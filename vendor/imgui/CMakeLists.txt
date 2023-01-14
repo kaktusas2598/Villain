@@ -1,8 +1,8 @@
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 
-file(GLOB imgui_sources *.cpp)
-add_library(imgui STATIC ${imgui_sources})
+file(GLOB IMGUI_SOURCE_DIR *.cpp)
+add_library(imgui STATIC ${IMGUI_SOURCE_DIR})
 
 include_directories(
     ${CMAKE_SOURCE_DIR}

@@ -26,19 +26,18 @@ file(GLOB vendor_sources vendor/*.cpp)
 # Build executable
 add_executable(${PROJECT_NAME} main.cpp ${sources})
 
-# Define include paths
-include_directories(vendor)
-
-
 # Specify extra directories with their own CMakeLists.txt for this build
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
 
-# Set up path to libraries
-#target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
-
 # Build Header only libs
 add_library(stb_image "vendor/stb_image.cpp")
+
+# Set up include paths
+target_include_directories(${PROJECT_NAME} PUBLIC vendor)
+# Set up path to libraries
+#target_link_directories(${PROJECT_NAME} PUBLIC vendor)
+#target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
 #file(GLOB SDL2_LIBS src/lib/*.a)
