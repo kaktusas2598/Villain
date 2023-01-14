@@ -1,3 +1,10 @@
+imgui.ini
+debug.log
+
+# Git submodules
+vendor/glm
+build
+
 # Precompiled Headers
 *.gch
 *.pch
