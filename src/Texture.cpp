@@ -10,7 +10,6 @@ Texture::Texture(const std::string& fileName)
     // Not sure why I need to flip texture for GL
     stbi_set_flip_vertically_on_load(1);
 
-    std::cout << "Loading texture: " << fileName.c_str() << std::endl;
     localBuffer = stbi_load(fileName.c_str(), &width, &height, &BPP, 4);
 
     GLCall(glGenTextures(1, &rendererID));

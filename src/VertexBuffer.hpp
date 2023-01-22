@@ -1,7 +1,7 @@
 #ifndef __VertexBuffer__
 #define __VertexBuffer__
 
-#include <GL/glew.h>
+#include "ErrorHandler.hpp"
 
 class VertexBuffer {
     public:

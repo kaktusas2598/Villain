@@ -29,7 +29,7 @@ namespace Villain {
 
         //Use OpenGL 3.1 core
         SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
         SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
 
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -67,7 +67,7 @@ namespace Villain {
 
         // Setup Platform/Renderer backends
         ImGui_ImplSDL2_InitForOpenGL(m_pWindow, glContext);
-        ImGui_ImplOpenGL3_Init("#version 130");
+        ImGui_ImplOpenGL3_Init("#version 330");
 
         //check the OpenGL version
         printf("*** OpenGL Version: %s ***\n", glGetString(GL_VERSION));

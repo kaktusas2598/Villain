@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "Renderer.hpp"
+#include "ErrorHandler.hpp"
 
 
 Shader::Shader(const std::string& fileName): rendererID(0) {

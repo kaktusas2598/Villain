@@ -2,7 +2,7 @@
 #define __VertexBufferLayout__
 
 #include <vector>
-#include "Renderer.hpp"
+#include "ErrorHandler.hpp"
 
 struct VertexBufferElement {
     unsigned int type;

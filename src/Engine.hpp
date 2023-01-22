@@ -13,6 +13,9 @@
 #include "DebugConsole.hpp"
 #include "imgui/imgui.h"
 
+#include "Sprite.hpp"
+#include "Camera2D.hpp"
+
 namespace Villain {
 
     class GameState;
@@ -67,7 +70,7 @@ namespace Villain {
             //void setLevel(Level* lvl) { level = lvl; }
             //Level* getLevel() { return level; }
 
-            SDL_Rect camera;
+            //SDL_Rect camera;
         private:
             Engine();
             ~Engine();
@@ -89,6 +92,9 @@ namespace Villain {
 
             //std::vector<Entity*> entities;
             //Level* level;
+
+            Sprite* testSprite;
+            Camera2D camera;
     };
 
     typedef Engine TheEngine;

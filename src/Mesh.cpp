@@ -1,8 +1,8 @@
 #include "Mesh.hpp"
 
 #include "Renderer.hpp"
+#include "ErrorHandler.hpp"
 #include "VertexBufferLayout.hpp"
-#include <iostream>
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse) {
     Vertices = vertices;

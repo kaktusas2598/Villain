@@ -1,18 +1,9 @@
 #include "Renderer.hpp"
+#include "ErrorHandler.hpp"
 
 #include <iostream>
 
-void GLClearError() {
-    while(glGetError() != GL_NO_ERROR);
-}
-
-bool GLLogCall(const char* func, const char* file, int line) {
-    while(GLenum error = glGetError()) {
-        std::cout << "[OpenGL Error] " << "(" << error << "): " << func << " " << file << ":" << line << std::endl;
-        return false;
-    }
-    return true;
-}
+Renderer* Renderer::sInstance = nullptr;
 
 void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const {
     shader.bind();
@@ -26,6 +17,5 @@ void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 }
 
 void Renderer::clear() const {
-    // TODO: depth buffer and stencil buffer bits
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }

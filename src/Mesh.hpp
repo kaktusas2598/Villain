@@ -5,6 +5,7 @@
 #include <memory>
 #include "Vertex.hpp"
 #include "VertexArray.hpp"
+#include "IndexBuffer.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
 

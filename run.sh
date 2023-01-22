@@ -1,2 +1,2 @@
 #!/bin/bash
-./build/Villain.exe
+./out/Villain.exe

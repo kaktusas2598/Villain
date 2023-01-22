@@ -1,7 +1,7 @@
 #ifndef __Texture__
 #define __Texture__
 
-#include "Renderer.hpp"
+#include "ErrorHandler.hpp"
 #include <vector>
 
 class Texture {
