@@ -3,7 +3,7 @@ debug.log
 
 # Git submodules
 vendor/glm
-build
+out
 
 # Precompiled Headers
 *.gch
