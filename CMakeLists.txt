@@ -44,4 +44,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC vendor)
 target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${GLEW_LIBRARIES} glm imgui stb_image)
 
 # Optional for linux to install binary
+# Can add options for include and lib as well here
+# To actually install use "make install"
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
