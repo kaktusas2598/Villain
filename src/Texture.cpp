@@ -5,7 +5,7 @@
 #include <iostream>
 
 Texture::Texture(const std::string& fileName)
-    : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0) {
+    : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_2D) {
 
     // Not sure why I need to flip texture for GL
     stbi_set_flip_vertically_on_load(1);
@@ -32,6 +32,36 @@ Texture::Texture(const std::string& fileName)
         stbi_image_free(localBuffer);
 }
 
+Texture::Texture(std::vector<std::string> faces)
+    : rendererID(0), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_CUBE_MAP) {
+    stbi_set_flip_vertically_on_load(0);
+
+    GLCall(glGenTextures(1, &rendererID));
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, rendererID));
+
+    for (unsigned int i = 0; i < faces.size(); i++) {
+        localBuffer = stbi_load(faces[i].c_str(), &width, &height, &BPP, 0);
+
+        if (localBuffer) {
+            GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
+                        GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer));
+            stbi_image_free(localBuffer);
+        } else {
+            std::cout << "Failed loading cubemap texture : " << faces[i] << std::endl;
+        }
+    }
+
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+
+    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+
+    stbi_set_flip_vertically_on_load(1);
+}
+
 Texture::~Texture() {
     std::cout << "Deleting texture: " << filePath << std::endl;
     GLCall(glDeleteTextures(1, &rendererID));
@@ -39,10 +69,10 @@ Texture::~Texture() {
 
 void Texture::bind(unsigned int slot) const {
     GLCall(glActiveTexture(GL_TEXTURE0 + slot));
-    GLCall(glBindTexture(GL_TEXTURE_2D, rendererID));
+    GLCall(glBindTexture(target, rendererID));
 }
 
 void Texture::unbind() const {
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    GLCall(glBindTexture(target, 0));
 }
 

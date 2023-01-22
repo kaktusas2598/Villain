@@ -16,7 +16,6 @@ bool GLLogCall(const char* func, const char* file, int line) {
 
 void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const {
     shader.bind();
-    //shader.setUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
     // By using vertex array obbject, we dont need to bind array buffer and vertex attributes 2nd time
     va.bind();
@@ -24,9 +23,9 @@ void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 
     // Needs index buffer object, but this way we save memory and vertex data is smaller
     GLCall(glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr));
-
 }
 
 void Renderer::clear() const {
+    // TODO: depth buffer and stencil buffer bits
     glClear(GL_COLOR_BUFFER_BIT);
 }
