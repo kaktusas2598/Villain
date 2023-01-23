@@ -3,23 +3,14 @@ cmake_minimum_required(VERSION 3.25.1)
 # Setup project and set name
 project(2D_Example)
 
-# Set C++ Standard
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-#find_package(Lua51 REQUIRED)
-
-file(GLOB sources src/*.cpp)
 # Build executable
-add_executable(${PROJECT_NAME} main.cpp ${sources})
-
+add_executable(${PROJECT_NAME} main.cpp)
 
 # Add engine as library, send lib file to this project's dir
 add_subdirectory(../../ ${PROJECT_SOURCE_DIR})
 
 # Set up include paths
 target_include_directories(${PROJECT_NAME} PUBLIC ../../)
-target_include_directories(${PROJECT_NAME} PUBLIC ../../vendor)
 # Set up path to libraries
 target_link_directories(${PROJECT_NAME} PUBLIC ../../)
 
