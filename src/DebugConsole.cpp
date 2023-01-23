@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 //#include "Level.hpp"
-//#include "ScriptEngine.hpp"
+#include "ScriptEngine.hpp"
 
 namespace Villain {
 
@@ -85,9 +85,9 @@ namespace Villain {
         }
 
         // run luachunk
-        //std::string output = ScriptEngine::Instance()->runChunk(command);
-        //if (!output.empty())
-            //addLog(output.c_str());
+        std::string output = ScriptEngine::Instance()->runChunk(command);
+        if (!output.empty())
+            addLog(output.c_str());
 
         scrollToBottom = true;
     }
