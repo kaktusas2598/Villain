@@ -8,11 +8,11 @@
 * 3D Model loading using assimp
 * Debug UI
 * Error logging
+* 2D orthographics and 3D perspective cameras
 
 ## Planned Features
 
-* 2D, 3D cameras
-* Sprite class, rendering
+* Sprite class, animations, batch rendering
 * LUA (Again!)
 * many more...
 
@@ -30,11 +30,17 @@
 
 ## Instructions
 
+First install the dependencies and when use build instructions below.
+
 ### Dependencies
 
 ### Building
 
-Install dependencies and run:
+Engine is built as shared library using CMake, to use it in one of your projects,
+go to examples folder execute these scripts in order:
  * ./configure.sh
  * ./build.sh
  * ./run.sh
+
+ Same scripts in the root folder will only build the engine as a library, CMakeLists.txt file can be modified by changing
+ one line to build engine as an executable, but that requires having an entrypoint like int main() etc.

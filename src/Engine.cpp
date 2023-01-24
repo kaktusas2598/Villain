@@ -1,7 +1,6 @@
 #include "Engine.hpp"
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
-#include "ResourceManager.hpp"
 //#include "EntityManager.hpp"
 
 //#include "StateParser.hpp"
@@ -83,7 +82,6 @@ namespace Villain {
         // onInit();
         //Initialise game camera
         //camera = {0, 0, screenWidth, screenHeight};
-        camera.init(screenWidth, screenHeight);
 
         //initialize game screens and add them to the screenList
         addStates();
@@ -96,18 +94,7 @@ namespace Villain {
         //set the initial game screen to ScreenState::RUNNING
         //currentState->setRunning();
 
-        // TESTING CODE, will be loaded from state or through script
-
         glEnable(GL_DEPTH_TEST);
-        Texture* playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
-        ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
-
-        std::cout << "Creating sprite\n";
-        testSprite = new Sprite("player", "sprite");
-        std::cout << "Sprite init\n";
-        testSprite->init(10, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
-
-        //-------------------------------
 
         isRunning = true;//start main loop
     }
@@ -161,7 +148,9 @@ namespace Villain {
 
                 deltaTime = deltaTime / DESIRED_FPS;
 
+                if (preUpdateCallback != nullptr) preUpdateCallback(deltaTime);
                 update(deltaTime);
+                if (postUpdateCallback != nullptr) postUpdateCallback(deltaTime);
 
                 render(deltaTime);
                 //std::cout << deltaTime << std::endl;
@@ -216,28 +205,10 @@ namespace Villain {
         glClearDepth(1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //---------------------------------
-        // Bind texture
-        // Set uniforms
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
-        model = glm::scale(model, glm::vec3(2.0f));
-        //glm::mat4 view = glm::mat4(1.0f);
-        //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        //glm::mat4 projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
-        glm::mat4 view = camera.getCameraMatrix();
-        glm::mat4 projection = glm::mat4(1.0f);
+        if (preRenderCallback != nullptr) preRenderCallback(deltaTime);
 
-        Shader* spriteShader = ResourceManager::Instance()->getShader("sprite");
-        if (spriteShader != nullptr) {
-            spriteShader->bind();
-            spriteShader->setUniformMat4f("model", model);
-            spriteShader->setUniformMat4f("view", view);
-            spriteShader->setUniformMat4f("projection", projection);
-            spriteShader->setUniform1i("spriteTexture", 0);
-            testSprite->draw();
-        }
+        if (postRenderCallback != nullptr) postRenderCallback(deltaTime);
 
-        //---------------------------------
 
         ImGui::Render();
         //glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
@@ -251,9 +222,6 @@ namespace Villain {
             ImGui::RenderPlatformWindowsDefault();
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         //}
-
-
-        //SDL_GL_SwapWindow(window);
 
         ImGui::EndFrame();
     }
@@ -362,14 +330,6 @@ namespace Villain {
                 //}
                 if (event.key.keysym.sym == SDLK_BACKQUOTE)
                     debugMode = !debugMode;
-                if (event.key.keysym.sym == SDLK_w)
-                    camera.setPosition(camera.getPosition() + glm::vec3(0.0f, 10.0f, 0.0f));
-                if (event.key.keysym.sym == SDLK_a)
-                    camera.setPosition(camera.getPosition() + glm::vec3(-10.0f, 0.0f, 0.0f));
-                if (event.key.keysym.sym == SDLK_s)
-                    camera.setPosition(camera.getPosition() + glm::vec3(0.0f, -10.0f, 0.0f));
-                if (event.key.keysym.sym == SDLK_d)
-                    camera.setPosition(camera.getPosition() + glm::vec3(10.0f, 0.0f, 0.0f));
                 break;
             case SDL_KEYUP:
                 TheInputManager::Instance()->releaseKey(event.key.keysym.sym);

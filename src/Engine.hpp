@@ -3,18 +3,13 @@
 
 #include "Window.hpp"
 #include "InputManager.hpp"
+#include "DebugConsole.hpp"
 //#include "StateMachine.hpp"
 //#include "Level.hpp"
 
 #include <stdio.h>
 #include <memory>
 #include <vector>
-
-#include "DebugConsole.hpp"
-#include "imgui/imgui.h"
-
-#include "Sprite.hpp"
-#include "Camera2D.hpp"
 
 namespace Villain {
 
@@ -70,7 +65,18 @@ namespace Villain {
             //void setLevel(Level* lvl) { level = lvl; }
             //Level* getLevel() { return level; }
 
-            //SDL_Rect camera;
+            // TODO: should be done in init() method
+            void setCallbacks(
+                void (*preUpdate)(float),
+                void (*postUpdate)(float),
+                void (*preRender)(float),
+                void (*postRender)(float)) {
+                preUpdateCallback = preUpdate;
+                postUpdateCallback = postUpdate;
+                preRenderCallback = preRender;
+                postRenderCallback = postRender;
+            }
+
         private:
             Engine();
             ~Engine();
@@ -87,14 +93,17 @@ namespace Villain {
 
             float fps = 0; ///< main application's fps
 
+            // Application callbacks
+            void (*preUpdateCallback)(float) = nullptr;
+            void (*postUpdateCallback)(float) = nullptr;
+            void (*preRenderCallback)(float) = nullptr;
+            void (*postRenderCallback)(float) = nullptr;
+
             //std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
             //GameState* currentState = nullptr; ///< current state's instance
 
             //std::vector<Entity*> entities;
             //Level* level;
-
-            Sprite* testSprite;
-            Camera2D camera;
     };
 
     typedef Engine TheEngine;
