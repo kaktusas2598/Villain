@@ -51,6 +51,10 @@ void preRender(float deltaTime) {
 void postRender(float deltaTime) {
 }
 
+void onWindowResize(int newWidth, int newHeight) {
+   camera.init(newWidth, newHeight);
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -66,6 +70,7 @@ int main(int argc, char *argv[]) {
         flags |= SDL_WINDOW_RESIZABLE;
 
     TheEngine::Instance()->setCallbacks(preUpdate, postUpdate, preRender, postRender);
+    TheEngine::Instance()->setWindowCallbacks(onWindowResize);
     TheEngine::Instance()->init(
             configScript.get<std::string>("window.title"),
             configScript.get<int>("window.height"),

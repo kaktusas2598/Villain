@@ -77,6 +77,10 @@ namespace Villain {
                 postRenderCallback = postRender;
             }
 
+            void setWindowCallbacks(void (*resizeCallback)(int, int)) {
+                windowResizeCallback = resizeCallback;
+            }
+
         private:
             Engine();
             ~Engine();
@@ -98,6 +102,8 @@ namespace Villain {
             void (*postUpdateCallback)(float) = nullptr;
             void (*preRenderCallback)(float) = nullptr;
             void (*postRenderCallback)(float) = nullptr;
+
+            void (*windowResizeCallback)(int, int) = nullptr;
 
             //std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
             //GameState* currentState = nullptr; ///< current state's instance

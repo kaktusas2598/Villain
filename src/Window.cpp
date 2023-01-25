@@ -18,7 +18,10 @@ namespace Villain {
             flags |= SDL_WINDOW_HIDDEN;
         }
         if (currentFlags & FULLSCREEN) {
-            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+            // Mouse always focused inside window, best for games
+            flags |= SDL_WINDOW_FULLSCREEN;
+            // Mouse can leave window
+            //flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
         }
         if (currentFlags & BORDERLESS) {
             flags |= SDL_WINDOW_BORDERLESS;
@@ -38,6 +41,9 @@ namespace Villain {
 
         //if succeed, create the window
         m_pWindow = SDL_CreateWindow(title.c_str() , SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, flags);
+        //m_pWindow = SDL_CreateWindow(title.c_str() , 0, 0, screenWidth, screenHeight, flags);
+        //SDL_SetWindowFullscreen(m_pWindow, SDL_WINDOW_FULLSCREEN);
+
         if (m_pWindow == nullptr) {
             exitWithError("SDL Window could not be created :(");
         }

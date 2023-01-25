@@ -3,6 +3,6 @@ window = {
 	width = 1024, --800,
 	height = 768, --600,
 	fullscreen = false,
-	borderless = false,
+	borderless = true,
 	resizable = true
 }

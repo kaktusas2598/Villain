@@ -357,6 +357,11 @@ namespace Villain {
         }
         switch (event.window.event) {
             case SDL_WINDOWEVENT_SIZE_CHANGED:
+                screenWidth = event.window.data1;
+                screenHeight = event.window.data2;
+                glViewport(0, 0, screenWidth, screenHeight);
+                if (windowResizeCallback != nullptr) windowResizeCallback(screenWidth, screenHeight);
+                // TODO: Update camera viewports
                 //screenWidth = camera.w = event.window.data1;
                 //screenHeight = camera.h = event.window.data2;
                 // Update map
