@@ -7,8 +7,11 @@ project(VILLAIN)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# includes cmake/FindSDL2.cmake
+# Append to cmake module dir and add files like FindSDL2.cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+
+# Cmake will generate compile_commands.json file used by clangd
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 find_package(OpenGL REQUIRED)
 find_package(Lua51 REQUIRED)
