@@ -33,6 +33,12 @@
 First install the dependencies and when use build instructions below.
 
 ### Dependencies
+    sudo apt-get install -y libsdl2-dev
+    sudo apt-get install -y libsdl2-mixer-dev
+    sudo apt-get install -y libsdl2-image-dev
+    sudo apt-get install -y libsdl2-ttf-dev
+    sudo apt-get install -y lua5.3-dev
+    sudo apt-get install -y libassimp-dev
 
 ### Building
 
