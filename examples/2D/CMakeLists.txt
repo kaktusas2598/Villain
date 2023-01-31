@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.25.1)
 project(2D_Example)
 
 # Build executable
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} WIN32 main.cpp)
 
 # Add engine as library, send lib file to this project's dir
 add_subdirectory(../../ ${PROJECT_SOURCE_DIR})
