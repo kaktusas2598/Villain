@@ -11,4 +11,6 @@ include_directories(
 
 target_link_libraries(imgui
     ${OPENGL_LIBRARIES}
-    ${SDL2_LIBRARY})
+    ${SDL2_LIBRARY}
+    ${CMAKE_DL_LIBS}
+    )

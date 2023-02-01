@@ -13,16 +13,19 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 # Cmake will generate compile_commands.json file used by clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-find_package(OpenGL REQUIRED)
 find_package(Lua REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
+find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(ASSIMP REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIRS})
+message(STATUS "Lua include dir: ${LUA_INCLUDE_DIR}")
+message(STATUS "SDL2 include dir: ${SDL2_INCLUDE_DIR}")
+message(STATUS "Glew include dir: ${GLEW_INCLUDE_DIRS}")
 
 file(GLOB sources src/*.cpp)
 
@@ -30,7 +33,8 @@ file(GLOB sources src/*.cpp)
 #add_executable(${PROJECT_NAME} main.cpp ${sources})
 
 # Build as library
-add_library(${PROJECT_NAME} SHARED ${sources})
+# NV: On WSL I had to change shared to static to make this work, whyyyyy???
+add_library(${PROJECT_NAME} STATIC ${sources})
 
 
 # Specify extra directories with their own CMakeLists.txt for this build
@@ -48,8 +52,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC vendor)
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-#file(GLOB SDL2_LIBS src/lib/*.a)
-target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${GLEW_LIBRARIES} glm imgui stb_image)
+target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image)
 
 # Optional for linux to install binary
 # Can add options for include and lib as well here

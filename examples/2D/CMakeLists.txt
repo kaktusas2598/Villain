@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME} WIN32 main.cpp)
 add_subdirectory(../../ ${PROJECT_SOURCE_DIR})
 
 # Set up include paths
+include_directories(${LUA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PUBLIC ../../)
 # Set up path to libraries
 target_link_directories(${PROJECT_NAME} PUBLIC ../../)
