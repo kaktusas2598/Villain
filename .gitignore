@@ -1,8 +1,6 @@
 imgui.ini
 debug.log
 
-# Git submodules
-vendor/glm
 out
 
 # Precompiled Headers
