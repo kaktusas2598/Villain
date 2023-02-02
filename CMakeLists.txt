@@ -19,7 +19,7 @@ find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(ASSIMP REQUIRED)
+find_package(assimp REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIRS})
@@ -52,7 +52,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC vendor)
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image)
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image)
 
 # Optional for linux to install binary
 # Can add options for include and lib as well here
