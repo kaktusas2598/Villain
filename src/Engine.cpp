@@ -164,8 +164,9 @@ namespace Villain {
             fps = frameLimiter.end();
             // TODO: window title is currently isolated in init() method, we can drop that and load
             // it from engine class instead using LuaScript?
+            // BUFFER OVERFLOW ON LINUX, YAY
             char titleBuffer[32];
-            sprintf(titleBuffer, "Villain Engine Test. FPS: %f.2", fps);
+            //sprintf(titleBuffer, "Villain Engine Test. FPS: %f.2", fps);
             window.setWindowTitle(titleBuffer);
 
             //swap window buffer for less flickering
