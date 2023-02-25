@@ -26,21 +26,18 @@ namespace Villain {
 
     class RenderBatch {
         public:
-            RenderBatch ();
-            ~RenderBatch ();
+            RenderBatch (GLuint Offset, GLuint NumVertices, GLuint Texture) :
+                offset(Offset), numVertices(NumVertices), texture(Texture) {}
+            //~RenderBatch ();
             GLuint offset;
             GLuint numVertices;
             GLuint texture;
         private:
     };
 
-    RenderBatch ::RenderBatch ()
-    {
-    }
-
-    RenderBatch ::~RenderBatch ()
-    {
-    }
+    //RenderBatch ::~RenderBatch ()
+    //{
+    //}
 
     class SpriteBatch {
         public:

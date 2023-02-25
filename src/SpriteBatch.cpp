@@ -17,10 +17,13 @@ namespace Villain {
 
     void SpriteBatch::begin(GlyphSortType sortType) {
         this->sortType = sortType;
+        renderBatches.clear();
+        glyphs.clear();
     }
 
     void SpriteBatch::end() {
         sortGlyphs();
+        createRenderBatches();
     }
 
     void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color) {
@@ -49,10 +52,54 @@ namespace Villain {
     }
 
     void SpriteBatch::renderBatch() {
+        for (int i = 0; i < renderBatches.size(); i++) {
+           glBindTexture(GL_TEXTURE_2D, renderBatches[i].texture) ;
+
+           glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices);
+        }
     }
 
     void SpriteBatch::createRenderBatches() {
-        //RenderBatch
+        std::vector <VertexC> vertices;
+        vertices.resize(glyphs.size() * 6);
+
+        if (glyphs.empty()) {
+            return;
+        }
+
+        int offset = 0;
+        int currentVertex = 0;
+        renderBatches.emplace_back(offset, 6, glyphs[0]->texture);
+        vertices[currentVertex++] = glyphs[0]->topLeft;
+        vertices[currentVertex++] = glyphs[0]->bottomLeft;
+        vertices[currentVertex++] = glyphs[0]->bottomRight;
+        vertices[currentVertex++] = glyphs[0]->bottomRight;
+        vertices[currentVertex++] = glyphs[0]->topRight;
+        vertices[currentVertex++] = glyphs[0]->topLeft;
+        offset += 6;
+
+        for (int currentGlyph = 1; currentGlyph < glyphs.size(); currentGlyph++) {
+            if (glyphs[currentGlyph]->texture != glyphs[currentGlyph - 1]->texture) {
+                renderBatches.emplace_back(offset, 6, glyphs[currentGlyph]->texture);
+            } else {
+                renderBatches.back().numVertices += 6;
+            }
+            vertices[currentVertex++] = glyphs[currentGlyph]->topLeft;
+            vertices[currentVertex++] = glyphs[currentGlyph]->bottomLeft;
+            vertices[currentVertex++] = glyphs[currentGlyph]->bottomRight;
+            vertices[currentVertex++] = glyphs[currentGlyph]->bottomRight;
+            vertices[currentVertex++] = glyphs[currentGlyph]->topRight;
+            vertices[currentVertex++] = glyphs[currentGlyph]->topLeft;
+            offset += 6;
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        // orphan the buffer
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexC), nullptr, GL_STREAM_DRAW);
+        // upload the data
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(VertexC), vertices.data());
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void SpriteBatch::createVAO() {

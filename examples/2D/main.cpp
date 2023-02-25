@@ -7,9 +7,12 @@
 #include "Camera2D.hpp"
 #include "ResourceManager.hpp"
 
+#include "SpriteBatch.hpp"
+
 using namespace Villain;
 
 Sprite* testSprite = nullptr;
+SpriteBatch* testBatch = nullptr;
 Camera2D camera;
 
 void preUpdate(float deltaTime) {
@@ -86,6 +89,8 @@ int main(int argc, char *argv[]) {
     testSprite = new Sprite("player", "sprite");
     testSprite->init(10, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
 
+    testBatch = new SpriteBatch();
+    testBatch->init();
 
     TheEngine::Instance()->run();
 
