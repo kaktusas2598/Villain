@@ -25,6 +25,12 @@ void preUpdate(float deltaTime) {
         camera.setPosition(camera.getPosition() + glm::vec3(0.0f, -10.0f, 0.0f));
     if(TheInputManager::Instance()->isKeyDown(SDLK_d))
         camera.setPosition(camera.getPosition() + glm::vec3(10.0f, 0.0f, 0.0f));
+    if(TheInputManager::Instance()->isKeyDown(SDLK_q))
+        camera.setZoom(camera.getZoom() + 0.01f);
+    if(TheInputManager::Instance()->isKeyDown(SDLK_e))
+        camera.setZoom(camera.getZoom() - 0.01f);
+
+
 }
 
 void postUpdate(float deltaTime) {

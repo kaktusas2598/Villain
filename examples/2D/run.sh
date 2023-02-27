@@ -1,2 +1,2 @@
 #!/bin/bash
-./out/*.exe
+./out/2D_Example
