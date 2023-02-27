@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <iostream>
-//#include "Vector2D.hpp"
+#include "glm/glm.hpp"
 
 namespace Villain {
 
@@ -41,7 +41,7 @@ namespace Villain {
             void releaseKey(unsigned int keyID);
 
             /// Helper func for updating the current event type
-            void setEventType(Uint32 eventType) { m_eventType = eventType; }
+            void setEventType(Uint32 type) { eventType = type; }
 
             /// Tells the input manager the location of the cursor
             void setMouseCoords(float x, float y);
@@ -62,10 +62,10 @@ namespace Villain {
             void addInputCharacters(const char* chars);
 
             //Vector2D getMouseCoords() const { return m_mouseCoords; } ///<Mouse coords's geeter
-            bool getMouseButtonState(int buttonNumber) {return m_mouseButtonStates[buttonNumber]; }
+            bool getMouseButtonState(int buttonNumber) {return mouseButtonStates[buttonNumber]; }
 
-            Uint32 getEventType() { return m_eventType; } //< SDL_Event type's getter
-            const char* getInChars() { return m_inChars; }
+            Uint32 getEventType() { return eventType; } //< SDL_Event type's getter
+            const char* getInChars() { return inChars; }
 
         private:
             InputManager();
@@ -77,15 +77,15 @@ namespace Villain {
             /// Identical to isKeyDown but searches the previous key map
             bool wasKeyDown(unsigned int keyID);
 
-            std::unordered_map<unsigned int, bool> m_keyMap; ///< Holds map of SDL key values versus pressed/released bool values
-            std::unordered_map<unsigned int, bool> m_prevKeyMap; ///< Holds map of previously pressed keys
+            std::unordered_map<unsigned int, bool> keyMap; ///< Holds map of SDL key values versus pressed/released bool values
+            std::unordered_map<unsigned int, bool> prevKeyMap; ///< Holds map of previously pressed keys
 
-            std::vector<bool> m_mouseButtonStates;
-            //Vector2D m_mouseCoords; ///< vector2 holding mouse coordinates
+            std::vector<bool> mouseButtonStates;
+            glm::vec2 mouseCoords;
 
-            Uint32 m_eventType; ///< event type: keypress, mousemotion, etc...
+            Uint32 eventType; ///< event type: keypress, mousemotion, etc...
 
-            char m_inChars[1];
+            char inChars[1];
     };
 
     typedef InputManager TheInputManager;

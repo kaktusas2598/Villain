@@ -7,43 +7,36 @@ namespace Villain {
 
     InputManager* InputManager::s_pInstance = 0;
 
-    //InputManager::InputManager() :
-        //m_mouseCoords(0.0f,0.0f)
-    InputManager::InputManager() { }
+    InputManager::InputManager(): mouseCoords(0.0f, 0.0f) { }
 
-    void InputManager::update()
-    {
+    void InputManager::update() {
         //iterate through current key map and copy it to the previous keymap
-        for (auto& it : m_keyMap)
+        for (auto& it : keyMap)
         {
-            m_prevKeyMap[it.first] = it.second;
+            prevKeyMap[it.first] = it.second;
         }
 
         //reset mouseWheel to 0
         mousewheel = 0;
     }
 
-    void InputManager::pressKey(unsigned int keyID)
-    {
-        m_keyMap[keyID] = true;
+    void InputManager::pressKey(unsigned int keyID) {
+        keyMap[keyID] = true;
     }
 
-    void InputManager::releaseKey(unsigned int keyID)
-    {
-        m_keyMap[keyID] = false;
+    void InputManager::releaseKey(unsigned int keyID) {
+        keyMap[keyID] = false;
     }
 
-    void InputManager::setMouseCoords(float x, float y)
-    {
-        //m_mouseCoords.setX(x);
-        //m_mouseCoords.setY(y);
+    void InputManager::setMouseCoords(float x, float y) {
+        mouseCoords.x = x;
+        mouseCoords.y = y;
     }
 
-    bool InputManager::isKeyDown(unsigned int keyID)
-    {
+    bool InputManager::isKeyDown(unsigned int keyID) {
         //search for key
-        auto it = m_keyMap.find(keyID);
-        if (it != m_keyMap.end())
+        auto it = keyMap.find(keyID);
+        if (it != keyMap.end())
         {
             //return the found key
             return it->second;
@@ -51,24 +44,20 @@ namespace Villain {
         else { return false; }
     }
 
-    bool InputManager::isKeyPressed(unsigned int keyID)
-    {
+    bool InputManager::isKeyPressed(unsigned int keyID) {
         //check if key was pressed on the current frame and
         //not on the previous frame
-        if (isKeyDown(keyID) == true && wasKeyDown(keyID) == false)
-        {
+        if (isKeyDown(keyID) == true && wasKeyDown(keyID) == false) {
             return true;
         }
 
         return false;
     }
 
-    bool InputManager::wasKeyDown(unsigned int keyID)
-    {
+    bool InputManager::wasKeyDown(unsigned int keyID) {
         //search for key in previous key map
-        auto it = m_prevKeyMap.find(keyID);
-        if (it != m_prevKeyMap.end())
-        {
+        auto it = prevKeyMap.find(keyID);
+        if (it != prevKeyMap.end()) {
             //return the found key
             return it->second;
         }
@@ -168,21 +157,21 @@ namespace Villain {
     void InputManager::addInputCharacter(char c) {
         //get string length
         int x = 0;
-        while(m_inChars[x++]);
+        while(inChars[x++]);
         const int n = x;
 
         //if we're not at the end of the string, add character to inchars
-        if (n < sizeof(m_inChars)/sizeof(char))
+        if (n < sizeof(inChars)/sizeof(char))
         {
-            m_inChars[n] = c;
-            m_inChars[n+1] = '\0';
+            inChars[n] = c;
+            inChars[n+1] = '\0';
         }
     }
 
     void InputManager::addInputCharacters(const char* chars) {
         for (int i = 0; i < sizeof(chars)/sizeof(const char*); i++)
         {
-            m_inChars[i] = chars[i];
+            inChars[i] = chars[i];
         }
     }
 }
