@@ -14,6 +14,7 @@ using namespace Villain;
 Sprite* testSprite = nullptr;
 SpriteBatch* testBatch = nullptr;
 Camera2D camera;
+Texture* playerSpritesheet = nullptr;
 
 void preUpdate(float deltaTime) {
     if(TheInputManager::Instance()->isKeyDown(SDLK_w))
@@ -49,6 +50,29 @@ void preRender(float deltaTime) {
         spriteShader->setUniform1i("spriteTexture", 0);
         testSprite->draw();
     }
+
+    Shader* batchShader = ResourceManager::Instance()->getShader("batch");
+    if (batchShader != nullptr) {
+        batchShader->bind();
+        //spriteShader->setUniformMat4f("model", model);
+        batchShader->setUniformMat4f("view", view);
+        batchShader->setUniformMat4f("projection", projection);
+        batchShader->setUniform1i("spriteTexture", 0);
+        testBatch->begin();
+
+        glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
+        glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
+        glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
+        testBatch->draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.0f, color);
+
+        testBatch->end();
+
+        testBatch->renderBatch();
+
+    }
+
 }
 
 void postRender(float deltaTime) {
@@ -83,8 +107,9 @@ int main(int argc, char *argv[]) {
 
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
 
-    Texture* playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
+    playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
     ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
+    ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
 
     testSprite = new Sprite("player", "sprite");
     testSprite->init(10, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());

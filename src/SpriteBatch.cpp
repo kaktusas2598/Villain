@@ -18,6 +18,10 @@ namespace Villain {
     void SpriteBatch::begin(GlyphSortType sortType) {
         this->sortType = sortType;
         renderBatches.clear();
+
+        for (int i = 0; i < glyphs.size(); i++) {
+            delete glyphs[i];
+        }
         glyphs.clear();
     }
 
@@ -41,7 +45,7 @@ namespace Villain {
         newGlyph->bottomLeft.UV = glm::vec2(uvRect.x, uvRect.y);
 
         newGlyph->topRight.Color = color;
-        newGlyph->topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + uvRect.w, 0.0f);
+        newGlyph->topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + destRect.w, 0.0f);
         newGlyph->topRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 
         newGlyph->bottomRight.Color = color;
@@ -52,11 +56,13 @@ namespace Villain {
     }
 
     void SpriteBatch::renderBatch() {
+        glBindVertexArray(vao);
         for (int i = 0; i < renderBatches.size(); i++) {
            glBindTexture(GL_TEXTURE_2D, renderBatches[i].texture) ;
 
            glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices);
         }
+        glBindVertexArray(0);
     }
 
     void SpriteBatch::createRenderBatches() {
@@ -95,8 +101,7 @@ namespace Villain {
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         // orphan the buffer
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexC), nullptr, GL_STREAM_DRAW);
-        // upload the data
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexC), nullptr, GL_DYNAMIC_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(VertexC), vertices.data());
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -109,15 +114,15 @@ namespace Villain {
 
         if (vbo == 0)
             glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)0); // Position
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)(sizeof(float) * 3)); // Color
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)(sizeof(float) * 6)); // UV
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)(sizeof(float) * 3)); // Color
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)(sizeof(float) * 7)); // UV
 
         glBindVertexArray(0);
     }
