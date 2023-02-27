@@ -61,7 +61,7 @@ namespace Villain {
             /// Add characters into inChars from a string
             void addInputCharacters(const char* chars);
 
-            //Vector2D getMouseCoords() const { return m_mouseCoords; } ///<Mouse coords's geeter
+            glm::vec2 getMouseCoords() const { return mouseCoords; } ///<Mouse coords's geeter
             bool getMouseButtonState(int buttonNumber) {return mouseButtonStates[buttonNumber]; }
 
             Uint32 getEventType() { return eventType; } //< SDL_Event type's getter
