@@ -31,6 +31,11 @@ void preUpdate(float deltaTime) {
         camera.setZoom(camera.getZoom() - 0.01f);
 
 
+    if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+        glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
+        mouseCoords = camera.screenToWorld(mouseCoords);
+        std::cout << "Mouse clicked: " << mouseCoords.x << ", " << mouseCoords.y << std::endl;
+    }
 }
 
 void postUpdate(float deltaTime) {

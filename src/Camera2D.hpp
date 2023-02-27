@@ -17,6 +17,8 @@ namespace Villain {
             // Combination of projection and view matrix
             glm::mat4 getCameraMatrix();
 
+            glm::vec2 screenToWorld(glm::vec2 screenCoords);
+
             // Setters
             void setPosition(const glm::vec3& newPos) { position = newPos; }
             void setZoom(float z) { zoom = z; }

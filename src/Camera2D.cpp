@@ -25,4 +25,14 @@ namespace Villain {
     }
 
 
+    glm::vec2 Camera2D::screenToWorld(glm::vec2 screenCoords) {
+        // Make 0,0 the center
+        screenCoords -= glm::vec2(screenWidth/2, screenHeight/2);
+        // Apply camera scale
+        screenCoords /= zoom;
+        // translate
+        screenCoords += glm::vec2(position.x, position.y);
+
+        return screenCoords;
+    }
 }
