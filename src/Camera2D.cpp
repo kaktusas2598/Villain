@@ -24,8 +24,9 @@ namespace Villain {
         return cameraMatrix;
     }
 
-
     glm::vec2 Camera2D::screenToWorld(glm::vec2 screenCoords) {
+        // Invert y
+        screenCoords.y = screenHeight - screenCoords.y;
         // Make 0,0 the center
         screenCoords -= glm::vec2(screenWidth/2, screenHeight/2);
         // Apply camera scale

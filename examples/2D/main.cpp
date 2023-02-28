@@ -6,15 +6,18 @@
 #include "Sprite.hpp"
 #include "Camera2D.hpp"
 #include "ResourceManager.hpp"
-
 #include "SpriteBatch.hpp"
+
+#include "Bullet.hpp"
 
 using namespace Villain;
 
+// TODO: Transform this source file to 2DGame class
 Sprite* testSprite = nullptr;
 SpriteBatch* testBatch = nullptr;
 Camera2D camera;
 Texture* playerSpritesheet = nullptr;
+std::vector<Bullet> bullets;
 
 void preUpdate(float deltaTime) {
     if(TheInputManager::Instance()->isKeyDown(SDLK_w))
@@ -35,10 +38,25 @@ void preUpdate(float deltaTime) {
         glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
         mouseCoords = camera.screenToWorld(mouseCoords);
         std::cout << "Mouse clicked: " << mouseCoords.x << ", " << mouseCoords.y << std::endl;
+
+        glm::vec2 playerPos(0.0f); // for now assume player is always in the center
+        glm::vec2 direction = mouseCoords - playerPos;
+        direction = glm::normalize(direction);
+
+        bullets.emplace_back(playerPos, direction, 1.0f, 500);
     }
 }
 
 void postUpdate(float deltaTime) {
+    for (int i = 0; i < bullets.size();) {
+        if (bullets[i].update()) {
+            // Remove bullet
+            bullets[i] = bullets.back();
+            bullets.pop_back();
+        } else {
+            i++;
+        }
+    }
 }
 
 void preRender(float deltaTime) {
@@ -77,6 +95,10 @@ void preRender(float deltaTime) {
 
         testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
         testBatch->draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.0f, color);
+
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets[i].draw(*testBatch);
+        }
 
         testBatch->end();
 
