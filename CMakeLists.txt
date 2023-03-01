@@ -55,6 +55,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC vendor)
 target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image)
 
 # Optional for linux to install binary
-# Can add options for include and lib as well here
-# To actually install use "make install"
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+# To actually install use "sudo make install"
+# Install lib
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+# Install includes
+file(GLOB includes src/*.hpp)
+install(FILES ${includes} DESTINATION include)
