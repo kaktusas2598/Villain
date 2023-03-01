@@ -55,6 +55,18 @@ namespace Villain {
         glyphs.push_back(newGlyph);
     }
 
+    // HACK: This method is only a proof of concept for drawing sprite from a spritesheet, will need to be improved a lot
+    void SpriteBatch::draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color) {
+        glm::vec4 uvRect;
+        // 0 - 1, where 1 is texture width
+        uvRect.x = frame * 1/(texture->getWidth()/(float) width);
+        uvRect.y = row * 1/(texture->getHeight()/(float) height);
+        uvRect.z = 1/(texture->getWidth() / (float) width);
+        uvRect.w = 1/(texture->getHeight() / (float) height);
+
+        draw(destRect, uvRect, texture->getID(), depth, color);
+    }
+
     void SpriteBatch::renderBatch() {
         glBindVertexArray(vao);
         for (int i = 0; i < renderBatches.size(); i++) {

@@ -90,11 +90,18 @@ void preRender(float deltaTime) {
         testBatch->begin();
 
         glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
-        glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
+        //glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
+        glm::vec4 uv(0.0f, 0.0f, 1.0f / 6, 1.0f / 10);
         glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
 
-        testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
+        //testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
         testBatch->draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.0f, color);
+
+        static int currentFrame = 0;
+        static int numFrames = 6;
+        currentFrame =  int(((SDL_GetTicks() / 100) % 6));
+        testBatch->draw(position, currentFrame++, 0, 48, 48, playerSpritesheet, 0.0f, color);
+
 
         for (int i = 0; i < bullets.size(); i++) {
             bullets[i].draw(*testBatch);
