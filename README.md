@@ -23,9 +23,10 @@
  * [GLEW](https://glew.sourceforge.net/) - extension library for loading OpenGL functions
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
- + [stb_image](https://github.com/nothings/stb) Public Domain Image Loading Library for C++
- * [assimp]
- * [lua]
+ * [stb_image](https://github.com/nothings/stb) Public Domain Image Loading Library for C++
+ * [tinyxml2](https://github.com/leethomason/tinyxml2) - Simple, small, efficient C++ XML parser
+ * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
+ * [lua](https://www.lua.org/) - For scripting
 
 
 ## Instructions
@@ -50,3 +51,9 @@ go to examples folder execute these scripts in order:
 
  Same scripts in the root folder will only build the engine as a library, CMakeLists.txt file can be modified by changing
  one line to build engine as an executable, but that requires having an entrypoint like int main() etc.
+
+
+## Dev Notes
+
+I use neovim with clangd LSP server for editing code. To build compilation database for clangd, so I can get great autocompletion
+use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.org/) for build
