@@ -7,7 +7,8 @@ project(2D_Example)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 # Build executable
-add_executable(${PROJECT_NAME} WIN32 main.cpp Bullet.cpp)
+file(GLOB sources *.cpp)
+add_executable(${PROJECT_NAME} WIN32 ${sources})
 
 # Add engine as library, send lib file to this project's dir
 add_subdirectory(../../ ${PROJECT_SOURCE_DIR})
