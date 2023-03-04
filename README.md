@@ -5,6 +5,7 @@
 
 * Vertex, Fragment shader loading
 * 2D and Cubemap texture support
+* 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
 * Debug UI
 * Error logging
@@ -12,9 +13,13 @@
 
 ## Planned Features
 
-* Sprite class, animations, batch rendering
+* Sprite and skeletal animation support
+* Built in collision detection: AABB, SAT, circle
+* Rigid Body implementation
+* Scene Graphs
+* Data Oriented Models
 * LUA (Again!)
-* many more...
+* and many more...
 
 ## Used Libraries
 
