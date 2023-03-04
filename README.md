@@ -7,6 +7,7 @@
 * 2D and Cubemap texture support
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
+* 2D Tiled map parsing/loading from tmx/xml files
 * Debug UI
 * Error logging
 * 2D orthographics and 3D perspective cameras
