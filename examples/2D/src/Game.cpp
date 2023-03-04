@@ -1,8 +1,11 @@
 #include "Game.hpp"
 
 #include "Engine.hpp"
+#include "LevelParser.hpp"
 #include "LuaScript.hpp"
 #include "ResourceManager.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include <SDL2/SDL_timer.h>
 
 using namespace Villain;
 
@@ -11,7 +14,8 @@ SpriteBatch Game::spriteBatch;
 Camera2D Game::camera;
 Texture* Game::playerSpritesheet = nullptr;
 std::vector<Bullet> Game::bullets;
-
+Level* Game::level = nullptr;
+Timer Game::colorTimer;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -40,16 +44,24 @@ Game::Game() {
     ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
 
+    //NOTE: So far not sure if sprite class will be used, due to sprite batch existance
     testSprite = new Sprite("player", "sprite");
     testSprite->init(10, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
 
     spriteBatch.init();
+
+    LevelParser levelParser;
+    //level = levelParser.parseLevel("assets/maps/map1.tmx"); //NOTE: relative tileset path does not work in this case because of launcher pwd(project dir)
+    level = levelParser.parseLevel("map1.tmx");
+    level->setCamera(&camera);
+    level->setBatch(&spriteBatch);
 }
 
 Game::~Game() {}
 
 void Game::run() {
     TheEngine::Instance()->run();
+    colorTimer.start();
 }
 
 void Game::handleEvents() {
@@ -75,7 +87,7 @@ void Game::handleEvents() {
         glm::vec2 direction = mouseCoords - playerPos;
         direction = glm::normalize(direction);
 
-        bullets.emplace_back(playerPos, direction, 1.0f, 100);
+        bullets.emplace_back(playerPos, direction, 1.0f, 500);
     }
 
 }
@@ -85,6 +97,8 @@ void Game::preUpdate(float dt) {
 }
 
 void Game::postUpdate(float dt) {
+    level->update();
+
     for (int i = 0; i < bullets.size();) {
         if (bullets[i].update()) {
             // Remove bullet
@@ -97,9 +111,11 @@ void Game::postUpdate(float dt) {
 }
 
 void Game::preRender(float dt) {
+
     // Bind texture
     // Set uniforms
-    glm::mat4 model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
+    model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
     model = glm::scale(model, glm::vec3(2.0f));
     //glm::mat4 view = glm::mat4(1.0f);
     //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -107,6 +123,11 @@ void Game::preRender(float dt) {
     glm::mat4 view = camera.getCameraMatrix();
     glm::mat4 projection = glm::mat4(1.0f);
 
+    float colorMin = 0.0f, colorMax = 255.0f, colorCurr = colorMin;
+    colorCurr+= (int)colorTimer.read() % 255;
+    if (colorCurr > colorMax) {
+        colorCurr = colorMin;
+    }
     Shader* spriteShader = ResourceManager::Instance()->getShader("sprite");
     if (spriteShader != nullptr) {
         spriteShader->bind();
@@ -114,9 +135,13 @@ void Game::preRender(float dt) {
         spriteShader->setUniformMat4f("view", view);
         spriteShader->setUniformMat4f("projection", projection);
         spriteShader->setUniform1i("spriteTexture", 0);
+        //spriteShader->setUniformVec4("uColor", glm::vec4(1.0f, (float)(colorTimer.read() / 255.0f), 0.0f, 1.0f));
+        spriteShader->setUniformVec4("uColor", glm::vec4(1.0f, colorCurr, 0.0f, 1.0f));
+        //spriteShader->setUniformVec4("uColor", glm::vec4(0.5f, 1.0f, 0.2f, 1.0f));
         testSprite->draw();
     }
 
+    // Setting up rendering batch and rendering it all at once with a single draw call
     Shader* batchShader = ResourceManager::Instance()->getShader("batch");
     if (batchShader != nullptr) {
         batchShader->bind();
@@ -125,6 +150,8 @@ void Game::preRender(float dt) {
         batchShader->setUniformMat4f("projection", projection);
         batchShader->setUniform1i("spriteTexture", 0);
         spriteBatch.begin();
+
+        level->render();
 
         glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
         //glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
@@ -149,7 +176,6 @@ void Game::preRender(float dt) {
         spriteBatch.end();
 
         spriteBatch.renderBatch();
-
     }
 
 }
