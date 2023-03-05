@@ -9,5 +9,8 @@ uniform sampler2D spriteTexture;
 
 void main() {
     // TODO: need to pass in color as well either as vertex attrib or uniform?
-    fragColor = texture(spriteTexture, v_texCoords) * uColor;
+    //fragColor = texture(spriteTexture, v_texCoords) * uColor;
+    vec4 color = texture(spriteTexture, v_texCoords) * uColor;
+    if (color.a < 0.5) discard; else fragColor = color;
+
 }
