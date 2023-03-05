@@ -45,6 +45,8 @@ namespace Villain {
         //position.y = cam->getPosition().y;
         position.x = 0;
         position.y = 0;
+        //position.x = -(float)TheEngine::Instance()->getScreenWidth()/2;
+        //position.y = -(float)TheEngine::Instance()->getScreenHeight()/2;
         //position.x = TheEngine::Instance()->camera.x;
         //position.y = TheEngine::Instance()->camera.y;
 
@@ -81,9 +83,9 @@ namespace Villain {
                 glm::vec4 destRect(tileX, tileY, tileSize * scale, tileSize * scale);
                 int row = (id - (tileset.firstGridID - 1)) / tileset.numColumns;
                 int column = (id - (tileset.firstGridID - 1)) % tileset.numColumns;
-                //std::cout << "ID: " << id << ", i: " << i << ", j: " << j << ", row: " << row << ", column: " << column << "\n";
-                // TODO:Utilise depth and color, spacing and margin can be implemented if needed
-                batch->draw(destRect, column, row, tileset.tileWidth, tileset.tileHeight, tilesetTexture, 0.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+                //std::cout << "ID: " << id << ", row: " << row << ", col: " << column << "\n";
+                // TODO:Utilise color, spacing and margin can be implemented if needed
+                batch->draw(destRect, column, row, tileset.tileWidth, tileset.tileHeight, tilesetTexture, depth, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
             }
         }
     }

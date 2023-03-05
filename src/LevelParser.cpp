@@ -1,5 +1,6 @@
 #include "LevelParser.hpp"
 #include "Level.hpp"
+#include "Logger.hpp"
 #include "TileLayer.hpp"
 //#include "ObjectLayer.hpp"
 #include "CollisionLayer.hpp"
@@ -9,11 +10,15 @@
 #include <sstream>
 
 // NOTE: For SDL_Rect, want to replace with own structure for representing colliders
+// Or can easily use something like glm::vec4
 #include <SDL2/SDL.h>
 
 namespace Villain {
 
     Level* LevelParser::parseLevel(const char* levelFile) {
+        std::string logMessage = "Loading tile map: " + std::string(levelFile);
+        Logger::Instance()->info(logMessage.data());
+
         tinyxml2::XMLDocument levelDoc;
         levelDoc.LoadFile(levelFile);
 
@@ -60,6 +65,10 @@ namespace Villain {
                     (e->FirstChildElement()->NextSiblingElement() != 0
                         && e->FirstChildElement()->NextSiblingElement()->Value() == std::string("data"))
                         ) {
+                    Logger::Instance()->info("Loading tile layer.");
+                    std::ostringstream ss;
+                    ss << "Map width: " << width << ", Map height: " << height;
+                    Logger::Instance()->info(ss.str().c_str());
                     parseTileLayer(e, level->getLayers(), level->getTilesets(), level->getCollisionLayers());
                 }
             }
@@ -89,10 +98,10 @@ namespace Villain {
 			tileset.spacing = tilesetRoot->IntAttribute("spacing");
         if (tilesetRoot->Attribute("margin"))
 			tileset.margin = tilesetRoot->IntAttribute("margin");
-        // tilesetRoot->Attribute("columns", &tileset.numColumns);
         tileset.name = tilesetRoot->Attribute("name");
 
-        tileset.numColumns = tileset.width / (tileset.tileWidth + tileset.spacing);
+        //tileset.numColumns = tileset.width / (tileset.tileWidth + tileset.spacing);
+        tileset.numColumns = tilesetRoot->IntAttribute("columns");
 
         level->getTilesets()->push_back(tileset);
 
@@ -109,8 +118,10 @@ namespace Villain {
             if(e->Value() == std::string("properties")) {
                 for(tinyxml2::XMLElement* property = e->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
                     if(property->Value() == std::string("property")) {
-                        if(property->Attribute("name") == std::string("collidable")) {
+                        if (property->Attribute("name") == std::string("collidable")) {
                             collidable = true;
+                        } else if (property->Attribute("name") == std::string("depth")) {
+                            layer->setDepth(property->FloatAttribute("value"));
                         }
                     }
                 }
@@ -140,12 +151,10 @@ namespace Villain {
             std::istringstream rowStream(row);
             std::string tileId;
             while(std::getline(rowStream, tileId, ',')) {
-                //std::cout << stoi(tileId) << "\n";
                 layerRow.push_back(stoi(tileId));
             }
             data.push_back(layerRow);
         }
-        //std::cout << data[0][0] << "\n";
 
         // uncompress zlib compression
         // uLongf numGids = width * height * sizeof(int);
@@ -172,6 +181,8 @@ namespace Villain {
         //Initialise game camera
         // TheEngine::Instance()->camera = {0, 0, TheEngine::Instance()->getScreenWidth(), TheEngine::Instance()->getScreenHeight()};
 
+        // NOTE: In Vigilant, collidable attribute was used for invisible collision layers, not sure if this is still neccessary
+        // as we can show collidable tiles using shader, will have to decide the function for this
         if (collidable) {
             layer->setVisible(false);
             collisionLayers->push_back(layer);

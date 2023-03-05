@@ -27,7 +27,7 @@ void Bullet::draw(Villain::SpriteBatch& spriteBatch) {
     glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::vec4 destRect = glm::vec4(position.x, position.y, 10, 10);
-    spriteBatch.draw(destRect, uv, texture->getID(), 0.0f, color);
+    spriteBatch.draw(destRect, uv, texture->getID(), 0.5f, color);
 }
 
 bool Bullet::update() {

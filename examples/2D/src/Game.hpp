@@ -9,6 +9,9 @@
 #include "Timer.hpp"
 
 #include "Bullet.hpp"
+#include "Player.hpp"
+#include "Zombie.hpp"
+#include <vector>
 
 class Game {
     public:
@@ -36,6 +39,10 @@ class Game {
         static Villain::Level* level;
 
         static Villain::Timer colorTimer;
+
+        static Player* player;
+        static std::vector<Human*> humans;
+        static std::vector<Zombie*> zombies;
 
 };
 

@@ -34,9 +34,13 @@ namespace Villain {
 			void setVisible(bool visible) { isVisible = visible; }
 			bool getVisible() { return isVisible; }
 
+			void setDepth(float z) { depth = z; }
+			float getDepth() const { return depth; }
+
         private:
             int tileSize;
             double scale;
+            float depth;
 
             const std::vector<TileSet> &tileSets;
 

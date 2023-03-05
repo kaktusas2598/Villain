@@ -4,8 +4,12 @@
 #include "LevelParser.hpp"
 #include "LuaScript.hpp"
 #include "ResourceManager.hpp"
+#include "examples/2D/src/Player.hpp"
 #include "glm/ext/matrix_transform.hpp"
-#include <SDL2/SDL_timer.h>
+
+#include "DebugConsole.hpp"
+#include <cstdio>
+#include <sstream>
 
 using namespace Villain;
 
@@ -16,6 +20,10 @@ Texture* Game::playerSpritesheet = nullptr;
 std::vector<Bullet> Game::bullets;
 Level* Game::level = nullptr;
 Timer Game::colorTimer;
+
+std::vector<Human*> Game::humans;
+std::vector<Zombie*> Game::zombies;
+Player* Game::player = nullptr;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -50,6 +58,11 @@ Game::Game() {
 
     spriteBatch.init();
 
+    player = new Player();
+    player->init(glm::vec3(-100.0f, -100.0f, 0.5f), 1.0f, playerSpritesheet);
+
+    humans.push_back(player);
+
     LevelParser levelParser;
     //level = levelParser.parseLevel("assets/maps/map1.tmx"); //NOTE: relative tileset path does not work in this case because of launcher pwd(project dir)
     level = levelParser.parseLevel("map1.tmx");
@@ -65,35 +78,53 @@ void Game::run() {
 }
 
 void Game::handleEvents() {
-    if(TheInputManager::Instance()->isKeyDown(SDLK_w))
-        camera.setPosition(camera.getPosition() + glm::vec3(0.0f, 10.0f, 0.0f));
-    if(TheInputManager::Instance()->isKeyDown(SDLK_a))
-        camera.setPosition(camera.getPosition() + glm::vec3(-10.0f, 0.0f, 0.0f));
-    if(TheInputManager::Instance()->isKeyDown(SDLK_s))
-        camera.setPosition(camera.getPosition() + glm::vec3(0.0f, -10.0f, 0.0f));
-    if(TheInputManager::Instance()->isKeyDown(SDLK_d))
-        camera.setPosition(camera.getPosition() + glm::vec3(10.0f, 0.0f, 0.0f));
+    //if(TheInputManager::Instance()->isKeyDown(SDLK_w))
+        //camera.setPosition(camera.getPosition() + glm::vec3(0.0f, 10.0f, 0.0f));
+    //if(TheInputManager::Instance()->isKeyDown(SDLK_a))
+        //camera.setPosition(camera.getPosition() + glm::vec3(-10.0f, 0.0f, 0.0f));
+    //if(TheInputManager::Instance()->isKeyDown(SDLK_s))
+        //camera.setPosition(camera.getPosition() + glm::vec3(0.0f, -10.0f, 0.0f));
+    //if(TheInputManager::Instance()->isKeyDown(SDLK_d))
+        //camera.setPosition(camera.getPosition() + glm::vec3(10.0f, 0.0f, 0.0f));
     if(TheInputManager::Instance()->isKeyDown(SDLK_q))
         camera.setZoom(camera.getZoom() + 0.01f);
     if(TheInputManager::Instance()->isKeyDown(SDLK_e))
         camera.setZoom(camera.getZoom() - 0.01f);
 
-    if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
-        glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
-        mouseCoords = camera.screenToWorld(mouseCoords);
-        std::cout << "Mouse clicked: " << mouseCoords.x << ", " << mouseCoords.y << std::endl;
+    // Get SDL window mouse coords and convert to camera woorld coords
+    glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
+    mouseCoords = camera.screenToWorld(mouseCoords);
 
-        glm::vec2 playerPos(0.0f); // for now assume player is always in the center
+    // Format message and add it in debug console
+    std::ostringstream ss;
+    ss << "Mouse world position: " << mouseCoords.x << ", " << mouseCoords.y;
+    DebugConsole::Instance()->setInfo("mouse", ss.str());
+
+    // On mouse click fire a bullet
+    if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+        //glm::vec2 playerPos(0.0f); // for now assume player is always in the center
+        glm::vec2 playerPos = glm::vec2(player->getPosition().x, player->getPosition().y);
         glm::vec2 direction = mouseCoords - playerPos;
         direction = glm::normalize(direction);
 
         bullets.emplace_back(playerPos, direction, 1.0f, 500);
     }
-
 }
 
 void Game::preUpdate(float dt) {
     handleEvents();
+
+    for (int i = 0; i < humans.size();i++) {
+        humans[i]->update();
+    }
+    for (int i = 0; i < zombies.size();i++) {
+        zombies[i]->update();
+    }
+
+    // Center camera around player
+    float cameraZ = camera.getPosition().z;
+    glm::vec3 cameraPos = glm::vec3(player->getPosition().x, player->getPosition().y, cameraZ);
+    camera.setPosition(cameraPos);
 }
 
 void Game::postUpdate(float dt) {
@@ -114,7 +145,7 @@ void Game::preRender(float dt) {
 
     // Bind texture
     // Set uniforms
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.2f));
     model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
     model = glm::scale(model, glm::vec3(2.0f));
     //glm::mat4 view = glm::mat4(1.0f);
@@ -128,6 +159,7 @@ void Game::preRender(float dt) {
     if (colorCurr > colorMax) {
         colorCurr = colorMin;
     }
+
     Shader* spriteShader = ResourceManager::Instance()->getShader("sprite");
     if (spriteShader != nullptr) {
         spriteShader->bind();
@@ -153,20 +185,24 @@ void Game::preRender(float dt) {
 
         level->render();
 
+        for (int i = 0; i < humans.size(); i++) {
+            humans[i]->draw(spriteBatch);
+        }
+
         glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
         //glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
         glm::vec4 uv(0.0f, 0.0f, 1.0f / 6, 1.0f / 10);
         glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
 
         //testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
-        spriteBatch.draw(position + glm::vec4(100.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.0f, color);
+        spriteBatch.draw(position + glm::vec4(100.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.5f, color);
 
         static int currentFrame = 0;
         static int numFrames = 6;
         currentFrame =  int(((SDL_GetTicks() / 100) % 5));
-        spriteBatch.draw(position, currentFrame++, 2, 48, 48, playerSpritesheet, 0.0f, color);
+        spriteBatch.draw(position, currentFrame++, 2, 48, 48, playerSpritesheet, 0.5f, color);
 
-        spriteBatch.draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), currentFrame, 0, 48, 48, playerSpritesheet, 0.0f, color);
+        spriteBatch.draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), currentFrame, 0, 48, 48, playerSpritesheet, 0.5f, color);
 
 
         for (int i = 0; i < bullets.size(); i++) {
@@ -177,7 +213,6 @@ void Game::preRender(float dt) {
 
         spriteBatch.renderBatch();
     }
-
 }
 
 void Game::postRender(float dt) {

@@ -37,19 +37,19 @@ namespace Villain {
         newGlyph->depth = depth;
 
         newGlyph->topLeft.Color = color;
-        newGlyph->topLeft.Position = glm::vec3(destRect.x, destRect.y + destRect.w, 0.0f);
+        newGlyph->topLeft.Position = glm::vec3(destRect.x, destRect.y + destRect.w, depth);
         newGlyph->topLeft.UV = glm::vec2(uvRect.x, uvRect.y + uvRect.w);
 
         newGlyph->bottomLeft.Color = color;
-        newGlyph->bottomLeft.Position = glm::vec3(destRect.x, destRect.y, 0.0f);
+        newGlyph->bottomLeft.Position = glm::vec3(destRect.x, destRect.y, depth);
         newGlyph->bottomLeft.UV = glm::vec2(uvRect.x, uvRect.y);
 
         newGlyph->topRight.Color = color;
-        newGlyph->topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + destRect.w, 0.0f);
+        newGlyph->topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + destRect.w, depth);
         newGlyph->topRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
 
         newGlyph->bottomRight.Color = color;
-        newGlyph->bottomRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y, 0.0f);
+        newGlyph->bottomRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y, depth);
         newGlyph->bottomRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y);
 
         glyphs.push_back(newGlyph);

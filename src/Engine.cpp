@@ -203,7 +203,7 @@ namespace Villain {
         //ParticleSystem::Instance()->update(deltaTime); // Update actually does rendering too
         //ParticleSystem::Instance()->render(deltaTime);
 
-        glClearDepth(1.0);
+        //glClearDepth(1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (preRenderCallback != nullptr) preRenderCallback(deltaTime);
