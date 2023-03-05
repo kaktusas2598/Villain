@@ -2,13 +2,17 @@
 
 #include "Engine.hpp"
 //#include "Level.hpp"
+#include "InputManager.hpp"
 #include "ScriptEngine.hpp"
+#include "imgui/imgui.h"
 
 namespace Villain {
 
     bool DebugConsole::layerVisibility = false;
     bool DebugConsole::colliderVisibility = false;
     bool DebugConsole::showDemoWindow = false;
+    ImVec4 DebugConsole::clearColor = ImVec4(255.0f, 0.0f, 0.0f, 1.0f);
+    std::map<std::string,std::string> DebugConsole::customInfo;
 
     DebugConsole* DebugConsole::s_pInstance = nullptr;
 
@@ -95,8 +99,17 @@ namespace Villain {
     void DebugConsole::render() {
         ImGui::Begin("Debug Console");
 
-        //ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+        // Engine Info
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+        //ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+        ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
+        ImGui::Separator();
+
+        // Custom Info
+        for (const auto& pair: customInfo) {
+            ImGui::TextUnformatted(pair.second.c_str());
+        }
         //ImGui::Text("Active entities: %d", EntityManager::livingCount);
         ImGui::Checkbox("Show collision layers", &layerVisibility);
         ImGui::Checkbox("Show colliders", &colliderVisibility);
@@ -190,6 +203,8 @@ namespace Villain {
 
 
         ImGui::End();
+
+        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     }
 
     // In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
