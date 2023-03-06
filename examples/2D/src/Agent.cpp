@@ -13,22 +13,18 @@ Agent::~Agent()
 }
 
 void Agent::collideWithLevel(Villain::Level& level) {
-    // TODO: check all collidable layers against agent not just 1st one
-    std::vector<Villain::TileLayer*> layers = level.getCollidableLayers();
-    //for (size_t i = 0; i < layers.size(); i++) {
-        //auto tileIds = layers[i]->getTileIDs();
-    //}
-
-    std::vector<glm::vec2> collideTilePositions;
     float spriteSize = 48.0f; //TODO: fix this hardcoded value, same as in draw()
 
+    // TODO: check all collidable layers against agent not just 1st one
     // Check four corners around sprite
-    float tileSize = layers[0]->getTileSize() * layers[0]->getScale();
+    std::vector<glm::vec2> collideTilePositions;
     checkTilePosition(level, collideTilePositions, position.x, position.y);
     checkTilePosition(level, collideTilePositions, position.x + spriteSize, position.y);
     checkTilePosition(level, collideTilePositions, position.x, position.y + spriteSize);
     checkTilePosition(level, collideTilePositions, position.x + spriteSize, position.y + spriteSize);
 
+    std::vector<Villain::TileLayer*> layers = level.getCollidableLayers();
+    float tileSize = layers[0]->getTileSize() * layers[0]->getScale();
     for (int i = 0; i < collideTilePositions.size(); i++) {
        collideWithTile(collideTilePositions[i], tileSize);
     }
@@ -62,7 +58,7 @@ void Agent::checkTilePosition(Villain::Level& level, std::vector<glm::vec2>& col
 
     if (cornerPos.x < layers[0]->getMapWidth() && cornerPos.x >= 0
         && cornerPos.y < layers[0]->getMapHeight() && cornerPos.y >= 0) {
-        if (tileIds[cornerPos.x][cornerPos.y] != 0) {
+        if (tileIds[cornerPos.y][cornerPos.x] != 0) {
             std::cout << "Player Tile Collision!\n";
             // Use center position of tile for collision check
             collideTilePositions.push_back(cornerPos * tileSize + glm::vec2(tileSize / 2.0f));
