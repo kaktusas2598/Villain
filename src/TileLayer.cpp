@@ -20,11 +20,6 @@ namespace Villain {
         std::cout << "Num columns: " << numColumns << "\n";
         std::cout << "Num rows: " << numRows << "\n";
         std::cout << "Tilesize: " << tileSize << "\n";
-
-        // Visible column and row calculation is taken straight from Vigilant Engine
-        // But Villain uses OpenGL explusively and coord system will be different here
-        //numColumns = mapWidth;
-        //numRows = mapHeight;
     }
 
     void TileLayer::update() {
@@ -41,6 +36,10 @@ namespace Villain {
 		if (!isVisible) {
 			return;
 		}
+
+        //NOTE: temporary fix for not whole map being rendered, but view must be culled by using camera to save on performance
+        numColumns = mapWidth;
+        numRows = mapHeight;
 
         int x, y, x2, y2 = 0;
 
