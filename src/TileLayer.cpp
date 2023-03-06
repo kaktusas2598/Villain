@@ -20,6 +20,11 @@ namespace Villain {
         std::cout << "Num columns: " << numColumns << "\n";
         std::cout << "Num rows: " << numRows << "\n";
         std::cout << "Tilesize: " << tileSize << "\n";
+
+        // Visible column and row calculation is taken straight from Vigilant Engine
+        // But Villain uses OpenGL explusively and coord system will be different here
+        //numColumns = mapWidth;
+        //numRows = mapHeight;
     }
 
     void TileLayer::update() {
@@ -41,6 +46,7 @@ namespace Villain {
 
 	    // Tile map position based on camera - causes weird rendering issues
         // TODO: not sure if Engine class should store camera anymore, maybe level should store active camera used?
+        // FIXME: Same code for calculating position wont work because this not using SDL coord system anymore
         //position.x = cam->getPosition().x;
         //position.y = cam->getPosition().y;
         position.x = 0;
@@ -83,8 +89,7 @@ namespace Villain {
                 glm::vec4 destRect(tileX, tileY, tileSize * scale, tileSize * scale);
                 int row = (id - (tileset.firstGridID - 1)) / tileset.numColumns;
                 int column = (id - (tileset.firstGridID - 1)) % tileset.numColumns;
-                //std::cout << "ID: " << id << ", row: " << row << ", col: " << column << "\n";
-                // TODO:Utilise color, spacing and margin can be implemented if needed
+                 //TODO:Utilise color, spacing and margin can be implemented if needed
                 batch->draw(destRect, column, row, tileset.tileWidth, tileset.tileHeight, tilesetTexture, depth, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
             }
         }

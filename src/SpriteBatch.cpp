@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <type_traits>
 
+#include <iostream>
+
 namespace Villain {
 
     SpriteBatch::SpriteBatch(): vbo(0), vao(0) {
@@ -55,12 +57,16 @@ namespace Villain {
         glyphs.push_back(newGlyph);
     }
 
-    // HACK: This method is only a proof of concept for drawing sprite from a spritesheet, will need to be improved a lot
+    //HACK: This method is only a proof of concept for drawing sprite from a spritesheet, will need to be improved a lot
     void SpriteBatch::draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color) {
         glm::vec4 uvRect;
         // 0 - 1, where 1 is texture width
         uvRect.x = frame * 1/(texture->getWidth()/(float) width);
-        uvRect.y = row * 1/(texture->getHeight()/(float) height);
+        // Calculate num rows to flip actual row because loaded textures are flipped vertically in STBI image
+        int numRows = texture->getHeight() / height;
+        uvRect.y = (numRows - row - 1) * 1/(texture->getHeight()/(float) height);
+        //uvRect.y = row * 1/(texture->getHeight()/(float) height);
+
         uvRect.z = 1/(texture->getWidth() / (float) width);
         uvRect.w = 1/(texture->getHeight() / (float) height);
 

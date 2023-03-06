@@ -7,6 +7,7 @@
 Texture::Texture(const std::string& fileName)
     : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_2D) {
 
+    // FIXME:: For some reason flipping texture messes up tile atlases, but not spritesheets, super strange
     // Not sure why I need to flip texture for GL
     stbi_set_flip_vertically_on_load(1);
 

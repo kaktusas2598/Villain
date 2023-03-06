@@ -184,7 +184,7 @@ namespace Villain {
         // NOTE: In Vigilant, collidable attribute was used for invisible collision layers, not sure if this is still neccessary
         // as we can show collidable tiles using shader, will have to decide the function for this
         if (collidable) {
-            layer->setVisible(false);
+            //layer->setVisible(false);
             collisionLayers->push_back(layer);
         }
 

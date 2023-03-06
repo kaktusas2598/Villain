@@ -28,9 +28,10 @@ namespace Villain {
 
         private:
             int screenWidth, screenHeight;
-            float zoom;
+            bool needsMatrixUpdate;
+            float zoom; //<<< scale/zoom factor
             glm::vec3 position;
-            glm::mat4 projection;
+            glm::mat4 projection; //<<< Orthographic projection matrix
     };
 }
 #endif // __Camera2D__
