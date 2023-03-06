@@ -8,6 +8,8 @@ class Zombie : public Agent {
         Zombie();
         ~Zombie();
 
+        void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
+
     private:
 
 };

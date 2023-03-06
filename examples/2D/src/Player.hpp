@@ -9,7 +9,7 @@ class Player : public Human {
         ~Player();
 
         void init(glm::vec3 pos, float sp, Texture* t);
-        void update();
+        void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
     private:
 
 };

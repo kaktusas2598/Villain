@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <sstream>
 
+#include "Zombie.hpp"
+
 using namespace Villain;
 
 Sprite* Game::testSprite = nullptr;
@@ -47,6 +49,10 @@ Game::Game() {
             );
 
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
+    glm::vec3 camPos = camera.getPosition();
+    camPos.x = configScript.get<int>("window.width")/2.0;
+    camPos.y = configScript.get<int>("window.width")/2.0;
+    camera.setPosition(camPos);
 
     playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
     ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
@@ -59,7 +65,7 @@ Game::Game() {
     spriteBatch.init();
 
     player = new Player();
-    player->init(glm::vec3(-100.0f, -100.0f, 0.5f), 1.0f, playerSpritesheet);
+    player->init(glm::vec3(100.0f, 100.0f, 0.5f), 1.0f, playerSpritesheet);
 
     humans.push_back(player);
 
@@ -115,10 +121,10 @@ void Game::preUpdate(float dt) {
     handleEvents();
 
     for (int i = 0; i < humans.size();i++) {
-        humans[i]->update();
+        humans[i]->update(*level, humans, zombies);
     }
     for (int i = 0; i < zombies.size();i++) {
-        zombies[i]->update();
+        zombies[i]->update(*level, humans, zombies);
     }
 
     // Center camera around player

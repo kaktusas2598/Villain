@@ -10,8 +10,9 @@
 
 #include "Bullet.hpp"
 #include "Player.hpp"
-#include "Zombie.hpp"
 #include <vector>
+
+class Zombie;
 
 class Game {
     public:
