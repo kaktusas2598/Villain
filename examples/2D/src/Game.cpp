@@ -9,6 +9,7 @@
 
 #include "DebugConsole.hpp"
 #include <cstdio>
+#include <random>
 #include <sstream>
 
 #include "Zombie.hpp"
@@ -64,16 +65,29 @@ Game::Game() {
 
     spriteBatch.init();
 
+    // Main game player
     player = new Player();
     player->init(glm::vec3(100.0f, 100.0f, 0.5f), 1.0f, playerSpritesheet);
-
     humans.push_back(player);
 
+    // Load level and set it's rendering batch and active camera
     LevelParser levelParser;
     //level = levelParser.parseLevel("assets/maps/map1.tmx"); //NOTE: relative tileset path does not work in this case because of launcher pwd(project dir)
     level = levelParser.parseLevel("map1.tmx");
     level->setCamera(&camera);
     level->setBatch(&spriteBatch);
+
+    // Randomise some NPCs
+    std::mt19937 rndEngine;
+    rndEngine.seed(time(nullptr));
+    std::cout << level->getWidth() << ", " << level->getHeight() << "\n";
+    std::uniform_real_distribution<float> xDist(100.0f, level->getWidth());
+    std::uniform_real_distribution<float> yDist(100.0f, level->getHeight());
+    for (int i = 0; i < 20; i++) {
+        humans.push_back(new Human);
+        humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), 0.5f, playerSpritesheet);
+    }
+
 }
 
 Game::~Game() {}

@@ -8,8 +8,10 @@ class Human : public Agent {
         Human();
         ~Human();
 
+        void init(glm::vec3 pos, float sp, Texture* t);
         void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
     private:
+        glm::vec2 direction;
 
 };
 

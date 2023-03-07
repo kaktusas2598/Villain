@@ -1,4 +1,8 @@
 #include "Human.hpp"
+#include "glm/fwd.hpp"
+#include "glm/geometric.hpp"
+
+#include <random>
 
 Human::Human()
 {
@@ -8,5 +12,27 @@ Human::~Human()
 {
 }
 
+void Human::init(glm::vec3 pos, float sp, Texture* t) {
+
+    static std::mt19937 rndEngine;
+    rndEngine.seed(time(nullptr));
+    static std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+
+
+    position = pos;
+    speed = sp;
+    texture = t;
+    // Randomize human/npc direction
+    direction = glm::vec2(dist(rndEngine), dist(rndEngine));
+    // Make sure direction isn't zero
+    if (direction.length() == 0) direction = glm::vec2(1.0f, 0.0f);
+    direction = glm::normalize(direction);
+}
+
 void Human::update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+
+    position.x += direction.x * speed;
+    position.y += direction.y * speed;
+
+    collideWithLevel(level);
 }

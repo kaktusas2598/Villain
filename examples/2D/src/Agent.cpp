@@ -38,8 +38,6 @@ void Agent::draw(Villain::SpriteBatch& batch) {
     int size = 48;
     destRect.z = size;
     destRect.w = size;
-    //spriteBatch->draw();
-    //Texture* texture = ResourceManager::Instance()->getTexture(tileset.name);
     // TODO:Utilise color, setup animations
     //batch->draw(destRect, frame, row, frameWidth, frameHeight, texture, depth, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     batch.draw(destRect, 0, 0, size, size, texture, position.z, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -56,10 +54,9 @@ void Agent::checkTilePosition(Villain::Level& level, std::vector<glm::vec2>& col
     glm::vec2 cornerPos = glm::vec2(floor(x / tileSize), floor(y / tileSize));
     std::cout << "Player Tile Position: " << cornerPos.x << ", " << cornerPos.y << "\n";
 
-    if (cornerPos.x < layers[0]->getMapWidth() && cornerPos.x >= 0
-        && cornerPos.y < layers[0]->getMapHeight() && cornerPos.y >= 0) {
+    if (cornerPos.x < layers[0]->getMapWidth() || cornerPos.x >= 0
+        || cornerPos.y < layers[0]->getMapHeight() || cornerPos.y >= 0) {
         if (tileIds[cornerPos.y][cornerPos.x] != 0) {
-            std::cout << "Player Tile Collision!\n";
             // Use center position of tile for collision check
             collideTilePositions.push_back(cornerPos * tileSize + glm::vec2(tileSize / 2.0f));
         }
@@ -79,7 +76,6 @@ void Agent::collideWithTile(glm::vec2 tilePosition, float tileSize) {
     // Calculate collision penetration depth
     float xDepth = minDistance - abs(distance.x);
     float yDepth = minDistance - abs(distance.y);
-    std::cout << "Penetration depth(x, y): "<< xDepth << ", " << yDepth << "\n";
 
     // Definitely collision!
     if (xDepth > 0 || yDepth > 0) {
