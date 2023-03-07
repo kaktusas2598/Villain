@@ -36,6 +36,7 @@ class Game {
         static Villain::SpriteBatch spriteBatch;
         static Villain::Camera2D camera;
         static Texture* playerSpritesheet;
+        static Texture* zombieSpritesheet;
         static std::vector<Bullet> bullets;
         static Villain::Level* level;
 

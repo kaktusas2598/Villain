@@ -20,6 +20,7 @@ Sprite* Game::testSprite = nullptr;
 SpriteBatch Game::spriteBatch;
 Camera2D Game::camera;
 Texture* Game::playerSpritesheet = nullptr;
+Texture* Game::zombieSpritesheet = nullptr;
 std::vector<Bullet> Game::bullets;
 Level* Game::level = nullptr;
 Timer Game::colorTimer;
@@ -27,6 +28,9 @@ Timer Game::colorTimer;
 std::vector<Human*> Game::humans;
 std::vector<Zombie*> Game::zombies;
 Player* Game::player = nullptr;
+
+const float HUMAN_SPEED = 0.5f;
+const float ZOMBIE_SPEED = 0.55f;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -56,6 +60,7 @@ Game::Game() {
     camera.setPosition(camPos);
 
     playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
+    zombieSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/slime.png", "zombie");
     ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
 
@@ -80,13 +85,19 @@ Game::Game() {
     // Randomise some NPCs
     std::mt19937 rndEngine;
     rndEngine.seed(time(nullptr));
-    std::cout << level->getWidth() << ", " << level->getHeight() << "\n";
     std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
     std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
+
     for (int i = 0; i < 40; i++) {
         humans.push_back(new Human);
-        humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), 0.5f, playerSpritesheet);
+        humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, playerSpritesheet);
     }
+
+    for (int i = 0; i < 20; i++) {
+        zombies.push_back(new Zombie);
+        zombies.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), ZOMBIE_SPEED, zombieSpritesheet);
+    }
+
 
 }
 
@@ -142,6 +153,28 @@ void Game::preUpdate(float dt) {
     }
 
     //Npc collision and game logic
+    for (int i = 0; i < zombies.size(); i++) {
+        // Collide zombie/zombie
+        for (int j = i + 1; j < zombies.size(); j++) {
+            zombies[i]->collideWithAgent(zombies[j]);
+        }
+        // Collide zombie/human
+        // Start from 1, because 0 is player
+        for (int j = 1; j < humans.size(); j++) {
+            if (zombies[i]->collideWithAgent(humans[j])) {
+                // Turn human into zombie - add new zombie and delete human
+                zombies.push_back(new Zombie);
+                zombies.back()->init(humans[j]->getPosition(), ZOMBIE_SPEED, zombieSpritesheet);
+                delete humans[j];
+                humans[j] = humans.back();
+                humans.pop_back();
+
+            }
+        }
+
+    }
+
+    // Human/human collision
     for (int i = 0; i < humans.size(); i++) {
         // Only check each pair once!
         for (int j = i + 1; j < humans.size(); j++) {
@@ -216,6 +249,11 @@ void Game::preRender(float dt) {
         for (int i = 0; i < humans.size(); i++) {
             humans[i]->draw(spriteBatch);
         }
+
+        for (int i = 0; i < zombies.size(); i++) {
+            zombies[i]->draw(spriteBatch);
+        }
+
 
         glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
         //glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
