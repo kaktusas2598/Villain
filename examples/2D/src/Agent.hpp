@@ -11,6 +11,12 @@
 class Zombie;
 class Human;
 
+// NOTE:A lot of stuff in this class can be refactor to the engine and used to make multiple apps:
+// Sprite information: frame size, animation rows/columns, collider info(shape,margin etc.)
+// Collision logic for Villain::Level to this new "Sprite" class/struct (Sprite class already exists though for rendering simple 2d sprites)
+// eg.
+//   Villain::Collision::collideSpriteLevel(Villain::Sprite* sprite, Vigilant::Level& level);
+//   Villain::Collision::collideSprites(Villain::Sprite* spriteA, Vigilant::Sprite* spriteB);
 class Agent {
     public:
         Agent();
