@@ -12,7 +12,7 @@ class Zombie : public Agent {
         void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
 
     private:
-
+        Human* getNearestHuman(std::vector<Human*>& humans);
 };
 
 #endif // __ZOMBIE__

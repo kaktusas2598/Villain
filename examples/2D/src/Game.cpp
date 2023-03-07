@@ -29,8 +29,8 @@ std::vector<Human*> Game::humans;
 std::vector<Zombie*> Game::zombies;
 Player* Game::player = nullptr;
 
-const float HUMAN_SPEED = 0.5f;
-const float ZOMBIE_SPEED = 0.55f;
+const float HUMAN_SPEED = 0.6f;
+const float ZOMBIE_SPEED = 0.5f;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -172,6 +172,10 @@ void Game::preUpdate(float dt) {
             }
         }
 
+        //Player collision
+        if (zombies[i]->collideWithAgent(player)) {
+            std::cout << "You suck!\n";
+        }
     }
 
     // Human/human collision
