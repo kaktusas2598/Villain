@@ -83,7 +83,7 @@ Game::Game() {
     std::cout << level->getWidth() << ", " << level->getHeight() << "\n";
     std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
     std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 40; i++) {
         humans.push_back(new Human);
         humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), 0.5f, playerSpritesheet);
     }
@@ -139,6 +139,14 @@ void Game::preUpdate(float dt) {
     }
     for (int i = 0; i < zombies.size();i++) {
         zombies[i]->update(*level, humans, zombies);
+    }
+
+    //Npc collision and game logic
+    for (int i = 0; i < humans.size(); i++) {
+        // Only check each pair once!
+        for (int j = i + 1; j < humans.size(); j++) {
+            humans[i]->collideWithAgent(humans[j]);
+        }
     }
 
     // Center camera around player

@@ -45,5 +45,7 @@ void Human::update(Villain::Level& level, std::vector<Human*>& humans, std::vect
         frames++;
     }
 
-    collideWithLevel(level);
+    if (collideWithLevel(level)) {
+        direction = glm::rotate(direction, dist(rndEngine));
+    }
 }
