@@ -12,6 +12,7 @@ class Human : public Agent {
         void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
     private:
         glm::vec2 direction;
+        int frames;
 
 };
 

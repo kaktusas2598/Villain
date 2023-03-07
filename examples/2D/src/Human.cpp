@@ -1,10 +1,13 @@
 #include "Human.hpp"
+
+#include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 
 #include <random>
 
-Human::Human()
+Human::Human() : frames(0)
 {
 }
 
@@ -31,6 +34,16 @@ void Human::update(Villain::Level& level, std::vector<Human*>& humans, std::vect
 
     position.x += direction.x * speed;
     position.y += direction.y * speed;
+
+    static std::mt19937 rndEngine(time(nullptr));
+    // Change distribution range for more wild direction changes!
+    static std::uniform_real_distribution<float> dist(-.5f, .5f);
+    if (frames == 20) {
+        direction = glm::rotate(direction, dist(rndEngine));
+        frames = 0;
+    } else {
+        frames++;
+    }
 
     collideWithLevel(level);
 }
