@@ -14,10 +14,8 @@ Human::~Human()
 
 void Human::init(glm::vec3 pos, float sp, Texture* t) {
 
-    static std::mt19937 rndEngine;
-    rndEngine.seed(time(nullptr));
+    static std::mt19937 rndEngine(time(nullptr));
     static std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
-
 
     position = pos;
     speed = sp;

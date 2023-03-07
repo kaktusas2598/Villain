@@ -81,8 +81,8 @@ Game::Game() {
     std::mt19937 rndEngine;
     rndEngine.seed(time(nullptr));
     std::cout << level->getWidth() << ", " << level->getHeight() << "\n";
-    std::uniform_real_distribution<float> xDist(100.0f, level->getWidth());
-    std::uniform_real_distribution<float> yDist(100.0f, level->getHeight());
+    std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
+    std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
     for (int i = 0; i < 20; i++) {
         humans.push_back(new Human);
         humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), 0.5f, playerSpritesheet);
