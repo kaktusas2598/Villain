@@ -46,6 +46,9 @@ class Game {
         static std::vector<Human*> humans;
         static std::vector<Zombie*> zombies;
 
+        static int numHumansKilled;
+        static int numZombiesKilled;
+
 };
 
 #endif // __GAME__

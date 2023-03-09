@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
 #include "Engine.hpp"
+#include "ErrorHandler.hpp"
 #include "LevelParser.hpp"
 #include "LuaScript.hpp"
 #include "ResourceManager.hpp"
@@ -26,9 +27,13 @@ std::vector<Bullet> Game::bullets;
 Level* Game::level = nullptr;
 Timer Game::colorTimer;
 
+
 std::vector<Human*> Game::humans;
 std::vector<Zombie*> Game::zombies;
 Player* Game::player = nullptr;
+int Game::numHumansKilled = 0;
+int Game::numZombiesKilled = 0;
+
 
 const float HUMAN_SPEED = 0.6f;
 const float ZOMBIE_SPEED = 0.5f;
@@ -67,7 +72,7 @@ Game::Game() {
 
     //NOTE: So far not sure if sprite class will be used, due to sprite batch existance
     testSprite = new Sprite("player", "sprite");
-    testSprite->init(10, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
+    testSprite->init(-250, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
 
     spriteBatch.init();
 
@@ -106,7 +111,7 @@ Game::Game() {
     // Shotgun
     player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 20.0f, 4, 500));
     // Machine gun
-    player->addGun(new Gun("Uzi", 5, 1, 10.0f, 20.0f, 20, 500));
+    player->addGun(new Gun("Uzi", 5, 10, 10.0f, 20.0f, 20, 500));
 }
 
 Game::~Game() {}
@@ -143,6 +148,17 @@ void Game::handleEvents() {
 }
 
 void Game::preUpdate(float dt) {
+
+    // Check victory conditions
+    if (zombies.empty()) {
+        // WIN
+        std::cout << "WIN!\n";
+        std::cout << "Zombies Killed:" << numZombiesKilled << "\n";
+        std::cout << "Humans Killed:" << numHumansKilled << "\n";
+        std::cout << "Humans Remaining:" << humans.size() - 1 << "\n";
+        exitWithError("WIN!");
+    }
+
     handleEvents();
 
     for (int i = 0; i < humans.size();i++) {
@@ -163,26 +179,53 @@ void Game::preUpdate(float dt) {
         }
     }
 
+    bool bulletRemoved;
     // Bullet - agent collision
-    for (int i = 0; i < bullets.size();) {
+    for (int i = 0; i < bullets.size(); i++) {
+        bulletRemoved = false;
         for (int j = 0; j < zombies.size();) {
             if (bullets[i].collideWithAgent(zombies[j])) {
                 if (zombies[j]->applyDamage(bullets[i].getDamage())) {
                     delete zombies[j];
                     zombies[j] = zombies.back();
                     zombies.pop_back();
+                    numZombiesKilled++;
                 } else {
                     j++;
                 }
 
                 bullets[i] = bullets.back();
                 bullets.pop_back();
+                bulletRemoved = true;
+                i--;
                 break;
             } else {
                 j++;
             }
         }
-        i++;
+        if (!bulletRemoved) {
+            // Bullet human collision, excluding player so start j from 1
+            for (int j = 1; j < humans.size();) {
+                if (bullets[i].collideWithAgent(humans[j])) {
+                    if (humans[j]->applyDamage(bullets[i].getDamage())) {
+                        delete humans[j];
+                        humans[j] = humans.back();
+                        humans.pop_back();
+                        numHumansKilled++;
+                    } else {
+                        j++;
+                    }
+
+                    bullets[i] = bullets.back();
+                    bullets.pop_back();
+                    i--;
+                    break;
+                } else {
+                    j++;
+                }
+            }
+
+        }
     }
 
     //Npc collision and game logic

@@ -46,10 +46,10 @@ bool Bullet::update(Villain::Level& level) {
 }
 
 bool Bullet::collideWithAgent(Agent* agent) {
-    const float spriteRadius = 48.0f/2 + BULLET_RADIUS; //TODO: fix this hardcoded value in Agent
-    glm::vec2 centrePositionA = glm::vec2(position) + glm::vec2(spriteRadius);
+    const float spriteRadius = 48.0f/2;//TODO: fix this hardcoded value in Agent
+    glm::vec2 centrePositionA = glm::vec2(position);
     glm::vec2 centrePositionB = glm::vec2(agent->getPosition()) + glm::vec2(spriteRadius);
-    const float minDistance = spriteRadius * 2;
+    const float minDistance = spriteRadius + BULLET_RADIUS;
 
     glm::vec2 distVec = centrePositionA - centrePositionB;
 
