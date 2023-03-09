@@ -12,6 +12,7 @@
 #include <random>
 #include <sstream>
 
+#include "Gun.hpp"
 #include "Zombie.hpp"
 
 using namespace Villain;
@@ -72,7 +73,7 @@ Game::Game() {
 
     // Main game player
     player = new Player();
-    player->init(glm::vec3(100.0f, 100.0f, 0.5f), 1.0f, playerSpritesheet);
+    player->init(glm::vec3(100.0f, 100.0f, 0.5f), 1.0f, playerSpritesheet, &camera, &bullets);
     humans.push_back(player);
 
     // Load level and set it's rendering batch and active camera
@@ -93,12 +94,19 @@ Game::Game() {
         humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, playerSpritesheet);
     }
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 5; i++) {
         zombies.push_back(new Zombie);
         zombies.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), ZOMBIE_SPEED, zombieSpritesheet);
     }
 
-
+    //Setup guns
+    //Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife);
+    // Pistol
+    player->addGun(new Gun("9mm", 30, 1, 5.0f, 20.0f, 30, 500));
+    // Shotgun
+    player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 20.0f, 4, 500));
+    // Machine gun
+    player->addGun(new Gun("Uzi", 5, 1, 10.0f, 20.0f, 20, 500));
 }
 
 Game::~Game() {}
@@ -109,14 +117,6 @@ void Game::run() {
 }
 
 void Game::handleEvents() {
-    //if(TheInputManager::Instance()->isKeyDown(SDLK_w))
-        //camera.setPosition(camera.getPosition() + glm::vec3(0.0f, 10.0f, 0.0f));
-    //if(TheInputManager::Instance()->isKeyDown(SDLK_a))
-        //camera.setPosition(camera.getPosition() + glm::vec3(-10.0f, 0.0f, 0.0f));
-    //if(TheInputManager::Instance()->isKeyDown(SDLK_s))
-        //camera.setPosition(camera.getPosition() + glm::vec3(0.0f, -10.0f, 0.0f));
-    //if(TheInputManager::Instance()->isKeyDown(SDLK_d))
-        //camera.setPosition(camera.getPosition() + glm::vec3(10.0f, 0.0f, 0.0f));
     if(TheInputManager::Instance()->isKeyDown(SDLK_q))
         camera.setZoom(camera.getZoom() + 0.01f);
     if(TheInputManager::Instance()->isKeyDown(SDLK_e))
@@ -132,14 +132,14 @@ void Game::handleEvents() {
     DebugConsole::Instance()->setInfo("mouse", ss.str());
 
     // On mouse click fire a bullet
-    if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
-        //glm::vec2 playerPos(0.0f); // for now assume player is always in the center
-        glm::vec2 playerPos = glm::vec2(player->getPosition().x, player->getPosition().y);
-        glm::vec2 direction = mouseCoords - playerPos;
-        direction = glm::normalize(direction);
+    //if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+        ////glm::vec2 playerPos(0.0f); // for now assume player is always in the center
+        //glm::vec2 playerPos = glm::vec2(player->getPosition().x, player->getPosition().y);
+        //glm::vec2 direction = mouseCoords - playerPos;
+        //direction = glm::normalize(direction);
 
-        bullets.emplace_back(playerPos, direction, 1.0f, 500);
-    }
+        //bullets.emplace_back(playerPos, direction, 1.0f, 500);
+    //}
 }
 
 void Game::preUpdate(float dt) {
@@ -150,6 +150,18 @@ void Game::preUpdate(float dt) {
     }
     for (int i = 0; i < zombies.size();i++) {
         zombies[i]->update(*level, humans, zombies);
+    }
+
+    for (int i = 0; i < bullets.size();) {
+        // FIXME: this one seems to cause complete freeze
+        if (bullets[i].update(humans, zombies)) {
+        //if (bullets[i].update()) {
+            //// Remove bullet
+            bullets[i] = bullets.back();
+            bullets.pop_back();
+        } else {
+            i++;
+        }
     }
 
     //Npc collision and game logic
@@ -195,15 +207,6 @@ void Game::preUpdate(float dt) {
 void Game::postUpdate(float dt) {
     level->update();
 
-    for (int i = 0; i < bullets.size();) {
-        if (bullets[i].update()) {
-            // Remove bullet
-            bullets[i] = bullets.back();
-            bullets.pop_back();
-        } else {
-            i++;
-        }
-    }
 }
 
 void Game::preRender(float dt) {
