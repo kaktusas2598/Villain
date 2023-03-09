@@ -114,7 +114,15 @@ Game::Game() {
     player->addGun(new Gun("Uzi", 5, 10, 10.0f, 20.0f, 20, 500));
 }
 
-Game::~Game() {}
+Game::~Game() {
+    for (int i = 0; i < zombies.size(); i++) {
+        delete zombies[i];
+    }
+    for (int i = 0; i < humans.size(); i++) {
+        delete humans[i];
+    }
+
+}
 
 void Game::run() {
     TheEngine::Instance()->run();
