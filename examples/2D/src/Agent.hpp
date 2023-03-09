@@ -22,7 +22,7 @@ class Agent {
         Agent();
         virtual ~Agent();
 
-        virtual void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) = 0;
+        virtual void update(float deltaTime, Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) = 0;
 
         bool collideWithLevel(Villain::Level& level);
 

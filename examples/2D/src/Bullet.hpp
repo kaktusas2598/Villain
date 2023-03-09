@@ -22,8 +22,7 @@ class Bullet {
         void init(glm::vec2 pos, glm::vec2 dir, float sp, int life);
         void draw(Villain::SpriteBatch& spriteBatch);
         // True if needs to be destroyed
-        bool update(Villain::Level& level);
-        bool update(std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
+        bool update(float deltaTime, Villain::Level& level);
 
         bool collideWithAgent(Agent* agent);
 

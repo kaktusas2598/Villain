@@ -32,10 +32,10 @@ void Human::init(glm::vec3 pos, float sp, Texture* t) {
     direction = glm::normalize(direction);
 }
 
-void Human::update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Human::update(float deltaTime, Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
 
-    position.x += direction.x * speed;
-    position.y += direction.y * speed;
+    position.x += direction.x * speed * deltaTime;
+    position.y += direction.y * speed * deltaTime;
 
     static std::mt19937 rndEngine(time(nullptr));
     // Change distribution range for more wild direction changes!

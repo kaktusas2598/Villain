@@ -35,8 +35,8 @@ void Bullet::draw(Villain::SpriteBatch& spriteBatch) {
     spriteBatch.draw(destRect, uv, texture->getID(), 0.5f, color);
 }
 
-bool Bullet::update(Villain::Level& level) {
-    position += direction * speed;
+bool Bullet::update(float deltaTime, Villain::Level& level) {
+    position += direction * speed * deltaTime;
 
     lifeTime--;
     if (lifeTime == 0 || collideWithLevel(level))

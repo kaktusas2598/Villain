@@ -18,13 +18,13 @@ void Zombie::init(glm::vec3 pos, float sp, Texture* t) {
     health = 100;
 }
 
-void Zombie::update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Zombie::update(float deltaTime, Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
 
     Human* closestHuman = getNearestHuman(humans);
     if (closestHuman != nullptr) {
         glm::vec2 direction = glm::normalize(glm::vec2(closestHuman->getPosition()) - glm::vec2(position));
-        position.x += direction.x;
-        position.y += direction.y;
+        position.x += direction.x * speed * deltaTime;
+        position.y += direction.y * speed * deltaTime;
     }
 
     if (collideWithLevel(level)) {

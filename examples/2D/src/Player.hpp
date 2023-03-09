@@ -16,6 +16,7 @@ class Player : public Human {
 
         void init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew);
         void update(
+                float deltaTime,
                 Villain::Level& level,
                 std::vector<Human*>& humans,
                 std::vector<Zombie*>& zombies

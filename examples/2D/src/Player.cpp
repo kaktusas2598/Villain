@@ -29,18 +29,19 @@ void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, s
 
 // NOTE: probably would be better to pass InputManager as a ref here
 void Player::update(
+                float deltaTime,
                 Villain::Level& level,
                 std::vector<Human*>& humans,
                 std::vector<Zombie*>& zombies) {
 
     if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_w))
-        position.y += speed;
+        position.y += speed * deltaTime;
     if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_a))
-        position.x -= speed;
+        position.x -= speed * deltaTime;
     if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_s))
-        position.y -= speed;
+        position.y -= speed * deltaTime;
     if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_d))
-        position.x += speed;
+        position.x += speed * deltaTime;
 
     if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_1) && guns.size() >= 0) {
         std::cout << "Gun 0 selected\n";
@@ -63,7 +64,8 @@ void Player::update(
         glm::vec2 direction = glm::normalize(mouseCoords - centerPosition);
 
         guns[currentGunIndex]->update(
-                Villain::TheInputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT),
+                deltaTime,
+                Villain::TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT),
                 centerPosition,
                 direction,
                 *bullets);

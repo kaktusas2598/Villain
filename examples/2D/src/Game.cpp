@@ -35,8 +35,8 @@ int Game::numHumansKilled = 0;
 int Game::numZombiesKilled = 0;
 
 
-const float HUMAN_SPEED = 0.6f;
-const float ZOMBIE_SPEED = 0.5f;
+const float HUMAN_SPEED = 50.f;
+const float ZOMBIE_SPEED = 45.f;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -78,7 +78,7 @@ Game::Game() {
 
     // Main game player
     player = new Player();
-    player->init(glm::vec3(100.0f, 100.0f, 0.5f), 1.0f, playerSpritesheet, &camera, &bullets);
+    player->init(glm::vec3(100.0f, 100.0f, 0.5f), HUMAN_SPEED, playerSpritesheet, &camera, &bullets);
     humans.push_back(player);
 
     // Load level and set it's rendering batch and active camera
@@ -107,11 +107,11 @@ Game::Game() {
     //Setup guns
     //Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife);
     // Pistol
-    player->addGun(new Gun("9mm", 30, 1, 5.0f, 20.0f, 30, 500));
+    player->addGun(new Gun("9mm", 30, 1, 5.0f, 100.0f, 30, 500));
     // Shotgun
-    player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 20.0f, 4, 500));
+    player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 100.0f, 4, 500));
     // Machine gun
-    player->addGun(new Gun("Uzi", 5, 10, 10.0f, 20.0f, 20, 500));
+    player->addGun(new Gun("Uzi", 5, 10, 10.0f, 100.0f, 20, 500));
 }
 
 Game::~Game() {
@@ -170,15 +170,15 @@ void Game::preUpdate(float dt) {
     handleEvents();
 
     for (int i = 0; i < humans.size();i++) {
-        humans[i]->update(*level, humans, zombies);
+        humans[i]->update(dt, *level, humans, zombies);
     }
     for (int i = 0; i < zombies.size();i++) {
-        zombies[i]->update(*level, humans, zombies);
+        zombies[i]->update(dt, *level, humans, zombies);
     }
 
     // Update bullets - lifetime, position, level collision
     for (int i = 0; i < bullets.size();) {
-        if (bullets[i].update(*level)) {
+        if (bullets[i].update(dt, *level)) {
             //// Remove bullet
             bullets[i] = bullets.back();
             bullets.pop_back();

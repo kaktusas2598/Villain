@@ -9,7 +9,7 @@ class Zombie : public Agent {
         ~Zombie();
 
         void init(glm::vec3 pos, float sp, Texture* t);
-        void update(Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
+        void update(float deltaTime, Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) override;
 
     private:
         Human* getNearestHuman(std::vector<Human*>& humans);
