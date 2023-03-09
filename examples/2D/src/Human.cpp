@@ -20,6 +20,8 @@ void Human::init(glm::vec3 pos, float sp, Texture* t) {
     static std::mt19937 rndEngine(time(nullptr));
     static std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
+    health = 20;
+
     position = pos;
     speed = sp;
     texture = t;

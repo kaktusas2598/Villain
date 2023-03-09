@@ -31,7 +31,7 @@ void Gun::fire(const glm::vec2& position, const glm::vec2& direction, std::vecto
     static std::uniform_real_distribution<float> dist(-spread, spread);
 
     for (int i = 0; i < bulletsPerShot; i++) {
-        bullets.emplace_back(position, glm::rotate(direction, dist(rndEngine)), bulletSpeed, bulletLifetime, bulletDamage);
+        bullets.emplace_back(position, glm::rotate(direction, glm::radians(dist(rndEngine))), bulletSpeed, bulletLifetime, bulletDamage);
     }
 }
 

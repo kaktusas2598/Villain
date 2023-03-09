@@ -30,6 +30,8 @@ class Agent {
 
         void draw(Villain::SpriteBatch& batch);
 
+        bool applyDamage(float dmg);
+
         glm::vec3 getPosition() const { return position; }
         void setPosition(glm::vec3 pos) { position = pos; }
     protected:
@@ -44,6 +46,8 @@ class Agent {
         int currentRow, currentFrame; //<<< Current animation frame
         int frameSize;
         float scale;
+
+        float health;
 };
 
 #endif // __AGENT__

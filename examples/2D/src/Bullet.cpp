@@ -2,6 +2,8 @@
 
 #include "ResourceManager.hpp"
 
+#include "Agent.hpp"
+
 using namespace Villain;
 
 Bullet::Bullet(glm::vec2 pos, glm::vec2 dir, float sp, int life)
@@ -33,22 +35,44 @@ void Bullet::draw(Villain::SpriteBatch& spriteBatch) {
     spriteBatch.draw(destRect, uv, texture->getID(), 0.5f, color);
 }
 
-bool Bullet::update() {
+bool Bullet::update(Villain::Level& level) {
     position += direction * speed;
 
     lifeTime--;
-    if (lifeTime == 0)
+    if (lifeTime == 0 || collideWithLevel(level))
         return true;
 
     return false;
 }
 
-bool Bullet::update(std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
-    position += direction * speed;
+bool Bullet::collideWithAgent(Agent* agent) {
+    const float spriteRadius = 48.0f/2 + BULLET_RADIUS; //TODO: fix this hardcoded value in Agent
+    glm::vec2 centrePositionA = glm::vec2(position) + glm::vec2(spriteRadius);
+    glm::vec2 centrePositionB = glm::vec2(agent->getPosition()) + glm::vec2(spriteRadius);
+    const float minDistance = spriteRadius * 2;
 
-    lifeTime--;
-    if (lifeTime == 0)
+    glm::vec2 distVec = centrePositionA - centrePositionB;
+
+    float collisionDepth = minDistance - glm::length(distVec);
+    // Agent collision!
+    if (collisionDepth > 0) {
         return true;
+    }
 
     return false;
+}
+
+// SImplest spherical collision
+bool Bullet::collideWithLevel(Villain::Level& level) {
+    std::vector<Villain::TileLayer*> layers = level.getCollidableLayers();
+    float tileSize = layers[0]->getTileSize() * layers[0]->getScale();
+    auto tileIds = layers[0]->getTileIDs();
+
+    glm::ivec2 gridPosition = glm::ivec2(floor(position.x / tileSize), floor(position.y / tileSize));
+
+    //if (gridPosition.x < layers[0]->getMapWidth() || gridPosition.x >= 0
+            //|| gridPosition.y < layers[0]->getMapHeight() || gridPosition.y >= 0) {
+        //return true;
+    //}
+    return tileIds[gridPosition.y][gridPosition.x] != 0;
 }

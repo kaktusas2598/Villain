@@ -89,12 +89,12 @@ Game::Game() {
     std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
     std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
 
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 50; i++) {
         humans.push_back(new Human);
         humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, playerSpritesheet);
     }
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 2; i++) {
         zombies.push_back(new Zombie);
         zombies.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), ZOMBIE_SPEED, zombieSpritesheet);
     }
@@ -152,16 +152,37 @@ void Game::preUpdate(float dt) {
         zombies[i]->update(*level, humans, zombies);
     }
 
+    // Update bullets - lifetime, position, level collision
     for (int i = 0; i < bullets.size();) {
-        // FIXME: this one seems to cause complete freeze
-        if (bullets[i].update(humans, zombies)) {
-        //if (bullets[i].update()) {
+        if (bullets[i].update(*level)) {
             //// Remove bullet
             bullets[i] = bullets.back();
             bullets.pop_back();
         } else {
             i++;
         }
+    }
+
+    // Bullet - agent collision
+    for (int i = 0; i < bullets.size();) {
+        for (int j = 0; j < zombies.size();) {
+            if (bullets[i].collideWithAgent(zombies[j])) {
+                if (zombies[j]->applyDamage(bullets[i].getDamage())) {
+                    delete zombies[j];
+                    zombies[j] = zombies.back();
+                    zombies.pop_back();
+                } else {
+                    j++;
+                }
+
+                bullets[i] = bullets.back();
+                bullets.pop_back();
+                break;
+            } else {
+                j++;
+            }
+        }
+        i++;
     }
 
     //Npc collision and game logic

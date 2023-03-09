@@ -24,6 +24,7 @@ void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, s
     texture = t;
     camera = cam;
     bullets = pewpew;
+    health = 100;
 }
 
 // NOTE: probably would be better to pass InputManager as a ref here

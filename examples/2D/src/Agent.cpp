@@ -74,6 +74,13 @@ void Agent::draw(Villain::SpriteBatch& batch) {
 
 }
 
+bool Agent::applyDamage(float dmg) {
+    health -= dmg;
+    if (health <= 0) {
+        return true;
+    }
+    return false;
+}
 
 void Agent::checkTilePosition(Villain::Level& level, std::vector<glm::vec2>& collideTilePositions, float x, float y) {
     std::vector<Villain::TileLayer*> layers = level.getCollidableLayers();

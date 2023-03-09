@@ -3,7 +3,9 @@
 
 #include "glm/glm.hpp"
 #include "SpriteBatch.hpp"
+#include "Level.hpp"
 
+class Agent;
 class Human;
 class Zombie;
 
@@ -20,10 +22,16 @@ class Bullet {
         void init(glm::vec2 pos, glm::vec2 dir, float sp, int life);
         void draw(Villain::SpriteBatch& spriteBatch);
         // True if needs to be destroyed
-        bool update();
+        bool update(Villain::Level& level);
         bool update(std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
 
+        bool collideWithAgent(Agent* agent);
+
+        float getDamage() const { return damage; }
+
     private:
+        bool collideWithLevel(Villain::Level& level);
+
         // Game options
         float damage;
 
