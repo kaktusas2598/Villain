@@ -20,41 +20,21 @@ namespace Villain {
     void SpriteBatch::begin(GlyphSortType sortType) {
         this->sortType = sortType;
         renderBatches.clear();
-
-        for (int i = 0; i < glyphs.size(); i++) {
-            delete glyphs[i];
-        }
         glyphs.clear();
     }
 
     void SpriteBatch::end() {
+        // Set up glyph pointers for fast sorting
+        glyphPointers.resize(glyphs.size());
+        for (int i = 0; i < glyphs.size(); i++) {
+           glyphPointers[i] = &glyphs[i];
+        }
         sortGlyphs();
         createRenderBatches();
     }
 
     void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color) {
-        // Add a glyph
-        Glyph* newGlyph = new Glyph();
-        newGlyph->texture = texture;
-        newGlyph->depth = depth;
-
-        newGlyph->topLeft.Color = color;
-        newGlyph->topLeft.Position = glm::vec3(destRect.x, destRect.y + destRect.w, depth);
-        newGlyph->topLeft.UV = glm::vec2(uvRect.x, uvRect.y + uvRect.w);
-
-        newGlyph->bottomLeft.Color = color;
-        newGlyph->bottomLeft.Position = glm::vec3(destRect.x, destRect.y, depth);
-        newGlyph->bottomLeft.UV = glm::vec2(uvRect.x, uvRect.y);
-
-        newGlyph->topRight.Color = color;
-        newGlyph->topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + destRect.w, depth);
-        newGlyph->topRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-
-        newGlyph->bottomRight.Color = color;
-        newGlyph->bottomRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y, depth);
-        newGlyph->bottomRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y);
-
-        glyphs.push_back(newGlyph);
+        glyphs.emplace_back(destRect, uvRect, texture, depth, color);
     }
 
     //HACK: This method is only a proof of concept for drawing sprite from a spritesheet, will need to be improved a lot
@@ -93,27 +73,27 @@ namespace Villain {
 
         int offset = 0;
         int currentVertex = 0;
-        renderBatches.emplace_back(offset, 6, glyphs[0]->texture);
-        vertices[currentVertex++] = glyphs[0]->topLeft;
-        vertices[currentVertex++] = glyphs[0]->bottomLeft;
-        vertices[currentVertex++] = glyphs[0]->bottomRight;
-        vertices[currentVertex++] = glyphs[0]->bottomRight;
-        vertices[currentVertex++] = glyphs[0]->topRight;
-        vertices[currentVertex++] = glyphs[0]->topLeft;
+        renderBatches.emplace_back(offset, 6, glyphPointers[0]->texture);
+        vertices[currentVertex++] = glyphPointers[0]->topLeft;
+        vertices[currentVertex++] = glyphPointers[0]->bottomLeft;
+        vertices[currentVertex++] = glyphPointers[0]->bottomRight;
+        vertices[currentVertex++] = glyphPointers[0]->bottomRight;
+        vertices[currentVertex++] = glyphPointers[0]->topRight;
+        vertices[currentVertex++] = glyphPointers[0]->topLeft;
         offset += 6;
 
-        for (int currentGlyph = 1; currentGlyph < glyphs.size(); currentGlyph++) {
-            if (glyphs[currentGlyph]->texture != glyphs[currentGlyph - 1]->texture) {
-                renderBatches.emplace_back(offset, 6, glyphs[currentGlyph]->texture);
+        for (int currentGlyph = 1; currentGlyph < glyphPointers.size(); currentGlyph++) {
+            if (glyphPointers[currentGlyph]->texture != glyphPointers[currentGlyph - 1]->texture) {
+                renderBatches.emplace_back(offset, 6, glyphPointers[currentGlyph]->texture);
             } else {
                 renderBatches.back().numVertices += 6;
             }
-            vertices[currentVertex++] = glyphs[currentGlyph]->topLeft;
-            vertices[currentVertex++] = glyphs[currentGlyph]->bottomLeft;
-            vertices[currentVertex++] = glyphs[currentGlyph]->bottomRight;
-            vertices[currentVertex++] = glyphs[currentGlyph]->bottomRight;
-            vertices[currentVertex++] = glyphs[currentGlyph]->topRight;
-            vertices[currentVertex++] = glyphs[currentGlyph]->topLeft;
+            vertices[currentVertex++] = glyphPointers[currentGlyph]->topLeft;
+            vertices[currentVertex++] = glyphPointers[currentGlyph]->bottomLeft;
+            vertices[currentVertex++] = glyphPointers[currentGlyph]->bottomRight;
+            vertices[currentVertex++] = glyphPointers[currentGlyph]->bottomRight;
+            vertices[currentVertex++] = glyphPointers[currentGlyph]->topRight;
+            vertices[currentVertex++] = glyphPointers[currentGlyph]->topLeft;
             offset += 6;
         }
 
@@ -148,13 +128,13 @@ namespace Villain {
     void SpriteBatch::sortGlyphs() {
         switch (sortType) {
             case GlyphSortType::BACK_TO_FRONT:
-                std::stable_sort(glyphs.begin(), glyphs.end(), compareBackToFront);
+                std::stable_sort(glyphPointers.begin(), glyphPointers.end(), compareBackToFront);
                 break;
             case GlyphSortType::FRONT_TO_BACK:
-                std::stable_sort(glyphs.begin(), glyphs.end(), compareFrontToBack);
+                std::stable_sort(glyphPointers.begin(), glyphPointers.end(), compareFrontToBack);
                 break;
             case GlyphSortType::TEXTURE:
-                std::stable_sort(glyphs.begin(), glyphs.end(), compareTexture);
+                std::stable_sort(glyphPointers.begin(), glyphPointers.end(), compareTexture);
                 break;
             default:
                 break;
