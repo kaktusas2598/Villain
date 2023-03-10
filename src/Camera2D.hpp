@@ -19,6 +19,9 @@ namespace Villain {
 
             glm::vec2 screenToWorld(glm::vec2 screenCoords);
 
+            // Checks if quad is in Camera's clip space
+            bool quadInView(const glm::vec2& pos, const glm::vec2& dimensions);
+
             // Setters
             void setPosition(const glm::vec3& newPos) { position = newPos; }
             void setZoom(float z) { zoom = z; }

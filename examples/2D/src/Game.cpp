@@ -36,7 +36,7 @@ int Game::numZombiesKilled = 0;
 
 
 const float HUMAN_SPEED = 50.f;
-const float ZOMBIE_SPEED = 45.f;
+const float ZOMBIE_SPEED = 40.f;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -94,7 +94,7 @@ Game::Game() {
     std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
     std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
 
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 98; i++) {
         humans.push_back(new Human);
         humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, playerSpritesheet);
     }
@@ -325,11 +325,19 @@ void Game::preRender(float dt) {
 
         level->render();
 
+        glm::vec2 agentPosition;
+        glm::vec2 agentDimensions(48.0f);
+
         for (int i = 0; i < humans.size(); i++) {
-            humans[i]->draw(spriteBatch);
+            agentPosition = glm::vec2(humans[i]->getPosition());
+            // Camera Culling! Only draw agents in camera clip space
+            if (camera.quadInView(agentPosition, agentDimensions)) {
+                humans[i]->draw(spriteBatch);
+            }
         }
 
         for (int i = 0; i < zombies.size(); i++) {
+            // TODO: Cull these with Camera2D but first sprite dimensions must be refactored
             zombies[i]->draw(spriteBatch);
         }
 
