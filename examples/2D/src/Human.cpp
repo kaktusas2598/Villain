@@ -6,6 +6,7 @@
 #include "glm/gtx/rotate_vector.hpp"
 
 #include <random>
+#include <ctime>
 
 Human::Human() : frames(0)
 {

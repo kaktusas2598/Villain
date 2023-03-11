@@ -1,6 +1,7 @@
 #include "Gun.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 #include <random>
+#include <ctime>
 
 Gun::Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife) :
     name(title),
