@@ -1,11 +1,16 @@
 #include "SoundManager.hpp"
 #include "ErrorHandler.hpp"
+#include "SDL_mixer.h"
 
 namespace Villain {
 
     SoundManager* SoundManager::sInstance = 0;
 
     SoundManager::SoundManager() {
+        if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == -1) {
+            exitWithError(std::string(Mix_GetError()));
+        }
+
         // (int frequency, Uint16 format, int channels, int chunksize)
         Mix_OpenAudio(22050, AUDIO_S16, 2, 4096);
     }
