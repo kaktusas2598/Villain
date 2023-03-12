@@ -66,3 +66,8 @@ go to examples folder execute these scripts in order:
 
 I use neovim with clangd LSP server for editing code. To build compilation database for clangd, so I can get great autocompletion
 use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.org/) for build
+
+## FIXME
+
+ * SpriteFont class - all glyphs are packed to single GL texture for performance and their sizes
+     seem correct, but glyphs themselves are rendering weirdly
