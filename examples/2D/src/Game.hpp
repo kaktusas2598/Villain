@@ -37,6 +37,7 @@ class Game {
         static Villain::Sprite* testSprite;
         static Villain::SpriteBatch spriteBatch;
         static Villain::Camera2D camera;
+        static Villain::Camera2D hudCamera;
         static Texture* playerSpritesheet;
         static Texture* zombieSpritesheet;
         static std::vector<Bullet> bullets;

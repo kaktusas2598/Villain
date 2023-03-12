@@ -21,6 +21,7 @@ using namespace Villain;
 Sprite* Game::testSprite = nullptr;
 SpriteBatch Game::spriteBatch;
 Camera2D Game::camera;
+Camera2D Game::hudCamera;
 Texture* Game::playerSpritesheet = nullptr;
 Texture* Game::zombieSpritesheet = nullptr;
 std::vector<Bullet> Game::bullets;
@@ -62,9 +63,10 @@ Game::Game() {
             );
 
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
+    hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     glm::vec3 camPos = camera.getPosition();
     camPos.x = configScript.get<int>("window.width")/2.0;
-    camPos.y = configScript.get<int>("window.width")/2.0;
+    camPos.y = configScript.get<int>("window.height")/2.0;
     camera.setPosition(camPos);
 
     playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
@@ -377,20 +379,19 @@ void Game::preRender(float dt) {
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
         textShader->bind();
-        textShader->setUniformMat4f("view", view);
+        textShader->setUniformMat4f("view", hudCamera.getCameraMatrix());
         textShader->setUniformMat4f("projection", projection);
-        //textShader->setUniform1i("spriteTexture", 0);
+        textShader->setUniform1i("spriteTexture", 0);
 
         textBatch.begin();
 
         std::stringstream ss;
         ss << "Humans: " << humans.size();
-        spriteFont->draw(textBatch, "TESTING", camera.screenToWorld(glm::vec2(10.0f, 50.0f)), glm::vec2(3.0f), 0.6f, color);
-        freeType->draw(textBatch, ss.str(), camera.screenToWorld(glm::vec2(10.0f, 100.0f)), 3.0f, 0.6f, color);
+        spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 50.0f)), glm::vec2(3.0f), 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 100.0f)), 3.0f, 0.6f, color);
         ss.str(""); // Empty string stream
         ss << "Zombies: " << zombies.size();
-        freeType->draw(textBatch, ss.str(), camera.screenToWorld(glm::vec2(10.0f, 150.0f)), 3.0f, 0.6f, color);
-        //freeType->draw(textBatch, "TESTING", glm::vec2(50.0f, 350.0f), 1.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), 3.0f, 0.6f, color);
 
         textBatch.end();
 
