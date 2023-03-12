@@ -15,6 +15,7 @@
 
 #include "Gun.hpp"
 #include "Zombie.hpp"
+#include "SoundManager.hpp"
 
 using namespace Villain;
 
@@ -121,6 +122,10 @@ Game::Game() {
     player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 100.0f, 4, 500));
     // Machine gun
     player->addGun(new Gun("Uzi", 5, 10, 10.0f, 100.0f, 20, 500));
+    SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
+    SoundManager::Instance()->load("assets/audio/laser.wav", "laser", SoundType::SOUND_SFX);
+    SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX);
+    //SoundManager::Instance()->playMusic("drive");
 }
 
 Game::~Game() {
@@ -261,7 +266,7 @@ void Game::preUpdate(float dt) {
                 delete humans[j];
                 humans[j] = humans.back();
                 humans.pop_back();
-
+                SoundManager::Instance()->playSound("zombie");
             }
         }
 
