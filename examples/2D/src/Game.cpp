@@ -385,13 +385,13 @@ void Game::preRender(float dt) {
 
         textBatch.begin();
 
+        //spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), glm::vec2(3.0f), 0.6f, color);
         std::stringstream ss;
         ss << "Humans: " << humans.size();
-        spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 50.0f)), glm::vec2(3.0f), 0.6f, color);
-        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 100.0f)), 3.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
         ss.str(""); // Empty string stream
         ss << "Zombies: " << zombies.size();
-        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), 3.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.6f, color);
 
         textBatch.end();
 
