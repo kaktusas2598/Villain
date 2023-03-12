@@ -58,7 +58,7 @@ namespace Villain {
         int i = 0, advance;
         for (char c = cs; c <= ce; c++) {
             TTF_GlyphMetrics(f, c, &glyphRects[i].x, &glyphRects[i].z, &glyphRects[i].y, &glyphRects[i].w, &advance);
-            std::cout << glyphRects[i].x << ", " << glyphRects[i].y << ", " << glyphRects[i].z << ", " << glyphRects[i].w << ", " << advance << "\n";
+            //std::cout << glyphRects[i].x << ", " << glyphRects[i].y << ", " << glyphRects[i].z << ", " << glyphRects[i].w << ", " << advance << "\n";
             glyphRects[i].z -= glyphRects[i].x;
             glyphRects[i].x = 0;
             glyphRects[i].w -= glyphRects[i].y;

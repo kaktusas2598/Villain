@@ -139,6 +139,8 @@ Game::~Game() {
         delete humans[i];
     }
 
+    SoundManager::Instance()->cleanSoundMaps();
+    //ResourceManager::Instance()->clearTextureMap();
 }
 
 void Game::run() {
