@@ -20,12 +20,14 @@ find_package(SDL2_mixer REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(assimp REQUIRED)
+find_package(Freetype REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIRS})
 message(STATUS "Lua include dir: ${LUA_INCLUDE_DIR}")
 message(STATUS "SDL2 include dir: ${SDL2_INCLUDE_DIR}")
 message(STATUS "Glew include dir: ${GLEW_INCLUDE_DIRS}")
+message(STATUS "Freetype include dir: ${FREETYPE_INCLUDE_DIRS}")
 
 file(GLOB sources src/*.cpp)
 
@@ -48,12 +50,13 @@ add_library(stb_image "vendor/stb_image.cpp")
 # Set up include paths
 target_include_directories(${PROJECT_NAME} PUBLIC src)
 target_include_directories(${PROJECT_NAME} PUBLIC vendor)
+target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 # Set up path to libraries
 #target_link_directories(${PROJECT_NAME} PUBLIC vendor)
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image tinyxml2)
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image tinyxml2 ${FREETYPE_LIBRARIES})
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"

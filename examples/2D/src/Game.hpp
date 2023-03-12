@@ -2,6 +2,7 @@
 #define __GAME__
 
 #include "ResourceManager.hpp"
+#include "SpriteFont.hpp"
 #include "Sprite.hpp"
 #include "SpriteBatch.hpp"
 #include "Camera2D.hpp"
@@ -10,6 +11,7 @@
 
 #include "Bullet.hpp"
 #include "Player.hpp"
+#include "FreeType.hpp"
 #include <vector>
 
 class Zombie;
@@ -48,6 +50,11 @@ class Game {
 
         static int numHumansKilled;
         static int numZombiesKilled;
+
+        static Villain::SpriteBatch textBatch;
+        static Villain::SpriteFont* spriteFont;
+
+        static Villain::FreeType* freeType;
 
 };
 

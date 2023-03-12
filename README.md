@@ -11,6 +11,7 @@
 * Debug UI
 * Error logging
 * 2D orthographics and 3D perspective cameras
+* TrueType font rendering (Only ASCII ATM)
 
 ## Planned Features
 
@@ -18,6 +19,7 @@
 * Built in collision detection: AABB, SAT, circle
 * Rigid Body implementation
 * Scene Graphs
+* Spatial Partitioning models
 * Data Oriented Models
 * LUA (Again!)
 * and many more...
@@ -29,10 +31,11 @@
  * [GLEW](https://glew.sourceforge.net/) - extension library for loading OpenGL functions
  * [IMGUI](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies;
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
- * [stb_image](https://github.com/nothings/stb) Public Domain Image Loading Library for C++
+ * [stb_image](https://github.com/nothings/stb) - Public Domain Image Loading Library for C++
+ * [FreeType](https://freetype.org/index.html) - freely available software library to render fonts
  * [tinyxml2](https://github.com/leethomason/tinyxml2) - Simple, small, efficient C++ XML parser
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
- * [lua](https://www.lua.org/) - For scripting
+ * [lua](https://www.lua.org/) - For scripting, configuration
 
 
 ## Instructions

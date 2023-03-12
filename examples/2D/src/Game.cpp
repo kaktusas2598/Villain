@@ -26,7 +26,9 @@ Texture* Game::zombieSpritesheet = nullptr;
 std::vector<Bullet> Game::bullets;
 Level* Game::level = nullptr;
 Timer Game::colorTimer;
-
+SpriteFont* Game::spriteFont = nullptr;
+SpriteBatch Game::textBatch;
+FreeType* Game::freeType = nullptr;
 
 std::vector<Human*> Game::humans;
 std::vector<Zombie*> Game::zombies;
@@ -69,12 +71,17 @@ Game::Game() {
     zombieSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/slime.png", "zombie");
     ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
+    ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/text.frag", "textBatch");
 
     //NOTE: So far not sure if sprite class will be used, due to sprite batch existance
     testSprite = new Sprite("player", "sprite");
     testSprite->init(-250, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
 
     spriteBatch.init();
+    textBatch.init();
+
+    spriteFont = new SpriteFont("assets/fonts/chintzy.ttf", 32);
+    freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
     // Main game player
     player = new Player();
@@ -365,6 +372,29 @@ void Game::preRender(float dt) {
         spriteBatch.end();
 
         spriteBatch.renderBatch();
+    }
+    Shader* textShader = ResourceManager::Instance()->getShader("textBatch");
+    if (textShader != nullptr) {
+        glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
+        textShader->bind();
+        textShader->setUniformMat4f("view", view);
+        textShader->setUniformMat4f("projection", projection);
+        //textShader->setUniform1i("spriteTexture", 0);
+
+        textBatch.begin();
+
+        std::stringstream ss;
+        ss << "Humans: " << humans.size();
+        spriteFont->draw(textBatch, "TESTING", camera.screenToWorld(glm::vec2(10.0f, 50.0f)), glm::vec2(3.0f), 0.6f, color);
+        freeType->draw(textBatch, ss.str(), camera.screenToWorld(glm::vec2(10.0f, 100.0f)), 3.0f, 0.6f, color);
+        ss.str(""); // Empty string stream
+        ss << "Zombies: " << zombies.size();
+        freeType->draw(textBatch, ss.str(), camera.screenToWorld(glm::vec2(10.0f, 150.0f)), 3.0f, 0.6f, color);
+        //freeType->draw(textBatch, "TESTING", glm::vec2(50.0f, 350.0f), 1.0f, 0.6f, color);
+
+        textBatch.end();
+
+        textBatch.renderBatch();
     }
 }
 
