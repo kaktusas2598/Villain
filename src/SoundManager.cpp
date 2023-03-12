@@ -12,7 +12,9 @@ namespace Villain {
         }
 
         // (int frequency, Uint16 format, int channels, int chunksize)
-        Mix_OpenAudio(22050, AUDIO_S16, 2, 4096);
+        if (Mix_OpenAudio(22050, AUDIO_S16, 2, 4096) == -1) {
+            exitWithError(std::string(Mix_GetError()));
+        }
     }
 
     SoundManager::~SoundManager() {
