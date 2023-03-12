@@ -41,14 +41,15 @@ namespace Villain {
     void SpriteBatch::draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color) {
         glm::vec4 uvRect;
         // 0 - 1, where 1 is texture width
-        uvRect.x = frame * 1/(texture->getWidth()/(float) width);
         // Calculate num rows to flip actual row because loaded textures are flipped vertically in STBI image
         int numRows = texture->getHeight() / height;
-        uvRect.y = (numRows - row - 1) * 1/(texture->getHeight()/(float) height);
-        //uvRect.y = row * 1/(texture->getHeight()/(float) height);
+        int numColumns = texture->getWidth() / width;
+        uvRect.x = frame * 1.0f/numColumns;
+        uvRect.y = (numRows - row - 1) * 1.0f/numRows;
+        //uvRect.y = row * 1.0f/numRows;
 
-        uvRect.z = 1/(texture->getWidth() / (float) width);
-        uvRect.w = 1/(texture->getHeight() / (float) height);
+        uvRect.z = 1.0f/numColumns;
+        uvRect.w = 1.0f/numRows;
 
         draw(destRect, uvRect, texture->getID(), depth, color);
     }
