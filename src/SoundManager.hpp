@@ -25,8 +25,13 @@ namespace Villain {
             bool load(std::string fileName, std::string id, SoundType type);
             void cleanSoundMaps();
 
-            void playSound(std::string id, int loop);
-            void playMusic(std::string id, int loop);
+            // TODO: volume control
+            void playSound(std::string id, int loop = 0);
+            void playMusic(std::string id, int loop = 0);
+
+            void pauseMusic();
+            void stopMusic();
+            void resumeMusic();
         private:
             static SoundManager* sInstance;
 

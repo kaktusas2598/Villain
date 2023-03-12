@@ -8,12 +8,12 @@ namespace Villain {
 
     SoundManager::SoundManager() {
         if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == -1) {
-            exitWithError(std::string(Mix_GetError()));
+            exitWithError("Mix Init Error: " + std::string(Mix_GetError()));
         }
 
         // (int frequency, Uint16 format, int channels, int chunksize)
         if (Mix_OpenAudio(22050, AUDIO_S16, 2, 4096) == -1) {
-            exitWithError(std::string(Mix_GetError()));
+            exitWithError("Mix OpenAudio Error: " + std::string(Mix_GetError()));
         }
     }
 
@@ -29,7 +29,7 @@ namespace Villain {
 
             Mix_Music* music = Mix_LoadMUS(fileName.c_str());
             if (music == 0) {
-                exitWithError("Could not load music file");
+                exitWithError("Could not load music file: " + std::string(Mix_GetError()));
                 return false;
             }
             musicMap[id] = music;
@@ -41,7 +41,7 @@ namespace Villain {
 
             Mix_Chunk* fx = Mix_LoadWAV(fileName.c_str());
             if (fx == 0) {
-                exitWithError("Could not load wav file");
+                exitWithError("Could not load wav file: " + std::string(Mix_GetError()));
                 return false;
             }
             sFXMap[id] = fx;
@@ -57,6 +57,18 @@ namespace Villain {
 
     void SoundManager::playMusic(std::string id, int loop) {
         Mix_PlayMusic(musicMap[id], loop);
+    }
+
+    void SoundManager::pauseMusic() {
+        Mix_PauseMusic();
+    }
+
+    void SoundManager::stopMusic() {
+        Mix_HaltMusic();
+    }
+
+    void SoundManager::resumeMusic() {
+        Mix_ResumeMusic();
     }
 
     void SoundManager::cleanSoundMaps() {
