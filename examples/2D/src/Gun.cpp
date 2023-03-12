@@ -4,7 +4,7 @@
 #include <random>
 #include <ctime>
 
-Gun::Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife) :
+Gun::Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife, std::string shotSound) :
     name(title),
     fireRate(rate),
     bulletsPerShot(bps),
@@ -12,7 +12,8 @@ Gun::Gun(std::string title, int rate, int bps, float spr, float bulletSp, float 
     bulletSpeed(bulletSp),
     bulletDamage(bulletDmg),
     bulletLifetime(bulletLife),
-    frameCounter(0)
+    frameCounter(0),
+    sound(shotSound)
 {}
 
 Gun::~Gun()
@@ -32,8 +33,9 @@ void Gun::fire(const glm::vec2& position, const glm::vec2& direction, std::vecto
     static std::mt19937 rndEngine(time(nullptr));
     static std::uniform_real_distribution<float> dist(-spread, spread);
 
+    Villain::SoundManager::Instance()->playSound(sound);
+
     for (int i = 0; i < bulletsPerShot; i++) {
-        Villain::SoundManager::Instance()->playSound("laser");
         bullets.emplace_back(position, glm::rotate(direction, glm::radians(dist(rndEngine))), bulletSpeed, bulletLifetime, bulletDamage);
     }
 }

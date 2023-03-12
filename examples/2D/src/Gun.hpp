@@ -7,7 +7,8 @@
 
 class Gun {
     public:
-        Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife);
+        Gun(std::string title, int rate, int bps, float spr,
+                float bulletSp, float bulletDmg, int bulletLife, std::string shotSound);
         ~Gun();
 
         void update(float deltaTime, bool mouseDown, const glm::vec2& position, const glm::vec2& direction, std::vector<Bullet>& bullets);
@@ -24,6 +25,8 @@ class Gun {
         int bulletLifetime;
 
         float frameCounter;
+
+        std::string sound;
 };
 
 #endif // __GUN__

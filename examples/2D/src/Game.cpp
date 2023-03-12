@@ -63,6 +63,13 @@ Game::Game() {
             flags
             );
 
+    SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
+    SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX);
+    SoundManager::Instance()->load("assets/audio/cg1.wav", "rifle", SoundType::SOUND_SFX);
+    SoundManager::Instance()->load("assets/audio/shotgun.wav", "shotgun", SoundType::SOUND_SFX);
+    SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX);
+    //SoundManager::Instance()->playMusic("drive");
+
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     glm::vec3 camPos = camera.getPosition();
@@ -117,15 +124,11 @@ Game::Game() {
     //Setup guns
     //Gun(std::string title, int rate, int bps, float spr, float bulletSp, float bulletDmg, int bulletLife);
     // Pistol
-    player->addGun(new Gun("9mm", 30, 1, 5.0f, 100.0f, 30, 500));
+    player->addGun(new Gun("9mm", 30, 1, 5.0f, 100.0f, 30, 500, "pistol"));
     // Shotgun
-    player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 100.0f, 4, 500));
+    player->addGun(new Gun("Shotgun", 60, 20, 20.0f, 100.0f, 4, 500, "shotgun"));
     // Machine gun
-    player->addGun(new Gun("Uzi", 5, 10, 10.0f, 100.0f, 20, 500));
-    SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
-    SoundManager::Instance()->load("assets/audio/laser.wav", "laser", SoundType::SOUND_SFX);
-    SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX);
-    //SoundManager::Instance()->playMusic("drive");
+    player->addGun(new Gun("Uzi", 5, 10, 10.0f, 100.0f, 20, 500, "rifle"));
 }
 
 Game::~Game() {

@@ -29,6 +29,7 @@ namespace Villain {
             void playSound(std::string id, int loop = 0);
             void playMusic(std::string id, int loop = 0);
 
+            // in SDL_Mixer music only plays on 1 global channel so methods below work for all music
             void pauseMusic();
             void stopMusic();
             void resumeMusic();

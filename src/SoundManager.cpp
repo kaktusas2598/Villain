@@ -52,7 +52,9 @@ namespace Villain {
 
     void SoundManager::playSound(std::string id, int loop) {
         // -1 means any channel
-        Mix_PlayChannel(-1, sFXMap[id], loop);
+        if (Mix_PlayChannel(-1, sFXMap[id], loop) == -1) {
+            // Failed to play sound effect on any channel
+        }
     }
 
     void SoundManager::playMusic(std::string id, int loop) {
