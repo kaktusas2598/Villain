@@ -21,7 +21,7 @@ namespace Villain {
         Mix_CloseAudio();
     }
 
-    bool SoundManager::load(std::string fileName, std::string id, SoundType type) {
+    bool SoundManager::load(std::string fileName, std::string id, SoundType type, int volumeAdjust) {
         if (type == SOUND_MUSIC) {
             if (musicMap.find(id) != musicMap.end()) {
                 return true;
@@ -32,6 +32,18 @@ namespace Villain {
                 exitWithError("Could not load music file: " + std::string(Mix_GetError()));
                 return false;
             }
+
+            if (volumeAdjust != 0) {
+                int currVolume = Mix_VolumeMusic(-1);
+                int newVolume = currVolume + volumeAdjust;
+                if (volumeAdjust > MIX_MAX_VOLUME) {
+                    newVolume = MIX_MAX_VOLUME;
+                } else if (newVolume < 0) {
+                    newVolume = 0;
+                }
+                Mix_VolumeMusic(newVolume);
+            }
+
             musicMap[id] = music;
             return true;
         } else if (type == SOUND_SFX) {
@@ -44,6 +56,18 @@ namespace Villain {
                 exitWithError("Could not load wav file: " + std::string(Mix_GetError()));
                 return false;
             }
+
+            if (volumeAdjust != 0) {
+                int currVolume = Mix_VolumeChunk(fx, -1);
+                int newVolume = currVolume + volumeAdjust;
+                if (volumeAdjust > MIX_MAX_VOLUME) {
+                    newVolume = MIX_MAX_VOLUME;
+                } else if (newVolume < 0) {
+                    newVolume = 0;
+                }
+                Mix_VolumeChunk(fx, newVolume);
+            }
+
             sFXMap[id] = fx;
             return true;
         }

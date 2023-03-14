@@ -22,10 +22,9 @@ namespace Villain {
                 return sInstance;
             }
 
-            bool load(std::string fileName, std::string id, SoundType type);
+            bool load(std::string fileName, std::string id, SoundType type, int volumeAdjust = 0);
             void cleanSoundMaps();
 
-            // TODO: volume control
             void playSound(std::string id, int loop = 0);
             void playMusic(std::string id, int loop = 0);
 
