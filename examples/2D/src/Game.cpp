@@ -375,10 +375,11 @@ void Game::preRender(float dt) {
         level->render();
 
         glm::vec2 agentPosition;
-        glm::vec2 agentDimensions(48.0f);
+        glm::vec2 agentDimensions;
 
         for (int i = 0; i < humans.size(); i++) {
             agentPosition = glm::vec2(humans[i]->getPosition());
+            agentDimensions = glm::vec2(humans[i]->getSize());
             // Camera Culling! Only draw agents in camera clip space
             if (camera.quadInView(agentPosition, agentDimensions)) {
                 humans[i]->draw(spriteBatch);

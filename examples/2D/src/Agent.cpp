@@ -14,7 +14,7 @@ Agent::~Agent()
 }
 
 bool Agent::collideWithLevel(Villain::Level& level) {
-    float spriteSize = 48.0f; //TODO: fix this hardcoded value, same as in draw()
+    float spriteSize = frameSize;
 
     // TODO: check all collidable layers against agent not just 1st one
     // Check four corners around sprite
@@ -39,7 +39,7 @@ bool Agent::collideWithLevel(Villain::Level& level) {
 
 // Circular collision 2D
 bool Agent::collideWithAgent(Agent* agent) {
-    const float spriteRadius = 48.0f / 2; //TODO: fix this hardcoded value, same as in draw()
+    const float spriteRadius = frameSize / 2;
     glm::vec2 centrePositionA = glm::vec2(position) + glm::vec2(spriteRadius);
     glm::vec2 centrePositionB = glm::vec2(agent->getPosition()) + glm::vec2(spriteRadius);
     const float minDistance = spriteRadius * 2;
@@ -64,8 +64,7 @@ void Agent::draw(Villain::SpriteBatch& batch) {
     glm::vec4 destRect;
     destRect.x = position.x;
     destRect.y = position.y;
-    //FIXME: pass in frame size instread of hardcode
-    int size = 48;
+    int size = floor(frameSize);
     destRect.z = size;
     destRect.w = size;
     // TODO:Utilise color, setup animations
@@ -102,7 +101,7 @@ void Agent::checkTilePosition(Villain::Level& level, std::vector<glm::vec2>& col
 
 // AABB Collision, circle/tile
 void Agent::collideWithTile(glm::vec2 tilePosition, float tileSize) {
-    const float spriteRadius = 48.0f / 2; //TODO: fix this hardcoded value, same as in draw()
+    const float spriteRadius = frameSize / 2;
     const float tileRadius = tileSize / 2;
     const float minDistance = spriteRadius + tileRadius;
 

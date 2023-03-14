@@ -8,13 +8,11 @@
 #include <random>
 #include <ctime>
 
-Human::Human() : frames(0)
-{
+Human::Human() : frames(0) {
+    frameSize = 48.0f;
 }
 
-Human::~Human()
-{
-}
+Human::~Human() {}
 
 void Human::init(glm::vec3 pos, float sp, Texture* t) {
 

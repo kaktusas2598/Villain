@@ -46,7 +46,7 @@ bool Bullet::update(float deltaTime, Villain::Level& level) {
 }
 
 bool Bullet::collideWithAgent(Agent* agent) {
-    const float spriteRadius = 48.0f/2;//TODO: fix this hardcoded value in Agent
+    const float spriteRadius = agent->getSize() /2;
     glm::vec2 centrePositionA = glm::vec2(position);
     glm::vec2 centrePositionB = glm::vec2(agent->getPosition()) + glm::vec2(spriteRadius);
     const float minDistance = spriteRadius + BULLET_RADIUS;

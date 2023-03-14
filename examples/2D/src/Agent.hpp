@@ -34,6 +34,8 @@ class Agent {
 
         glm::vec3 getPosition() const { return position; }
         void setPosition(glm::vec3 pos) { position = pos; }
+
+        float getSize() const { return frameSize; }
     protected:
 
         void checkTilePosition(Villain::Level& level, std::vector<glm::vec2>& collideTilePositions, float x, float y);
@@ -44,7 +46,7 @@ class Agent {
 
         Texture* texture;
         int currentRow, currentFrame; //<<< Current animation frame
-        int frameSize;
+        float frameSize;
         float scale;
 
         float health;

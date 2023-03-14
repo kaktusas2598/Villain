@@ -2,8 +2,8 @@
 
 #include "Human.hpp"
 
-Zombie::Zombie()
-{
+Zombie::Zombie() {
+    frameSize = 32.0f;
 }
 
 Zombie::~Zombie()
