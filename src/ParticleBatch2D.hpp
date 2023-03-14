@@ -2,16 +2,13 @@
 #define __PARTICLE_BATCH_2D__
 
 #include "SpriteBatch.hpp"
+#include <functional>
 
 namespace Villain {
 
     // 2D Particle model
     class Particle2D {
         public:
-            friend class ParticleBatch2D;
-
-            void update(float deltaTime);
-        private:
             // C++11 header initialization
             glm::vec2 position = glm::vec2(0.0f);
             glm::vec2 velocity = glm::vec2(0.0f);
@@ -19,6 +16,11 @@ namespace Villain {
             float life = 0.0f;
             float width = 0.0f; //<<< Assume all particles are square
     };
+
+    // Default behaviour for particles - increase position by velocity
+    inline void defaultParticleUpdate(Particle2D& particle, float deltaTime) {
+        particle.position += particle.velocity * deltaTime;
+    }
 
     // 2D Particle batch/emitter
     class ParticleBatch2D {
@@ -32,8 +34,14 @@ namespace Villain {
              * @param maxP Max number of particles in a batch
              * @param decay Particles decay rate
              * @param t Pointer to texture resource
+             * @param updateParticle update function
              */
-            void init(int maxP, float decay, Texture* t);
+            void init(
+                    int maxP,
+                    float decay,
+                    Texture* t,
+                    std::function<void(Particle2D&, float)> update = defaultParticleUpdate
+                    );
 
             void update(float deltaTime);
             void draw(SpriteBatch* batch);
@@ -50,6 +58,7 @@ namespace Villain {
         private:
             int findFreeParticle();
 
+            std::function<void(Particle2D&, float)> updateFunc;
             // Global batch properties for all particles
             float decayRate = 0.1f; //<<< How quickly particles disappear
             Particle2D* particles = nullptr;

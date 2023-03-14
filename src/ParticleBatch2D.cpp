@@ -2,27 +2,29 @@
 
 namespace Villain {
 
-    void Particle2D::update(float deltaTime) {
-        position += velocity * deltaTime;
-    }
-
     ParticleBatch2D::ParticleBatch2D() {}
 
     ParticleBatch2D::~ParticleBatch2D() {
         delete[] particles;
     }
 
-    void ParticleBatch2D::init(int maxP, float decay, Texture* t) {
+    void ParticleBatch2D::init(
+            int maxP,
+            float decay,
+            Texture* t,
+            std::function<void(Particle2D&, float)> update
+            ) {
         maxParticles = maxP;
         texture = t;
         decayRate = decay;
         particles = new Particle2D[maxParticles];
+        updateFunc = update;
     }
 
     void ParticleBatch2D::update(float deltaTime) {
         for (int i = 0; i < maxParticles; i++) {
             if (particles[i].life > 0.0f) {
-                particles[i].update(deltaTime);
+                updateFunc(particles[i], deltaTime);
                 particles[i].life -= decayRate * deltaTime;
             }
         }

@@ -46,6 +46,11 @@ int Game::numZombiesKilled = 0;
 const float HUMAN_SPEED = 50.f;
 const float ZOMBIE_SPEED = 40.f;
 
+//void updateBlood(Particle2D& p, float dt) {
+    //p.position += p.velocity * dt;
+    //p.color.a -= p.life * dt;
+//}
+
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
     configScript.open();
@@ -85,7 +90,14 @@ Game::Game() {
     bloodParticles->init(
             1000,
             0.05f,
-            ResourceManager::Instance()->loadTexture("assets/textures/particle.png", "particle")
+            ResourceManager::Instance()->loadTexture("assets/textures/particle.png", "particle"),
+            // Lambda
+            [] (Particle2D& p, float dt) {
+                p.position += p.velocity * dt;
+                p.color.a -= p.life * dt * 0.5f;
+            }
+            // Or normal function: updateBlood
+            // Or nothing - default particle update behaviour
             );
     particleEngine.addParticleBatch(bloodParticles);
 
