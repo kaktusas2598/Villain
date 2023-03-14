@@ -47,6 +47,7 @@ namespace Villain {
         uvRect.x = frame * 1.0f/numColumns;
         uvRect.y = (numRows - row - 1) * 1.0f/numRows;
         //uvRect.y = row * 1.0f/numRows;
+        //std::cout << "Num rows: " << numRows << ", Num columns: " << numColumns << "\n";
 
         uvRect.z = 1.0f/numColumns;
         uvRect.w = 1.0f/numRows;

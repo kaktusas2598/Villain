@@ -27,6 +27,7 @@ class Bullet {
         bool collideWithAgent(Agent* agent);
 
         float getDamage() const { return damage; }
+        glm::vec2 getPosition() const { return position; }
 
     private:
         bool collideWithLevel(Villain::Level& level);

@@ -8,6 +8,8 @@
 #include "Camera2D.hpp"
 #include "Level.hpp"
 #include "Timer.hpp"
+#include "ParticleEngine2D.hpp"
+#include "ParticleBatch2D.hpp"
 
 #include "Bullet.hpp"
 #include "Player.hpp"
@@ -31,6 +33,7 @@ class Game {
         static void onWindowResize(int newWidth, int newHeight);
 
     private:
+        static void addBlood(const glm::vec2& pos, int numParticles);
         //NOTE: In example game code, most of Game class members need to be static
         //so they can be used in engine callbacks, not sure if this is good idea, but it works well
         //and this way engine can be used to create all kinds of applications possibly
@@ -56,6 +59,9 @@ class Game {
         static Villain::SpriteFont* spriteFont;
 
         static Villain::FreeType* freeType;
+
+        static Villain::ParticleEngine2D particleEngine;
+        static Villain::ParticleBatch2D* bloodParticles;
 
 };
 

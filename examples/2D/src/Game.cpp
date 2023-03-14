@@ -7,8 +7,10 @@
 #include "ResourceManager.hpp"
 #include "examples/2D/src/Player.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 
 #include "DebugConsole.hpp"
+#include <cmath>
 #include <cstdio>
 #include <random>
 #include <sstream>
@@ -31,6 +33,8 @@ Timer Game::colorTimer;
 SpriteFont* Game::spriteFont = nullptr;
 SpriteBatch Game::textBatch;
 FreeType* Game::freeType = nullptr;
+ParticleEngine2D Game::particleEngine;
+ParticleBatch2D* Game::bloodParticles = nullptr;
 
 std::vector<Human*> Game::humans;
 std::vector<Zombie*> Game::zombies;
@@ -76,6 +80,14 @@ Game::Game() {
     camPos.x = configScript.get<int>("window.width")/2.0;
     camPos.y = configScript.get<int>("window.height")/2.0;
     camera.setPosition(camPos);
+
+    bloodParticles = new ParticleBatch2D();
+    bloodParticles->init(
+            1000,
+            0.05f,
+            ResourceManager::Instance()->loadTexture("assets/textures/particle.png", "particle")
+            );
+    particleEngine.addParticleBatch(bloodParticles);
 
     playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
     zombieSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/slime.png", "zombie");
@@ -212,6 +224,8 @@ void Game::preUpdate(float dt) {
         bulletRemoved = false;
         for (int j = 0; j < zombies.size();) {
             if (bullets[i].collideWithAgent(zombies[j])) {
+                addBlood(glm::vec2(bullets[i].getPosition()), 5);
+
                 if (zombies[j]->applyDamage(bullets[i].getDamage())) {
                     delete zombies[j];
                     zombies[j] = zombies.back();
@@ -234,6 +248,8 @@ void Game::preUpdate(float dt) {
             // Bullet human collision, excluding player so start j from 1
             for (int j = 1; j < humans.size();) {
                 if (bullets[i].collideWithAgent(humans[j])) {
+                    addBlood(glm::vec2(bullets[i].getPosition()), 5);
+
                     if (humans[j]->applyDamage(bullets[i].getDamage())) {
                         delete humans[j];
                         humans[j] = humans.back();
@@ -288,6 +304,8 @@ void Game::preUpdate(float dt) {
             humans[i]->collideWithAgent(humans[j]);
         }
     }
+
+    particleEngine.update(dt);
 
     // Center camera around player
     float cameraZ = camera.getPosition().z;
@@ -385,6 +403,9 @@ void Game::preRender(float dt) {
 
         spriteBatch.renderBatch();
     }
+
+    particleEngine.draw(&spriteBatch);
+
     Shader* textShader = ResourceManager::Instance()->getShader("textBatch");
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
@@ -406,6 +427,18 @@ void Game::preRender(float dt) {
         textBatch.end();
 
         textBatch.renderBatch();
+    }
+}
+
+
+void Game::addBlood(const glm::vec2& pos, int numParticles) {
+    static std::mt19937 randEngine(time(nullptr));
+    static std::uniform_real_distribution<float> randAngle(0.0f, 2.f * M_PI);
+    glm::vec2 vel(2.0f, 0.0f);
+    glm::vec4 color(1.0f, 0.0f, 0.0f, 1.0f);
+
+    for (int i = 0; i < numParticles; i++) {
+        bloodParticles->addParticle(pos, glm::rotate(vel, randAngle(randEngine)), color, 20.0f);
     }
 }
 

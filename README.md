@@ -8,10 +8,11 @@
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
 * 2D Tiled map parsing/loading from tmx/xml files
+* 2D Particle Engine
 * Debug UI
 * Error logging
 * 2D orthographics and 3D perspective cameras
-* TrueType font rendering (Only ASCII ATM)
+* TrueType font rendering (Only ASCII encoding ATM)
 
 ## Planned Features
 
@@ -47,7 +48,7 @@ First install the dependencies and when use build instructions below.
     sudo apt-get install -y libsdl2-mixer-dev
     sudo apt-get install -y libsdl2-image-dev
     sudo apt-get install -y libsdl2-ttf-dev
-    sudo apt-get install -y lua5.3-dev
+    sudo apt-get install -y liblua5.4-dev
     sudo apt-get install -y libassimp-dev
 
 ### Building
