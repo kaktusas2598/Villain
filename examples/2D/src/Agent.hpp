@@ -43,6 +43,7 @@ class Agent {
 
         glm::vec3 position;
         float speed;
+        glm::vec2 direction = glm::vec2(1.0f, 0.0f);
 
         Texture* texture;
         int currentRow, currentFrame; //<<< Current animation frame

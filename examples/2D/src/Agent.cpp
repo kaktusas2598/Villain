@@ -64,8 +64,9 @@ void Agent::draw(Villain::SpriteBatch& batch) {
     destRect.z = scale * size;
     destRect.w = scale * size;
     // TODO:Utilise color, setup animations
-    //batch->draw(destRect, frame, row, frameWidth, frameHeight, texture, depth, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    batch.draw(destRect, 0, 0, size, size, texture, position.z, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+    batch.draw(destRect, uvRect, texture->getID(), position.z, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), direction);
+    //batch.draw(destRect, 0, 0, size, size, texture, position.z, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 }
 

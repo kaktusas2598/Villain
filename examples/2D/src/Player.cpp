@@ -58,12 +58,13 @@ void Player::update(
         currentGunIndex = 2;
     }
 
-    if (currentGunIndex != -1) {
-        glm::vec2 mouseCoords = Villain::InputManager::Instance()->getMouseCoords();
-        mouseCoords = camera->screenToWorld(mouseCoords);
+    glm::vec2 mouseCoords = Villain::InputManager::Instance()->getMouseCoords();
+    mouseCoords = camera->screenToWorld(mouseCoords);
 
-        glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(scale * frameSize / 2);
-        glm::vec2 direction = glm::normalize(mouseCoords - centerPosition);
+    glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(scale * frameSize / 2);
+    direction = glm::normalize(mouseCoords - centerPosition);
+
+    if (currentGunIndex != -1) {
 
         guns[currentGunIndex]->update(
                 deltaTime,

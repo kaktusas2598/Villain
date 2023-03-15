@@ -22,7 +22,7 @@ void Zombie::update(float deltaTime, Villain::Level& level, std::vector<Human*>&
 
     Human* closestHuman = getNearestHuman(humans);
     if (closestHuman != nullptr) {
-        glm::vec2 direction = glm::normalize(glm::vec2(closestHuman->getPosition()) - glm::vec2(position));
+        direction = glm::normalize(glm::vec2(closestHuman->getPosition()) - glm::vec2(position));
         position.x += direction.x * speed * deltaTime;
         position.y += direction.y * speed * deltaTime;
     }

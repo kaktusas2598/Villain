@@ -119,8 +119,15 @@ Game::Game() {
 
     // Main game player
     player = new Player();
-    player->init(glm::vec3(100.0f, 100.0f, 0.5f), HUMAN_SPEED, playerSpritesheet, &camera, &bullets, 48.0f, 1.0f);
-    //player->init(glm::vec3(100.0f, 100.0f, 0.5f), HUMAN_SPEED, ResourceManager::Instance()->loadTexture("assets/textures/player2.png", "player2"), &camera, &bullets, 128.0f);
+    //player->init(glm::vec3(100.0f, 100.0f, 0.5f), HUMAN_SPEED, playerSpritesheet, &camera, &bullets, 48.0f, 1.0f);
+    player->init(
+            glm::vec3(100.0f, 100.0f, 0.5f),
+            HUMAN_SPEED,
+            ResourceManager::Instance()->loadTexture("assets/textures/player2.png", "player2"),
+            &camera,
+            &bullets,
+            128.0f,
+            0.25f);
     humans.push_back(player);
 
     // Load level and set it's rendering batch and active camera
@@ -138,12 +145,14 @@ Game::Game() {
 
     for (int i = 0; i < 98; i++) {
         humans.push_back(new Human);
-        humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, playerSpritesheet, 48.0f, 1.0f);
+        //humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, playerSpritesheet, 48.0f, 1.0f);
+        humans.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), HUMAN_SPEED, ResourceManager::Instance()->loadTexture("assets/textures/human.png", "human"), 128.0f, 0.25f);
     }
 
     for (int i = 0; i < 2; i++) {
         zombies.push_back(new Zombie);
-        zombies.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), ZOMBIE_SPEED, zombieSpritesheet, 32.0f, 1.0f);
+        //zombies.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), ZOMBIE_SPEED, zombieSpritesheet, 32.0f, 1.0f);
+        zombies.back()->init(glm::vec3(xDist(rndEngine), yDist(rndEngine), 0.5f), ZOMBIE_SPEED, ResourceManager::Instance()->loadTexture("assets/textures/zombie.png", "zombie2"), 128.0f, 0.25f);
     }
 
     //Setup guns
@@ -296,7 +305,8 @@ void Game::preUpdate(float dt) {
             if (zombies[i]->collideWithAgent(humans[j])) {
                 // Turn human into zombie - add new zombie and delete human
                 zombies.push_back(new Zombie);
-                zombies.back()->init(humans[j]->getPosition(), ZOMBIE_SPEED, zombieSpritesheet, 32.0f, 1.0f);
+                //zombies.back()->init(humans[j]->getPosition(), ZOMBIE_SPEED, zombieSpritesheet, 32.0f, 1.0f);
+                zombies.back()->init(humans[j]->getPosition(), ZOMBIE_SPEED, ResourceManager::Instance()->loadTexture("assets/textures/zombie.png", "zombie2"), 128.0f, 0.25f);
                 delete humans[j];
                 humans[j] = humans.back();
                 humans.pop_back();

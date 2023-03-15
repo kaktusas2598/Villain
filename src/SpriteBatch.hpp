@@ -17,27 +17,18 @@ namespace Villain {
 
     class Glyph {
         public:
-            Glyph() {}
-            Glyph(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint txt, float dp, const glm::vec4& color) {
-                texture = txt;
-                depth = dp;
+            Glyph(const glm::vec4& destRect,
+                    const glm::vec4& uvRect,
+                    GLuint txt,
+                    float dp,
+                    const glm::vec4& color);
 
-                topLeft.Color = color;
-                topLeft.Position = glm::vec3(destRect.x, destRect.y + destRect.w, depth);
-                topLeft.UV = glm::vec2(uvRect.x, uvRect.y + uvRect.w);
-
-                bottomLeft.Color = color;
-                bottomLeft.Position = glm::vec3(destRect.x, destRect.y, depth);
-                bottomLeft.UV = glm::vec2(uvRect.x, uvRect.y);
-
-                topRight.Color = color;
-                topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + destRect.w, depth);
-                topRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-
-                bottomRight.Color = color;
-                bottomRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y, depth);
-                bottomRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y);
-            }
+            Glyph(const glm::vec4& destRect,
+                    const glm::vec4& uvRect,
+                    GLuint txt,
+                    float dp,
+                    const glm::vec4& color,
+                    float angle);
 
             GLuint texture;
             float depth;
@@ -46,6 +37,8 @@ namespace Villain {
             VertexC bottomLeft;
             VertexC topRight;
             VertexC bottomRight;
+        private:
+            glm::vec2 rotatePoint(glm::vec2 position, float angle);
     };
 
     class RenderBatch {
@@ -76,13 +69,22 @@ namespace Villain {
              */
             void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color);
 
+            // 1st draw() overload - rotate by angle in radians around sprite origin
+            void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color, float angleRad);
+
+            // 2nd draw() overload - rotate by direction vector around sprite origin
+            void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color, const glm::vec2& dir);
+
+            // 3rd draw() overload - draw frame from texture atlas
             void draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color);
 
+            void draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color, const glm::vec2& dir);
             void renderBatch();
         private:
             void createRenderBatches();
             void createVAO();
             void sortGlyphs();
+            glm::vec4 measureUV(int column, int row, int width, int height, Texture* texture);
 
             // TODO: Use lambdas for these compare functions instead
             static bool compareFrontToBack(Glyph* a, Glyph* b);

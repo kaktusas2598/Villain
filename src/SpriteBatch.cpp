@@ -1,4 +1,5 @@
 #include "SpriteBatch.hpp"
+#include "glm/geometric.hpp"
 
 #include <algorithm>
 #include <type_traits>
@@ -7,11 +8,71 @@
 
 namespace Villain {
 
-    SpriteBatch::SpriteBatch(): vbo(0), vao(0) {
+    Glyph::Glyph(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint txt, float dp, const glm::vec4& color) {
+        texture = txt;
+        depth = dp;
+
+        topLeft.Color = color;
+        topLeft.Position = glm::vec3(destRect.x, destRect.y + destRect.w, depth);
+        topLeft.UV = glm::vec2(uvRect.x, uvRect.y + uvRect.w);
+
+        bottomLeft.Color = color;
+        bottomLeft.Position = glm::vec3(destRect.x, destRect.y, depth);
+        bottomLeft.UV = glm::vec2(uvRect.x, uvRect.y);
+
+        topRight.Color = color;
+        topRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y + destRect.w, depth);
+        topRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+
+        bottomRight.Color = color;
+        bottomRight.Position = glm::vec3(destRect.x + destRect.z, destRect.y, depth);
+        bottomRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y);
     }
 
-    SpriteBatch::~SpriteBatch() {
+    Glyph::Glyph(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint txt, float dp, const glm::vec4& color, float angle) {
+        texture = txt;
+        depth = dp;
+
+        glm::vec2 halfDimensions(destRect.z / 2.0f, destRect.w / 2.0f);
+        // Get points centered around origin
+        glm::vec2 tl(-halfDimensions.x, halfDimensions.y); //top left
+        glm::vec2 bl(-halfDimensions.x, -halfDimensions.y); //bottom left
+        glm::vec2 br(halfDimensions.x, -halfDimensions.y); //bottom right
+        glm::vec2 tr(halfDimensions.x, halfDimensions.y); //top right
+
+        tl = rotatePoint(tl, angle) + halfDimensions;
+        bl = rotatePoint(bl, angle) + halfDimensions;
+        br = rotatePoint(br, angle) + halfDimensions;
+        tr = rotatePoint(tr, angle) + halfDimensions;
+
+        topLeft.Color = color;
+        topLeft.Position = glm::vec3(destRect.x + tl.x, destRect.y + tl.y, depth);
+        topLeft.UV = glm::vec2(uvRect.x, uvRect.y + uvRect.w);
+
+        bottomLeft.Color = color;
+        bottomLeft.Position = glm::vec3(destRect.x + bl.x, destRect.y + bl.y, depth);
+        bottomLeft.UV = glm::vec2(uvRect.x, uvRect.y);
+
+        topRight.Color = color;
+        topRight.Position = glm::vec3(destRect.x + tr.x, destRect.y + tr.y, depth);
+        topRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+
+        bottomRight.Color = color;
+        bottomRight.Position = glm::vec3(destRect.x + br.x, destRect.y + br.y, depth);
+        bottomRight.UV = glm::vec2(uvRect.x + uvRect.z, uvRect.y);
     }
+
+    glm::vec2 Glyph::rotatePoint(glm::vec2 position, float angle) {
+        glm::vec2 newPos;
+        newPos.x = position.x * cos(angle) - position.y * sin(angle);
+        newPos.y = position.x * sin(angle) + position.y * cos(angle);
+        return newPos;
+    }
+
+
+    SpriteBatch::SpriteBatch(): vbo(0), vao(0) { }
+
+    SpriteBatch::~SpriteBatch() { }
 
     void SpriteBatch::init() {
         createVAO();
@@ -37,14 +98,44 @@ namespace Villain {
         glyphs.emplace_back(destRect, uvRect, texture, depth, color);
     }
 
+    void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color, float angleRad) {
+        glyphs.emplace_back(destRect, uvRect, texture, depth, color, angleRad);
+    }
+
+    void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const glm::vec4& color, const glm::vec2& dir) {
+        // assume for now sprites will face right by default, so positive X only in 2D ortho
+        const glm::vec2 right(1.0f, 0.0f);
+        float angle = acos(glm::dot(right, dir));
+        if (dir.y < 0.0f) angle = -angle;
+
+        glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
+    }
+
+
     //HACK: This method is only a proof of concept for drawing sprite from a spritesheet, will need to be improved a lot
     void SpriteBatch::draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color) {
+        glm::vec4 uvRect = measureUV(frame, row, width, height, texture);
+        draw(destRect, uvRect, texture->getID(), depth, color);
+    }
+
+    void SpriteBatch::draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color, const glm::vec2& dir) {
+        glm::vec4 uvRect = measureUV(frame, row, width, height, texture);
+
+        // assume for now sprites will face right by default, so positive X only in 2D ortho
+        const glm::vec2 right(1.0f, 0.0f);
+        float angle = acos(glm::dot(right, dir));
+        if (dir.y < 0.0f) angle = -angle;
+
+        draw(destRect, uvRect, texture->getID(), depth, color, angle);
+    }
+
+    glm::vec4 SpriteBatch::measureUV(int column, int row, int width, int height, Texture* texture) {
         glm::vec4 uvRect;
         // 0 - 1, where 1 is texture width
         // Calculate num rows to flip actual row because loaded textures are flipped vertically in STBI image
         int numRows = texture->getHeight() / height;
         int numColumns = texture->getWidth() / width;
-        uvRect.x = frame * 1.0f/numColumns;
+        uvRect.x = column * 1.0f/numColumns;
         uvRect.y = (numRows - row - 1) * 1.0f/numRows;
         //uvRect.y = row * 1.0f/numRows;
         //std::cout << "Num rows: " << numRows << ", Num columns: " << numColumns << "\n";
@@ -52,7 +143,7 @@ namespace Villain {
         uvRect.z = 1.0f/numColumns;
         uvRect.w = 1.0f/numRows;
 
-        draw(destRect, uvRect, texture->getID(), depth, color);
+        return uvRect;
     }
 
     void SpriteBatch::renderBatch() {
