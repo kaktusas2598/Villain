@@ -8,17 +8,16 @@
 #include <random>
 #include <ctime>
 
-Human::Human() : frames(0) {
-    frameSize = 48.0f;
-}
+Human::Human() : frames(0) {}
 
 Human::~Human() {}
 
-void Human::init(glm::vec3 pos, float sp, Texture* t) {
+void Human::init(glm::vec3 pos, float sp, Texture* t, float size) {
 
     static std::mt19937 rndEngine(time(nullptr));
     static std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
+    frameSize = size;
     health = 20;
 
     position = pos;

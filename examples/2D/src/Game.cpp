@@ -73,10 +73,10 @@ Game::Game() {
             );
 
     SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
-    SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX);
-    SoundManager::Instance()->load("assets/audio/cg1.wav", "rifle", SoundType::SOUND_SFX);
-    SoundManager::Instance()->load("assets/audio/shotgun.wav", "shotgun", SoundType::SOUND_SFX);
-    SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX);
+    SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX, -50);
+    SoundManager::Instance()->load("assets/audio/cg1.wav", "rifle", SoundType::SOUND_SFX, -60);
+    SoundManager::Instance()->load("assets/audio/shotgun.wav", "shotgun", SoundType::SOUND_SFX, -50);
+    SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
     //SoundManager::Instance()->playMusic("drive");
 
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
@@ -120,6 +120,7 @@ Game::Game() {
     // Main game player
     player = new Player();
     player->init(glm::vec3(100.0f, 100.0f, 0.5f), HUMAN_SPEED, playerSpritesheet, &camera, &bullets);
+    //player->init(glm::vec3(100.0f, 100.0f, 0.5f), HUMAN_SPEED, ResourceManager::Instance()->loadTexture("assets/textures/player2.png", "player2"), &camera, &bullets, 128.0f);
     humans.push_back(player);
 
     // Load level and set it's rendering batch and active camera

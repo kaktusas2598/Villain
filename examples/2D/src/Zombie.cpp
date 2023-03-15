@@ -2,18 +2,17 @@
 
 #include "Human.hpp"
 
-Zombie::Zombie() {
-    frameSize = 32.0f;
-}
+Zombie::Zombie() {}
 
 Zombie::~Zombie()
 {
 }
 
-void Zombie::init(glm::vec3 pos, float sp, Texture* t) {
+void Zombie::init(glm::vec3 pos, float sp, Texture* t, float size) {
     position = pos;
     speed = sp;
     texture = t;
+    frameSize = size;
 
     health = 100;
 }

@@ -18,13 +18,14 @@ void Player::addGun(Gun* gun) {
     }
 }
 
-void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew) {
+void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size) {
     speed = sp;
     position = pos;
     texture = t;
     camera = cam;
     bullets = pewpew;
     health = 100;
+    frameSize = size;
 }
 
 // NOTE: probably would be better to pass InputManager as a ref here
@@ -60,7 +61,7 @@ void Player::update(
         glm::vec2 mouseCoords = Villain::InputManager::Instance()->getMouseCoords();
         mouseCoords = camera->screenToWorld(mouseCoords);
 
-        glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(48.f / 2);
+        glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(scale * frameSize / 2);
         glm::vec2 direction = glm::normalize(mouseCoords - centerPosition);
 
         guns[currentGunIndex]->update(

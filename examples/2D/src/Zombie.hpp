@@ -8,7 +8,7 @@ class Zombie : public Agent {
         Zombie();
         ~Zombie();
 
-        void init(glm::vec3 pos, float sp, Texture* t);
+        void init(glm::vec3 pos, float sp, Texture* t, float size = 32.0f);
         void update(float deltaTime, Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) override;
 
     private:
