@@ -5,15 +5,9 @@
 
 #include <iostream>
 
-Agent::Agent()
-{
-    // TODO: refactor
-    scale = 1.0f;
-}
+Agent::Agent() {}
 
-Agent::~Agent()
-{
-}
+Agent::~Agent() {}
 
 bool Agent::collideWithLevel(Villain::Level& level) {
     float spriteSize = scale * frameSize;

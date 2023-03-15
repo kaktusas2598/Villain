@@ -18,7 +18,7 @@ void Player::addGun(Gun* gun) {
     }
 }
 
-void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size) {
+void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size, float sc) {
     speed = sp;
     position = pos;
     texture = t;
@@ -26,6 +26,7 @@ void Player::init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, s
     bullets = pewpew;
     health = 100;
     frameSize = size;
+    scale = sc;
 }
 
 // NOTE: probably would be better to pass InputManager as a ref here

@@ -8,7 +8,7 @@ class Human : public Agent {
         Human();
         ~Human();
 
-        void init(glm::vec3 pos, float sp, Texture* t, float size = 48.0f);
+        void init(glm::vec3 pos, float sp, Texture* t, float size = 48.0f, float sc = 1.0f);
         virtual void update(float deltaTime, Villain::Level& level, std::vector<Human*>& humans, std::vector<Zombie*>& zombies);
     private:
         glm::vec2 direction;

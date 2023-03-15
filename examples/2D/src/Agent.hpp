@@ -47,7 +47,7 @@ class Agent {
         Texture* texture;
         int currentRow, currentFrame; //<<< Current animation frame
         float frameSize;
-        float scale;
+        float scale = 1.0f;
 
         float health;
 };

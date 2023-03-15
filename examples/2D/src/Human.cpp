@@ -12,12 +12,13 @@ Human::Human() : frames(0) {}
 
 Human::~Human() {}
 
-void Human::init(glm::vec3 pos, float sp, Texture* t, float size) {
+void Human::init(glm::vec3 pos, float sp, Texture* t, float size, float sc) {
 
     static std::mt19937 rndEngine(time(nullptr));
     static std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
     frameSize = size;
+    scale = sc;
     health = 20;
 
     position = pos;
