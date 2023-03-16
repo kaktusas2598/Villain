@@ -120,7 +120,7 @@ namespace Villain {
         frameLimiter.setMaxFPS(DESIRED_FPS);
 
         //starting time
-        float prevTicks = SDL_GetTicks();
+        Uint32 prevTicks = SDL_GetTicks();
 
         while (isRunning) {
             frameLimiter.begin();
