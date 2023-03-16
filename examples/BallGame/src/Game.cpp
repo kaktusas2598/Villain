@@ -11,14 +11,32 @@
 #include "DebugConsole.hpp"
 #include <cmath>
 #include <cstdio>
+#include <memory>
 #include <random>
 #include <sstream>
 
 #include "SoundManager.hpp"
 
+struct BallSpawn {
+    BallSpawn(const glm::vec4 colr, float rad, float m, float minSpeed, float maxSpeed, float prob) :
+        color(colr),
+        radius(rad),
+        mass(m),
+        randSpeed(minSpeed, maxSpeed),
+        probability(prob)
+    {}
+
+    glm::vec4 color;
+    float radius;
+    float mass;
+    float probability;
+    std::uniform_real_distribution<float> randSpeed;
+};
+
 using namespace Villain;
 
 Game::Game() {
+    // ENGINE INIT
     LuaScript configScript("assets/scripts/config.lua");
     configScript.open();
 
@@ -37,6 +55,7 @@ Game::Game() {
             flags
             );
 
+    // RESOURCES INIT
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     glm::vec3 camPos = camera.getPosition();
     camPos.x = configScript.get<int>("window.width")/2.0;
@@ -51,11 +70,10 @@ Game::Game() {
 
     freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
-    // Randomise some NPCs
-    //std::mt19937 rndEngine;
-    //rndEngine.seed(time(nullptr));
-    //std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
-    //std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
+    // GAME INIT
+    ballRenderers.push_back(std::make_unique<BallRenderer>());
+
+    initBalls();
 }
 
 Game::~Game() {
@@ -77,6 +95,68 @@ void Game::handleEvents() {
     std::ostringstream ss;
     ss << "Mouse world position: " << mouseCoords.x << ", " << mouseCoords.y;
     DebugConsole::Instance()->setInfo("mouse", ss.str());
+
+    if (InputManager::Instance()->isKeyDown(SDLK_LEFT)) {
+        ballController.setGravityDirection(GravityDirection::LEFT);
+    } else if (InputManager::Instance()->isKeyDown(SDLK_RIGHT)) {
+        ballController.setGravityDirection(GravityDirection::RIGHT);
+    } else if (InputManager::Instance()->isKeyDown(SDLK_UP)) {
+        ballController.setGravityDirection(GravityDirection::UP);
+    } else if (InputManager::Instance()->isKeyDown(SDLK_DOWN)) {
+        ballController.setGravityDirection(GravityDirection::UP);
+    }
+}
+
+void Game::initBalls() {
+    const int NUM_BALLS = 100;
+
+    std::mt19937 rndEngine((unsigned int)time(nullptr));
+    std::uniform_real_distribution<float> randX(0.0f, getScreenWidth());
+    std::uniform_real_distribution<float> randY(0.0f, getScreenHeight());
+    std::uniform_real_distribution<float> randDir(-1.0f, 1.0f);
+
+    std::vector<BallSpawn> possibleBalls;
+    float totalProbability = 0.0f;
+
+    totalProbability += 20.0f;
+    possibleBalls.emplace_back(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 20.f, 1.f, 0.1f, 7.0f, totalProbability);
+
+    totalProbability += 10.0f;
+    possibleBalls.emplace_back(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 30.f, 2.f, 0.1f, 3.0f, totalProbability);
+
+    totalProbability += 1.0f;
+    possibleBalls.emplace_back(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 50.f, 4.f, 0.0f, 0.0f, totalProbability);
+
+    std::uniform_real_distribution<float> spawn(0.0f, totalProbability);
+
+    balls.reserve(NUM_BALLS);
+
+    BallSpawn* ballToSpawn = &possibleBalls[0];
+    for (int i = 0; i < NUM_BALLS; i++) {
+        float spawnVal = spawn(rndEngine);
+        for (auto i = 0; i < possibleBalls.size(); i++) {
+            if (spawnVal <= possibleBalls[i].probability) {
+                ballToSpawn = &possibleBalls[i];
+                break;
+            }
+        }
+
+        // random starting pos
+        glm::vec2 pos(randX(rndEngine), randY(rndEngine));
+
+        // random dir, hacky
+        glm::vec2 direction(randDir(rndEngine), randDir(rndEngine));
+        if (direction.x != 0.0f || direction.y != 0.0f) {
+            direction = glm::normalize(direction);
+        } else {
+            direction = glm::vec2(1.0f, 0.0f); // default direction in case dir is 0
+        }
+
+        balls.emplace_back(ballToSpawn->radius, ballToSpawn->mass,
+                pos, direction * ballToSpawn->randSpeed(rndEngine),
+                ResourceManager::Instance()->loadTexture("assets/textures/circle.png", "circle")->getID(),
+                ballToSpawn->color);
+    }
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -84,11 +164,13 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
+    ballController.updateBalls(balls, dt, getScreenWidth(), getScreenHeight());
 }
 
 void Game::onAppRender(float dt) {
 
     // Bind texture
+    ResourceManager::Instance()->getTexture("circle")->bind();
     // Set uniforms
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.2f));
     model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -115,13 +197,10 @@ void Game::onAppRender(float dt) {
         batchShader->setUniform1i("spriteTexture", 0);
         spriteBatch.begin();
 
-        glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
-        //glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-        glm::vec4 uv(0.0f, 0.0f, 1.0f / 6, 1.0f / 10);
-        glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
-
-        //testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
-        //spriteBatch.draw(position + glm::vec4(100.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.5f, color);
+        for (int i = 0; i < balls.size(); i++) {
+            std::cout << i << "= Position: " << balls[i].position.x << ", " << balls[i].position.y << "\n";
+            ballRenderers[currentRenderer]->renderBall(spriteBatch, balls[i]);
+        }
 
         spriteBatch.end();
 
@@ -138,13 +217,9 @@ void Game::onAppRender(float dt) {
 
         textBatch.begin();
 
-        //spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), glm::vec2(3.0f), 0.6f, color);
         std::stringstream ss;
-        //ss << "Humans: " << humans.size();
-        //freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
-        //ss.str(""); // Empty string stream
-        //ss << "Zombies: " << zombies.size();
-        //freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.6f, color);
+        ss << "FPS: " << getFps();
+        freeType->draw(textBatch, ss.str(), glm::vec2(10.0f, 10.0f), 2.0f, 0.6f, color);
 
         textBatch.end();
 

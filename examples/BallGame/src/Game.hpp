@@ -17,13 +17,15 @@
 
 enum class GameState { RUNNING, EXIT };
 
+const int CELL_SIZE = 12;
+
 class Game : public Villain::Engine {
     public:
         Game();
         ~Game();
 
         void handleEvents();
-        //static void run();
+        void initBalls();
 
         void onAppPreUpdate(float deltaTime);
         void onAppPostUpdate(float deltaTime);
@@ -32,7 +34,7 @@ class Game : public Villain::Engine {
 
     private:
         BallController ballController;
-        std::vector<Ball> bullets;
+        std::vector<Ball> balls;
 
         int currentRenderer = 0;
         std::vector<std::unique_ptr<BallRenderer>> ballRenderers;
