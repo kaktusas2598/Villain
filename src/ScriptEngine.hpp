@@ -97,13 +97,13 @@ namespace Villain {
             //}
 
             static int lua_getScreenWidth(lua_State *L) {
-                int screenWidth = TheEngine::Instance()->getScreenWidth();
+                int screenWidth = Engine::getScreenWidth();
                 lua_pushnumber(L, screenWidth);
                 return 1;
             }
 
             static int lua_getScreenHeight(lua_State *L) {
-                int screenHeight = TheEngine::Instance()->getScreenHeight();
+                int screenHeight = Engine::getScreenHeight();
                 lua_pushnumber(L, screenHeight);
                 return 1;
             }
@@ -129,7 +129,7 @@ namespace Villain {
             //}
 
             static int lua_quit(lua_State *L) {
-                TheEngine::Instance()->setRunning(false);
+                //TheEngine::Instance()->setRunning(false);
                 return 0;
             }
 

@@ -1,6 +1,7 @@
 #ifndef __GAME__
 #define __GAME__
 
+#include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteFont.hpp"
 #include "Sprite.hpp"
@@ -18,51 +19,47 @@
 
 class Zombie;
 
-class Game {
+class Game : public Villain::Engine {
     public:
         Game();
         ~Game();
 
-        static void handleEvents();
-        static void run();
-        // Villain Engine callbacks
-        static void preUpdate(float dt);
-        static void postUpdate(float dt);
-        static void preRender(float dt);
-        static void postRender(float dt);
-        static void onWindowResize(int newWidth, int newHeight);
+        void handleEvents();
+        //static void run();
+
+        void onAppPreUpdate(float deltaTime);
+        void onAppPostUpdate(float deltaTime);
+        void onAppRender(float deltaTime);
+        void onAppWindowResize(int newWidth, int newHeight);
 
     private:
-        static void addBlood(const glm::vec2& pos, int numParticles);
-        //NOTE: In example game code, most of Game class members need to be static
-        //so they can be used in engine callbacks, not sure if this is good idea, but it works well
-        //and this way engine can be used to create all kinds of applications possibly
-        static Villain::Sprite* testSprite;
-        static Villain::SpriteBatch spriteBatch;
-        static Villain::Camera2D camera;
-        static Villain::Camera2D hudCamera;
-        static Texture* playerSpritesheet;
-        static Texture* zombieSpritesheet;
-        static std::vector<Bullet> bullets;
-        static Villain::Level* level;
+        void addBlood(const glm::vec2& pos, int numParticles);
 
-        static Villain::Timer colorTimer;
+        Villain::Sprite* testSprite;
+        Villain::SpriteBatch spriteBatch;
+        Villain::Camera2D camera;
+        Villain::Camera2D hudCamera;
+        Texture* playerSpritesheet;
+        Texture* zombieSpritesheet;
+        std::vector<Bullet> bullets;
+        Villain::Level* level;
 
-        static Player* player;
-        static std::vector<Human*> humans;
-        static std::vector<Zombie*> zombies;
+        Villain::Timer colorTimer;
 
-        static int numHumansKilled;
-        static int numZombiesKilled;
+        Player* player;
+        std::vector<Human*> humans;
+        std::vector<Zombie*> zombies;
 
-        static Villain::SpriteBatch textBatch;
-        static Villain::SpriteFont* spriteFont;
+        int numHumansKilled = 0;
+        int numZombiesKilled = 0;
 
-        static Villain::FreeType* freeType;
+        Villain::SpriteBatch textBatch;
+        Villain::SpriteFont* spriteFont;
 
-        static Villain::ParticleEngine2D particleEngine;
-        static Villain::ParticleBatch2D* bloodParticles;
+        Villain::FreeType* freeType;
 
+        Villain::ParticleEngine2D particleEngine;
+        Villain::ParticleBatch2D* bloodParticles;
 };
 
 #endif // __GAME__

@@ -14,8 +14,8 @@ namespace Villain {
     void TileLayer::init() {
         // Number of tile columns and rows needed to fill the screen
         // Adding 2 to each fixes gaps in rendering at the far sides of the screen, but TileLayer and collision system needs to check array bounds
-        numColumns = TheEngine::Instance()->getScreenWidth() / (tileSize * scale) + 2;
-        numRows = TheEngine::Instance()->getScreenHeight() / (tileSize * scale) + 2;
+        numColumns = Engine::getScreenWidth() / (tileSize * scale) + 2;
+        numRows = Engine::getScreenHeight() / (tileSize * scale) + 2;
 
         std::cout << "Num columns: " << numColumns << "\n";
         std::cout << "Num rows: " << numRows << "\n";

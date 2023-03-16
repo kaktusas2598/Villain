@@ -24,7 +24,11 @@
 
 namespace Villain {
 
-    Engine* Engine::s_pInstance = nullptr;
+    int Engine::screenWidth;
+    int Engine::screenHeight;
+
+    int Engine::getScreenWidth() { return screenWidth; }
+    int Engine::getScreenHeight() { return screenHeight; }
 
     Engine::Engine() {
         // Initialize State Machine
@@ -148,9 +152,9 @@ namespace Villain {
 
                 deltaTime = deltaTime / DESIRED_FPS;
 
-                if (preUpdateCallback != nullptr) preUpdateCallback(deltaTime);
+                onAppPreUpdate(deltaTime);
                 update(deltaTime);
-                if (postUpdateCallback != nullptr) postUpdateCallback(deltaTime);
+                onAppPostUpdate(deltaTime);
 
                 render(deltaTime);
                 //std::cout << deltaTime << std::endl;
@@ -206,10 +210,7 @@ namespace Villain {
         //glClearDepth(1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (preRenderCallback != nullptr) preRenderCallback(deltaTime);
-
-        if (postRenderCallback != nullptr) postRenderCallback(deltaTime);
-
+        onAppRender(deltaTime);
 
         ImGui::Render();
         //glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
@@ -361,7 +362,7 @@ namespace Villain {
                 screenWidth = event.window.data1;
                 screenHeight = event.window.data2;
                 glViewport(0, 0, screenWidth, screenHeight);
-                if (windowResizeCallback != nullptr) windowResizeCallback(screenWidth, screenHeight);
+                onAppWindowResize(screenWidth, screenHeight);
                 // TODO: Update camera viewports
                 //screenWidth = camera.w = event.window.data1;
                 //screenHeight = camera.h = event.window.data2;

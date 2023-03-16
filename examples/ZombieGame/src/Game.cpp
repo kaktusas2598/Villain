@@ -21,28 +21,6 @@
 
 using namespace Villain;
 
-Sprite* Game::testSprite = nullptr;
-SpriteBatch Game::spriteBatch;
-Camera2D Game::camera;
-Camera2D Game::hudCamera;
-Texture* Game::playerSpritesheet = nullptr;
-Texture* Game::zombieSpritesheet = nullptr;
-std::vector<Bullet> Game::bullets;
-Level* Game::level = nullptr;
-Timer Game::colorTimer;
-SpriteFont* Game::spriteFont = nullptr;
-SpriteBatch Game::textBatch;
-FreeType* Game::freeType = nullptr;
-ParticleEngine2D Game::particleEngine;
-ParticleBatch2D* Game::bloodParticles = nullptr;
-
-std::vector<Human*> Game::humans;
-std::vector<Zombie*> Game::zombies;
-Player* Game::player = nullptr;
-int Game::numHumansKilled = 0;
-int Game::numZombiesKilled = 0;
-
-
 const float HUMAN_SPEED = 50.f;
 const float ZOMBIE_SPEED = 40.f;
 
@@ -63,9 +41,7 @@ Game::Game() {
     if (configScript.get<bool>("window.resizable"))
         flags |= SDL_WINDOW_RESIZABLE;
 
-    TheEngine::Instance()->setCallbacks(preUpdate, postUpdate, preRender, postRender);
-    TheEngine::Instance()->setWindowCallbacks(onWindowResize);
-    TheEngine::Instance()->init(
+    init(
             configScript.get<std::string>("window.title"),
             configScript.get<int>("window.height"),
             configScript.get<int>("window.width"),
@@ -177,10 +153,10 @@ Game::~Game() {
     //ResourceManager::Instance()->clearTextureMap();
 }
 
-void Game::run() {
-    TheEngine::Instance()->run();
-    colorTimer.start();
-}
+//void Game::run() {
+    //TheEngine::Instance()->run();
+    //colorTimer.start();
+//}
 
 void Game::handleEvents() {
     if(TheInputManager::Instance()->isKeyDown(SDLK_q))
@@ -208,7 +184,7 @@ void Game::handleEvents() {
     //}
 }
 
-void Game::preUpdate(float dt) {
+void Game::onAppPreUpdate(float dt) {
 
     // Check victory conditions
     if (zombies.empty()) {
@@ -336,12 +312,12 @@ void Game::preUpdate(float dt) {
     camera.setPosition(cameraPos);
 }
 
-void Game::postUpdate(float dt) {
+void Game::onAppPostUpdate(float dt) {
     level->update();
 
 }
 
-void Game::preRender(float dt) {
+void Game::onAppRender(float dt) {
 
     // Bind texture
     // Set uniforms
@@ -454,7 +430,6 @@ void Game::preRender(float dt) {
     }
 }
 
-
 void Game::addBlood(const glm::vec2& pos, int numParticles) {
     static std::mt19937 randEngine(time(nullptr));
     static std::uniform_real_distribution<float> randAngle(0.0f, 2.f * M_PI);
@@ -466,10 +441,6 @@ void Game::addBlood(const glm::vec2& pos, int numParticles) {
     }
 }
 
-void Game::postRender(float dt) {
-}
-
-void Game::onWindowResize(int newWidth, int newHeight) {
+void Game::onAppWindowResize(int newWidth, int newHeight) {
    camera.init(newWidth, newHeight);
 }
-
