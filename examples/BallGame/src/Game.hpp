@@ -41,6 +41,7 @@ class Game : public Villain::Engine {
 
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D camera;
+        Villain::Camera2D hudCamera;
 
         Villain::Timer colorTimer;
 

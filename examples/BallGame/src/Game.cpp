@@ -57,6 +57,7 @@ Game::Game() {
 
     // RESOURCES INIT
     camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
+    hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     glm::vec3 camPos = camera.getPosition();
     camPos.x = configScript.get<int>("window.width")/2.0;
     camPos.y = configScript.get<int>("window.height")/2.0;
@@ -111,6 +112,7 @@ void Game::initBalls() {
     const int NUM_BALLS = 100;
 
     std::mt19937 rndEngine((unsigned int)time(nullptr));
+    std::cout << getScreenWidth() << ", " << getScreenHeight() << "\n";
     std::uniform_real_distribution<float> randX(0.0f, getScreenWidth());
     std::uniform_real_distribution<float> randY(0.0f, getScreenHeight());
     std::uniform_real_distribution<float> randDir(-1.0f, 1.0f);
@@ -169,15 +171,7 @@ void Game::onAppPostUpdate(float dt) {
 
 void Game::onAppRender(float dt) {
 
-    // Bind texture
-    ResourceManager::Instance()->getTexture("circle")->bind();
-    // Set uniforms
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.2f));
-    model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(2.0f));
-    //glm::mat4 view = glm::mat4(1.0f);
-    //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //glm::mat4 projection = glm::ortho(0.0f, (float)TheEngine::Instance()->getScreenWidth(), 0.0f, (float)TheEngine::Instance()->getScreenHeight(), 0.1f, 100.0f);
+    //glm::mat4 projection = glm::ortho(0.0f, (float)getScreenWidth(), 0.0f, (float)getScreenHeight(), 0.1f, 100.0f);
     glm::mat4 view = camera.getCameraMatrix();
     glm::mat4 projection = glm::mat4(1.0f);
 
@@ -198,7 +192,7 @@ void Game::onAppRender(float dt) {
         spriteBatch.begin();
 
         for (int i = 0; i < balls.size(); i++) {
-            std::cout << i << "= Position: " << balls[i].position.x << ", " << balls[i].position.y << "\n";
+            //std::cout << i << "= Position: " << balls[i].position.x << ", " << balls[i].position.y << "\n";
             ballRenderers[currentRenderer]->renderBall(spriteBatch, balls[i]);
         }
 
@@ -211,15 +205,15 @@ void Game::onAppRender(float dt) {
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
         textShader->bind();
-        //textShader->setUniformMat4f("view", hudCamera.getCameraMatrix());
+        textShader->setUniformMat4f("view", hudCamera.getCameraMatrix());
         textShader->setUniformMat4f("projection", projection);
         textShader->setUniform1i("spriteTexture", 0);
 
         textBatch.begin();
 
         std::stringstream ss;
-        ss << "FPS: " << getFps();
-        freeType->draw(textBatch, ss.str(), glm::vec2(10.0f, 10.0f), 2.0f, 0.6f, color);
+        ss << "FPS: " << (int) getFps();
+        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
 
         textBatch.end();
 
