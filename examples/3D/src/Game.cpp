@@ -34,7 +34,7 @@ Game::Game() {
             flags
             );
 
-    model = new Model("assets/models/donut.obj");
+    model3D = new Model("assets/models/donut.obj");
 
     //camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     //glm::vec3 camPos = camera.getPosition();
@@ -42,30 +42,14 @@ Game::Game() {
     //camPos.y = configScript.get<int>("window.width")/2.0;
     //camera.setPosition(camPos);
 
-    //ResourceManager::Instance()->loadShader("assets/shaders/model.vert", "assets/shaders/model.frag", "model");
     ResourceManager::Instance()->loadShader("assets/shaders/models.glsl", "model");
-
-    //NOTE: So far not sure if sprite class will be used, due to sprite batch existance
-
-
-    // Randomise some NPCs
-    //std::mt19937 rndEngine;
-    //rndEngine.seed(time(nullptr));
-    //std::uniform_real_distribution<float> xDist(100.0f, level->getWidth() - 100.0f);
-    //std::uniform_real_distribution<float> yDist(100.0f, level->getHeight() - 100.0f);
-
 }
 
 Game::~Game() {
 
 }
 
-void Game::handleEvents() {
-    //if(TheInputManager::Instance()->isKeyDown(SDLK_q))
-        //camera.setZoom(camera.getZoom() + 0.01f);
-    //if(TheInputManager::Instance()->isKeyDown(SDLK_e))
-        //camera.setZoom(camera.getZoom() - 0.01f);
-
+void Game::handleEvents(float deltaTime) {
     // Get SDL window mouse coords and convert to camera woorld coords
     glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
     //mouseCoords = camera.screenToWorld(mouseCoords);
@@ -74,69 +58,114 @@ void Game::handleEvents() {
     //std::ostringstream ss;
     //ss << "Mouse world position: " << mouseCoords.x << ", " << mouseCoords.y;
     //DebugConsole::Instance()->setInfo("mouse", ss.str());
+
+    static bool firstMouse = true;
+    static float lastX = getScreenWidth() / 2.0f;
+    static float lastY = getScreenHeight() / 2.0f;
+    // To prevent sudden camera jamp when mouse callback first gets called upon entering screen
+    if (firstMouse) {
+        lastX = mouseCoords.x;
+        lastY = mouseCoords.y;
+        firstMouse = false;
+    }
+
+    float xOffset = mouseCoords.x - lastX;
+    float yOffset = lastY - mouseCoords.y; // Reversed because Y axis goes from bottom to top in opengl
+
+    lastX = mouseCoords.x;
+    lastY = mouseCoords.y;
+    camera.processMouseMovement(xOffset, yOffset);
+
+    // TODO:
+    //camera.processMouseScroll(yOffset);
+
+    if (InputManager::Instance()->isKeyDown(SDLK_w)) {
+        camera.processKeyboard(CameraMovement::FORWARD, deltaTime);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_s)) {
+        camera.processKeyboard(CameraMovement::BACKWARD, deltaTime);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_a)) {
+        camera.processKeyboard(CameraMovement::LEFT, deltaTime);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_d)) {
+        camera.processKeyboard(CameraMovement::RIGHT, deltaTime);
+    }
+
+    // Camera up and down, same controls as in minecraft creative
+    if (InputManager::Instance()->isKeyDown(SDLK_SPACE)) {
+            camera.Position.y += 2.5f * deltaTime;
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_LSHIFT)) {
+            camera.Position.y -= 2.5f * deltaTime;
+    }
 }
 
 void Game::onAppPreUpdate(float dt) {
-    handleEvents();
+    handleEvents(dt);
 }
 
 void Game::onAppPostUpdate(float dt) {
 }
 
 void Game::onAppRender(float dt) {
-    // Bind texture
-    // Set uniforms
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.2f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
     model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(2.0f));
-    //glm::mat4 view = glm::mat4(1.0f);
-    //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //glm::mat4 projection = glm::ortho(0.0f, (float)TheEngine::Instance()->getScreenWidth(), 0.0f, (float)TheEngine::Instance()->getScreenHeight(), 0.1f, 100.0f);
+    model = glm::scale(model, glm::vec3(1.0f));
     glm::mat4 view = camera.getViewMatrix();
-    glm::mat4 projection = glm::mat4(1.0f);
+
+    // First param - FOV could be changed for zooming effect
+    // 2nd param - aspect ratio
+    // 3rd and 4th params - near and far planes
+    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)getScreenWidth()/(float)getScreenHeight(), 0.1f, 100.0f);
+
+    glm::vec3 lightPosition = glm::vec3(1.0f, 2.0f, -10.0f);
+    glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
+
+    // Or just use static color
+    glm::vec3 dirLightColor = glm::vec3(1.0f);
+    glm::vec3 pointLightColor = glm::vec3(1.0f, 0.0f, 0.0f);
+    glm::vec3 spotLightColor = glm::vec3(1.0f, 1.0f, 0.0f);
+
+    float constant = 1.0f;
+    float linear = 0.022f;
+    float quadratic = 0.0019f;
 
     Shader* modelShader = ResourceManager::Instance()->getShader("model");
     if (modelShader != nullptr) {
-        //spriteShader->bind();
-        //spriteShader->setUniformMat4f("model", model);
-        //spriteShader->setUniformMat4f("view", view);
-        //spriteShader->setUniformMat4f("projection", projection);
-        //spriteShader->setUniform1i("spriteTexture", 0);
-        ////spriteShader->setUniformVec4("uColor", glm::vec4(1.0f, (float)(colorTimer.read() / 255.0f), 0.0f, 1.0f));
-        //spriteShader->setUniformVec4("uColor", glm::vec4(1.0f, colorCurr, 0.0f, 1.0f));
-        ////spriteShader->setUniformVec4("uColor", glm::vec4(0.5f, 1.0f, 0.2f, 1.0f));
-        //model->draw(*modelShader);
+        modelShader->bind();
+        modelShader->setUniformMat4f("model", model);
+        modelShader->setUniformMat4f("view", view);
+        modelShader->setUniformMat4f("projection", projection);
+
+        modelShader->setUniform1f("material.shininess", 32.0f);
+
+        modelShader->setUniformVec3("dirLight.direction", lightDirection);
+        modelShader->setUniformVec3("dirLight.ambient", dirLightColor * glm::vec3(0.2f));
+        modelShader->setUniformVec3("dirLight.diffuse", dirLightColor * glm::vec3(0.5f));
+        modelShader->setUniform3f("dirLight.specular", 1.0f, 1.0f, 1.0f);
+
+        modelShader->setUniformVec3("pointLight.position", lightPosition);
+        modelShader->setUniformVec3("pointLight.ambient", pointLightColor * glm::vec3(0.5f));
+        modelShader->setUniformVec3("pointLight.diffuse", pointLightColor * glm::vec3(0.2f));
+        modelShader->setUniform3f("pointLight.specular", 1.0f, 1.0f, 1.0f);
+        modelShader->setUniform1f("pointLight.constant", constant);
+        modelShader->setUniform1f("pointLight.linear", linear);
+        modelShader->setUniform1f("pointLight.quadratic", quadratic);
+
+        // Make spot light position same as camera thus simulating flashlight!
+        modelShader->setUniformVec3("spotLight.position", camera.Position);
+        modelShader->setUniformVec3("spotLight.direction", camera.Front);
+        modelShader->setUniform1f("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        modelShader->setUniform1f("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+        modelShader->setUniformVec3("spotLight.ambient", spotLightColor * glm::vec3(0.2f));
+        modelShader->setUniformVec3("spotLight.diffuse", spotLightColor * glm::vec3(0.9f));
+        modelShader->setUniform3f("spotLight.specular", 1.0f, 1.0f, 1.0f);
+
+        modelShader->setUniformVec3("viewPosition", camera.Position);
+
+        model3D->draw(*modelShader);
     }
-
-    // Setting up rendering batch and rendering it all at once with a single draw call
-    //Shader* batchShader = ResourceManager::Instance()->getShader("batch");
-    //if (batchShader != nullptr) {
-        //batchShader->bind();
-        ////spriteShader->setUniformMat4f("model", model);
-        //batchShader->setUniformMat4f("view", view);
-        //batchShader->setUniformMat4f("projection", projection);
-        //batchShader->setUniform1i("spriteTexture", 0);
-        //spriteBatch.begin();
-
-        //glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
-        ////glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-        //glm::vec4 uv(0.0f, 0.0f, 1.0f / 6, 1.0f / 10);
-        //glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
-
-        ////testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
-        //spriteBatch.draw(position + glm::vec4(100.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.5f, color);
-
-        //static int currentFrame = 0;
-        //static int numFrames = 6;
-        //currentFrame =  int(((SDL_GetTicks() / 100) % 5));
-        //spriteBatch.draw(position, currentFrame++, 2, 48, 48, playerSpritesheet, 0.5f, color);
-
-        //spriteBatch.draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), currentFrame, 0, 48, 48, playerSpritesheet, 0.5f, color);
-
-        //spriteBatch.end();
-
-        //spriteBatch.renderBatch();
-    //}
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
