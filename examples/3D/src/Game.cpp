@@ -6,7 +6,6 @@
 #include "LuaScript.hpp"
 #include "Model.hpp"
 #include "ResourceManager.hpp"
-#include "examples/2D/src/Player.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
 #include "DebugConsole.hpp"
@@ -15,9 +14,6 @@
 #include <sstream>
 
 using namespace Villain;
-
-Camera Game::camera;
-Model* Game::model = nullptr;
 
 Game::Game() {
     LuaScript configScript("assets/scripts/config.lua");
@@ -31,9 +27,7 @@ Game::Game() {
     if (configScript.get<bool>("window.resizable"))
         flags |= SDL_WINDOW_RESIZABLE;
 
-    TheEngine::Instance()->setCallbacks(preUpdate, postUpdate, preRender, postRender);
-    TheEngine::Instance()->setWindowCallbacks(onWindowResize);
-    TheEngine::Instance()->init(
+    init(
             configScript.get<std::string>("window.title"),
             configScript.get<int>("window.height"),
             configScript.get<int>("window.width"),
@@ -48,7 +42,8 @@ Game::Game() {
     //camPos.y = configScript.get<int>("window.width")/2.0;
     //camera.setPosition(camPos);
 
-    ResourceManager::Instance()->loadShader("assets/shaders/model.vert", "assets/shaders/model.frag", "model");
+    //ResourceManager::Instance()->loadShader("assets/shaders/model.vert", "assets/shaders/model.frag", "model");
+    ResourceManager::Instance()->loadShader("assets/shaders/models.glsl", "model");
 
     //NOTE: So far not sure if sprite class will be used, due to sprite batch existance
 
@@ -63,10 +58,6 @@ Game::Game() {
 
 Game::~Game() {
 
-}
-
-void Game::run() {
-    TheEngine::Instance()->run();
 }
 
 void Game::handleEvents() {
@@ -85,18 +76,14 @@ void Game::handleEvents() {
     //DebugConsole::Instance()->setInfo("mouse", ss.str());
 }
 
-void Game::preUpdate(float dt) {
-
+void Game::onAppPreUpdate(float dt) {
     handleEvents();
-
-
-   }
-
-void Game::postUpdate(float dt) {
 }
 
-void Game::preRender(float dt) {
+void Game::onAppPostUpdate(float dt) {
+}
 
+void Game::onAppRender(float dt) {
     // Bind texture
     // Set uniforms
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.2f));
@@ -152,10 +139,7 @@ void Game::preRender(float dt) {
     //}
 }
 
-void Game::postRender(float dt) {
-}
-
-void Game::onWindowResize(int newWidth, int newHeight) {
+void Game::onAppWindowResize(int newWidth, int newHeight) {
    //camera.init(newWidth, newHeight);
 }
 
