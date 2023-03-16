@@ -5,7 +5,6 @@
 #include "LevelParser.hpp"
 #include "LuaScript.hpp"
 #include "ResourceManager.hpp"
-#include "examples/2D/src/Player.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 
@@ -16,6 +15,7 @@
 #include <sstream>
 
 #include "Gun.hpp"
+#include "Player.hpp"
 #include "Zombie.hpp"
 #include "SoundManager.hpp"
 
