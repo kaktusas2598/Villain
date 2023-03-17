@@ -86,8 +86,8 @@ void Agent::checkTilePosition(Villain::Level& level, std::vector<glm::vec2>& col
 
     glm::vec2 cornerPos = glm::vec2(floor(x / tileSize), floor(y / tileSize));
 
-    if (cornerPos.x < layers[0]->getMapWidth() || cornerPos.x >= 0
-            || cornerPos.y < layers[0]->getMapHeight() || cornerPos.y >= 0) {
+    if (cornerPos.x < layers[0]->getMapWidth() && cornerPos.x >= 0
+            && cornerPos.y < layers[0]->getMapHeight() && cornerPos.y >= 0) {
         if (tileIds[cornerPos.y][cornerPos.x] != 0) {
             // Use center position of tile for collision check
             collideTilePositions.push_back(cornerPos * tileSize + glm::vec2(tileSize / 2.0f));

@@ -6,6 +6,7 @@
 #include "CollisionLayer.hpp"
 #include "ResourceManager.hpp"
 //#include "Entity.hpp"
+#include <algorithm>
 #include <string>
 #include <sstream>
 
@@ -173,6 +174,10 @@ namespace Villain {
         //         // data[rows][cols] = gids[rows * width + cols];
         //     }
         // }
+
+        // 2023-03-17: Reversing tileIDs array will make sure row 0 is at the bottom instead of top
+        // because we are using OpenGL now
+        std::reverse(data.begin(), data.end());
 
         layer->setTileIDs(data);
         layer->setMapWidth(width);
