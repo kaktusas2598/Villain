@@ -315,6 +315,7 @@ namespace Villain {
                 break;
             case SDL_MOUSEMOTION:
                 TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
+                onMouseMove(event.motion.x, event.motion.y);
 
                 // Just a testing code for particle emitters
                 //ParticleSystem::Instance()->addEmitter(Vector2D{(float)event.motion.x, (float)event.motion.y}, "fire");
@@ -338,9 +339,11 @@ namespace Villain {
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 TheInputManager::Instance()->pressKey(event.button.button);
+                onMouseDown(event.motion.x, event.motion.y);
                 break;
             case SDL_MOUSEBUTTONUP:
                 TheInputManager::Instance()->releaseKey(event.button.button);
+                onMouseUp();
                 break;
             case SDL_TEXTINPUT:
                 TheInputManager::Instance()->addInputCharacters(event.text.text);

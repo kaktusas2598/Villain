@@ -68,6 +68,11 @@ namespace Villain {
             virtual void onAppRender(float deltaTime) = 0;
             virtual void onAppWindowResize(int newWidth, int newHeight) = 0;
 
+            // Optional callbacks
+            virtual void onMouseMove(int mouseX, int mouseY) {}
+            virtual void onMouseDown(int mouseX, int mouseY) {}
+            virtual void onMouseUp() {}
+
         private:
             void render(float deltaTime); ///< Main render method, renders current state
             void update(float deltaTime); ///< Main update method, sets different state or updates current one
