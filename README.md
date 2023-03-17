@@ -74,6 +74,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
- * Multiple tiled map layers not displaying correctly - has something to do with Y axis being flipped and
-     and coordinate system being different in GL compared to SDL
 
