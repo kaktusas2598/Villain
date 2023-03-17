@@ -443,4 +443,8 @@ void Game::addBlood(const glm::vec2& pos, int numParticles) {
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
    camera.init(newWidth, newHeight);
+   glm::vec3 camPos = camera.getPosition();
+   camPos.x = newWidth/2.0;
+   camPos.y = newHeight/2.0;
+   camera.setPosition(camPos);
 }

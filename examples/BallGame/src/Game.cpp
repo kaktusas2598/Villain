@@ -240,4 +240,8 @@ void Game::onMouseUp() {
 void Game::onAppWindowResize(int newWidth, int newHeight) {
     std::cout << "Window resize event, new size: " << newWidth << ", " << newHeight << "\n";
     camera.init(newWidth, newHeight);
+    glm::vec3 camPos = camera.getPosition();
+    camPos.x = newWidth/2.0;
+    camPos.y = newHeight/2.0;
+    camera.setPosition(camPos);
 }
