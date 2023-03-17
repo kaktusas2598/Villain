@@ -81,7 +81,8 @@ void BallController::onMouseMove(std::vector<Ball>& balls, float mouseX, float m
 }
 
 void BallController::checkCollision(Ball& b1, Ball& b2) {
-    glm::vec2 distVec = (b2.position + b2.radius) - (b1.position + b1.radius);
+    // circle - circle collision
+    glm::vec2 distVec = b2.position - b1.position;
     glm::vec2 distDir = glm::normalize(distVec);
     float dist = glm::length(distVec);
     float totalRadius = b1.radius + b2.radius;
@@ -101,14 +102,12 @@ void BallController::checkCollision(Ball& b1, Ball& b2) {
         b2.position += distDir * collisionDepth * massRatio * 0.5f;
 
         //calculate deflection - http://stackoverflow.com/a/345863
+        // Elastic ball collision
         float aci = glm::dot(b1.velocity, distDir) / b2.mass;
         float bci = glm::dot(b2.velocity, distDir) / b1.mass;
 
         float acf = (aci * (b1.mass - b2.mass) + 2 * b2.mass * bci) / (b1.mass + b2.mass);
         float bcf = (bci * (b2.mass - b1.mass) + 2 * b1.mass * aci) / (b1.mass + b2.mass);
-
-        //b1.velocity += (bci - aci) * distDir * (1.0f / massRatio);
-        //b2.velocity += (bci - aci) * distDir * massRatio;
 
         b1.velocity += (acf - aci) * distDir;
         b2.velocity += (bcf - bci) * distDir;
@@ -121,7 +120,7 @@ bool BallController::isMouseOnBall(Ball&b, float mouseX, float mouseY) {
 }
 
 glm::vec2 BallController::getGravityAcc() {
-    const float GRAVITY_FORCE = 1.0f; // 0.1f
+    const float GRAVITY_FORCE = 0.75f; // 0.1f
     glm::vec2 gravity;
 
     switch (gravityDirection) {

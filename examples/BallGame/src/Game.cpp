@@ -117,6 +117,7 @@ void Game::initBalls() {
     possibleBalls.emplace_back(__VA_ARGS__);
 
 
+    // 1250 max without spatial partitioning to reach 60FPS
     const int NUM_BALLS = 250;
 
     std::mt19937 rndEngine((unsigned int)time(nullptr));
