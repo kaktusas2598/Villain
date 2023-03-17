@@ -121,7 +121,7 @@ bool BallController::isMouseOnBall(Ball&b, float mouseX, float mouseY) {
 }
 
 glm::vec2 BallController::getGravityAcc() {
-    const float GRAVITY_FORCE = 0.1f;
+    const float GRAVITY_FORCE = 1.0f; // 0.1f
     glm::vec2 gravity;
 
     switch (gravityDirection) {

@@ -111,7 +111,13 @@ void Game::handleEvents() {
 }
 
 void Game::initBalls() {
-    const int NUM_BALLS = 100;
+
+#define ADD_BALL(p, ...) \
+    totalProbability += p; \
+    possibleBalls.emplace_back(__VA_ARGS__);
+
+
+    const int NUM_BALLS = 250;
 
     std::mt19937 rndEngine((unsigned int)time(nullptr));
     std::cout << getScreenWidth() << ", " << getScreenHeight() << "\n";
@@ -122,14 +128,9 @@ void Game::initBalls() {
     std::vector<BallSpawn> possibleBalls;
     float totalProbability = 0.0f;
 
-    totalProbability += 20.0f;
-    possibleBalls.emplace_back(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 20.f, 1.f, 0.1f, 7.0f, totalProbability);
-
-    totalProbability += 10.0f;
-    possibleBalls.emplace_back(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 30.f, 2.f, 0.1f, 3.0f, totalProbability);
-
-    totalProbability += 1.0f;
-    possibleBalls.emplace_back(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 50.f, 4.f, 0.0f, 0.0f, totalProbability);
+    ADD_BALL(20.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 20.f, 1.f, 0.1f, 7.0f, totalProbability)
+    ADD_BALL(10.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 30.f, 2.f, 0.1f, 3.0f, totalProbability)
+    ADD_BALL(1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 50.f, 4.f, 0.0f, 0.0f, totalProbability)
 
     std::uniform_real_distribution<float> spawn(0.0f, totalProbability);
 
