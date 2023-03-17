@@ -339,7 +339,7 @@ namespace Villain {
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 TheInputManager::Instance()->pressKey(event.button.button);
-                onMouseDown(event.motion.x, event.motion.y);
+                onMouseDown(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
                 TheInputManager::Instance()->releaseKey(event.button.button);
