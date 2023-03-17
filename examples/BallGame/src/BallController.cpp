@@ -28,18 +28,18 @@ void BallController::updateBalls(std::vector<Ball>& balls, float deltaTime, int 
             ball.velocity += gravity * deltaTime;
         }
         // Check wall collisions
-        if (ball.position.x < 0) {
-            ball.position.x = 0;
+        if (ball.position.x < ball.radius) {
+            ball.position.x = ball.radius;
             if (ball.velocity.x < 0) ball.velocity.x *= -1;
-        } else if (ball.position.x + ball.radius * 2.0f >= maxX) {
-            ball.position.x = maxX - ball.radius * 2.0f - 1;
+        } else if (ball.position.x + ball.radius >= maxX) {
+            ball.position.x = maxX - ball.radius - 1;
             if (ball.velocity.x > 0) ball.velocity.x *= -1;
         }
-        if (ball.position.y < 0) {
-            ball.position.y = 0;
+        if (ball.position.y < ball.radius) {
+            ball.position.y = ball.radius;
             if (ball.velocity.y < 0) ball.velocity.y *= -1;
-        } else if (ball.position.y + ball.radius * 2.0f >= maxY) {
-            ball.position.y = maxY - ball.radius * 2.0f - 1;
+        } else if (ball.position.y + ball.radius >= maxY) {
+            ball.position.y = maxY - ball.radius - 1;
             if (ball.velocity.y > 0) ball.velocity.y *= -1;
         }
         // Check collisions
@@ -90,25 +90,34 @@ void BallController::checkCollision(Ball& b1, Ball& b2) {
 
     if (collisionDepth > 0) {
         // Push away ball with less mass
-        if (b1.mass < b2.mass) {
-        } else {
-            b2.position -= distDir * collisionDepth;
-        }
+        //if (b1.mass < b2.mass) {
+            //b1.position -= distDir * collisionDepth;
+        //} else {
+            //b2.position += distDir * collisionDepth;
+        //}
+        // Push the balls based on ratio of mass
+        float massRatio = b1.mass / b2.mass;
+        b1.position -= distDir * collisionDepth * massRatio * 0.5f;
+        b2.position += distDir * collisionDepth * massRatio * 0.5f;
 
-        //calculate deflection
+        //calculate deflection - http://stackoverflow.com/a/345863
         float aci = glm::dot(b1.velocity, distDir) / b2.mass;
         float bci = glm::dot(b2.velocity, distDir) / b1.mass;
 
-        float massRatio = b1.mass / b2.mass;
+        float acf = (aci * (b1.mass - b2.mass) + 2 * b2.mass * bci) / (b1.mass + b2.mass);
+        float bcf = (bci * (b2.mass - b1.mass) + 2 * b1.mass * aci) / (b1.mass + b2.mass);
 
-        b1.velocity += (bci - aci) * distDir * (1.0f / massRatio);
-        b2.velocity += (bci - aci) * distDir * massRatio;
+        //b1.velocity += (bci - aci) * distDir * (1.0f / massRatio);
+        //b2.velocity += (bci - aci) * distDir * massRatio;
+
+        b1.velocity += (acf - aci) * distDir;
+        b2.velocity += (bcf - bci) * distDir;
     }
 }
 
 bool BallController::isMouseOnBall(Ball&b, float mouseX, float mouseY) {
-    return (mouseX >= b.position.x && mouseX < b.position.x + b.radius * 2.0f &&
-            mouseY >= b.position.y && mouseY < b.position.y + b.radius * 2.0f);
+    return (mouseX >= b.position.x - b.radius && mouseX < b.position.x + b.radius &&
+            mouseY >= b.position.y - b.radius && mouseY < b.position.y + b.radius);
 }
 
 glm::vec2 BallController::getGravityAcc() {

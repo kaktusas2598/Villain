@@ -32,6 +32,10 @@ class Game : public Villain::Engine {
         void onAppRender(float deltaTime);
         void onAppWindowResize(int newWidth, int newHeight);
 
+        void onMouseMove(int mouseX, int mouseY);
+        void onMouseDown(int mouseX, int mouseY);
+        void onMouseUp();
+
     private:
         BallController ballController;
         std::vector<Ball> balls;

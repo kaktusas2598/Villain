@@ -71,6 +71,8 @@ Game::Game() {
 
     freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
     // GAME INIT
     ballRenderers.push_back(std::make_unique<BallRenderer>());
 
@@ -97,14 +99,14 @@ void Game::handleEvents() {
     ss << "Mouse world position: " << mouseCoords.x << ", " << mouseCoords.y;
     DebugConsole::Instance()->setInfo("mouse", ss.str());
 
-    if (InputManager::Instance()->isKeyDown(SDLK_LEFT)) {
+    if (InputManager::Instance()->isKeyPressed(SDLK_LEFT)) {
         ballController.setGravityDirection(GravityDirection::LEFT);
-    } else if (InputManager::Instance()->isKeyDown(SDLK_RIGHT)) {
+    } else if (InputManager::Instance()->isKeyPressed(SDLK_RIGHT)) {
         ballController.setGravityDirection(GravityDirection::RIGHT);
-    } else if (InputManager::Instance()->isKeyDown(SDLK_UP)) {
+    } else if (InputManager::Instance()->isKeyPressed(SDLK_UP)) {
         ballController.setGravityDirection(GravityDirection::UP);
-    } else if (InputManager::Instance()->isKeyDown(SDLK_DOWN)) {
-        ballController.setGravityDirection(GravityDirection::UP);
+    } else if (InputManager::Instance()->isKeyPressed(SDLK_DOWN)) {
+        ballController.setGravityDirection(GravityDirection::DOWN);
     }
 }
 
@@ -136,9 +138,9 @@ void Game::initBalls() {
     BallSpawn* ballToSpawn = &possibleBalls[0];
     for (int i = 0; i < NUM_BALLS; i++) {
         float spawnVal = spawn(rndEngine);
-        for (auto i = 0; i < possibleBalls.size(); i++) {
-            if (spawnVal <= possibleBalls[i].probability) {
-                ballToSpawn = &possibleBalls[i];
+        for (auto j = 0; j < possibleBalls.size(); j++) {
+            if (spawnVal <= possibleBalls[j].probability) {
+                ballToSpawn = &possibleBalls[j];
                 break;
             }
         }
@@ -221,6 +223,20 @@ void Game::onAppRender(float dt) {
     }
 }
 
+void Game::onMouseMove(int mouseX, int mouseY) {
+    ballController.onMouseMove(balls, (float)mouseX, (float)getScreenHeight() - (float)mouseY);
+}
+
+void Game::onMouseDown(int mouseX, int mouseY) {
+    ballController.onMouseDown(balls, (float)mouseX, (float)getScreenHeight() - (float)mouseY);
+}
+
+void Game::onMouseUp() {
+    ballController.onMouseUp(balls);
+}
+
+
 void Game::onAppWindowResize(int newWidth, int newHeight) {
-   camera.init(newWidth, newHeight);
+    std::cout << "Window resize event, new size: " << newWidth << ", " << newHeight << "\n";
+    camera.init(newWidth, newHeight);
 }
