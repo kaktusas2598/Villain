@@ -21,6 +21,8 @@ namespace Villain {
             glm::vec3 cameraTranslate(-position.x + screenWidth/2.0f, -position.y + screenHeight/2.0f, -position.z);
             glm::mat4 cameraMatrix = glm::translate(projection, cameraTranslate);
             cameraMatrix = glm::scale(cameraMatrix, glm::vec3(zoom));
+
+            needsMatrixUpdate = false;
         }
     }
 
@@ -31,6 +33,8 @@ namespace Villain {
         glm::mat4 cameraMatrix = glm::translate(projection, cameraTranslate);
         // Camera zoom
         cameraMatrix = glm::scale(cameraMatrix, glm::vec3(zoom));
+        //glm::vec3 scale(zoom, zoom, 0.0f);
+        //cameraMatrix = glm::scale(glm::mat4(1.0f), scale) * cameraMatrix;
 
         return cameraMatrix;
     }
@@ -68,5 +72,18 @@ namespace Villain {
         }
 
         return false;
+    }
+
+    void Camera2D::offsetPosition(const glm::vec2& offset) {
+        position.x += offset.x;
+        position.y += offset.y;
+        needsMatrixUpdate = true;
+    }
+
+    void Camera2D::offsetScale(float offset) {
+        zoom += offset;
+        if (zoom < 0.001f)
+            zoom = 0.001f;
+        needsMatrixUpdate = true;
     }
 }

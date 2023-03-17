@@ -22,9 +22,12 @@ namespace Villain {
             // Checks if quad is in Camera's clip space
             bool quadInView(const glm::vec2& pos, const glm::vec2& dimensions);
 
+            void offsetPosition(const glm::vec2& offset);
+            void offsetScale(float offset);
+
             // Setters
-            void setPosition(const glm::vec3& newPos) { position = newPos; }
-            void setZoom(float z) { zoom = z; }
+            void setPosition(const glm::vec3& newPos) { position = newPos; needsMatrixUpdate = true; }
+            void setZoom(float z) { zoom = z; needsMatrixUpdate = true; }
             // Getters
             glm::vec3 getPosition() const { return position; }
             float getZoom() const { return zoom; }

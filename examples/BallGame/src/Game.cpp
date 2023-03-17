@@ -169,6 +169,7 @@ void Game::onAppPreUpdate(float dt) {
 
 void Game::onAppPostUpdate(float dt) {
     ballController.updateBalls(balls, dt, getScreenWidth(), getScreenHeight());
+    camera.update();
 }
 
 void Game::onAppRender(float dt) {
