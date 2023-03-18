@@ -75,6 +75,9 @@ Game::Game() {
 
     // GAME INIT
     ballRenderers.push_back(std::make_unique<BallRenderer>());
+    ballRenderers.push_back(std::make_unique<MomentumBallRenderer>());
+    ballRenderers.push_back(std::make_unique<VelocityBallRenderer>());
+    ballRenderers.push_back(std::make_unique<TrippyBallRenderer>());
 
     initBalls();
 }
@@ -108,6 +111,14 @@ void Game::handleEvents() {
     } else if (InputManager::Instance()->isKeyPressed(SDLK_DOWN)) {
         ballController.setGravityDirection(GravityDirection::DOWN);
     }
+
+    // Cycle through different ball renderers
+    if (InputManager::Instance()->isKeyPressed(SDLK_1)) {
+        currentRenderer++;
+        if (currentRenderer >= ballRenderers.size()) {
+            currentRenderer = 0;
+        }
+    }
 }
 
 void Game::initBalls() {
@@ -123,7 +134,8 @@ void Game::initBalls() {
 
 
     // 1250 max without spatial partitioning to reach 60FPS
-    const int NUM_BALLS = 10000;
+    // With spatial partitioning we can have more than 10000 balls!
+    const int NUM_BALLS = 15000;
 
     std::mt19937 rndEngine((unsigned int)time(nullptr));
     std::cout << getScreenWidth() << ", " << getScreenHeight() << "\n";
@@ -134,9 +146,20 @@ void Game::initBalls() {
     std::vector<BallSpawn> possibleBalls;
     float totalProbability = 0.0f;
 
-    ADD_BALL(20.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 2.f, 1.f, 0.1f, 7.0f, totalProbability)
-    ADD_BALL(10.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 3.f, 2.f, 0.1f, 3.0f, totalProbability)
+    // Random values for ball types
+    std::uniform_real_distribution<float> r1(2.0f, 8.0f);
+    std::uniform_real_distribution<float> r2(0.0f, 1.0f);
+
+    ADD_BALL(2.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 2.f, 1.f, 0.1f, 7.0f, totalProbability)
+    ADD_BALL(1.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 3.f, 2.f, 0.1f, 3.0f, totalProbability)
     ADD_BALL(1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 5.f, 4.f, 0.0f, 0.0f, totalProbability)
+    ADD_BALL(1.0f, glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 5.f, 4.f, 0.0f, 0.0f, totalProbability)
+    ADD_BALL(1.0f, glm::vec4(0.5f, 1.0f, 0.5f, 1.0f), 5.f, 4.f, 0.0f, 0.0f, totalProbability)
+    ADD_BALL(1.0f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), 5.f, 4.f, 0.0f, 0.0f, totalProbability)
+
+    for (int i = 0; i < 10000; i++) {
+        ADD_BALL(1.0f, glm::vec4(r2(rndEngine), r2(rndEngine), r2(rndEngine), 1.0f), r1(rndEngine), r1(rndEngine), 0.0f, 0.0f, totalProbability)
+    }
 
     std::uniform_real_distribution<float> spawn(0.0f, totalProbability);
 
@@ -184,41 +207,15 @@ void Game::onAppPostUpdate(float dt) {
 void Game::onAppRender(float dt) {
 
     //glm::mat4 projection = glm::ortho(0.0f, (float)getScreenWidth(), 0.0f, (float)getScreenHeight(), 0.1f, 100.0f);
-    glm::mat4 view = camera.getCameraMatrix();
-    glm::mat4 projection = glm::mat4(1.0f);
 
-    float colorMin = 0.0f, colorMax = 255.0f, colorCurr = colorMin;
-    colorCurr+= (int)colorTimer.read() % 255;
-    if (colorCurr > colorMax) {
-        colorCurr = colorMin;
-    }
-
-    // Setting up rendering batch and rendering it all at once with a single draw call
-    Shader* batchShader = ResourceManager::Instance()->getShader("batch");
-    if (batchShader != nullptr) {
-        batchShader->bind();
-        //spriteShader->setUniformMat4f("model", model);
-        batchShader->setUniformMat4f("view", view);
-        batchShader->setUniformMat4f("projection", projection);
-        batchShader->setUniform1i("spriteTexture", 0);
-        spriteBatch.begin();
-
-        for (int i = 0; i < balls.size(); i++) {
-            //std::cout << i << "= Position: " << balls[i].position.x << ", " << balls[i].position.y << "\n";
-            ballRenderers[currentRenderer]->renderBall(spriteBatch, balls[i]);
-        }
-
-        spriteBatch.end();
-
-        spriteBatch.renderBatch();
-    }
+    ballRenderers[currentRenderer]->renderBalls(spriteBatch, balls, camera.getCameraMatrix());
 
     Shader* textShader = ResourceManager::Instance()->getShader("textBatch");
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
         textShader->bind();
         textShader->setUniformMat4f("view", hudCamera.getCameraMatrix());
-        textShader->setUniformMat4f("projection", projection);
+        textShader->setUniformMat4f("projection", glm::mat4(1.0f));
         textShader->setUniform1i("spriteTexture", 0);
 
         textBatch.begin();
