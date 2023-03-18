@@ -23,6 +23,7 @@ using namespace Villain;
 
 const float HUMAN_SPEED = 50.f;
 const float ZOMBIE_SPEED = 40.f;
+const float ZOMBIE_DAMAGE = 5.f;
 
 //void updateBlood(Particle2D& p, float dt) {
     //p.position += p.velocity * dt;
@@ -292,7 +293,7 @@ void Game::onAppPreUpdate(float dt) {
 
         //Player collision
         if (zombies[i]->collideWithAgent(player)) {
-            std::cout << "You suck!\n";
+            player->applyDamage(ZOMBIE_DAMAGE);
         }
     }
 
@@ -418,9 +419,14 @@ void Game::onAppRender(float dt) {
 
         //spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), glm::vec2(3.0f), 0.6f, color);
         std::stringstream ss;
+        ss << "HP: " << (int)player->getHealth();
+        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 70.0f)), 2.0f, 0.6f, color);
+        ss.str(""); // Empty string stream
+
         ss << "Humans: " << humans.size();
         freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
         ss.str(""); // Empty string stream
+
         ss << "Zombies: " << zombies.size();
         freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.6f, color);
 

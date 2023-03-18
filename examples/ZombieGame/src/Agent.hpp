@@ -31,6 +31,7 @@ class Agent {
         void draw(Villain::SpriteBatch& batch);
 
         bool applyDamage(float dmg);
+        float getHealth() const { return health; }
 
         glm::vec3 getPosition() const { return position; }
         void setPosition(glm::vec3 pos) { position = pos; }

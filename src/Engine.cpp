@@ -135,12 +135,13 @@ namespace Villain {
             //how much extra time we have in the frame
             float totalDeltaTime = frameTime / DESIRED_FRAMETIME;
 
-            //update input manager
-            TheInputManager::Instance()->update();
+            // input manager update used to be here
 
             //SEMI FIXED TIME STEP ??
             int updateCount = 0;
             while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && isRunning) {
+                //update input manager
+                TheInputManager::Instance()->update();
                 SDL_Event event;
                 while (SDL_PollEvent(&event)) {
                     ImGui_ImplSDL2_ProcessEvent(&event);
