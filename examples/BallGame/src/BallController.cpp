@@ -136,12 +136,6 @@ void BallController::checkCollision(Ball& b1, Ball& b2) {
     float collisionDepth = totalRadius - dist;
 
     if (collisionDepth > 0) {
-        // Push away ball with less mass
-        //if (b1.mass < b2.mass) {
-            //b1.position -= distDir * collisionDepth;
-        //} else {
-            //b2.position += distDir * collisionDepth;
-        //}
         // Push the balls based on ratio of mass
         float massRatio = b1.mass / b2.mass;
         b1.position -= distDir * collisionDepth * massRatio * 0.5f;
@@ -157,6 +151,14 @@ void BallController::checkCollision(Ball& b1, Ball& b2) {
 
         b1.velocity += (acf - aci) * distDir;
         b2.velocity += (bcf - bci) * distDir;
+
+        if (glm::length(b1.velocity + b2.velocity) > 0.5f) {
+            //choose the faster ball
+            bool choise = glm::length(b1.velocity) < glm::length(b2.velocity);
+
+            // faster ball transfers colour to the slower ball
+            choise ? b2.color = b1.color : b1.color = b2.color;
+        }
     }
 }
 
