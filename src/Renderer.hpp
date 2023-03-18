@@ -5,22 +5,26 @@
 #include "IndexBuffer.hpp"
 #include "Shader.hpp"
 
-class Renderer {
-    public:
-        void clear() const;
-        void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+namespace Villain {
 
-        static Renderer *Instance() {
-            if (sInstance == 0)
-            {
-                sInstance = new Renderer();
+    class Renderer {
+        public:
+            void clear() const;
+            void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+
+            static Renderer *Instance() {
+                if (sInstance == 0)
+                {
+                    sInstance = new Renderer();
+                    return sInstance;
+                }
                 return sInstance;
             }
-            return sInstance;
-        }
 
-    private:
-        static Renderer* sInstance;
-};
+        private:
+            static Renderer* sInstance;
+    };
+
+}
 
 #endif // __Renderer__
