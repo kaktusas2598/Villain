@@ -1,7 +1,9 @@
 #ifndef __BALL__
 #define __BALL__
 
-#include "glm/glm.hpp"
+# include "glm/glm.hpp"
+
+struct Cell;
 
 struct Ball {
 
@@ -14,7 +16,8 @@ struct Ball {
     glm::vec2 velocity;
     unsigned int textureID = 0;
     glm::vec4 color;
-
+    Cell* ownerCell = nullptr;
+    int cellVectorIndex = -1;
 };
 
 #endif // __BALL__

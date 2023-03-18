@@ -6,9 +6,11 @@
 
 enum class GravityDirection {NONE, LEFT, UP, RIGHT, DOWN};
 
+class Grid;
+
 class BallController {
     public:
-        void updateBalls(std::vector<Ball>& balls, float deltaTime, int maxX, int maxY);
+        void updateBalls(std::vector<Ball>& balls, Grid* grid, float deltaTime, int maxX, int maxY);
 
         void onMouseDown(std::vector<Ball>& balls, float mouseX, float mouseY);
         void onMouseUp(std::vector<Ball>& balls);
@@ -17,6 +19,8 @@ class BallController {
         void setGravityDirection(GravityDirection dir) { gravityDirection = dir; }
 
     private:
+        void updateCollision(Grid* grid);
+        void checkCollision(Ball* ball, std::vector<Ball*>& ballsToCheck, int startingIndex);
         void checkCollision(Ball& b1, Ball& b2);
         bool isMouseOnBall(Ball&b, float mouseX, float mouseY);
         glm::vec2 getGravityAcc();

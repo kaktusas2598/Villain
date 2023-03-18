@@ -112,13 +112,18 @@ void Game::handleEvents() {
 
 void Game::initBalls() {
 
+
+    // Initialise the spatial partition grid
+    // NOTE:will need to be recalculated on window resize
+    grid = std::make_unique<Grid>(getScreenWidth(), getScreenHeight(), CELL_SIZE);
+
 #define ADD_BALL(p, ...) \
     totalProbability += p; \
     possibleBalls.emplace_back(__VA_ARGS__);
 
 
     // 1250 max without spatial partitioning to reach 60FPS
-    const int NUM_BALLS = 250;
+    const int NUM_BALLS = 10000;
 
     std::mt19937 rndEngine((unsigned int)time(nullptr));
     std::cout << getScreenWidth() << ", " << getScreenHeight() << "\n";
@@ -129,9 +134,9 @@ void Game::initBalls() {
     std::vector<BallSpawn> possibleBalls;
     float totalProbability = 0.0f;
 
-    ADD_BALL(20.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 20.f, 1.f, 0.1f, 7.0f, totalProbability)
-    ADD_BALL(10.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 30.f, 2.f, 0.1f, 3.0f, totalProbability)
-    ADD_BALL(1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 50.f, 4.f, 0.0f, 0.0f, totalProbability)
+    ADD_BALL(20.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 2.f, 1.f, 0.1f, 7.0f, totalProbability)
+    ADD_BALL(10.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 3.f, 2.f, 0.1f, 3.0f, totalProbability)
+    ADD_BALL(1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 5.f, 4.f, 0.0f, 0.0f, totalProbability)
 
     std::uniform_real_distribution<float> spawn(0.0f, totalProbability);
 
@@ -162,6 +167,8 @@ void Game::initBalls() {
                 pos, direction * ballToSpawn->randSpeed(rndEngine),
                 ResourceManager::Instance()->loadTexture("assets/textures/circle.png", "circle")->getID(),
                 ballToSpawn->color);
+        // Avoid dangling pointers by not calling emplace_back on balls vector after init
+        grid->addBall(&balls.back());
     }
 }
 
@@ -170,7 +177,7 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
-    ballController.updateBalls(balls, dt, getScreenWidth(), getScreenHeight());
+    ballController.updateBalls(balls, grid.get(), dt, getScreenWidth(), getScreenHeight());
     camera.update();
 }
 
@@ -246,4 +253,6 @@ void Game::onAppWindowResize(int newWidth, int newHeight) {
     camPos.x = newWidth/2.0;
     camPos.y = newHeight/2.0;
     camera.setPosition(camPos);
+
+    //grid->resize(newWidth, newHeight);
 }

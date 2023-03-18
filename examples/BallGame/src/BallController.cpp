@@ -1,9 +1,10 @@
 #include "BallController.hpp"
+#include "Grid.hpp"
 #include "glm/detail/qualifier.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 
-void BallController::updateBalls(std::vector<Ball>& balls, float deltaTime, int maxX, int maxY) {
+void BallController::updateBalls(std::vector<Ball>& balls, Grid* grid, float deltaTime, int maxX, int maxY) {
     const float FRICTION = 0.001f; // Friction coefficient
     if (grabbedBall != -1) {
         balls[grabbedBall].velocity = balls[grabbedBall].position - prevPos;
@@ -42,11 +43,21 @@ void BallController::updateBalls(std::vector<Ball>& balls, float deltaTime, int 
             ball.position.y = maxY - ball.radius - 1;
             if (ball.velocity.y > 0) ball.velocity.y *= -1;
         }
-        // Check collisions
-        for (int j = i + 1; j < balls.size(); j++) {
-            checkCollision(ball, balls[j]);
+
+        Cell* newCell = grid->getCell(ball.position);
+        if (newCell != ball.ownerCell) {
+            // Shift the ball
+            grid->removeBallFromCell(&balls[i]);
+            grid->addBall(&balls[i], newCell);
         }
+
+        // Check collisions
+        //for (int j = i + 1; j < balls.size(); j++) {
+            //checkCollision(grid, ball, balls[j]);
+        //}
     }
+    // Check collisions
+    updateCollision(grid);
 
     // Update grabbedBall
     if (grabbedBall != -1) {
@@ -77,6 +88,41 @@ void BallController::onMouseUp(std::vector<Ball>& balls) {
 void BallController::onMouseMove(std::vector<Ball>& balls, float mouseX, float mouseY) {
     if (grabbedBall != -1) {
         balls[grabbedBall].position = glm::vec2(mouseX, mouseY) - grabOffset;
+    }
+}
+
+void BallController::updateCollision(Grid* grid) {
+    for (int i = 0; i < grid->cells.size(); i++) {
+        int x = i % grid->numXCells;
+        int y = i / grid->numXCells;
+
+        Cell& cell = grid->cells[i];
+        for(int j = 0; j < cell.balls.size(); j++) {
+            Ball* ball = cell.balls[j];
+            // Update collision within same cell as ball resides
+            checkCollision(ball, cell.balls, j + 1);
+            // Neighbour cell collisions
+            if (x > 0) {
+                if (y > 0) {
+                    // Top left cell
+                    checkCollision(ball, grid->getCell(x - 1, y - 1)->balls, 0);
+                }
+                if (y < grid->numYCells - 1) {
+                    // Bottom left
+                    checkCollision(ball, grid->getCell(x - 1, y + 1)->balls, 0);
+                }
+            }
+            // Up cell
+            if (y > 0) {
+                checkCollision(ball, grid->getCell(x, y - 1)->balls, 0);
+            }
+        }
+    }
+}
+
+void BallController::checkCollision(Ball* ball, std::vector<Ball*>& ballsToCheck, int startingIndex) {
+    for (int i = startingIndex; i < ballsToCheck.size(); i++) {
+        checkCollision(*ball, *ballsToCheck[i]);
     }
 }
 

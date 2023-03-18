@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Ball.hpp"
+#include "Grid.hpp"
 #include "BallController.hpp"
 #include "BallRenderer.hpp"
 
@@ -39,9 +40,11 @@ class Game : public Villain::Engine {
     private:
         BallController ballController;
         std::vector<Ball> balls;
+        std::unique_ptr<Grid> grid; //<<< Spatial partitioning grid for collision
 
         int currentRenderer = 0;
         std::vector<std::unique_ptr<BallRenderer>> ballRenderers;
+
 
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D camera;
