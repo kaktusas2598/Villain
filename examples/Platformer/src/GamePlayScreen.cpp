@@ -1,4 +1,5 @@
 #include "GamePlayScreen.hpp"
+#include "glm/fwd.hpp"
 
 #include <random>
 
@@ -24,7 +25,11 @@ void GamePlayScreen::destroy() {
 }
 
 void GamePlayScreen::onEntry() {
+    boxTexture = Villain::ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "box");
+    playerSpriteAtlas = Villain::ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
+
     b2Vec2 gravity(0.0f, -9.81f);
+    //b2Vec2 gravity(0.0f, -14.81f);
     world = std::make_unique<b2World>(gravity);
 
     // Make ground
@@ -51,13 +56,12 @@ void GamePlayScreen::onEntry() {
         randColor.b = color(randGenerator) / 255.f;
         randColor.a = 1.0f;
         Box newBox;
-        newBox.init(world.get(), glm::vec2(xDist(randGenerator), yDist(randGenerator)), glm::vec2(size(randGenerator)), randColor);
+        newBox.init(world.get(), glm::vec2(xDist(randGenerator), yDist(randGenerator)), glm::vec2(size(randGenerator)), boxTexture->getID(), randColor);
         boxes.push_back(newBox);
     }
 
     textureShader = Villain::ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
     //ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/text.frag", "textBatch");
-    boxTexture = Villain::ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "box");
 
     spriteBatch.init();
     //textBatch.init();
@@ -73,6 +77,8 @@ void GamePlayScreen::onEntry() {
     //camPos.x = mainApplication->getScreenWidth()/2.0;
     //camPos.y = mainApplication->getScreenHeight()/2.0;
     //camera.setPosition(camPos);
+
+    player.init(world.get(), glm::vec2(0.0f, 30.0f), glm::vec2(1.2f, 1.8f), playerSpriteAtlas->getID(), glm::vec4(1.0f));
 }
 
 void GamePlayScreen::onExit() {
@@ -80,6 +86,7 @@ void GamePlayScreen::onExit() {
 }
 
 void GamePlayScreen::update(float deltaTime) {
+    player.update();
     // Update physics
     world->Step(deltaTime, 6, 2);
 }
@@ -97,15 +104,10 @@ void GamePlayScreen::draw(float deltaTime) {
         spriteBatch.begin();
 
         for(auto& b : boxes) {
-            glm::vec4 destRect;
-            // Need to subtract half size because box position is the centre
-            destRect.x = b.getBody()->GetPosition().x - b.getSize().x / 2.0f;
-            destRect.y = b.getBody()->GetPosition().y - b.getSize().y / 2.0f;
-            destRect.z = b.getSize().x;
-            destRect.w = b.getSize().y;
-            glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
-            spriteBatch.draw(destRect, uvRect, boxTexture->getID(), 0.0f, b.getColor(), b.getBody()->GetAngle());
+            b.draw(spriteBatch);
         }
+
+        player.draw(spriteBatch);
 
         spriteBatch.end();
 

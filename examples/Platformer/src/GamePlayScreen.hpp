@@ -8,6 +8,7 @@
 #include "ResourceManager.hpp"
 
 #include "Box.hpp"
+#include "Player.hpp"
 
 class GamePlayScreen : public Villain::IGameScreen {
     public:
@@ -32,11 +33,13 @@ class GamePlayScreen : public Villain::IGameScreen {
     private:
         Villain::Shader* textureShader;
         Villain::Texture* boxTexture;
+        Villain::Texture* playerSpriteAtlas;
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D camera;
 
         std::unique_ptr<b2World> world;
         std::vector<Box> boxes;
+        Player player;
 };
 
 #endif // __GAME_PLAY_SCREEN__
