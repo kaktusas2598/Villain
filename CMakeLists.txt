@@ -50,6 +50,9 @@ if (VILLAIN_ENABLE_BOX2D)
     option(BOX2D_BUILD_UNIT_TESTS OFF)
     option(BOX2D_BUILD_TESTBED OFF)
     add_subdirectory(vendor/box2d)
+    set(BOX2D_LIBRARIES box2d)
+else()
+    set(BOX2D_LIBRARIES )
 endif()
 
 # Build Header only libs
@@ -64,7 +67,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image tinyxml2 ${FREETYPE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES})
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"
