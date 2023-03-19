@@ -154,11 +154,6 @@ Game::~Game() {
     //ResourceManager::Instance()->clearTextureMap();
 }
 
-//void Game::run() {
-    //TheEngine::Instance()->run();
-    //colorTimer.start();
-//}
-
 void Game::handleEvents() {
     if(TheInputManager::Instance()->isKeyDown(SDLK_q))
         camera.setZoom(camera.getZoom() + 0.01f);
