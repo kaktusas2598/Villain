@@ -1,5 +1,5 @@
 # Villain
-2D/3D Game/Physics/Rendering Engine in development.
+2D/3D Game/Physics/Rendering Engine/Framework in development.
 
 ## Supported Features
 
@@ -13,6 +13,7 @@
 * Error logging
 * 2D orthographics and 3D perspective cameras
 * TrueType font rendering (Only ASCII encoding ATM)
+* Finite State Machine
 
 ## Planned Features
 

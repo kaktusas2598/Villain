@@ -3,8 +3,8 @@
 #include "ErrorHandler.hpp"
 //#include "EntityManager.hpp"
 
-//#include "StateParser.hpp"
-//#include "GameState.hpp"
+#include "StateParser.hpp"
+#include "IGameScreen.hpp"
 
 #include <string>
 #include <cstdio> // For sprintf
@@ -33,7 +33,7 @@ namespace Villain {
     Engine::Engine() {
         // Initialize State Machine
         Logger::Instance()->info("Initialising the engine.");
-        //stateMachine = std::make_unique<StateMachine>(this);
+        stateMachine = std::make_unique<StateMachine>(this);
         // Set default level
         //level = nullptr;
     }
@@ -41,19 +41,22 @@ namespace Villain {
     Engine::~Engine() {}
 
     void Engine::addStates() {
-        //Logger::Instance()->info("Adding states.");
-        //StateParser stateParser;
-        //std::vector<GameState*> states;
-        //if (!stateParser.loadStates("state.xml", &states)) {
-            //Logger::Instance()->error("Failed adding states.");
-        //}
-        //for (auto& state: states) {
-            //stateMachine->addState(state);
-        //}
-        //stateMachine->setState(states[0]->getID());
-        //states.clear();
+        Logger::Instance()->info("Adding states.");
+        StateParser stateParser;
+        std::vector<IGameScreen*> states;
+        if (!stateParser.loadStates("state.xml", &states)) {
+            Logger::Instance()->error("Failed adding states.");
+        }
+        for (auto& state: states) {
+            stateMachine->addScreen(state);
+        }
+        stateMachine->setScreen(states[0]->getID());
+        states.clear();
 
         return;
+    }
+
+    void Engine::onExit() {
     }
 
     void Engine::init(std::string title, int height, int width, unsigned int currentFlags, bool sdlEnabled){
@@ -78,12 +81,12 @@ namespace Villain {
 
         // set up a double buffered window (minimizes flickering)
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);//?
+        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
         window.create(title, screenHeight, screenWidth, currentFlags);
 
         //initialize the current game
-        // onInit();
+        onInit();
         //Initialise game camera
         //camera = {0, 0, screenWidth, screenHeight};
 
@@ -91,12 +94,14 @@ namespace Villain {
         addStates();
 
         //set the MainGame's current game screen
-        //currentState = stateMachine->getCurrentState();
+        currentState = stateMachine->getCurrentScreen();
 
-        //initialize game screen elements
-        //currentState->onEntry();
-        //set the initial game screen to ScreenState::RUNNING
-        //currentState->setRunning();
+        if (currentState != nullptr) {
+            //initialize game screen elements
+            currentState->onEntry();
+            //set the initial game screen to ScreenState::RUNNING
+            currentState->setRunning();
+        }
 
         glEnable(GL_DEPTH_TEST);
 
@@ -199,9 +204,6 @@ namespace Villain {
         //SDL_SetRenderDrawColor(window.getSDLRenderer(), (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
 
         //SDL_RenderClear(window.getSDLRenderer()); // clear the renderer to the draw color
-        //if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
-        //currentState->draw(deltaTime);
-        //}
         // TEMPORARY, just testing EntityManager, entities will get rendered twice
         //EntityManager::Instance()->render(deltaTime);
 
@@ -211,6 +213,9 @@ namespace Villain {
         //glClearDepth(1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
+            currentState->draw(deltaTime);
+        }
         onAppRender(deltaTime);
 
         ImGui::Render();
@@ -245,7 +250,7 @@ namespace Villain {
                 TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
                 break;
             }
-        }
+        }*/
 
         if (currentState) {
             switch (currentState->getScreenState()) {
@@ -259,7 +264,7 @@ namespace Villain {
                     currentState->onExit();
                     currentState = stateMachine->moveNext();
                     if (currentState) {
-                        //initialize zanew running screen
+                        //initialize new running screen
                         currentState->setRunning();
                         currentState->onEntry();
                     }
@@ -283,9 +288,9 @@ namespace Villain {
                     break;
             }
         }
-        else { exit(); }
+        //else { exit(); }
 
-        EntityManager::Instance()->refresh();
+        /*EntityManager::Instance()->refresh();
         EntityManager::Instance()->update(deltaTime);
 
         for (auto& e: EntityManager::Instance()->getEntities()) {
@@ -401,15 +406,16 @@ namespace Villain {
 
     void Engine::exit() {
 
-        /*currentState->onExit();
+        if (currentState != nullptr) {
+            currentState->onExit();
+        }
 
-        if (stateMachine)
-        {
+        if (stateMachine) {
             stateMachine->destroy();
             stateMachine.reset();
         }
 
-        ParticleSystem::Instance()->destroy();
+        /*ParticleSystem::Instance()->destroy();
         ParticleSystem::Instance()->clean();*/
 
 

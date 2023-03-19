@@ -4,7 +4,8 @@
 #include "Window.hpp"
 #include "InputManager.hpp"
 #include "DebugConsole.hpp"
-//#include "StateMachine.hpp"
+
+#include "StateMachine.hpp"
 //#include "Level.hpp"
 
 #include <functional>
@@ -14,17 +15,17 @@
 
 namespace Villain {
 
-    class GameState;
+    class IGameScreen;
     class Entity;
 
     /*! \brief Engine
-     *         Main Engine Class.
+     * Main Application Class, entrypoint class will need to extend this one
      *
      */
     class Engine {
         public:
             Engine();
-            ~Engine();
+            virtual ~Engine();
 
             /**
              * init systems, create window and GL context
@@ -39,9 +40,9 @@ namespace Villain {
             void run(); ///< runs main application's loop
             void exit(); //< clean resources and exit application
 
-            // void onInit();
-            void addStates();
-            void onExit();
+            virtual void onInit() = 0;
+            virtual void addStates();
+            virtual void onExit();
 
             void handleEvents(SDL_Event& event);
 
@@ -50,7 +51,7 @@ namespace Villain {
 
             const float getFps() const { return fps; }
 
-            //StateMachine* getStateMachine() { return stateMachine.get(); }
+            StateMachine* getStateMachine() { return stateMachine.get(); }
 
             static int getScreenWidth();
             static int getScreenHeight();
@@ -73,7 +74,7 @@ namespace Villain {
             virtual void onMouseDown(int mouseX, int mouseY) {}
             virtual void onMouseUp() {}
 
-        private:
+        protected:
             void render(float deltaTime); ///< Main render method, renders current state
             void update(float deltaTime); ///< Main update method, sets different state or updates current one
 
@@ -87,8 +88,9 @@ namespace Villain {
 
             float fps = 0; ///< main application's fps
 
-            //std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
+            std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
             //GameState* currentState = nullptr; ///< current state's instance
+            IGameScreen* currentState = nullptr; ///< current state's instance
 
             //std::vector<Entity*> entities;
             //Level* level;
