@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.22.1)
 # Setup project and set name
 project(Platformer)
 
+set(VILLAIN_ENABLE_BOX2D ON)
+
 # Cmake will generate compile_commands.json file used by clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 

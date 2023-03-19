@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.22.1)
 # Setup project and set name
 project(VILLAIN)
 
+# Custom Engine Build Options
+option(VILLAIN_ENABLE_BOX2D "Enable Box2D Physics Engine" OFF)
+
 # Set C++ Standard
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,11 +41,16 @@ file(GLOB sources src/*.cpp)
 # NV: On WSL I had to change shared to static to make this work, whyyyyy???
 add_library(${PROJECT_NAME} STATIC ${sources})
 
-
 # Specify extra directories with their own CMakeLists.txt for this build
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
 add_subdirectory(vendor/tinyxml2)
+
+if (VILLAIN_ENABLE_BOX2D)
+    option(BOX2D_BUILD_UNIT_TESTS OFF)
+    option(BOX2D_BUILD_TESTBED OFF)
+    add_subdirectory(vendor/box2d)
+endif()
 
 # Build Header only libs
 add_library(stb_image "vendor/stb_image.cpp")
