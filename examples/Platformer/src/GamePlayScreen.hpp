@@ -2,6 +2,12 @@
 #define __GAME_PLAY_SCREEN__
 
 #include "IGameScreen.hpp"
+#include "box2d/box2d.h"
+#include "Camera2D.hpp"
+#include "SpriteBatch.hpp"
+#include "ResourceManager.hpp"
+
+#include "Box.hpp"
 
 class GamePlayScreen : public Villain::IGameScreen {
     public:
@@ -24,6 +30,13 @@ class GamePlayScreen : public Villain::IGameScreen {
         virtual void draw(float deltaTime) override;
 
     private:
+        Villain::Shader* textureShader;
+        Villain::Texture* boxTexture;
+        Villain::SpriteBatch spriteBatch;
+        Villain::Camera2D camera;
+
+        std::unique_ptr<b2World> world;
+        std::vector<Box> boxes;
 };
 
 #endif // __GAME_PLAY_SCREEN__
