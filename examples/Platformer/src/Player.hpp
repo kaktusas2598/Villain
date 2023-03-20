@@ -4,6 +4,9 @@
 #include "Capsule.hpp"
 #include "DebugRenderer.hpp"
 #include "SpriteBatch.hpp"
+#include "TileAtlas.hpp"
+
+enum class PlayerMoveState { STANDING, RUNNING, PUNCHING, JUMPING};
 
 class Player {
     public:
@@ -27,9 +30,15 @@ class Player {
     private:
         Capsule collisionShape;
 
-        unsigned int textureID;
+        Villain::TileAtlas spriteSheet;
         glm::vec4 color;
         glm::vec2 drawSize;
+
+        bool onGround = false;
+        bool punching = false;
+        int direction = 1; // 1 or -1
+        float animationTime;
+        PlayerMoveState moveState = PlayerMoveState::STANDING;
 };
 
 #endif // __PLAYER__

@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "InputManager.hpp"
+#include "ResourceManager.hpp"
 #include <SDL2/SDL_keycode.h>
 
 
@@ -20,22 +21,90 @@ void Player::init(
         const glm::vec2& collisionDimensions,
         unsigned int texture,
         const glm::vec4& col) {
-    textureID = texture;
+    Villain::Texture* t = Villain::ResourceManager::Instance()->getTexture("player");
+    spriteSheet.init(t, glm::ivec2(6, 10));
+
     color = col;
     drawSize = drawDimensions;
     collisionShape.init(world, position, collisionDimensions * 2.f, DENSITY, FRICTION, true);
 }
 
 void Player::draw(Villain::SpriteBatch& batch) {
-    //HACK:this is temporary
-    //TODO: implement 2D animations properly
-    glm::vec4 uvRect;
-    int numColumns = 6;
-    int numRows = 10;
-    uvRect.x = 0 * 1.0f/numColumns;
-    uvRect.y = (numRows - 1 - 1) * 1.0f/numRows;
-    uvRect.z = 1.0f/numColumns;
-    uvRect.w = 1.0f/numRows;
+
+    float animationSpeed = 0.2;
+    int frameIndex;
+    int numFrames;
+
+    glm::vec2 velocity;
+    velocity.x = collisionShape.getBody()->GetLinearVelocity().x;
+    velocity.y = collisionShape.getBody()->GetLinearVelocity().y;
+    // Calculate animation
+    if (onGround) {
+
+        if (punching) {
+            numFrames = 4;
+            frameIndex = 12;
+            animationSpeed *= 0.25f;
+            if (moveState != PlayerMoveState::PUNCHING) {
+                moveState = PlayerMoveState::PUNCHING;
+                animationTime = 0;
+            }
+        } else if (abs(velocity.x) > 1.0f && (velocity.x > 0.0f && direction > 0) || (velocity.x < 0 && direction < 0)) {
+            // running
+            numFrames = 6;
+            frameIndex = 48;
+            animationSpeed = abs(velocity.x) * 0.025f;
+            if (moveState != PlayerMoveState::RUNNING) {
+                moveState = PlayerMoveState::RUNNING;
+                animationTime = 0;
+            }
+        } else {
+            // standing
+            numFrames = 1;
+            frameIndex = 48;
+            moveState = PlayerMoveState::STANDING;
+        }
+
+
+        // jumping animation
+    } else {
+        if (punching) {
+            numFrames = 4;
+            frameIndex = 18;
+            animationSpeed *= 0.25f;
+            if (moveState != PlayerMoveState::PUNCHING) {
+                moveState = PlayerMoveState::PUNCHING;
+                animationTime = 0;
+            }
+        } else if (velocity.y <= 0.0f) {
+            // falling
+            numFrames = 1;
+            frameIndex = 38;
+            moveState = PlayerMoveState::JUMPING;
+        } else {
+            // rising
+            numFrames = 1;
+            frameIndex = 37;
+            moveState = PlayerMoveState::JUMPING;
+        }
+    }
+
+    animationTime += animationSpeed;
+
+    // check for attack anim ending
+    if (animationTime > numFrames) {
+        punching = false;
+    }
+
+    frameIndex = frameIndex + (int)animationTime % numFrames;
+
+    glm::vec4 uvRect = spriteSheet.getUVs(frameIndex);
+
+    // flip uv coords if facing the other direction
+    if (direction == -1) {
+        uvRect.x += 1.0f/spriteSheet.dims.x;
+        uvRect.z *= -1.0f;
+    }
 
     glm::vec4 destRect;
     // Need to subtract half size because box position is the centre
@@ -43,7 +112,7 @@ void Player::draw(Villain::SpriteBatch& batch) {
     destRect.y = collisionShape.getBody()->GetPosition().y - collisionShape.getSize().y / 1.55f; // was 2.0f, probably because sprites are not centered in sheet
     destRect.z = drawSize.x;
     destRect.w = drawSize.y;
-    batch.draw(destRect, uvRect, textureID, 0.0f, color, collisionShape.getBody()->GetAngle());
+    batch.draw(destRect, uvRect, spriteSheet.texture->getID(), 0.0f, color, collisionShape.getBody()->GetAngle());
 }
 
 void Player::drawDebug(Villain::DebugRenderer& renderer) {
@@ -54,22 +123,29 @@ void Player::update() {
     Villain::InputManager* input = Villain::InputManager::Instance();
     b2Body* body = collisionShape.getBody();
 
+    if (input->isKeyPressed(SDLK_f)) {
+        punching = true;
+    }
+
     if (input->isKeyDown(SDLK_a)) {
         body->ApplyForceToCenter(b2Vec2(-100.0f, 0.0f), true);
+        direction = -1;
     } else if (input->isKeyDown(SDLK_d)) {
         body->ApplyForceToCenter(b2Vec2(100.0f, 0.0f), true);
+        direction = 1;
     } else {
         // Apply dampening
         body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x * 0.95f, body->GetLinearVelocity().y));
     }
 
-    float MAX_SPEED = 5.0f;
+    float MAX_SPEED = 3.0f;
     if (body->GetLinearVelocity().x < -MAX_SPEED) {
         body->SetLinearVelocity(b2Vec2(-MAX_SPEED, body->GetLinearVelocity().y));
     } else if (body->GetLinearVelocity().x > MAX_SPEED) {
         body->SetLinearVelocity(b2Vec2(MAX_SPEED, body->GetLinearVelocity().y));
     }
 
+    onGround = false;
     // Loop through all the contact points of player collision box
     for (b2ContactEdge* ce = body->GetContactList(); ce != nullptr; ce = ce->next) {
         b2Contact* c = ce->contact;
@@ -79,15 +155,16 @@ void Player::update() {
             // Check if points are below player
             bool below = false;
             for (int i = 0; i < b2_maxManifoldPoints; i++) {
-                if (manifold.points[i].y < body->GetPosition().y - collisionShape.getSize().y / 2.0f + 0.01f) {
+                if (manifold.points[i].y < body->GetPosition().y - collisionShape.getSize().y / 2.0f + collisionShape.getSize().x / 2.0f + 0.01f) {
                     below = true;
                     break;
                 }
             }
             if (below) {
+                onGround = true;
                 // now we can jump
                 if (input->isKeyPressed(SDLK_SPACE)) {
-                    body->ApplyLinearImpulse(b2Vec2(0.0f, 30.0f), b2Vec2(0.0f, 0.0f), true);
+                    body->ApplyLinearImpulse(b2Vec2(0.0f, 15.0f), b2Vec2(0.0f, 0.0f), true);
                     break;
                 }
             }

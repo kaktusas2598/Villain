@@ -81,7 +81,7 @@ void GamePlayScreen::onEntry() {
     //camPos.y = mainApplication->getScreenHeight()/2.0;
     //camera.setPosition(camPos);
 
-    player.init(world.get(), glm::vec2(0.0f, 30.0f), glm::vec2(3.0f), glm::vec2(0.5f, 0.8f), playerSpriteAtlas->getID(), glm::vec4(1.0f));
+    player.init(world.get(), glm::vec2(0.0f, 30.0f), glm::vec2(2.0f), glm::vec2(0.3f, 0.8f), playerSpriteAtlas->getID(), glm::vec4(1.0f));
 }
 
 void GamePlayScreen::onExit() {
