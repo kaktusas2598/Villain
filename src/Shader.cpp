@@ -8,6 +8,8 @@
 
 namespace Villain {
 
+    Shader::Shader(): rendererID(0) {}
+
     Shader::Shader(const std::string& fileName): rendererID(0) {
         ShaderProgramSource shaderSource = parseShader(fileName);
         rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);

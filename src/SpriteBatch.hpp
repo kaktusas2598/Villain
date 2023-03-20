@@ -51,6 +51,8 @@ namespace Villain {
         private:
     };
 
+    // TODO: See if VertexBuffer and VertexArray classes can be used to reduce number of raw GL calls here
+    // VertexBuffer will need to be improved
     class SpriteBatch {
         public:
             SpriteBatch();

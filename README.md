@@ -75,4 +75,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
+ * Refactor all classes doing the rendering (DebugRenderer, SpriteBatch) to use VertexBuffer class
+ *
 
