@@ -14,7 +14,7 @@ class Player : public Human {
 
         void addGun(Gun* gun);
 
-        void init(glm::vec3 pos, float sp, Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size = 48.0f, float sc = 1.0f);
+        void init(glm::vec3 pos, float sp, Villain::Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size = 48.0f, float sc = 1.0f);
         void update(
                 float deltaTime,
                 Villain::Level& level,

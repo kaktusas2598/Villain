@@ -46,7 +46,7 @@ class Agent {
         float speed;
         glm::vec2 direction = glm::vec2(1.0f, 0.0f);
 
-        Texture* texture;
+        Villain::Texture* texture;
         int currentRow, currentFrame; //<<< Current animation frame
         float frameSize;
         float scale = 1.0f;

@@ -8,7 +8,7 @@ Zombie::~Zombie()
 {
 }
 
-void Zombie::init(glm::vec3 pos, float sp, Texture* t, float size, float sc) {
+void Zombie::init(glm::vec3 pos, float sp, Villain::Texture* t, float size, float sc) {
     position = pos;
     speed = sp;
     texture = t;

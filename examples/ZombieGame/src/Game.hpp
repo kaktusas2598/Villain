@@ -39,8 +39,8 @@ class Game : public Villain::Engine {
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D camera;
         Villain::Camera2D hudCamera;
-        Texture* playerSpritesheet;
-        Texture* zombieSpritesheet;
+        Villain::Texture* playerSpritesheet;
+        Villain::Texture* zombieSpritesheet;
         std::vector<Bullet> bullets;
         Villain::Level* level;
 
