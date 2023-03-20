@@ -2,6 +2,10 @@
 #include "InputManager.hpp"
 #include <SDL2/SDL_keycode.h>
 
+
+const float FRICTION = 0.3f;
+const float DENSITY = 1.0f;
+
 Player::Player() {
 
 }
@@ -9,7 +13,20 @@ Player::~Player() {
 
 }
 
-void Player::init(b2World* world, const glm::vec2& position, const glm::vec2& dimensions, unsigned int texture, const glm::vec4& col) {
+void Player::init(
+        b2World* world,
+        const glm::vec2& position,
+        const glm::vec2& drawDimensions,
+        const glm::vec2& collisionDimensions,
+        unsigned int texture,
+        const glm::vec4& col) {
+    textureID = texture;
+    color = col;
+    drawSize = drawDimensions;
+    collisionShape.init(world, position, collisionDimensions * 2.f, DENSITY, FRICTION, true);
+}
+
+void Player::draw(Villain::SpriteBatch& batch) {
     //HACK:this is temporary
     //TODO: implement 2D animations properly
     glm::vec4 uvRect;
@@ -20,16 +37,22 @@ void Player::init(b2World* world, const glm::vec2& position, const glm::vec2& di
     uvRect.z = 1.0f/numColumns;
     uvRect.w = 1.0f/numRows;
 
-    collisionBox.init(world, position, dimensions * 2.f, texture, col, true, uvRect);
+    glm::vec4 destRect;
+    // Need to subtract half size because box position is the centre
+    destRect.x = collisionShape.getBody()->GetPosition().x - drawSize.x / 2.0f;
+    destRect.y = collisionShape.getBody()->GetPosition().y - collisionShape.getSize().y / 1.55f; // was 2.0f, probably because sprites are not centered in sheet
+    destRect.z = drawSize.x;
+    destRect.w = drawSize.y;
+    batch.draw(destRect, uvRect, textureID, 0.0f, color, collisionShape.getBody()->GetAngle());
 }
 
-void Player::draw(Villain::SpriteBatch& batch) {
-    collisionBox.draw(batch);
+void Player::drawDebug(Villain::DebugRenderer& renderer) {
+    collisionShape.drawDebug(renderer);
 }
 
 void Player::update() {
     Villain::InputManager* input = Villain::InputManager::Instance();
-    b2Body* body = collisionBox.getBody();
+    b2Body* body = collisionShape.getBody();
 
     if (input->isKeyDown(SDLK_a)) {
         body->ApplyForceToCenter(b2Vec2(-100.0f, 0.0f), true);
@@ -56,7 +79,7 @@ void Player::update() {
             // Check if points are below player
             bool below = false;
             for (int i = 0; i < b2_maxManifoldPoints; i++) {
-                if (manifold.points[i].y < body->GetPosition().y - collisionBox.getSize().y / 2.0f + 0.01f) {
+                if (manifold.points[i].y < body->GetPosition().y - collisionShape.getSize().y / 2.0f + 0.01f) {
                     below = true;
                     break;
                 }
@@ -64,7 +87,7 @@ void Player::update() {
             if (below) {
                 // now we can jump
                 if (input->isKeyPressed(SDLK_SPACE)) {
-                    body->ApplyLinearImpulse(b2Vec2(0.0f, 60.0f), b2Vec2(0.0f, 0.0f), true);
+                    body->ApplyLinearImpulse(b2Vec2(0.0f, 30.0f), b2Vec2(0.0f, 0.0f), true);
                     break;
                 }
             }

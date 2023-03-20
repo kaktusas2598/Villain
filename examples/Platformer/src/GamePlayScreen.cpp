@@ -81,7 +81,7 @@ void GamePlayScreen::onEntry() {
     //camPos.y = mainApplication->getScreenHeight()/2.0;
     //camera.setPosition(camPos);
 
-    player.init(world.get(), glm::vec2(0.0f, 30.0f), glm::vec2(1.2f, 1.8f), playerSpriteAtlas->getID(), glm::vec4(1.0f));
+    player.init(world.get(), glm::vec2(0.0f, 30.0f), glm::vec2(3.0f), glm::vec2(0.5f, 0.8f), playerSpriteAtlas->getID(), glm::vec4(1.0f));
 }
 
 void GamePlayScreen::onExit() {
@@ -131,12 +131,13 @@ void GamePlayScreen::draw(float deltaTime) {
                 debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
             }
             // Render player's collision box
-            auto& b = player.getBox();
-            destRect.x = b.getBody()->GetPosition().x - b.getSize().x / 2.0f;
-            destRect.y = b.getBody()->GetPosition().y - b.getSize().y / 2.0f;
-            destRect.z = b.getSize().x;
-            destRect.w = b.getSize().y;
-            debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
+            player.drawDebug(debugRenderer);
+            //auto& b = player.getCapsule();
+            //destRect.x = b.getBody()->GetPosition().x - b.getSize().x / 2.0f;
+            //destRect.y = b.getBody()->GetPosition().y - b.getSize().y / 2.0f;
+            //destRect.z = b.getSize().x;
+            //destRect.w = b.getSize().y;
+            //debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
 
             debugRenderer.end();
             debugRenderer.render(camera.getCameraMatrix(), 2.0f);
