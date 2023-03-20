@@ -79,6 +79,8 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Refactor all classes doing the rendering (DebugRenderer, SpriteBatch) to use VertexBuffer class
  * Refactor VertexBuffer, VertexArray classes to be able to feed vertices dynamicaly (glBufferSubData)
  * Refactor Renderer class to draw without index buffer object
+ * Finish refactoring/porting StateParser class from Vigilant engine!
+ * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
 
 ## GL TODOS
 
