@@ -25,6 +25,7 @@ class Game : public Villain::Engine {
         ~Game();
 
         void onInit() {};
+        void addStates() {};
         void handleEvents();
 
         void onAppPreUpdate(float deltaTime);

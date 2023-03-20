@@ -29,6 +29,7 @@ class Game : public Villain::Engine {
         void initBalls();
 
         void onInit() {};
+        void addStates() {};
         void onAppPreUpdate(float deltaTime);
         void onAppPostUpdate(float deltaTime);
         void onAppRender(float deltaTime);
