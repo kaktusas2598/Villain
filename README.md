@@ -14,10 +14,11 @@
 * 2D orthographics and 3D perspective cameras
 * TrueType font rendering (Only ASCII encoding ATM)
 * Finite State Machine
+* Sprite animation
 
 ## Planned Features
 
-* Sprite and skeletal animation support
+* Skeletal animation support
 * Built in collision detection: AABB, SAT, circle
 * Rigid Body implementation
 * Scene Graphs
@@ -25,6 +26,8 @@
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System
+* UI
+* Phong based lighting system
 * and many more...
 
 ## Used Libraries
