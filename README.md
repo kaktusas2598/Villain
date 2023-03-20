@@ -24,6 +24,7 @@
 * Spatial Partitioning models
 * Data Oriented Models
 * LUA (Again!)
+* Entity Component System
 * and many more...
 
 ## Used Libraries
@@ -76,5 +77,13 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
  * Refactor all classes doing the rendering (DebugRenderer, SpriteBatch) to use VertexBuffer class
- *
+ * Refactor VertexBuffer, VertexArray classes to be able to feed vertices dynamicaly (glBufferSubData)
+ * Refactor Renderer class to draw without index buffer object
+
+## GL TODOS
+
+ * Geometry, tessalation shader support
+ * Instanced draw calls
+ * Framebuffer and stencil buffer support for some cool effects
+
 
