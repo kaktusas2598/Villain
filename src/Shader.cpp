@@ -40,6 +40,11 @@ namespace Villain {
         GLCall(glDeleteProgram(rendererID));
     }
 
+
+    void Shader::createFromSource(const std::string& vertexSource, const std::string& fragmentSource) {
+        rendererID = createShader(vertexSource, fragmentSource);
+    }
+
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
 
         GLCall(unsigned int program = glCreateProgram());

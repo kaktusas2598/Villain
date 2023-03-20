@@ -17,11 +17,17 @@ namespace Villain {
     // This is really Shader Program, as it loads and compiles both vertex and fragment shaders
     class Shader {
         public:
-            Shader(); // Empty shader object, use createShader() to pass shader source directly
+            // Empty shader object, use createShader() to pass shader source directly
+            Shader();
+            // Create shader from a single file which has vertex and fragment shaders
             Shader(const std::string& fileName);
+            // Create shader object from 2 separate files, one containing vertex and other fragment shaders
             Shader(const std::string& vertexFile, const std::string& fragmentFile);
             //TODO: add support for geometry shaders
             ~Shader();
+
+            // To be used with empty constructor if we don't want to load shaders from files
+            void createFromSource(const std::string& vertexSource, const std::string& fragmentSource);
 
             void bind() const;
             void unbind() const;

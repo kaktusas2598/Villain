@@ -1,4 +1,5 @@
 #include "GamePlayScreen.hpp"
+#include "InputManager.hpp"
 #include "glm/fwd.hpp"
 
 #include <random>
@@ -25,6 +26,8 @@ void GamePlayScreen::destroy() {
 }
 
 void GamePlayScreen::onEntry() {
+    debugRenderer.init();
+
     boxTexture = Villain::ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "box");
     playerSpriteAtlas = Villain::ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
 
@@ -82,17 +85,21 @@ void GamePlayScreen::onEntry() {
 }
 
 void GamePlayScreen::onExit() {
-
 }
 
 void GamePlayScreen::update(float deltaTime) {
     player.update();
     // Update physics
     world->Step(deltaTime, 6, 2);
+
+    if (Villain::InputManager::Instance()->isKeyPressed(SDLK_1)) {
+        debugRenderMode = !debugRenderMode;
+    }
 }
 
 void GamePlayScreen::draw(float deltaTime) {
 
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // Setting up rendering batch and rendering it all at once with a single draw call
     if (textureShader != nullptr) {
         textureShader->bind();
@@ -112,7 +119,28 @@ void GamePlayScreen::draw(float deltaTime) {
         spriteBatch.end();
 
         spriteBatch.renderBatch();
-        textureShader->bind();
+        //textureShader->bind();
+
+        if (debugRenderMode) {
+            glm::vec4 destRect;
+            for(auto& b : boxes) {
+                destRect.x = b.getBody()->GetPosition().x - b.getSize().x / 2.0f;
+                destRect.y = b.getBody()->GetPosition().y - b.getSize().y / 2.0f;
+                destRect.z = b.getSize().x;
+                destRect.w = b.getSize().y;
+                debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
+            }
+            // Render player's collision box
+            auto& b = player.getBox();
+            destRect.x = b.getBody()->GetPosition().x - b.getSize().x / 2.0f;
+            destRect.y = b.getBody()->GetPosition().y - b.getSize().y / 2.0f;
+            destRect.z = b.getSize().x;
+            destRect.w = b.getSize().y;
+            debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
+
+            debugRenderer.end();
+            debugRenderer.render(camera.getCameraMatrix(), 2.0f);
+        }
     }
 }
 

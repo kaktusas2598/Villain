@@ -6,6 +6,7 @@
 #include "Camera2D.hpp"
 #include "SpriteBatch.hpp"
 #include "ResourceManager.hpp"
+#include "DebugRenderer.hpp"
 
 #include "Box.hpp"
 #include "Player.hpp"
@@ -36,6 +37,8 @@ class GamePlayScreen : public Villain::IGameScreen {
         Villain::Texture* playerSpriteAtlas;
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D camera;
+        Villain::DebugRenderer debugRenderer;
+        bool debugRenderMode = true;
 
         std::unique_ptr<b2World> world;
         std::vector<Box> boxes;
