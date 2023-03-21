@@ -2,6 +2,7 @@
 #include "InputManager.hpp"
 #include "glm/fwd.hpp"
 
+#include "Light.hpp"
 #include <random>
 
 GamePlayScreen::GamePlayScreen() {}
@@ -64,6 +65,7 @@ void GamePlayScreen::onEntry() {
     }
 
     textureShader = Villain::ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
+    light2DShader = Villain::ResourceManager::Instance()->loadShader("assets/shaders/light2D.vert", "assets/shaders/light2D.frag", "light2D");
     //ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/text.frag", "textBatch");
 
     spriteBatch.init();
@@ -142,6 +144,43 @@ void GamePlayScreen::draw(float deltaTime) {
             debugRenderer.end();
             debugRenderer.render(camera.getCameraMatrix(), 2.0f);
         }
+
+        // HACK: Render test lights
+        // TODO: stop hardcoding this
+        Light playerLight;
+        playerLight.color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+        playerLight.size = 20.0f;
+        glm::vec3 playerPosition;
+        playerPosition.x = player.getCapsule().getBody()->GetPosition().x;
+        playerPosition.y = player.getCapsule().getBody()->GetPosition().y;
+        playerPosition.z = -0.1f;
+        playerLight.position = playerPosition;
+
+        Light mouseLight;
+        mouseLight.color = glm::vec4(0.1f, 1.0f, 0.1f, 1.0f);
+        mouseLight.size = 10.0f;
+        glm::vec2 mouseCoords = camera.screenToWorld(Villain::InputManager::Instance()->getMouseCoords());
+        //mouseCoords.x += 5.0f / 2;
+        //mouseCoords.y += 5.0f / 2;
+        mouseLight.position = glm::vec3(mouseCoords.x, mouseCoords.y, 0.0f);
+
+        // Additive blending
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+        spriteBatch.begin();
+
+        light2DShader->bind();
+        light2DShader->setUniformMat4f("MVP", camera.getCameraMatrix());
+
+        playerLight.draw(spriteBatch);
+        mouseLight.draw(spriteBatch);
+
+        spriteBatch.end();
+        spriteBatch.renderBatch();
+
+        // Back to regular blending
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     }
 }
 

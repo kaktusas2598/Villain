@@ -33,6 +33,7 @@ class GamePlayScreen : public Villain::IGameScreen {
 
     private:
         Villain::Shader* textureShader;
+        Villain::Shader* light2DShader;
         Villain::Texture* boxTexture;
         Villain::Texture* playerSpriteAtlas;
         Villain::SpriteBatch spriteBatch;
