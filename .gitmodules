@@ -10,3 +10,6 @@
 [submodule "vendor/cegui"]
 	path = vendor/cegui
 	url = https://github.com/cegui/cegui
+[submodule "vendor/mygui"]
+	path = vendor/mygui
+	url = https://github.com/MyGUI/mygui
