@@ -13,6 +13,8 @@
 #include <memory>
 #include <vector>
 
+struct nk_context;
+
 namespace Villain {
 
     class IGameScreen;
@@ -52,6 +54,8 @@ namespace Villain {
             const float getFps() const { return fps; }
 
             StateMachine* getStateMachine() { return stateMachine.get(); }
+            Window getWindow() { return window; }
+            struct nk_context * getNuklearContext() { return nuklearContext; }
 
             static int getScreenWidth();
             static int getScreenHeight();
@@ -94,6 +98,8 @@ namespace Villain {
 
             //std::vector<Entity*> entities;
             //Level* level;
+        private:
+            struct nk_context* nuklearContext;
     };
 }
 

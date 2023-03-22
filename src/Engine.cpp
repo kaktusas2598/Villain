@@ -17,10 +17,17 @@
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "nuklear.h"
+#include "nuklear_sdl_gl3.h"
+
 #include "glm/gtc/matrix_transform.hpp"
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+
+// NOTE: temporary nuklear defines
+#define MAX_VERTEX_MEMORY 512 * 1024
+#define MAX_ELEMENT_MEMORY 128 * 1024
 
 namespace Villain {
 
@@ -85,6 +92,24 @@ namespace Villain {
 
         window.create(title, screenHeight, screenWidth, currentFlags);
 
+        nuklearContext = nk_sdl_init(window.getSDLWindow());
+        /* Load Fonts: if none of these are loaded a default font will be used  */
+        /* Load Cursor: if you uncomment cursor loading please hide the cursor */
+        {
+            struct nk_font_atlas *atlas;
+            nk_sdl_font_stash_begin(&atlas);
+            /*struct nk_font *droid = nk_font_atlas_add_from_file(atlas, "../../../extra_font/DroidSans.ttf", 14, 0);*/
+            /*struct nk_font *roboto = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Roboto-Regular.ttf", 16, 0);*/
+            /*struct nk_font *future = nk_font_atlas_add_from_file(atlas, "../../../extra_font/kenvector_future_thin.ttf", 13, 0);*/
+            /*struct nk_font *clean = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyClean.ttf", 12, 0);*/
+            /*struct nk_font *tiny = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyTiny.ttf", 10, 0);*/
+            /*struct nk_font *cousine = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Cousine-Regular.ttf", 13, 0);*/
+            nk_sdl_font_stash_end();
+            /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
+            /*nk_style_set_font(ctx, &roboto->handle);*/
+        }
+
+
         //initialize the current game
         onInit();
         //Initialise game camera
@@ -148,10 +173,13 @@ namespace Villain {
                 //update input manager
                 TheInputManager::Instance()->update();
                 SDL_Event event;
+                nk_input_begin(nuklearContext);
                 while (SDL_PollEvent(&event)) {
                     ImGui_ImplSDL2_ProcessEvent(&event);
                     handleEvents(event);
+                    nk_sdl_handle_event(&event);
                 }
+                nk_input_end(nuklearContext);
 
                 //limit deltatime to 1.0 so no speedup (1.0 being one frame and .2 being a fifth of a frame)
                 float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
@@ -200,23 +228,23 @@ namespace Villain {
             DebugConsole::Instance()->render();
         }
 
-        // ImGui::Render(); in imgui example Render() was placed here before SDL_RenderClear
-        //SDL_SetRenderDrawColor(window.getSDLRenderer(), (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-
-        //SDL_RenderClear(window.getSDLRenderer()); // clear the renderer to the draw color
-        // TEMPORARY, just testing EntityManager, entities will get rendered twice
-        //EntityManager::Instance()->render(deltaTime);
-
-        //ParticleSystem::Instance()->update(deltaTime); // Update actually does rendering too
-        //ParticleSystem::Instance()->render(deltaTime);
-
         //glClearDepth(1.0);
+        //SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
+        //glViewport(0, 0, screenWidth, screenHeight);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
             currentState->draw(deltaTime);
         }
         onAppRender(deltaTime);
+
+        /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
+         * with blending, scissor, face culling, depth test and viewport and
+         * defaults everything back into a default state.
+         * Make sure to either a.) save and restore or b.) reset your own state after
+         * rendering the UI. */
+        nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
 
         ImGui::Render();
         //glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
@@ -428,6 +456,7 @@ namespace Villain {
         TTF_Quit();
         //IMG_Quit();
 
+        nk_sdl_shutdown();
         //SDL_GL_DeleteContext(glContext);
         SDL_DestroyWindow(window.getSDLWindow());
         SDL_Quit();

@@ -57,9 +57,11 @@ endif()
 
 # Build Header only libs
 add_library(stb_image "vendor/stb_image.cpp")
+add_library(nuklear "vendor/nuklear.cpp")
 
 # Set up include paths
 target_include_directories(${PROJECT_NAME} PUBLIC src)
+# Will add Nuklear and stb_image includes
 target_include_directories(${PROJECT_NAME} PUBLIC vendor)
 target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 # Set up path to libraries
@@ -67,7 +69,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES})
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"
