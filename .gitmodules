@@ -7,9 +7,6 @@
 [submodule "vendor/box2d"]
 	path = vendor/box2d
 	url = https://github.com/erincatto/box2d
-[submodule "vendor/cegui"]
-	path = vendor/cegui
-	url = https://github.com/cegui/cegui
 [submodule "vendor/mygui"]
 	path = vendor/mygui
 	url = https://github.com/MyGUI/mygui
