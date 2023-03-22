@@ -16,6 +16,8 @@ class Game : public Villain::Engine {
         ~Game();
 
         void handleEvents(float deltaTime);
+        void addStates() {}
+        void onInit() {}
 
         // Villain Engine callbacks
         void onAppPreUpdate(float dt);
@@ -25,7 +27,7 @@ class Game : public Villain::Engine {
 
     private:
         Camera camera;
-        Model* model3D;
+        Villain::Model* model3D;
 };
 
 #endif // __GAME__

@@ -84,11 +84,6 @@ namespace Villain {
         //set VSYNC
         SDL_GL_SetSwapInterval(0);
 
-        //enable alpha blending
-        glEnable(GL_BLEND);
-        //what kind of blending we want
-        //in this case, we want alpha 0 to be transparent
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void Window::swapBuffer() {

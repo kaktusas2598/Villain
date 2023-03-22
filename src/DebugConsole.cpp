@@ -11,7 +11,8 @@ namespace Villain {
     bool DebugConsole::layerVisibility = false;
     bool DebugConsole::colliderVisibility = false;
     bool DebugConsole::showDemoWindow = false;
-    ImVec4 DebugConsole::clearColor = ImVec4(255.0f, 0.0f, 0.0f, 1.0f);
+    // TODO: store initial value somewhere
+    ImVec4 DebugConsole::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     std::map<std::string,std::string> DebugConsole::customInfo;
 
     DebugConsole* DebugConsole::s_pInstance = nullptr;

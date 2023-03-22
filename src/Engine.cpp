@@ -128,8 +128,6 @@ namespace Villain {
             currentState->setRunning();
         }
 
-        glEnable(GL_DEPTH_TEST);
-
         isRunning = true;//start main loop
     }
 
@@ -217,6 +215,13 @@ namespace Villain {
      * @param deltaTime
      */
     void Engine::render(float deltaTime){
+
+        glEnable(GL_DEPTH_TEST);
+        //enable alpha blending
+        glEnable(GL_BLEND);
+        //what kind of blending we want
+        //in this case, we want alpha 0 to be transparent
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // These commands probably should go just before update() method so that states can setup their own ui
         // Start the Dear ImGui frame
