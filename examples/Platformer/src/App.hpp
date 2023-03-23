@@ -3,6 +3,7 @@
 
 #include "Engine.hpp"
 #include "GamePlayScreen.hpp"
+#include "MenuScreen.hpp"
 
 class Zombie;
 
@@ -23,6 +24,7 @@ class App : public Villain::Engine {
 
     private:
         std::unique_ptr<GamePlayScreen> gameScreen = nullptr;
+        std::unique_ptr<MenuScreen> menuScreen = nullptr;
 };
 
 #endif // __APP__

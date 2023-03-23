@@ -31,6 +31,8 @@ class GamePlayScreen : public Villain::IGameScreen {
         virtual void update(float deltaTime) override;
         virtual void draw(float deltaTime) override;
 
+        void onAppWindowResize(int newWidth, int newHeight);
+
     private:
         Villain::Shader* textureShader;
         Villain::Shader* light2DShader;

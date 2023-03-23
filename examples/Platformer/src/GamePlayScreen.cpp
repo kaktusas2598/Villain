@@ -10,12 +10,12 @@ GamePlayScreen::GamePlayScreen() {}
 GamePlayScreen::~GamePlayScreen() {}
 
 int GamePlayScreen::getNextScreenID() const {
-    return STATE_NONE;
+    return 0;
 }
 
 
 int GamePlayScreen::getPrevScreenID() const {
-    return STATE_NONE;
+    return 0;
 }
 
 void GamePlayScreen::build() {
@@ -27,6 +27,8 @@ void GamePlayScreen::destroy() {
 }
 
 void GamePlayScreen::onEntry() {
+    SDL_ShowCursor(0);
+
     debugRenderer.init();
 
     boxTexture = Villain::ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "box");
@@ -39,7 +41,7 @@ void GamePlayScreen::onEntry() {
     // Make ground
     b2BodyDef groundBodyDef;
     // Everything in box2d are meters!
-    groundBodyDef.position.Set(0.0f, -20.0f);
+    groundBodyDef.position.Set(0.0f, -25.0f);
     b2Body* groundBody = world->CreateBody(&groundBodyDef);
     // Make the ground fixture
     b2PolygonShape groundBox;
@@ -87,6 +89,20 @@ void GamePlayScreen::onEntry() {
 }
 
 void GamePlayScreen::onExit() {
+    Villain::ResourceManager* rM = Villain::ResourceManager::Instance();
+    rM->clearTexture("box");
+    rM->clearTexture("player");
+    rM->clearTextureMap();
+
+    rM->clearShader("batch");
+    rM->clearShader("light2D");
+    rM->clearShaderMap();
+
+    debugRenderer.dispose();
+    boxes.clear();
+    world.reset();
+
+    SDL_ShowCursor(1);
 }
 
 void GamePlayScreen::update(float deltaTime) {
@@ -96,6 +112,9 @@ void GamePlayScreen::update(float deltaTime) {
 
     if (Villain::InputManager::Instance()->isKeyPressed(SDLK_1)) {
         debugRenderMode = !debugRenderMode;
+    }
+    if (Villain::InputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
+        setScreenState(Villain::ScreenState::CHANGE_PREVIOUS);
     }
 }
 
@@ -164,7 +183,7 @@ void GamePlayScreen::draw(float deltaTime) {
         //mouseCoords.y += 5.0f / 2;
         mouseLight.position = glm::vec3(mouseCoords.x, mouseCoords.y, 0.0f);
 
-        // Additive blending
+        //// Additive blending
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         spriteBatch.begin();
@@ -180,7 +199,14 @@ void GamePlayScreen::draw(float deltaTime) {
 
         // Back to regular blending
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     }
 }
 
+void GamePlayScreen::onAppWindowResize(int newWidth, int newHeight) {
+    std::cout << newWidth << ", " << newHeight << "\n";
+    camera.init(newWidth, newHeight);
+    //glm::vec3 camPos = camera.getPosition();
+    //camPos.x = newWidth/2.0;
+    //camPos.y = newHeight/2.0;
+    //camera.setPosition(camPos);
+}
