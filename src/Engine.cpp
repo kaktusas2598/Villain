@@ -57,7 +57,8 @@ namespace Villain {
         for (auto& state: states) {
             stateMachine->addScreen(state);
         }
-        stateMachine->setScreen(states[0]->getID());
+        if (states.size() > 0)
+            stateMachine->setScreen(states[0]->getID());
         states.clear();
 
         return;
@@ -109,11 +110,8 @@ namespace Villain {
             /*nk_style_set_font(ctx, &roboto->handle);*/
         }
 
-
         //initialize the current game
         onInit();
-        //Initialise game camera
-        //camera = {0, 0, screenWidth, screenHeight};
 
         //initialize game screens and add them to the screenList
         addStates();
@@ -188,7 +186,11 @@ namespace Villain {
                 update(deltaTime);
                 onAppPostUpdate(deltaTime);
 
-                render(deltaTime);
+                // HACK: To solve Segfault in IMGUI, have to check it's running here again, because after we switch state
+                // in update() method, it calls exit, but it still continues through the loop and hits render function and that causes
+                // imgui to try and render on empty context
+                if (isRunning) render(deltaTime);
+
                 //std::cout << deltaTime << std::endl;
                 //std::cout <<  " T: " << totalDeltaTime << std::endl;
                 totalDeltaTime -= deltaTime;
@@ -255,14 +257,15 @@ namespace Villain {
         //glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        //if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        //{
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
             SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-        //}
+        }
 
         ImGui::EndFrame();
     }
@@ -322,22 +325,6 @@ namespace Villain {
             }
         }
         //else { exit(); }
-
-        /*EntityManager::Instance()->refresh();
-        EntityManager::Instance()->update(deltaTime);
-
-        for (auto& e: EntityManager::Instance()->getEntities()) {
-            // Chek each entity for collision against map tiles
-            Collision::checkMapCollision(e, level->getCollidableLayers());
-
-            if (e->hasComponent<InputComponent>()) {
-                // FPS DROP from 60 to 20 and below, caused by particle emitters in onCollide() listener in Lua
-                // Removing that and looks like this method does not cause massive lag anymore
-                Collision::checkPlayerEntityCollision(e, EntityManager::Instance()->getEntities());
-            } else if (e->hasComponent<ProjectileComponent>()) {
-                Collision::checkProjectileEntityCollision(e, EntityManager::Instance()->getEntities());
-            }
-        }*/
     }
 
     /**
@@ -405,32 +392,6 @@ namespace Villain {
                 screenHeight = event.window.data2;
                 glViewport(0, 0, screenWidth, screenHeight);
                 onAppWindowResize(screenWidth, screenHeight);
-                // TODO: Update camera viewports
-                //screenWidth = camera.w = event.window.data1;
-                //screenHeight = camera.h = event.window.data2;
-                // Update map
-                /*if (level != nullptr) {
-                    for (auto it = level->getLayers()->begin(); it != level->getLayers()->end(); ++it) {
-                        (*it)->init();
-                    }
-                }
-                // Update UI
-                for (auto& e: EntityManager::Instance()->getEntities()) {
-                    // Need much better way than this, probably using render groups? but every component belonging to group
-                    // needs to have same method, extend from another class?
-                    if (e->hasComponent<UILabelComponent>()) {
-                        e->getComponent<UILabelComponent>()->ui.refresh();
-                        continue;
-                    } else if (e->hasComponent<ButtonComponent>()) {
-                        e->getComponent<ButtonComponent>()->ui.refresh();
-                        continue;
-                    } else if (e->hasComponent<BackgroundComponent>()) {
-                        e->getComponent<BackgroundComponent>()->reload();
-                        continue;
-                    }
-                }
-
-                SDL_RenderPresent( window.getSDLRenderer() );*/
                 break;
             default:
                 break;
@@ -448,10 +409,6 @@ namespace Villain {
             stateMachine.reset();
         }
 
-        /*ParticleSystem::Instance()->destroy();
-        ParticleSystem::Instance()->clean();*/
-
-
         isRunning = false;
 
         ImGui_ImplOpenGL3_Shutdown();
@@ -462,7 +419,7 @@ namespace Villain {
         //IMG_Quit();
 
         nk_sdl_shutdown();
-        //SDL_GL_DeleteContext(glContext);
+        SDL_GL_DeleteContext(SDL_GL_GetCurrentContext());
         SDL_DestroyWindow(window.getSDLWindow());
         SDL_Quit();
     }

@@ -53,6 +53,7 @@ namespace Villain {
         if (glContext == nullptr) {
             exitWithError("SDL_GL context could not be created");
         }
+        SDL_GL_MakeCurrent(m_pWindow, glContext);
 
         GLenum glewStatus = glewInit();
         if (glewStatus != GLEW_OK) {
@@ -64,9 +65,12 @@ namespace Villain {
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+                                                                    //
+        // Handle cursor visibility ourselves
+        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
