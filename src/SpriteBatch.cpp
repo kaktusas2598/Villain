@@ -1,4 +1,5 @@
 #include "SpriteBatch.hpp"
+#include "VertexBufferLayout.hpp"
 #include "glm/geometric.hpp"
 
 #include <algorithm>
@@ -70,7 +71,7 @@ namespace Villain {
     }
 
 
-    SpriteBatch::SpriteBatch(): vbo(0), vao(0) { }
+    SpriteBatch::SpriteBatch() { }
 
     SpriteBatch::~SpriteBatch() { }
 
@@ -111,8 +112,6 @@ namespace Villain {
         glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
     }
 
-
-    //HACK: This method is only a proof of concept for drawing sprite from a spritesheet, will need to be improved a lot
     void SpriteBatch::draw(const glm::vec4& destRect, int frame, int row, int width, int height, Texture* texture, float depth, const glm::vec4& color) {
         glm::vec4 uvRect = measureUV(frame, row, width, height, texture);
         draw(destRect, uvRect, texture->getID(), depth, color);
@@ -147,13 +146,13 @@ namespace Villain {
     }
 
     void SpriteBatch::renderBatch() {
-        glBindVertexArray(vao);
+        vao->bind();
         for (int i = 0; i < renderBatches.size(); i++) {
            glBindTexture(GL_TEXTURE_2D, renderBatches[i].texture) ;
 
            glDrawArrays(GL_TRIANGLES, renderBatches[i].offset, renderBatches[i].numVertices);
         }
-        glBindVertexArray(0);
+        vao->unbind();
     }
 
     void SpriteBatch::createRenderBatches() {
@@ -190,32 +189,22 @@ namespace Villain {
             offset += 6;
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        // orphan the buffer
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexC), nullptr, GL_DYNAMIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(VertexC), vertices.data());
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        vbo->fill(vertices.data(), vertices.size() * sizeof(VertexC), GL_DYNAMIC_DRAW);
+        vbo->unbind();
     }
 
     void SpriteBatch::createVAO() {
-        if (vao == 0)
-            glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
+        vao = std::make_unique<VertexArray>();
+        vbo = std::make_unique<VertexBuffer>(nullptr, -1);
 
-        if (vbo == 0)
-            glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        // Setup vertex attrib pointers
+        VertexBufferLayout layout;
+        layout.push<float>(3); // position
+        layout.push<float>(4); // color
+        layout.push<float>(2); // uv
 
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)0); // Position
-        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)(sizeof(float) * 3)); // Color
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexC), (void*)(sizeof(float) * 7)); // UV
-
-        glBindVertexArray(0);
+        vao->addBuffer(*vbo, layout);
     }
 
     void SpriteBatch::sortGlyphs() {

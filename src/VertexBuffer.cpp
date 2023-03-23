@@ -5,9 +5,8 @@
 VertexBuffer::VertexBuffer(const void* data, unsigned int size, GLenum usage) {
     GLCall(glGenBuffers(1, &rendererID));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, rendererID));
-    // TODO: when setting GL_DYNAMIC_DRAW, data needs to be nullptr so glBufferData needs
-    // to know size and we will need a setter for data
-    GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
+    if (size != -1)
+        GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -22,3 +21,9 @@ void VertexBuffer::unbind() const {
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
+
+void VertexBuffer::fill(const void* data, unsigned int size, GLenum usage) {
+    bind();
+    GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
+    GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
+}

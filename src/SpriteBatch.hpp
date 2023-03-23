@@ -4,6 +4,10 @@
 #include <GL/glew.h>
 #include "Vertex.hpp"
 #include "Texture.hpp"
+
+#include "VertexArray.hpp"
+
+#include <memory>
 #include <vector>
 
 namespace Villain {
@@ -51,8 +55,6 @@ namespace Villain {
         private:
     };
 
-    // TODO: See if VertexBuffer and VertexArray classes can be used to reduce number of raw GL calls here
-    // VertexBuffer will need to be improved
     class SpriteBatch {
         public:
             SpriteBatch();
@@ -93,14 +95,15 @@ namespace Villain {
             static bool compareBackToFront(Glyph* a, Glyph* b);
             static bool compareTexture(Glyph* a, Glyph* b);
 
-            GLuint vbo;
-            GLuint vao;
-
             GlyphSortType sortType;
 
             std::vector<Glyph*> glyphPointers; //<<< For sorting glyphs
             std::vector<Glyph> glyphs; //<<< Actual Glyphs used in rendering
             std::vector<RenderBatch> renderBatches;
+
+            std::unique_ptr<VertexArray> vao;
+            std::unique_ptr<VertexBuffer> vbo;
+
     };
 }
 

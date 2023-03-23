@@ -83,8 +83,7 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
- * Refactor all classes doing the rendering (DebugRenderer, SpriteBatch) to use VertexBuffer class
- * Refactor VertexBuffer, VertexArray classes to be able to feed vertices dynamicaly (glBufferSubData)
+ * Improve DebugRenderer: add lines and 3d primitive draw calls, use unique_ptr abstractions like VertexBuffer class
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
