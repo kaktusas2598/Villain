@@ -88,6 +88,7 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
+ * Refactor DebugConsole class and separate responsibilities: ImGUI LuaConsole, ImGui Init, dockspaces..
 
 ## GL TODOS
 
