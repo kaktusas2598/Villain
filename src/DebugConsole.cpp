@@ -98,12 +98,16 @@ namespace Villain {
     }
 
     void DebugConsole::render() {
+        // NOTE: Must be done after starting new frame and before any Imgui rendering is done!
+        // Which means DebugConsole::render() should be the first method in the engine to draw ImGUI
+        setupDockspace();
+
         ImGui::Begin("Debug Console");
 
         // Engine Info
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
-        //ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Separator();
 
@@ -126,7 +130,8 @@ namespace Villain {
         //}
 
         // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        //ImGui::ShowDemoWindow(&showDemoWindow);
+        if (showDemoWindow)
+            ImGui::ShowDemoWindow(&showDemoWindow);
 
         // Lua Console
         //----------------------------------
@@ -206,6 +211,38 @@ namespace Villain {
         ImGui::End();
 
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+    }
+
+    void DebugConsole::setupDockspace() {
+        // DOCKSPACE Setup
+        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoDockingInCentralNode;
+
+        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+        // because it would be confusing to have two docking targets within each others.
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+        if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+            window_flags |= ImGuiWindowFlags_NoBackground;
+
+        ImGui::SetNextWindowBgAlpha(0.0f); // For docking
+        ImGui::Begin("DockSpace Demo", NULL, window_flags);
+
+        ImGui::PopStyleVar(2);
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+        ImGui::End();
+        ///////////////////////////////////
+
     }
 
     // In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
