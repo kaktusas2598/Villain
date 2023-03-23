@@ -254,10 +254,10 @@ namespace Villain {
         nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
 
         ImGui::Render();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
         //glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();

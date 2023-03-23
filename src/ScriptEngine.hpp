@@ -37,6 +37,9 @@ namespace Villain {
             //
             void update(float deltaTime);
 
+            // Setup metatables and bind c++ methods
+            void build();
+
             // Setup metatables and bind c++ methods, load script
             // Tried loading init script for all states, functions can be shared, but variables
             // don't seem to be shared even in the same lua_state?

@@ -38,13 +38,12 @@ namespace Villain {
 	}*/
 
 
-    ScriptEngine::ScriptEngine() {}
+    ScriptEngine::ScriptEngine() {
+        build();
+    }
 
-    void ScriptEngine::init(std::string fileName) {
-        //id = tag;
-        //fileName = filename;
-        script = new LuaScript(fileName);
-        state = script->getLuaState();
+    void ScriptEngine::build() {
+        state = luaL_newstate();
 
         /*lua_newtable(state);
         lua_setglobal(state, "entities");
@@ -166,6 +165,16 @@ namespace Villain {
         lua_register(state, "quit", lua_quit);
         lua_register(state, "addLog", lua_addLog);
 
+    }
+
+    void ScriptEngine::init(std::string fileName) {
+        //id = tag;
+        //fileName = filename;
+        script = new LuaScript(fileName);
+        state = script->getLuaState();
+
+        build();
+
         script->open();
     }
 
@@ -186,7 +195,10 @@ namespace Villain {
     }
 
     std::string ScriptEngine::runChunk(const char* chunk) {
-        script->clean();
+        // Clean Lua stack before running another chunk
+        int n = lua_gettop(state);
+        lua_pop(state, n);
+
         if (luaL_dostring (state, chunk)) {
             std::string errorMessage = lua_tostring(state, -1);
             return errorMessage;
