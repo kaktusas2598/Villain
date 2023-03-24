@@ -17,6 +17,12 @@ namespace Villain {
             void end();
             void drawBox(const glm::vec4& destRect, float depth, const glm::vec4& color, float angle);
             void drawCircle(const glm::vec2& center, float depth, const glm::vec4& color, float radius);
+            // TODO:
+            // 1. rotation vector for 3D primitives
+            // 2. planes (Not XY plane, but XZ for 3D applications)
+            // 3. Other 3D primitives
+            // 4. 2D line drawing
+            void drawCube(const glm::vec3& position, const glm::vec4& color, float width);
             // Will render all as one batch
             void render(const glm::mat4& mvpMatrix, float lineWidth);
             void dispose();

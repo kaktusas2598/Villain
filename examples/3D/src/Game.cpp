@@ -9,6 +9,7 @@
 #include "glm/ext/matrix_transform.hpp"
 
 #include "DebugConsole.hpp"
+#include "DebugRenderer.hpp"
 #include <cstdio>
 #include <random>
 #include <sstream>
@@ -43,10 +44,12 @@ Game::Game() {
     //camera.setPosition(camPos);
 
     ResourceManager::Instance()->loadShader("assets/shaders/models.glsl", "model");
+
+    debugRenderer.init();
 }
 
 Game::~Game() {
-
+    debugRenderer.dispose();
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -109,9 +112,9 @@ void Game::onAppPostUpdate(float dt) {
 }
 
 void Game::onAppRender(float dt) {
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-    model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(1.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, -5.0f));
+    //model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(4.0f));
     glm::mat4 view = camera.getViewMatrix();
 
     // First param - FOV could be changed for zooming effect
@@ -166,6 +169,14 @@ void Game::onAppRender(float dt) {
 
         model3D->draw(*modelShader);
     }
+
+    // TODO:
+
+    debugRenderer.drawCube(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), 5.0f);
+    debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
+
+    debugRenderer.end();
+    debugRenderer.render(projection * view, 2.0f);
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {

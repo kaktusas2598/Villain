@@ -1,6 +1,7 @@
 #ifndef __GAME__
 #define __GAME__
 
+#include "DebugRenderer.hpp"
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "Sprite.hpp"
@@ -28,6 +29,8 @@ class Game : public Villain::Engine {
     private:
         Camera camera;
         Villain::Model* model3D;
+
+        Villain::DebugRenderer debugRenderer;
 };
 
 #endif // __GAME__
