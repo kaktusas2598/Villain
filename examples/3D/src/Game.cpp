@@ -134,6 +134,7 @@ void Game::onAppRender(float dt) {
     float linear = 0.022f;
     float quadratic = 0.0019f;
 
+    // TODO: all of this lighting code should be refactored to a separate class
     Shader* modelShader = ResourceManager::Instance()->getShader("model");
     if (modelShader != nullptr) {
         modelShader->bind();
@@ -170,9 +171,8 @@ void Game::onAppRender(float dt) {
         model3D->draw(*modelShader);
     }
 
-    // TODO:
-
-    debugRenderer.drawCube(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), 5.0f);
+    debugRenderer.drawBox3D(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(10.0f, 5.0f, 0.1f));
+    debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
     debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
 
     debugRenderer.end();

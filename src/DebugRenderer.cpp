@@ -157,43 +157,43 @@ namespace Villain {
     }
 
     // TODO: Somehow make this shorter, 100 lines way too much
-    void DebugRenderer::drawCube(const glm::vec3& position, const glm::vec4& color, float width) {
+    void DebugRenderer::drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size) {
         int i = vertices.size(); // Index for 1st new vertex added
         vertices.resize(vertices.size() + 8);
 
         // position is center of the cube!!
         // 0 - FAR BOTTOM LEFT
-        vertices[i].position.x = position.x - width/2;
-        vertices[i].position.y = position.y - width/2;
-        vertices[i].position.z = position.z - width/2;
+        vertices[i].position.x = position.x - size.x/2;
+        vertices[i].position.y = position.y - size.y/2;
+        vertices[i].position.z = position.z - size.z/2;
         // 1 - FAR TOP LEFT
-        vertices[i + 1].position.x = position.x - width/2;
-        vertices[i + 1].position.y = position.y + width/2;
-        vertices[i + 1].position.z = position.z - width/2;
+        vertices[i + 1].position.x = position.x - size.x/2;
+        vertices[i + 1].position.y = position.y + size.y/2;
+        vertices[i + 1].position.z = position.z - size.z/2;
         // 2 - FAR TOP RIGHT
-        vertices[i + 2].position.x = position.x + width/2;
-        vertices[i + 2].position.y = position.y + width/2;
-        vertices[i + 2].position.z = position.z - width/2;
+        vertices[i + 2].position.x = position.x + size.x/2;
+        vertices[i + 2].position.y = position.y + size.y/2;
+        vertices[i + 2].position.z = position.z - size.z/2;
         // 3 - FAR BOTTOM RIGHT
-        vertices[i + 3].position.x = position.x + width/2;
-        vertices[i + 3].position.y = position.y - width/2;
-        vertices[i + 3].position.z = position.z - width/2;
+        vertices[i + 3].position.x = position.x + size.x/2;
+        vertices[i + 3].position.y = position.y - size.y/2;
+        vertices[i + 3].position.z = position.z - size.z/2;
         // 4 - NEAR BOTTOM LEFT
-        vertices[i + 4].position.x = position.x - width/2;
-        vertices[i + 4].position.y = position.y - width/2;
-        vertices[i + 4].position.z = position.z + width/2;
+        vertices[i + 4].position.x = position.x - size.x/2;
+        vertices[i + 4].position.y = position.y - size.y/2;
+        vertices[i + 4].position.z = position.z + size.z/2;
         // 5 - NEAR BOTTOM RIGHT
-        vertices[i + 5].position.x = position.x + width/2;
-        vertices[i + 5].position.y = position.y - width/2;
-        vertices[i + 5].position.z = position.z + width/2;
+        vertices[i + 5].position.x = position.x + size.x/2;
+        vertices[i + 5].position.y = position.y - size.y/2;
+        vertices[i + 5].position.z = position.z + size.z/2;
         // 6 - NEAR TOP RIGHT
-        vertices[i + 6].position.x = position.x + width/2;
-        vertices[i + 6].position.y = position.y + width/2;
-        vertices[i + 6].position.z = position.z + width/2;
+        vertices[i + 6].position.x = position.x + size.x/2;
+        vertices[i + 6].position.y = position.y + size.y/2;
+        vertices[i + 6].position.z = position.z + size.z/2;
         // 7 - NEAR TOP LEFT
-        vertices[i + 7].position.x = position.x - width/2;
-        vertices[i + 7].position.y = position.y + width/2;
-        vertices[i + 7].position.z = position.z + width/2;
+        vertices[i + 7].position.x = position.x - size.x/2;
+        vertices[i + 7].position.y = position.y + size.y/2;
+        vertices[i + 7].position.z = position.z + size.z/2;
 
         // Set all vertex colors at once
         for (int j = i; j < i + 8; j++) {

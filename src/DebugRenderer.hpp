@@ -22,7 +22,7 @@ namespace Villain {
             // 2. planes (Not XY plane, but XZ for 3D applications)
             // 3. Other 3D primitives
             // 4. 2D line drawing
-            void drawCube(const glm::vec3& position, const glm::vec4& color, float width);
+            void drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size);
             // Will render all as one batch
             void render(const glm::mat4& mvpMatrix, float lineWidth);
             void dispose();
