@@ -231,27 +231,36 @@ namespace Villain {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        if (debugMode) {
-            DebugConsole::Instance()->render();
-        }
-
-        //glClearDepth(1.0);
-        //SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
-        //glViewport(0, 0, screenWidth, screenHeight);
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClearDepth(1.0);
+        SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
+        glViewport(0, 0, screenWidth, screenHeight);
 
+        // First render application
         if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
             currentState->draw(deltaTime);
         }
         onAppRender(deltaTime);
 
+        // Restore viewport if render happened to FBO
+        glViewport(0, 0, screenWidth, screenHeight);
+
+        // Then render Nuklear UI
         /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
          * with blending, scissor, face culling, depth test and viewport and
          * defaults everything back into a default state.
          * Make sure to either a.) save and restore or b.) reset your own state after
          * rendering the UI. */
         nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
+
+
+        // In the end Render ImGui
+        if (debugMode) {
+            DebugConsole::Instance()->render();
+        }
+
+
+
 
         ImGui::Render();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
