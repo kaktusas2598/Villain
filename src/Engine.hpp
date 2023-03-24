@@ -73,7 +73,7 @@ namespace Villain {
             virtual void onAppPostUpdate(float deltaTime) = 0;
             virtual void onAppRender(float deltaTime) = 0;
             virtual void onAppWindowResize(int newWidth, int newHeight) = 0;
-            virtual void onAppImGuiRender(float deltaTime) {}
+            virtual void onAppImGuiRender(float deltaTime);
 
             // Optional callbacks
             virtual void onMouseMove(int mouseX, int mouseY) {}
@@ -100,6 +100,7 @@ namespace Villain {
 
             //std::vector<Entity*> entities;
             //Level* level;
+            std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;
         private:
             struct nk_context* nuklearContext;
     };

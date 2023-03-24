@@ -110,6 +110,8 @@ namespace Villain {
             /*nk_style_set_font(ctx, &roboto->handle);*/
         }
 
+        sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
+
         //initialize the current game
         onInit();
 
@@ -231,6 +233,10 @@ namespace Villain {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
+        // In debug/edit mode render scene to texture and output it in imgui
+        if (debugMode)
+            sceneBuffer->bind();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glClearDepth(1.0);
         SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
@@ -241,6 +247,9 @@ namespace Villain {
             currentState->draw(deltaTime);
         }
         onAppRender(deltaTime);
+
+        if (debugMode)
+            sceneBuffer->unbind();
 
         // Then render Nuklear UI
         /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
@@ -275,6 +284,26 @@ namespace Villain {
         }
 
         ImGui::EndFrame();
+    }
+
+    void Engine::onAppImGuiRender(float deltaTime) {
+        ImGui::Begin("Scene");
+        {
+            ImGui::BeginChild("GameRender");
+
+            float width = ImGui::GetContentRegionAvail().x;
+            float height = ImGui::GetContentRegionAvail().y;
+
+            ImGui::Image(
+                    (ImTextureID)sceneBuffer->getTextureID(),
+                    //ImGui::GetContentRegionAvail(),
+                    ImGui::GetWindowSize(),
+                    ImVec2(0, 1),
+                    ImVec2(1, 0)
+                    );
+            ImGui::EndChild();
+        }
+        ImGui::End();
     }
 
     /**
@@ -398,6 +427,7 @@ namespace Villain {
                 screenWidth = event.window.data1;
                 screenHeight = event.window.data2;
                 glViewport(0, 0, screenWidth, screenHeight);
+                sceneBuffer->rescale(screenWidth, screenHeight);
                 onAppWindowResize(screenWidth, screenHeight);
                 break;
             default:
