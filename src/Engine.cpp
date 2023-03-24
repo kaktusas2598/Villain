@@ -242,9 +242,6 @@ namespace Villain {
         }
         onAppRender(deltaTime);
 
-        // Restore viewport if render happened to FBO
-        glViewport(0, 0, screenWidth, screenHeight);
-
         // Then render Nuklear UI
         /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
          * with blending, scissor, face culling, depth test and viewport and
@@ -253,14 +250,15 @@ namespace Villain {
          * rendering the UI. */
         nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
 
-
         // In the end Render ImGui
         if (debugMode) {
             DebugConsole::Instance()->render();
+
+            if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
+                currentState->onImGuiDraw(deltaTime);
+            }
+            onAppImGuiRender(deltaTime);
         }
-
-
-
 
         ImGui::Render();
         ImGuiIO& io = ImGui::GetIO(); (void)io;

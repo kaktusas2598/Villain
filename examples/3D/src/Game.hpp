@@ -11,6 +11,8 @@
 #include "Model.hpp"
 #include "Camera.hpp"
 
+#include "FrameBuffer.hpp"
+
 class Game : public Villain::Engine {
     public:
         Game();
@@ -24,13 +26,16 @@ class Game : public Villain::Engine {
         void onAppPreUpdate(float dt);
         void onAppPostUpdate(float dt);
         void onAppRender(float deltaTime);
+        void onAppImGuiRender(float deltaTime);
         void onAppWindowResize(int newWidth, int newHeight);
 
     private:
         Camera camera;
-        Villain::Model* model3D;
+        Villain::Model* model3D = nullptr;
 
         Villain::DebugRenderer debugRenderer;
+
+        Villain::FrameBuffer* sceneBuffer = nullptr;
 };
 
 #endif // __GAME__

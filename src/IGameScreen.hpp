@@ -46,6 +46,8 @@ namespace Villain {
             virtual void update(float deltaTime) = 0;
             virtual void draw(float deltaTime) = 0;
 
+            virtual void onImGuiDraw(float deltaTime) {}
+
             void setParentGame(Engine* app) { mainApplication = app; }
             void setRunning() { currentScreenState = ScreenState::RUNNING; }
             void setScreenState(ScreenState state) { currentScreenState = state; }

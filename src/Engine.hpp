@@ -1,6 +1,7 @@
 #ifndef __Engine__
 #define __Engine__
 
+#include "FrameBuffer.hpp"
 #include "Window.hpp"
 #include "InputManager.hpp"
 #include "DebugConsole.hpp"
@@ -72,6 +73,7 @@ namespace Villain {
             virtual void onAppPostUpdate(float deltaTime) = 0;
             virtual void onAppRender(float deltaTime) = 0;
             virtual void onAppWindowResize(int newWidth, int newHeight) = 0;
+            virtual void onAppImGuiRender(float deltaTime) {}
 
             // Optional callbacks
             virtual void onMouseMove(int mouseX, int mouseY) {}

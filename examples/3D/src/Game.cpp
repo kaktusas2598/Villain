@@ -46,6 +46,8 @@ Game::Game() {
     ResourceManager::Instance()->loadShader("assets/shaders/models.glsl", "model");
 
     debugRenderer.init();
+
+    sceneBuffer = new FrameBuffer(getScreenWidth(), getScreenHeight());
 }
 
 Game::~Game() {
@@ -102,6 +104,10 @@ void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_LSHIFT)) {
             camera.Position.y -= 2.5f * deltaTime;
     }
+
+    if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
+        isRunning = false;
+    }
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -133,6 +139,13 @@ void Game::onAppRender(float dt) {
     float constant = 1.0f;
     float linear = 0.022f;
     float quadratic = 0.0019f;
+
+    // 1st render pass - render to texture for imgui
+    if (debugMode) {
+        sceneBuffer->bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+    }
 
     // TODO: all of this lighting code should be refactored to a separate class
     Shader* modelShader = ResourceManager::Instance()->getShader("model");
@@ -177,9 +190,35 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
+
+    if (debugMode)
+        sceneBuffer->unbind();
+}
+
+void Game::onAppImGuiRender(float deltaTime) {
+    ImGui::Begin("Scene");
+    {
+        ImGui::BeginChild("GameRender");
+
+        float width = ImGui::GetContentRegionAvail().x;
+        float height = ImGui::GetContentRegionAvail().y;
+
+        ImGui::Image(
+            (ImTextureID)sceneBuffer->getTextureID(),
+            //ImGui::GetContentRegionAvail(),
+            ImGui::GetWindowSize(),
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+        );
+        ImGui::EndChild();
+    }
+    ImGui::End();
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
-   //camera.init(newWidth, newHeight);
+    //camera.init(newWidth, newHeight);
+    // FIXME:probably worth recreating whole fbo from scratch on resize
+    if (sceneBuffer != nullptr)
+        sceneBuffer->rescale((float)newWidth, (float)newHeight);
 }
 
