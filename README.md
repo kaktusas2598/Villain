@@ -1,5 +1,5 @@
 # Villain
-2D/3D Game/Physics/Rendering Engine/Framework in development.
+2D/3D Game/Physics/Rendering Engine/Framework in development. Built using SDL2/OpenGL and C++17!
 
 ## Supported Features
 

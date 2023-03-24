@@ -7,7 +7,7 @@ project(VILLAIN)
 option(VILLAIN_ENABLE_BOX2D "Enable Box2D Physics Engine" OFF)
 
 # Set C++ Standard
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Append to cmake module dir and add files like FindSDL2.cmake
