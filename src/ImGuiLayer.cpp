@@ -8,6 +8,8 @@
 
 namespace Villain {
 
+    bool ImGuiLayer::showDemoWindow = false;
+
     ImGuiLayer::ImGuiLayer() {}
 
     ImGuiLayer::~ImGuiLayer() {}
@@ -133,7 +135,20 @@ namespace Villain {
 
     //TODO:
     void ImGuiLayer::drawSettings(Engine& engine) {
+        static bool showDemoWindow = false;
+        ImGui::Begin("Settings");
 
+        // Engine Info
+        ImGui::Text("Engine FPS: %.1f ", engine.getFps());
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+        //ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
+        ImGui::Separator();
+
+        // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (showDemoWindow)
+            ImGui::ShowDemoWindow(&showDemoWindow);
     }
 
     void ImGuiLayer::drawAssetBrowser() {

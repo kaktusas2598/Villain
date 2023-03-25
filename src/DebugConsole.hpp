@@ -37,7 +37,6 @@ namespace Villain {
 
             static bool layerVisibility; ///< Toggle collision layer render
             static bool colliderVisibility; ///< Toggle collider component render
-            static bool showDemoWindow; ///< Toggle IMGui Demo Window for Docs
             static int textEditCallbackStub(ImGuiInputTextCallbackData* data);
             int textEditCallback(ImGuiInputTextCallbackData* data);
 

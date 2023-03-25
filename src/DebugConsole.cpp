@@ -10,7 +10,6 @@ namespace Villain {
 
     bool DebugConsole::layerVisibility = false;
     bool DebugConsole::colliderVisibility = false;
-    bool DebugConsole::showDemoWindow = false;
     // TODO: store initial value somewhere
     ImVec4 DebugConsole::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     std::map<std::string,std::string> DebugConsole::customInfo;
@@ -100,11 +99,6 @@ namespace Villain {
     void DebugConsole::render() {
         ImGui::Begin("Debug Console");
 
-        // Engine Info
-        //ImGui::Text("Engine FPS: %.1f ", Engine::getFps());
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
-        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Separator();
 
@@ -125,10 +119,6 @@ namespace Villain {
                 //i++;
             //}
         //}
-
-        // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (showDemoWindow)
-            ImGui::ShowDemoWindow(&showDemoWindow);
 
         // Lua Console
         //----------------------------------

@@ -31,6 +31,8 @@ namespace Villain {
         void drawAssetBrowser();
     private:
         void setupDockspace();
+
+        static bool showDemoWindow; ///< Toggle IMGui Demo Window for Docs
     };
 
 
