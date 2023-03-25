@@ -33,6 +33,11 @@ namespace Villain {
         mouseCoords.y = y;
     }
 
+    void InputManager::setMouseOffsets(float x, float y) {
+        mouseOffsets.x = x;
+        mouseOffsets.y = y;
+    }
+
     bool InputManager::isKeyDown(unsigned int keyID) {
         //search for key
         auto it = keyMap.find(keyID);

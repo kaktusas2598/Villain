@@ -46,6 +46,9 @@ namespace Villain {
             /// Tells the input manager the location of the cursor
             void setMouseCoords(float x, float y);
 
+            /// Set relative mouse motion, used by 3D Camera
+            void setMouseOffsets(float x, float y);
+
             /// Returns true if key is held down
             bool isKeyDown(unsigned int keyID);
 
@@ -62,6 +65,7 @@ namespace Villain {
             void addInputCharacters(const char* chars);
 
             glm::vec2 getMouseCoords() const { return mouseCoords; } ///<Mouse coords's geeter
+            glm::vec2 getMouseOffsets() const { return mouseOffsets; }
             bool getMouseButtonState(int buttonNumber) {return mouseButtonStates[buttonNumber]; }
 
             Uint32 getEventType() { return eventType; } //< SDL_Event type's getter
@@ -82,6 +86,7 @@ namespace Villain {
 
             std::vector<bool> mouseButtonStates;
             glm::vec2 mouseCoords;
+            glm::vec2 mouseOffsets; ///< Using SDL relative mouse mode
 
             Uint32 eventType; ///< event type: keypress, mousemotion, etc...
 
