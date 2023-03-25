@@ -93,6 +93,10 @@ namespace Villain {
         drawScene(engine);
         drawSettings(engine);
         drawAssetBrowser();
+        //TODO: file browser to load assets
+        // some kind of scene manager or ECS manager
+        // some kind of tool to render stuff with DebugRenderer
+        // ability to manage lights camera and everything
     }
 
     void ImGuiLayer::end() {
