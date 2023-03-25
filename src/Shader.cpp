@@ -35,11 +35,32 @@ namespace Villain {
         rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);
     }
 
+    Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile) {
+        std::ifstream vShaderFile;
+        std::ifstream gShaderFile;
+        std::ifstream fShaderFile;
+
+        vShaderFile.open(vertexFile);
+        gShaderFile.open(geometryFile);
+        fShaderFile.open(fragmentFile);
+
+        std::stringstream vShaderStream, fShaderStream, gShaderStream;
+
+        vShaderStream << vShaderFile.rdbuf();
+        gShaderStream << gShaderFile.rdbuf();
+        fShaderStream << fShaderFile.rdbuf();
+
+        vShaderFile.close();
+        gShaderFile.close();
+        fShaderFile.close();
+
+        rendererID = createShader(vShaderStream.str(), gShaderStream.str(), fShaderStream.str());
+    }
+
 
     Shader::~Shader() {
         GLCall(glDeleteProgram(rendererID));
     }
-
 
     void Shader::createFromSource(const std::string& vertexSource, const std::string& fragmentSource) {
         rendererID = createShader(vertexSource, fragmentSource);
@@ -59,6 +80,30 @@ namespace Villain {
 
         // Delete intermediate shaders once they are linked to program
         GLCall(glDeleteShader(vs));
+        GLCall(glDeleteShader(fs));
+
+        return program;
+    }
+
+    unsigned int Shader::createShader(
+            const std::string& vertexShader,
+            const std::string& geometryShader,
+            const std::string& fragmentShader) {
+        GLCall(unsigned int program = glCreateProgram());
+
+        unsigned int vs = compileShader(GL_VERTEX_SHADER, vertexShader);
+        unsigned int gs = compileShader(GL_GEOMETRY_SHADER, geometryShader);
+        unsigned int fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+        GLCall(glAttachShader(program, vs));
+        GLCall(glAttachShader(program, gs));
+        GLCall(glAttachShader(program, fs));
+        GLCall(glLinkProgram(program));
+        GLCall(glValidateProgram(program));
+
+        // Delete intermediate shaders once they are linked to program
+        GLCall(glDeleteShader(vs));
+        GLCall(glDeleteShader(gs));
         GLCall(glDeleteShader(fs));
 
         return program;

@@ -23,7 +23,8 @@ namespace Villain {
             Shader(const std::string& fileName);
             // Create shader object from 2 separate files, one containing vertex and other fragment shaders
             Shader(const std::string& vertexFile, const std::string& fragmentFile);
-            //TODO: add support for geometry shaders
+            // Create shader obhect from 3 files: vertex, geometry and fragment shaders
+            Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile);
             ~Shader();
 
             // To be used with empty constructor if we don't want to load shaders from files
@@ -49,6 +50,7 @@ namespace Villain {
             std::unordered_map<std::string, int> uniformLocationCache;
 
             unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
+            unsigned int createShader(const std::string& vertexShader, const std::string& geometryShader, const std::string& fragmentShader);
             unsigned int compileShader(unsigned int type, const std::string& source);
             ShaderProgramSource parseShader(const std::string& fileName);
 

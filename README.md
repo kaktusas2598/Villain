@@ -3,21 +3,24 @@
 
 ## Supported Features
 
-* Vertex, Fragment shader loading
+* Builds as a library
+* Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
-* Debug UI
+* Debug/Edit mode UI
 * Error logging
 * 2D orthographics and 3D perspective cameras
 * TrueType font rendering (Only ASCII encoding ATM)
 * Finite State Machine
 * Sprite animation
+* UI
 
 ## Planned Features
 
+* Engine editor
 * Skeletal animation support
 * Built in collision detection: AABB, SAT, circle
 * Rigid Body implementation
@@ -26,7 +29,6 @@
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System
-* UI
 * Phong based lighting system
 * and many more...
 
@@ -91,8 +93,9 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
 
 ## GL TODOS
 
- * Geometry, tessalation shader support
  * Instanced draw calls
- * Framebuffer and stencil buffer support for some cool effects
+ * Stencil buffers
+ * Shadow mapping, normal mapping
+ * PBR
 
 
