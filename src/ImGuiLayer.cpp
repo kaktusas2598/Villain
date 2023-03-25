@@ -133,7 +133,6 @@ namespace Villain {
         ImGui::End();
     }
 
-    //TODO:
     void ImGuiLayer::drawSettings(Engine& engine) {
         static bool showDemoWindow = false;
         ImGui::Begin("Settings");
@@ -143,6 +142,7 @@ namespace Villain {
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
         ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+        //TODO:clear color
         //ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Separator();
 
@@ -189,6 +189,17 @@ namespace Villain {
                 if (ImGui::TreeNode("Textures")) {
                     for (auto const& t: ResourceManager::Instance()->getTextureMap()) {
                         if (ImGui::TreeNode(t.first.c_str())) {
+                            float width = ImGui::GetContentRegionAvail().x;
+                            float height = ImGui::GetContentRegionAvail().y;
+
+                            ImGui::Image(
+                                    (ImTextureID)t.second->getID(),
+                                    //ImGui::GetWindowSize(), // will respect aspect ratio of image
+                                    ImGui::GetContentRegionAvail(), // will squish image to fit it in
+                                    ImVec2(0, 1),
+                                    ImVec2(1, 0)
+                                    );
+
                             ImGui::TreePop();
                         }
                     }
