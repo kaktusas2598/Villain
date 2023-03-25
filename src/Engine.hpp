@@ -3,6 +3,7 @@
 
 #include "FrameBuffer.hpp"
 #include "Window.hpp"
+#include "ImGuiLayer.hpp"
 #include "InputManager.hpp"
 #include "DebugConsole.hpp"
 
@@ -55,6 +56,7 @@ namespace Villain {
             const float getFps() const { return fps; }
 
             StateMachine* getStateMachine() { return stateMachine.get(); }
+            FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             Window getWindow() { return window; }
             struct nk_context * getNuklearContext() { return nuklearContext; }
 
@@ -87,6 +89,7 @@ namespace Villain {
             bool isRunning = false; ///< appliction running flag
             bool debugMode = false; ///< enables IMGui Debug Console
             Window window; ///< main window instance
+            ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
 
             // Screen dimensions will be static so they can be accessed from anywhere in the Engine
             static int screenWidth;

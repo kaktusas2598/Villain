@@ -1,23 +1,14 @@
 #include "Engine.hpp"
+
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
 //#include "EntityManager.hpp"
-#include "ResourceManager.hpp"
-
-#include "SoundManager.hpp"
 #include "StateParser.hpp"
 #include "IGameScreen.hpp"
 
 #include <string>
 #include <cstdio> // For sprintf
 #include "Logger.hpp"
-
-//#include "ParticleSystem.hpp"
-//#include "Collision.hpp"
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_sdl.h"
-#include "imgui/imgui_impl_opengl3.h"
 
 #include "nuklear.h"
 #include "nuklear_sdl_gl3.h"
@@ -94,6 +85,8 @@ namespace Villain {
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
         window.create(title, screenHeight, screenWidth, currentFlags);
+
+        imGuiLayer.init(window);
 
         nuklearContext = nk_sdl_init(window.getSDLWindow());
         /* Load Fonts: if none of these are loaded a default font will be used  */
@@ -229,11 +222,7 @@ namespace Villain {
         //in this case, we want alpha 0 to be transparent
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // These commands probably should go just before update() method so that states can setup their own ui
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
+        imGuiLayer.start();
 
         // In debug/edit mode render scene to texture and output it in imgui
         if (debugMode)
@@ -264,7 +253,7 @@ namespace Villain {
         // In the end Render ImGui
         if (debugMode) {
             SDL_ShowCursor(SDL_TRUE);
-            DebugConsole::Instance()->render();
+            imGuiLayer.render(*this);
 
             if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
                 currentState->onImGuiDraw(deltaTime);
@@ -272,93 +261,10 @@ namespace Villain {
             onAppImGuiRender(deltaTime);
         }
 
-        ImGui::Render();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        //glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-            SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-        }
-
-        ImGui::EndFrame();
+        imGuiLayer.end();
     }
 
     void Engine::onAppImGuiRender(float deltaTime) {
-        ImGui::Begin("Scene");
-        {
-            ImGui::BeginChild("GameRender");
-
-            float width = ImGui::GetContentRegionAvail().x;
-            float height = ImGui::GetContentRegionAvail().y;
-
-            ImGui::Image(
-                    (ImTextureID)sceneBuffer->getTextureID(),
-                    //ImGui::GetContentRegionAvail(),
-                    ImGui::GetWindowSize(),
-                    ImVec2(0, 1),
-                    ImVec2(1, 0)
-                    );
-            ImGui::EndChild();
-        }
-        ImGui::End();
-
-
-        // TODO: refactor all of these imgui windows into separate classes
-        ImGui::Begin("Asset Browser");
-        {
-            if (ImGui::TreeNode("Assets")) {
-                if (ImGui::TreeNode("Music")) {
-                    for (auto const& t: SoundManager::Instance()->getMusicMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            SoundManager::Instance()->playMusic(t.first);
-
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                if (ImGui::TreeNode("Shaders")) {
-                    for (auto const& t: ResourceManager::Instance()->getShaderMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                if (ImGui::TreeNode("Sound FX")) {
-                    for (auto const& t: SoundManager::Instance()->getSoundFXMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            SoundManager::Instance()->playSound(t.first);
-
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                if (ImGui::TreeNode("Textures")) {
-                    for (auto const& t: ResourceManager::Instance()->getTextureMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                // TODO: fonts, levels
-
-                ImGui::TreePop();
-            }
-        }
-        ImGui::End();
     }
 
     /**

@@ -50,8 +50,6 @@ namespace Villain {
             DebugConsole();
             ~DebugConsole();
 
-            void setupDockspace();
-
             static DebugConsole* s_pInstance;
     };
 }

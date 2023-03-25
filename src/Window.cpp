@@ -1,10 +1,6 @@
 #include "Window.hpp"
 #include "ErrorHandler.hpp"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_sdl.h"
-#include "imgui/imgui_impl_opengl3.h"
-
 namespace Villain {
 
     void Window::create(std::string title, int screenHeight, int screenWidth, unsigned int currentFlags) {
@@ -60,25 +56,6 @@ namespace Villain {
             exitWithError("Failed to initialise GLEW");
         }
 
-        // Setup Dear ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-                                                                    //
-        // Handle cursor visibility ourselves
-        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
-
-        // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
-
-        // Setup Platform/Renderer backends
-        ImGui_ImplSDL2_InitForOpenGL(m_pWindow, glContext);
-        ImGui_ImplOpenGL3_Init("#version 330");
-
         //check the OpenGL version
         printf("*** OpenGL Version: %s ***\n", glGetString(GL_VERSION));
 
@@ -87,7 +64,6 @@ namespace Villain {
 
         //set VSYNC
         SDL_GL_SetSwapInterval(0);
-
     }
 
     void Window::swapBuffer() {
