@@ -4,6 +4,7 @@
 //#include "EntityManager.hpp"
 #include "ResourceManager.hpp"
 
+#include "SoundManager.hpp"
 #include "StateParser.hpp"
 #include "IGameScreen.hpp"
 
@@ -308,24 +309,51 @@ namespace Villain {
         ImGui::End();
 
 
+        // TODO: refactor all of these imgui windows into separate classes
         ImGui::Begin("Asset Browser");
         {
             if (ImGui::TreeNode("Assets")) {
+                if (ImGui::TreeNode("Music")) {
+                    for (auto const& t: SoundManager::Instance()->getMusicMap()) {
+                        if (ImGui::TreeNode(t.first.c_str())) {
+                            SoundManager::Instance()->playMusic(t.first);
+
+                            ImGui::TreePop();
+                        }
+                    }
+
+                    ImGui::TreePop();
+                }
                 if (ImGui::TreeNode("Shaders")) {
                     for (auto const& t: ResourceManager::Instance()->getShaderMap()) {
-                        ImGui::TreeNode(t.first.c_str());
+                        if (ImGui::TreeNode(t.first.c_str())) {
+                            ImGui::TreePop();
+                        }
+                    }
+
+                    ImGui::TreePop();
+                }
+                if (ImGui::TreeNode("Sound FX")) {
+                    for (auto const& t: SoundManager::Instance()->getSoundFXMap()) {
+                        if (ImGui::TreeNode(t.first.c_str())) {
+                            SoundManager::Instance()->playSound(t.first);
+
+                            ImGui::TreePop();
+                        }
                     }
 
                     ImGui::TreePop();
                 }
                 if (ImGui::TreeNode("Textures")) {
                     for (auto const& t: ResourceManager::Instance()->getTextureMap()) {
-                        ImGui::TreeNode(t.first.c_str());
+                        if (ImGui::TreeNode(t.first.c_str())) {
+                            ImGui::TreePop();
+                        }
                     }
 
                     ImGui::TreePop();
                 }
-                // TODO: Sounds, fonts, levels
+                // TODO: fonts, levels
 
                 ImGui::TreePop();
             }

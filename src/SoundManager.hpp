@@ -32,6 +32,10 @@ namespace Villain {
             void pauseMusic();
             void stopMusic();
             void resumeMusic();
+
+            std::map<std::string, Mix_Chunk*>& getSoundFXMap() { return sFXMap; }
+            std::map<std::string, Mix_Music*>& getMusicMap() { return musicMap; }
+
         private:
             static SoundManager* sInstance;
 
