@@ -3,7 +3,6 @@
 #include "Engine.hpp"
 #include "ErrorHandler.hpp"
 #include "LevelParser.hpp"
-#include "LuaScript.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -19,23 +18,7 @@
 using namespace Villain;
 
 App::App() {
-    LuaScript configScript("assets/scripts/config.lua");
-    configScript.open();
-
-    unsigned int flags = 0;
-    if (configScript.get<bool>("window.fullscreen"))
-        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-    if (configScript.get<bool>("window.borderless"))
-        flags |= SDL_WINDOW_BORDERLESS;
-    if (configScript.get<bool>("window.resizable"))
-        flags |= SDL_WINDOW_RESIZABLE;
-
-    init(
-            configScript.get<std::string>("window.title"),
-            configScript.get<int>("window.height"),
-            configScript.get<int>("window.width"),
-            flags
-            );
+    init("assets/scripts/config.lua");
 }
 
 void App::onInit() {

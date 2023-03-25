@@ -31,23 +31,7 @@ const float ZOMBIE_DAMAGE = 5.f;
 //}
 
 Game::Game() {
-    LuaScript configScript("assets/scripts/config.lua");
-    configScript.open();
-
-    unsigned int flags = 0;
-    if (configScript.get<bool>("window.fullscreen"))
-        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-    if (configScript.get<bool>("window.borderless"))
-        flags |= SDL_WINDOW_BORDERLESS;
-    if (configScript.get<bool>("window.resizable"))
-        flags |= SDL_WINDOW_RESIZABLE;
-
-    init(
-            configScript.get<std::string>("window.title"),
-            configScript.get<int>("window.height"),
-            configScript.get<int>("window.width"),
-            flags
-            );
+    init("assets/scripts/config.lua");
 
     SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX, -50);
@@ -56,11 +40,11 @@ Game::Game() {
     SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
     //SoundManager::Instance()->playMusic("drive");
 
-    camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
-    hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
+    camera.init(getScreenWidth(), getScreenHeight());
+    hudCamera.init(getScreenWidth(), getScreenHeight());
     glm::vec3 camPos = camera.getPosition();
-    camPos.x = configScript.get<int>("window.width")/2.0;
-    camPos.y = configScript.get<int>("window.height")/2.0;
+    camPos.x = getScreenWidth()/2.0;
+    camPos.y = getScreenHeight()/2.0;
     camera.setPosition(camPos);
 
     bloodParticles = new ParticleBatch2D();
@@ -178,6 +162,9 @@ void Game::handleEvents() {
 
         //bullets.emplace_back(playerPos, direction, 1.0f, 500);
     //}
+
+    if(TheInputManager::Instance()->isKeyDown(SDLK_ESCAPE))
+        isRunning = false;
 }
 
 void Game::onAppPreUpdate(float dt) {

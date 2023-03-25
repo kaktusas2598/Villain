@@ -37,30 +37,14 @@ using namespace Villain;
 
 Game::Game() {
     // ENGINE INIT
-    LuaScript configScript("assets/scripts/config.lua");
-    configScript.open();
-
-    unsigned int flags = 0;
-    if (configScript.get<bool>("window.fullscreen"))
-        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-    if (configScript.get<bool>("window.borderless"))
-        flags |= SDL_WINDOW_BORDERLESS;
-    if (configScript.get<bool>("window.resizable"))
-        flags |= SDL_WINDOW_RESIZABLE;
-
-    init(
-            configScript.get<std::string>("window.title"),
-            configScript.get<int>("window.height"),
-            configScript.get<int>("window.width"),
-            flags
-            );
+    init("assets/scripts/config.lua");
 
     // RESOURCES INIT
-    camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
-    hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
+    camera.init(getScreenWidth(), getScreenHeight());
+    hudCamera.init(getScreenWidth(), getScreenHeight());
     glm::vec3 camPos = camera.getPosition();
-    camPos.x = configScript.get<int>("window.width")/2.0;
-    camPos.y = configScript.get<int>("window.height")/2.0;
+    camPos.x = getScreenWidth()/2.0;
+    camPos.y = getScreenHeight()/2.0;
     camera.setPosition(camPos);
 
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");

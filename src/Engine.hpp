@@ -36,11 +36,13 @@ namespace Villain {
              * @param title Title to be displayed on window title bar
              * @param height Screen height in pixels
              * @param width Screen width in pixels
-             * @param currentFlags window flags
+             * @param windowFlags window flags
              * @param sdlEnabled Optional SDL rendering
              * @sa WindowFlags
              */
-            void init(std::string title, int height, int width, unsigned int currentFlags, bool sdlRendering = false);
+            void init(std::string title, int height, int width, unsigned int windowFlags);
+            // Or initialise using Lua config script
+            void init(const std::string& luaConfigPath);
             void run(); ///< runs main application's loop
             void exit(); //< clean resources and exit application
 

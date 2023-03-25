@@ -1,17 +1,12 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "DebugRenderer.hpp"
 #include "Engine.hpp"
-#include "ResourceManager.hpp"
-#include "Sprite.hpp"
-#include "SpriteBatch.hpp"
-#include "Timer.hpp"
 
 #include "Model.hpp"
 #include "Camera.hpp"
 
-#include "FrameBuffer.hpp"
+#include "DebugRenderer.hpp"
 
 class Game : public Villain::Engine {
     public:
@@ -29,12 +24,10 @@ class Game : public Villain::Engine {
         void onAppWindowResize(int newWidth, int newHeight);
 
     private:
-        Camera camera;
+        Villain::Camera camera;
         Villain::Model* model3D = nullptr;
 
         Villain::DebugRenderer debugRenderer;
-
-        Villain::FrameBuffer* sceneBuffer = nullptr;
 };
 
 #endif // __GAME__

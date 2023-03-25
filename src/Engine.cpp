@@ -60,7 +60,7 @@ namespace Villain {
     void Engine::onExit() {
     }
 
-    void Engine::init(std::string title, int height, int width, unsigned int currentFlags, bool sdlEnabled){
+    void Engine::init(std::string title, int height, int width, unsigned int windowFlags) {
         screenHeight = height;
         screenWidth = width;
 
@@ -84,7 +84,7 @@ namespace Villain {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-        window.create(title, screenHeight, screenWidth, currentFlags);
+        window.create(title, screenHeight, screenWidth, windowFlags);
 
         imGuiLayer.init(window);
 
@@ -124,6 +124,26 @@ namespace Villain {
         }
 
         isRunning = true;//start main loop
+    }
+
+    void Engine::init(const std::string& luaConfigPath) {
+        LuaScript configScript(luaConfigPath);
+        configScript.open();
+
+        unsigned int flags = 0;
+        if (configScript.get<bool>("window.fullscreen"))
+            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        if (configScript.get<bool>("window.borderless"))
+            flags |= SDL_WINDOW_BORDERLESS;
+        if (configScript.get<bool>("window.resizable"))
+            flags |= SDL_WINDOW_RESIZABLE;
+
+        init(
+                configScript.get<std::string>("window.title"),
+                configScript.get<int>("window.height"),
+                configScript.get<int>("window.width"),
+                flags
+            );
     }
 
     void Engine::run() {
