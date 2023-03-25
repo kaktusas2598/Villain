@@ -87,8 +87,8 @@ void Game::handleEvents(float deltaTime) {
     //FIXME: relative mode fixes camera restraint problem, but camera never stops moving for some reason
     if (!debugMode) {
         SDL_SetRelativeMouseMode(SDL_TRUE);
+        SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), 0, 0); // this seem to fix moving camera issue, but cursor disappears?
     }
-    SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), 0, 0); // this seem to fix moving camera issue, but cursor disappears?
     glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
     camera.processMouseMovement(mouseOffsets.x, mouseOffsets.y);
 

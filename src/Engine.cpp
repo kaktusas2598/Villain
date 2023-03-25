@@ -253,6 +253,7 @@ namespace Villain {
         // In the end Render ImGui
         if (debugMode) {
             SDL_ShowCursor(SDL_TRUE);
+            SDL_SetRelativeMouseMode(SDL_FALSE);
             imGuiLayer.render(*this);
 
             if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
