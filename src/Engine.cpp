@@ -2,6 +2,7 @@
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
 //#include "EntityManager.hpp"
+#include "ResourceManager.hpp"
 
 #include "StateParser.hpp"
 #include "IGameScreen.hpp"
@@ -239,8 +240,8 @@ namespace Villain {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glClearDepth(1.0);
-        SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
-        glViewport(0, 0, screenWidth, screenHeight);
+        //SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
+        //glViewport(0, 0, screenWidth, screenHeight);
 
         // First render application
         if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
@@ -261,6 +262,7 @@ namespace Villain {
 
         // In the end Render ImGui
         if (debugMode) {
+            SDL_ShowCursor(SDL_TRUE);
             DebugConsole::Instance()->render();
 
             if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
@@ -302,6 +304,31 @@ namespace Villain {
                     ImVec2(1, 0)
                     );
             ImGui::EndChild();
+        }
+        ImGui::End();
+
+
+        ImGui::Begin("Asset Browser");
+        {
+            if (ImGui::TreeNode("Assets")) {
+                if (ImGui::TreeNode("Shaders")) {
+                    for (auto const& t: ResourceManager::Instance()->getShaderMap()) {
+                        ImGui::TreeNode(t.first.c_str());
+                    }
+
+                    ImGui::TreePop();
+                }
+                if (ImGui::TreeNode("Textures")) {
+                    for (auto const& t: ResourceManager::Instance()->getTextureMap()) {
+                        ImGui::TreeNode(t.first.c_str());
+                    }
+
+                    ImGui::TreePop();
+                }
+                // TODO: Sounds, fonts, levels
+
+                ImGui::TreePop();
+            }
         }
         ImGui::End();
     }
@@ -369,6 +396,7 @@ namespace Villain {
      * @sa GameState::update, InputManager
      */
     void Engine::handleEvents(SDL_Event& event) {
+        static bool mouseFirst = true;
         //set the event type
         TheInputManager::Instance()->setEventType(event.type);
         switch (event.type) {
@@ -376,11 +404,17 @@ namespace Villain {
                 exit();
                 break;
             case SDL_MOUSEMOTION:
+                mouseMotion = true;
+                // Set offsets if relative mouse mode is used for 3D camera
+                if (!mouseFirst) {
+                    TheInputManager::Instance()->setMouseOffsets((float)event.motion.xrel, (float)event.motion.yrel);
+                } else {
+                    mouseFirst = false;
+                    TheInputManager::Instance()->setMouseOffsets(0.0f, 0.0f);
+                }
+
                 TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
                 onMouseMove(event.motion.x, event.motion.y);
-
-                // Just a testing code for particle emitters
-                //ParticleSystem::Instance()->addEmitter(Vector2D{(float)event.motion.x, (float)event.motion.y}, "fire");
                 break;
             case SDL_KEYDOWN:
                 TheInputManager::Instance()->pressKey(event.key.keysym.sym);

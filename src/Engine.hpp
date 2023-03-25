@@ -93,6 +93,7 @@ namespace Villain {
             static int screenHeight;
 
             float fps = 0; ///< main application's fps
+            bool mouseMotion = false;
 
             std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
             //GameState* currentState = nullptr; ///< current state's instance
