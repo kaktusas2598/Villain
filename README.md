@@ -20,7 +20,7 @@
 
 ## Planned Features
 
-* Engine editor
+* Engine editor with scene management
 * Skeletal animation support
 * Built in collision detection: AABB, SAT, circle
 * Rigid Body implementation
@@ -30,6 +30,10 @@
 * LUA (Again!)
 * Entity Component System
 * Phong based lighting system
+* Environmental mapping(reflections and refractions)
+* Shadow mapping and normal mapping
+* Stencil buffer
+* Instanced drawing
 * and many more...
 
 ## Used Libraries
@@ -89,13 +93,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
- * Refactor DebugConsole class and separate responsibilities: ImGUI LuaConsole, ImGui Init, dockspaces..
-
-## GL TODOS
-
- * Instanced draw calls
- * Stencil buffers
- * Shadow mapping, normal mapping
- * PBR
-
 
