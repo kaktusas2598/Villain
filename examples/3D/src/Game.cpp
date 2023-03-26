@@ -144,7 +144,8 @@ void Game::onAppRender(float dt) {
         modelShader->setUniformMat4f("view", view);
         modelShader->setUniformMat4f("projection", projection);
 
-        // Step material uniforms
+        // Step material uniforms, other parameters like diffuse color,
+        // diffuse and specular maps are set in Model class
         modelShader->setUniform1f("material.shininess", 32.0f);
 
         // Step light uniforms
