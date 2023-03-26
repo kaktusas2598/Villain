@@ -32,6 +32,17 @@ Game::Game() {
     ResourceManager::Instance()->loadShader("assets/shaders/models.glsl", "model");
 
     debugRenderer.init();
+
+    std::vector<std::string> faces{
+        "assets/textures/skybox/right.jpg",
+        "assets/textures/skybox/left.jpg",
+        "assets/textures/skybox/top.jpg",
+        "assets/textures/skybox/bottom.jpg",
+        "assets/textures/skybox/front.jpg",
+        "assets/textures/skybox/back.jpg"
+    };
+
+    skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 }
 
 Game::~Game() {
@@ -165,6 +176,8 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
+
+    skybox->render(projection, view);
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {

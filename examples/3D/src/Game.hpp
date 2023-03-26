@@ -4,6 +4,7 @@
 #include "Engine.hpp"
 
 #include "Model.hpp"
+#include "SkyBox.hpp"
 #include "Camera.hpp"
 
 #include "DebugRenderer.hpp"
@@ -26,6 +27,7 @@ class Game : public Villain::Engine {
     private:
         Villain::Camera camera;
         Villain::Model* model3D = nullptr;
+        std::unique_ptr<Villain::SkyBox> skybox;
 
         Villain::DebugRenderer debugRenderer;
 };
