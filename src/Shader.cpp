@@ -213,4 +213,32 @@ namespace Villain {
         return location;
 
     }
+
+    void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight dirLight) {
+        setUniformVec3(name + ".direction", dirLight.Direction);
+        setUniformVec3(name + ".base.ambient", dirLight.Base.AmbientColor);
+        setUniformVec3(name + ".base.diffuse", dirLight.Base.DiffuseColor);
+        setUniformVec3(name + ".base.specular", dirLight.Base.SpecularColor);
+    }
+
+    void Shader::setPointLightUniforms(const std::string& name, PointLight pointLight) {
+        setUniformVec3(name + ".position", pointLight.Position);
+        setUniformVec3(name + ".base.ambient", pointLight.Base.AmbientColor);
+        setUniformVec3(name + ".base.diffuse", pointLight.Base.DiffuseColor);
+        setUniformVec3(name + ".base.specular", pointLight.Base.SpecularColor);
+        setUniform1f(name + ".constant", pointLight.Constant);
+        setUniform1f(name + ".linear", pointLight.Linear);
+        setUniform1f(name + ".quadratic", pointLight.Quadratic);
+    }
+
+    void Shader::setSpotLightUniforms(const std::string& name, SpotLight spotLight) {
+        setUniformVec3(name + ".position", spotLight.Position);
+        setUniformVec3(name + ".direction", spotLight.Direction);
+        setUniform1f(name + ".cutOff", spotLight.CutOff);
+        setUniform1f(name + ".outerCutOff", spotLight.OuterCutOff);
+        setUniformVec3(name + ".base.ambient", spotLight.Base.AmbientColor);
+        setUniformVec3(name + ".base.diffuse", spotLight.Base.DiffuseColor);
+        setUniformVec3(name + ".base.specular", spotLight.Base.SpecularColor);
+    }
+
 }

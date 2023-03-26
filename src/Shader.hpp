@@ -6,6 +6,8 @@
 
 #include "glm/glm.hpp"
 
+#include "Light.hpp"
+
 namespace Villain {
 
     struct ShaderProgramSource {
@@ -43,6 +45,12 @@ namespace Villain {
             void setUniformVec3(const std::string& name, const glm::vec3& vec);
             void setUniformVec4(const std::string& name, const glm::vec4& vec);
             void setUniformMat4f(const std::string& name, const glm::mat4& matrix);
+
+            // Set specific uniforms
+            // NOTE: at the moment, only 1 light source of each type have been tested
+            void setDirectionalLightUniforms(const std::string& name, DirectionalLight dirLight);
+            void setPointLightUniforms(const std::string& name, PointLight pointLight);
+            void setSpotLightUniforms(const std::string& name, SpotLight spotLight);
 
         private:
             unsigned int rendererID;

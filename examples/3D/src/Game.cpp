@@ -139,34 +139,20 @@ void Game::onAppRender(float dt) {
     Shader* modelShader = ResourceManager::Instance()->getShader("model");
     if (modelShader != nullptr) {
         modelShader->bind();
-        // TODO: Uniforms could be set automatically, at least for lights
+        // Step projection uniforms
         modelShader->setUniformMat4f("model", model);
         modelShader->setUniformMat4f("view", view);
         modelShader->setUniformMat4f("projection", projection);
 
+        // Step material uniforms
         modelShader->setUniform1f("material.shininess", 32.0f);
 
-        modelShader->setUniformVec3("dirLight.direction", dirLight.Direction);
-        modelShader->setUniformVec3("dirLight.base.ambient", dirLight.Base.AmbientColor);
-        modelShader->setUniformVec3("dirLight.base.diffuse", dirLight.Base.DiffuseColor);
-        modelShader->setUniformVec3("dirLight.base.specular", dirLight.Base.SpecularColor);
+        // Step light uniforms
+        modelShader->setDirectionalLightUniforms("dirLight", dirLight);
+        modelShader->setPointLightUniforms("pointLight", pointLight);
+        modelShader->setSpotLightUniforms("spotLight", spotLight);
 
-        modelShader->setUniformVec3("pointLight.position", pointLight.Position);
-        modelShader->setUniformVec3("pointLight.base.ambient", pointLight.Base.AmbientColor);
-        modelShader->setUniformVec3("pointLight.base.diffuse", pointLight.Base.DiffuseColor);
-        modelShader->setUniformVec3("pointLight.base.specular", pointLight.Base.SpecularColor);
-        modelShader->setUniform1f("pointLight.constant", pointLight.Constant);
-        modelShader->setUniform1f("pointLight.linear", pointLight.Linear);
-        modelShader->setUniform1f("pointLight.quadratic", pointLight.Quadratic);
-
-        modelShader->setUniformVec3("spotLight.position", spotLight.Position);
-        modelShader->setUniformVec3("spotLight.direction", spotLight.Direction);
-        modelShader->setUniform1f("spotLight.cutOff", spotLight.CutOff);
-        modelShader->setUniform1f("spotLight.outerCutOff", spotLight.OuterCutOff);
-        modelShader->setUniformVec3("spotLight.base.ambient", spotLight.Base.AmbientColor);
-        modelShader->setUniformVec3("spotLight.base.diffuse", spotLight.Base.DiffuseColor);
-        modelShader->setUniformVec3("spotLight.base.specular", spotLight.Base.SpecularColor);
-
+        // For lighting calculations
         modelShader->setUniformVec3("viewPosition", camera.Position);
 
         model3D->draw(*modelShader);
