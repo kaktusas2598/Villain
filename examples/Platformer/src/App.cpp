@@ -9,19 +9,10 @@
 #include "glm/gtx/rotate_vector.hpp"
 
 #include "DebugConsole.hpp"
-#include <cmath>
-#include <cstdio>
-#include <random>
-#include <sstream>
-
 
 using namespace Villain;
 
-App::App() {
-    init("assets/scripts/config.lua");
-}
-
-void App::onInit() {
+void App::init() {
 
 }
 
@@ -35,27 +26,9 @@ void App::addStates() {
     stateMachine->setScreen(menuScreen->getID());
 }
 
-void App::onExit() {
-
-}
-
-
 App::~App() {
     SoundManager::Instance()->cleanSoundMaps();
     //ResourceManager::Instance()->clearTextureMap();
-}
-
-void App::handleEvents() {
-}
-
-void App::onAppPreUpdate(float dt) {
-    handleEvents();
-}
-
-void App::onAppPostUpdate(float dt) {
-}
-
-void App::onAppRender(float dt) {
 }
 
 void App::onAppWindowResize(int newWidth, int newHeight) {

@@ -1,10 +1,10 @@
-#ifndef __LIGHT__
-#define __LIGHT__
+#ifndef __LIGHT_2D__
+#define __LIGHT_2D__
 
 #include "SpriteBatch.hpp"
 
 // HACK:
-class Light {
+class Light2D {
     public:
         void draw(Villain::SpriteBatch& batch) {
             glm::vec4 destRect;
@@ -23,4 +23,4 @@ class Light {
         float size;
 };
 
-#endif // __LIGHT__
+#endif // __LIGHT_2D__

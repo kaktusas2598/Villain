@@ -7,7 +7,7 @@
 
 namespace Villain {
 
-    class Engine;
+    class Application;
     class IGameScreen;
 
     // NOTE: Similar to Vigilant's StateMachine which currently only supports states loaded from xml,
@@ -19,12 +19,12 @@ namespace Villain {
      *
      * Finite State Machine. Manages std::vector of GameState instances
      * Limitations: changes between states sequentually
-     *  @sa IGameScreen, Engine
+     *  @sa IGameScreen, Application
      */
 
     class StateMachine {
         public:
-            StateMachine (Engine* mainApplication);
+            StateMachine (Application* mainApplication);
             ~StateMachine ();
 
             IGameScreen* moveNext();
@@ -39,12 +39,10 @@ namespace Villain {
             IGameScreen* getCurrentScreen();
 
         protected:
-            Engine* mainApplication = nullptr;
+            Application* mainApplication = nullptr;
             //std::map<std::string, GameState*> stateMap; ///< State collection mapped against state name
             std::vector<IGameScreen*> screens;
             int currentScreenID = STATE_NONE; ///< Indicates current state in states collection, -1 indicates none
-
-
     };
 }
 

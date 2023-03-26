@@ -30,9 +30,7 @@ const float ZOMBIE_DAMAGE = 5.f;
     //p.color.a -= p.life * dt;
 //}
 
-Game::Game() {
-    init("assets/scripts/config.lua");
-
+void Game::init() {
     SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX, -50);
     SoundManager::Instance()->load("assets/audio/cg1.wav", "rifle", SoundType::SOUND_SFX, -60);
@@ -40,11 +38,11 @@ Game::Game() {
     SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
     //SoundManager::Instance()->playMusic("drive");
 
-    camera.init(getScreenWidth(), getScreenHeight());
-    hudCamera.init(getScreenWidth(), getScreenHeight());
+    camera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
+    hudCamera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
     glm::vec3 camPos = camera.getPosition();
-    camPos.x = getScreenWidth()/2.0;
-    camPos.y = getScreenHeight()/2.0;
+    camPos.x = Engine::getScreenWidth()/2.0;
+    camPos.y = Engine::getScreenHeight()/2.0;
     camera.setPosition(camPos);
 
     bloodParticles = new ParticleBatch2D();
@@ -164,7 +162,8 @@ void Game::handleEvents() {
     //}
 
     if(TheInputManager::Instance()->isKeyDown(SDLK_ESCAPE))
-        isRunning = false;
+        Engine::setRunning(false);
+        //isRunning = false;
 }
 
 void Game::onAppPreUpdate(float dt) {

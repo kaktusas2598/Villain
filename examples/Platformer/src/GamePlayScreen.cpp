@@ -2,7 +2,7 @@
 #include "InputManager.hpp"
 #include "glm/fwd.hpp"
 
-#include "Light.hpp"
+#include "Light2D.hpp"
 #include <random>
 
 GamePlayScreen::GamePlayScreen() {}
@@ -76,7 +76,7 @@ void GamePlayScreen::onEntry() {
     //spriteFont = new SpriteFont("assets/fonts/chintzy.ttf", 32);
     //freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
-    camera.init(mainApplication->getScreenWidth(), mainApplication->getScreenHeight());
+    camera.init(Villain::Engine::getScreenWidth(), Villain::Engine::getScreenHeight());
     // Zoom out because Box2D uses meters and not pixels
     camera.setZoom(32.0f);
     //hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
@@ -166,7 +166,7 @@ void GamePlayScreen::draw(float deltaTime) {
 
         // HACK: Render test lights
         // TODO: stop hardcoding this
-        Light playerLight;
+        Light2D playerLight;
         playerLight.color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
         playerLight.size = 20.0f;
         glm::vec3 playerPosition;
@@ -175,7 +175,7 @@ void GamePlayScreen::draw(float deltaTime) {
         playerPosition.z = -0.1f;
         playerLight.position = playerPosition;
 
-        Light mouseLight;
+        Light2D mouseLight;
         mouseLight.color = glm::vec4(0.1f, 1.0f, 0.1f, 1.0f);
         mouseLight.size = 10.0f;
         glm::vec2 mouseCoords = camera.screenToWorld(Villain::InputManager::Instance()->getMouseCoords());

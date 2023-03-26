@@ -1,7 +1,7 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "Engine.hpp"
+#include "Application.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteBatch.hpp"
 #include "Camera2D.hpp"
@@ -20,10 +20,11 @@ enum class GameState { RUNNING, EXIT };
 
 const int CELL_SIZE = 12;
 
-class Game : public Villain::Engine {
+class Game : public Villain::Application {
     public:
-        Game();
         ~Game();
+
+        void init();
 
         void handleEvents();
         void initBalls();

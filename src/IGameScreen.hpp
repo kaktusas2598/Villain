@@ -1,7 +1,7 @@
 #ifndef __IGAMESCREEN__
 #define __IGAMESCREEN__
 
-#include "Engine.hpp"
+#include "Application.hpp"
 
 namespace Villain {
 
@@ -48,7 +48,7 @@ namespace Villain {
 
             virtual void onImGuiDraw(float deltaTime) {}
 
-            void setParentGame(Engine* app) { mainApplication = app; }
+            void setParentGame(Application* app) { mainApplication = app; }
             void setRunning() { currentScreenState = ScreenState::RUNNING; }
             void setScreenState(ScreenState state) { currentScreenState = state; }
 
@@ -59,7 +59,7 @@ namespace Villain {
         protected:
             int screenID = -1;
 
-            Engine* mainApplication = nullptr;
+            Application* mainApplication = nullptr;
             ScreenState currentScreenState = ScreenState::NONE;
     };
 

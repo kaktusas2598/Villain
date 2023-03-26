@@ -35,16 +35,13 @@ struct BallSpawn {
 
 using namespace Villain;
 
-Game::Game() {
-    // ENGINE INIT
-    init("assets/scripts/config.lua");
-
+void Game::init() {
     // RESOURCES INIT
-    camera.init(getScreenWidth(), getScreenHeight());
-    hudCamera.init(getScreenWidth(), getScreenHeight());
+    camera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
+    hudCamera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
     glm::vec3 camPos = camera.getPosition();
-    camPos.x = getScreenWidth()/2.0;
-    camPos.y = getScreenHeight()/2.0;
+    camPos.x = Engine::getScreenWidth()/2.0;
+    camPos.y = Engine::getScreenHeight()/2.0;
     camera.setPosition(camPos);
 
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
@@ -110,7 +107,7 @@ void Game::initBalls() {
 
     // Initialise the spatial partition grid
     // NOTE:will need to be recalculated on window resize
-    grid = std::make_unique<Grid>(getScreenWidth(), getScreenHeight(), CELL_SIZE);
+    grid = std::make_unique<Grid>(Engine::getScreenWidth(), Engine::getScreenHeight(), CELL_SIZE);
 
 #define ADD_BALL(p, ...) \
     totalProbability += p; \
@@ -122,9 +119,9 @@ void Game::initBalls() {
     const int NUM_BALLS = 15000;
 
     std::mt19937 rndEngine((unsigned int)time(nullptr));
-    std::cout << getScreenWidth() << ", " << getScreenHeight() << "\n";
-    std::uniform_real_distribution<float> randX(0.0f, getScreenWidth());
-    std::uniform_real_distribution<float> randY(0.0f, getScreenHeight());
+    std::cout << Engine::getScreenWidth() << ", " << Engine::getScreenHeight() << "\n";
+    std::uniform_real_distribution<float> randX(0.0f, Engine::getScreenWidth());
+    std::uniform_real_distribution<float> randY(0.0f, Engine::getScreenHeight());
     std::uniform_real_distribution<float> randDir(-1.0f, 1.0f);
 
     std::vector<BallSpawn> possibleBalls;
@@ -184,7 +181,7 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
-    ballController.updateBalls(balls, grid.get(), dt, getScreenWidth(), getScreenHeight());
+    ballController.updateBalls(balls, grid.get(), dt, Engine::getScreenWidth(), Engine::getScreenHeight());
     camera.update();
 }
 
@@ -205,7 +202,7 @@ void Game::onAppRender(float dt) {
         textBatch.begin();
 
         std::stringstream ss;
-        ss << "FPS: " << (int) getFps();
+        ss << "FPS: " << (int) Engine::getFps();
         freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
 
         textBatch.end();
@@ -215,11 +212,11 @@ void Game::onAppRender(float dt) {
 }
 
 void Game::onMouseMove(int mouseX, int mouseY) {
-    ballController.onMouseMove(balls, (float)mouseX, (float)getScreenHeight() - (float)mouseY);
+    ballController.onMouseMove(balls, (float)mouseX, (float)Engine::getScreenHeight() - (float)mouseY);
 }
 
 void Game::onMouseDown(int mouseX, int mouseY) {
-    ballController.onMouseDown(balls, (float)mouseX, (float)getScreenHeight() - (float)mouseY);
+    ballController.onMouseDown(balls, (float)mouseX, (float)Engine::getScreenHeight() - (float)mouseY);
 }
 
 void Game::onMouseUp() {

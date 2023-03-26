@@ -10,8 +10,12 @@ int main(int argc, char *argv[]) {
     for (const auto & entry : fs::directory_iterator(path))
         std::cout << entry.path() << std::endl;
     //fs::temp_directory_path()
+
     Game mainGame;
-    mainGame.run();
+
+    Villain::Engine engine;
+    engine.init(&mainGame, "assets/scripts/config.lua");
+    engine.run();
 
     return 0;
 }

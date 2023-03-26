@@ -46,8 +46,8 @@ void MenuScreen::draw(float deltaTime) {
     struct nk_context * ctx = mainApplication->getNuklearContext();
 
     int w = 200, h = 90;
-    float x = mainApplication->getScreenWidth()/2.0f - w/2.0f;
-    float y = mainApplication->getScreenHeight()/2.0f - h/2.0f;
+    float x = Villain::Engine::getScreenWidth()/2.0f - w/2.0f;
+    float y = Villain::Engine::getScreenHeight()/2.0f - h/2.0f;
 
     if (nk_begin(ctx, "Show", nk_rect(x, y, w, h), NK_WINDOW_BORDER)) {
         //nk_layout_row_static(ctx, 30, 80, 1);

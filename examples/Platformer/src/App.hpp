@@ -7,21 +7,12 @@
 
 class Zombie;
 
-class App : public Villain::Engine {
+class App : public Villain::Application {
     public:
-        App();
         ~App();
-
-        void onInit() override;
+        void init() override;
         void addStates() override;
-        void onExit() override;
-        void handleEvents();
-
-        void onAppPreUpdate(float deltaTime) override;
-        void onAppPostUpdate(float deltaTime) override;
-        void onAppRender(float deltaTime) override;
         void onAppWindowResize(int newWidth, int newHeight) override;
-
     private:
         std::unique_ptr<GamePlayScreen> gameScreen = nullptr;
         std::unique_ptr<MenuScreen> menuScreen = nullptr;

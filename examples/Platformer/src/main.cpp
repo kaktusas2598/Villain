@@ -3,7 +3,9 @@
 int main(int argc, char *argv[]) {
 
     App mainGame;
-    mainGame.run();
+    Villain::Engine engine;
+    engine.init(&mainGame, "assets/scripts/config.lua");
+    engine.run();
 
     return 0;
 }

@@ -4,7 +4,7 @@
 
 namespace Villain {
 
-    StateMachine::StateMachine (Engine* game): mainApplication(game) {}
+    StateMachine::StateMachine (Application* game): mainApplication(game) {}
 
     StateMachine::~StateMachine () {
         destroy();

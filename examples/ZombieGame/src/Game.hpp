@@ -1,7 +1,7 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "Engine.hpp"
+#include "Application.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteFont.hpp"
 #include "Sprite.hpp"
@@ -19,12 +19,11 @@
 
 class Zombie;
 
-class Game : public Villain::Engine {
+class Game : public Villain::Application {
     public:
-        Game();
         ~Game();
 
-        void onInit() {};
+        void init();
         void addStates() {};
         void handleEvents();
 

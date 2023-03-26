@@ -18,9 +18,7 @@
 
 using namespace Villain;
 
-Game::Game() {
-    init("assets/scripts/config.lua");
-
+void Game::init() {
     model3D = new Model("assets/models/donut.obj");
 
     //camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
@@ -60,8 +58,8 @@ void Game::handleEvents(float deltaTime) {
     //DebugConsole::Instance()->setInfo("mouse", ss.str());
 
     static bool firstMouse = true;
-    static float lastX = getScreenWidth() / 2.0f;
-    static float lastY = getScreenHeight() / 2.0f;
+    static float lastX = Engine::getScreenWidth() / 2.0f;
+    static float lastY = Engine::getScreenHeight() / 2.0f;
     // To prevent sudden camera jamp when mouse callback first gets called upon entering screen
     if (firstMouse) {
         lastX = mouseCoords.x;
@@ -78,7 +76,7 @@ void Game::handleEvents(float deltaTime) {
 
 
     //FIXME: relative mode fixes camera restraint problem, but camera never stops moving for some reason
-    if (!debugMode) {
+    if (!Engine::editModeActive()) {
         SDL_SetRelativeMouseMode(SDL_TRUE);
         SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), 0, 0); // this seem to fix moving camera issue, but cursor disappears?
     }
@@ -110,7 +108,7 @@ void Game::handleEvents(float deltaTime) {
     }
 
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
-        isRunning = false;
+        Engine::setRunning(false);
     }
 }
 
@@ -130,7 +128,7 @@ void Game::onAppRender(float dt) {
     // First param - FOV could be changed for zooming effect
     // 2nd param - aspect ratio
     // 3rd and 4th params - near and far planes
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)getScreenWidth()/(float)getScreenHeight(), 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)Engine::getScreenWidth()/(float)Engine::getScreenHeight(), 0.1f, 100.0f);
 
     LightColor dirColor(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f));
     DirectionalLight dirLight(dirColor, glm::vec3(-0.2f, -1.0f, -0.3f));

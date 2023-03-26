@@ -1,7 +1,7 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "Engine.hpp"
+#include "Application.hpp"
 
 #include "Model.hpp"
 #include "SkyBox.hpp"
@@ -9,14 +9,13 @@
 
 #include "DebugRenderer.hpp"
 
-class Game : public Villain::Engine {
+class Game : public Villain::Application {
     public:
-        Game();
         ~Game();
 
+        void init();
         void handleEvents(float deltaTime);
         void addStates() {}
-        void onInit() {}
 
         // Villain Engine callbacks
         void onAppPreUpdate(float dt);

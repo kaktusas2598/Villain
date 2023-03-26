@@ -1,14 +1,11 @@
 #ifndef __Engine__
 #define __Engine__
 
+#include "DebugConsole.hpp"
 #include "FrameBuffer.hpp"
-#include "Window.hpp"
 #include "ImGuiLayer.hpp"
 #include "InputManager.hpp"
-#include "DebugConsole.hpp"
-
-#include "StateMachine.hpp"
-//#include "Level.hpp"
+#include "Window.hpp"
 
 #include <functional>
 #include <stdio.h>
@@ -19,7 +16,7 @@ struct nk_context;
 
 namespace Villain {
 
-    class IGameScreen;
+    class Application;
     class Entity;
 
     /*! \brief Engine
@@ -37,59 +34,32 @@ namespace Villain {
              * @param height Screen height in pixels
              * @param width Screen width in pixels
              * @param windowFlags window flags
-             * @param sdlEnabled Optional SDL rendering
              * @sa WindowFlags
              */
-            void init(std::string title, int height, int width, unsigned int windowFlags);
+            void init(Application* app, std::string title, int height, int width, unsigned int windowFlags);
             // Or initialise using Lua config script
-            void init(const std::string& luaConfigPath);
+            void init(Application* app, const std::string& luaConfigPath);
             void run(); ///< runs main application's loop
             void exit(); //< clean resources and exit application
-
-            virtual void onInit() = 0;
-            virtual void addStates();
-            virtual void onExit();
 
             void handleEvents(SDL_Event& event);
 
             bool running(){ return isRunning; }
-            void setRunning(bool running) { isRunning = running; }
+            static void setRunning(bool running) { isRunning = running; }
 
-            const float getFps() const { return fps; }
+            static float getFps() { return fps; }
+            static bool editModeActive() { return editMode; }
 
-            StateMachine* getStateMachine() { return stateMachine.get(); }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             Window getWindow() { return window; }
-            struct nk_context * getNuklearContext() { return nuklearContext; }
 
             static int getScreenWidth();
             static int getScreenHeight();
-
-            // Mainly used for Lua to get current level dimensions
-            //int getMapWidth() const { return level != nullptr ? level->getWidth() : 0; }
-            //int getMapHeight() const { return level != nullptr ? level->getHeight() : 0; }
-            // Current level or nullptr if none
-            //void setLevel(Level* lvl) { level = lvl; }
-            //Level* getLevel() { return level; }
-
-            // Any application using engine must implement these callbacks
-            virtual void onAppPreUpdate(float deltaTime) = 0;
-            virtual void onAppPostUpdate(float deltaTime) = 0;
-            virtual void onAppRender(float deltaTime) = 0;
-            virtual void onAppWindowResize(int newWidth, int newHeight) = 0;
-            virtual void onAppImGuiRender(float deltaTime);
-
-            // Optional callbacks
-            virtual void onMouseMove(int mouseX, int mouseY) {}
-            virtual void onMouseDown(int mouseX, int mouseY) {}
-            virtual void onMouseUp() {}
-
-        protected:
+        private:
             void render(float deltaTime); ///< Main render method, renders current state
-            void update(float deltaTime); ///< Main update method, sets different state or updates current one
 
-            bool isRunning = false; ///< appliction running flag
-            bool debugMode = false; ///< enables IMGui Debug Console
+            static bool isRunning; ///< appliction running flag
+            static bool editMode; ///< enables IMGui Overlay
             Window window; ///< main window instance
             ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
 
@@ -97,18 +67,13 @@ namespace Villain {
             static int screenWidth;
             static int screenHeight;
 
-            float fps = 0; ///< main application's fps
+            static float fps; ///< main application's fps
             bool mouseMotion = false;
 
-            std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
-            //GameState* currentState = nullptr; ///< current state's instance
-            IGameScreen* currentState = nullptr; ///< current state's instance
-
-            //std::vector<Entity*> entities;
-            //Level* level;
             std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;
-        private:
             struct nk_context* nuklearContext;
+
+            Application* application;
     };
 }
 

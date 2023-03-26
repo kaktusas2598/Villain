@@ -1,10 +1,8 @@
 #include "Engine.hpp"
 
+#include "Application.hpp"
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
-//#include "EntityManager.hpp"
-#include "StateParser.hpp"
-#include "IGameScreen.hpp"
 
 #include <string>
 #include <cstdio> // For sprintf
@@ -26,41 +24,20 @@ namespace Villain {
 
     int Engine::screenWidth;
     int Engine::screenHeight;
+    bool Engine::isRunning = false;
+    bool Engine::editMode = false;
+    float Engine::fps = 0;
 
     int Engine::getScreenWidth() { return screenWidth; }
     int Engine::getScreenHeight() { return screenHeight; }
 
     Engine::Engine() {
-        // Initialize State Machine
         Logger::Instance()->info("Initialising the engine.");
-        stateMachine = std::make_unique<StateMachine>(this);
-        // Set default level
-        //level = nullptr;
     }
 
     Engine::~Engine() {}
 
-    void Engine::addStates() {
-        Logger::Instance()->info("Adding states.");
-        StateParser stateParser;
-        std::vector<IGameScreen*> states;
-        if (!stateParser.loadStates("state.xml", &states)) {
-            Logger::Instance()->error("Failed adding states.");
-        }
-        for (auto& state: states) {
-            stateMachine->addScreen(state);
-        }
-        if (states.size() > 0)
-            stateMachine->setScreen(states[0]->getID());
-        states.clear();
-
-        return;
-    }
-
-    void Engine::onExit() {
-    }
-
-    void Engine::init(std::string title, int height, int width, unsigned int windowFlags) {
+    void Engine::init(Application* app, std::string title, int height, int width, unsigned int windowFlags) {
         screenHeight = height;
         screenWidth = width;
 
@@ -108,25 +85,21 @@ namespace Villain {
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
         //initialize the current game
-        onInit();
+        application = app;
+        application->setEngine(this);
+        application->setNulkearContext(nuklearContext);
+        application->init();
 
         //initialize game screens and add them to the screenList
-        addStates();
+        application->addStates();
 
         //set the MainGame's current game screen
-        currentState = stateMachine->getCurrentScreen();
-
-        if (currentState != nullptr) {
-            //initialize game screen elements
-            currentState->onEntry();
-            //set the initial game screen to ScreenState::RUNNING
-            currentState->setRunning();
-        }
+        application->startStateMachine();
 
         isRunning = true;//start main loop
     }
 
-    void Engine::init(const std::string& luaConfigPath) {
+    void Engine::init(Application* app, const std::string& luaConfigPath) {
         LuaScript configScript(luaConfigPath);
         configScript.open();
 
@@ -139,11 +112,12 @@ namespace Villain {
             flags |= SDL_WINDOW_RESIZABLE;
 
         init(
-                configScript.get<std::string>("window.title"),
-                configScript.get<int>("window.height"),
-                configScript.get<int>("window.width"),
-                flags
-            );
+            app,
+            configScript.get<std::string>("window.title"),
+            configScript.get<int>("window.height"),
+            configScript.get<int>("window.width"),
+            flags
+        );
     }
 
     void Engine::run() {
@@ -199,9 +173,9 @@ namespace Villain {
 
                 deltaTime = deltaTime / DESIRED_FPS;
 
-                onAppPreUpdate(deltaTime);
-                update(deltaTime);
-                onAppPostUpdate(deltaTime);
+                application->onAppPreUpdate(deltaTime);
+                application->update(deltaTime);
+                application->onAppPostUpdate(deltaTime);
 
                 // HACK: To solve Segfault in IMGUI, have to check it's running here again, because after we switch state
                 // in update() method, it calls exit, but it still continues through the loop and hits render function and that causes
@@ -245,7 +219,7 @@ namespace Villain {
         imGuiLayer.start();
 
         // In debug/edit mode render scene to texture and output it in imgui
-        if (debugMode)
+        if (editMode)
             sceneBuffer->bind();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -254,12 +228,10 @@ namespace Villain {
         //glViewport(0, 0, screenWidth, screenHeight);
 
         // First render application
-        if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
-            currentState->draw(deltaTime);
-        }
-        onAppRender(deltaTime);
+        application->render(deltaTime);
+        application->onAppRender(deltaTime);
 
-        if (debugMode)
+        if (editMode)
             sceneBuffer->unbind();
 
         // Then render Nuklear UI
@@ -271,78 +243,18 @@ namespace Villain {
         nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
 
         // In the end Render ImGui
-        if (debugMode) {
+        if (editMode) {
             SDL_ShowCursor(SDL_TRUE);
             SDL_SetRelativeMouseMode(SDL_FALSE);
             imGuiLayer.render(*this);
 
-            if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
-                currentState->onImGuiDraw(deltaTime);
-            }
-            onAppImGuiRender(deltaTime);
+            //if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
+                //currentState->onImGuiDraw(deltaTime);
+            //}
+            application->onAppImGuiRender(deltaTime);
         }
 
         imGuiLayer.end();
-    }
-
-    void Engine::onAppImGuiRender(float deltaTime) {
-    }
-
-    /**
-     * Update current state or change state if needed
-     * @param deltaTime
-     * @sa StateMachine
-     */
-    void Engine::update(float deltaTime) {
-        // update() method is used in engine render because it also renders particles
-        //ParticleSystem::Instance()->update(deltaTime);
-
-        /*for (auto& e: EntityManager::Instance()->getEntities()) {
-            // Find player and update camera
-            if (e->hasComponent<InputComponent>()) {
-                TheEngine::Instance()->camera.x = e->transform->getX() - TheEngine::Instance()->camera.w/2;
-                TheEngine::Instance()->camera.y = e->transform->getY() - TheEngine::Instance()->camera.h/2;
-                break;
-            }
-        }*/
-
-        if (currentState) {
-            switch (currentState->getScreenState()) {
-                //update the current running screen
-                case ScreenState::RUNNING:
-                    currentState->update(deltaTime);
-                    break;
-                    //change to next screen
-                case ScreenState::CHANGE_NEXT:
-                    //clean up running screen
-                    currentState->onExit();
-                    currentState = stateMachine->moveNext();
-                    if (currentState) {
-                        //initialize new running screen
-                        currentState->setRunning();
-                        currentState->onEntry();
-                    }
-                    break;
-                    //change to previous screen
-                case ScreenState::CHANGE_PREVIOUS:
-                    //clean up running screen
-                    currentState->onExit();
-                    currentState = stateMachine->movePrev();
-                    if (currentState) {
-                        //initialize new running screen
-                        currentState->setRunning();
-                        currentState->onEntry();
-                    }
-                    break;
-                    //exit game
-                case ScreenState::EXIT_APPLICATION:
-                    exit();
-                    break;
-                default:
-                    break;
-            }
-        }
-        //else { exit(); }
     }
 
     /**
@@ -369,7 +281,7 @@ namespace Villain {
                 }
 
                 TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
-                onMouseMove(event.motion.x, event.motion.y);
+                application->onMouseMove(event.motion.x, event.motion.y);
                 break;
             case SDL_KEYDOWN:
                 TheInputManager::Instance()->pressKey(event.key.keysym.sym);
@@ -383,18 +295,18 @@ namespace Villain {
                     //}
                 //}
                 if (event.key.keysym.sym == SDLK_BACKQUOTE)
-                    debugMode = !debugMode;
+                    editMode = !editMode;
                 break;
             case SDL_KEYUP:
                 TheInputManager::Instance()->releaseKey(event.key.keysym.sym);
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 TheInputManager::Instance()->pressKey(event.button.button);
-                onMouseDown(event.button.x, event.button.y);
+                application->onMouseDown(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
                 TheInputManager::Instance()->releaseKey(event.button.button);
-                onMouseUp();
+                application->onMouseUp();
                 break;
             case SDL_TEXTINPUT:
                 TheInputManager::Instance()->addInputCharacters(event.text.text);
@@ -417,7 +329,7 @@ namespace Villain {
                 screenHeight = event.window.data2;
                 glViewport(0, 0, screenWidth, screenHeight);
                 sceneBuffer->rescale(screenWidth, screenHeight);
-                onAppWindowResize(screenWidth, screenHeight);
+                application->onAppWindowResize(screenWidth, screenHeight);
                 break;
             default:
                 break;
@@ -426,14 +338,15 @@ namespace Villain {
 
     void Engine::exit() {
 
-        if (currentState != nullptr) {
-            currentState->onExit();
-        }
+        // TODO: move to application
+        //if (currentState != nullptr) {
+            //currentState->onExit();
+        //}
 
-        if (stateMachine) {
-            stateMachine->destroy();
-            stateMachine.reset();
-        }
+        //if (stateMachine) {
+            //stateMachine->destroy();
+            //stateMachine.reset();
+        //}
 
         isRunning = false;
 
