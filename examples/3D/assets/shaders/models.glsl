@@ -28,7 +28,6 @@ void main() {
 #shader fragment
 #version 330 core
 struct Material {
-    float useDiffuseMap;
     vec4 diffuseColor;
     sampler2D diffuseMap;
     sampler2D specularMap;
