@@ -50,14 +50,12 @@ struct BaseLight {
 
 struct DirectionalLight {
     vec3 direction;
-
     BaseLight base;
 };
 
 struct PointLight {
-    vec3 position;
-
     BaseLight base;
+    vec3 position;
 
     // attenuation
     float constant;
@@ -66,6 +64,7 @@ struct PointLight {
 };
 
 struct SpotLight {
+    BaseLight base;
     vec3 position;
     vec3 direction;
     float cutOff;

@@ -5,6 +5,7 @@
 #include "LevelParser.hpp"
 #include "Model.hpp"
 #include "ResourceManager.hpp"
+#include "Light.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
 #include "DebugConsole.hpp"
@@ -120,49 +121,51 @@ void Game::onAppRender(float dt) {
     // 3rd and 4th params - near and far planes
     glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)getScreenWidth()/(float)getScreenHeight(), 0.1f, 100.0f);
 
-    glm::vec3 lightPosition = glm::vec3(1.0f, 2.0f, -10.0f);
-    glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
+    LightColor dirColor(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f));
+    DirectionalLight dirLight(dirColor, glm::vec3(-0.2f, -1.0f, -0.3f));
 
-    // Or just use static color
-    glm::vec3 dirLightColor = glm::vec3(1.0f);
-    glm::vec3 pointLightColor = glm::vec3(1.0f, 0.0f, 0.0f);
     glm::vec3 spotLightColor = glm::vec3(1.0f, 1.0f, 0.0f);
+    LightColor spotColor(spotLightColor * glm::vec3(0.2f), spotLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
+    // Make spot light position same as camera thus simulating flashlight!
+    SpotLight spotLight(spotColor, camera.Position, camera.Front, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
 
+    glm::vec3 pointLightColor = glm::vec3(1.0f, 0.0f, 0.0f);
+    LightColor pointColor(pointLightColor * glm::vec3(0.5f), pointLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
     float constant = 1.0f;
     float linear = 0.022f;
     float quadratic = 0.0019f;
+    PointLight pointLight(pointColor, glm::vec3(1.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f);
 
-    // TODO: all of this lighting code should be refactored to a separate class
     Shader* modelShader = ResourceManager::Instance()->getShader("model");
     if (modelShader != nullptr) {
         modelShader->bind();
+        // TODO: Uniforms could be set automatically, at least for lights
         modelShader->setUniformMat4f("model", model);
         modelShader->setUniformMat4f("view", view);
         modelShader->setUniformMat4f("projection", projection);
 
         modelShader->setUniform1f("material.shininess", 32.0f);
 
-        modelShader->setUniformVec3("dirLight.direction", lightDirection);
-        modelShader->setUniformVec3("dirLight.ambient", dirLightColor * glm::vec3(0.2f));
-        modelShader->setUniformVec3("dirLight.diffuse", dirLightColor * glm::vec3(0.5f));
-        modelShader->setUniform3f("dirLight.specular", 1.0f, 1.0f, 1.0f);
+        modelShader->setUniformVec3("dirLight.direction", dirLight.Direction);
+        modelShader->setUniformVec3("dirLight.base.ambient", dirLight.Base.AmbientColor);
+        modelShader->setUniformVec3("dirLight.base.diffuse", dirLight.Base.DiffuseColor);
+        modelShader->setUniformVec3("dirLight.base.specular", dirLight.Base.SpecularColor);
 
-        modelShader->setUniformVec3("pointLight.position", lightPosition);
-        modelShader->setUniformVec3("pointLight.ambient", pointLightColor * glm::vec3(0.5f));
-        modelShader->setUniformVec3("pointLight.diffuse", pointLightColor * glm::vec3(0.2f));
-        modelShader->setUniform3f("pointLight.specular", 1.0f, 1.0f, 1.0f);
-        modelShader->setUniform1f("pointLight.constant", constant);
-        modelShader->setUniform1f("pointLight.linear", linear);
-        modelShader->setUniform1f("pointLight.quadratic", quadratic);
+        modelShader->setUniformVec3("pointLight.position", pointLight.Position);
+        modelShader->setUniformVec3("pointLight.base.ambient", pointLight.Base.AmbientColor);
+        modelShader->setUniformVec3("pointLight.base.diffuse", pointLight.Base.DiffuseColor);
+        modelShader->setUniformVec3("pointLight.base.specular", pointLight.Base.SpecularColor);
+        modelShader->setUniform1f("pointLight.constant", pointLight.Constant);
+        modelShader->setUniform1f("pointLight.linear", pointLight.Linear);
+        modelShader->setUniform1f("pointLight.quadratic", pointLight.Quadratic);
 
-        // Make spot light position same as camera thus simulating flashlight!
-        modelShader->setUniformVec3("spotLight.position", camera.Position);
-        modelShader->setUniformVec3("spotLight.direction", camera.Front);
-        modelShader->setUniform1f("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-        modelShader->setUniform1f("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
-        modelShader->setUniformVec3("spotLight.ambient", spotLightColor * glm::vec3(0.2f));
-        modelShader->setUniformVec3("spotLight.diffuse", spotLightColor * glm::vec3(0.9f));
-        modelShader->setUniform3f("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        modelShader->setUniformVec3("spotLight.position", spotLight.Position);
+        modelShader->setUniformVec3("spotLight.direction", spotLight.Direction);
+        modelShader->setUniform1f("spotLight.cutOff", spotLight.CutOff);
+        modelShader->setUniform1f("spotLight.outerCutOff", spotLight.OuterCutOff);
+        modelShader->setUniformVec3("spotLight.base.ambient", spotLight.Base.AmbientColor);
+        modelShader->setUniformVec3("spotLight.base.diffuse", spotLight.Base.DiffuseColor);
+        modelShader->setUniformVec3("spotLight.base.specular", spotLight.Base.SpecularColor);
 
         modelShader->setUniformVec3("viewPosition", camera.Position);
 
