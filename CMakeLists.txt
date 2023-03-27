@@ -55,6 +55,11 @@ else()
     set(BOX2D_LIBRARIES )
 endif()
 
+# Copy over engine resources to build dir
+# NOTE: ideally these resources should be embedded into executable or library
+message(STATUS "Copying resources...")
+file(COPY res DESTINATION "${CMAKE_BINARY_DIR}")
+
 # Build Header only libs
 add_library(stb_image "vendor/stb_image.cpp")
 add_library(nuklear "vendor/nuklear.cpp")
