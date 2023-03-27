@@ -337,17 +337,6 @@ namespace Villain {
     }
 
     void Engine::exit() {
-
-        // TODO: move to application
-        //if (currentState != nullptr) {
-            //currentState->onExit();
-        //}
-
-        //if (stateMachine) {
-            //stateMachine->destroy();
-            //stateMachine.reset();
-        //}
-
         isRunning = false;
 
         ImGui_ImplOpenGL3_Shutdown();

@@ -21,6 +21,7 @@ namespace Villain {
             virtual void addStates();
             void startStateMachine();
             void handleEvents();
+            void exit();
 
             void update(float deltaTime);
             void render(float deltaTime);

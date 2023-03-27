@@ -74,7 +74,7 @@ namespace Villain {
                     break;
                     //exit game
                 case ScreenState::EXIT_APPLICATION:
-                    Engine::setRunning(false);
+                    exit();
                     //engine->exit();
                     break;
                 default:
@@ -88,6 +88,20 @@ namespace Villain {
     void Application::render(float deltaTime) {
         if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
             currentState->draw(deltaTime);
+        }
+    }
+
+    void Application::exit() {
+        // NOTE: gotta be a better way
+        Engine::setRunning(false);
+
+        if (currentState != nullptr) {
+            currentState->onExit();
+        }
+
+        if (stateMachine) {
+            stateMachine->destroy();
+            stateMachine.reset();
         }
     }
 
