@@ -39,13 +39,13 @@ namespace Villain {
         }
     }
 
-    Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-        std::vector<Vertex> vertices;
+    Mesh<VertexP1N1UV> Model::processMesh(aiMesh* mesh, const aiScene* scene) {
+        std::vector<VertexP1N1UV> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture*> textures;
 
         for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-            Vertex vertex;
+            VertexP1N1UV vertex;
 
             glm::vec3 tempVec;
             tempVec.x = mesh->mVertices[i].x;
@@ -94,7 +94,7 @@ namespace Villain {
             textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
         }
 
-        return Mesh(vertices, indices, textures, diffuseColor);
+        return Mesh<VertexP1N1UV>(vertices, indices, textures, diffuseColor);
     }
 
     std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {

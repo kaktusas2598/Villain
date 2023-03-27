@@ -11,15 +11,15 @@
 
 namespace Villain {
 
-    class Mesh {
+    template <class VertexType> class Mesh {
         public:
-            std::vector<Vertex> Vertices;
+            std::vector<VertexType> Vertices;
             std::vector<unsigned int> Indices;
             std::vector<Texture*> Textures;
 
             glm::vec4 diffuseColor;
 
-            Mesh(std::vector<Vertex> vertices,
+            Mesh(std::vector<VertexType> vertices,
                     std::vector<unsigned int> indices,
                     std::vector<Texture*> textures,
                     glm::vec4 diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));

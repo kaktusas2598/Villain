@@ -6,7 +6,8 @@
 
 namespace Villain {
 
-    Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse) {
+    template <class VertexType>
+    Mesh<VertexType>::Mesh(std::vector<VertexType> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse) {
         Vertices = vertices;
         Indices = indices;
         Textures = textures;
@@ -16,7 +17,8 @@ namespace Villain {
         setupMesh();
     }
 
-    void Mesh::draw(Shader &shader) {
+    template <class VertexType>
+    void Mesh<VertexType>::draw(Shader &shader) {
         unsigned int diffuseIndex = 1;
         unsigned int specularIndex = 1;
         for (unsigned int i = 0; i < Textures.size(); i++) {
@@ -37,10 +39,13 @@ namespace Villain {
         renderer.draw(*vao, *ibo, shader);
     }
 
-    void Mesh::setupMesh() {
+    template <class VertexType>
+    void Mesh<VertexType>::setupMesh() {
         vao = std::make_unique<VertexArray>();
         vbo = std::make_unique<VertexBuffer>(Vertices.data(), Vertices.size() * sizeof(Vertex));
 
+        //TODO: test this line out
+        //VertexBufferLayout layout = VertexType::getVertexLayout();
         VertexBufferLayout layout;
         layout.push<float>(3); // position
         layout.push<float>(3); // normal
@@ -52,4 +57,15 @@ namespace Villain {
         ibo = std::make_unique<IndexBuffer>(Indices.data(), Indices.size());
 
     }
+
+    // Explicit instantiation of template specialisations to avoid linker errors, alternativaly and even better
+    // template should be defined in header file only
+    template Mesh<VertexP1>::Mesh(std::vector<VertexP1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+    template Mesh<VertexP1N1>::Mesh(std::vector<VertexP1N1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+    template Mesh<VertexP1N1UV>::Mesh(std::vector<VertexP1N1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+
+    template void Mesh<VertexP1>::draw(Shader &shader);
+    template void Mesh<VertexP1N1>::draw(Shader &shader);
+    template void Mesh<VertexP1N1UV>::draw(Shader &shader);
+
 }
