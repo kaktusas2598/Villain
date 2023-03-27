@@ -6,9 +6,6 @@
 
 struct VertexP1 {
     glm::vec3 Position;
-    // TODO: create multiple structs with these and try to use them
-    // as template arguments? that way we can use any kind of layout
-    // Mesh class could become template class?
     static VertexBufferLayout getVertexLayout() {
         VertexBufferLayout layout;
         layout.push<float>(3);
@@ -49,6 +46,7 @@ struct VertexP1N1C1UV {
 
 
 
+// TODO: get rid of these
 // Currently used for Model and Mesh
 struct Vertex {
     glm::vec3 Position;
