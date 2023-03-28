@@ -80,11 +80,4 @@ struct Vertex {
     glm::vec2 UV;
  };
 
-// Currently used for sprite batch
-struct VertexC {
-    glm::vec3 Position;
-    glm::vec4 Color;
-    glm::vec2 UV;
-};
-
 #endif // __Vertex__

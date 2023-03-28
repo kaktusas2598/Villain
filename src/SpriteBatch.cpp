@@ -156,7 +156,7 @@ namespace Villain {
     }
 
     void SpriteBatch::createRenderBatches() {
-        std::vector <VertexC> vertices;
+        std::vector <VertexP1C1UV> vertices;
         vertices.resize(glyphs.size() * 6);
 
         if (glyphs.empty()) {
@@ -190,20 +190,14 @@ namespace Villain {
         }
 
 
-        vbo->fill(vertices.data(), vertices.size() * sizeof(VertexC), GL_DYNAMIC_DRAW);
+        vbo->fill(vertices.data(), vertices.size() * sizeof(VertexP1C1UV), GL_DYNAMIC_DRAW);
         vbo->unbind();
     }
 
     void SpriteBatch::createVAO() {
         vao = std::make_unique<VertexArray>();
         vbo = std::make_unique<VertexBuffer>(nullptr, -1);
-
-        // Setup vertex attrib pointers
-        VertexBufferLayout layout;
-        layout.push<float>(3); // position
-        layout.push<float>(4); // color
-        layout.push<float>(2); // uv
-
+        VertexBufferLayout layout = VertexP1C1UV::getVertexLayout();
         vao->addBuffer(*vbo, layout);
     }
 

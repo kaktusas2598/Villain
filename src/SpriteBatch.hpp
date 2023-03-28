@@ -37,10 +37,10 @@ namespace Villain {
             GLuint texture;
             float depth;
 
-            VertexC topLeft;
-            VertexC bottomLeft;
-            VertexC topRight;
-            VertexC bottomRight;
+            VertexP1C1UV topLeft;
+            VertexP1C1UV bottomLeft;
+            VertexP1C1UV topRight;
+            VertexP1C1UV bottomRight;
         private:
             glm::vec2 rotatePoint(glm::vec2 position, float angle);
     };
