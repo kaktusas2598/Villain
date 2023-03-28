@@ -20,6 +20,7 @@
 
 ## Planned Features
 
+* Forward rendering multi-pass system
 * Engine editor with scene management
 * Skeletal animation support
 * Built in collision detection: AABB, SAT, circle
