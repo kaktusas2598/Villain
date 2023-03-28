@@ -93,4 +93,5 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
+ * Possibly refactor Logger class to be a wrapper for spdlog
 
