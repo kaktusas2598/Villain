@@ -42,20 +42,14 @@ namespace Villain {
     template <class VertexType>
     void Mesh<VertexType>::setupMesh() {
         vao = std::make_unique<VertexArray>();
-        vbo = std::make_unique<VertexBuffer>(Vertices.data(), Vertices.size() * sizeof(Vertex));
+        vbo = std::make_unique<VertexBuffer>(Vertices.data(), Vertices.size() * sizeof(VertexType));
 
-        //TODO: test this line out
-        //VertexBufferLayout layout = VertexType::getVertexLayout();
-        VertexBufferLayout layout;
-        layout.push<float>(3); // position
-        layout.push<float>(3); // normal
-        layout.push<float>(2); // texCoords
-
+        // Use template argument to get correct vertex attribute layout
+        VertexBufferLayout layout = VertexType::getVertexLayout();
         vao->addBuffer(*vbo, layout);
 
         // Generate and bind index buffer object
         ibo = std::make_unique<IndexBuffer>(Indices.data(), Indices.size());
-
     }
 
     // Explicit instantiation of template specialisations to avoid linker errors, alternativaly and even better
@@ -63,9 +57,12 @@ namespace Villain {
     template Mesh<VertexP1>::Mesh(std::vector<VertexP1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1>::Mesh(std::vector<VertexP1N1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1UV>::Mesh(std::vector<VertexP1N1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+    template Mesh<VertexP1C1UV>::Mesh(std::vector<VertexP1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+    template Mesh<VertexP1N1C1UV>::Mesh(std::vector<VertexP1N1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
 
     template void Mesh<VertexP1>::draw(Shader &shader);
     template void Mesh<VertexP1N1>::draw(Shader &shader);
     template void Mesh<VertexP1N1UV>::draw(Shader &shader);
-
+    template void Mesh<VertexP1C1UV>::draw(Shader &shader);
+    template void Mesh<VertexP1N1C1UV>::draw(Shader &shader);
 }
