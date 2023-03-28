@@ -25,11 +25,6 @@ const float HUMAN_SPEED = 50.f;
 const float ZOMBIE_SPEED = 40.f;
 const float ZOMBIE_DAMAGE = 5.f;
 
-//void updateBlood(Particle2D& p, float dt) {
-    //p.position += p.velocity * dt;
-    //p.color.a -= p.life * dt;
-//}
-
 void Game::init() {
     SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
     SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX, -50);
@@ -38,8 +33,8 @@ void Game::init() {
     SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
     //SoundManager::Instance()->playMusic("drive");
 
-    camera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
-    hudCamera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
+    camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    hudCamera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     glm::vec3 camPos = camera.getPosition();
     camPos.x = Engine::getScreenWidth()/2.0;
     camPos.y = Engine::getScreenHeight()/2.0;
@@ -62,13 +57,8 @@ void Game::init() {
 
     playerSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/player.png", "player");
     zombieSpritesheet = ResourceManager::Instance()->loadTexture("assets/textures/slime.png", "zombie");
-    ResourceManager::Instance()->loadShader("assets/shaders/sprite.vert", "assets/shaders/sprite.frag", "sprite");
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/text.frag", "textBatch");
-
-    //NOTE: So far not sure if sprite class will be used, due to sprite batch existance
-    testSprite = new Sprite("player", "sprite");
-    testSprite->init(-250, 10, playerSpritesheet->getWidth(), playerSpritesheet->getHeight());
 
     spriteBatch.init();
     textBatch.init();
@@ -309,26 +299,13 @@ void Game::onAppRender(float dt) {
     //glm::mat4 view = glm::mat4(1.0f);
     //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     //glm::mat4 projection = glm::ortho(0.0f, (float)TheEngine::Instance()->getScreenWidth(), 0.0f, (float)TheEngine::Instance()->getScreenHeight(), 0.1f, 100.0f);
-    glm::mat4 view = camera.getCameraMatrix();
-    glm::mat4 projection = glm::mat4(1.0f);
+    glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 projection = camera.getProjMatrix();
 
     float colorMin = 0.0f, colorMax = 255.0f, colorCurr = colorMin;
     colorCurr+= (int)colorTimer.read() % 255;
     if (colorCurr > colorMax) {
         colorCurr = colorMin;
-    }
-
-    Shader* spriteShader = ResourceManager::Instance()->getShader("sprite");
-    if (spriteShader != nullptr) {
-        spriteShader->bind();
-        spriteShader->setUniformMat4f("model", model);
-        spriteShader->setUniformMat4f("view", view);
-        spriteShader->setUniformMat4f("projection", projection);
-        spriteShader->setUniform1i("spriteTexture", 0);
-        //spriteShader->setUniformVec4("uColor", glm::vec4(1.0f, (float)(colorTimer.read() / 255.0f), 0.0f, 1.0f));
-        spriteShader->setUniformVec4("uColor", glm::vec4(1.0f, colorCurr, 0.0f, 1.0f));
-        //spriteShader->setUniformVec4("uColor", glm::vec4(0.5f, 1.0f, 0.2f, 1.0f));
-        testSprite->draw();
     }
 
     // Setting up rendering batch and rendering it all at once with a single draw call
@@ -360,23 +337,6 @@ void Game::onAppRender(float dt) {
             zombies[i]->draw(spriteBatch);
         }
 
-
-        glm::vec4 position(0.0f, 0.0f, 50.0f, 50.0f);
-        //glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-        glm::vec4 uv(0.0f, 0.0f, 1.0f / 6, 1.0f / 10);
-        glm::vec4 color(1.0f, 1.0f, 1.0f, 1.0f);
-
-        //testBatch->draw(position, uv, playerSpritesheet->getID(), 0.0f, color);
-        spriteBatch.draw(position + glm::vec4(100.0f, 0.0f, 0.0f, 0.0f), uv, playerSpritesheet->getID(), 0.5f, color);
-
-        static int currentFrame = 0;
-        static int numFrames = 6;
-        currentFrame =  int(((SDL_GetTicks() / 100) % 5));
-        spriteBatch.draw(position, currentFrame++, 2, 48, 48, playerSpritesheet, 0.5f, color);
-
-        spriteBatch.draw(position + glm::vec4(50.0f, 0.0f, 0.0f, 0.0f), currentFrame, 0, 48, 48, playerSpritesheet, 0.5f, color);
-
-
         for (int i = 0; i < bullets.size(); i++) {
             bullets[i].draw(spriteBatch);
         }
@@ -392,8 +352,8 @@ void Game::onAppRender(float dt) {
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
         textShader->bind();
-        textShader->setUniformMat4f("view", hudCamera.getCameraMatrix());
-        textShader->setUniformMat4f("projection", projection);
+        textShader->setUniformMat4f("view", hudCamera.getViewMatrix());
+        textShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
         textShader->setUniform1i("spriteTexture", 0);
 
         textBatch.begin();
@@ -429,7 +389,7 @@ void Game::addBlood(const glm::vec2& pos, int numParticles) {
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
-   camera.init(newWidth, newHeight);
+   camera.rescale(newWidth, newHeight);
    glm::vec3 camPos = camera.getPosition();
    camPos.x = newWidth/2.0;
    camPos.y = newHeight/2.0;

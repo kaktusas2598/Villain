@@ -10,7 +10,9 @@ namespace Villain {
         FORWARD,
         BACKWARD,
         LEFT,
-        RIGHT
+        RIGHT,
+        UP,
+        DOWN
     };
 
     // Default values
@@ -18,38 +20,31 @@ namespace Villain {
     const float PITCH = 0.0f;
     const float SPEED = 2.5f;
     const float SENSITIVITY = 0.1f;
-    const float ZOOM = 45.0f;
 
+    // Common interface for all Camera types
     class Camera {
         public:
-            // Camera Attributes
-            glm::vec3 Position;
-            glm::vec3 Front;
-            glm::vec3 Up;
-            glm::vec3 Right;
-            glm::vec3 WorldUp;
-            // Euler Angles
-            float Yaw;
-            float Pitch;
-            // Roll angle could be implemented for fligh simulator camera
-            // Camera Options
-            float MovementSpeed;
-            float MouseSensitivity;
-            float Zoom;
+            Camera() {}
+            virtual ~Camera() {}
 
-            Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+            // Call after creation and on window size change to change projection
+            virtual void rescale(int width, int height) = 0;
 
-            glm::mat4 getViewMatrix();
+            virtual glm::mat4 getViewMatrix() = 0;
+            virtual glm::mat4 getProjMatrix() = 0;
 
-            void processKeyboard(CameraMovement direction, float deltaTime);
-            void processMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
-            void processMouseScroll(float yOffset);
-        private:
+            glm::vec3& getPosition() { return position; }
+            float getZoom() { return zoom; }
 
-            // Using Euler Angles
-            void updateCameraVectors();
+            void setPosition(const glm::vec3& newPos) { position = newPos; }
+            void setZoom(float z) { zoom = z; }
+
+        protected:
+            int screenWidth, screenHeight;
+            float zoom;
+            glm::vec3 position;
+            glm::mat4 projection;
     };
-
 }
 
 #endif // __Camera__

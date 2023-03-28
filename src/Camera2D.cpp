@@ -3,30 +3,25 @@
 
 namespace Villain {
 
-    Camera2D::Camera2D(): position(0.0f, 0.0f, 1.0f), zoom(1.0f), screenWidth(100.0f), screenHeight(100.0f), needsMatrixUpdate(true) {
+    Camera2D::Camera2D() {
+        position = glm::vec3(0.0f, 0.0f, 1.0f);
+        zoom = 1.0f;
+        screenWidth = 100.0f;
+        screenHeight = 100.0f;
     }
 
     Camera2D::~Camera2D() {
     }
 
-    void Camera2D::init(int width, int height) {
+    void Camera2D::rescale(int width, int height) {
         screenWidth = width;
         screenHeight = height;
         projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
     }
 
-    void Camera2D::update() {
-        if (needsMatrixUpdate) {
-            projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
-            glm::vec3 cameraTranslate(-position.x + screenWidth/2.0f, -position.y + screenHeight/2.0f, -position.z);
-            glm::mat4 cameraMatrix = glm::translate(projection, cameraTranslate);
-            cameraMatrix = glm::scale(cameraMatrix, glm::vec3(zoom));
+    glm::mat4 Camera2D::getProjMatrix() { return glm::mat4(1.0f); }
 
-            needsMatrixUpdate = false;
-        }
-    }
-
-    glm::mat4 Camera2D::getCameraMatrix() {
+    glm::mat4 Camera2D::getViewMatrix() {
         //glm::vec3 cameraTranslate(-position.x, -position.y, -position.z);
         // Set ortohrapic projection and center camera around position vector
         glm::vec3 cameraTranslate(-position.x + screenWidth/2.0f, -position.y + screenHeight/2.0f, -position.z);
@@ -77,13 +72,11 @@ namespace Villain {
     void Camera2D::offsetPosition(const glm::vec2& offset) {
         position.x += offset.x;
         position.y += offset.y;
-        needsMatrixUpdate = true;
     }
 
     void Camera2D::offsetScale(float offset) {
         zoom += offset;
         if (zoom < 0.001f)
             zoom = 0.001f;
-        needsMatrixUpdate = true;
     }
 }

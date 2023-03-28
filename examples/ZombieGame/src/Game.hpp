@@ -4,7 +4,6 @@
 #include "Application.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteFont.hpp"
-#include "Sprite.hpp"
 #include "SpriteBatch.hpp"
 #include "Camera2D.hpp"
 #include "Level.hpp"
@@ -35,7 +34,6 @@ class Game : public Villain::Application {
     private:
         void addBlood(const glm::vec2& pos, int numParticles);
 
-        Villain::Sprite* testSprite;
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D camera;
         Villain::Camera2D hudCamera;
