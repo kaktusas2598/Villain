@@ -71,13 +71,4 @@ struct VertexP1C1UV {
     }
 };
 
-// TODO: get rid of these
-// Currently used for Model
-// Mesh can now accept any kind of vertex!!
-struct Vertex {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec2 UV;
- };
-
 #endif // __Vertex__
