@@ -19,6 +19,17 @@ struct VertexP1 {
     }
 };
 
+struct VertexP1UV {
+    glm::vec3 Position;
+    glm::vec2 UV;
+    static VertexBufferLayout getVertexLayout() {
+        VertexBufferLayout layout;
+        layout.push<float>(3);
+        layout.push<float>(2);
+        return layout;
+    }
+};
+
 struct VertexP1N1 {
     glm::vec3 Position;
     glm::vec3 Normal;
