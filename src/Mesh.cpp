@@ -55,12 +55,14 @@ namespace Villain {
     // Explicit instantiation of template specialisations to avoid linker errors, alternativaly and even better
     // template should be defined in header file only
     template Mesh<VertexP1>::Mesh(std::vector<VertexP1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+    template Mesh<VertexP1UV>::Mesh(std::vector<VertexP1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1>::Mesh(std::vector<VertexP1N1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1UV>::Mesh(std::vector<VertexP1N1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1C1UV>::Mesh(std::vector<VertexP1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1C1UV>::Mesh(std::vector<VertexP1N1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
 
     template void Mesh<VertexP1>::draw(Shader &shader);
+    template void Mesh<VertexP1UV>::draw(Shader &shader);
     template void Mesh<VertexP1N1>::draw(Shader &shader);
     template void Mesh<VertexP1N1UV>::draw(Shader &shader);
     template void Mesh<VertexP1C1UV>::draw(Shader &shader);
