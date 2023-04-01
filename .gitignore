@@ -38,3 +38,6 @@ out
 **/*.cbp
 **/CMakeScripts
 **/compile_commands.json
+
+# CmakeRC files
+**/__cmrc_***
