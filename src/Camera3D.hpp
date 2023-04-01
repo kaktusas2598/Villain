@@ -23,6 +23,7 @@ namespace Villain {
             void processMouseScroll(float yOffset);
 
             glm::vec3 getFront() { return front; }
+            void setZPlanes(float near, float far) { zNear = near, zFar = far; }
         private:
             // Using Euler Angles
             void updateCameraVectors();
@@ -39,6 +40,8 @@ namespace Villain {
             // Camera Options
             float movementSpeed;
             float mouseSensitivity;
+            float zNear = 0.1f;
+            float zFar = 100.0f;
     };
 }
 

@@ -16,7 +16,7 @@ namespace Villain {
     void Camera3D::rescale(int width, int height) {
         screenWidth = width;
         screenHeight = height;
-        projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);
     }
 
     glm::mat4 Camera3D::getViewMatrix() {
@@ -27,7 +27,7 @@ namespace Villain {
         // First param - FOV could be changed for zooming effect
         // 2nd param - aspect ratio
         // 3rd and 4th params - near and far planes
-        projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);
         return projection;
     }
 
