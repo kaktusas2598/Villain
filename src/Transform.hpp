@@ -8,20 +8,11 @@ namespace Villain {
 
     class Transform {
         public:
-            Transform(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 1), float sc = 1.0f)
+            Transform(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 0), float sc = 1.0f)
                 : position(pos), rotation(rot), scale(sc), parent(nullptr) {}
 
-            glm::mat4 getTransformMatrix() {
-                glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
-                // TODO: not tested
-                //model *= glm::mat4_cast(rotation);
-                model = glm::scale(model, glm::vec3(scale));
-                if (parent != nullptr) {
-                    return parent->getTransformMatrix() * model;
-                } else {
-                    return model;
-                }
-            }
+            glm::mat4 getTransformMatrix();
+            bool hasChanged();
 
             const glm::vec3& getPos() const { return position; }
             float getScale() const { return scale; }
@@ -33,13 +24,19 @@ namespace Villain {
             inline void setScale(float sc) { scale = sc; }
             inline void setParent(Transform* p) { parent = p; }
         private:
+            glm::mat4 getParentMatrix() const;
+
             glm::vec3 position = glm::vec3(0.0f);
-            glm::quat rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 1.f));
+            glm::quat rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
             float scale = 1.0f;
+
+            glm::vec3 oldPos = glm::vec3(0.0f);
+            glm::quat oldRot = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
+            float oldSc = 1.0f;
 
             Transform* parent;
             // From C++11 mutable keybord allows const function to modify these
-            //mutable glm::mat4 parentMatrix;
+            mutable glm::mat4 parentMatrix = glm::mat4(1.0f);
     };
 }
 

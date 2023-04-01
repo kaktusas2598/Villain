@@ -24,7 +24,7 @@ void Game::init() {
     //model3D = new Model("assets/models/donut.obj");
     model3D = new Model("assets/models/sponza.obj");
 
-    camera.setZPlanes(0.1f, 1000.f);
+    camera.setZPlanes(0.1f, 1000.f); // for bigger render range
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     //glm::vec3 camPos = camera.getPosition();
     //camPos.x = configScript.get<int>("window.width")/2.0;
@@ -55,27 +55,20 @@ void Game::init() {
     std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
     Mesh<VertexP1UV>* mesh = new Mesh<VertexP1UV>(vertices, indices, textures);
     Material mat("wood", ResourceManager::Instance()->getTexture("crate"), 8);
-    MeshRenderer<VertexP1UV>* meshRenderer = new MeshRenderer<VertexP1UV>(mesh, mat);
 
     planeNode = new SceneNode();
-    planeNode->addComponent(meshRenderer);
+    planeNode->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
 
     SceneNode* testHierarchy = new SceneNode(glm::vec3(0.0f, 3.0f, 0.0f)); // +3 y relative to parent
-    //FIXME: why adding component here causes original node to render using this node transform, WTF?
-    MeshRenderer<VertexP1UV>* meshRenderer2 = new MeshRenderer<VertexP1UV>(mesh, mat);
-    // creating another component pointer solves issue mentioned above
-    testHierarchy->addComponent(meshRenderer2);
+    testHierarchy->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
 
     SceneNode* testHierarchyChild = new SceneNode(glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
-    MeshRenderer<VertexP1UV>* meshRenderer3 = new MeshRenderer<VertexP1UV>(mesh, mat);
-    testHierarchyChild->addComponent(meshRenderer3);
+    testHierarchyChild->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
     testHierarchy->addChild(testHierarchyChild);
 
+    testHierarchy->getTransform()->setRot(90.f, glm::vec3(0.f, 0.f, 1.f));
 
-    // Wht child is rendered upside down?
-    //testHierarchy->getTransform()->setRot(180.0f);
     planeNode->addChild(testHierarchy);
-
 
     addToScene(planeNode);
 }
@@ -119,7 +112,7 @@ void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
-
+    // FIXME:It's bad to set camera every single time here
     // TEMP solution to pass camera inputs to rendering engine
     getRootNode()->getEngine()->getRenderingEngine()->setMainCamera(camera);
 }

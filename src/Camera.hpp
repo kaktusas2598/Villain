@@ -18,8 +18,8 @@ namespace Villain {
     // Default values
     const float YAW = -90.0f;
     const float PITCH = 0.0f;
-    //const float SPEED = 2.5f;
-    const float SPEED = 20.5f;
+    const float SPEED = 2.5f;
+    //const float SPEED = 20.5f;
     const float SENSITIVITY = 0.1f;
 
     // Common interface for all Camera types

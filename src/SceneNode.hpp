@@ -15,7 +15,7 @@ namespace Villain {
     // Represents a single node in the Scene Graph structure
     class SceneNode {
         public:
-            SceneNode(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 1), float scale = 1.0f);
+            SceneNode(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 0), float scale = 1.0f);
             ~SceneNode();
 
             void handleInput();
