@@ -21,7 +21,11 @@ namespace Villain {
                 // TODO: not tested
                 model *= glm::mat4_cast(Rotation);
                 model = glm::scale(model, glm::vec3(Scale));
-                return model;
+                if (parent != nullptr) {
+                    return parent->getTransformMatrix() * model;
+                } else {
+                    return model;
+                }
             }
 
             void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {
