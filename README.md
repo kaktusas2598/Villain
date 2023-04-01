@@ -88,15 +88,19 @@ go to examples folder execute these scripts in order:
 I use neovim with clangd LSP server for editing code. To build compilation database for clangd, so I can get great autocompletion
 use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.org/) for build
 
-## FIXME
+## FIXME/TODOS
 
  * SpriteFont class - all glyphs are packed to single GL texture for performance and their sizes
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
  * Improve DebugRenderer: add lines and 3d primitive draw calls, use unique_ptr abstractions like VertexBuffer class
+ * Add ability to render spheres!
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
+ * Finish implementing RenderingEngine - need to have multiple render passes(maybe create RenderPass class?) and use forward lighting rendering
+ * Finish implementing SceneGraph, will need Light and Camera to become NodeComponent as well
+ * After forward multi-pass rendering is done, start looking into normal mapping and shadow mapping
 
