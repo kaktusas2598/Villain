@@ -97,7 +97,7 @@ namespace Villain {
     }
 
     //TODO:
-    void CustomXMLScreen::draw(float deltaTime) {
+    void CustomXMLScreen::draw() {
     }
 
 }

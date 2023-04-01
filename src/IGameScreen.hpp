@@ -44,7 +44,7 @@ namespace Villain {
 
             // Called in main app loop
             virtual void update(float deltaTime) = 0;
-            virtual void draw(float deltaTime) = 0;
+            virtual void draw() = 0;
 
             virtual void onImGuiDraw(float deltaTime) {}
 
@@ -84,7 +84,7 @@ namespace Villain {
 
             // Called in main app loop
             virtual void update(float deltaTime) override;
-            virtual void draw(float deltaTime) override;
+            virtual void draw() override;
         private:
     };
 
