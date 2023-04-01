@@ -63,9 +63,9 @@ else()
 endif()
 
 # Copy over engine resources to build dir
-# NOTE: ideally these resources should be embedded into executable or library
-message(STATUS "Copying resources...")
-file(COPY res DESTINATION "${CMAKE_BINARY_DIR}")
+# NOTE: for now disabled because we use CMakeRC to embed resources into library
+#message(STATUS "Copying resources...")
+#file(COPY res DESTINATION "${CMAKE_BINARY_DIR}")
 
 # Build Header only libs
 add_library(stb_image "vendor/stb_image.cpp")
