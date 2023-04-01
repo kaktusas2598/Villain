@@ -271,6 +271,9 @@ namespace Villain {
             //this->setUniform1i("material." + type + slot, i);
         //}
         //this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
+        material.getDiffuseMap()->bind();
+        if (material.getSpecularMap() != nullptr)
+            material.getSpecularMap()->bind(1);
         this->setUniform1i("material.texture_diffuse1", 0);
         this->setUniform1i("material.texture_specular1", 1);
 

@@ -16,11 +16,8 @@ void MeshRenderer<VertexType>::render(
             Villain::Camera& camera
             ) {
     shader.bind();
-    Villain::Material mat("wood", Villain::ResourceManager::Instance()->getTexture("crate"), 8);
     // TODO: Update uniforms :: matrices, materials, lights, camera etc.
     // TODO: pass to rendering engine (maybe should implenent mesh batch renderer)
-    //mat.getDiffuseMap()->bind();
-    this->material.getDiffuseMap()->bind();
     shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
 
     mesh->draw(shader);
