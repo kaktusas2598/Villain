@@ -24,10 +24,11 @@ namespace Villain {
             void exit();
 
             void update(float deltaTime);
-            void render(float deltaTime);
+            void render(RenderingEngine* RenderingEngine);
             inline void setEngine(Engine* engine) { rootNode.setEngine(engine); }
 
             StateMachine* getStateMachine() { return stateMachine.get(); }
+            SceneNode* getRootNode() { return &rootNode; }
 
             struct nk_context * getNuklearContext() { return nuklearContext; }
             void setNulkearContext(struct nk_context* nctx) { nuklearContext = nctx; }

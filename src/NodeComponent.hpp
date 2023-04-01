@@ -8,8 +8,6 @@ namespace Villain {
     class RenderingEngine;
     class Shader;
 
-    //TODO: finish implementing
-
     // Defines logic for Scene Node
     // Kind of like ECS components and systems combined, not ideal approach but wayyy beter
     // than inheritance approach
@@ -22,16 +20,17 @@ namespace Villain {
 
             virtual void handleInput(float deltaTime) {}
             virtual void update(float deltaTime) {}
-            virtual void render(const Shader& shader, const RenderingEngine& renderingEngine, const Camera& camera) const {}
+            virtual void render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera) {}
 
             virtual void addToEngine(Engine* engine) const { }
 
-            //inline Transform* GetTransform()             { return m_parent->GetTransform(); }
-            //inline const Transform& GetTransform() const { return *m_parent->GetTransform(); }
+            inline Transform* GetTransform()             { return parent->getTransform(); }
+            inline const Transform& GetTransform() const { return *parent->getTransform(); }
 
             virtual void setParent(SceneNode* p) { parent = p; }
-        private:
+        protected:
             SceneNode* parent;
+        private:
 
             NodeComponent(const NodeComponent& other) {}
             void operator=(const NodeComponent& other) {}

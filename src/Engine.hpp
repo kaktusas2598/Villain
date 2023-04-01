@@ -5,6 +5,7 @@
 #include "FrameBuffer.hpp"
 #include "ImGuiLayer.hpp"
 #include "InputManager.hpp"
+#include "RendereringEngine.hpp"
 #include "Window.hpp"
 
 #include <functional>
@@ -50,6 +51,7 @@ namespace Villain {
             static float getFps() { return fps; }
             static bool editModeActive() { return editMode; }
 
+            inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             Window getWindow() { return window; }
 
@@ -73,7 +75,8 @@ namespace Villain {
             std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;
             struct nk_context* nuklearContext;
 
-            Application* application;
+            RenderingEngine* renderingEngine = nullptr;
+            Application* application = nullptr;
     };
 }
 

@@ -1,12 +1,16 @@
 #ifndef __SCENE_NODE__
 #define __SCENE_NODE__
 
+#include "Transform.hpp"
 #include <vector>
 
 namespace Villain {
 
+    class Camera;
     class Engine;
     class NodeComponent;
+    class RenderingEngine;
+    class Shader;
 
     //TODO: finish implementing
 
@@ -18,16 +22,24 @@ namespace Villain {
 
             void handleInput();
             void update(float deltaTime);
-            void render();
+            void render(Shader* shader, RenderingEngine* renderingEngine, Camera* camera);
 
-            void addChild(SceneNode* child) { children.push_back(child); }
-            void addComponent(NodeComponent* component) { components.push_back(component); }
+            SceneNode* addChild(SceneNode* child);
+            SceneNode* addComponent(NodeComponent* component);
 
-            void setEngine(Engine* e) { engine = e; }
+            //std::vector<SceneNode*>& getAllAttached();
+
+            Transform* getTransform() { return &transform; }
+            void setEngine(Engine* e);
+            inline Engine* getEngine() { return engine; }
         private:
+            Transform transform;
             std::vector<SceneNode*> children;
             std::vector<NodeComponent*> components;
             Engine* engine;
+
+            SceneNode(const SceneNode& other) {}
+            void operator=(const SceneNode& other) {}
     };
 };
 

@@ -5,7 +5,7 @@
 
 #include "Model.hpp"
 #include "SkyBox.hpp"
-#include "Camera.hpp"
+#include "Camera3D.hpp"
 
 #include "DebugRenderer.hpp"
 
@@ -24,11 +24,13 @@ class Game : public Villain::Application {
         void onAppWindowResize(int newWidth, int newHeight);
 
     private:
-        Villain::Camera camera;
+        Villain::Camera3D camera;
         Villain::Model* model3D = nullptr;
         std::unique_ptr<Villain::SkyBox> skybox;
 
         Villain::DebugRenderer debugRenderer;
+
+        Villain::SceneNode* planeNode;
 };
 
 #endif // __GAME__

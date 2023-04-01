@@ -40,10 +40,14 @@ namespace Villain {
 
 
     void Application::handleEvents() {
-
+        rootNode.handleInput();
     }
 
     void Application::update(float deltaTime) {
+        // Update scene
+        rootNode.update(deltaTime);
+
+        // Update state
         if (currentState) {
             switch (currentState->getScreenState()) {
                 //update the current running screen
@@ -85,9 +89,13 @@ namespace Villain {
 
     }
 
-    void Application::render(float deltaTime) {
+    void Application::render(RenderingEngine* renderingEngine) {
+        //Render scene
+        renderingEngine->render(&rootNode);
+
+        // Render current state
         if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
-            currentState->draw(deltaTime);
+            currentState->draw();
         }
     }
 

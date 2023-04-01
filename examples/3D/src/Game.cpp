@@ -6,6 +6,8 @@
 #include "Model.hpp"
 #include "ResourceManager.hpp"
 #include "Light.hpp"
+#include "SceneNode.hpp"
+#include "components/MeshRenderer.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
 #include "DebugConsole.hpp"
@@ -19,9 +21,11 @@
 using namespace Villain;
 
 void Game::init() {
-    model3D = new Model("assets/models/donut.obj");
+    //model3D = new Model("assets/models/donut.obj");
+    model3D = new Model("assets/models/sponza.obj");
 
-    //camera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
+    camera.setZPlanes(0.1f, 1000.f);
+    camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     //glm::vec3 camPos = camera.getPosition();
     //camPos.x = configScript.get<int>("window.width")/2.0;
     //camPos.y = configScript.get<int>("window.width")/2.0;
@@ -41,6 +45,24 @@ void Game::init() {
     };
 
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
+
+    ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
+    //TODO: initialise these
+    std::vector<VertexP1UV> vertices;
+    vertices.push_back({glm::vec3(0.0f,  1.0f, -5.0f), glm::vec2(0.5f, 1.0f)});
+    vertices.push_back({glm::vec3(1.0f,  0.0f, -5.0f), glm::vec2(1.0f, 0.0f)});
+    vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f), glm::vec2(0.0f, 0.0f)});
+    std::vector<unsigned int> indices = {0, 1, 2};
+    std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
+    Mesh<VertexP1UV>* mesh = new Mesh<VertexP1UV>(vertices, indices, textures);
+    Material mat("wood", ResourceManager::Instance()->getTexture("crate"), 8);
+    MeshRenderer<VertexP1UV>* meshRenderer = new MeshRenderer<VertexP1UV>(mesh, mat);
+
+    planeNode = new SceneNode();
+    planeNode->addComponent(meshRenderer);
+    //TODO: set transform now
+
+    addToScene(planeNode);
 }
 
 Game::~Game() {
@@ -48,33 +70,7 @@ Game::~Game() {
 }
 
 void Game::handleEvents(float deltaTime) {
-    // Get SDL window mouse coords and convert to camera woorld coords
-    glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
-    //mouseCoords = camera.screenToWorld(mouseCoords);
-
-    // Format message and add it in debug console
-    //std::ostringstream ss;
-    //ss << "Mouse world position: " << mouseCoords.x << ", " << mouseCoords.y;
-    //DebugConsole::Instance()->setInfo("mouse", ss.str());
-
-    static bool firstMouse = true;
-    static float lastX = Engine::getScreenWidth() / 2.0f;
-    static float lastY = Engine::getScreenHeight() / 2.0f;
-    // To prevent sudden camera jamp when mouse callback first gets called upon entering screen
-    if (firstMouse) {
-        lastX = mouseCoords.x;
-        lastY = mouseCoords.y;
-        firstMouse = false;
-    }
-
-    float xOffset = mouseCoords.x - lastX;
-    float yOffset = lastY - mouseCoords.y; // Reversed because Y axis goes from bottom to top in opengl
-
-    lastX = mouseCoords.x;
-    lastY = mouseCoords.y;
-    //camera.processMouseMovement(xOffset, yOffset);
-
-
+    // TODO: need to refactor camera input logic for both 2D and 3D so we don't need to write it out each time
     //FIXME: relative mode fixes camera restraint problem, but camera never stops moving for some reason
     if (!Engine::editModeActive()) {
         SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -98,18 +94,19 @@ void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_d)) {
         camera.processKeyboard(CameraMovement::RIGHT, deltaTime);
     }
-
-    // Camera up and down, same controls as in minecraft creative
     if (InputManager::Instance()->isKeyDown(SDLK_SPACE)) {
-            camera.Position.y += 2.5f * deltaTime;
+            camera.processKeyboard(CameraMovement::UP, deltaTime);
     }
     if (InputManager::Instance()->isKeyDown(SDLK_LSHIFT)) {
-            camera.Position.y -= 2.5f * deltaTime;
+            camera.processKeyboard(CameraMovement::DOWN, deltaTime);
     }
 
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
+
+    // TEMP solution to pass camera inputs to rendering engine
+    getRootNode()->getEngine()->getRenderingEngine()->setMainCamera(camera);
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -122,24 +119,21 @@ void Game::onAppPostUpdate(float dt) {
 void Game::onAppRender(float dt) {
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, -5.0f));
     //model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(4.0f));
+    model = glm::scale(model, glm::vec3(0.1f)); // for sponza
+    //model = glm::scale(model, glm::vec3(4.0f)); // for donut
     glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 projection = camera.getProjMatrix();
 
-    // First param - FOV could be changed for zooming effect
-    // 2nd param - aspect ratio
-    // 3rd and 4th params - near and far planes
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)Engine::getScreenWidth()/(float)Engine::getScreenHeight(), 0.1f, 100.0f);
-
-    LightColor dirColor(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f));
+    BaseLight dirColor(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f));
     DirectionalLight dirLight(dirColor, glm::vec3(-0.2f, -1.0f, -0.3f));
 
     glm::vec3 spotLightColor = glm::vec3(1.0f, 1.0f, 0.0f);
-    LightColor spotColor(spotLightColor * glm::vec3(0.2f), spotLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
+    BaseLight spotColor(spotLightColor * glm::vec3(0.2f), spotLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
     // Make spot light position same as camera thus simulating flashlight!
-    SpotLight spotLight(spotColor, camera.Position, camera.Front, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
+    SpotLight spotLight(spotColor, camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)));
 
     glm::vec3 pointLightColor = glm::vec3(1.0f, 0.0f, 0.0f);
-    LightColor pointColor(pointLightColor * glm::vec3(0.5f), pointLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
+    BaseLight pointColor(pointLightColor * glm::vec3(0.5f), pointLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
     float constant = 1.0f;
     float linear = 0.022f;
     float quadratic = 0.0019f;
@@ -163,7 +157,7 @@ void Game::onAppRender(float dt) {
         modelShader->setSpotLightUniforms("spotLight", spotLight);
 
         // For lighting calculations
-        modelShader->setUniformVec3("viewPosition", camera.Position);
+        modelShader->setUniformVec3("viewPosition", camera.getPosition());
 
         model3D->draw(*modelShader);
     }
@@ -179,6 +173,6 @@ void Game::onAppRender(float dt) {
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
-    //camera.init(newWidth, newHeight);
+    camera.rescale(newWidth, newHeight);
 }
 
