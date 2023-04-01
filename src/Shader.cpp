@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "ErrorHandler.hpp"
+#include "RendereringEngine.hpp"
 
 namespace Villain {
 
@@ -64,6 +65,35 @@ namespace Villain {
 
     void Shader::createFromSource(const std::string& vertexSource, const std::string& fragmentSource) {
         rendererID = createShader(vertexSource, fragmentSource);
+    }
+
+    void Shader::createFromSource(const std::string& source) {
+        // NOTE: this func is too similar to parseShader() which uses filestream instead of istringstream
+        std::istringstream iss(source);
+        enum class ShaderType {
+            NONE = -1, VERTEX = 0, FRAGMENT = 1
+        };
+
+        std::string line;
+        std::stringstream ss[2];
+        ShaderType type = ShaderType::NONE;
+        //while(getline(fs, line)) {
+        for (std::string line; std::getline(iss, line); ) {
+            if (line.find("#shader") != std::string::npos) {
+                if (line.find("vertex") != std::string::npos) {
+                    type = ShaderType::VERTEX;
+
+                } else if (line.find("fragment") != std::string::npos) {
+                    type = ShaderType::FRAGMENT;
+
+                }
+            } else {
+                if (type != ShaderType::NONE)
+                    ss[(int)type] << line << '\n';
+            }
+        }
+
+        rendererID = createShader(ss[0].str(), ss[1].str());
     }
 
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
@@ -211,6 +241,56 @@ namespace Villain {
 
         uniformLocationCache[name] = location;
         return location;
+
+    }
+
+    void Shader::updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera) {
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.Position);
+        //TODO: rotation probably with quaternion
+        //model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(transform.Scale));
+
+        this->bind();
+        // Step projection uniforms
+        this->setUniformMat4f("model", model);
+        this->setUniformMat4f("view", camera.getViewMatrix());
+        this->setUniformMat4f("projection", camera.getProjMatrix());
+
+        // TODO: sort material uniforms
+        // Step material uniforms, other parameters like diffuse color,
+        // diffuse and specular maps are set in Model class
+        this->setUniform1f("material.shininess", material.getSpecularFactor());
+
+        //unsigned int diffuseIndex = 1;
+        //unsigned int specularIndex = 1;
+        //for (unsigned int i = 0; i < Textures.size(); i++) {
+            //Textures[i]->bind(i);
+            //std::string slot;
+            //std::string type = Textures[i]->getType();
+            //if (type == "texture_diffuse")
+                //slot = std::to_string(diffuseIndex++);
+            //else if (type == "texture_specular")
+                //slot = std::to_string(specularIndex++);
+
+            //// TODO: need to check if color set when loading mesh and pass color as uniform here as well
+            //this->setUniform1i("material." + type + slot, i);
+        //}
+        //this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
+        this->setUniform1i("material.texture_diffuse1", 0);
+        this->setUniform1i("material.texture_specular1", 1);
+
+
+        // Step light uniforms
+        //this->setDirectionalLightUniforms("dirLight", dirLight);
+        //this->setPointLightUniforms("pointLight", pointLight);
+        //this->setSpotLightUniforms("spotLight", spotLight);
+
+        // For lighting calculations
+        this->setUniformVec3("viewPosition", camera.getPosition());
+
+        // Forward Ambient shader uniforms, NOTE: move these elsewhere TEMPORARY
+        this->setUniformVec3("color", glm::vec3(0.8f, 0.6f, 0.2f));
+        this->setUniform1i("texture", 0);
 
     }
 

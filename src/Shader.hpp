@@ -6,9 +6,14 @@
 
 #include "glm/glm.hpp"
 
+#include "Camera.hpp"
 #include "Light.hpp"
+#include "Material.hpp"
+#include "Transform.hpp"
 
 namespace Villain {
+
+    class RenderingEngine;
 
     struct ShaderProgramSource {
         std::string VertexSource;
@@ -31,11 +36,15 @@ namespace Villain {
 
             // To be used with empty constructor if we don't want to load shaders from files
             void createFromSource(const std::string& vertexSource, const std::string& fragmentSource);
+            void createFromSource(const std::string& source);
 
             void bind() const;
             void unbind() const;
 
             unsigned int getRendererID() const { return rendererID; }
+
+            // Update multiple default uniforms at once
+            void updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera);
 
             // Set uniforms, TODO: use templates to have multiple types of uniforms
             void setUniform1i(const std::string& name, int value);
