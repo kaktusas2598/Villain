@@ -9,6 +9,9 @@ namespace Villain {
     // TODO: implement proper transform hierarchy in the scene graph
     class Transform {
         public:
+            Transform(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 1), float scale = 1.0f)
+                : Position(pos), Rotation(rot), Scale(scale), parent(nullptr) {}
+
             glm::vec3 Position = glm::vec3(0.0f);
             glm::quat Rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 1.f));
             float Scale = 1.0f;
@@ -26,6 +29,8 @@ namespace Villain {
             }
         private:
             Transform* parent;
+            // From C++11 mutable keybord allows const function to modify these
+            //mutable glm::mat4 parentMatrix;
     };
 }
 

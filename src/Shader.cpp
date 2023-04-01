@@ -245,14 +245,9 @@ namespace Villain {
     }
 
     void Shader::updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera) {
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.Position);
-        //TODO: rotation probably with quaternion
-        //model = glm::rotate(glm::mat4(1.0f), float(SDL_GetTicks())* 0.001f, glm::vec3(0.0f, 0.0f, 1.0f));
-        model = glm::scale(model, glm::vec3(transform.Scale));
-
         this->bind();
         // Step projection uniforms
-        this->setUniformMat4f("model", model);
+        this->setUniformMat4f("model", transform.getTransformMatrix());
         this->setUniformMat4f("view", camera.getViewMatrix());
         this->setUniformMat4f("projection", camera.getProjMatrix());
 
