@@ -4,10 +4,8 @@
 
 namespace Villain {
 
-    SceneNode::SceneNode() {
-        transform.Position = glm::vec3(0.0f);
-        transform.Rotation = glm::vec3(0.0f);
-        transform.Scale = 1.0f;
+    SceneNode::SceneNode(const glm::vec3& pos, const glm::quat& rot, float scale)
+        : transform(pos, rot, scale), engine(nullptr) {
     }
 
     SceneNode::~SceneNode() {
@@ -26,7 +24,7 @@ namespace Villain {
 
     SceneNode* SceneNode::addChild(SceneNode* child) {
         children.push_back(child);
-        //child->getTransform()->setParent(transform); // TODO: set up scene graph transform hierarchy
+        child->getTransform()->setParent(&transform);
         child->setEngine(engine);
         return this;
     }

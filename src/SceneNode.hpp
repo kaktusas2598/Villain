@@ -12,12 +12,10 @@ namespace Villain {
     class RenderingEngine;
     class Shader;
 
-    //TODO: finish implementing
-
     // Represents a single node in the Scene Graph structure
     class SceneNode {
         public:
-            SceneNode();
+            SceneNode(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 1), float scale = 1.0f);
             ~SceneNode();
 
             void handleInput();
@@ -36,7 +34,7 @@ namespace Villain {
             Transform transform;
             std::vector<SceneNode*> children;
             std::vector<NodeComponent*> components;
-            Engine* engine;
+            Engine* engine = nullptr;
 
             SceneNode(const SceneNode& other) {}
             void operator=(const SceneNode& other) {}

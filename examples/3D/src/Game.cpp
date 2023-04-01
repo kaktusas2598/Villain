@@ -47,7 +47,6 @@ void Game::init() {
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 
     ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
-    //TODO: initialise these
     std::vector<VertexP1UV> vertices;
     vertices.push_back({glm::vec3(0.0f,  1.0f, -5.0f), glm::vec2(0.5f, 1.0f)});
     vertices.push_back({glm::vec3(1.0f,  0.0f, -5.0f), glm::vec2(1.0f, 0.0f)});
@@ -60,7 +59,23 @@ void Game::init() {
 
     planeNode = new SceneNode();
     planeNode->addComponent(meshRenderer);
-    //TODO: set transform now
+
+    SceneNode* testHierarchy = new SceneNode(glm::vec3(0.0f, 3.0f, 0.0f)); // +3 y relative to parent
+    //FIXME: why adding component here causes original node to render using this node transform, WTF?
+    MeshRenderer<VertexP1UV>* meshRenderer2 = new MeshRenderer<VertexP1UV>(mesh, mat);
+    // creating another component pointer solves issue mentioned above
+    testHierarchy->addComponent(meshRenderer2);
+
+    SceneNode* testHierarchyChild = new SceneNode(glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
+    MeshRenderer<VertexP1UV>* meshRenderer3 = new MeshRenderer<VertexP1UV>(mesh, mat);
+    testHierarchyChild->addComponent(meshRenderer3);
+    testHierarchy->addChild(testHierarchyChild);
+
+
+    // Wht child is rendered upside down?
+    //testHierarchy->getTransform()->setRot(180.0f);
+    planeNode->addChild(testHierarchy);
+
 
     addToScene(planeNode);
 }
@@ -111,6 +126,10 @@ void Game::handleEvents(float deltaTime) {
 
 void Game::onAppPreUpdate(float dt) {
     handleEvents(dt);
+
+    glm::vec3 newPos = planeNode->getTransform()->getPos();
+    newPos.x += 0.0001f;
+    planeNode->getTransform()->setPos(newPos);
 }
 
 void Game::onAppPostUpdate(float dt) {

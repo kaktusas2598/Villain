@@ -6,21 +6,16 @@
 
 namespace Villain {
 
-    // TODO: implement proper transform hierarchy in the scene graph
     class Transform {
         public:
-            Transform(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 1), float scale = 1.0f)
-                : Position(pos), Rotation(rot), Scale(scale), parent(nullptr) {}
-
-            glm::vec3 Position = glm::vec3(0.0f);
-            glm::quat Rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 1.f));
-            float Scale = 1.0f;
+            Transform(const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 1), float sc = 1.0f)
+                : position(pos), rotation(rot), scale(sc), parent(nullptr) {}
 
             glm::mat4 getTransformMatrix() {
-                glm::mat4 model = glm::translate(glm::mat4(1.0f), Position);
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
                 // TODO: not tested
-                model *= glm::mat4_cast(Rotation);
-                model = glm::scale(model, glm::vec3(Scale));
+                //model *= glm::mat4_cast(rotation);
+                model = glm::scale(model, glm::vec3(scale));
                 if (parent != nullptr) {
                     return parent->getTransformMatrix() * model;
                 } else {
@@ -28,10 +23,20 @@ namespace Villain {
                 }
             }
 
+            const glm::vec3& getPos() const { return position; }
+            float getScale() const { return scale; }
+
             void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {
-                Rotation = glm::angleAxis(glm::radians(angleDeg), rotationAxis);
+                rotation = glm::angleAxis(glm::radians(angleDeg), rotationAxis);
             }
+            inline void setPos(const glm::vec3& pos) { position = pos; }
+            inline void setScale(float sc) { scale = sc; }
+            inline void setParent(Transform* p) { parent = p; }
         private:
+            glm::vec3 position = glm::vec3(0.0f);
+            glm::quat rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 1.f));
+            float scale = 1.0f;
+
             Transform* parent;
             // From C++11 mutable keybord allows const function to modify these
             //mutable glm::mat4 parentMatrix;
