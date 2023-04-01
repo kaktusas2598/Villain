@@ -8,6 +8,7 @@
 namespace Villain {
 
     class Engine;
+    class SceneNode;
     class Window;
 
     class ImGuiLayer {
@@ -27,10 +28,13 @@ namespace Villain {
 
         // Draw different tools, can potentially be refactored to new classes
         void drawScene(Engine& engine);
+        void drawSceneGraph(Engine& engine);
         void drawSettings(Engine& engine);
         void drawAssetBrowser();
     private:
         void setupDockspace();
+        // Render Scene Graph nodes and components recursively
+        void drawNode(SceneNode* node);
 
         static bool showDemoWindow; ///< Toggle IMGui Demo Window for Docs
     };

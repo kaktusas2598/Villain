@@ -4,7 +4,9 @@
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
 
+#include "Application.hpp"
 #include "Engine.hpp"
+#include "SceneNode.hpp"
 
 namespace Villain {
 
@@ -64,13 +66,13 @@ namespace Villain {
 
         // NOTE: temporary
         //if (ImGui::BeginMainMenuBar()) {
-            //if (ImGui::BeginMenu("File")) {
-                //if (ImGui::MenuItem("Import")) {
-                    ////isImportClicked = true;
-                //}
-                //ImGui::EndMenu();
-            //}
-            //ImGui::EndMainMenuBar();
+        //if (ImGui::BeginMenu("File")) {
+        //if (ImGui::MenuItem("Import")) {
+        ////isImportClicked = true;
+        //}
+        //ImGui::EndMenu();
+        //}
+        //ImGui::EndMainMenuBar();
         //}
 
         ImGui::End();
@@ -91,6 +93,7 @@ namespace Villain {
         // Draw all different parts of the toolkit
         DebugConsole::Instance()->render();
         drawScene(engine);
+        drawSceneGraph(engine);
         drawSettings(engine);
         drawAssetBrowser();
         //TODO: file browser to load assets
@@ -135,6 +138,34 @@ namespace Villain {
             ImGui::EndChild();
         }
         ImGui::End();
+    }
+
+    void ImGuiLayer::drawSceneGraph(Engine& engine) {
+        ImGui::Begin("Scene Graph");
+        {
+            drawNode(engine.getApplication()->getRootNode());
+        }
+        ImGui::End();
+    }
+
+    void ImGuiLayer::drawNode(SceneNode* node) {
+        // TODO: nodes need unique ids or names
+        if (ImGui::TreeNode("NodeX")) {
+            if (!node->getComponents().empty()) {
+                if (ImGui::TreeNode("Components")) {
+                    for (auto& compo: node->getComponents()) {
+                        // draw components here
+                    }
+                    ImGui::TreePop();
+                }
+            }
+
+            for (auto& child: node->getChildren()) {
+                drawNode(child);
+            }
+
+            ImGui::TreePop();
+        }
     }
 
     void ImGuiLayer::drawSettings(Engine& engine) {

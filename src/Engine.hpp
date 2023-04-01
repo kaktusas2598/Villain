@@ -52,6 +52,7 @@ namespace Villain {
             static bool editModeActive() { return editMode; }
 
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
+            inline Application* getApplication() { return application; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             Window getWindow() { return window; }
 

@@ -30,6 +30,9 @@ namespace Villain {
             Transform* getTransform() { return &transform; }
             void setEngine(Engine* e);
             inline Engine* getEngine() { return engine; }
+
+            std::vector<SceneNode*>& getChildren() { return children; }
+            std::vector<NodeComponent*>& getComponents() { return components; }
         private:
             Transform transform;
             std::vector<SceneNode*> children;
