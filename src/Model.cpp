@@ -1,12 +1,14 @@
 #include "Model.hpp"
 
-#include <iostream>
+#include "Logger.hpp"
+#include <sstream>
 
 namespace Villain {
 
     void Model::draw(Shader& shader) {
-        for (unsigned int i = 0; i < meshes.size(); i++) {
-            meshes[i].draw(shader);
+        for (auto& mesh: meshes) {
+            // Draw mesh using it's own material
+            mesh.draw(shader, materials[mesh.getMaterialName()]);
         }
     }
 
@@ -19,7 +21,9 @@ namespace Villain {
         const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            std::cout << "ASSIMP ERROR: " << importer.GetErrorString() << std::endl;
+            std::stringstream ss;
+            ss << "ASSIMP ERROR: " << importer.GetErrorString();
+            Logger::Instance()->error(ss.str().c_str());
             return;
         }
         directory = path.substr(0, path.find_last_of('/'));
@@ -43,6 +47,7 @@ namespace Villain {
         std::vector<VertexP1N1UV> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture*> textures;
+        std::string matName = std::string();
 
         for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
             VertexP1N1UV vertex;
@@ -94,13 +99,21 @@ namespace Villain {
             textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
             std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
             textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
+
+            matName = std::string(material->GetName().C_Str());
+            // TODO: stop hardcoding specularity factor(32) here
+            Material mat(matName, *diffuseMaps, 32.0f, *specularMaps, *normalMaps);
+            mat.setDiffuseColor(diffuseColor);
+            materials[matName] = mat;
+            return Mesh<VertexP1N1UV>(vertices, indices, matName);
         }
 
+        Logger::Instance()->warn("Mesh missing material information");
         return Mesh<VertexP1N1UV>(vertices, indices, textures, diffuseColor);
     }
 
     std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
-        // TODO: In actual application you would check if texture was not already loaded by asset manager or sth like that
+        //TODO: need to use resource manager here
         std::vector<Texture*>* textures = new std::vector<Texture*>();
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
             aiString str;

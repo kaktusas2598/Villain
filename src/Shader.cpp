@@ -276,34 +276,9 @@ namespace Villain {
         this->setUniformMat4f("view", camera.getViewMatrix());
         this->setUniformMat4f("projection", camera.getProjMatrix());
 
-        // TODO: sort material uniforms
-        // Step material uniforms, other parameters like diffuse color,
-        // diffuse and specular maps are set in Model class
-        this->setUniform1f("material.shininess", material.getSpecularFactor());
+        this->setMaterialUniforms(material);
 
-        //unsigned int diffuseIndex = 1;
-        //unsigned int specularIndex = 1;
-        //for (unsigned int i = 0; i < Textures.size(); i++) {
-            //Textures[i]->bind(i);
-            //std::string slot;
-            //std::string type = Textures[i]->getType();
-            //if (type == "texture_diffuse")
-                //slot = std::to_string(diffuseIndex++);
-            //else if (type == "texture_specular")
-                //slot = std::to_string(specularIndex++);
-
-            //// TODO: need to check if color set when loading mesh and pass color as uniform here as well
-            //this->setUniform1i("material." + type + slot, i);
-        //}
-        //this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
-        if (material.getDiffuseMap() != nullptr)
-            material.getDiffuseMap()->bind();
-        if (material.getSpecularMap() != nullptr)
-            material.getSpecularMap()->bind(1);
-        this->setUniform1i("material.texture_diffuse1", 0);
-        this->setUniform1i("material.texture_specular1", 1);
-
-
+        // TODO:implement forward rendering pipeline in RenderingEngine to set this
         // Step light uniforms
         //this->setDirectionalLightUniforms("dirLight", dirLight);
         //this->setPointLightUniforms("pointLight", pointLight);
@@ -314,8 +289,35 @@ namespace Villain {
 
         // Forward Ambient shader uniforms, NOTE: move these elsewhere TEMPORARY
         this->setUniformVec3("color", glm::vec3(0.8f, 0.6f, 0.2f));
-        this->setUniform1i("texture", 0);
+    }
 
+    void Shader::setMaterialUniforms(Material& material) {
+        unsigned int diffuseIndex = 1;
+        unsigned int specularIndex = 1;
+        unsigned int normalIndex = 1;
+        unsigned int i = 0;
+
+        for (auto& mat: material.getDiffuseMaps()) {
+            mat->bind(i);
+            std::string slot = std::to_string(diffuseIndex++);
+            this->setUniform1i("material.texture_diffuse" + slot, i);
+            i++;
+        }
+        for (auto& mat: material.getSpecularMaps()) {
+            mat->bind(i);
+            std::string slot = std::to_string(specularIndex++);
+            this->setUniform1i("material.texture_specular" + slot, i);
+            i++;
+        }
+        for (auto& mat: material.getNormalMaps()) {
+            mat->bind(i);
+            std::string slot = std::to_string(normalIndex++);
+            this->setUniform1i("material.texture_normal" + slot, i);
+            i++;
+        }
+
+        this->setUniform1f("material.shininess", material.getSpecularFactor());
+        this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
     }
 
     void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight dirLight) {

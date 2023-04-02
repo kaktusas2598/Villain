@@ -45,6 +45,11 @@ namespace Villain {
 
             unsigned int getRendererID() const { return rendererID; }
 
+            // Set specific uniforms
+            void setDirectionalLightUniforms(const std::string& name, DirectionalLight dirLight);
+            void setPointLightUniforms(const std::string& name, PointLight pointLight);
+            void setSpotLightUniforms(const std::string& name, SpotLight spotLight);
+            void setMaterialUniforms(Material& material);
             // Update multiple default uniforms at once
             void updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera);
 
@@ -57,11 +62,6 @@ namespace Villain {
             void setUniformVec4(const std::string& name, const glm::vec4& vec);
             void setUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
-            // Set specific uniforms
-            // NOTE: at the moment, only 1 light source of each type have been tested
-            void setDirectionalLightUniforms(const std::string& name, DirectionalLight dirLight);
-            void setPointLightUniforms(const std::string& name, PointLight pointLight);
-            void setSpotLightUniforms(const std::string& name, SpotLight spotLight);
 
         private:
             unsigned int rendererID;

@@ -6,21 +6,15 @@ namespace Villain {
         this->name = name;
     }
 
-    Material::Material(const Material& other) :
-        name(other.name), specularMap(other.specularMap), specularFactor(other.specularFactor),
-        diffuseMap(other.diffuseMap), normalMap(other.normalMap)
-    { }
-
-    Material::~Material() { }
-
     Material::Material(
             const std::string& name,
-            Texture* diffuse,
+            std::vector<Texture*> diffuse,
             float shininess,
-            Texture* specular,
-            Texture* normal) : diffuseMap(diffuse), specularFactor(shininess), specularMap(specular), normalMap(normal)
+            std::vector<Texture*> specular,
+            std::vector<Texture*> normal): diffuseMaps(diffuse), specularFactor(shininess), specularMaps(specular), normalMaps(normal)
     {
         this->name = name;
     }
 
+    Material::~Material() { }
 }

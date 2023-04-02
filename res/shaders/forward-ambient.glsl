@@ -24,11 +24,26 @@ layout(location = 0) out vec4 o_color;
 
 in vec2 v_texCoords;
 
+struct Material {
+    vec4 diffuseColor;
+    float shininess;
+
+    sampler2D texture_ambient1;
+    sampler2D texture_ambient2;
+    sampler2D texture_diffuse1;
+    sampler2D texture_diffuse2;
+    sampler2D texture_diffuse3;
+    sampler2D texture_specular1;
+    sampler2D texture_specular2;
+    sampler2D texture_normal1;
+    sampler2D texture_normal2;
+};
+
 uniform vec3 color; // Ambient light color
-uniform sampler2D texture;
+uniform Material material;
 
 void main() {
-    vec4 textureColor = texture2D(texture, v_texCoords);
+    vec4 textureColor = texture2D(material.texture_diffuse1, v_texCoords);
     if (textureColor == vec4(0, 0, 0, 0))
         o_color = vec4(color, 1.0);
     else

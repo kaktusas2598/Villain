@@ -18,6 +18,15 @@ namespace Villain {
     }
 
     template <class VertexType>
+    Mesh<VertexType>::Mesh(std::vector<VertexType> vertices, std::vector<unsigned int> indices, const std::string& matName) {
+        Vertices = vertices;
+        Indices = indices;
+        materialName = matName;
+
+        setupMesh();
+    }
+
+    template <class VertexType>
     void Mesh<VertexType>::draw(Shader &shader) {
         unsigned int diffuseIndex = 1;
         unsigned int specularIndex = 1;
@@ -34,6 +43,14 @@ namespace Villain {
             shader.setUniform1i("material." + type + slot, i);
         }
         shader.setUniformVec4("material.diffuseColor", diffuseColor);
+
+        Renderer renderer;
+        renderer.draw(*vao, *ibo, shader);
+    }
+
+    template <class VertexType>
+    void Mesh<VertexType>::draw(Shader &shader, Material& material) {
+        shader.setMaterialUniforms(material);
 
         Renderer renderer;
         renderer.draw(*vao, *ibo, shader);
@@ -61,10 +78,19 @@ namespace Villain {
     template Mesh<VertexP1C1UV>::Mesh(std::vector<VertexP1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1C1UV>::Mesh(std::vector<VertexP1N1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
 
+    template Mesh<VertexP1>::Mesh(std::vector<VertexP1> vertices, std::vector<unsigned int> indices, const std::string& matName);
+    template Mesh<VertexP1UV>::Mesh(std::vector<VertexP1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
+    template Mesh<VertexP1N1>::Mesh(std::vector<VertexP1N1> vertices, std::vector<unsigned int> indices, const std::string& matName);
+    template Mesh<VertexP1N1UV>::Mesh(std::vector<VertexP1N1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
+    template Mesh<VertexP1C1UV>::Mesh(std::vector<VertexP1C1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
+    template Mesh<VertexP1N1C1UV>::Mesh(std::vector<VertexP1N1C1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
+
     template void Mesh<VertexP1>::draw(Shader &shader);
     template void Mesh<VertexP1UV>::draw(Shader &shader);
     template void Mesh<VertexP1N1>::draw(Shader &shader);
     template void Mesh<VertexP1N1UV>::draw(Shader &shader);
     template void Mesh<VertexP1C1UV>::draw(Shader &shader);
     template void Mesh<VertexP1N1C1UV>::draw(Shader &shader);
+
+    template void Mesh<VertexP1N1UV>::draw(Shader &shader, Material& material);
 }
