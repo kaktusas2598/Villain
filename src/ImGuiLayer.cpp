@@ -16,6 +16,12 @@ namespace Villain {
 
     ImGuiLayer::~ImGuiLayer() {}
 
+    void ImGuiLayer::exit() {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
+    }
+
     void ImGuiLayer::init(Window& window) {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();

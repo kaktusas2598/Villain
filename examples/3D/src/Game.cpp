@@ -90,9 +90,9 @@ void Game::handleEvents(float deltaTime) {
 void Game::onAppPreUpdate(float dt) {
     handleEvents(dt);
 
-    glm::vec3 newPos = planeNode->getTransform()->getPos();
-    newPos.x += 0.0001f;
-    planeNode->getTransform()->setPos(newPos);
+    //glm::vec3 newPos = planeNode->getTransform()->getPos();
+    //newPos.x += 0.0001f;
+    //planeNode->getTransform()->setPos(newPos);
 }
 
 void Game::onAppPostUpdate(float dt) {
@@ -148,8 +148,3 @@ void Game::onAppRender(float dt) {
 
     skybox->render(projection, view);
 }
-
-void Game::onAppWindowResize(int newWidth, int newHeight) {
-    camera.rescale(newWidth, newHeight);
-}
-

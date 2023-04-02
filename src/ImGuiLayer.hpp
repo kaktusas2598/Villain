@@ -18,6 +18,8 @@ namespace Villain {
 
         // Sets up ImGui context and backends
         void init(Window& window);
+        // Shutdown ImGui
+        void exit();
 
         // Call before render() to start a new frame
         void start();

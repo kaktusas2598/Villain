@@ -348,9 +348,7 @@ namespace Villain {
     void Engine::exit() {
         isRunning = false;
 
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplSDL2_Shutdown();
-        ImGui::DestroyContext();
+        imGuiLayer.exit();
 
         TTF_Quit();
         //IMG_Quit();

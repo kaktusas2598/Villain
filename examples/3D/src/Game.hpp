@@ -21,7 +21,6 @@ class Game : public Villain::Application {
         void onAppPreUpdate(float dt);
         void onAppPostUpdate(float dt);
         void onAppRender(float deltaTime);
-        void onAppWindowResize(int newWidth, int newHeight);
 
     private:
         Villain::Camera3D camera;
