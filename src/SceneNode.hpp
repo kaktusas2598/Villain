@@ -19,7 +19,7 @@ namespace Villain {
             SceneNode(const std::string& name, const glm::vec3& pos = glm::vec3(0.f), const glm::quat& rot = glm::quat(0, 0, 0, 0), float scale = 1.0f);
             ~SceneNode();
 
-            void handleInput();
+            void handleInput(float deltaTime);
             void update(float deltaTime);
             void render(Shader* shader, RenderingEngine* renderingEngine, Camera* camera);
 

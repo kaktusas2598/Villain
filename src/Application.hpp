@@ -20,9 +20,9 @@ namespace Villain {
             virtual void init() {}
             virtual void addStates();
             void startStateMachine();
-            void handleEvents();
             void exit();
 
+            void handleEvents(float deltaTime);
             void update(float deltaTime);
             void render(RenderingEngine* RenderingEngine);
             inline void setEngine(Engine* engine) { rootNode.setEngine(engine); }

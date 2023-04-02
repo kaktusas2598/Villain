@@ -7,6 +7,7 @@
 #include "ResourceManager.hpp"
 #include "Light.hpp"
 #include "SceneNode.hpp"
+#include "components/CameraComponent.hpp"
 #include "components/MeshRenderer.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
@@ -71,6 +72,9 @@ void Game::init() {
     planeNode->addChild(testHierarchy);
 
     addToScene(planeNode);
+
+    // Add camera
+    addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
 }
 
 Game::~Game() {
@@ -78,45 +82,9 @@ Game::~Game() {
 }
 
 void Game::handleEvents(float deltaTime) {
-    // TODO: need to refactor camera input logic for both 2D and 3D so we don't need to write it out each time
-    //FIXME: relative mode fixes camera restraint problem, but camera never stops moving for some reason
-    if (!Engine::editModeActive()) {
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-        SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), 0, 0); // this seem to fix moving camera issue, but cursor disappears?
-
-        // Also disable mouse in edit mode for now
-        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
-        camera.processMouseMovement(mouseOffsets.x, mouseOffsets.y);
-    }
-
-    // TODO:
-    //camera.processMouseScroll(yOffset);
-
-    if (InputManager::Instance()->isKeyDown(SDLK_w)) {
-        camera.processKeyboard(CameraMovement::FORWARD, deltaTime);
-    }
-    if (InputManager::Instance()->isKeyDown(SDLK_s)) {
-        camera.processKeyboard(CameraMovement::BACKWARD, deltaTime);
-    }
-    if (InputManager::Instance()->isKeyDown(SDLK_a)) {
-        camera.processKeyboard(CameraMovement::LEFT, deltaTime);
-    }
-    if (InputManager::Instance()->isKeyDown(SDLK_d)) {
-        camera.processKeyboard(CameraMovement::RIGHT, deltaTime);
-    }
-    if (InputManager::Instance()->isKeyDown(SDLK_SPACE)) {
-            camera.processKeyboard(CameraMovement::UP, deltaTime);
-    }
-    if (InputManager::Instance()->isKeyDown(SDLK_LSHIFT)) {
-            camera.processKeyboard(CameraMovement::DOWN, deltaTime);
-    }
-
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
-    // FIXME:It's bad to set camera every single time here
-    // TEMP solution to pass camera inputs to rendering engine
-    getRootNode()->getEngine()->getRenderingEngine()->setMainCamera(camera);
 }
 
 void Game::onAppPreUpdate(float dt) {

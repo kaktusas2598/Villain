@@ -84,6 +84,9 @@ namespace Villain {
 
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
+        // NOTE: must be initialized before application
+        renderingEngine = new RenderingEngine();
+
         //initialize the current game
         application = app;
         application->setEngine(this);
@@ -96,8 +99,6 @@ namespace Villain {
         //set the MainGame's current game screen
         application->startStateMachine();
 
-        // TODO: temporary init here
-        renderingEngine = new RenderingEngine();
 
         isRunning = true;//start main loop
     }
@@ -175,6 +176,8 @@ namespace Villain {
                 float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
 
                 deltaTime = deltaTime / DESIRED_FPS;
+
+                application->handleEvents(deltaTime);
 
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);

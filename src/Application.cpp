@@ -39,8 +39,8 @@ namespace Villain {
     }
 
 
-    void Application::handleEvents() {
-        rootNode.handleInput();
+    void Application::handleEvents(float deltaTime) {
+        rootNode.handleInput(deltaTime);
     }
 
     void Application::update(float deltaTime) {

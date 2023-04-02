@@ -35,16 +35,14 @@ namespace Villain {
     }
 
 
-    void SceneNode::handleInput() {
+    void SceneNode::handleInput(float deltaTime) {
         for (auto& c: components) {
-            c->handleInput(0.0f);//TODO: do I need deltatime here at all?
+            c->handleInput(deltaTime);
         }
         for (auto& c: children) {
-            c->handleInput();
+            c->handleInput(deltaTime);
         }
-    }
-
-    void SceneNode::update(float deltaTime) {
+    } void SceneNode::update(float deltaTime) {
         for (auto& c: components) {
             c->update(deltaTime);
         }

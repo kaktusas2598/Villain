@@ -15,7 +15,7 @@ namespace Villain {
             void render(SceneNode* node);
 
             inline void addLight(BaseLight& light) { lights.push_back(&light); }
-            inline void setMainCamera(Camera& camera) { mainCamera = &camera; }
+            void setMainCamera(Camera& camera) { mainCamera = &camera; }
             // Call on window/viewport resize event
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
         private:
