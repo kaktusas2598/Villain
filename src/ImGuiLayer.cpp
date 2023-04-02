@@ -149,16 +149,37 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
-        if (ImGui::TreeNode(node->getName().c_str())) {
-            if (!node->getComponents().empty()) {
-                if (ImGui::TreeNode("Components")) {
-                    for (auto& compo: node->getComponents()) {
-                        // draw components here
-                    }
-                    ImGui::TreePop();
-                }
-            }
+        if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
+            if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
+                if (ImGui::BeginTabItem("Transform")) {
+                    //ImGui::SeparatorText("Position");
+                    //ImGui::SeparatorText("Scale");
+                    //ImGui::TextDisabled
+                    //ImGui::DragFloat3("Position", );
+                    ImGui::DragFloat("Scale", node->getTransform()->getScalePtr());
 
+                    ImGui::Text("Position"); ImGui::SameLine();
+                    ImGui::PushItemWidth(50);
+                    ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
+                    ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
+                    ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
+                    ImGui::PopItemWidth();
+
+                    ImGui::EndTabItem();
+                }
+                if (!node->getComponents().empty()) {
+                    if (ImGui::BeginTabItem("Components")) {
+                        for (auto& compo: node->getComponents()) {
+                            // draw components here
+                            ImGui::Separator();
+                        }
+
+                        ImGui::EndTabItem();
+                    }
+                }
+                ImGui::EndTabBar();
+            }
+                                // Children
             for (auto& child: node->getChildren()) {
                 drawNode(child);
             }

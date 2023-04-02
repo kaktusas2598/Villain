@@ -233,7 +233,6 @@ namespace Villain {
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
         // let rendering engine take care of all things?
-        renderingEngine->render(application->getRootNode());
         application->render(renderingEngine);
         application->onAppRender(deltaTime);
 

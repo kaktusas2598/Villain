@@ -83,9 +83,11 @@ void Game::handleEvents(float deltaTime) {
     if (!Engine::editModeActive()) {
         SDL_SetRelativeMouseMode(SDL_TRUE);
         SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), 0, 0); // this seem to fix moving camera issue, but cursor disappears?
+
+        // Also disable mouse in edit mode for now
+        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
+        camera.processMouseMovement(mouseOffsets.x, mouseOffsets.y);
     }
-    glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
-    camera.processMouseMovement(mouseOffsets.x, mouseOffsets.y);
 
     // TODO:
     //camera.processMouseScroll(yOffset);

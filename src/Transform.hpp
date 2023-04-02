@@ -14,8 +14,11 @@ namespace Villain {
             glm::mat4 getTransformMatrix();
             bool hasChanged();
 
-            const glm::vec3& getPos() const { return position; }
+            //const glm::vec3& getPos() const { return position; }
             float getScale() const { return scale; }
+
+            glm::vec3& getPos() { return position; }
+            float* getScalePtr() { return &scale; }
 
             void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {
                 rotation = glm::angleAxis(glm::radians(angleDeg), rotationAxis);
