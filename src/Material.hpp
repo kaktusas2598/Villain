@@ -35,7 +35,7 @@ namespace Villain {
             std::string name; //<<< Material name
             float specularFactor ; //<<< shininess
             // NOTE: should material have a vector of textures?
-            Texture* diffuseMap; //<<< display texture
+            Texture* diffuseMap = nullptr; //<<< display texture
             Texture* specularMap = nullptr; //<<< optional specular map
             Texture* normalMap = nullptr; //<<< optional bump map
     };

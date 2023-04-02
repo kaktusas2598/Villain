@@ -148,33 +148,28 @@ void Game::onAppRender(float dt) {
 
     glm::vec3 pointLightColor = glm::vec3(1.0f, 0.0f, 0.0f);
     BaseLight pointColor(pointLightColor * glm::vec3(0.5f), pointLightColor * glm::vec3(0.9f), glm::vec3(1.0f));
-    float constant = 1.0f;
-    float linear = 0.022f;
-    float quadratic = 0.0019f;
     PointLight pointLight(pointColor, glm::vec3(1.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f);
 
     Shader* modelShader = ResourceManager::Instance()->getShader("model");
-    if (modelShader != nullptr) {
-        modelShader->bind();
-        // Step projection uniforms
-        modelShader->setUniformMat4f("model", model);
-        modelShader->setUniformMat4f("view", view);
-        modelShader->setUniformMat4f("projection", projection);
+    modelShader->bind();
+    // Step projection uniforms
+    modelShader->setUniformMat4f("model", model);
+    modelShader->setUniformMat4f("view", view);
+    modelShader->setUniformMat4f("projection", projection);
 
-        // Step material uniforms, other parameters like diffuse color,
-        // diffuse and specular maps are set in Model class
-        modelShader->setUniform1f("material.shininess", 32.0f);
+    // Step material uniforms, other parameters like diffuse color,
+    // diffuse and specular maps are set in Model class
+    modelShader->setUniform1f("material.shininess", 32.0f);
 
-        // Step light uniforms
-        modelShader->setDirectionalLightUniforms("dirLight", dirLight);
-        modelShader->setPointLightUniforms("pointLight", pointLight);
-        modelShader->setSpotLightUniforms("spotLight", spotLight);
+    // Step light uniforms
+    modelShader->setDirectionalLightUniforms("dirLight", dirLight);
+    modelShader->setPointLightUniforms("pointLight", pointLight);
+    modelShader->setSpotLightUniforms("spotLight", spotLight);
 
-        // For lighting calculations
-        modelShader->setUniformVec3("viewPosition", camera.getPosition());
+    // For lighting calculations
+    modelShader->setUniformVec3("viewPosition", camera.getPosition());
 
-        model3D->draw(*modelShader);
-    }
+    model3D->draw(*modelShader);
 
     debugRenderer.drawBox3D(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(10.0f, 5.0f, 0.1f));
     debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));

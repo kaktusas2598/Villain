@@ -156,7 +156,7 @@ namespace Villain {
                     //ImGui::SeparatorText("Scale");
                     //ImGui::TextDisabled
                     //ImGui::DragFloat3("Position", );
-                    ImGui::DragFloat("Scale", node->getTransform()->getScalePtr());
+                    ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
 
                     ImGui::Text("Position"); ImGui::SameLine();
                     ImGui::PushItemWidth(50);
