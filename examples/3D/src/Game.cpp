@@ -13,11 +13,6 @@
 
 #include "DebugConsole.hpp"
 #include "DebugRenderer.hpp"
-#include <SDL2/SDL_mouse.h>
-#include <SDL2/SDL_video.h>
-#include <cstdio>
-#include <random>
-#include <sstream>
 
 using namespace Villain;
 
@@ -27,10 +22,6 @@ void Game::init() {
 
     camera.setZPlanes(0.1f, 1000.f); // for bigger render range
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
-    //glm::vec3 camPos = camera.getPosition();
-    //camPos.x = configScript.get<int>("window.width")/2.0;
-    //camPos.y = configScript.get<int>("window.width")/2.0;
-    //camera.setPosition(camPos);
 
     ResourceManager::Instance()->loadShader("assets/shaders/models.glsl", "model");
 
