@@ -11,7 +11,6 @@ namespace Villain {
     // Defines logic for Scene Node
     // Kind of like ECS components and systems combined, not ideal approach but wayyy beter
     // than inheritance approach
-    // TODO:
     class NodeComponent {
         public:
             NodeComponent() :
