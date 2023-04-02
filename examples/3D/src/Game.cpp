@@ -9,6 +9,7 @@
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
 #include "components/MeshRenderer.hpp"
+#include "components/ModelRenderer.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
 #include "DebugConsole.hpp"
@@ -46,7 +47,7 @@ void Game::init() {
     std::vector<unsigned int> indices = {0, 1, 2};
     std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
     Mesh<VertexP1UV>* mesh = new Mesh<VertexP1UV>(vertices, indices, textures);
-    Material mat("wood", ResourceManager::Instance()->getTexture("crate"), 8);
+    Material mat("wood", textures, 8);
 
     planeNode = new SceneNode("Mesh");
     planeNode->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
@@ -66,6 +67,11 @@ void Game::init() {
 
     // Add camera
     addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
+
+    // Model renderer test
+    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
+    modelNode->getTransform()->setScale(0.1f);
+    addToScene(modelNode);
 }
 
 Game::~Game() {
@@ -97,7 +103,7 @@ void Game::onAppRender(float dt) {
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 projection = camera.getProjMatrix();
 
-    BaseLight dirColor(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f));
+    /*BaseLight dirColor(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f));
     DirectionalLight dirLight(dirColor, glm::vec3(-0.2f, -1.0f, -0.3f));
 
     glm::vec3 spotLightColor = glm::vec3(1.0f, 1.0f, 0.0f);
@@ -128,7 +134,8 @@ void Game::onAppRender(float dt) {
     // For lighting calculations
     modelShader->setUniformVec3("viewPosition", camera.getPosition());
 
-    model3D->draw(*modelShader);
+    // NOTE: diabled for now until we implement ModelRenderer
+    model3D->draw(*modelShader);*/
 
     debugRenderer.drawBox3D(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(10.0f, 5.0f, 0.1f));
     debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
