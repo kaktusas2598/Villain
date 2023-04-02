@@ -1,11 +1,15 @@
 #include "Shader.hpp"
 
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
 #include "ErrorHandler.hpp"
+#include "Logger.hpp"
 #include "RendereringEngine.hpp"
+
+// For common shader resources
+#include <cmrc/cmrc.hpp>
+CMRC_DECLARE(Villain);
 
 namespace Villain {
 
@@ -96,6 +100,20 @@ namespace Villain {
         rendererID = createShader(ss[0].str(), ss[1].str());
     }
 
+    void Shader::createFromResource(const std::string& source) {
+        auto shaderFs = cmrc::Villain::get_filesystem();
+        std::string path = "res/shaders/" + source + ".glsl";
+        if (shaderFs.exists(path)) {
+            auto faShaderFile = shaderFs.open(path);
+            std::string faSource(faShaderFile.begin());
+            this->createFromSource(faSource);
+        } else {
+            std::stringstream ss;
+            ss << "Shader resource " << source << " not found";
+            Logger::Instance()->error(ss.str().c_str());
+        }
+    }
+
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
 
         GLCall(unsigned int program = glCreateProgram());
@@ -157,7 +175,11 @@ namespace Villain {
             // Use alloca() to allocate error message buffer on the stack
             char * message = (char*)alloca(length * sizeof(char));
             GLCall(glGetShaderInfoLog(id, length, &length, message));
-            std::cout << "Failed to compile shader: " << message << std::endl;
+
+            std::stringstream ss;
+            ss << "Failed to compile shader: " << message;
+            Logger::Instance()->warn(ss.str().c_str());
+
             GLCall(glDeleteShader(id));
             return 0;
         }
@@ -236,8 +258,11 @@ namespace Villain {
             return uniformLocationCache[name];
         }
         GLCall(int location = glGetUniformLocation(rendererID, name.c_str()));
-        if (location == -1)
-            std::cout << "Uniform '" << name << "' doesn't exist!" << std::endl;
+        if (location == -1) {
+            std::stringstream ss;
+            ss << "Uniform '" << name << "' doesn't exist";
+            Logger::Instance()->warn(ss.str().c_str());
+        }
 
         uniformLocationCache[name] = location;
         return location;

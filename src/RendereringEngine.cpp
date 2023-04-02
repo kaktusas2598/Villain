@@ -8,24 +8,13 @@
 #include "ResourceManager.hpp"
 #include "Shader.hpp"
 
-// For common shader resources
-#include <cmrc/cmrc.hpp>
-CMRC_DECLARE(Villain);
-
 namespace Villain {
 
     RenderingEngine::RenderingEngine() {
 
-        //NOTE: temporary!
         defaultShader = new Shader();
+        defaultShader->createFromResource("forward-ambient");
 
-        //// CMRC Resource usage
-        auto shaderFs = cmrc::Villain::get_filesystem();
-        if (shaderFs.exists("res/shaders/forward-ambient.glsl")) {
-            auto faShaderFile = shaderFs.open("res/shaders/forward-ambient.glsl");
-            std::string faSource(faShaderFile.begin());
-            defaultShader->createFromSource(faSource);
-        }
         mainCamera = new Camera3D();
     }
 
@@ -35,6 +24,9 @@ namespace Villain {
 
         // Loop through lights now
         // Render all lights, generate shadow maps, etc
+        for (auto& light: lights) {
+
+        }
 
     }
 }

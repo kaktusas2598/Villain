@@ -24,6 +24,15 @@ namespace Villain {
                 logFile << "[INFO]: " << message << std::endl;
                 std::string output = message;
                 output = "[info]: " + output;
+                std::cout << output << "\n";
+                DebugConsole::Instance()->addLog(output.c_str());
+            }
+
+            void warn(const char* message) {
+                logFile << "[WARN]: " << message << std::endl;
+                std::string output = message;
+                output = "[warn]: " + output;
+                std::cout << output << "\n";
                 DebugConsole::Instance()->addLog(output.c_str());
             }
 
@@ -31,6 +40,7 @@ namespace Villain {
                 logFile << "[ERROR]: " << message << std::endl;
                 std::string output = message;
                 output = "[error]: " + output;
+                std::cout << output << "\n";
                 DebugConsole::Instance()->addLog(output.c_str());
             }
 
