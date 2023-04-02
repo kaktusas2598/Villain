@@ -103,4 +103,5 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Finish implementing RenderingEngine - need to have multiple render passes(maybe create RenderPass class?) and use forward lighting rendering
  * Finish implementing SceneGraph, will need Light and Camera to become NodeComponent as well
  * After forward multi-pass rendering is done, start looking into normal mapping and shadow mapping
+ * Make materials more generic: add maps for different properties: floats, ints and textures mainly
 
