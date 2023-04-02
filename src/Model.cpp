@@ -92,6 +92,8 @@ namespace Villain {
             textures.insert(textures.end(), diffuseMaps->begin(), diffuseMaps->end());
             std::vector<Texture*>* specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
             textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
+            std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+            textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
         }
 
         return Mesh<VertexP1N1UV>(vertices, indices, textures, diffuseColor);

@@ -29,6 +29,7 @@ namespace Villain  {
             std::string filePath;
             unsigned char* localBuffer;
             int width, height, BPP; // Bits per picture
+            // Available types: texture_diffuse, texture_specular, texture_normal
             std::string type;
             GLenum target; ///< GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
     };
