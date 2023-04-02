@@ -5,7 +5,7 @@
 
 namespace Villain {
 
-    Application::Application() {
+    Application::Application(): rootNode("rootNode") {
         // Initialize State Machine
         stateMachine = std::make_unique<StateMachine>(this);
     }

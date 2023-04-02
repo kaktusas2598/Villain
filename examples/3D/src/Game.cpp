@@ -56,13 +56,13 @@ void Game::init() {
     Mesh<VertexP1UV>* mesh = new Mesh<VertexP1UV>(vertices, indices, textures);
     Material mat("wood", ResourceManager::Instance()->getTexture("crate"), 8);
 
-    planeNode = new SceneNode();
+    planeNode = new SceneNode("Mesh");
     planeNode->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
 
-    SceneNode* testHierarchy = new SceneNode(glm::vec3(0.0f, 3.0f, 0.0f)); // +3 y relative to parent
+    SceneNode* testHierarchy = new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)); // +3 y relative to parent
     testHierarchy->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
 
-    SceneNode* testHierarchyChild = new SceneNode(glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
+    SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
     testHierarchyChild->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
     testHierarchy->addChild(testHierarchyChild);
 

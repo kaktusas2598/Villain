@@ -53,13 +53,12 @@ namespace Villain {
             IGameScreen* currentState = nullptr; ///< current state's instance
 
         private:
-            Application(Application& app) {}
+            Application(Application& app): rootNode("rootNode") {}
             void operator=(Application& app) {}
 
-            // TODO: will hold root entity here
-            // or maybe should go to the state?
             SceneNode rootNode;
 
+            // NOTE: problably should be in different class, maybe need to create UI class to abstract nuklear stuff
             struct nk_context* nuklearContext;
     };
 }

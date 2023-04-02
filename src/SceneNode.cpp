@@ -4,8 +4,8 @@
 
 namespace Villain {
 
-    SceneNode::SceneNode(const glm::vec3& pos, const glm::quat& rot, float scale)
-        : transform(pos, rot, scale), engine(nullptr) {
+    SceneNode::SceneNode(const std::string& name, const glm::vec3& pos, const glm::quat& rot, float scale)
+        : uid(name), transform(pos, rot, scale), engine(nullptr) {
     }
 
     SceneNode::~SceneNode() {

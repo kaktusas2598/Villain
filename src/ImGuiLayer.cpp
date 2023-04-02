@@ -149,8 +149,7 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
-        // TODO: nodes need unique ids or names
-        if (ImGui::TreeNode("NodeX")) {
+        if (ImGui::TreeNode(node->getName().c_str())) {
             if (!node->getComponents().empty()) {
                 if (ImGui::TreeNode("Components")) {
                     for (auto& compo: node->getComponents()) {
