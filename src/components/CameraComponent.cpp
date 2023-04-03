@@ -43,7 +43,7 @@ namespace Villain {
         }
     }
 
-    void CameraComponent::addToEngine(Engine* engine) const {
+    void CameraComponent::addToEngine(Engine* engine) {
         // NOTE: bad solution once we have multiple cameras in place
         engine->getRenderingEngine()->setMainCamera(*camera);
     }

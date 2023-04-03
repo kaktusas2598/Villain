@@ -21,7 +21,7 @@ namespace Villain {
             virtual void update(float deltaTime) {}
             virtual void render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera) {}
 
-            virtual void addToEngine(Engine* engine) const { }
+            virtual void addToEngine(Engine* engine) { }
 
             inline Transform* GetTransform()             { return parent->getTransform(); }
             inline const Transform& GetTransform() const { return *parent->getTransform(); }

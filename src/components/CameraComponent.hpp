@@ -12,7 +12,7 @@ namespace Villain {
             CameraComponent(Camera* cam): camera(cam) {}
 
             virtual void handleInput(float deltaTime) override;
-            virtual void addToEngine(Engine* engine) const override;
+            virtual void addToEngine(Engine* engine) override;
         private:
             Camera* camera = nullptr;
     };
