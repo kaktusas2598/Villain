@@ -19,7 +19,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # Include Cmake Resource Compiler, https://github.com/vector-of-bool/cmrc
 include(CMakeRC)
 # Create resource library for shaders
-file(GLOB shaders res/shaders/*.glsl)
+file(GLOB shaders res/shaders/*)
 cmrc_add_resource_library(VillainShaderLibrary ALIAS Villain::ShaderLibrary NAMESPACE Villain ${shaders})
 
 find_package(Lua REQUIRED)
