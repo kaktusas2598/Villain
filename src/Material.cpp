@@ -15,6 +15,4 @@ namespace Villain {
     {
         this->name = name;
     }
-
-    Material::~Material() { }
 }

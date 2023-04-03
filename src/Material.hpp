@@ -12,7 +12,7 @@ namespace Villain {
     class Material {
         public:
             Material(const std::string& name = std::string());
-            virtual ~Material();
+            virtual ~Material() {}
 
             // TODO: engine should have default textures to display when there is no texture provided
             Material(
