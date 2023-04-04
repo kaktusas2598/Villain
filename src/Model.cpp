@@ -18,7 +18,9 @@ namespace Villain {
         // and all primitives are triangles
         // Other useful options:
         // aiProcess_GenNormals
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+        // aiProcess_CalcTangentSpace
+        // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             std::stringstream ss;
