@@ -67,6 +67,25 @@ namespace Villain {
         //std::cout << "minAABB: " << minAABB.x << ", " << minAABB.y << ", " << minAABB.z << "\n";
         return Sphere((maxAABB + minAABB) * 0.5f, glm::length(minAABB - maxAABB));
     }
+
+    // Helper method to generate AABB shaped bounding volume to fit mesh in
+    template <class VertexType>
+    AABB generateAABoxBV(const Mesh<VertexType>& mesh) {
+        glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
+        glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
+        for (auto&& vertex : mesh.Vertices) {
+            minAABB.x = std::min(minAABB.x, vertex.Position.x);
+            minAABB.y = std::min(minAABB.y, vertex.Position.y);
+            minAABB.z = std::min(minAABB.z, vertex.Position.z);
+
+            maxAABB.x = std::max(maxAABB.x, vertex.Position.x);
+            maxAABB.y = std::max(maxAABB.y, vertex.Position.y);
+            maxAABB.z = std::max(maxAABB.z, vertex.Position.z);
+        }
+
+        return AABB(minAABB, maxAABB);
+    }
+
 }
 
 #endif // __Mesh__
