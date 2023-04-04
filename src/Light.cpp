@@ -27,6 +27,10 @@ namespace Villain {
         shader->createFromResource("forward-point");
     }
 
+    void PointLight::update(float deltaTime) {
+        Position = GetTransform()->getPos();
+    }
+
     SpotLight::SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff) :
                 BaseLight(ambient, diffuse, specular), Position(pos), Direction(dir), CutOff(cutOff), OuterCutOff(outerCutOff) {
 
@@ -34,5 +38,7 @@ namespace Villain {
         shader->createFromResource("forward-spot");
     }
 
-
+    void SpotLight::update(float deltaTime) {
+        Position = GetTransform()->getPos();
+    }
 }

@@ -45,6 +45,7 @@ namespace Villain {
 
             PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, float cnst, float linr, float quadr);
             virtual std::string type() { return std::string("point"); }
+            virtual void update(float deltaTime);
     };
 
     class SpotLight : public BaseLight {
@@ -56,6 +57,7 @@ namespace Villain {
 
             SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff);
             virtual std::string type() { return std::string("spot"); }
+            virtual void update(float deltaTime);
     };
 
 }
