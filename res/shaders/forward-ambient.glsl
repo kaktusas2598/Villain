@@ -2,7 +2,8 @@
 #version 330 core
 
 layout(location = 0) in vec3 position;
-layout(location = 1) in vec2 texCoords;
+layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 texCoords;
 
 out vec3 v_normal;
 out vec3 v_fragPos;
@@ -28,8 +29,6 @@ struct Material {
     vec4 diffuseColor;
     float shininess;
 
-    sampler2D texture_ambient1;
-    sampler2D texture_ambient2;
     sampler2D texture_diffuse1;
     sampler2D texture_diffuse2;
     sampler2D texture_diffuse3;
@@ -38,6 +37,7 @@ struct Material {
     sampler2D texture_normal1;
     sampler2D texture_normal2;
 };
+
 
 uniform vec3 color; // Ambient light color
 uniform Material material;
@@ -48,5 +48,6 @@ void main() {
         o_color = vec4(color, 1.0);
     else
         o_color = textureColor * vec4(color, 1.0);
+    o_color = texture2D(material.texture_diffuse1, v_texCoords);
 }
 

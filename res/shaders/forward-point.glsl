@@ -32,7 +32,7 @@ in vec2 v_texCoords;
 
 #include lighting.glh
 
-uniform DirectionalLight dirLight;
+uniform PointLight pointLight;
 // Alternatively we can calculate lighting in view space, this uniform becaumes 0,0,0 always and is not needed
 // but we need to convert all relevant vectors, view matrix and normal matrix if used
 uniform vec3 viewPosition;
@@ -42,7 +42,7 @@ void main() {
     vec3 norm = normalize(v_normal);
     vec3 viewDirection = normalize(viewPosition - v_fragPos);
 
-    outputColor += calculateDirLight(dirLight, norm, viewDirection);
+    outputColor += calculatePointLight(pointLight, norm, v_fragPos, viewDirection);
 
     color = vec4(outputColor, 1.0);
 }
