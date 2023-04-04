@@ -95,11 +95,13 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
  * Improve DebugRenderer: add lines and 3d primitive draw calls, use unique_ptr abstractions like VertexBuffer class
- * Add ability to render spheres!
+ * Add ability to render spheres in DebugRenderer
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * After forward multi-pass rendering is done, start looking into normal mapping and shadow mapping
- * Make materials more generic: add maps for different properties: floats, ints and textures mainly
+ * Implement Normal Mapping
+ * Investigate shadow mapping techniques
+ * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
+ * SpotLight could take Camera* as an optional param to make it act as a flashlight
 
