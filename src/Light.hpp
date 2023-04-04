@@ -2,56 +2,60 @@
 #define __LIGHT__
 
 #include <glm/glm.hpp>
+#include "NodeComponent.hpp"
 
 namespace Villain {
 
-    /*
-     * Stores light source definitions
-     */
-
-    // TODO: refactor all of this to classes and all light sources externing BaseLight
-    // and they can provide methods to set uniforms as well, then add these to rendering engine
-    // and render using multi-pass forward rendering system for many lights at once
+    // TODO: Specular color can be changed by specular intensity probably, same with diffuse?
+    // Because it feels strange passing 3 colour values just to setup a light
     //
     // Base color components used by all light sources
-    struct BaseLight {
-        glm::vec3 AmbientColor;
-        glm::vec3 DiffuseColor;
-        glm::vec3 SpecularColor;
+    class BaseLight : public NodeComponent {
+        public:
+            glm::vec3 AmbientColor;
+            glm::vec3 DiffuseColor;
+            glm::vec3 SpecularColor;
 
-        BaseLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :
-            AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular) {}
+            BaseLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :
+                AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular) {}
+            ~BaseLight();
+            virtual void addToEngine(Engine* engine) override;
+            virtual std::string type() = 0;
+
+            Shader* getShader() { return shader; }
+        protected:
+            Shader* shader;
     };
 
-    struct DirectionalLight {
-        BaseLight Base;
-        glm::vec3 Direction;
+    class DirectionalLight : public BaseLight {
+        public:
+            glm::vec3 Direction;
 
-        DirectionalLight(BaseLight& lightColors, const glm::vec3& dir) :
-            Base(lightColors), Direction(dir) {}
+            DirectionalLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& dir);
+            virtual std::string type() { return std::string("directional"); }
     };
 
-    struct PointLight {
-        BaseLight Base;
-        glm::vec3 Position;
-        // Attenuation factors
-        float Constant;
-        float Linear;
-        float Quadratic;
+    class PointLight : public BaseLight {
+        public:
+            glm::vec3 Position;
+            // Attenuation factors
+            float Constant;
+            float Linear;
+            float Quadratic;
 
-        PointLight(BaseLight& lightColors, const glm::vec3& pos, float cnst, float linr, float quadr) :
-            Base(lightColors), Position(pos), Constant(cnst), Linear(linr), Quadratic(quadr) {}
+            PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, float cnst, float linr, float quadr);
+            virtual std::string type() { return std::string("point"); }
     };
 
-    struct SpotLight {
-        BaseLight Base;
-        glm::vec3 Position;
-        glm::vec3 Direction;
-        float CutOff;
-        float OuterCutOff;
+    class SpotLight : public BaseLight {
+        public:
+            glm::vec3 Position;
+            glm::vec3 Direction;
+            float CutOff;
+            float OuterCutOff;
 
-        SpotLight(BaseLight& lightColors, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff) :
-            Base(lightColors), Position(pos), Direction(dir), CutOff(cutOff), OuterCutOff(outerCutOff) {}
+            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff);
+            virtual std::string type() { return std::string("spot"); }
     };
 
 }
