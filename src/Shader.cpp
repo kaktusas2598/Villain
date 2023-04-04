@@ -78,12 +78,36 @@ namespace Villain {
             NONE = -1, VERTEX = 0, FRAGMENT = 1
         };
 
+        // TODO: All code related to reusable shader code will have to be merged in with parseShader()
+        // as a matter of fact, a lot of loading/creating shader methods are too similar, this class needs refactor
+        const std::string INCLUDE_DIRECTIVE = "#include";
+
         std::string line;
         std::stringstream ss[2];
         ShaderType type = ShaderType::NONE;
-        //while(getline(fs, line)) {
         for (std::string line; std::getline(iss, line); ) {
-            if (line.find("#shader") != std::string::npos) {
+            if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
+                // process include directive
+                // TODO: super similar to createFromResource() method, needs refactor
+                std::string file = line.substr(line.find(' ') + 1, line.length());
+                auto shaderFs = cmrc::Villain::get_filesystem();
+                std::string path = "res/shaders/" + file;
+                if (shaderFs.exists(path)) {
+                    auto incFile = shaderFs.open(path);
+                    std::string incSource(incFile.begin());
+                    std::istringstream inceIss(incSource);
+                    std::string incLine;
+                    // Append included file to shader
+                    for (std::string incLine; std::getline(inceIss, incLine); ) {
+                        // NOTE: #shader directive must come before #include directive, to ensure type is set here
+                        ss[(int)type] << incLine << '\n';
+                    }
+                } else {
+                    std::stringstream ess;
+                    ess << "Shader resource " << file << " not found";
+                    Logger::Instance()->error(ess.str().c_str());
+                }
+            } else if (line.find("#shader") != std::string::npos) {
                 if (line.find("vertex") != std::string::npos) {
                     type = ShaderType::VERTEX;
 
@@ -278,17 +302,23 @@ namespace Villain {
 
         this->setMaterialUniforms(material);
 
-        // TODO:implement forward rendering pipeline in RenderingEngine to set this
-        // Step light uniforms
-        //this->setDirectionalLightUniforms("dirLight", dirLight);
-        //this->setPointLightUniforms("pointLight", pointLight);
-        //this->setSpotLightUniforms("spotLight", spotLight);
+        // Set light uniforms
+        // NOTE: this is really not good due to having to dynamic_cast every time and check
+        if (renderingEngine.getActiveLight() != nullptr) {
+            if (renderingEngine.getActiveLight()->type() == "directional") {
+                DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(renderingEngine.getActiveLight());
+                this->setDirectionalLightUniforms("dirLight", *dirLight);
+            } else if (renderingEngine.getActiveLight()->type() == "spot") {
+                SpotLight* spotLight = dynamic_cast<SpotLight*>(renderingEngine.getActiveLight());
+                this->setSpotLightUniforms("spotLight", *spotLight);
+            } else if (renderingEngine.getActiveLight()->type() == "point") {
+                PointLight* pointLight = dynamic_cast<PointLight*>(renderingEngine.getActiveLight());
+                this->setPointLightUniforms("pointLight", *pointLight);
+            }
+        }
 
-        // For lighting calculations
+        // Camera/view/eye pos for lighting calculations
         this->setUniformVec3("viewPosition", camera.getPosition());
-
-        // Forward Ambient shader uniforms, NOTE: move these elsewhere TEMPORARY
-        this->setUniformVec3("color", glm::vec3(0.8f, 0.6f, 0.2f));
     }
 
     void Shader::setMaterialUniforms(Material& material) {
@@ -320,31 +350,31 @@ namespace Villain {
         this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
     }
 
-    void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight dirLight) {
+    void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight) {
         setUniformVec3(name + ".direction", dirLight.Direction);
-        setUniformVec3(name + ".base.ambient", dirLight.Base.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", dirLight.Base.DiffuseColor);
-        setUniformVec3(name + ".base.specular", dirLight.Base.SpecularColor);
+        setUniformVec3(name + ".base.ambient", dirLight.AmbientColor);
+        setUniformVec3(name + ".base.diffuse", dirLight.DiffuseColor);
+        setUniformVec3(name + ".base.specular", dirLight.SpecularColor);
     }
 
-    void Shader::setPointLightUniforms(const std::string& name, PointLight pointLight) {
+    void Shader::setPointLightUniforms(const std::string& name, PointLight& pointLight) {
         setUniformVec3(name + ".position", pointLight.Position);
-        setUniformVec3(name + ".base.ambient", pointLight.Base.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", pointLight.Base.DiffuseColor);
-        setUniformVec3(name + ".base.specular", pointLight.Base.SpecularColor);
+        setUniformVec3(name + ".base.ambient", pointLight.AmbientColor);
+        setUniformVec3(name + ".base.diffuse", pointLight.DiffuseColor);
+        setUniformVec3(name + ".base.specular", pointLight.SpecularColor);
         setUniform1f(name + ".constant", pointLight.Constant);
         setUniform1f(name + ".linear", pointLight.Linear);
         setUniform1f(name + ".quadratic", pointLight.Quadratic);
     }
 
-    void Shader::setSpotLightUniforms(const std::string& name, SpotLight spotLight) {
+    void Shader::setSpotLightUniforms(const std::string& name, SpotLight& spotLight) {
         setUniformVec3(name + ".position", spotLight.Position);
         setUniformVec3(name + ".direction", spotLight.Direction);
         setUniform1f(name + ".cutOff", spotLight.CutOff);
         setUniform1f(name + ".outerCutOff", spotLight.OuterCutOff);
-        setUniformVec3(name + ".base.ambient", spotLight.Base.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", spotLight.Base.DiffuseColor);
-        setUniformVec3(name + ".base.specular", spotLight.Base.SpecularColor);
+        setUniformVec3(name + ".base.ambient", spotLight.AmbientColor);
+        setUniformVec3(name + ".base.diffuse", spotLight.DiffuseColor);
+        setUniformVec3(name + ".base.specular", spotLight.SpecularColor);
     }
 
 }
