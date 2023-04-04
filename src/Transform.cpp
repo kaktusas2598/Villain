@@ -36,4 +36,24 @@ namespace Villain {
             return model;
         }
     }
+
+    glm::vec3 Transform::getRight() const {
+        return model[0];
+    }
+
+    glm::vec3 Transform::getUp() const {
+        return model[1];
+    }
+
+    glm::vec3 Transform::getBackward() const {
+        return model[2];
+    }
+
+    glm::vec3 Transform::getForward() const {
+        return -model[2];
+    }
+
+    glm::vec3 Transform::getGlobalScale() const {
+        return { glm::length(getRight()), glm::length(getUp()), glm::length(getBackward()) };
+    }
 }

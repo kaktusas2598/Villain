@@ -27,6 +27,12 @@ namespace Villain {
             inline void setPos(const glm::vec3& pos) { position = pos; needsUpdate = true; }
             inline void setScale(float sc) { scale = sc; needsUpdate = true; }
             inline void setParent(Transform* p) { parent = p; }
+
+            glm::vec3 getRight() const;
+            glm::vec3 getUp() const;
+            glm::vec3 getBackward() const;
+            glm::vec3 getForward() const;
+            glm::vec3 getGlobalScale() const;
         private:
             glm::mat4 getMatrix() const;
 
