@@ -58,6 +58,9 @@ namespace Villain {
 
     template <class VertexType>
     void Mesh<VertexType>::setupMesh() {
+        // Create bounding volime
+        boundingVolume = std::make_unique<Sphere>(generateSphereBV<VertexType>(*this));
+
         vao = std::make_unique<VertexArray>();
         vbo = std::make_unique<VertexBuffer>(Vertices.data(), Vertices.size() * sizeof(VertexType));
 

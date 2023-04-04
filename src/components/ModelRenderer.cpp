@@ -19,6 +19,10 @@ namespace Villain {
             RenderingEngine& renderingEngine,
             Camera& camera
             ) {
+
+		//unsigned int display = 0, total = 0;
+		const Frustum camFrustum = camera.getFrustum();
+
         shader.bind();
         // TODO: need different method to update uniforms, stuff like matrixes can be updated the same for all meshes
         // materials are different per mesh
@@ -26,8 +30,13 @@ namespace Villain {
         shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
         //model->draw(shader);
         for (auto& mesh: model->getMeshes()) {
-            // Draw mesh using it's own material
-            mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);
+            if (mesh.getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
+                // Draw mesh using it's own material
+                mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);
+                //display++;
+            }
+            //total++;
         }
+        //std::cout << "Total meshes: " << total << ", Visible meshes: " << display << "\n";
     }
 }
