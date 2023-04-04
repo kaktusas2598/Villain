@@ -53,7 +53,7 @@ void Game::init() {
     testHierarchyChild->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
     testHierarchy->addChild(testHierarchyChild);
 
-    testHierarchy->getTransform()->setRot(90.f, glm::vec3(0.f, 0.f, 1.f));
+    testHierarchy->getTransform()->setEulerRot(45.0f, 0.f, 0.f);
 
     planeNode->addChild(testHierarchy);
 
@@ -92,8 +92,6 @@ void Game::init() {
     SceneNode* spotLight = ((new SceneNode("Spot Light"))
                 ->addComponent(new SpotLight(greenLight * glm::vec3(0.2f), greenLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
     addToScene(spotLight);
-
-
 }
 
 Game::~Game() {

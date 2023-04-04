@@ -2,23 +2,29 @@
 
 namespace Villain {
     glm::mat4 Transform::getTransformMatrix() {
-        glm::mat4 model = glm::translate(glm::mat4(1.0), position);
-        //model = glm::rotate(model, rotAngle, rotAxis);
-        // NOTE: Not working correctly
-        // Cause scene to be upside down
-        //model *= glm::mat4_cast(rotation);
-        model = glm::scale(model, glm::vec3(scale));
+        const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
+                         glm::radians(eulerRot.x),
+                         glm::vec3(1.0f, 0.0f, 0.0f));
+        const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f),
+                         glm::radians(eulerRot.y),
+                         glm::vec3(0.0f, 1.0f, 0.0f));
+        const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f),
+                         glm::radians(eulerRot.z),
+                         glm::vec3(0.0f, 0.0f, 1.0f));
 
-        //glm::mat4 translate = glm::translate(glm::mat4(1.0f), position);
-        //glm::mat4 rotate = glm::mat4_cast(rotation);
-        //glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-        //glm::mat4 model = translate * rotate * scaleMat;
+        // Y * X * Z
+        const glm::mat4 roationMatrix = transformY * transformX * transformZ;
+
+        // translation * rotation * scale (also know as TRS matrix)
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), position) *
+                    roationMatrix *
+                    glm::scale(glm::mat4(1.0f), glm::vec3(scale));
+
         if (parent != nullptr) {
             return parent->getTransformMatrix() * model;
         } else {
             return model;
         }
-        //return getParentMatrix() * model;
     }
 
     glm::mat4 Transform::getParentMatrix() const {

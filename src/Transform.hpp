@@ -23,6 +23,7 @@ namespace Villain {
             void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {
                 rotation = glm::angleAxis(glm::radians(angleDeg), rotationAxis);
             }
+            void setEulerRot(float x, float y, float z) { eulerRot.x = x; eulerRot.y = y; eulerRot.z = z; }
             inline void setPos(const glm::vec3& pos) { position = pos; }
             inline void setScale(float sc) { scale = sc; }
             inline void setParent(Transform* p) { parent = p; }
@@ -31,6 +32,8 @@ namespace Villain {
 
             glm::vec3 position = glm::vec3(0.0f);
             glm::quat rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
+            // NOTE: for now we will use euler rotations instead of quaternions, but in the future quaternions should be preffered way
+            glm::vec3 eulerRot = glm::vec3(0.0f);
             float scale = 1.0f;
 
             glm::vec3 oldPos = glm::vec3(0.0f);
