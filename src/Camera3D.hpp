@@ -23,7 +23,26 @@ namespace Villain {
             void processMouseScroll(float yOffset);
 
             glm::vec3 getFront() { return front; }
+            glm::vec3 getRight() { return right; }
+            glm::vec3 getUp() { return up; }
+            float getZnear() { return zNear; }
+            float getZfar() { return zFar; }
             void setZPlanes(float near, float far) { zNear = near, zFar = far; }
+
+            Frustum getFrustum() {
+                Frustum     frustum;
+                const float halfVSide = zFar * tanf(glm::radians(zoom) * .5f);
+                const float halfHSide = halfVSide * getAspectRatio();
+                const glm::vec3 frontMultFar = zFar * front;
+
+                frustum.nearFace = { position + zNear * front, front };
+                frustum.farFace = { position + frontMultFar, -front };
+                frustum.rightFace = { position, glm::cross(frontMultFar - right * halfHSide, up) };
+                frustum.leftFace = { position, glm::cross(up, frontMultFar + right * halfHSide) };
+                frustum.topFace = { position, glm::cross(right, frontMultFar - up * halfVSide) };
+                frustum.bottomFace = { position, glm::cross(frontMultFar + up * halfVSide, right) };
+                return frustum;
+            }
         private:
             // Using Euler Angles
             void updateCameraVectors();

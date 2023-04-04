@@ -4,6 +4,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "Frustum.hpp"
+
 namespace Villain {
 
     enum class CameraMovement {
@@ -36,9 +38,14 @@ namespace Villain {
 
             glm::vec3& getPosition() { return position; }
             float getZoom() { return zoom; }
+            float getAspectRatio() { return (float)screenWidth / (float)screenHeight; }
 
             void setPosition(const glm::vec3& newPos) { position = newPos; }
             void setZoom(float z) { zoom = z; }
+
+            // NOTE: Obviously 2D camera does not need frustum, but defined it here anyway for now
+            // so we don't have to dynamic_cast every time we want to render a mesh and check frustum
+            virtual Frustum getFrustum() { return Frustum(); }
 
         protected:
             int screenWidth, screenHeight;
