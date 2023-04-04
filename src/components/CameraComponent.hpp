@@ -15,6 +15,7 @@ namespace Villain {
             virtual void addToEngine(Engine* engine) override;
         private:
             Camera* camera = nullptr;
+            bool input = false;
     };
 }
 

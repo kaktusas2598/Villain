@@ -23,23 +23,40 @@ namespace Villain {
             //camera.processMouseScroll(yOffset);
 
             if (InputManager::Instance()->isKeyDown(SDLK_w)) {
+                input = true;
                 cam3D->processKeyboard(CameraMovement::FORWARD, deltaTime);
             }
             if (InputManager::Instance()->isKeyDown(SDLK_s)) {
+                input = true;
                 cam3D->processKeyboard(CameraMovement::BACKWARD, deltaTime);
             }
             if (InputManager::Instance()->isKeyDown(SDLK_a)) {
+                input = true;
                 cam3D->processKeyboard(CameraMovement::LEFT, deltaTime);
             }
             if (InputManager::Instance()->isKeyDown(SDLK_d)) {
+                input = true;
                 cam3D->processKeyboard(CameraMovement::RIGHT, deltaTime);
             }
             if (InputManager::Instance()->isKeyDown(SDLK_SPACE)) {
+                input = true;
                 cam3D->processKeyboard(CameraMovement::UP, deltaTime);
             }
             if (InputManager::Instance()->isKeyDown(SDLK_LSHIFT)) {
+                input = true;
                 cam3D->processKeyboard(CameraMovement::DOWN, deltaTime);
             }
+
+            // HACK: Not a great solution, but idea is this - if user moved camera's position, it will update paren'ts transform
+            // but if no input was detected, camera will use transform's pos
+            // NOTE: Potentially could be solved by refactoring Camera to use Transform class and make both Node and Camera have Transform
+            // pointer pointing to the same address
+            if (input)
+                GetTransform()->setPos(cam3D->getPosition());
+            else
+                cam3D->setPosition(GetTransform()->getPos());
+
+            input = false;
         }
     }
 
