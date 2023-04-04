@@ -24,7 +24,6 @@ class Game : public Villain::Application {
 
     private:
         Villain::Camera3D camera;
-        Villain::Model* model3D = nullptr;
         std::unique_ptr<Villain::SkyBox> skybox;
 
         Villain::DebugRenderer debugRenderer;
