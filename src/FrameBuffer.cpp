@@ -38,7 +38,7 @@ namespace Villain {
         return textureID;
     }
     void FrameBuffer::rescale(float width, float height) {
-        // TODO: had to remove couple of GLCall(), need to try recreating
+        // FIXME: had to remove couple of GLCall(), need to try recreating
         // fbo every time we resize viewport probably as some functions below were causing errors
         GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
         GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
