@@ -3,6 +3,8 @@
 
 ## Supported Features
 
+* Multi-pass forward rendering system using scene graph for 3D applications
+* Phong based lighting system for Scene Graph
 * Builds as a library
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
@@ -11,26 +13,24 @@
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
-* Error logging
+* Error logging to stdout, log file and editor console
 * 2D orthographics and 3D perspective cameras
+* Camera Frustum culling to increase performance
 * TrueType font rendering (Only ASCII encoding ATM)
 * Finite State Machine
 * Sprite animation
-* UI
+* Basic Nuklear UI support
 
 ## Planned Features
 
-* Forward rendering multi-pass system
 * Engine editor with scene management
 * Skeletal animation support
 * Built in collision detection: AABB, SAT, circle
 * Rigid Body implementation
-* Scene Graphs
 * Spatial Partitioning models
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System
-* Phong based lighting system
 * Environmental mapping(reflections and refractions)
 * Shadow mapping and normal mapping
 * Stencil buffer
@@ -100,8 +100,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * Finish implementing RenderingEngine - need to have multiple render passes(maybe create RenderPass class?) and use forward lighting rendering
- * Finish implementing SceneGraph, will need Light and Camera to become NodeComponent as well
  * After forward multi-pass rendering is done, start looking into normal mapping and shadow mapping
  * Make materials more generic: add maps for different properties: floats, ints and textures mainly
 
