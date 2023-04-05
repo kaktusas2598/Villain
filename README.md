@@ -100,8 +100,10 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * Implement Normal Mapping
+ * Implement Normal Mapping ( currently doing that, but not working, do I need gamma correction?)
  * Investigate shadow mapping techniques
  * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
  * SpotLight could take Camera* as an optional param to make it act as a flashlight
+ * Improve Phong shading by implementing Blinn-Phong shading
+ * Investigate gamma correction and sRGB textures
 
