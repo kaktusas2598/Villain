@@ -78,6 +78,7 @@ namespace Villain {
     template Mesh<VertexP1UV>::Mesh(std::vector<VertexP1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1>::Mesh(std::vector<VertexP1N1> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1UV>::Mesh(std::vector<VertexP1N1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
+    template Mesh<VertexP1N1T1B1UV>::Mesh(std::vector<VertexP1N1T1B1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1C1UV>::Mesh(std::vector<VertexP1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
     template Mesh<VertexP1N1C1UV>::Mesh(std::vector<VertexP1N1C1UV> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, glm::vec4 diffuse);
 
@@ -85,6 +86,7 @@ namespace Villain {
     template Mesh<VertexP1UV>::Mesh(std::vector<VertexP1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
     template Mesh<VertexP1N1>::Mesh(std::vector<VertexP1N1> vertices, std::vector<unsigned int> indices, const std::string& matName);
     template Mesh<VertexP1N1UV>::Mesh(std::vector<VertexP1N1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
+    template Mesh<VertexP1N1T1B1UV>::Mesh(std::vector<VertexP1N1T1B1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
     template Mesh<VertexP1C1UV>::Mesh(std::vector<VertexP1C1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
     template Mesh<VertexP1N1C1UV>::Mesh(std::vector<VertexP1N1C1UV> vertices, std::vector<unsigned int> indices, const std::string& matName);
 
@@ -96,4 +98,5 @@ namespace Villain {
     template void Mesh<VertexP1N1C1UV>::draw(Shader &shader);
 
     template void Mesh<VertexP1N1UV>::draw(Shader &shader, Material& material);
+    template void Mesh<VertexP1N1T1B1UV>::draw(Shader &shader, Material& material);
 }
