@@ -252,6 +252,8 @@ namespace Villain {
 
         // In the end Render ImGui
         if (editMode) {
+            // Clear background
+            glClear(GL_COLOR_BUFFER_BIT);
             SDL_ShowCursor(SDL_TRUE);
             SDL_SetRelativeMouseMode(SDL_FALSE);
             imGuiLayer.render(*this);
