@@ -54,6 +54,24 @@ struct VertexP1N1UV {
     }
 };
 
+struct VertexP1N1T1B1UV {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 UV;
+    glm::vec3 Tangent;
+    glm::vec3 BiTangent;
+    static VertexBufferLayout getVertexLayout() {
+        VertexBufferLayout layout;
+        layout.push<float>(3);
+        layout.push<float>(3);
+        layout.push<float>(2);
+        layout.push<float>(3);
+        layout.push<float>(3);
+        return layout;
+    }
+};
+
+
 struct VertexP1N1C1UV {
     glm::vec3 Position;
     glm::vec3 Normal;
