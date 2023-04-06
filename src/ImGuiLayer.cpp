@@ -149,6 +149,7 @@ namespace Villain {
     void ImGuiLayer::drawSceneGraph(Engine& engine) {
         ImGui::Begin("Scene Graph");
         {
+            ImGui::SetNextItemOpen(true);
             drawNode(engine.getApplication()->getRootNode());
         }
         ImGui::End();
