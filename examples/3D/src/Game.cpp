@@ -32,25 +32,23 @@ void Game::init() {
 
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 
-    // NOTE: P1UV won't cut here anymore if we use lighting system, we need normals as well! :/
     ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
-    std::vector<VertexP1UV> vertices;
-    vertices.push_back({glm::vec3(0.0f,  1.0f, -5.0f), glm::vec2(0.5f, 1.0f)});
-    vertices.push_back({glm::vec3(1.0f,  0.0f, -5.0f), glm::vec2(1.0f, 0.0f)});
-    vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f), glm::vec2(0.0f, 0.0f)});
+    std::vector<VertexP1N1UV> vertices;
+    // nomals here are wrong cause im lazy, just wanted to get uv working cause it's 2nd vertex attrib, so need normals
+    vertices.push_back({glm::vec3(0.0f,  1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.5f, 1.0f)});
+    vertices.push_back({glm::vec3(1.0f,  0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f)});
+    vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
     std::vector<unsigned int> indices = {0, 1, 2};
     std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
-    Mesh<VertexP1UV>* mesh = new Mesh<VertexP1UV>(vertices, indices, textures);
+    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices, textures);
     Material mat("wood", textures, 8);
 
-    planeNode = new SceneNode("Mesh");
-    planeNode->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
+    planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
-    SceneNode* testHierarchy = new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)); // +3 y relative to parent
-    testHierarchy->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
+    SceneNode* testHierarchy = (new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
     SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
-    testHierarchyChild->addComponent(new MeshRenderer<VertexP1UV>(mesh, mat));
+    testHierarchyChild->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
     testHierarchy->addChild(testHierarchyChild);
 
     testHierarchy->getTransform()->setEulerRot(45.0f, 0.f, 0.f);
@@ -65,14 +63,23 @@ void Game::init() {
     // Model renderer test
     // 2023-04-04 - Currently ~12FPS with 3 light sources
     // WIth frustum culling seeing increases from ~3 to ~10FPS, still not enough
-    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
-    modelNode->getTransform()->setScale(0.1f);
+    //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
+    //modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
     //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/donut.obj"));
     //modelNode->getTransform()->setScale(4.0f);
 
-    addToScene(modelNode);
+    //addToScene(modelNode);
+
+
+    SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/rock.obj"));
+    rockNode->getTransform()->setScale(0.01f);
+    addToScene(rockNode);
+
+    SceneNode* wall = (new SceneNode("wall", glm::vec3(4.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/wall.obj"));
+    wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
+    addToScene(wall);
 
     // Light test
     //SceneNode* dirLight = ((new SceneNode("Directional Light 1"))
@@ -81,17 +88,24 @@ void Game::init() {
 
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     SceneNode* pointLight = ((new SceneNode("Point Light 1"))
-                ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(1.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));
+                ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));
     addToScene(pointLight);
 
     SceneNode* pointLight2 = ((new SceneNode("Point Light 2"))
                 ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f, 10.0f, 10.0f), 1.0f, 0.022f, 0.0019f)));
     addToScene(pointLight2);
 
-    glm::vec3 greenLight = glm::vec3(0.0f, 1.0f, 0.f);
+    //SceneNode* pointLights;
+    //for (int i = 0; i < 5; i++) {
+        //pointLights = ((new SceneNode(std::to_string(i)))
+                //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f * i, 5.0f, 5.0f), 1.0f, 0.022f, 0.0019f)));
+        //addToScene(pointLights);
+
+    //}
+
     // TODO: somehow will have to make this follow camera, probably needs to be part of same Node
     SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                ->addComponent(new SpotLight(greenLight * glm::vec3(0.2f), greenLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
+                ->addComponent(new SpotLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
     addToScene(spotLight);
 }
 
