@@ -18,9 +18,9 @@ namespace Villain {
         // and all primitives are triangles
         // Other useful options:
         // aiProcess_GenNormals
-        // aiProcess_CalcTangentSpace
+        // aiProcess_CalcTangentSpace - won't calculate if there are no normals
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             std::stringstream ss;
@@ -45,14 +45,14 @@ namespace Villain {
         }
     }
 
-    Mesh<VertexP1N1UV> Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-        std::vector<VertexP1N1UV> vertices;
+    Mesh<VertexP1N1T1B1UV> Model::processMesh(aiMesh* mesh, const aiScene* scene) {
+        std::vector<VertexP1N1T1B1UV> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture*> textures;
         std::string matName = std::string();
 
         for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-            VertexP1N1UV vertex;
+            VertexP1N1T1B1UV vertex;
 
             glm::vec3 tempVec;
             tempVec.x = mesh->mVertices[i].x;
@@ -64,6 +64,17 @@ namespace Villain {
             tempVec.y = mesh->mNormals[i].y;
             tempVec.z = mesh->mNormals[i].z;
             vertex.Normal = tempVec;
+
+            tempVec.x = mesh->mTangents[i].x;
+            tempVec.y = mesh->mTangents[i].y;
+            tempVec.z = mesh->mTangents[i].z;
+            vertex.Tangent = tempVec;
+
+            tempVec.x = mesh->mBitangents[i].x;
+            tempVec.y = mesh->mBitangents[i].y;
+            tempVec.z = mesh->mBitangents[i].z;
+            vertex.BiTangent = tempVec;
+
 
             // Check if texture coords are set, assimp supports up to 8 tex coords for each vertex
             if (mesh->mTextureCoords[0]) {
@@ -107,11 +118,11 @@ namespace Villain {
             Material mat(matName, *diffuseMaps, 32.0f, *specularMaps, *normalMaps);
             mat.setDiffuseColor(diffuseColor);
             materials[matName] = mat;
-            return Mesh<VertexP1N1UV>(vertices, indices, matName);
+            return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName);
         }
 
         Logger::Instance()->warn("Mesh missing material information");
-        return Mesh<VertexP1N1UV>(vertices, indices, textures, diffuseColor);
+        return Mesh<VertexP1N1T1B1UV>(vertices, indices, textures, diffuseColor);
     }
 
     std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {

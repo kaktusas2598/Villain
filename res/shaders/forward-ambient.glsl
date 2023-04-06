@@ -4,6 +4,8 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
+layout(location = 3) in vec3 tangent; // Calculated by Assimp
+layout(location = 4) in vec3 biTangent; // Calculated by Assimp
 
 out vec3 v_normal;
 out vec3 v_fragPos;
@@ -39,6 +41,7 @@ struct Material {
 };
 
 
+// TODO: need to add getter/setter for this in RenderingEngine and add it to imgui
 uniform vec3 color; // Ambient light color
 uniform Material material;
 
