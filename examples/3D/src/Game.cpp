@@ -49,13 +49,13 @@ void Game::init() {
 
     SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
     testHierarchyChild->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-    testHierarchy->addChild(testHierarchyChild);
+    //testHierarchy->addChild(testHierarchyChild);
 
     testHierarchy->getTransform()->setEulerRot(45.0f, 0.f, 0.f);
 
-    planeNode->addChild(testHierarchy);
+    //planeNode->addChild(testHierarchy);
 
-    addToScene(planeNode);
+    //addToScene(planeNode);
 
     // Add camera
     addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
@@ -87,8 +87,9 @@ void Game::init() {
     //addToScene(dirLight);
 
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
-    SceneNode* pointLight = ((new SceneNode("Point Light 1"))
+    SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
                 ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));
+    pointLight->addChild(planeNode);
     addToScene(pointLight);
 
     SceneNode* pointLight2 = ((new SceneNode("Point Light 2"))
