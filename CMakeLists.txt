@@ -39,7 +39,7 @@ message(STATUS "Glew include dir: ${GLEW_INCLUDE_DIRS}")
 message(STATUS "Freetype include dir: ${FREETYPE_INCLUDE_DIRS}")
 
 file(GLOB sources src/*.cpp)
-file(GLOB comp_sources src/components/*.cpp)
+file(GLOB comp_sources src/*/*.cpp)
 
 # Uncoment to build executable, but make sure to comment add_library() line
 #add_executable(${PROJECT_NAME} main.cpp ${sources})

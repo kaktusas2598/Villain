@@ -1,28 +1,11 @@
 #ifndef __FRUSTUM__
 #define __FRUSTUM__
 
-//#include "Camera3D.hpp"
+#include "physics/Plane.hpp"
 #include "Transform.hpp"
 #include "glm/glm.hpp"
 
 namespace Villain {
-
-    struct Plane {
-        // unit vector
-        glm::vec3 Normal = {0.f, 1.f, 0.f};
-
-        // distance from origin to the nearest point on the plane
-        float Distance = 0.f;
-
-        Plane() = default;
-        Plane(const glm::vec3& point, const glm::vec3& normal) :
-            Normal(glm::normalize(normal)),
-            Distance(glm::dot(Normal, point)) {}
-
-        float getSignedDistanceToPlane(const glm::vec3 point) const {
-            return glm::dot(Normal, point) - Distance;
-        }
-    };
 
     struct Frustum {
         Plane topFace;
@@ -98,8 +81,8 @@ namespace Villain {
 
         virtual bool isOnOrForwardPlane(const Plane& plane) const {
             // Compute the projection interval radius of b onto L(t) = b.c + t * p.n
-            const float r = Extents.x * std::abs(plane.Normal.x) +
-                    Extents.y * std::abs(plane.Normal.y) + Extents.z * std::abs(plane.Normal.z);
+            const float r = Extents.x * std::abs(plane.getNormal().x) +
+                    Extents.y * std::abs(plane.getNormal().y) + Extents.z * std::abs(plane.getNormal().z);
 
             return -r <= plane.getSignedDistanceToPlane(Center);
         }

@@ -9,6 +9,9 @@
 #include "components/CameraComponent.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
+#include "components/PhysicsEngineComponent.hpp"
+#include "components/PhysicsObjectComponent.hpp"
+#include "physics/BoundingSphere.hpp"
 
 #include "DebugConsole.hpp"
 #include "DebugRenderer.hpp"
@@ -47,7 +50,7 @@ void Game::init() {
 
     SceneNode* testHierarchy = (new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
-    SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f)); // +2 x relative to parent
+    SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f));
     testHierarchyChild->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
     //testHierarchy->addChild(testHierarchyChild);
 
@@ -63,14 +66,14 @@ void Game::init() {
     // Model renderer test
     // 2023-04-04 - Currently ~12FPS with 3 light sources
     // WIth frustum culling seeing increases from ~3 to ~10FPS, still not enough
-    //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
-    //modelNode->getTransform()->setScale(0.1f);
+    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
+    modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
     //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/donut.obj"));
     //modelNode->getTransform()->setScale(4.0f);
 
-    //addToScene(modelNode);
+    addToScene(modelNode);
 
 
     SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/rock.obj"));
@@ -108,6 +111,23 @@ void Game::init() {
     SceneNode* spotLight = ((new SceneNode("Spot Light"))
                 ->addComponent(new SpotLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
     addToScene(spotLight);
+
+    // TEMP physics code, will need to improve
+    PhysicsEngine physicsEngine;
+
+    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 5.0f, 0.f), 1.0f), glm::vec3(3.0f, 0.f, 0.f)));
+    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-3.0f, 0.f, 0.f)));
+
+    PhysicsEngineComponent* physicsEngineComponent = new PhysicsEngineComponent(physicsEngine);
+
+    // This is bad design because we must use PhysicsEngine copy in PhysicsEngineComponent to make this system work
+    for (unsigned int i = 0; i < physicsEngineComponent->getPhysicsEngine().getNumObjects(); i++) {
+        addToScene((new SceneNode("physics object" + std::to_string(i)))
+                ->addComponent(new PhysicsObjectComponent(&physicsEngineComponent->getPhysicsEngine().getObject(i)))
+                ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat)));
+    }
+
+    addToScene((new SceneNode("physics engine"))->addComponent(physicsEngineComponent));
 }
 
 Game::~Game() {
