@@ -114,8 +114,8 @@ void Game::init() {
     // TEMP physics code, will need to improve
     PhysicsEngine physicsEngine;
 
-    physicsEngine.addObject(PhysicsObject(glm::vec3(0.f), glm::vec3(1.0f, 1.0f, 0.0f)));
-    physicsEngine.addObject(PhysicsObject(glm::vec3(40.0f, 20.0f, 0.f), glm::vec3(0.f, -3.f, -1.0f)));
+    physicsEngine.addObject(PhysicsObject(glm::vec3(-50.f, 5.0f, 0.0f), glm::vec3(3.0f, 0.f, 0.f), 1.f));
+    physicsEngine.addObject(PhysicsObject(glm::vec3(50.0f, 5.0f, 0.f), glm::vec3(-3.f, 0.f, 0.f), 1.f));
 
     PhysicsEngineComponent* physicsEngineComponent = new PhysicsEngineComponent(physicsEngine);
 

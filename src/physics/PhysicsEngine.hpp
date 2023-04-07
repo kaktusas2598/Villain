@@ -13,6 +13,9 @@ namespace Villain {
             void addObject(const PhysicsObject& object);
             void simulate(float deltaTime);
 
+            // Temporarily for now both collision detection and response done in same step
+            void handleCollisions();
+
             // TEMP
             inline const PhysicsObject& getObject(unsigned int index) const { return objects[index]; }
             inline unsigned int getNumObjects() const { return objects.size(); }
