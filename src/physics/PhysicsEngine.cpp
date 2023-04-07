@@ -1,7 +1,6 @@
 #include "PhysicsEngine.hpp"
 
 #include "IntersectData.hpp"
-#include <iostream>
 
 namespace Villain {
 
@@ -23,7 +22,6 @@ namespace Villain {
                 IntersectData intersectData = objects[i].getCollider()
                     .intersect(objects[j].getCollider());
                 if (intersectData.isIntersecting()) {
-                    std::cout << "intersected!\n";
                     // TODO: will need to implement proper conservation of momentum here, impulses
                     // so colliders will need to have mass
                     //

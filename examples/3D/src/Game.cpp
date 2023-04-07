@@ -115,7 +115,7 @@ void Game::init() {
     // TEMP physics code, will need to improve
     PhysicsEngine physicsEngine;
 
-    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 5.0f, 0.f), 1.0f), glm::vec3(3.0f, 0.f, 0.f)));
+    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), glm::vec3(3.0f, 0.f, 0.f)));
     physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-3.0f, 0.f, 0.f)));
 
     PhysicsEngineComponent* physicsEngineComponent = new PhysicsEngineComponent(physicsEngine);
@@ -124,7 +124,8 @@ void Game::init() {
     for (unsigned int i = 0; i < physicsEngineComponent->getPhysicsEngine().getNumObjects(); i++) {
         addToScene((new SceneNode("physics object" + std::to_string(i)))
                 ->addComponent(new PhysicsObjectComponent(&physicsEngineComponent->getPhysicsEngine().getObject(i)))
-                ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat)));
+                ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+                //->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat)));
     }
 
     addToScene((new SceneNode("physics engine"))->addComponent(physicsEngineComponent));
