@@ -66,7 +66,7 @@ void Game::init() {
     // 2023-04-04 - Currently ~12FPS with 3 light sources
     // WIth frustum culling seeing increases from ~3 to ~10FPS, still not enough
     SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
-    //modelNode->getTransform()->setScale(0.1f);
+    modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
     //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/donut.obj"));

@@ -16,7 +16,6 @@ namespace Villain {
 
     // TODO: will need to implement come kind of spatial partitioning system in physics module and use it here
     // to reduce collision checks
-    // Also, need to add more colliders for physics object and check bettween them: sphere/aabb, sphere/sphere and so on
     void PhysicsEngine::handleCollisions() {
         for (unsigned int i = 0; i < objects.size(); i++) {
             for (unsigned int j = i + 1; j < objects.size(); j++) {
