@@ -1,8 +1,7 @@
 #ifndef __PHYSICS_OBJECT__
 #define __PHYSICS_OBJECT__
 
-#include "glm/glm.hpp"
-#include "physics/Collider.hpp"
+#include "Collider.hpp"
 
 namespace Villain {
 

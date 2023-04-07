@@ -4,11 +4,13 @@ namespace Villain {
 
     IntersectData BoundingSphere::intersectBoundingSphere(const BoundingSphere& other) {
         float radiusDistance = radius + other.getRadius();
-        float centreDistance = glm::length(other.getCentre() - centre);
+        glm::vec3 direction = other.getCentre() - centre;
+        float centreDistance = glm::length(direction);
+        direction /= centreDistance; // normalize
 
         float distance = centreDistance - radiusDistance;
 
-        return IntersectData(distance < 0, distance);
+        return IntersectData(distance < 0, direction * distance);
     }
 
     void BoundingSphere::transform(const glm::vec3& translation) {

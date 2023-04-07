@@ -1,7 +1,6 @@
 #ifndef __COLLIDER__
 #define __COLLIDER__
 
-#include "glm/glm.hpp"
 #include "IntersectData.hpp"
 
 namespace Villain {
