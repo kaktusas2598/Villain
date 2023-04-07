@@ -19,8 +19,8 @@ namespace Villain {
     void PhysicsEngine::handleCollisions() {
         for (unsigned int i = 0; i < objects.size(); i++) {
             for (unsigned int j = i + 1; j < objects.size(); j++) {
-                IntersectData intersectData = objects[i].getBoundingSphere()
-                    .intersectBoundingSphere(objects[j].getBoundingSphere());
+                IntersectData intersectData = objects[i].getCollider()
+                    .intersect(objects[j].getCollider());
                 if (intersectData.isIntersecting()) {
                     // Collision response goes here, ideally detection and response will need to be separate
                     objects[i].setVelocity(objects[i].getVelocity() * -1.f);

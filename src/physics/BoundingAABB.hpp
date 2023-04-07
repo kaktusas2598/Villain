@@ -1,23 +1,26 @@
 #ifndef __BOUNDING_AABB__
 #define __BOUNDING_AABB__
 
-#include "glm/glm.hpp"
-#include "IntersectData.hpp"
+#include "Collider.hpp"
 
 namespace Villain {
 
-    class BoundingAABB {
+    class BoundingAABB : public Collider {
         public:
             BoundingAABB(const glm::vec3& min, const glm::vec3& max) :
-                minExtents(min), maxExtents(max) {}
+                Collider(ColliderType::AABB), minExtents(min), maxExtents(max) {}
 
             IntersectData intersectAABB(const BoundingAABB& other);
+            // TODO:
+            virtual void transform(const glm::vec3& translation) {}
+            // TODO:
+            virtual const glm::vec3& getCentre() const { return maxExtents - minExtents; }
 
             const glm::vec3& getMinExtents() const { return minExtents; }
             const glm::vec3& getMaxExtents() const { return maxExtents; }
         private:
-            const glm::vec3 minExtents;
-            const glm::vec3 maxExtents;
+            glm::vec3 minExtents;
+            glm::vec3 maxExtents;
     };
 }
 
