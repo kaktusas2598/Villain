@@ -22,26 +22,6 @@ void Game::init() {
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
 
     ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
-    std::vector<VertexP1N1UV> vertices;
-    // nomals here are wrong cause im lazy, just wanted to get uv working cause it's 2nd vertex attrib, so need normals
-    vertices.push_back({glm::vec3(-1.0f,  1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 1.0f)});
-    vertices.push_back({glm::vec3(1.0f,  1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 1.0f)});
-    vertices.push_back({glm::vec3(1.0f, -1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f)});
-    vertices.push_back({glm::vec3(-1.0f, -1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
-    std::vector<unsigned int> indices = {0, 1, 2, 2, 3, 0};
-    std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices, textures);
-    Material mat("wood", textures, 8);
-
-    SceneNode* planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-
-    SceneNode* testHierarchy = (new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-
-    SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f));
-    testHierarchyChild->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-    //testHierarchy->addChild(testHierarchyChild);
-
-    testHierarchy->getTransform()->setEulerRot(45.0f, 0.f, 0.f);
 
     // Add camera
     addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
@@ -58,7 +38,6 @@ void Game::init() {
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
                 ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));
-    pointLight->addChild(planeNode);
     addToScene(pointLight);
 
     SceneNode* pointLight2 = ((new SceneNode("Point Light 2"))
