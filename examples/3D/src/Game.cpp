@@ -9,7 +9,6 @@
 #include "components/CameraComponent.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
-#include "components/PhysicsEngineComponent.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingSphere.hpp"
 
@@ -112,23 +111,18 @@ void Game::init() {
                 ->addComponent(new SpotLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
     addToScene(spotLight);
 
-    // TEMP physics code, will need to improve
-    PhysicsEngine physicsEngine;
 
-    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), glm::vec3(3.0f, 0.f, 0.f)));
-    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-3.0f, 0.f, 0.f)));
+    // Physics demo
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), glm::vec3(6.0f, 0.f, 0.f)));
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-6.0f, 0.f, 0.f)));
 
-    PhysicsEngineComponent* physicsEngineComponent = new PhysicsEngineComponent(physicsEngine);
-
-    // This is bad design because we must use PhysicsEngine copy in PhysicsEngineComponent to make this system work
-    for (unsigned int i = 0; i < physicsEngineComponent->getPhysicsEngine().getNumObjects(); i++) {
-        addToScene((new SceneNode("physics object" + std::to_string(i)))
-                ->addComponent(new PhysicsObjectComponent(&physicsEngineComponent->getPhysicsEngine().getObject(i)))
-                ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
-                //->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat)));
-    }
-
-    addToScene((new SceneNode("physics engine"))->addComponent(physicsEngineComponent));
+    // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
+    addToScene((new SceneNode("physics object 0"))
+        ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
+        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+    addToScene((new SceneNode("physics object 1"))
+        ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
+        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
 }
 
 Game::~Game() {

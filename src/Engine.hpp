@@ -7,6 +7,7 @@
 #include "InputManager.hpp"
 #include "RendereringEngine.hpp"
 #include "Window.hpp"
+#include "physics/PhysicsEngine.hpp"
 
 #include <functional>
 #include <stdio.h>
@@ -51,6 +52,7 @@ namespace Villain {
             static float getFps() { return fps; }
             static bool editModeActive() { return editMode; }
 
+            inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
             inline Application* getApplication() { return application; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
@@ -76,6 +78,7 @@ namespace Villain {
             std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;
             struct nk_context* nuklearContext;
 
+            std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;
             RenderingEngine* renderingEngine = nullptr;
             Application* application = nullptr;
     };

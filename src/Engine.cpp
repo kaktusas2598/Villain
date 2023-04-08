@@ -84,6 +84,8 @@ namespace Villain {
 
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
+        // TODO: will need some configs here, gravity vector for example
+        physicsEngine = std::make_unique<PhysicsEngine>();
         // NOTE: must be initialized before application
         renderingEngine = new RenderingEngine();
 
@@ -178,6 +180,9 @@ namespace Villain {
                 deltaTime = deltaTime / DESIRED_FPS;
 
                 application->handleEvents(deltaTime);
+
+                physicsEngine->simulate(deltaTime);
+                physicsEngine->handleCollisions();
 
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);
