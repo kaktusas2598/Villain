@@ -95,7 +95,7 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
  * Improve DebugRenderer: add lines and 3d primitive draw calls, use unique_ptr abstractions like VertexBuffer class
- * Add ability to render spheres in DebugRenderer
+ * Fix drawSphere() in DebugRenderer - for some reason only drawing top half of sphere
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
