@@ -16,6 +16,8 @@ using namespace Villain;
 const float ROOM_WIDTH = 1.0f;
 const float ROOM_LENGTH = 1.0f;
 const float ROOM_HEIGHT = 2.0f;
+const int NUM_TEX_EXP = 4;
+const int NUM_TEXTURES = (int)pow(2, NUM_TEX_EXP);
 
 void Game::init() {
     camera.setZPlanes(0.1f, 1000.f); // for bigger render range
@@ -67,13 +69,21 @@ void Game::init() {
     Bitmap map1("assets/textures/level1.png");
     for (int i = 0; i < map1.getWidth(); i++) {
         for (int j = 0; j < map1.getHeight(); j++) {
-            float xHigher = 1;
-            float xLower = 0;
-            float yHigher = 1;
-            float yLower = 0;
-
             Pixel pixel = map1.getPixel(i, j);
-            if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255) {
+
+            // Selects tile from atlas using green component of the pixel in current position in bitmap
+            // For walls we use red component
+            // So for 16 textures, we divide color component 0 -> 255 in 16 parts
+            int texX = pixel.G / NUM_TEXTURES;
+            int texY = texX % NUM_TEX_EXP;
+            texX /= NUM_TEX_EXP;
+
+            float xHigher = 1.f - (float)texX / (float)NUM_TEX_EXP;
+            float xLower = xHigher - 1.f / NUM_TEX_EXP;
+            float yHigher = 1.f - (float)texY / (float)NUM_TEX_EXP;
+            float yLower = yHigher - 1.f / NUM_TEX_EXP;
+
+            if (pixel.R != 0 || pixel.G != 0 || pixel.B != 0) {
                 // Floor vertices, normals are defaults just to make shader work
                 floorIndices.push_back(floorVertices.size() + 2);
                 floorIndices.push_back(floorVertices.size() + 1);
@@ -99,6 +109,14 @@ void Game::init() {
                 floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
                 floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
                 floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+
+                int texX = pixel.R / NUM_TEXTURES;
+                int texY = texX % NUM_TEX_EXP;
+                texX /= NUM_TEX_EXP;
+                float xHigher = 1.f - (float)texX / (float)NUM_TEX_EXP;
+                float xLower = xHigher - 1.f / NUM_TEX_EXP;
+                float yHigher = 1.f - (float)texY / (float)NUM_TEX_EXP;
+                float yLower = yHigher - 1.f / NUM_TEX_EXP;
 
                 // Genertate walls
                 Pixel pixel = map1.getPixel(i, j - 1); // get adjacent pixel
