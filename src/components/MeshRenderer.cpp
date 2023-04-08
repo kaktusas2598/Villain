@@ -18,11 +18,10 @@ namespace Villain {
                 Camera& camera
                 ) {
             shader.bind();
-            // TODO: Update uniforms :: matrices, materials, lights, camera etc.
-            // TODO: pass to rendering engine (maybe should implenent mesh batch renderer)
+            // NOTE: should implenent mesh batch renderer
             shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
 
-            mesh->draw(shader);
+            mesh->draw(shader, this->material);
         }
 
     // Explicit instantiation of template specialisations to avoid linker errors, alternativaly and even better

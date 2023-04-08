@@ -119,8 +119,9 @@ void Game::init() {
     }
     // Add floor to scene graph
     std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/models/textures/brickwall.jpg", "wall")};
+    Material bricks{"bricks", floorTextures, 8};
     Mesh<VertexP1N1UV>* floorMesh = new Mesh<VertexP1N1UV>(floorVertices, floorIndices, floorTextures);
-    addToScene((new SceneNode("floor"))->addComponent(new MeshRenderer<VertexP1N1UV>(floorMesh, mat)));
+    addToScene((new SceneNode("floor"))->addComponent(new MeshRenderer<VertexP1N1UV>(floorMesh, bricks)));
 }
 
 Game::~Game() {

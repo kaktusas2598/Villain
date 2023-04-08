@@ -13,13 +13,11 @@ namespace Villain {
         delete model;
     }
 
-    // TODO:
     void ModelRenderer::render(
             Shader& shader,
             RenderingEngine& renderingEngine,
             Camera& camera
             ) {
-
 		//unsigned int display = 0, total = 0;
 		const Frustum camFrustum = camera.getFrustum();
 

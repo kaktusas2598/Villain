@@ -26,6 +26,8 @@ namespace Villain {
         setupMesh();
     }
 
+    // TODO: probably outdated by now, upon deleting this make sure to remove textures vector from mesh constructor
+    // only Materials will be used instead from now on
     template <class VertexType>
     void Mesh<VertexType>::draw(Shader &shader) {
         unsigned int diffuseIndex = 1;
@@ -96,7 +98,13 @@ namespace Villain {
     template void Mesh<VertexP1N1UV>::draw(Shader &shader);
     template void Mesh<VertexP1C1UV>::draw(Shader &shader);
     template void Mesh<VertexP1N1C1UV>::draw(Shader &shader);
+    template void Mesh<VertexP1N1T1B1UV>::draw(Shader &shader);
 
+    template void Mesh<VertexP1>::draw(Shader &shader, Material& material);
+    template void Mesh<VertexP1UV>::draw(Shader &shader, Material& material);
+    template void Mesh<VertexP1N1>::draw(Shader &shader, Material& material);
     template void Mesh<VertexP1N1UV>::draw(Shader &shader, Material& material);
+    template void Mesh<VertexP1C1UV>::draw(Shader &shader, Material& material);
+    template void Mesh<VertexP1N1C1UV>::draw(Shader &shader, Material& material);
     template void Mesh<VertexP1N1T1B1UV>::draw(Shader &shader, Material& material);
 }
