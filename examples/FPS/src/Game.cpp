@@ -67,7 +67,6 @@ void Game::init() {
     Bitmap map1("assets/textures/level1.png");
     for (int i = 0; i < map1.getWidth(); i++) {
         for (int j = 0; j < map1.getHeight(); j++) {
-            // TODO: create meshes here
             float xHigher = 1;
             float xLower = 0;
             float yHigher = 1;
@@ -167,7 +166,8 @@ void Game::init() {
             }
         }
     }
-    std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/models/textures/brickwall.jpg", "wall")};
+    //std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/models/textures/brickwall.jpg", "wall")};
+    std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/textures/WolfCollection.png", "wall")};
     Material bricks{"bricks", floorTextures, 8};
     Mesh<VertexP1N1UV>* floorMesh = new Mesh<VertexP1N1UV>(floorVertices, floorIndices, floorTextures);
     addToScene((new SceneNode("floor"))->addComponent(new MeshRenderer<VertexP1N1UV>(floorMesh, bricks)));
