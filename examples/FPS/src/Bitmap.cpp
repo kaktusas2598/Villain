@@ -22,6 +22,12 @@ Bitmap::~Bitmap() {
         stbi_image_free(data);
 }
 
-unsigned char* Bitmap::getPixel(int x, int y) {
-    return data + (y + x * height) * BPP;
+Pixel Bitmap::getPixel(int x, int y) {
+    unsigned char* pixelPointer = data + (y + x * height) * BPP;
+    Pixel pixel;
+    pixel.R = (int)pixelPointer[0];
+    pixel.G = (int)pixelPointer[1];
+    pixel.B = (int)pixelPointer[2];
+
+    return pixel;
 }

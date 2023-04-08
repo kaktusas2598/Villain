@@ -2,6 +2,12 @@
 
 #include <string>
 
+struct Pixel {
+    int R;
+    int G;
+    int B;
+};
+
 // Texture representing 3D Doom/Wolfenstein-like map
 class Bitmap {
     public:
@@ -11,7 +17,7 @@ class Bitmap {
 
         inline int getWidth() const { return width; }
         inline int getHeight() const { return height; }
-        unsigned char* getPixel(int x, int y);
+        Pixel getPixel(int x, int y);
     private:
         int width, height, BPP;
         unsigned char* data;

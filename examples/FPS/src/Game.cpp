@@ -61,7 +61,7 @@ void Game::init() {
         ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
         ->addComponent(new ModelRenderer("assets/models/wall.obj")));
 
-    // Map test
+    // Load and generate 3D map from bitmap texture
     std::vector<VertexP1N1UV> floorVertices;
     std::vector<unsigned int> floorIndices;
     Bitmap map1("assets/textures/level1.png");
@@ -73,12 +73,8 @@ void Game::init() {
             float yHigher = 1;
             float yLower = 0;
 
-            unsigned char* pixel = map1.getPixel(i, j);
-            int r = (int)pixel[0];
-            int g = (int)pixel[1];
-            int b = (int)pixel[2];
-
-            if (r == 255 && g == 255 && b == 255) {
+            Pixel pixel = map1.getPixel(i, j);
+            if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255) {
                 // Floor vertices, normals are defaults just to make shader work
                 floorIndices.push_back(floorVertices.size() + 2);
                 floorIndices.push_back(floorVertices.size() + 1);
@@ -91,12 +87,86 @@ void Game::init() {
                 floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
                 floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
                 floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+
+                // Ceilings, also revert indices to make sure textures are drawn from the bottom
+                floorIndices.push_back(floorVertices.size() + 0);
+                floorIndices.push_back(floorVertices.size() + 1);
+                floorIndices.push_back(floorVertices.size() + 2);
+                floorIndices.push_back(floorVertices.size() + 0);
+                floorIndices.push_back(floorVertices.size() + 2);
+                floorIndices.push_back(floorVertices.size() + 3);
+
+                floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
+                floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
+                floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
+                floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+
+                // Genertate walls
+                Pixel pixel = map1.getPixel(i, j - 1); // get adjacent pixel
+                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    // Generate left wall
+                    floorIndices.push_back(floorVertices.size() + 0);
+                    floorIndices.push_back(floorVertices.size() + 1);
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 0);
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 3);
+
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+                }
+                pixel = map1.getPixel(i, j + 1);
+                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    // Generate right wall
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 1);
+                    floorIndices.push_back(floorVertices.size() + 0);
+                    floorIndices.push_back(floorVertices.size() + 3);
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 0);
+
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+                }
+                pixel = map1.getPixel(i - 1, j);
+                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    // Generate near wall
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 1);
+                    floorIndices.push_back(floorVertices.size() + 0);
+                    floorIndices.push_back(floorVertices.size() + 3);
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 0);
+
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
+                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+                }
+                pixel = map1.getPixel(i + 1, j);
+                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    // Generate far wall
+                    floorIndices.push_back(floorVertices.size() + 0);
+                    floorIndices.push_back(floorVertices.size() + 1);
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 0);
+                    floorIndices.push_back(floorVertices.size() + 2);
+                    floorIndices.push_back(floorVertices.size() + 3);
+
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
+                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
+                }
+
+
             }
-            //std::cout << "X: " << i << ", Y: " << j << "\n";
-            //std::cout << "R: " << (int)pixel[0] << ", G: " << (int)pixel[1] << ", B: " << (int)pixel[2] << "\n";
         }
     }
-    // Add floor to scene graph
     std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/models/textures/brickwall.jpg", "wall")};
     Material bricks{"bricks", floorTextures, 8};
     Mesh<VertexP1N1UV>* floorMesh = new Mesh<VertexP1N1UV>(floorVertices, floorIndices, floorTextures);
