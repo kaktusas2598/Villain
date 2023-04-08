@@ -2,8 +2,8 @@
 #define __GAME__
 
 #include "Application.hpp"
-
 #include "Camera3D.hpp"
+#include "Level.hpp"
 
 class Game : public Villain::Application {
     public:
@@ -15,6 +15,7 @@ class Game : public Villain::Application {
 
     private:
         Villain::Camera3D camera;
+        Level* currentLevel;
 };
 
 #endif // __GAME__

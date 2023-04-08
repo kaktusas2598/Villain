@@ -9,15 +9,10 @@
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingSphere.hpp"
 
-#include "Bitmap.hpp"
+#include "Level.hpp"
 
 using namespace Villain;
 
-const float ROOM_WIDTH = 1.0f;
-const float ROOM_LENGTH = 1.0f;
-const float ROOM_HEIGHT = 2.0f;
-const int NUM_TEX_EXP = 4;
-const int NUM_TEXTURES = (int)pow(2, NUM_TEX_EXP);
 
 void Game::init() {
     camera.setZPlanes(0.1f, 1000.f); // for bigger render range
@@ -63,132 +58,9 @@ void Game::init() {
         ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
         ->addComponent(new ModelRenderer("assets/models/wall.obj")));
 
-    // Load and generate 3D map from bitmap texture
-    std::vector<VertexP1N1UV> floorVertices;
-    std::vector<unsigned int> floorIndices;
-    Bitmap map1("assets/textures/level1.png");
-    for (int i = 0; i < map1.getWidth(); i++) {
-        for (int j = 0; j < map1.getHeight(); j++) {
-            Pixel pixel = map1.getPixel(i, j);
-
-            // Selects tile from atlas using green component of the pixel in current position in bitmap
-            // For walls we use red component
-            // So for 16 textures, we divide color component 0 -> 255 in 16 parts
-            int texX = pixel.G / NUM_TEXTURES;
-            int texY = texX % NUM_TEX_EXP;
-            texX /= NUM_TEX_EXP;
-
-            float xHigher = 1.f - (float)texX / (float)NUM_TEX_EXP;
-            float xLower = xHigher - 1.f / NUM_TEX_EXP;
-            float yHigher = 1.f - (float)texY / (float)NUM_TEX_EXP;
-            float yLower = yHigher - 1.f / NUM_TEX_EXP;
-
-            if (pixel.R != 0 || pixel.G != 0 || pixel.B != 0) {
-                // Floor vertices, normals are defaults just to make shader work
-                floorIndices.push_back(floorVertices.size() + 2);
-                floorIndices.push_back(floorVertices.size() + 1);
-                floorIndices.push_back(floorVertices.size() + 0);
-                floorIndices.push_back(floorVertices.size() + 3);
-                floorIndices.push_back(floorVertices.size() + 2);
-                floorIndices.push_back(floorVertices.size() + 0);
-
-                floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
-                floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
-                floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
-                floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
-
-                // Ceilings, also revert indices to make sure textures are drawn from the bottom
-                floorIndices.push_back(floorVertices.size() + 0);
-                floorIndices.push_back(floorVertices.size() + 1);
-                floorIndices.push_back(floorVertices.size() + 2);
-                floorIndices.push_back(floorVertices.size() + 0);
-                floorIndices.push_back(floorVertices.size() + 2);
-                floorIndices.push_back(floorVertices.size() + 3);
-
-                floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
-                floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
-                floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
-                floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
-
-                int texX = pixel.R / NUM_TEXTURES;
-                int texY = texX % NUM_TEX_EXP;
-                texX /= NUM_TEX_EXP;
-                float xHigher = 1.f - (float)texX / (float)NUM_TEX_EXP;
-                float xLower = xHigher - 1.f / NUM_TEX_EXP;
-                float yHigher = 1.f - (float)texY / (float)NUM_TEX_EXP;
-                float yLower = yHigher - 1.f / NUM_TEX_EXP;
-
-                // Genertate walls
-                Pixel pixel = map1.getPixel(i, j - 1); // get adjacent pixel
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
-                    // Generate left wall
-                    floorIndices.push_back(floorVertices.size() + 0);
-                    floorIndices.push_back(floorVertices.size() + 1);
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 0);
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 3);
-
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
-                }
-                pixel = map1.getPixel(i, j + 1);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
-                    // Generate right wall
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 1);
-                    floorIndices.push_back(floorVertices.size() + 0);
-                    floorIndices.push_back(floorVertices.size() + 3);
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 0);
-
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
-                }
-                pixel = map1.getPixel(i - 1, j);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
-                    // Generate near wall
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 1);
-                    floorIndices.push_back(floorVertices.size() + 0);
-                    floorIndices.push_back(floorVertices.size() + 3);
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 0);
-
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
-                    floorVertices.push_back({glm::vec3((i * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
-                }
-                pixel = map1.getPixel(i + 1, j);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
-                    // Generate far wall
-                    floorIndices.push_back(floorVertices.size() + 0);
-                    floorIndices.push_back(floorVertices.size() + 1);
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 0);
-                    floorIndices.push_back(floorVertices.size() + 2);
-                    floorIndices.push_back(floorVertices.size() + 3);
-
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yLower)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), 0.0f, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yLower)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xHigher, yHigher)});
-                    floorVertices.push_back({glm::vec3(((i + 1) * ROOM_WIDTH), ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(xLower, yHigher)});
-                }
-
-
-            }
-        }
-    }
-    //std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/models/textures/brickwall.jpg", "wall")};
-    std::vector<Texture*> floorTextures = {ResourceManager::Instance()->loadTexture("assets/textures/WolfCollection.png", "wall")};
-    Material bricks{"bricks", floorTextures, 8};
-    Mesh<VertexP1N1UV>* floorMesh = new Mesh<VertexP1N1UV>(floorVertices, floorIndices, floorTextures);
-    addToScene((new SceneNode("floor"))->addComponent(new MeshRenderer<VertexP1N1UV>(floorMesh, bricks)));
+    // Load level and add to the scene graph
+    currentLevel = new Level("assets/textures/level1.png", "assets/textures/WolfCollection.png");
+    addToScene((new SceneNode("Level 1"))->addComponent(new MeshRenderer<VertexP1N1UV>(currentLevel->getMesh(), currentLevel->getMaterial())));
 }
 
 Game::~Game() {
