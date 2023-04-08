@@ -106,9 +106,9 @@ void Game::init() {
 
     //}
 
-    // TODO: somehow will have to make this follow camera, probably needs to be part of same Node
+    glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
     SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                ->addComponent(new SpotLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
+                ->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))/*, &camera*/)));
     addToScene(spotLight);
 
 

@@ -31,8 +31,8 @@ namespace Villain {
         Position = GetTransform()->getPos();
     }
 
-    SpotLight::SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff) :
-                BaseLight(ambient, diffuse, specular), Position(pos), Direction(dir), CutOff(cutOff), OuterCutOff(outerCutOff) {
+    SpotLight::SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, Camera3D* cam) :
+                BaseLight(ambient, diffuse, specular), Position(pos), Direction(dir), CutOff(cutOff), OuterCutOff(outerCutOff), camera(cam) {
 
         shader = new Shader();
         shader->createFromResource("forward-spot");
@@ -40,5 +40,10 @@ namespace Villain {
 
     void SpotLight::update(float deltaTime) {
         Position = GetTransform()->getPos();
+
+        if (camera != nullptr) {
+            Position = camera->getPosition();
+            Direction = camera->getFront();
+        }
     }
 }
