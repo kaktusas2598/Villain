@@ -156,6 +156,8 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
     debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
 
+    //debugRenderer.drawSphere(glm::vec3(0.0f, 20.0f, 0.0f), glm::vec4(0.8f, 0.0f, 2.0f, 2.0f), 5.0f);
+
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
 

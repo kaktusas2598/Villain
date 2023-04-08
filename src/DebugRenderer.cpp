@@ -242,6 +242,55 @@ namespace Villain {
         indices.push_back(i + 4);
     }
 
+    // Inspired by: https://www.songho.ca/opengl/gl_sphere.html
+    // FIXME: only half sphere is being drawn for some reason
+    void DebugRenderer::drawSphere(const glm::vec3& center, const glm::vec4& color, float radius) {
+        const float sectorCount = 36; //<<< num of longitude divisions
+        const float stackCount = 18; //<<< num of latitude divisions
+        float x, y, z, xy;
+
+        int start = vertices.size(); // Index for 1st new vertex added
+        vertices.resize(vertices.size() + 703);
+
+        float sectorStep = 2 * M_PI / sectorCount;
+        float stackStep = M_PI / stackCount;
+        float sectorAngle, stackAngle;
+
+        for (int i = 0; i <= stackCount; ++i) {
+            stackAngle = M_PI / 2 - i * stackStep; //<<< from pi/2 to -pi/2
+            xy = radius * cosf(stackAngle);
+            z = radius * sinf(stackAngle);
+
+            for (int j = 0; j <= sectorCount; ++j) {
+                sectorAngle = j * sectorStep;
+                // start + i is probably not correct here
+                vertices[start + i * stackCount + j].position.x = xy * cosf(sectorAngle);
+                vertices[start + i * stackCount + j].position.y = xy * sinf(sectorAngle);
+                vertices[start + i * stackCount + j].position.z = z;
+                // shift sphere by center vector to transform it, not sure if this is correct
+                vertices[start + i * stackCount + j].position += center;
+                vertices[start + i * stackCount + j].color = color;
+            }
+        }
+        // Generate indices
+        indices.reserve(indices.size() + 2520);
+        int k1, k2;
+        for (int i = 0; i < stackCount; ++i) {
+            k1 = i * (sectorCount + 1); // beginning of current stack
+            k2 = k1 + sectorCount + 1; // beginning of next stack
+            for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+                // vertical lines
+                indices.push_back(k1);
+                indices.push_back(k2);
+                // horizontal lines
+                if (i != 0) {
+                    indices.push_back(k1);
+                    indices.push_back(k1 + 1);
+                }
+            }
+        }
+    }
+
     void DebugRenderer::render(const glm::mat4& mvpMatrix, float lineWidth) {
         debugShader->bind();
 
