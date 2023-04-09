@@ -7,8 +7,10 @@
 #include "Light.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
+#include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
+#include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingSphere.hpp"
 
@@ -60,7 +62,11 @@ void Game::init() {
     //addToScene(planeNode);
 
     // Add camera
-    addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
+    SceneNode* cam = (new SceneNode("Free look camera"))
+            ->addComponent(new CameraComponent(&camera))
+            ->addComponent(new MoveController())
+            ->addComponent(new LookController());
+    addToScene(cam);
 
     // Model renderer test
     // 2023-04-04 - Currently ~12FPS with 3 light sources

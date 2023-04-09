@@ -28,6 +28,7 @@ namespace Villain {
             float getZnear() { return zNear; }
             float getZfar() { return zFar; }
             void setZPlanes(float near, float far) { zNear = near, zFar = far; }
+            void setRotation(const glm::vec3& rotation);
 
             Frustum getFrustum() {
                 Frustum     frustum;

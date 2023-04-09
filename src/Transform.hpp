@@ -18,6 +18,7 @@ namespace Villain {
             float getScale() const { return scale; }
 
             glm::vec3& getPos() { return position; }
+            glm::vec3& getEulerRot() { return eulerRot; }
             float* getScalePtr() { return &scale; }
 
             //void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {

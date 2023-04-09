@@ -1,30 +1,26 @@
 #include "Game.hpp"
 
-#include "ResourceManager.hpp"
 #include "Light.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
+#include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
+#include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingSphere.hpp"
 
 #include "Level.hpp"
+#include "Player.hpp"
 
 using namespace Villain;
 
 
 void Game::init() {
-    camera.setZPlanes(0.1f, 1000.f); // for bigger render range
-    camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
-
-    ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
-
-    // Add camera
-    addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
-
     SceneNode* wall = (new SceneNode("wall", glm::vec3(4.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/wall.obj"));
-    wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
+    //wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
+    //wall->addComponent(new LookController());
+    //wall->addComponent(new MoveController());
     addToScene(wall);
 
     // Light test
@@ -57,6 +53,16 @@ void Game::init() {
     // Load level and add to the scene graph
     currentLevel = new Level("assets/textures/level1.png", "assets/textures/WolfCollection.png");
     addToScene((new SceneNode("Level 1"))->addComponent(new MeshRenderer<VertexP1N1UV>(currentLevel->getMesh(), currentLevel->getMaterial())));
+
+    // Add camera and player
+    camera = new Camera3D();
+    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
+
+    SceneNode* player = (new SceneNode("Player"))->addComponent(new CameraComponent(camera));
+    player->addComponent(new Player());
+    player->addComponent(new LookController());
+    player->addComponent(new MoveController());
+    addToScene(player);
 }
 
 Game::~Game() {

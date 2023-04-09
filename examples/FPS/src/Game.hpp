@@ -14,7 +14,7 @@ class Game : public Villain::Application {
         void onAppPreUpdate(float dt);
 
     private:
-        Villain::Camera3D camera;
+        Villain::Camera3D* camera;
         Level* currentLevel;
 };
 
