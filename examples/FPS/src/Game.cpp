@@ -55,7 +55,7 @@ void Game::init() {
     camera = new Camera3D();
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
 
-    SceneNode* player = (new SceneNode("Player", glm::vec3(0.f, 1.f, 0.f)))->addComponent(new CameraComponent(camera));
+    SceneNode* player = (new SceneNode("Player", glm::vec3(1.f, 1.f, 17.5f)))->addComponent(new CameraComponent(camera));
     player->addComponent(new Player());
     player->addComponent(new LookController());
     player->addComponent(new MoveController());
