@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bitmap.hpp"
+#include "Door.hpp"
 #include "Mesh.hpp"
 
 class Level {
@@ -14,6 +15,7 @@ class Level {
 
         // TODO: need to incorporate level collision into Physics Engine
         glm::vec3 checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPos, float objectWidth, float objectLength);
+        void setDoor(Door* d) { door = d; }
     private:
         void generateLevel(const std::string& tileAtlasFileName);
 
@@ -30,4 +32,7 @@ class Level {
         Bitmap* bitmap = nullptr;
         Villain::Mesh<VertexP1N1UV>* mesh = nullptr;
         Villain::Material* material = nullptr;
+
+        // TEMP
+        Door* door = nullptr;
 };

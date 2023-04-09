@@ -143,6 +143,13 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
                 }
             }
         }
+        // Check door collision
+        glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
+        glm::vec2 doorSize(door->Length, door->Width);
+        glm::vec2 doorCol = rectCollide(oldPos2, newPos2, objectSize, doorSize, doorPos);
+        collision.x *= doorCol.x;
+        collision.y *= doorCol.y;
+
     }
 
     return glm::vec3(collision.x, 0.0f, collision.y);

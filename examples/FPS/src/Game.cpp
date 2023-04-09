@@ -63,18 +63,10 @@ void Game::init() {
     //player->addComponent(new MoveController());
     addToScene(player);
 
-    SceneNode* door1 = (new SceneNode("Door 1", glm::vec3(2.f, 1.f, 17.5f)))->addComponent(new Door());
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures.crate.png", "door")};
-    Material material{"door", textures, 8};
-    std::vector<VertexP1N1UV> vertices;
-    vertices.push_back({glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.0f), glm::vec2(0.f, 0.f)});
-    vertices.push_back({glm::vec3(0.f, 2.f, 0.f), glm::vec3(0.0f), glm::vec2(0.f, 0.f)});
-    vertices.push_back({glm::vec3(1.f, 2.f, 0.f), glm::vec3(0.0f), glm::vec2(0.f, 0.f)});
-    vertices.push_back({glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.0f), glm::vec2(0.f, 0.f)});
-    std::vector<unsigned int> indices{0, 1, 2, 0, 2, 3};
-
-    Mesh<VertexP1N1UV>* doorMesh = new Mesh<VertexP1N1UV>(vertices, indices);
-    addToScene(door1->addComponent(new MeshRenderer<VertexP1N1UV>(doorMesh, material)));
+    // Add door
+    Door* door = new Door();
+    currentLevel->setDoor(door);
+    addToScene((new SceneNode("Door 1", glm::vec3(13.f, 0.f, 17.0f)))->addComponent(door));
 }
 
 Game::~Game() {
