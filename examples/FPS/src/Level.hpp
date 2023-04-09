@@ -39,5 +39,5 @@ class Level {
         Villain::SceneNode* levelNode;
         // Could just use children nodes instead but that needs dynamic casts,
         // so we need to introduce maybe component signature and systems and...
-        std::vector<Villain::SceneNode*> doors;
+        std::vector<Door*> doors;
 };

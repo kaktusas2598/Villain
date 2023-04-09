@@ -92,7 +92,7 @@ void Level::addDoor(int x, int y) {
         newNode = (new Villain::SceneNode(doorName.str(), glm::vec3(x, 0.0f, y + ROOM_LENGTH/2)))->addComponent(newDoor);
         levelNode->addChild(newNode);
     }
-    doors.push_back(newNode);
+    doors.push_back(newDoor);
 }
 
 void Level::addSpecialObject(int blueValue, int x, int y) {
@@ -178,11 +178,13 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
             }
         }
         // Check door collision
-        //glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
-        //glm::vec2 doorSize(door->Length, door->Width);
-        //glm::vec2 doorCol = rectCollide(oldPos2, newPos2, objectSize, doorSize, doorPos);
-        //collision.x *= doorCol.x;
-        //collision.y *= doorCol.y;
+        for(auto& door : doors){
+            glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
+            glm::vec2 doorSize(door->Length, door->Width);
+            glm::vec2 doorCol = rectCollide(oldPos2, newPos2, objectSize, doorSize, doorPos);
+            collision.x *= doorCol.x;
+            collision.y *= doorCol.y;
+        }
 
     }
 
