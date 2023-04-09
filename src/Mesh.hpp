@@ -8,7 +8,6 @@
 #include "IndexBuffer.hpp"
 #include "Material.hpp"
 #include "Shader.hpp"
-#include "Texture.hpp"
 
 #include "Frustum.hpp"
 
@@ -18,21 +17,12 @@ namespace Villain {
         public:
             std::vector<VertexType> Vertices;
             std::vector<unsigned int> Indices;
-            std::vector<Texture*> Textures;
 
-            glm::vec4 diffuseColor;
-
-            Mesh(std::vector<VertexType> vertices,
-                    std::vector<unsigned int> indices,
-                    std::vector<Texture*> textures,
-                    glm::vec4 diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            // Instead of passing textures, pass material name
+            Mesh(std::vector<VertexType> vertices, std::vector<unsigned int> indices);
             Mesh(std::vector<VertexType> vertices, std::vector<unsigned int> indices, const std::string& matName);
 
             void draw(Shader &shader);
             void draw(Shader &shader, Material& material);
-            // TODO: delete textures in here?
-            // ~Mesh() {}
 
             Sphere* getBoundingVolume() { return boundingVolume.get(); }
             const std::string& getMaterialName() const { return materialName; }

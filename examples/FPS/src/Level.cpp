@@ -64,7 +64,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
 
     std::vector<Villain::Texture*> floorTextures = {Villain::ResourceManager::Instance()->loadTexture(tileAtlasFileName, "atlas")};
     material = new Villain::Material{"bricks", floorTextures, 8};
-    mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices, floorTextures);
+    mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
 }
 
 void Level::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {

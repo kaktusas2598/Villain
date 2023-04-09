@@ -44,8 +44,8 @@ void Game::init() {
     vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
     std::vector<unsigned int> indices = {0, 1, 2};
     std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices, textures);
     Material mat("wood", textures, 8);
+    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     SceneNode* planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
