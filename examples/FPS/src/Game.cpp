@@ -18,9 +18,6 @@ using namespace Villain;
 
 void Game::init() {
     SceneNode* wall = (new SceneNode("wall", glm::vec3(4.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/wall.obj"));
-    //wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
-    //wall->addComponent(new LookController());
-    //wall->addComponent(new MoveController());
     addToScene(wall);
 
     // Light test
