@@ -118,3 +118,50 @@ float* Level::getTexCoords(int val) {
     res[2] = res[3] - 1.f / NUM_TEX_EXP; // yLower
     return res;
 }
+
+glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPos, float objectWidth, float objectLength) {
+    glm::vec2 collision = glm::vec2(1.f); // Won't move in y axis, so only vec2 here
+    glm::vec3 movement = newPos - oldPos;
+
+    if (glm::length(movement)) {
+        glm::vec2 blockSize(ROOM_WIDTH, ROOM_LENGTH);
+        glm::vec2 objectSize(objectWidth, objectLength);
+
+        glm::vec2 oldPos2(oldPos.x, oldPos.z);
+        glm::vec2 newPos2(newPos.x, newPos.z);
+        // Pretty bad way to check collision, need to improve so only checks nearby titles
+        for (int i = 0; i < bitmap->getWidth(); i++) {
+            for (int j = 0; j < bitmap->getHeight(); j++) {
+                Pixel pixel = bitmap->getPixel(i, j);
+                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    glm::vec2 blockPos; // get pos for a wall block
+                    blockPos.x = blockSize.x * i;
+                    blockPos.y = blockSize.y * j;
+                    glm::vec2 currentTileCol = rectCollide(oldPos2, newPos2, objectSize, blockSize, blockPos);
+                    collision.x *= currentTileCol.x;
+                    collision.y *= currentTileCol.y;
+                }
+            }
+        }
+    }
+
+    return glm::vec3(collision.x, 0.0f, collision.y);
+}
+
+glm::vec2 Level::rectCollide(glm::vec2& oldPos, glm::vec2& newPos, glm::vec2& objectSize, glm::vec2& blockSize, glm::vec2& blockPos) {
+    glm::vec2 result(0.0f);
+
+    if (newPos.x + objectSize.x < blockPos.x ||
+        newPos.x - objectSize.x > blockPos.x + blockSize.x * blockSize.x ||
+        oldPos.y + objectSize.y < blockPos.y ||
+        oldPos.y - objectSize.y > blockPos.y + blockSize.y * blockSize.y) {
+        result.x = 1.0f; // Collision found on X axis
+    }
+    if (oldPos.x + objectSize.x < blockPos.x ||
+        oldPos.x - objectSize.x > blockPos.x + blockSize.x * blockSize.x ||
+        newPos.y + objectSize.y < blockPos.y ||
+        newPos.y - objectSize.y > blockPos.y + blockSize.y * blockSize.y) {
+        result.y = 1.0f; // Collision found on Z axis
+    }
+    return result;
+}
