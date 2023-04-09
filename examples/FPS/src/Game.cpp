@@ -57,7 +57,7 @@ void Game::init() {
 
     SceneNode* player = (new SceneNode("Player", glm::vec3(0.f, 1.f, 0.f)))->addComponent(new CameraComponent(camera));
     player->addComponent(new Player());
-    //player->addComponent(new LookController());
+    player->addComponent(new LookController());
     //player->addComponent(new MoveController()); // We use Player as custom Move/Look Controller here
     addToScene(player);
 }
