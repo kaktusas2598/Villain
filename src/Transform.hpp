@@ -14,6 +14,7 @@ namespace Villain {
             glm::mat4 getTransformMatrix();
             bool hasChanged() { return needsUpdate; }
 
+            void translatePosition(const glm::vec3& translation) { position += translation; }
             //const glm::vec3& getPos() const { return position; }
             float getScale() const { return scale; }
 
