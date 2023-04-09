@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Application.hpp"
 #include "Bitmap.hpp"
 #include "Door.hpp"
 #include "Mesh.hpp"
 
 class Level {
     public:
-        Level(const std::string& fileName, const std::string& tileAtlasFileName);
+        Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app);
 
         void update(float deltaTime);
 
@@ -15,9 +16,10 @@ class Level {
 
         // TODO: need to incorporate level collision into Physics Engine
         glm::vec3 checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPos, float objectWidth, float objectLength);
-        void setDoor(Door* d) { door = d; }
     private:
         void generateLevel(const std::string& tileAtlasFileName);
+        void addSpecialObject(int blueValue, int x, int y);
+        void addDoor(int x, int y);
 
         // Generate indices for quad
         void addFace(std::vector<unsigned int>* indices, int startLocation, bool direction);
@@ -33,6 +35,9 @@ class Level {
         Villain::Mesh<VertexP1N1UV>* mesh = nullptr;
         Villain::Material* material = nullptr;
 
-        // TEMP
-        Door* door = nullptr;
+        Villain::Application* application;
+        Villain::SceneNode* levelNode;
+        // Could just use children nodes instead but that needs dynamic casts,
+        // so we need to introduce maybe component signature and systems and...
+        std::vector<Villain::SceneNode*> doors;
 };

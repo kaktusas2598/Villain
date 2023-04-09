@@ -2,6 +2,7 @@
 
 #include "ResourceManager.hpp"
 #include <iostream>
+#include <sstream>
 
 const float ROOM_WIDTH = 1.0f;
 const float ROOM_LENGTH = 1.0f;
@@ -9,13 +10,15 @@ const float ROOM_HEIGHT = 2.0f;
 const int NUM_TEX_EXP = 4;
 const int NUM_TEXTURES = (int)pow(2, NUM_TEX_EXP);
 
-Level::Level(const std::string& fileName, const std::string& tileAtlasFileName) {
+Level::Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app) {
+    application = app;
     bitmap = new Bitmap(fileName);
     generateLevel(tileAtlasFileName);
 }
 
 void Level::generateLevel(const std::string& tileAtlasFileName) {
     // Load and generate 3D map from bitmap texture
+    levelNode = new Villain::SceneNode("Level 1");
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
 
@@ -24,6 +27,10 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
             Pixel pixel = bitmap->getPixel(i, j);
             if (pixel.R != 0 || pixel.G != 0 || pixel.B != 0) {
                 float* texCoords = getTexCoords(pixel.G);
+
+                // Objects like doors, enemies will be denoted by blue colour component in bitmap
+                addSpecialObject(pixel.B, i, j);
+
                 // Floor vertices, normals are defaults just to make shader work
                 addFace(&indices, vertices.size(), true);
                 addVertices(&vertices, i, j, true, false, true, 0.0f, texCoords);
@@ -65,6 +72,33 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
     std::vector<Villain::Texture*> floorTextures = {Villain::ResourceManager::Instance()->loadTexture(tileAtlasFileName, "atlas")};
     material = new Villain::Material{"bricks", floorTextures, 8};
     mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
+
+    application->addToScene(levelNode->addComponent(new Villain::MeshRenderer<VertexP1N1UV>(mesh, *material)));
+}
+
+void Level::addDoor(int x, int y) {
+    static unsigned int counter = 1;
+    std::stringstream doorName;
+    doorName << "Door " << counter++;
+    Door* newDoor = new Door();
+    Villain::SceneNode* newNode = nullptr;
+    //this->setDoor(door); // TODO: somehow need to get all doors in collision check method
+    Pixel bottomPixel = bitmap->getPixel(x, y - 1);
+    if (bottomPixel.R == 0 && bottomPixel.G == 0 && bottomPixel.B == 0) {
+        Villain::SceneNode* newNode = (new Villain::SceneNode(doorName.str(), glm::vec3(x + newDoor->Width + ROOM_WIDTH/2, 0.0f, y)))->addComponent(newDoor);
+        newNode->getTransform()->setEulerRot(0.0f, 270.0f, 0.0f);
+        levelNode->addChild(newNode);
+    } else {
+        newNode = (new Villain::SceneNode(doorName.str(), glm::vec3(x, 0.0f, y + ROOM_LENGTH/2)))->addComponent(newDoor);
+        levelNode->addChild(newNode);
+    }
+    doors.push_back(newNode);
+}
+
+void Level::addSpecialObject(int blueValue, int x, int y) {
+    if (blueValue == 16) {
+        addDoor(x, y);
+    }
 }
 
 void Level::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
@@ -144,11 +178,11 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
             }
         }
         // Check door collision
-        glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
-        glm::vec2 doorSize(door->Length, door->Width);
-        glm::vec2 doorCol = rectCollide(oldPos2, newPos2, objectSize, doorSize, doorPos);
-        collision.x *= doorCol.x;
-        collision.y *= doorCol.y;
+        //glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
+        //glm::vec2 doorSize(door->Length, door->Width);
+        //glm::vec2 doorCol = rectCollide(oldPos2, newPos2, objectSize, doorSize, doorPos);
+        //collision.x *= doorCol.x;
+        //collision.y *= doorCol.y;
 
     }
 

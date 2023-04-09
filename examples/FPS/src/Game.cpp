@@ -49,9 +49,8 @@ void Game::init() {
         ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
         ->addComponent(new ModelRenderer("assets/models/wall.obj")));
 
-    // Load level and add to the scene graph
-    currentLevel = new Level("assets/textures/level1.png", "assets/textures/WolfCollection.png");
-    addToScene((new SceneNode("Level 1"))->addComponent(new MeshRenderer<VertexP1N1UV>(currentLevel->getMesh(), currentLevel->getMaterial())));
+    // Add level which will also generate and add to scene all special objects
+    currentLevel = new Level("assets/textures/level1.png", "assets/textures/WolfCollection.png", this);
 
     // Add camera and player
     camera = new Camera3D();
@@ -62,11 +61,6 @@ void Game::init() {
     player->addComponent(new LookController());
     //player->addComponent(new MoveController());
     addToScene(player);
-
-    // Add door
-    Door* door = new Door();
-    currentLevel->setDoor(door);
-    addToScene((new SceneNode("Door 1", glm::vec3(13.f, 0.f, 17.0f)))->addComponent(door));
 }
 
 Game::~Game() {
