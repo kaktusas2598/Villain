@@ -97,14 +97,8 @@ namespace Villain {
     }
 
     void Camera3D::setRotation(const glm::vec3& rotation) {
-        // Calculate new front vector using euler angles
-        glm::vec3 newFront;
-        newFront.x = cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-        newFront.y = sin(glm::radians(rotation.x));
-        newFront.z = sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-        front = glm::normalize(newFront);
-
-        right = glm::normalize(glm::cross(front, worldUp));
-        up = glm::normalize(glm::cross(right, front));
+        pitch = rotation.x;
+        yaw = rotation.y;
+        updateCameraVectors();
     }
 }
