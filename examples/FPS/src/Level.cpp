@@ -1,6 +1,7 @@
 #include "Level.hpp"
 
 #include "ResourceManager.hpp"
+#include <iostream>
 
 const float ROOM_WIDTH = 1.0f;
 const float ROOM_LENGTH = 1.0f;
@@ -100,6 +101,8 @@ void Level::addVertices(std::vector<VertexP1N1UV>* vertices, int i, int j, bool 
         vertices->push_back({glm::vec3(offset * ROOM_WIDTH, i * ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(texCoords[0], texCoords[3])});
         vertices->push_back({glm::vec3(offset * ROOM_WIDTH, (i + 1) * ROOM_HEIGHT, ((j + 1) * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(texCoords[0], texCoords[2])});
         vertices->push_back({glm::vec3(offset * ROOM_WIDTH, (i + 1) * ROOM_HEIGHT, (j * ROOM_LENGTH)), glm::vec3(0.0f), glm::vec2(texCoords[1], texCoords[2])});
+    } else {
+        std::cerr << "Impossible plane combo!\n";
     }
 }
 
