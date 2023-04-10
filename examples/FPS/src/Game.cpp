@@ -50,7 +50,7 @@ void Game::init() {
         ->addComponent(new ModelRenderer("assets/models/wall.obj")));
 
     // Add level which will also generate and add to scene all special objects
-    currentLevel = new Level("assets/textures/level1.png", "assets/textures/WolfCollection.png", this);
+    currentLevel = new Level("assets/bitmaps/level1.png", "assets/textures/WolfCollection.png", this);
 
     // Add camera and player
     camera = new Camera3D();
