@@ -19,9 +19,8 @@ const float TEX_MAX_Y = 1 - OFFSET_Y;
 
 Monster::Monster() : MeshRenderer<VertexP1N1UV>(nullptr, Material()) {
 
-    std::vector<Texture *> textures = {ResourceManager::Instance()->loadTexture(
-            "assets/textures/SSWVA1.png", "enemy1")};
-    material = Material{"door", textures, 8};
+    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->loadTexture(
+            "assets/textures/SSWVA1.png", "enemy1")}, 8};
     std::vector<VertexP1N1UV> vertices;
 
     // NOTE: Now Mesh class only needs vertices and indices and it could contain methods to build common primitives like these Also need an easy way to generate UV coords in 3D, and calculate normals vertices.push_back({glm::vec3(Start, Start, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.f)}); vertices.push_back({glm::vec3(Start, Height, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.25f)});
@@ -36,5 +35,34 @@ Monster::Monster() : MeshRenderer<VertexP1N1UV>(nullptr, Material()) {
 }
 
 void Monster::update(float deltaTime) {
+    switch (currentState) {
+        case AIState::STATE_IDLE: idleUpdate(); break;
+        case AIState::STATE_CHASE: chaseUpdate(); break;
+        case AIState::STATE_ATTACK: attackUpdate(); break;
+        case AIState::STATE_DYING: dyingUpdate(); break;
+        case AIState::STATE_DEAD: deadUpdate(); break;
+        default:
+            std::cerr << "AI State not found!\n";
+            break;
+    }
+}
+
+void Monster::idleUpdate() {
+
+}
+
+void Monster::chaseUpdate() {
+
+}
+
+void Monster::attackUpdate() {
+
+}
+
+void Monster::dyingUpdate() {
+
+}
+
+void Monster::deadUpdate() {
 
 }
