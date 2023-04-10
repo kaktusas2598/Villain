@@ -9,6 +9,8 @@ class Player : public Villain::NodeComponent {
 
         virtual void handleInput(float deltaTime) override;
         virtual void update(float deltaTime) override;
+
+        static const float PLAYER_SIZE;
     private:
         Level* currentLevel = nullptr;
         float speed;

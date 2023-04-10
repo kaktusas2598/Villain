@@ -4,7 +4,7 @@
 
 using namespace Villain;
 
-const float PLAYER_SIZE = 0.3f;
+const float Player::PLAYER_SIZE = 0.3f;
 
 // Custom Move Controller for this game, locked on y height
 void Player::handleInput(float deltaTime) {

@@ -2,6 +2,9 @@
 
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
+#include "Player.hpp"
+
+#include <random>
 
 using namespace Villain;
 
@@ -22,10 +25,11 @@ const float MOVE_SPEED = 0.8f;
 const float CHASE_STOP_DISTANCE = 2.0f;
 const float MONSTER_WIDTH = 0.2;
 const float MONSTER_LENGTH = 0.2;
+const float SHOOT_DISTANCE = 100.0f;
 
 Monster::Monster(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level) {
 
-    currentState = AIState::STATE_CHASE;
+    currentState = AIState::STATE_ATTACK;
     material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->loadTexture(
             "assets/textures/SSWVA1.png", "enemy1")}, 8};
     std::vector<VertexP1N1UV> vertices;
@@ -99,6 +103,31 @@ void Monster::chaseUpdate(float deltaTime) {
 }
 
 void Monster::attackUpdate(float deltaTime) {
+    // TODO: Rotate cast direction by random float
+    std::mt19937 rndEngine((unsigned int)time(nullptr));
+    std::uniform_real_distribution<float> rand(-0.5f, 0.5f);
+
+    glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
+    glm::vec2 castDirection(-orientation.x, -orientation.z);
+    glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+    glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
+    glm::vec2 playerPos(playerPos3.x, playerPos3.z);
+    glm::vec2 playerSize(Player::PLAYER_SIZE);
+
+    glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd);
+
+    glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
+    if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
+        || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
+        std::cout << "player shot\n";
+        currentState = AIState::STATE_CHASE;
+    }
+
+    if (collision == glm::vec2(0.0f)) {
+        std::cout << "enemy missed!\n";
+    } else {
+        std::cout << "enemy hit something!\n";
+    }
 
 }
 

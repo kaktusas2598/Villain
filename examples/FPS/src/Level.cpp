@@ -46,24 +46,32 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                 // Genertate walls
                 Pixel pixel = bitmap->getPixel(i, j - 1); // get adjacent pixel
                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, j * ROOM_LENGTH));
+                    collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, j * ROOM_LENGTH));
                     // Generate left wall
                     addFace(&indices, vertices.size(), false);
                     addVertices(&vertices, i, 0, true, true, false, j, texCoords);
                 }
                 pixel = bitmap->getPixel(i, j + 1);
                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
+                    collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate right wall
                     addFace(&indices, vertices.size(), true);
                     addVertices(&vertices, i, 0, true, true, false, (j + 1), texCoords);
                 }
                 pixel = bitmap->getPixel(i - 1, j);
                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, j * ROOM_LENGTH));
+                    collisionPosEnd.push_back(glm::vec2(i * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate near wall
                     addFace(&indices, vertices.size(), true);
                     addVertices(&vertices, 0, j, false, true, true, i, texCoords);
                 }
                 pixel = bitmap->getPixel(i + 1, j);
                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                    collisionPosStart.push_back(glm::vec2((i + 1) * ROOM_WIDTH, j * ROOM_LENGTH));
+                    collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate far wall
                     addFace(&indices, vertices.size(), false);
                     addVertices(&vertices, 0, j, false, true, true, (i + 1), texCoords);
@@ -207,6 +215,73 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
     }
 
     return glm::vec3(collision.x, 0.0f, collision.y);
+}
+
+
+glm::vec2 Level::checkIntersections(const glm::vec2& lineStart, const glm::vec2& lineEnd) {
+    glm::vec2 nearestIntersection = glm::vec2(0.0f);
+
+    for (unsigned int i = 0; i < collisionPosStart.size(); i++) {
+        glm::vec2 collision = lineIntersect(lineStart, lineEnd, collisionPosStart[i], collisionPosEnd[i]);
+
+        nearestIntersection = findNearestVec2(collision, nearestIntersection, lineStart);
+    }
+
+    for(auto& door : doors) {
+        glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
+        glm::vec2 collision = lineIntersect(lineStart, lineEnd, doorPos, door->getSize());
+
+        // FIXME: not working
+        //nearestIntersection = findNearestVec2(collision, nearestIntersection, lineStart);
+    }
+
+    return nearestIntersection;
+}
+
+glm::vec2 Level::lineIntersect(const glm::vec2& lineStart1, const glm::vec2& lineEnd1, const glm::vec2& lineStart2, const glm::vec2& lineEnd2) {
+    glm::vec2 line1 = lineEnd1 - lineStart1;
+    glm::vec2 line2 = lineEnd2 - lineStart2;
+
+    float cross = vec2Cross(line1, line2);
+    // perpendicular lines so they dont cross
+    if (cross == 0.0f)
+        return glm::vec2(0.0f);
+
+    glm::vec2 distanceBetweenStarts = lineStart2 - lineStart1;
+    float a = vec2Cross(distanceBetweenStarts, line2) / cross;
+    float b = vec2Cross(distanceBetweenStarts, line1) / cross;
+
+    if (0.0f < a && a < 1.0f && 0.0f < b && b < 1.0f) {
+        return lineStart1 + line1 * a;
+    }
+
+    return glm::vec2(0.0f);
+}
+
+glm::vec2 Level::lineIntersectRect(const glm::vec2& lineStart, const glm::vec2& lineEnd, glm::vec2& rectPos, glm::vec2& rectSize) {
+    glm::vec2 result(0.0f);
+
+    glm::vec2 collision = lineIntersect(lineStart, lineEnd, rectPos, glm::vec2(rectPos.x + rectSize.x, rectPos.y));
+    result = findNearestVec2(result, collision, lineStart);
+
+    collision = lineIntersect(lineStart, lineEnd, rectPos, glm::vec2(rectPos.x, rectPos.y + rectSize.y));
+    result = findNearestVec2(result, collision, lineStart);
+
+    collision = lineIntersect(lineStart, lineEnd, glm::vec2(rectPos.x, rectPos.y + rectSize.y), rectPos + rectSize);
+    result = findNearestVec2(result, collision, lineStart);
+
+    collision = lineIntersect(lineStart, lineEnd, glm::vec2(rectPos.x + rectSize.x, rectPos.y), rectPos + rectSize);
+    result = findNearestVec2(result, collision, lineStart);
+
+    return result;
+}
+
+glm::vec2 Level::findNearestVec2(const glm::vec2& a, const glm::vec2& b, const glm::vec2& relativePos) {
+    if (b != glm::vec2(0.0f) && (a == glm::vec2(0.0f)
+            || glm::length(a - relativePos) > glm::length(b - relativePos))) {
+        return b;
+    }
+    return a;
 }
 
 glm::vec2 Level::rectCollide(glm::vec2& oldPos, glm::vec2& newPos, glm::vec2& objectSize, glm::vec2& blockSize, glm::vec2& blockPos) {
