@@ -23,6 +23,8 @@ void Game::init() {
     addToScene(wall);
 
     // Light test
+    // NOTE: Noticed if I add lights here, it messes up blending on the sprite a bit - it still is transparent but has greenish shade
+    // Probably related to RenderingEngine using additive blending to mix up light color with existing one in default framebuffer?
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
                 ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));

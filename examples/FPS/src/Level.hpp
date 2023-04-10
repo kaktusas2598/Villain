@@ -5,6 +5,8 @@
 #include "Door.hpp"
 #include "Mesh.hpp"
 
+#include "Monster.hpp"
+
 class Level {
     public:
         Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app);
@@ -41,4 +43,6 @@ class Level {
         // Could just use children nodes instead but that needs dynamic casts,
         // so we need to introduce maybe component signature and systems and...
         std::vector<Door*> doors;
+        // TEMP!
+        Monster* monster = nullptr;
 };
