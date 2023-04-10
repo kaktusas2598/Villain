@@ -11,6 +11,8 @@ const int NUM_TEX_EXP = 4;
 const int NUM_TEXTURES = (int)pow(2, NUM_TEX_EXP);
 const float DOOR_OPEN_MOVE_AMT = 0.9f;
 
+const float Level::OPEN_DOOR_DISTANCE = 2.0f;
+
 Level::Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app) {
     application = app;
     bitmap = new Bitmap(fileName);
@@ -104,6 +106,16 @@ void Level::addDoor(int x, int y) {
 void Level::addSpecialObject(int blueValue, int x, int y) {
     if (blueValue == 16) {
         addDoor(x, y);
+    }
+}
+
+
+void Level::openDoors(const glm::vec3& pos) {
+    for (auto& door : doors) {
+        float distanceToDoor = glm::length(door->GetTransform()->getPos() - pos);
+        if (distanceToDoor < Level::OPEN_DOOR_DISTANCE) {
+            door->open();
+        }
     }
 }
 

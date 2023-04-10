@@ -18,7 +18,7 @@ const float TEX_MAX_X = 1 - OFFSET_X;
 const float TEX_MIN_Y = -OFFSET_Y;
 const float TEX_MAX_Y = 1 - OFFSET_Y;
 
-const float MOVE_SPEED = 1.0f;
+const float MOVE_SPEED = 0.8f;
 const float CHASE_STOP_DISTANCE = 2.0f;
 const float MONSTER_WIDTH = 0.2;
 const float MONSTER_LENGTH = 0.2;
@@ -91,6 +91,10 @@ void Monster::chaseUpdate(float deltaTime) {
 
         if (movement.length() > 0)
             GetTransform()->translatePosition(movement * moveAmt);
+
+        if (glm::length(movement - orientation) != 0) {
+            currentLevel->openDoors(GetTransform()->getPos());
+        }
     }
 }
 

@@ -5,7 +5,6 @@
 using namespace Villain;
 
 const float PLAYER_SIZE = 0.3f;
-const float OPEN_DISTANCE = 2.0f;
 
 // Custom Move Controller for this game, locked on y height
 void Player::handleInput(float deltaTime) {
@@ -27,12 +26,7 @@ void Player::handleInput(float deltaTime) {
     }
 
     if (InputManager::Instance()->isKeyDown(SDLK_e)) {
-        for(auto& door : currentLevel->getDoors()) {
-            float distanceToDoor = glm::length(door->GetTransform()->getPos() - GetTransform()->getPos());
-            if (distanceToDoor < OPEN_DISTANCE) {
-                door->open();
-            }
-        }
+        currentLevel->openDoors(GetTransform()->getPos());
     }
 }
 
