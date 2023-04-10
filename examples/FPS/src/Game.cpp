@@ -10,6 +10,7 @@
 
 #include "Door.hpp"
 #include "Level.hpp"
+#include "Monster.hpp"
 #include "Player.hpp"
 
 using namespace Villain;
@@ -41,6 +42,9 @@ void Game::init() {
     player->addComponent(new LookController());
     //player->addComponent(new MoveController());
     addToScene(player);
+
+    // TEMP add monster
+    currentLevel->getNode()->addChild((new Villain::SceneNode("Monster" ,glm::vec3(8.f, 0.f, 17.5f)))->addComponent(new Monster(currentLevel)));
 }
 
 void Game::onAppPreUpdate(float dt) {

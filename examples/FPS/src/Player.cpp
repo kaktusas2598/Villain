@@ -11,11 +11,7 @@ const float OPEN_DISTANCE = 2.0f;
 void Player::handleInput(float deltaTime) {
     // NOTE: Commented out Movement logic below, because all we need to do here is lock y height and then we can use
     // generic Look and Move controllers, but the problem is that MoveController reacts to space/lshift, need
-    // ability to override that
-    //glm::vec3 pos = GetTransform()->getPos();
-    //pos.y = 1.0f;
-    //GetTransform()->setPos(pos);
-
+    // ability to override that, so using our move logix for now
     movement = glm::vec3(0.0f);
     if (InputManager::Instance()->isKeyDown(SDLK_w)) {
         movement += GetTransform()->getForward();

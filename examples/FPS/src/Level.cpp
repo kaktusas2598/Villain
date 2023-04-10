@@ -74,10 +74,6 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
     material = new Villain::Material{"bricks", floorTextures, 8};
     mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
 
-    // TEMP TEST CODE!!!
-    monster = new Monster();
-    levelNode->addChild((new Villain::SceneNode("Monster" ,glm::vec3(8.f, 0.f, 17.5f)))->addComponent(monster));
-
     application->addToScene(levelNode->addComponent(new Villain::MeshRenderer<VertexP1N1UV>(mesh, *material)));
 }
 
