@@ -19,20 +19,15 @@ void Game::init() {
     // Light test
     // NOTE: Noticed if I add lights here, it messes up blending on the sprite a bit - it still is transparent but has greenish shade
     // Probably related to RenderingEngine using additive blending to mix up light color with existing one in default framebuffer?
-    glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
-    SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
-                ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));
-    addToScene(pointLight);
+    //glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
+    //SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
+                //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), 1.0f, 0.022f, 0.0019f)));
+    //addToScene(pointLight);
 
-    SceneNode* pointLight2 = ((new SceneNode("Point Light 2"))
-                ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f, 10.0f, 10.0f), 1.0f, 0.022f, 0.0019f)));
-    addToScene(pointLight2);
-
-    glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
-    SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                ->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))/*, &camera*/)));
-    addToScene(spotLight);
-
+    //glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
+    //SceneNode* spotLight = ((new SceneNode("Spot Light"))
+                //->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))[>, &camera<])));
+    //addToScene(spotLight);
 
     // Add level which will also generate and add to scene all special objects
     currentLevel = new Level("assets/bitmaps/level1.png", "assets/textures/WolfCollection.png", this);
@@ -46,9 +41,6 @@ void Game::init() {
     player->addComponent(new LookController());
     //player->addComponent(new MoveController());
     addToScene(player);
-}
-
-Game::~Game() {
 }
 
 void Game::onAppPreUpdate(float dt) {

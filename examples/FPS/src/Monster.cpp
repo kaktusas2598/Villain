@@ -1,5 +1,6 @@
 #include "Monster.hpp"
 
+#include "Engine.hpp"
 #include "ResourceManager.hpp"
 
 using namespace Villain;
@@ -35,6 +36,15 @@ Monster::Monster() : MeshRenderer<VertexP1N1UV>(nullptr, Material()) {
 }
 
 void Monster::update(float deltaTime) {
+    // Monster always faces camera
+    glm::vec3 directionToCamera = GetTransform()->getPos()
+        - parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
+    float angleToCameraFace = glm::degrees(atanf(directionToCamera.z / directionToCamera.x));
+    if (directionToCamera.x > 0.0f) {
+        angleToCameraFace += 180.0f;
+    }
+    GetTransform()->setEulerRot(0.0f, angleToCameraFace + 90.0f, 0.0f );
+
     switch (currentState) {
         case AIState::STATE_IDLE: idleUpdate(); break;
         case AIState::STATE_CHASE: chaseUpdate(); break;
