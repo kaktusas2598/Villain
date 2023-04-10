@@ -16,6 +16,7 @@ class Level {
 
         // TODO: need to incorporate level collision into Physics Engine
         glm::vec3 checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPos, float objectWidth, float objectLength);
+        std::vector<Door*>& getDoors() { return doors; }
     private:
         void generateLevel(const std::string& tileAtlasFileName);
         void addSpecialObject(int blueValue, int x, int y);

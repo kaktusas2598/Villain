@@ -9,6 +9,7 @@ const float ROOM_LENGTH = 1.0f;
 const float ROOM_HEIGHT = 2.0f;
 const int NUM_TEX_EXP = 4;
 const int NUM_TEXTURES = (int)pow(2, NUM_TEX_EXP);
+const float DOOR_OPEN_MOVE_AMT = 0.9f;
 
 Level::Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app) {
     application = app;
@@ -77,19 +78,24 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
 }
 
 void Level::addDoor(int x, int y) {
-    static unsigned int counter = 1;
+    static unsigned int counter = 1; // static door counter
     std::stringstream doorName;
     doorName << "Door " << counter++;
-    Door* newDoor = new Door();
+
+    glm::vec3 openPosition =  glm::vec3(0.0f);
+    Door* newDoor = new Door(openPosition);
     Villain::SceneNode* newNode = nullptr;
-    //this->setDoor(door); // TODO: somehow need to get all doors in collision check method
     Pixel bottomPixel = bitmap->getPixel(x, y - 1);
     if (bottomPixel.R == 0 && bottomPixel.G == 0 && bottomPixel.B == 0) {
         Villain::SceneNode* newNode = (new Villain::SceneNode(doorName.str(), glm::vec3(x + newDoor->Width + ROOM_WIDTH/2, 0.0f, y)))->addComponent(newDoor);
         newNode->getTransform()->setEulerRot(0.0f, 270.0f, 0.0f);
+        openPosition = newNode->getTransform()->getPos() - glm::vec3(0.f, 0.f, DOOR_OPEN_MOVE_AMT);
+        newDoor->setOpenPos(openPosition);
         levelNode->addChild(newNode);
     } else {
         newNode = (new Villain::SceneNode(doorName.str(), glm::vec3(x, 0.0f, y + ROOM_LENGTH/2)))->addComponent(newDoor);
+        openPosition = newNode->getTransform()->getPos() - glm::vec3(DOOR_OPEN_MOVE_AMT, 0.f, 0.f);
+        newDoor->setOpenPos(openPosition);
         levelNode->addChild(newNode);
     }
     doors.push_back(newDoor);
@@ -180,7 +186,7 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
         // Check door collision
         for(auto& door : doors){
             glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
-            glm::vec2 doorSize(door->Length, door->Width);
+            glm::vec2 doorSize = door->getSize();
             glm::vec2 doorCol = rectCollide(oldPos2, newPos2, objectSize, doorSize, doorPos);
             collision.x *= doorCol.x;
             collision.y *= doorCol.y;
