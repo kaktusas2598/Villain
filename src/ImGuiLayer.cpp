@@ -159,18 +159,22 @@ namespace Villain {
         if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
                 if (ImGui::BeginTabItem("Transform")) {
-                    //ImGui::SeparatorText("Position");
-                    //ImGui::SeparatorText("Scale");
-                    //ImGui::TextDisabled
-                    //ImGui::DragFloat3("Position", );
                     ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
 
                     ImGui::Text("Position"); ImGui::SameLine();
-                    ImGui::PushItemWidth(50);
+                    ImGui::PushItemWidth(40);
                     ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
                     ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
                     ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
                     ImGui::PopItemWidth();
+
+                    ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
+                    //ImGui::Text("Rotation"); ImGui::SameLine();
+                    //ImGui::PushItemWidth(40);
+                    //ImGui::DragFloat("RX", &node->getTransform()->getEulerRot().x); ImGui::SameLine();
+                    //ImGui::DragFloat("RY", &node->getTransform()->getEulerRot().y); ImGui::SameLine();
+                    //ImGui::DragFloat("RZ", &node->getTransform()->getEulerRot().z);
+                    //ImGui::PopItemWidth();
 
                     ImGui::EndTabItem();
                 }

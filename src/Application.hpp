@@ -45,8 +45,9 @@ namespace Villain {
             virtual void onMouseDown(int mouseX, int mouseY) {}
             virtual void onMouseUp() {}
 
-        protected:
+            // 2023-04-09: Was protected before, but had to expose this class to 3D level in FPS project
             void addToScene(SceneNode* child) { rootNode.addChild(child); }
+        protected:
 
             std::unique_ptr<StateMachine> stateMachine = nullptr; ///< state machine's instance
             //GameState* currentState = nullptr; ///< current state's instance

@@ -7,9 +7,10 @@
 #include "Light.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
+#include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
-#include "components/PhysicsEngineComponent.hpp"
+#include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingSphere.hpp"
 
@@ -43,10 +44,10 @@ void Game::init() {
     vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
     std::vector<unsigned int> indices = {0, 1, 2};
     std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices, textures);
     Material mat("wood", textures, 8);
+    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
-    planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+    SceneNode* planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
     SceneNode* testHierarchy = (new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
@@ -61,7 +62,11 @@ void Game::init() {
     //addToScene(planeNode);
 
     // Add camera
-    addToScene((new SceneNode("Main camera"))->addComponent(new CameraComponent(&camera)));
+    SceneNode* cam = (new SceneNode("Free look camera"))
+            ->addComponent(new CameraComponent(&camera))
+            ->addComponent(new MoveController())
+            ->addComponent(new LookController());
+    addToScene(cam);
 
     // Model renderer test
     // 2023-04-04 - Currently ~12FPS with 3 light sources
@@ -107,27 +112,23 @@ void Game::init() {
 
     //}
 
-    // TODO: somehow will have to make this follow camera, probably needs to be part of same Node
+    glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
     SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                ->addComponent(new SpotLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), camera.getPosition(), camera.getFront(), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)))));
+                ->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))/*, &camera*/)));
     addToScene(spotLight);
 
-    // TEMP physics code, will need to improve
-    PhysicsEngine physicsEngine;
 
-    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 5.0f, 0.f), 1.0f), glm::vec3(3.0f, 0.f, 0.f)));
-    physicsEngine.addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-3.0f, 0.f, 0.f)));
+    // Physics demo
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), glm::vec3(6.0f, 0.f, 0.f)));
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-6.0f, 0.f, 0.f)));
 
-    PhysicsEngineComponent* physicsEngineComponent = new PhysicsEngineComponent(physicsEngine);
-
-    // This is bad design because we must use PhysicsEngine copy in PhysicsEngineComponent to make this system work
-    for (unsigned int i = 0; i < physicsEngineComponent->getPhysicsEngine().getNumObjects(); i++) {
-        addToScene((new SceneNode("physics object" + std::to_string(i)))
-                ->addComponent(new PhysicsObjectComponent(&physicsEngineComponent->getPhysicsEngine().getObject(i)))
-                ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat)));
-    }
-
-    addToScene((new SceneNode("physics engine"))->addComponent(physicsEngineComponent));
+    // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
+    addToScene((new SceneNode("physics object 0"))
+        ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
+        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+    addToScene((new SceneNode("physics object 1"))
+        ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
+        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
 }
 
 Game::~Game() {
@@ -154,6 +155,8 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawBox3D(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(10.0f, 5.0f, 0.1f));
     debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
     debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
+
+    //debugRenderer.drawSphere(glm::vec3(0.0f, 20.0f, 0.0f), glm::vec4(0.8f, 0.0f, 2.0f, 2.0f), 5.0f);
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);

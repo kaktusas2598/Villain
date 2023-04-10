@@ -16,7 +16,7 @@ namespace Villain {
                 RenderingEngine& renderingEngine,
                 Camera& camera
                 ) override;
-        private:
+        protected:
             Mesh<VertexType>* mesh;
             Material material;
     };

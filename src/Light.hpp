@@ -2,6 +2,7 @@
 #define __LIGHT__
 
 #include <glm/glm.hpp>
+#include "Camera3D.hpp"
 #include "NodeComponent.hpp"
 
 namespace Villain {
@@ -54,8 +55,9 @@ namespace Villain {
             glm::vec3 Direction;
             float CutOff;
             float OuterCutOff;
+            Camera3D* camera = nullptr;
 
-            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff);
+            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, Camera3D* cam = nullptr);
             virtual std::string type() { return std::string("spot"); }
             virtual void update(float deltaTime);
     };

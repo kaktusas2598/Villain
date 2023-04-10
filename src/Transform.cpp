@@ -38,19 +38,28 @@ namespace Villain {
     }
 
     glm::vec3 Transform::getRight() const {
-        return model[0];
+        // 2nd argument to cross product is world up vector
+        return glm::normalize(glm::cross(getForward(), glm::vec3(0.0, 1.0f, 0.0f)));
+        //return model[0];
     }
 
     glm::vec3 Transform::getUp() const {
-        return model[1];
+        return glm::normalize(glm::cross(getRight(), getForward()));
+        //return model[1];
     }
 
     glm::vec3 Transform::getBackward() const {
-        return model[2];
+        return -1.f * getForward();
+        //return model[2];
     }
 
     glm::vec3 Transform::getForward() const {
-        return -model[2];
+        glm::vec3 front;
+        front.x = cos(glm::radians(eulerRot.y)) * cos(glm::radians(eulerRot.x));
+        front.y = sin(glm::radians(eulerRot.x));
+        front.z = sin(glm::radians(eulerRot.y)) * cos(glm::radians(eulerRot.x));
+        return front;
+        //return -model[2];
     }
 
     glm::vec3 Transform::getGlobalScale() const {

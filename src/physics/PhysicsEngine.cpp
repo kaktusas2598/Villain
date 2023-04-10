@@ -22,9 +22,17 @@ namespace Villain {
                 IntersectData intersectData = objects[i].getCollider()
                     .intersect(objects[j].getCollider());
                 if (intersectData.isIntersecting()) {
+                    // TODO: will need to implement proper conservation of momentum here, impulses
+                    // so colliders will need to have mass
+                    //
                     // Collision response goes here, ideally detection and response will need to be separate
-                    objects[i].setVelocity(objects[i].getVelocity() * -1.f);
-                    objects[j].setVelocity(objects[j].getVelocity() * -1.f);
+                    glm::vec3 direction = glm::normalize(intersectData.getDirection());
+                    glm::vec3 otherDirection = glm::reflect(glm::normalize(objects[i].getVelocity()), intersectData.getDirection());
+                    objects[i].setVelocity(glm::reflect(otherDirection, objects[i].getVelocity()));
+                    objects[j].setVelocity(glm::reflect(direction, objects[j].getVelocity()));
+                    // Working most basic collision response, just invert velocity
+                    //objects[i].setVelocity(objects[i].getVelocity() * -1.f);
+                    //objects[j].setVelocity(objects[j].getVelocity() * -1.f);
                 }
             }
         }

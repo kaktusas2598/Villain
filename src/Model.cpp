@@ -122,7 +122,7 @@ namespace Villain {
         }
 
         Logger::Instance()->warn("Mesh missing material information");
-        return Mesh<VertexP1N1T1B1UV>(vertices, indices, textures, diffuseColor);
+        return Mesh<VertexP1N1T1B1UV>(vertices, indices);
     }
 
     std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {

@@ -96,4 +96,9 @@ namespace Villain {
         up = glm::normalize(glm::cross(right, front));
     }
 
+    void Camera3D::setRotation(const glm::vec3& rotation) {
+        pitch = rotation.x;
+        yaw = rotation.y;
+        updateCameraVectors();
+    }
 }

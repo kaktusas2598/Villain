@@ -18,6 +18,6 @@ namespace Villain {
             ((distances.x > distances.z) ? distances.x : distances.z) :
             ((distances.y > distances.z) ? distances.y: distances.z);
 
-        return IntersectData(maxDistance < 0, maxDistance);
+        return IntersectData(maxDistance < 0, distances);
     }
 }

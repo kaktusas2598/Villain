@@ -14,10 +14,12 @@ namespace Villain {
             glm::mat4 getTransformMatrix();
             bool hasChanged() { return needsUpdate; }
 
+            void translatePosition(const glm::vec3& translation) { position += translation; }
             //const glm::vec3& getPos() const { return position; }
             float getScale() const { return scale; }
 
             glm::vec3& getPos() { return position; }
+            glm::vec3& getEulerRot() { return eulerRot; }
             float* getScalePtr() { return &scale; }
 
             //void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {

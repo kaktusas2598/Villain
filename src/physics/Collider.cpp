@@ -17,7 +17,7 @@ namespace Villain {
             return self->intersectAABB((BoundingAABB&)other);
         } else {
             // TODO: aabb/sphere or error because collider type is invalid
-            return IntersectData(false, 1.f);
+            return IntersectData(false, glm::vec3(1.f));
         }
     }
 }

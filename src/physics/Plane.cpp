@@ -14,6 +14,6 @@ namespace Villain {
         float distanceFromSphereCentre = fabs(glm::dot(normal, sphere.getCentre()) + distance);
         float distanceFromSphere = distanceFromSphereCentre - sphere.getRadius();
 
-        return IntersectData(distanceFromSphere < 0.f, distanceFromSphere);
+        return IntersectData(distanceFromSphere < 0.f, normal * distanceFromSphere);
     }
 }

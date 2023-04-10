@@ -21,6 +21,8 @@ namespace Villain {
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
+
+        glEnable(GL_BLEND);
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -57,9 +59,10 @@ namespace Villain {
 
             node->render(light->getShader(), this, mainCamera);
 
+            // Reset to default blending
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
-            glDisable(GL_BLEND);
         }
 
     }
