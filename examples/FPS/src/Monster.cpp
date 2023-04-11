@@ -27,11 +27,10 @@ const float MONSTER_WIDTH = 0.2;
 const float MONSTER_LENGTH = 0.2;
 const float SHOOT_DISTANCE = 100.0f;
 
-Monster::Monster(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level) {
+Monster::Monster(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level), deathTime(0.0f) {
 
     currentState = AIState::STATE_IDLE;
-    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->loadTexture(
-            "assets/textures/SSWVA1.png", "enemy1")}, 8};
+    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk1")}, 8};
     std::vector<VertexP1N1UV> vertices;
 
     // NOTE: Now Mesh class only needs vertices and indices and it could contain methods to build common primitives like these Also need an easy way to generate UV coords in 3D, and calculate normals vertices.push_back({glm::vec3(Start, Start, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.f)}); vertices.push_back({glm::vec3(Start, Height, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.25f)});
@@ -78,35 +77,50 @@ void Monster::update(float deltaTime) {
 
 void Monster::idleUpdate(float deltaTime) {
     float time = timer.readSeconds();
-
     float timeDecimals = time - (float)(int)(time);
     if (timeDecimals < 0.5f) {
         canLook = true;
-    } else if (canLook) {
-        // NOTE: almost exact copy of attack update, horrible practise and essentially a hack for now
-        glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
-        glm::vec2 castDirection(-orientation.x, -orientation.z);
-        glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
-        glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
-        glm::vec2 playerPos(playerPos3.x, playerPos3.z);
-        glm::vec2 playerSize(Player::PLAYER_SIZE);
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk1")}, 8};
+    } else {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk2")}, 8};
+        if (canLook) {
+            // NOTE: almost exact copy of attack update, horrible practise and essentially a hack for now
+            glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
+            glm::vec2 castDirection(-orientation.x, -orientation.z);
+            glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+            glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
+            glm::vec2 playerPos(playerPos3.x, playerPos3.z);
+            glm::vec2 playerSize(Player::PLAYER_SIZE);
 
-        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
+            glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
 
-        glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
-        if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
-            || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
-            std::cout << "Enemy saw player!\n";
-            currentState = AIState::STATE_CHASE;
+            glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
+            if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
+                || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
+                currentState = AIState::STATE_CHASE;
+            }
+
+            canLook = false;
         }
-
-        canLook = false;
     }
 }
 
 void Monster::chaseUpdate(float deltaTime) {
-    // TODO: add some randomisation here to start attack state
+    float time = timer.readSeconds();
+    float timeDecimals = time - (float)(int)(time);
 
+    // HACKY Animations
+    if (timeDecimals < 0.25f) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk1")}, 8};
+    } else if (timeDecimals < 0.5f){
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk2")}, 8};
+    } else if (timeDecimals < 0.75f){
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk3")}, 8};
+    } else {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk4")}, 8};
+    }
+
+    // TODO: add some randomisation here to start attack state
     if (distance > CHASE_STOP_DISTANCE) {
         float moveAmt = -MOVE_SPEED * deltaTime;
         glm::vec3 oldPos = GetTransform()->getPos();
@@ -135,49 +149,78 @@ void Monster::attackUpdate(float deltaTime) {
     //std::uniform_real_distribution<float> rand(-0.5f, 0.5f);
 
     float time = timer.readSeconds();
-
     float timeDecimals = time - (float)(int)(time);
-    if (timeDecimals < 0.5f) {
-        canAttack = true;
-    } else if (canAttack) {
-        glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
-        glm::vec2 castDirection(-orientation.x, -orientation.z);
-        glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
-        glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
-        glm::vec2 playerPos(playerPos3.x, playerPos3.z);
-        glm::vec2 playerSize(Player::PLAYER_SIZE);
+    if (timeDecimals < 0.25f) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire1")}, 8};
+    } else if (timeDecimals < 0.5f) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire2")}, 8};
+    } else if (timeDecimals < 0.75f) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire3")}, 8};
+        if (canAttack) {
+            glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
+            glm::vec2 castDirection(-orientation.x, -orientation.z);
+            glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+            glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
+            glm::vec2 playerPos(playerPos3.x, playerPos3.z);
+            glm::vec2 playerSize(Player::PLAYER_SIZE);
 
-        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
+            glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
 
-        glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
-        if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
-            || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
-            currentLevel->damagePlayer(getDamage());
-            std::cout << "Player shot!\n";
+            glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
+            if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
+                || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
+                currentLevel->damagePlayer(getDamage());
+                std::cout << "Player shot!\n";
+            }
+
+            currentState = AIState::STATE_CHASE;
+            canAttack = false;
         }
-        //if (collision == glm::vec2(0.0f)) {
-            //std::cout << "enemy missed!\n";
-        //} else {
-            //std::cout << "enemy hit something!\n";
-        //}
-
-        currentState = AIState::STATE_CHASE;
-        canAttack = false;
+    } else {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire2")}, 8};
+        canAttack = true;
     }
 }
 
 void Monster::dyingUpdate(float deltaTime) {
-    currentState = AIState::STATE_DEAD;
+    float time = timer.readSeconds();
+    float timeDecimals = time - (float)(int)(time);
+
+    if (deathTime == 0.0f) {
+        deathTime = time;
+    }
+
+    // keyframes
+    const float time1 = 0.1f;
+    const float time2 = 0.3f;
+    const float time3 = 0.45f;
+    const float time4 = 0.6f;
+
+    if (time < deathTime + time1) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die1")}, 8};
+    } else if (time < deathTime + time2) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die2")}, 8};
+    } else if (time < deathTime + time3) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die3")}, 8};
+    } else if (time < deathTime + time4) {
+        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die4")}, 8};
+    } else {
+        currentState = AIState::STATE_DEAD;
+    }
+
 }
 
 void Monster::deadUpdate(float deltaTime) {
-    std::cout << "Enemy Dead!\n";
+    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("death")}, 8};
+    GetTransform()->getPos().y = 0.01f; // prevent z-fighting
+    GetTransform()->setEulerRot(90.0f, 0.0f, 0.0f);
 }
 
 void Monster::damage(int amount) {
     if (currentState == AIState::STATE_IDLE) {
         currentState = AIState::STATE_CHASE;
     }
+    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("pain")}, 8};
     health -= amount;
 
     if (health <= 0) {

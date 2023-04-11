@@ -277,7 +277,6 @@ glm::vec2 Level::checkIntersections(const glm::vec2& lineStart, const glm::vec2&
         }
         if (nearestMonsterIntersect != glm::vec2(0.0f) && (nearestIntersection == glm::vec2(0.0f)
             || (glm::length(nearestMonsterIntersect - lineStart) < glm::length(nearestIntersection - lineStart)))) {
-            std::cout << "Enemy hit by player!\n";
             if (nearestMonster != nullptr) nearestMonster->damage(player->getDamage());
         }
     }
