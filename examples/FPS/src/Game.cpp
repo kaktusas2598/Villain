@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
 #include "Light.hpp"
+#include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 
 #include "Level.hpp"
@@ -9,6 +10,25 @@ using namespace Villain;
 
 
 void Game::init() {
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVA1.png", "walk1");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVB1.png", "walk2");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVC1.png", "walk3");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVD1.png", "walk4");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVE1.png", "walk5");
+
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVE0.png", "fire1");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVF0.png", "fire2");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVG0.png", "fire3");
+
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVH0.png", "pain");
+
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVI0.png", "die1");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVJ0.png", "die2");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVK0.png", "die3");
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVL0.png", "die4");
+
+    ResourceManager::Instance()->loadTexture("assets/textures/SSWVM0.png", "death");
+
     // Light test
     // NOTE: Noticed if I add lights here, it messes up blending on the sprite a bit - it still is transparent but has greenish shade
     // Probably related to RenderingEngine using additive blending to mix up light color with existing one in default framebuffer?
