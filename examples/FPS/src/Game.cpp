@@ -44,7 +44,7 @@ void Game::init() {
     addToScene(player);
 
     // TEMP add monster
-    currentLevel->getNode()->addChild((new Villain::SceneNode("Monster" ,glm::vec3(8.f, 0.f, 17.5f)))->addComponent(new Monster(currentLevel)));
+    currentLevel->getNode()->addChild((new Villain::SceneNode("Monster" ,glm::vec3(6.f, 0.f, 10.5f)))->addComponent(new Monster(currentLevel)));
 }
 
 void Game::onAppPreUpdate(float dt) {

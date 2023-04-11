@@ -229,10 +229,10 @@ glm::vec2 Level::checkIntersections(const glm::vec2& lineStart, const glm::vec2&
 
     for(auto& door : doors) {
         glm::vec2 doorPos(door->GetTransform()->getPos().x, door->GetTransform()->getPos().z);
-        glm::vec2 collision = lineIntersect(lineStart, lineEnd, doorPos, door->getSize());
+        glm::vec2 doorSize = door->getSize();
+        glm::vec2 collision = lineIntersectRect(lineStart, lineEnd, doorPos, doorSize);
 
-        // FIXME: not working
-        //nearestIntersection = findNearestVec2(collision, nearestIntersection, lineStart);
+        nearestIntersection = findNearestVec2(collision, nearestIntersection, lineStart);
     }
 
     return nearestIntersection;

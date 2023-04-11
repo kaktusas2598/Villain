@@ -23,5 +23,7 @@ class Monster : public Villain::MeshRenderer<VertexP1N1UV> {
         float distance; // Distance to Player/Camera
         glm::vec3 orientation; // Orientation towards camera
         Level* currentLevel = nullptr;
-
+        bool canLook = false;
+        bool canAttack = false;
+        Villain::Timer timer;
 };

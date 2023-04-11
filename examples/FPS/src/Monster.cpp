@@ -29,7 +29,7 @@ const float SHOOT_DISTANCE = 100.0f;
 
 Monster::Monster(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level) {
 
-    currentState = AIState::STATE_ATTACK;
+    currentState = AIState::STATE_IDLE;
     material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->loadTexture(
             "assets/textures/SSWVA1.png", "enemy1")}, 8};
     std::vector<VertexP1N1UV> vertices;
@@ -77,13 +77,38 @@ void Monster::update(float deltaTime) {
 }
 
 void Monster::idleUpdate(float deltaTime) {
+    float time = timer.readSeconds();
 
+    float timeDecimals = time - (float)(int)(time);
+    if (timeDecimals < 0.5f) {
+        canLook = true;
+    } else if (canLook) {
+        // NOTE: almost exact copy of attack update, horrible practise and essentially a hack for now
+        glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
+        glm::vec2 castDirection(-orientation.x, -orientation.z);
+        glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+        glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
+        glm::vec2 playerPos(playerPos3.x, playerPos3.z);
+        glm::vec2 playerSize(Player::PLAYER_SIZE);
+
+        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd);
+
+        glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
+        if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
+            || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
+            std::cout << "Enemy saw player!\n";
+            currentState = AIState::STATE_CHASE;
+        }
+
+        canLook = false;
+    }
 }
 
 void Monster::chaseUpdate(float deltaTime) {
+    // TODO: add some randomisation here to start attack state
+
     if (distance > CHASE_STOP_DISTANCE) {
         float moveAmt = -MOVE_SPEED * deltaTime;
-        //glm::vec3 movement = GetTransform()->getPos() + (-1.f * orientation * MOVE_SPEED * deltaTime);
         glm::vec3 oldPos = GetTransform()->getPos();
         glm::vec3 newPos = GetTransform()->getPos() + (orientation * moveAmt);
 
@@ -99,36 +124,46 @@ void Monster::chaseUpdate(float deltaTime) {
         if (glm::length(movement - orientation) != 0) {
             currentLevel->openDoors(GetTransform()->getPos());
         }
+    } else {
+        currentState = AIState::STATE_ATTACK;
     }
 }
 
 void Monster::attackUpdate(float deltaTime) {
     // TODO: Rotate cast direction by random float
-    std::mt19937 rndEngine((unsigned int)time(nullptr));
-    std::uniform_real_distribution<float> rand(-0.5f, 0.5f);
+    //std::mt19937 rndEngine((unsigned int)time(nullptr));
+    //std::uniform_real_distribution<float> rand(-0.5f, 0.5f);
 
-    glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
-    glm::vec2 castDirection(-orientation.x, -orientation.z);
-    glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
-    glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
-    glm::vec2 playerPos(playerPos3.x, playerPos3.z);
-    glm::vec2 playerSize(Player::PLAYER_SIZE);
+    float time = timer.readSeconds();
 
-    glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd);
+    float timeDecimals = time - (float)(int)(time);
+    if (timeDecimals < 0.5f) {
+        canAttack = true;
+    } else if (canAttack) {
+        glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
+        glm::vec2 castDirection(-orientation.x, -orientation.z);
+        glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+        glm::vec3 playerPos3 = parent->getEngine()->getRenderingEngine()->getMainCamera()->getPosition();
+        glm::vec2 playerPos(playerPos3.x, playerPos3.z);
+        glm::vec2 playerSize(Player::PLAYER_SIZE);
 
-    glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
-    if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
-        || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
-        std::cout << "player shot\n";
+        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd);
+
+        glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
+        if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
+            || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
+            std::cout << "player shot\n";
+        }
+
+        if (collision == glm::vec2(0.0f)) {
+            std::cout << "enemy missed!\n";
+        } else {
+            std::cout << "enemy hit something!\n";
+        }
+
         currentState = AIState::STATE_CHASE;
+        canAttack = false;
     }
-
-    if (collision == glm::vec2(0.0f)) {
-        std::cout << "enemy missed!\n";
-    } else {
-        std::cout << "enemy hit something!\n";
-    }
-
 }
 
 void Monster::dyingUpdate(float deltaTime) {
