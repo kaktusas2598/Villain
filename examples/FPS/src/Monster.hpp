@@ -12,6 +12,9 @@ class Monster : public Villain::MeshRenderer<VertexP1N1UV> {
         Monster(Level* level);
         virtual void update(float deltaTime) override;
 
+        glm::vec2 getSize();
+        void damage(int amount);
+        int getDamage() const { return 15.0f; }
     private:
         void idleUpdate(float deltaTime);
         void chaseUpdate(float deltaTime);
@@ -26,4 +29,5 @@ class Monster : public Villain::MeshRenderer<VertexP1N1UV> {
         bool canLook = false;
         bool canAttack = false;
         Villain::Timer timer;
+        int health = 100;
 };

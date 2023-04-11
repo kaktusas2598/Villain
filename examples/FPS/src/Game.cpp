@@ -1,17 +1,9 @@
 #include "Game.hpp"
 
 #include "Light.hpp"
-#include "ResourceManager.hpp"
 #include "SceneNode.hpp"
-#include "components/CameraComponent.hpp"
-#include "components/LookController.hpp"
-#include "components/MeshRenderer.hpp"
-#include "components/MoveController.hpp"
 
-#include "Door.hpp"
 #include "Level.hpp"
-#include "Monster.hpp"
-#include "Player.hpp"
 
 using namespace Villain;
 
@@ -32,19 +24,6 @@ void Game::init() {
 
     // Add level which will also generate and add to scene all special objects
     currentLevel = new Level("assets/bitmaps/level1.png", "assets/textures/WolfCollection.png", this);
-
-    // Add camera and player
-    camera = new Camera3D();
-    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
-
-    SceneNode* player = (new SceneNode("Player", glm::vec3(3.f, 1.f, 17.5f)))->addComponent(new CameraComponent(camera));
-    player->addComponent(new Player(currentLevel));
-    player->addComponent(new LookController());
-    //player->addComponent(new MoveController());
-    addToScene(player);
-
-    // TEMP add monster
-    currentLevel->getNode()->addChild((new Villain::SceneNode("Monster" ,glm::vec3(6.f, 0.f, 10.5f)))->addComponent(new Monster(currentLevel)));
 }
 
 void Game::onAppPreUpdate(float dt) {

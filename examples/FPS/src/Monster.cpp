@@ -91,7 +91,7 @@ void Monster::idleUpdate(float deltaTime) {
         glm::vec2 playerPos(playerPos3.x, playerPos3.z);
         glm::vec2 playerSize(Player::PLAYER_SIZE);
 
-        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd);
+        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
 
         glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
         if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
@@ -147,19 +147,19 @@ void Monster::attackUpdate(float deltaTime) {
         glm::vec2 playerPos(playerPos3.x, playerPos3.z);
         glm::vec2 playerSize(Player::PLAYER_SIZE);
 
-        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd);
+        glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
 
         glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
         if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
             || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
-            std::cout << "player shot\n";
+            currentLevel->damagePlayer(getDamage());
+            std::cout << "Player shot!\n";
         }
-
-        if (collision == glm::vec2(0.0f)) {
-            std::cout << "enemy missed!\n";
-        } else {
-            std::cout << "enemy hit something!\n";
-        }
+        //if (collision == glm::vec2(0.0f)) {
+            //std::cout << "enemy missed!\n";
+        //} else {
+            //std::cout << "enemy hit something!\n";
+        //}
 
         currentState = AIState::STATE_CHASE;
         canAttack = false;
@@ -167,9 +167,24 @@ void Monster::attackUpdate(float deltaTime) {
 }
 
 void Monster::dyingUpdate(float deltaTime) {
-
+    currentState = AIState::STATE_DEAD;
 }
 
 void Monster::deadUpdate(float deltaTime) {
+    std::cout << "Enemy Dead!\n";
+}
 
+void Monster::damage(int amount) {
+    if (currentState == AIState::STATE_IDLE) {
+        currentState = AIState::STATE_CHASE;
+    }
+    health -= amount;
+
+    if (health <= 0) {
+        currentState = AIState::STATE_DYING;
+    }
+}
+
+glm::vec2 Monster::getSize() {
+    return glm::vec2(MONSTER_WIDTH, MONSTER_LENGTH);
 }

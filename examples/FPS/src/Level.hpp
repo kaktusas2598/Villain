@@ -5,6 +5,9 @@
 #include "Door.hpp"
 #include "Mesh.hpp"
 
+class Monster;
+class Player;
+
 class Level {
     public:
         Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app);
@@ -16,10 +19,11 @@ class Level {
 
         // TODO: need to incorporate level collision into Physics Engine
         glm::vec3 checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPos, float objectWidth, float objectLength);
-        glm::vec2 checkIntersections(const glm::vec2& lineStart, const glm::vec2& lineEnd);
+        glm::vec2 checkIntersections(const glm::vec2& lineStart, const glm::vec2& lineEnd, bool hurtMonsters = false);
         glm::vec2 lineIntersectRect(const glm::vec2& lineStart, const glm::vec2& lineEnd, glm::vec2& rectPos, glm::vec2& rectSize);
 
         std::vector<Door*>& getDoors() { return doors; }
+        void damagePlayer(int amount);
         void openDoors(const glm::vec3& pos);
         inline Villain::SceneNode* getNode() { return levelNode; }
 
@@ -55,4 +59,7 @@ class Level {
         // Could just use children nodes instead but that needs dynamic casts,
         // so we need to introduce maybe component signature and systems and...
         std::vector<Door*> doors;
+
+        std::vector<Monster*> enemies;
+        Player* player = nullptr;
 };

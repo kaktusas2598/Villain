@@ -4,6 +4,14 @@
 #include <iostream>
 #include <sstream>
 
+// Really spent no time on thinking of design for this game, Level should contain
+// Player and Monster objects, but they also shouldn't include Level
+#include "Monster.hpp"
+#include "Player.hpp"
+#include "components/CameraComponent.hpp"
+#include "components/LookController.hpp"
+
+
 const float ROOM_WIDTH = 1.0f;
 const float ROOM_LENGTH = 1.0f;
 const float ROOM_HEIGHT = 2.0f;
@@ -84,6 +92,21 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
     material = new Villain::Material{"bricks", floorTextures, 8};
     mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
 
+    enemies.push_back(new Monster(this));
+    levelNode->addChild((new Villain::SceneNode("Monster 1" ,glm::vec3(6.f, 0.f, 10.5f)))->addComponent(enemies[0]));
+    enemies.push_back(new Monster(this));
+    levelNode->addChild((new Villain::SceneNode("Monster 2" ,glm::vec3(16.f, 0.f, 10.5f)))->addComponent(enemies[1]));
+
+    // Add camera and player
+    Villain::Camera3D* camera = new Villain::Camera3D();
+    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
+    player = new Player(this);
+    Villain::SceneNode* playerNode = (new Villain::SceneNode("Player", glm::vec3(3.f, 1.f, 17.5f)))->addComponent(new Villain::CameraComponent(camera));
+    playerNode->addComponent(player);
+    playerNode->addComponent(new Villain::LookController());
+    levelNode->addChild(playerNode);
+
+    // Add level to scene graph with generated mesh and all game objects as children
     application->addToScene(levelNode->addComponent(new Villain::MeshRenderer<VertexP1N1UV>(mesh, *material)));
 }
 
@@ -117,7 +140,6 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
     }
 }
 
-
 void Level::openDoors(const glm::vec3& pos) {
     for (auto& door : doors) {
         float distanceToDoor = glm::length(door->GetTransform()->getPos() - pos);
@@ -125,6 +147,10 @@ void Level::openDoors(const glm::vec3& pos) {
             door->open();
         }
     }
+}
+
+void Level::damagePlayer(int amount) {
+    player->damage(amount);
 }
 
 void Level::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
@@ -218,7 +244,7 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
 }
 
 
-glm::vec2 Level::checkIntersections(const glm::vec2& lineStart, const glm::vec2& lineEnd) {
+glm::vec2 Level::checkIntersections(const glm::vec2& lineStart, const glm::vec2& lineEnd, bool hurtMonsters) {
     glm::vec2 nearestIntersection = glm::vec2(0.0f);
 
     for (unsigned int i = 0; i < collisionPosStart.size(); i++) {
@@ -233,6 +259,27 @@ glm::vec2 Level::checkIntersections(const glm::vec2& lineStart, const glm::vec2&
         glm::vec2 collision = lineIntersectRect(lineStart, lineEnd, doorPos, doorSize);
 
         nearestIntersection = findNearestVec2(collision, nearestIntersection, lineStart);
+    }
+
+    if (hurtMonsters) {
+        glm::vec2 nearestMonsterIntersect = glm::vec2(0.f);
+        Monster* nearestMonster = nullptr;
+        for(auto& enemy : enemies) {
+            glm::vec2 enemyPos(enemy->GetTransform()->getPos().x, enemy->GetTransform()->getPos().z);
+            glm::vec2 enemySize = enemy->getSize();
+            glm::vec2 collision = lineIntersectRect(lineStart, lineEnd, enemyPos, enemySize);
+
+            glm::vec2 lastMonsterIntersect = nearestMonsterIntersect;
+            nearestMonsterIntersect = findNearestVec2(collision, nearestMonsterIntersect, lineStart);
+            if (nearestMonsterIntersect == collision) {
+                nearestMonster = enemy;
+            }
+        }
+        if (nearestMonsterIntersect != glm::vec2(0.0f) && (nearestIntersection == glm::vec2(0.0f)
+            || (glm::length(nearestMonsterIntersect - lineStart) < glm::length(nearestIntersection - lineStart)))) {
+            std::cout << "Enemy hit by player!\n";
+            if (nearestMonster != nullptr) nearestMonster->damage(player->getDamage());
+        }
     }
 
     return nearestIntersection;

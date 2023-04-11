@@ -5,6 +5,7 @@
 using namespace Villain;
 
 const float Player::PLAYER_SIZE = 0.3f;
+const float SHOOT_DISTANCE = 100.f;
 
 // Custom Move Controller for this game, locked on y height
 void Player::handleInput(float deltaTime) {
@@ -28,6 +29,17 @@ void Player::handleInput(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_e)) {
         currentLevel->openDoors(GetTransform()->getPos());
     }
+
+    if (InputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)) {
+        glm::vec2 lineStart = glm::vec2(GetTransform()->getPos().x, GetTransform()->getPos().z);
+        // Needed camera's front vector here, but playuer's should be the same
+        glm::vec2 castDirection = glm::normalize(glm::vec2(GetTransform()->getForward().x, GetTransform()->getForward().z));
+        //std::cout << "Camera front: " << castDirection.x << ", " << castDirection.y << "\n";
+        glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+
+        currentLevel->checkIntersections(lineStart, lineEnd, true);
+    }
+
 }
 
 void Player::update(float deltaTime) {
@@ -44,5 +56,14 @@ void Player::update(float deltaTime) {
     movement.z *= collision.z;
 
     GetTransform()->translatePosition(movement * speed * deltaTime);
+}
+
+void Player::damage(int amount) {
+    health -= amount;
+
+    if (health <= 0) {
+        std::cout << "GAME OVER\n";
+        Engine::setRunning(false);
+    }
 }
 
