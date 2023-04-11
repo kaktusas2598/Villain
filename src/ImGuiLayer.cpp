@@ -8,6 +8,9 @@
 #include "Engine.hpp"
 #include "SceneNode.hpp"
 
+// Custom baked fonts for ImGui
+#include "imgui/Roboto-Regular.h"
+
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
@@ -27,13 +30,22 @@ namespace Villain {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+        // Load custom font
+        //io.Fonts->AddFontDefault();
+        // ImGui searches in working directory
+        //io.Fonts->AddFontFromFileTTF("Roboto-Regular.ttf", 14.0f);
+        // Add custom fonts built by ImGui's binary_to_compressed_c script!
+        ImFontConfig config;
+        config.PixelSnapH = true;
+        io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        io.Fonts->Build();
+
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;        // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-                                                                    //
-                                                                    // Handle cursor visibility ourselves
-        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+        io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;      // Handle cursor visibility ourselves
 
         // Setup Dear ImGui style
         //ImGui::StyleColorsDark();
