@@ -11,6 +11,8 @@ class Player : public Villain::NodeComponent {
         virtual void update(float deltaTime) override;
 
         int getDamage() const { return 20.0f; }
+        int getMaxHealth() const { return 100.0f; }
+        int getHealth() const { return health; }
         void damage(int amount);
 
         static const float PLAYER_SIZE;

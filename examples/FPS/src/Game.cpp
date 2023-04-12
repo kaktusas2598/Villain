@@ -81,7 +81,7 @@ void Game::onAppRender(float dt) {
         uvRect.y = 0.0f;
         uvRect.z = 1.0f;
         uvRect.w = 1.0f;
-        glm::vec4 destRect{0.0f, 0.0f, 100.f, 100.f};
+        glm::vec4 destRect{-50.0f, 0.0f, 100.f, 100.f};
         spriteBatch.draw(destRect, uvRect, ResourceManager::Instance()->getTexture("gun")->getID(), -1.0f, glm::vec4(1.0f));
 
         spriteBatch.end();

@@ -94,9 +94,7 @@ void Monster::idleUpdate(float deltaTime) {
 
             glm::vec2 collision = currentLevel->checkIntersections(lineStart, lineEnd, false);
 
-            glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
-            if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
-                || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
+            if (collision == glm::vec2(0.0f) || (glm::length(playerPos - lineStart) < glm::length(collision - lineStart))) {
                 currentState = AIState::STATE_CHASE;
             }
 

@@ -5,6 +5,7 @@
 #include "Door.hpp"
 #include "Mesh.hpp"
 
+class Medkit;
 class Monster;
 class Player;
 
@@ -23,8 +24,10 @@ class Level {
         glm::vec2 lineIntersectRect(const glm::vec2& lineStart, const glm::vec2& lineEnd, glm::vec2& rectPos, glm::vec2& rectSize);
 
         std::vector<Door*>& getDoors() { return doors; }
+        Player* getPlayer() const { return player; }
         void damagePlayer(int amount);
         void openDoors(const glm::vec3& pos);
+        void removeMedkit(Medkit* medkit);
         inline Villain::SceneNode* getNode() { return levelNode; }
 
         static const float OPEN_DOOR_DISTANCE;
@@ -61,5 +64,6 @@ class Level {
         std::vector<Door*> doors;
 
         std::vector<Monster*> enemies;
+        std::vector<Medkit*> medkits;
         Player* player = nullptr;
 };

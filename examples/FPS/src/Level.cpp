@@ -9,6 +9,7 @@
 #include "Gun.hpp"
 // Really spent no time on thinking of design for this game, Level should contain
 // Player and Monster objects, but they also shouldn't include Level
+#include "Medkit.hpp"
 #include "Monster.hpp"
 #include "Player.hpp"
 
@@ -121,6 +122,9 @@ void Level::addDoor(int x, int y) {
 }
 
 void Level::addSpecialObject(int blueValue, int x, int y) {
+    static unsigned int monsterCnt = 1;
+    static unsigned int medkitCnt = 1;
+
     if (blueValue == 16) {
         addDoor(x, y);
     }
@@ -143,9 +147,19 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
         levelNode->addChild(playerNode);
     }
     if (blueValue == 128) {
+        std::stringstream name;
+        name << "Enemy " << monsterCnt++;
         enemies.push_back(new Monster(this));
-        levelNode->addChild((new Villain::SceneNode("Monster 1" ,glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f))))
+        levelNode->addChild((new Villain::SceneNode(name.str(), glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f))))
                 ->addComponent(enemies[enemies.size() - 1]));
+    }
+    if (blueValue == 192) {
+        std::stringstream name;
+        name << "Medkit " << medkitCnt++;
+        medkits.push_back(new Medkit(this));
+        levelNode->addChild((new Villain::SceneNode(name.str(), glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f))))
+                ->addComponent(medkits[medkits.size() - 1]));
+
     }
 }
 
@@ -160,6 +174,17 @@ void Level::openDoors(const glm::vec3& pos) {
 
 void Level::damagePlayer(int amount) {
     player->damage(amount);
+    std::cout << "HP: " << player->getHealth() << "\n";
+}
+
+void Level::removeMedkit(Medkit* medkit) {
+    for (auto& m : medkits) {
+        if (medkit == m) {
+            // TODO: need a way to correctly remove scene node
+            //delete m;
+            //m = nullptr;
+        }
+    }
 }
 
 void Level::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
