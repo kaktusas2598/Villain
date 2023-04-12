@@ -4,13 +4,13 @@
 #include <iostream>
 #include <sstream>
 
+#include "components/CameraComponent.hpp"
+#include "components/LookController.hpp"
+#include "Gun.hpp"
 // Really spent no time on thinking of design for this game, Level should contain
 // Player and Monster objects, but they also shouldn't include Level
 #include "Monster.hpp"
 #include "Player.hpp"
-#include "components/CameraComponent.hpp"
-#include "components/LookController.hpp"
-
 
 const float ROOM_WIDTH = 1.0f;
 const float ROOM_LENGTH = 1.0f;
@@ -104,6 +104,12 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
     Villain::SceneNode* playerNode = (new Villain::SceneNode("Player", glm::vec3(3.f, 1.f, 17.5f)))->addComponent(new Villain::CameraComponent(camera));
     playerNode->addComponent(player);
     playerNode->addComponent(new Villain::LookController());
+
+    // And gun mesh for player, always relatie to it
+    Gun* gun = new Gun();
+    playerNode->addChild((new Villain::SceneNode("Gun", glm::vec3(0.0f, 0.0f, -1.0f)))->addComponent(gun));
+
+
     levelNode->addChild(playerNode);
 
     // Add level to scene graph with generated mesh and all game objects as children
