@@ -26,6 +26,7 @@ namespace Villain {
             SceneNode* addChild(SceneNode* child);
             SceneNode* addComponent(NodeComponent* component);
 
+            void removeChild(SceneNode* child);
             //std::vector<SceneNode*>& getAllAttached();
 
             Transform* getTransform() { return &transform; }
