@@ -49,7 +49,7 @@ void Medkit::update(float deltaTime) {
     if (glm::length(currentLevel->getPlayer()->GetTransform()->getPos() - GetTransform()->getPos()) < PICKUP_DISTANCE) {
         if (currentLevel->getPlayer()->getHealth() < currentLevel->getPlayer()->getMaxHealth()) {
             currentLevel->damagePlayer(-HEAL_AMOUNT);
-            currentLevel->removeMedkit(this);
+            currentLevel->removeMedkit(this->parent);
         }
     }
 }

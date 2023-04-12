@@ -5,6 +5,8 @@
 #include "SceneNode.hpp"
 
 #include "Level.hpp"
+#include "Player.hpp"
+#include <sstream>
 
 using namespace Villain;
 
@@ -52,9 +54,13 @@ void Game::init() {
     spriteBatch.init();
     hudShader = new Shader();
     hudShader->createFromResource("spriteBatch");
+    textShader = new Shader();
+    textShader->createFromResource("text");
 
     // Add level which will also generate and add to scene all special objects
     currentLevel = new Level("assets/bitmaps/level1.png", "assets/textures/WolfCollection.png", this);
+
+    freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -64,28 +70,43 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppRender(float dt) {
-    // HUD DRAW/ GUN
+    // Setup 1st render pass for hud/gun
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-80.0f, 0.0f, 0.0f));
     model = glm::scale(model, glm::vec3(2.0f));
 
-    if (hudShader != nullptr) {
-        hudShader->bind();
-        hudShader->setUniformMat4f("model", model);
-        hudShader->setUniformMat4f("view", hudCamera.getViewMatrix());
-        hudShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
-        hudShader->setUniform1i("spriteTexture", 0);
-        spriteBatch.begin();
+    hudShader->bind();
+    hudShader->setUniformMat4f("model", model);
+    hudShader->setUniformMat4f("view", hudCamera.getViewMatrix());
+    hudShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
+    hudShader->setUniform1i("spriteTexture", 0);
+    spriteBatch.begin();
 
-        glm::vec4 uvRect;
-        uvRect.x = 0.0f;
-        uvRect.y = 0.0f;
-        uvRect.z = 1.0f;
-        uvRect.w = 1.0f;
-        glm::vec4 destRect{-50.0f, 0.0f, 100.f, 100.f};
-        spriteBatch.draw(destRect, uvRect, ResourceManager::Instance()->getTexture("gun")->getID(), -1.0f, glm::vec4(1.0f));
+    glm::vec4 uvRect;
+    uvRect.x = 0.0f;
+    uvRect.y = 0.0f;
+    uvRect.z = 1.0f;
+    uvRect.w = 1.0f;
+    glm::vec4 destRect{-50.0f, 0.0f, 100.f, 100.f};
+    spriteBatch.draw(destRect, uvRect, ResourceManager::Instance()->getTexture("gun")->getID(), -1.0f, glm::vec4(1.0f));
 
-        spriteBatch.end();
-        spriteBatch.renderBatch();
-    }
+    spriteBatch.end();
+    spriteBatch.renderBatch();
+
+    // Setup 2nd render pass for text
+    textShader->bind();
+    textShader->setUniformMat4f("model", model);
+    textShader->setUniformMat4f("view", hudCamera.getViewMatrix());
+    textShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
+    textShader->setUniform1i("spriteTexture", 0);
+    spriteBatch.begin();
+
+    std::stringstream ss;
+    ss << "HP: " << (int)currentLevel->getPlayer()->getHealth();
+    glm::vec4 color(0.8f, 0.3f, 0.4f, 1.0f);
+    freeType->draw(spriteBatch, ss.str(), glm::vec2(-500.0f, 30.0f), 2.0f, -1.0f, color);
+    ss.str(""); // Empty string stream
+
+    spriteBatch.end();
+    spriteBatch.renderBatch();
 
 }

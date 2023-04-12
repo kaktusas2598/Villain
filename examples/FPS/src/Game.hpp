@@ -5,6 +5,7 @@
 #include "Level.hpp"
 
 #include "Camera2D.hpp"
+#include "FreeType.hpp"
 #include "SpriteBatch.hpp"
 
 class Game : public Villain::Application {
@@ -21,4 +22,6 @@ class Game : public Villain::Application {
         Villain::SpriteBatch spriteBatch;
         Villain::Camera2D hudCamera;
         Villain::Shader* hudShader = nullptr;
+        Villain::Shader* textShader = nullptr;
+        Villain::FreeType* freeType;
 };

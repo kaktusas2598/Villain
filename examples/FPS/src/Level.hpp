@@ -26,8 +26,8 @@ class Level {
         std::vector<Door*>& getDoors() { return doors; }
         Player* getPlayer() const { return player; }
         void damagePlayer(int amount);
-        void openDoors(const glm::vec3& pos);
-        void removeMedkit(Medkit* medkit);
+        void openDoors(const glm::vec3& pos, bool exitLevel = false);
+        void removeMedkit(Villain::SceneNode* medkit);
         inline Villain::SceneNode* getNode() { return levelNode; }
 
         static const float OPEN_DOOR_DISTANCE;
@@ -64,6 +64,7 @@ class Level {
         std::vector<Door*> doors;
 
         std::vector<Monster*> enemies;
-        std::vector<Medkit*> medkits;
+        std::vector<Villain::SceneNode*> medkits;
         Player* player = nullptr;
+        std::vector<glm::vec3> exitPoints;
 };

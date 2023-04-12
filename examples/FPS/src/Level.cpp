@@ -156,18 +156,30 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
     if (blueValue == 192) {
         std::stringstream name;
         name << "Medkit " << medkitCnt++;
-        medkits.push_back(new Medkit(this));
-        levelNode->addChild((new Villain::SceneNode(name.str(), glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f))))
-                ->addComponent(medkits[medkits.size() - 1]));
-
+        Villain::SceneNode* medkit = new Villain::SceneNode(name.str(), glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f)));
+        medkit->addComponent(new Medkit(this));
+        medkits.push_back(medkit);
+        levelNode->addChild(medkit);
+    }
+    // TODO: Implement exit points, moving to next level
+    // Need to improve first level and add second one as well
+    if (blueValue == 97) {
+        exitPoints.push_back(glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f)));
     }
 }
 
-void Level::openDoors(const glm::vec3& pos) {
+void Level::openDoors(const glm::vec3& pos, bool exitLevel) {
     for (auto& door : doors) {
         float distanceToDoor = glm::length(door->GetTransform()->getPos() - pos);
         if (distanceToDoor < Level::OPEN_DOOR_DISTANCE) {
             door->open();
+        }
+    }
+    if (exitLevel) {
+        for (auto& exit: exitPoints) {
+            if (glm::length(exit - pos) < Level::OPEN_DOOR_DISTANCE) {
+                // TODO: change to next level
+            }
         }
     }
 }
@@ -177,12 +189,12 @@ void Level::damagePlayer(int amount) {
     std::cout << "HP: " << player->getHealth() << "\n";
 }
 
-void Level::removeMedkit(Medkit* medkit) {
+void Level::removeMedkit(Villain::SceneNode* medkit) {
     for (auto& m : medkits) {
         if (medkit == m) {
-            // TODO: need a way to correctly remove scene node
-            //delete m;
-            //m = nullptr;
+            levelNode->removeChild(m);
+            // Not entirely sure that this is correct below
+            m = nullptr;
         }
     }
 }
