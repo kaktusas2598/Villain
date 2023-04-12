@@ -19,7 +19,7 @@ const float TEX_MAX_X = 1.0f;
 const float TEX_MIN_Y = -0.0f;
 const float TEX_MAX_Y = 1.0f;
 
-Medkit::Medkit(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level), deathTime(0.0f) {
+Medkit::Medkit(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level) {
 
     material = Material{"medkit", std::vector<Texture*>{ResourceManager::Instance()->loadTexture("assets/textures/MEDIA0.png", "medkit")}, 8};
     std::vector<VertexP1N1UV> vertices;
