@@ -92,26 +92,6 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
     material = new Villain::Material{"bricks", floorTextures, 8};
     mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
 
-    enemies.push_back(new Monster(this));
-    levelNode->addChild((new Villain::SceneNode("Monster 1" ,glm::vec3(6.f, 0.f, 10.5f)))->addComponent(enemies[0]));
-    enemies.push_back(new Monster(this));
-    levelNode->addChild((new Villain::SceneNode("Monster 2" ,glm::vec3(16.f, 0.f, 10.5f)))->addComponent(enemies[1]));
-
-    // Add camera and player
-    Villain::Camera3D* camera = new Villain::Camera3D();
-    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
-    player = new Player(this);
-    Villain::SceneNode* playerNode = (new Villain::SceneNode("Player", glm::vec3(3.f, 1.f, 17.5f)))->addComponent(new Villain::CameraComponent(camera));
-    playerNode->addComponent(player);
-    playerNode->addComponent(new Villain::LookController());
-
-    // And gun mesh for player, always relatie to it
-    Gun* gun = new Gun();
-    playerNode->addChild((new Villain::SceneNode("Gun", glm::vec3(0.0f, 0.0f, -1.0f)))->addComponent(gun));
-
-
-    levelNode->addChild(playerNode);
-
     // Add level to scene graph with generated mesh and all game objects as children
     application->addToScene(levelNode->addComponent(new Villain::MeshRenderer<VertexP1N1UV>(mesh, *material)));
 }
@@ -143,6 +123,29 @@ void Level::addDoor(int x, int y) {
 void Level::addSpecialObject(int blueValue, int x, int y) {
     if (blueValue == 16) {
         addDoor(x, y);
+    }
+    if (blueValue == 1) {
+        // Add camera and player
+        Villain::Camera3D* camera = new Villain::Camera3D();
+        camera->setZPlanes(0.1f, 1000.f); // for bigger render range
+        player = new Player(this);
+        Villain::SceneNode* playerNode = (new Villain::SceneNode("Player", glm::vec3((x + 0.5f) * ROOM_WIDTH, 1.f, (y + 0.5f) * ROOM_LENGTH)))
+            ->addComponent(new Villain::CameraComponent(camera));
+        playerNode->addComponent(player);
+        playerNode->addComponent(new Villain::LookController());
+
+        // And gun mesh for player, always relative to it
+        // FIXME: Relative position not really working very well, not sure, but most likely a problem
+        // with Transform class?
+        Gun* gun = new Gun();
+        playerNode->addChild((new Villain::SceneNode("Gun", glm::vec3(0.0f, 0.0f, -1.0f)))->addComponent(gun));
+
+        levelNode->addChild(playerNode);
+    }
+    if (blueValue == 128) {
+        enemies.push_back(new Monster(this));
+        levelNode->addChild((new Villain::SceneNode("Monster 1" ,glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f))))
+                ->addComponent(enemies[enemies.size() - 1]));
     }
 }
 
