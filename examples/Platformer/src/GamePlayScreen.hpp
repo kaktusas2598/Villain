@@ -29,7 +29,7 @@ class GamePlayScreen : public Villain::IGameScreen {
 
         // Called in main app loop
         virtual void update(float deltaTime) override;
-        virtual void draw(float deltaTime) override;
+        virtual void draw() override;
 
         void onAppWindowResize(int newWidth, int newHeight);
 

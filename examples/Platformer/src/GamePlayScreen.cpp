@@ -76,7 +76,7 @@ void GamePlayScreen::onEntry() {
     //spriteFont = new SpriteFont("assets/fonts/chintzy.ttf", 32);
     //freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
-    camera.init(Villain::Engine::getScreenWidth(), Villain::Engine::getScreenHeight());
+    camera.rescale(Villain::Engine::getScreenWidth(), Villain::Engine::getScreenHeight());
     // Zoom out because Box2D uses meters and not pixels
     camera.setZoom(32.0f);
     //hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
@@ -118,14 +118,14 @@ void GamePlayScreen::update(float deltaTime) {
     }
 }
 
-void GamePlayScreen::draw(float deltaTime) {
+void GamePlayScreen::draw() {
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // Setting up rendering batch and rendering it all at once with a single draw call
     if (textureShader != nullptr) {
         textureShader->bind();
         // Set uniforms
-        textureShader->setUniformMat4f("view", camera.getCameraMatrix());
+        textureShader->setUniformMat4f("view", camera.getViewMatrix());
         textureShader->setUniformMat4f("projection", glm::mat4(1.0f));
         textureShader->setUniform1i("spriteTexture", 0);
 
@@ -161,7 +161,7 @@ void GamePlayScreen::draw(float deltaTime) {
             //debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
 
             debugRenderer.end();
-            debugRenderer.render(camera.getCameraMatrix(), 2.0f);
+            debugRenderer.render(camera.getViewMatrix(), 2.0f);
         }
 
         // HACK: Render test lights
@@ -189,7 +189,7 @@ void GamePlayScreen::draw(float deltaTime) {
         spriteBatch.begin();
 
         light2DShader->bind();
-        light2DShader->setUniformMat4f("MVP", camera.getCameraMatrix());
+        light2DShader->setUniformMat4f("MVP", camera.getViewMatrix());
 
         playerLight.draw(spriteBatch);
         mouseLight.draw(spriteBatch);
@@ -204,7 +204,7 @@ void GamePlayScreen::draw(float deltaTime) {
 
 void GamePlayScreen::onAppWindowResize(int newWidth, int newHeight) {
     std::cout << newWidth << ", " << newHeight << "\n";
-    camera.init(newWidth, newHeight);
+    camera.rescale(newWidth, newHeight);
     //glm::vec3 camPos = camera.getPosition();
     //camPos.x = newWidth/2.0;
     //camPos.y = newHeight/2.0;
