@@ -106,5 +106,5 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * SpotLight could take Camera* as an optional param to make it act as a flashlight
  * Improve Phong shading by implementing Blinn-Phong shading
  * Investigate gamma correction and sRGB textures
- * Fix Engine not compiling on Windows due to Nuklear, also other issues on Windows with framebuffer, mouse, etc
-
+ * Fix Engine on Windows
+ * Investigate integrating Box2D and Bullet physics
