@@ -69,24 +69,14 @@ namespace Villain {
         for (std::string line; std::getline(iss, line); ) {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
                 // process include directive
-                // TODO: super similar to createFromResource() method, needs refactor
                 std::string file = line.substr(line.find(' ') + 1, line.length());
-                auto shaderFs = cmrc::Villain::get_filesystem();
-                std::string path = "res/shaders/" + file;
-                if (shaderFs.exists(path)) {
-                    auto incFile = shaderFs.open(path);
-                    std::string incSource(incFile.begin());
-                    std::istringstream inceIss(incSource);
-                    std::string incLine;
-                    // Append included file to shader
-                    for (std::string incLine; std::getline(inceIss, incLine); ) {
-                        // NOTE: #shader directive must come before #include directive, to ensure type is set here
-                        ss[(int)type] << incLine << '\n';
-                    }
-                } else {
-                    std::stringstream ess;
-                    ess << "Shader resource " << file << " not found";
-                    Logger::Instance()->error(ess.str().c_str());
+                std::string incSource = this->loadFromResource("res/shaders/" + file);
+                std::istringstream inceIss(incSource);
+                std::string incLine;
+                // Append included file to shader
+                for (std::string incLine; std::getline(inceIss, incLine); ) {
+                    // NOTE: #shader directive must come before #include directive, to ensure type is set here
+                    ss[(int)type] << incLine << '\n';
                 }
             } else if (line.find("#shader") != std::string::npos) {
                 if (line.find("vertex") != std::string::npos) {
@@ -106,17 +96,22 @@ namespace Villain {
     }
 
     void Shader::createFromResource(const std::string& source) {
+        std::string src = this->loadFromResource("res/shaders/" + source + ".glsl");
+        this->createFromSource(src);
+    }
+
+    std::string Shader::loadFromResource(const std::string& path) {
         auto shaderFs = cmrc::Villain::get_filesystem();
-        std::string path = "res/shaders/" + source + ".glsl";
         if (shaderFs.exists(path)) {
             auto faShaderFile = shaderFs.open(path);
             std::string faSource(faShaderFile.begin());
-            this->createFromSource(faSource);
+            return faSource;
         } else {
             std::stringstream ss;
-            ss << "Shader resource " << source << " not found";
+            ss << "Shader resource at " << path << " not found";
             Logger::Instance()->error(ss.str().c_str());
         }
+        return std::string();
     }
 
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {

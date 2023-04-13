@@ -40,6 +40,7 @@ namespace Villain {
             void createFromSource(const std::string& source);
             // From embedded resource library
             void createFromResource(const std::string& source);
+            std::string loadFromResource(const std::string& path);
 
             void bind() const;
             void unbind() const;
