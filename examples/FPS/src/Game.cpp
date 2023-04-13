@@ -56,11 +56,9 @@ void Game::init() {
     hudShader->createFromResource("spriteBatch");
     textShader = new Shader();
     textShader->createFromResource("text");
-
-    // Add level which will also generate and add to scene all special objects
-    currentLevel = new Level("assets/bitmaps/level1.png", "assets/textures/WolfCollection.png", this);
-
     freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
+
+    moveToNextLevel();
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -109,4 +107,19 @@ void Game::onAppRender(float dt) {
     spriteBatch.end();
     spriteBatch.renderBatch();
 
+}
+
+void Game::moveToNextLevel() {
+    currentLevelNum++;
+    if (currentLevel != nullptr) {
+        getRootNode()->removeChild(currentLevel->getNode());
+        delete currentLevel;
+    }
+    currentLevel = new Level(getCurrentLevelName(), "assets/textures/WolfCollection.png", this);
+}
+
+std::string Game::getCurrentLevelName() {
+    std::stringstream ss;
+    ss << "assets/bitmaps/level" << currentLevelNum << ".png";
+    return ss.str();
 }

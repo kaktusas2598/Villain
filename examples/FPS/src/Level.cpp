@@ -6,6 +6,7 @@
 
 #include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
+#include "Game.hpp"
 #include "Gun.hpp"
 // Really spent no time on thinking of design for this game, Level should contain
 // Player and Monster objects, but they also shouldn't include Level
@@ -30,7 +31,7 @@ Level::Level(const std::string& fileName, const std::string& tileAtlasFileName, 
 
 void Level::generateLevel(const std::string& tileAtlasFileName) {
     // Load and generate 3D map from bitmap texture
-    levelNode = new Villain::SceneNode("Level 1");
+    levelNode = new Villain::SceneNode("Level 1"); // TODO: set correct level num
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
 
@@ -161,9 +162,8 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
         medkits.push_back(medkit);
         levelNode->addChild(medkit);
     }
-    // TODO: Implement exit points, moving to next level
-    // Need to improve first level and add second one as well
     if (blueValue == 97) {
+        std::cout << "Adding exit point\n";
         exitPoints.push_back(glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f)));
     }
 }
@@ -177,8 +177,12 @@ void Level::openDoors(const glm::vec3& pos, bool exitLevel) {
     }
     if (exitLevel) {
         for (auto& exit: exitPoints) {
+            //std:: cout << "Exit position"
             if (glm::length(exit - pos) < Level::OPEN_DOOR_DISTANCE) {
+                std::cout << "exiting\n";
                 // TODO: change to next level
+                // Game need to do that
+                dynamic_cast<Game*>(application)->moveToNextLevel();
             }
         }
     }

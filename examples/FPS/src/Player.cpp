@@ -27,7 +27,8 @@ void Player::handleInput(float deltaTime) {
     }
 
     if (InputManager::Instance()->isKeyDown(SDLK_e)) {
-        currentLevel->openDoors(GetTransform()->getPos());
+        // TODO: only pass true when all monsters are killed
+        currentLevel->openDoors(GetTransform()->getPos(), true);
     }
 
     if (InputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)) {

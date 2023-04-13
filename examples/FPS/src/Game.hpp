@@ -14,9 +14,13 @@ class Game : public Villain::Application {
         void addStates() {}
         void onAppPreUpdate(float dt);
         void onAppRender(float dt);
+
+        void moveToNextLevel();
+        std::string getCurrentLevelName();
     private:
         Villain::Camera3D* camera;
-        Level* currentLevel;
+        Level* currentLevel = nullptr;
+        int currentLevelNum = 0;
 
         // For static stuff, player gun, HUD, text, should be part of scene graph
         Villain::SpriteBatch spriteBatch;
