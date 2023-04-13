@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: install dependencies
+      run: |
+        sudo apt-get install libglew-dev
+        sudo apt-get install -y libsdl2-dev
+        sudo apt-get install -y libsdl2-mixer-dev
+        sudo apt-get install -y libsdl2-image-dev
+        sudo apt-get install -y libsdl2-ttf-dev
+        sudo apt-get install -y liblua5.4-dev
+        sudo apt-get install -y libassimp-dev
     - name: configure
       run: ./configure.sh
     - name: build
