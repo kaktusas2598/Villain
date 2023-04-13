@@ -12,6 +12,7 @@ class Player;
 class Level {
     public:
         Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app);
+        ~Level() { delete bitmap; }
 
         void update(float deltaTime);
 

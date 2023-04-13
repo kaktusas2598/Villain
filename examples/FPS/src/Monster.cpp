@@ -167,7 +167,7 @@ void Monster::attackUpdate(float deltaTime) {
             glm::vec2 playerIntersect = currentLevel->lineIntersectRect(lineStart, lineEnd, playerPos, playerSize);
             if (playerIntersect != glm::vec2(0.0f) && (collision == glm::vec2(0.0f)
                 || (glm::length(playerIntersect - lineStart) < glm::length(collision - lineStart)))) {
-                //currentLevel->damagePlayer(getDamage());
+                currentLevel->damagePlayer(getDamage());
             }
 
             currentState = AIState::STATE_CHASE;

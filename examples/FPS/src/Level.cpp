@@ -163,7 +163,6 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
         levelNode->addChild(medkit);
     }
     if (blueValue == 97) {
-        std::cout << "Adding exit point\n";
         exitPoints.push_back(glm::vec3((x + 0.5f) * ROOM_WIDTH, 0.f, (y + 0.5f)));
     }
 }
@@ -177,11 +176,7 @@ void Level::openDoors(const glm::vec3& pos, bool exitLevel) {
     }
     if (exitLevel) {
         for (auto& exit: exitPoints) {
-            //std:: cout << "Exit position"
             if (glm::length(exit - pos) < Level::OPEN_DOOR_DISTANCE) {
-                std::cout << "exiting\n";
-                // TODO: change to next level
-                // Game need to do that
                 dynamic_cast<Game*>(application)->moveToNextLevel();
             }
         }
@@ -190,7 +185,6 @@ void Level::openDoors(const glm::vec3& pos, bool exitLevel) {
 
 void Level::damagePlayer(int amount) {
     player->damage(amount);
-    std::cout << "HP: " << player->getHealth() << "\n";
 }
 
 void Level::removeMedkit(Villain::SceneNode* medkit) {

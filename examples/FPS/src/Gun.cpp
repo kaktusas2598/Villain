@@ -6,7 +6,7 @@
 using namespace Villain;
 
 const float GUN_OFFSET = -0.1325f;
-const float SCALE = 0.1f;
+const float SCALE = 0.0625f;
 const float START = 0.0f;
 const float SIZE_Y = SCALE * 2;
 // Crazy constant to scale image and keep aspect ratio of gun sprite
@@ -35,10 +35,11 @@ Gun::Gun() : MeshRenderer<VertexP1N1UV>(nullptr, Villain::Material()) {
 
 void Gun::update(float deltaTime) {
     Camera3D* mainCam = dynamic_cast<Camera3D*>(parent->getEngine()->getRenderingEngine()->getMainCamera());
-    GetTransform()->setPos(mainCam->getPosition() + mainCam->getFront() * 0.105f);
+    //GetTransform()->setPos(mainCam->getPosition() + mainCam->getFront() * 0.105f);
+    GetTransform()->setPos(mainCam->getFront());
     GetTransform()->getPos().y += GUN_OFFSET;
 
-    glm::vec3 directionToCamera = GetTransform()->getPos() - mainCam->getPosition();
+    glm::vec3 directionToCamera = mainCam->getPosition() - GetTransform()->getPos();
 
     float angleToCameraFace = glm::degrees(atanf(directionToCamera.z / directionToCamera.x));
     if (directionToCamera.x < 0.0f) {
