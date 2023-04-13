@@ -5,8 +5,6 @@ layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
 
-out vec3 v_normal;
-out vec3 v_fragPos;
 out vec2 v_texCoords;
 
 uniform mat4 projection;
