@@ -20,48 +20,33 @@ namespace Villain {
         rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);
     }
 
-    Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile): rendererID(0) {
-        std::ifstream vShaderFile;
-        std::ifstream fShaderFile;
-
-        vShaderFile.open(vertexFile);
-        fShaderFile.open(fragmentFile);
-
-        std::stringstream vShaderStream, fShaderStream;
-
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-
-        vShaderFile.close();
-        fShaderFile.close();
-
-
-        ShaderProgramSource shaderSource = {vShaderStream.str(), fShaderStream.str()};
-        rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);
-    }
-
-    Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile) {
+    Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile): rendererID(0) {
         std::ifstream vShaderFile;
         std::ifstream gShaderFile;
         std::ifstream fShaderFile;
 
         vShaderFile.open(vertexFile);
-        gShaderFile.open(geometryFile);
         fShaderFile.open(fragmentFile);
 
         std::stringstream vShaderStream, fShaderStream, gShaderStream;
 
         vShaderStream << vShaderFile.rdbuf();
-        gShaderStream << gShaderFile.rdbuf();
         fShaderStream << fShaderFile.rdbuf();
 
         vShaderFile.close();
-        gShaderFile.close();
         fShaderFile.close();
 
-        rendererID = createShader(vShaderStream.str(), gShaderStream.str(), fShaderStream.str());
-    }
+        if (geometryFile != std::string()) {
+            gShaderFile.open(geometryFile);
+            gShaderStream << gShaderFile.rdbuf();
+            gShaderFile.close();
 
+            rendererID = createShader(vShaderStream.str(), gShaderStream.str(), fShaderStream.str());
+        } else {
+            ShaderProgramSource shaderSource = {vShaderStream.str(), fShaderStream.str()};
+            rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);
+        }
+    }
 
     Shader::~Shader() {
         GLCall(glDeleteProgram(rendererID));
@@ -74,12 +59,8 @@ namespace Villain {
     void Shader::createFromSource(const std::string& source) {
         // NOTE: this func is too similar to parseShader() which uses filestream instead of istringstream
         std::istringstream iss(source);
-        enum class ShaderType {
-            NONE = -1, VERTEX = 0, FRAGMENT = 1
-        };
 
         // TODO: All code related to reusable shader code will have to be merged in with parseShader()
-        // as a matter of fact, a lot of loading/creating shader methods are too similar, this class needs refactor
         const std::string INCLUDE_DIRECTIVE = "#include";
 
         std::string line;
@@ -215,10 +196,6 @@ namespace Villain {
     ShaderProgramSource Shader::parseShader(const std::string& fileName) {
         std::ifstream fs(fileName);
 
-        enum class ShaderType {
-            NONE = -1, VERTEX = 0, FRAGMENT = 1
-        };
-
         std::string line;
         std::stringstream ss[2];
         ShaderType type = ShaderType::NONE;
@@ -239,8 +216,6 @@ namespace Villain {
 
         return {ss[0].str(), ss[1].str()};
     }
-
-
 
     void Shader::bind() const {
         GLCall(glUseProgram(rendererID));

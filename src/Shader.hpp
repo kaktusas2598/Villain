@@ -20,6 +20,9 @@ namespace Villain {
         std::string FragmentSource;
     };
 
+    enum class ShaderType {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1
+    };
 
     // This is really Shader Program, as it loads and compiles both vertex and fragment shaders
     class Shader {
@@ -28,10 +31,8 @@ namespace Villain {
             Shader();
             // Create shader from a single file which has vertex and fragment shaders
             Shader(const std::string& fileName);
-            // Create shader object from 2 separate files, one containing vertex and other fragment shaders
-            Shader(const std::string& vertexFile, const std::string& fragmentFile);
-            // Create shader obhect from 3 files: vertex, geometry and fragment shaders
-            Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile);
+            // Create shader program from multiple files: vertex, fragment and optionally geometry shader
+            Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile = std::string());
             ~Shader();
 
             // To be used with empty constructor if we don't want to load shaders from files
@@ -62,7 +63,6 @@ namespace Villain {
             void setUniformVec4(const std::string& name, const glm::vec4& vec);
             void setUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
-
         private:
             unsigned int rendererID;
             // caching for uniforms
@@ -75,7 +75,6 @@ namespace Villain {
 
             int getUniformLocation(const std::string& name);
     };
-
 }
 
 #endif // __Shader__
