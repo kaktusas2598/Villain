@@ -1,56 +1,29 @@
 #include "Shader.hpp"
 
-#include <fstream>
-#include <sstream>
-
 #include "ErrorHandler.hpp"
 #include "Logger.hpp"
+#include "FileUtils.hpp"
 #include "RendereringEngine.hpp"
-
-// For common shader resources
-#include <cmrc/cmrc.hpp>
-CMRC_DECLARE(Villain);
+#include <sstream>
 
 namespace Villain {
 
     Shader::Shader(): rendererID(0) {}
 
     Shader::Shader(const std::string& fileName): rendererID(0) {
-        // TODO: Loading shader string from resource and loading from file should be refactored
-        // to new FileUtils class! It will contain CMRC, fstream and filesystem methods
-        std::ifstream shaderFile;
-        shaderFile.open(fileName);
-        std::stringstream ss;
-        ss << shaderFile.rdbuf();
-        shaderFile.close();
-        createFromSource(ss.str());
+        createFromSource(FileUtils::loadFile(fileName));
     }
 
     Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile): rendererID(0) {
-        std::ifstream vShaderFile;
-        std::ifstream gShaderFile;
-        std::ifstream fShaderFile;
-
-        vShaderFile.open(vertexFile);
-        fShaderFile.open(fragmentFile);
-
-        std::stringstream vShaderStream, fShaderStream, gShaderStream;
-
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-
-        vShaderFile.close();
-        fShaderFile.close();
+        std::string vertexShader = FileUtils::loadFile(vertexFile);
+        std::string fragmentShader = FileUtils::loadFile(fragmentFile);
 
         if (geometryFile != std::string()) {
-            gShaderFile.open(geometryFile);
-            gShaderStream << gShaderFile.rdbuf();
-            gShaderFile.close();
+            std::string geometryShader = FileUtils::loadFile(geometryFile);
 
-            rendererID = createShader(vShaderStream.str(), gShaderStream.str(), fShaderStream.str());
+            rendererID = createShader(vertexShader, fragmentShader, geometryShader);
         } else {
-            ShaderProgramSource shaderSource = {vShaderStream.str(), fShaderStream.str()};
-            rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);
+            rendererID = createShader(vertexShader, fragmentShader);
         }
     }
 
@@ -73,7 +46,7 @@ namespace Villain {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
                 // process include directive
                 std::string file = line.substr(line.find(' ') + 1, line.length());
-                std::string incSource = this->loadFromResource("res/shaders/" + file);
+                std::string incSource = FileUtils::loadResource("res/shaders/" + file);
                 std::istringstream inceIss(incSource);
                 std::string incLine;
                 // Append included file to shader
@@ -99,22 +72,8 @@ namespace Villain {
     }
 
     void Shader::createFromResource(const std::string& source) {
-        std::string src = this->loadFromResource("res/shaders/" + source + ".glsl");
+        std::string src = FileUtils::loadResource("res/shaders/" + source + ".glsl");
         this->createFromSource(src);
-    }
-
-    std::string Shader::loadFromResource(const std::string& path) {
-        auto shaderFs = cmrc::Villain::get_filesystem();
-        if (shaderFs.exists(path)) {
-            auto faShaderFile = shaderFs.open(path);
-            std::string faSource(faShaderFile.begin());
-            return faSource;
-        } else {
-            std::stringstream ss;
-            ss << "Shader resource at " << path << " not found";
-            Logger::Instance()->error(ss.str().c_str());
-        }
-        return std::string();
     }
 
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {

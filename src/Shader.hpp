@@ -15,13 +15,8 @@ namespace Villain {
 
     class RenderingEngine;
 
-    struct ShaderProgramSource {
-        std::string VertexSource;
-        std::string FragmentSource;
-    };
-
     enum class ShaderType {
-        NONE = -1, VERTEX = 0, FRAGMENT = 1
+        NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2
     };
 
     // This is really Shader Program, as it loads and compiles both vertex and fragment shaders
@@ -40,7 +35,6 @@ namespace Villain {
             void createFromSource(const std::string& source);
             // From embedded resource library
             void createFromResource(const std::string& source);
-            std::string loadFromResource(const std::string& path);
 
             void bind() const;
             void unbind() const;
