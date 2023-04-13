@@ -16,8 +16,14 @@ namespace Villain {
     Shader::Shader(): rendererID(0) {}
 
     Shader::Shader(const std::string& fileName): rendererID(0) {
-        ShaderProgramSource shaderSource = parseShader(fileName);
-        rendererID = createShader(shaderSource.VertexSource, shaderSource.FragmentSource);
+        // TODO: Loading shader string from resource and loading from file should be refactored
+        // to new FileUtils class! It will contain CMRC, fstream and filesystem methods
+        std::ifstream shaderFile;
+        shaderFile.open(fileName);
+        std::stringstream ss;
+        ss << shaderFile.rdbuf();
+        shaderFile.close();
+        createFromSource(ss.str());
     }
 
     Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile): rendererID(0) {
@@ -57,10 +63,7 @@ namespace Villain {
     }
 
     void Shader::createFromSource(const std::string& source) {
-        // NOTE: this func is too similar to parseShader() which uses filestream instead of istringstream
         std::istringstream iss(source);
-
-        // TODO: All code related to reusable shader code will have to be merged in with parseShader()
         const std::string INCLUDE_DIRECTIVE = "#include";
 
         std::string line;
@@ -185,31 +188,6 @@ namespace Villain {
         }
 
         return id;
-    }
-
-    // This is very basic way of loading shader with both vertex and fragment shaders being in one file
-    ShaderProgramSource Shader::parseShader(const std::string& fileName) {
-        std::ifstream fs(fileName);
-
-        std::string line;
-        std::stringstream ss[2];
-        ShaderType type = ShaderType::NONE;
-        while(getline(fs, line)) {
-            if (line.find("#shader") != std::string::npos) {
-                if (line.find("vertex") != std::string::npos) {
-                    type = ShaderType::VERTEX;
-
-                } else if (line.find("fragment") != std::string::npos) {
-                    type = ShaderType::FRAGMENT;
-
-                }
-            } else {
-                if (type != ShaderType::NONE)
-                    ss[(int)type] << line << '\n';
-            }
-        }
-
-        return {ss[0].str(), ss[1].str()};
     }
 
     void Shader::bind() const {

@@ -72,7 +72,6 @@ namespace Villain {
             unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
             unsigned int createShader(const std::string& vertexShader, const std::string& geometryShader, const std::string& fragmentShader);
             unsigned int compileShader(unsigned int type, const std::string& source);
-            ShaderProgramSource parseShader(const std::string& fileName);
 
             int getUniformLocation(const std::string& name);
     };
