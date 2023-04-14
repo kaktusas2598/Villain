@@ -60,9 +60,11 @@
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
  * [lua](https://www.lua.org/) - For scripting, configuration
 
-## Libraries used by examples
+
+## Libraries and assets used by examples
  * [Box2D](https://box2d.org/) - A 2D Physics Engine for Games
  * [Bullet Physics](https://bulletphysics.org/) - Real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
+ * [Sponza Palace](https://github.com/jimmiebergmann/Sponza) - Sponza Palace Obj model made by Jimmie Bergmann
 
 
 ## Instructions
