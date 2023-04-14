@@ -42,8 +42,9 @@
 * and more...
 
 
-![2D example](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
-![3D example](screenshots/3Dimgui.png?raw=true "Villain Engine Demo: 3D phong lighting/skybox demo")
+![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
+![3D features](screenshots/3Dimgui.png?raw=true "Villain Engine Demo: 3D demo with models/lighting etc.")
+![FPS](screenshots/FPS.png?raw=true "Villain Engine Demo: Wolfenstein/Doom clone")
 
 ## Used Libraries
 
