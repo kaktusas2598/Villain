@@ -268,7 +268,7 @@ namespace Villain {
                 vertices[vertexIndex].position.x = xy * cosf(sectorAngle);
                 vertices[vertexIndex].position.y = xy * sinf(sectorAngle);
                 vertices[vertexIndex].position.z = z;
-                // shift sphere by center vector to transform it, not sure if this is correct
+                // shift sphere by center vector to transform it
                 vertices[vertexIndex].position += center;
                 vertices[vertexIndex].color = color;
             }
