@@ -244,7 +244,6 @@ namespace Villain {
     }
 
     // Inspired by: https://www.songho.ca/opengl/gl_sphere.html
-    // FIXME: sphere is being renderer, but still not looking perfect: one vertex is outside the sphere and some lines are missing
     void DebugRenderer::drawSphere(const glm::vec3& center, const glm::vec4& color, float radius) {
         const float sectorCount = 36; //<<< num of longitude divisions
         const float stackCount = 18; //<<< num of latitude divisions
@@ -256,6 +255,7 @@ namespace Villain {
         float sectorStep = 2 * M_PI / sectorCount;
         float stackStep = M_PI / stackCount;
         float sectorAngle, stackAngle;
+        int vertexIndex = start;
 
         for (int i = 0; i <= stackCount; ++i) {
             stackAngle = M_PI / 2 - i * stackStep; //<<< from pi/2 to -pi/2
@@ -264,13 +264,13 @@ namespace Villain {
 
             for (int j = 0; j <= sectorCount; ++j) {
                 sectorAngle = j * sectorStep;
-                int vertexIndex = start + i * sectorCount + j;
                 vertices[vertexIndex].position.x = xy * cosf(sectorAngle);
                 vertices[vertexIndex].position.y = xy * sinf(sectorAngle);
                 vertices[vertexIndex].position.z = z;
                 // shift sphere by center vector to transform it
                 vertices[vertexIndex].position += center;
                 vertices[vertexIndex].color = color;
+                vertexIndex++;
             }
         }
         // Generate indices
@@ -281,12 +281,12 @@ namespace Villain {
             k2 = k1 + sectorCount + 1; // beginning of next stack
             for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
                 // vertical lines
-                indices.push_back(k1);
-                indices.push_back(k2);
+                indices.push_back(start + k1);
+                indices.push_back(start + k2);
                 // horizontal lines
                 if (i != 0) {
-                    indices.push_back(k1);
-                    indices.push_back(k1 + 1);
+                    indices.push_back(start + k1);
+                    indices.push_back(start + k1 + 1);
                 }
             }
         }
