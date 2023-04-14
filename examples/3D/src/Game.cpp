@@ -75,11 +75,8 @@ void Game::init() {
     modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
-    //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/donut.obj"));
     //modelNode->getTransform()->setScale(4.0f);
-
     addToScene(modelNode);
-
 
     SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/rock.obj"));
     rockNode->getTransform()->setScale(0.01f);
