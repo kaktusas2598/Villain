@@ -4,7 +4,7 @@
 #include <vector>
 #include "Layer.hpp"
 #include "glm/glm.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 
 namespace Villain {
 

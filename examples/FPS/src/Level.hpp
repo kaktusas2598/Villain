@@ -3,7 +3,7 @@
 #include "Application.hpp"
 #include "Bitmap.hpp"
 #include "Door.hpp"
-#include "Mesh.hpp"
+#include "rendering/Mesh.hpp"
 
 class Medkit;
 class Monster;

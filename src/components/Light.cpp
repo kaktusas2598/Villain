@@ -1,7 +1,7 @@
 #include "Light.hpp"
 
 #include "Engine.hpp"
-#include "Shader.hpp"
+#include "../rendering/Shader.hpp"
 
 namespace Villain {
 

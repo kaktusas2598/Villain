@@ -2,7 +2,7 @@
 #define __LAYER__
 
 #include "Camera2D.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 
 namespace Villain {
 

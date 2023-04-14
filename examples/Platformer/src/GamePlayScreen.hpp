@@ -4,9 +4,9 @@
 #include "IGameScreen.hpp"
 #include "box2d/box2d.h"
 #include "Camera2D.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
-#include "DebugRenderer.hpp"
+#include "rendering/DebugRenderer.hpp"
 
 #include "Box.hpp"
 #include "Player.hpp"

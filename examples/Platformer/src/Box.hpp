@@ -1,7 +1,7 @@
 #ifndef __BOX__
 #define __BOX__
 
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include <box2d/box2d.h>
 #include <glm/glm.hpp>
 

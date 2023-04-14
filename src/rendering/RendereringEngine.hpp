@@ -2,7 +2,7 @@
 #define __RENDERING_ENGINE__
 
 #include "Camera.hpp"
-#include "Light.hpp"
+#include "../components/Light.hpp"
 #include "SceneNode.hpp"
 
 namespace Villain {

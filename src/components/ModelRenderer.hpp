@@ -1,7 +1,7 @@
 #ifndef __MODEL_RENDERER__
 #define __MODEL_RENDERER__
 
-#include "../Model.hpp"
+#include "../rendering/Model.hpp"
 #include "../NodeComponent.hpp"
 
 namespace Villain {

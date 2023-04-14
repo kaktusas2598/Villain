@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-#include "Light.hpp"
+#include "components/Light.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 

@@ -1,7 +1,7 @@
 #include "FreeType.hpp"
 
-#include "Texture.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/Texture.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include <iostream>
 
 namespace Villain {

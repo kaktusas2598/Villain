@@ -3,8 +3,8 @@
 
 #include <string>
 #include <map>
-#include "Texture.hpp"
-#include "Shader.hpp"
+#include "rendering/Texture.hpp"
+#include "rendering/Shader.hpp"
 #include <iostream>
 
 namespace Villain {

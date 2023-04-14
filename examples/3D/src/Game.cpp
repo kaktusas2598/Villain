@@ -4,9 +4,9 @@
 #include "ErrorHandler.hpp"
 #include "LevelParser.hpp"
 #include "ResourceManager.hpp"
-#include "Light.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
+#include "components/Light.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
@@ -15,7 +15,7 @@
 #include "physics/BoundingSphere.hpp"
 
 #include "DebugConsole.hpp"
-#include "DebugRenderer.hpp"
+#include "rendering/DebugRenderer.hpp"
 
 using namespace Villain;
 

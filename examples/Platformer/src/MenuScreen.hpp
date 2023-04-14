@@ -3,7 +3,7 @@
 
 #include "IGameScreen.hpp"
 #include "Camera2D.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 
 class MenuScreen : public Villain::IGameScreen {

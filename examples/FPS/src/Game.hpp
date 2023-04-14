@@ -6,7 +6,7 @@
 
 #include "Camera2D.hpp"
 #include "FreeType.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 
 class Game : public Villain::Application {
     public:

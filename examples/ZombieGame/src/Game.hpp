@@ -3,8 +3,8 @@
 
 #include "Application.hpp"
 #include "ResourceManager.hpp"
-#include "SpriteFont.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteFont.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include "Camera2D.hpp"
 #include "Level.hpp"
 #include "Timer.hpp"

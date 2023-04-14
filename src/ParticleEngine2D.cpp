@@ -1,7 +1,7 @@
 #include "ParticleEngine2D.hpp"
 
 #include "ParticleBatch2D.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 
 namespace Villain {
 

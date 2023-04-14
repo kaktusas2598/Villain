@@ -2,12 +2,12 @@
 #define __Engine__
 
 #include "DebugConsole.hpp"
-#include "FrameBuffer.hpp"
 #include "ImGuiLayer.hpp"
 #include "InputManager.hpp"
-#include "RendereringEngine.hpp"
-#include "Window.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include "rendering/FrameBuffer.hpp"
+#include "rendering/RendereringEngine.hpp"
+#include "Window.hpp"
 
 #include <functional>
 #include <stdio.h>
