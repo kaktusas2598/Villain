@@ -106,3 +106,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Investigate gamma correction and sRGB textures
  * Fix Engine on Windows
  * Investigate integrating Box2D and Bullet physics
+ * Need MeshUtils class, ability to create vertices and indices for primitive shapes, 2D quads, planes, cubes, spheres and so on
