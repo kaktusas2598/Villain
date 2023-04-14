@@ -38,7 +38,15 @@ namespace Villain {
     DebugRenderer ::DebugRenderer () { }
 
     DebugRenderer ::~DebugRenderer () {
-        dispose();
+        if (vao) {
+            glDeleteVertexArrays(1, &vao);
+        }
+        if (vbo) {
+            glDeleteBuffers(1, &vbo);
+        }
+        if (ibo) {
+            glDeleteBuffers(1, &ibo);
+        }
     }
 
     void DebugRenderer::init() {
@@ -157,7 +165,19 @@ namespace Villain {
         indices.push_back(start);
     }
 
-    // TODO: Somehow make this shorter, 100 lines way too much
+    void DebugRenderer::drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color) {
+        int i = vertices.size();
+        vertices.resize(vertices.size() + 2);
+        vertices[i].position = start;
+        vertices[i].color = color;
+        vertices[i + 0].position = end;
+        vertices[i + 1].color = color;
+
+        indices.reserve(indices.size() + 2);
+        indices.push_back(i);
+        indices.push_back(i + 1);
+    }
+
     void DebugRenderer::drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size) {
         int i = vertices.size(); // Index for 1st new vertex added
         vertices.resize(vertices.size() + 8);
@@ -306,17 +326,4 @@ namespace Villain {
         debugShader->unbind();
 
     }
-
-    void DebugRenderer::dispose() {
-        if (vao) {
-            glDeleteVertexArrays(1, &vao);
-        }
-        if (vbo) {
-            glDeleteBuffers(1, &vbo);
-        }
-        if (ibo) {
-            glDeleteBuffers(1, &ibo);
-        }
-    }
-
 }

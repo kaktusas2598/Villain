@@ -131,10 +131,6 @@ void Game::init() {
         ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
 }
 
-Game::~Game() {
-    debugRenderer.dispose();
-}
-
 void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
@@ -157,6 +153,8 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
 
     debugRenderer.drawSphere(glm::vec3(0.0f, 20.0f, 0.0f), glm::vec4(0.8f, 0.0f, 2.0f, 2.0f), 5.0f);
+
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 10.f, 0.f));
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);

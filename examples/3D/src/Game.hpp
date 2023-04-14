@@ -9,8 +9,6 @@
 
 class Game : public Villain::Application {
     public:
-        ~Game();
-
         void init();
         void handleEvents(float deltaTime);
         void addStates() {}
