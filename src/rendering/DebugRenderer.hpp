@@ -20,6 +20,7 @@ namespace Villain {
             // TODO:
             // 1. planes/rect (Not XY plane, but also XZ and YZ for 3D applications)
             // 2. Other 3D primitives (cylinders, different ways to calculate sphere?)
+            // 3. Mesh generation could be refactored to new helper class?
             void drawBox(const glm::vec4& destRect, float depth, const glm::vec4& color, float angle);
             void drawCircle(const glm::vec2& center, float depth, const glm::vec4& color, float radius);
             void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color = glm::vec4(1.0f));

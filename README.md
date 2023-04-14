@@ -13,6 +13,7 @@
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
+* Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
 * Error logging to stdout, log file and editor console
 * 2D orthographics and 3D perspective cameras
 * Camera Frustum culling to increase performance
@@ -25,17 +26,20 @@
 
 * Engine editor with scene management
 * Skeletal animation support
-* Built in collision detection: AABB, SAT, circle
-* Rigid Body implementation
-* Spatial Partitioning models
+* Physics Engine:
+    * Potential Box2D and Bullet physics integration
+    * Built in collision detection: AABB, SAT, circle
+    * Rigid Body implementation
+    * Spatial Partitioning models
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Shadow mapping and normal mapping
+* Post-processing effects
 * Stencil buffer
 * Instanced drawing
-* and many more...
+* and more...
 
 
 ![2D example](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
@@ -57,6 +61,7 @@
 
 ## Libraries used by examples
  * [Box2D](https://box2d.org/) - A 2D Physics Engine for Games
+ * [Bullet Physics](https://bulletphysics.org/) - Real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
 
 
 ## Instructions
@@ -70,6 +75,7 @@ First install the dependencies and when use build instructions below.
     sudo apt-get install -y libsdl2-ttf-dev
     sudo apt-get install -y liblua5.4-dev
     sudo apt-get install -y libassimp-dev
+    sudo apt-get install -y libbullet-dev (Optional at the moment)
 
 ### Building
 
