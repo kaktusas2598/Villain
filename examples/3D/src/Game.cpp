@@ -164,7 +164,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawBox3DRotated(position, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
 
     debugRenderer.end();
-    debugRenderer.render(projection * view, 2.0f);
+    debugRenderer.render(projection * view, 1.0f);
 
     skybox->render(projection, view);
 }

@@ -1,5 +1,5 @@
 window = {
-	title = "Vigilant Engine Test",
+	title = "Bullet Physics Demo",
 	width = 1024, --800,
 	height = 768, --600,
 	fullscreen = false,
