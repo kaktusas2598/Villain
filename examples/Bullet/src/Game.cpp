@@ -27,7 +27,7 @@ void Game::init() {
     debugRenderer.init();
 
     // Add camera
-    SceneNode* cam = (new SceneNode("Free look camera"))
+    SceneNode* cam = (new SceneNode("Free look camera", glm::vec3(-50.0f, 10.0f, 0.0f)))
             ->addComponent(new CameraComponent(&camera))
             ->addComponent(new MoveController())
             ->addComponent(new LookController());
@@ -36,25 +36,7 @@ void Game::init() {
 
     initBulletPhysics();
 
-    // Create ground using bullet physics
-    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
-
-    collisionShapes.push_back(groundShape);
-
-    btTransform groundTransform;
-    groundTransform.setIdentity();
-    groundTransform.setOrigin(btVector3(0, -10, 0));
-
-    btScalar groundMass(0.); // If mass is 0, body becomes static
-    btVector3 localInertia(0, 0, 0);
-
-    //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
-    btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
-    btRigidBody::btRigidBodyConstructionInfo groundInfo(groundMass, groundMotionState, groundShape, localInertia);
-    btRigidBody* groundBody = new btRigidBody(groundInfo);
-
-    dynamicsWorld->addRigidBody(groundBody);
-    /////////////////////////////
+    createGround();
 
     //create a few dynamic rigidbodies
     // Re-using the same collision is better for memory usage and performance
@@ -66,6 +48,7 @@ void Game::init() {
     startTransform.setIdentity();
 
     btScalar mass(1.f);
+    btVector3 localInertia(0, 0, 0);
     boxShape->calculateLocalInertia(mass, localInertia);
 
     const int ARRAY_SIZE_X = 4;
@@ -79,7 +62,7 @@ void Game::init() {
             {
                 startTransform.setOrigin(btVector3(
                     btScalar(0.2 * i),
-                    btScalar(20 + .2 * k),
+                    btScalar(100 + .2 * k),
                     btScalar(0.2 * j)));
 
                 //createRigidBody(mass, startTransform, colShape);
@@ -88,7 +71,7 @@ void Game::init() {
 
                 // Add bounciness!
                 //rbInfo.m_restitution = 1.3f;
-                //rbInfo.m_friction = 1.5f;
+                rbInfo.m_friction = 1.5f;
 
                 btRigidBody* body = new btRigidBody(rbInfo);
 
@@ -139,6 +122,26 @@ void Game::initBulletPhysics() {
     dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
 }
 
+void Game::createGround() {
+    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
+
+    collisionShapes.push_back(groundShape);
+
+    btTransform groundTransform;
+    groundTransform.setIdentity();
+    groundTransform.setOrigin(btVector3(0, 0, 0));
+
+    btScalar groundMass(0.); // If mass is 0, body becomes static
+    btVector3 localInertia(0, 0, 0);
+
+    //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+    btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
+    btRigidBody::btRigidBodyConstructionInfo groundInfo(groundMass, groundMotionState, groundShape, localInertia);
+    btRigidBody* groundBody = new btRigidBody(groundInfo);
+
+    dynamicsWorld->addRigidBody(groundBody);
+}
+
 void Game::cleanupBulletPhysics() {
     //cleanup in the reverse order of creation/initialization
 	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
@@ -185,6 +188,11 @@ void Game::onAppRender(float dt) {
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 projection = camera.getProjMatrix();
 
+    // Draw coordinate gizmo
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
     for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
         btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
         btRigidBody* body = btRigidBody::upcast(obj);
@@ -199,7 +207,14 @@ void Game::onAppRender(float dt) {
         }
 
         glm::vec3 pos = glm::vec3(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
-        debugRenderer.drawBox3D(pos, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+        float x, y, z;
+        trans.getRotation().getEulerZYX(x, y, z);
+        glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), x, glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), y, glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), z, glm::vec3(0.0f, 0.0f, 1.0f));
+        const glm::mat4 rotation= transformY * transformX * transformZ;
+
+        debugRenderer.drawBox3DRotated(pos, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
     }
 
     //debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));

@@ -263,8 +263,20 @@ namespace Villain {
         indices.push_back(i + 4);
     }
 
+    void DebugRenderer::drawBox3DRotated(const glm::vec3& position, const glm::vec3& size, const glm::mat4& rotation, const glm::vec4& color) {
+        int i = vertices.size(); // Make sure to get latest vertex index before drawing axis aligned cube
+        drawBox3D(position, color, size);
+
+        // Revert vertices around origin (glm::vec3 position)
+        for (int j = i; j < i + 8; j++) {
+            // https://stackoverflow.com/questions/52770929/rotate-object-around-origin-as-it-faces-origin-in-opengl-with-glm
+            glm::vec4 pos_h = rotation * glm::vec4(vertices[j].position - position, 1.0f);
+            vertices[j].position = glm::vec3(pos_h) + position;
+        }
+    }
+
     // Inspired by: https://www.songho.ca/opengl/gl_sphere.html
-    void DebugRenderer::drawSphere(const glm::vec3& center, const glm::vec4& color, float radius) {
+    void DebugRenderer::drawSphere(const glm::vec3& center, float radius, const glm::vec4& color) {
         const float sectorCount = 36; //<<< num of longitude divisions
         const float stackCount = 18; //<<< num of latitude divisions
         float x, y, z, xy;

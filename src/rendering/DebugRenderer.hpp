@@ -18,14 +18,14 @@ namespace Villain {
             void render(const glm::mat4& mvpMatrix, float lineWidth); // Will render all primitives using single batch
 
             // TODO:
-            // 1. rotation vector for 3D primitives
-            // 2. planes (Not XY plane, but also XZ and YZ for 3D applications)
-            // 3. Other 3D primitives (cylinders, different ways to calculate sphere?)
+            // 1. planes/rect (Not XY plane, but also XZ and YZ for 3D applications)
+            // 2. Other 3D primitives (cylinders, different ways to calculate sphere?)
             void drawBox(const glm::vec4& destRect, float depth, const glm::vec4& color, float angle);
             void drawCircle(const glm::vec2& center, float depth, const glm::vec4& color, float radius);
             void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color = glm::vec4(1.0f));
             void drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size);
-            void drawSphere(const glm::vec3& center, const glm::vec4& color, float radius);
+            void drawBox3DRotated(const glm::vec3& position, const glm::vec3& size, const glm::mat4& rotation, const glm::vec4& color = glm::vec4(1.0f));
+            void drawSphere(const glm::vec3& center, float radius, const glm::vec4& color = glm::vec4(1.0f));
 
             struct DebugVertex {
                 glm::vec3 position;
