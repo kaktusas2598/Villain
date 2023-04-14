@@ -1,4 +1,5 @@
 #include "DebugRenderer.hpp"
+#include <cmath>
 
 namespace Villain {
 
@@ -243,7 +244,7 @@ namespace Villain {
     }
 
     // Inspired by: https://www.songho.ca/opengl/gl_sphere.html
-    // FIXME: only half sphere is being drawn for some reason
+    // FIXME: sphere is being renderer, but still not looking perfect: one vertex is outside the sphere and some lines are missing
     void DebugRenderer::drawSphere(const glm::vec3& center, const glm::vec4& color, float radius) {
         const float sectorCount = 36; //<<< num of longitude divisions
         const float stackCount = 18; //<<< num of latitude divisions
@@ -263,18 +264,18 @@ namespace Villain {
 
             for (int j = 0; j <= sectorCount; ++j) {
                 sectorAngle = j * sectorStep;
-                // start + i is probably not correct here
-                vertices[start + i * stackCount + j].position.x = xy * cosf(sectorAngle);
-                vertices[start + i * stackCount + j].position.y = xy * sinf(sectorAngle);
-                vertices[start + i * stackCount + j].position.z = z;
+                int vertexIndex = start + i * sectorCount + j;
+                vertices[vertexIndex].position.x = xy * cosf(sectorAngle);
+                vertices[vertexIndex].position.y = xy * sinf(sectorAngle);
+                vertices[vertexIndex].position.z = z;
                 // shift sphere by center vector to transform it, not sure if this is correct
-                vertices[start + i * stackCount + j].position += center;
-                vertices[start + i * stackCount + j].color = color;
+                vertices[vertexIndex].position += center;
+                vertices[vertexIndex].color = color;
             }
         }
         // Generate indices
         indices.reserve(indices.size() + 2520);
-        int k1, k2;
+        unsigned int k1, k2;
         for (int i = 0; i < stackCount; ++i) {
             k1 = i * (sectorCount + 1); // beginning of current stack
             k2 = k1 + sectorCount + 1; // beginning of next stack
