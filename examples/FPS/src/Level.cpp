@@ -6,6 +6,7 @@
 
 #include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
+#include "rendering/MeshUtils.hpp"
 #include "Game.hpp"
 #include "Gun.hpp"
 // Really spent no time on thinking of design for this game, Level should contain
@@ -45,11 +46,11 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                 addSpecialObject(pixel.B, i, j);
 
                 // Floor vertices, normals are defaults just to make shader work
-                addFace(&indices, vertices.size(), true);
+                Villain::MeshUtils::addFace(&indices, vertices.size(), true);
                 addVertices(&vertices, i, j, true, false, true, 0.0f, texCoords);
 
                 // Ceilings, also revert indices to make sure textures are drawn from the bottom
-                addFace(&indices, vertices.size(), false);
+                Villain::MeshUtils::addFace(&indices, vertices.size(), false);
                 addVertices(&vertices, i, j, true, false, true, 1.0f, texCoords);
 
                 texCoords = getTexCoords(pixel.R);
@@ -59,7 +60,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                     collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, j * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, j * ROOM_LENGTH));
                     // Generate left wall
-                    addFace(&indices, vertices.size(), false);
+                    Villain::MeshUtils::addFace(&indices, vertices.size(), false);
                     addVertices(&vertices, i, 0, true, true, false, j, texCoords);
                 }
                 pixel = bitmap->getPixel(i, j + 1);
@@ -67,7 +68,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                     collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate right wall
-                    addFace(&indices, vertices.size(), true);
+                    Villain::MeshUtils::addFace(&indices, vertices.size(), true);
                     addVertices(&vertices, i, 0, true, true, false, (j + 1), texCoords);
                 }
                 pixel = bitmap->getPixel(i - 1, j);
@@ -75,7 +76,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                     collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, j * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2(i * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate near wall
-                    addFace(&indices, vertices.size(), true);
+                    Villain::MeshUtils::addFace(&indices, vertices.size(), true);
                     addVertices(&vertices, 0, j, false, true, true, i, texCoords);
                 }
                 pixel = bitmap->getPixel(i + 1, j);
@@ -83,7 +84,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                     collisionPosStart.push_back(glm::vec2((i + 1) * ROOM_WIDTH, j * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate far wall
-                    addFace(&indices, vertices.size(), false);
+                    Villain::MeshUtils::addFace(&indices, vertices.size(), false);
                     addVertices(&vertices, 0, j, false, true, true, (i + 1), texCoords);
                 }
             }
@@ -194,24 +195,6 @@ void Level::removeMedkit(Villain::SceneNode* medkit) {
             // Not entirely sure that this is correct below
             m = nullptr;
         }
-    }
-}
-
-void Level::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
-    if (direction) {
-        indices->push_back(startLocation + 2);
-        indices->push_back(startLocation + 1);
-        indices->push_back(startLocation + 0);
-        indices->push_back(startLocation + 3);
-        indices->push_back(startLocation + 2);
-        indices->push_back(startLocation + 0);
-    } else {
-        indices->push_back(startLocation + 0);
-        indices->push_back(startLocation + 1);
-        indices->push_back(startLocation + 2);
-        indices->push_back(startLocation + 0);
-        indices->push_back(startLocation + 2);
-        indices->push_back(startLocation + 3);
     }
 }
 

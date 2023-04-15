@@ -37,8 +37,6 @@ class Level {
         void addSpecialObject(int blueValue, int x, int y);
         void addDoor(int x, int y);
 
-        // Generate indices for quad
-        void addFace(std::vector<unsigned int>* indices, int startLocation, bool direction);
         // Generate vertices for quad on any plane, used for walls/floors and ceilings
         void addVertices(std::vector<VertexP1N1UV>* vertices, int i, int j, bool x, bool y, bool z, float offset, float* texCoords);
 
