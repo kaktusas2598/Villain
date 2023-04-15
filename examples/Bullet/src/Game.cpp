@@ -35,7 +35,6 @@ void Game::init() {
 
     initBulletPhysics();
     bulletRenderer = new BulletDebugRenderer();
-    bulletRenderer->init();
     dynamicsWorld->setDebugDrawer(bulletRenderer);
     dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
 
@@ -196,37 +195,10 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-    // Rendering using Villain::DebugRenderer
-    for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
-        btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
-        btRigidBody* body = btRigidBody::upcast(obj);
-        btTransform trans;
-        if (body && body->getMotionState())
-        {
-            body->getMotionState()->getWorldTransform(trans);
-        }
-        else
-        {
-            trans = obj->getWorldTransform();
-        }
-
-        glm::vec3 pos = glm::vec3(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
-        float x, y, z;
-        trans.getRotation().getEulerZYX(x, y, z);
-        glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), x, glm::vec3(1.0f, 0.0f, 0.0f));
-        glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), y, glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), z, glm::vec3(0.0f, 0.0f, 1.0f));
-        const glm::mat4 rotation= transformY * transformX * transformZ;
-
-        // FIXME: Seems like this renders exactly half the scale of the actual collision shape
-        debugRenderer.drawBox3DRotated(pos, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
-    }
-
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
 
     // Rendering using custom renderer - recommended Bullet approach!
     dynamicsWorld->debugDrawWorld();
-    bulletRenderer->end();
     bulletRenderer->render(projection * view, 1.0f);
 }

@@ -22,7 +22,6 @@ class Game : public Villain::Application {
 
     private:
         Villain::Camera3D camera;
-        Villain::DebugRenderer debugRenderer;
 
         void initBulletPhysics();
         void cleanupBulletPhysics();
