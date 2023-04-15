@@ -7,6 +7,7 @@
 
 // Bullet Physics!
 #include "btBulletDynamicsCommon.h"
+#include "BulletDebugRenderer.hpp"
 
 class Game : public Villain::Application {
     public:
@@ -36,6 +37,7 @@ class Game : public Villain::Application {
         btDiscreteDynamicsWorld* dynamicsWorld;
 
         btAlignedObjectArray<btCollisionShape*> collisionShapes;
+        BulletDebugRenderer* bulletRenderer;
 };
 
 #endif // __GAME__

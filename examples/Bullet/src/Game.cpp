@@ -11,7 +11,6 @@
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 
-#include "DebugConsole.hpp"
 #include "rendering/DebugRenderer.hpp"
 
 using namespace Villain;
@@ -35,6 +34,10 @@ void Game::init() {
 
 
     initBulletPhysics();
+    bulletRenderer = new BulletDebugRenderer();
+    bulletRenderer->init();
+    dynamicsWorld->setDebugDrawer(bulletRenderer);
+    dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
 
     createGround();
 
@@ -51,9 +54,9 @@ void Game::init() {
     btVector3 localInertia(0, 0, 0);
     boxShape->calculateLocalInertia(mass, localInertia);
 
-    const int ARRAY_SIZE_X = 4;
-    const int ARRAY_SIZE_Y = 4;
-    const int ARRAY_SIZE_Z = 10;
+    const int ARRAY_SIZE_X = 5;
+    const int ARRAY_SIZE_Y = 5;
+    const int ARRAY_SIZE_Z = 5;
     for (int k = 0; k < ARRAY_SIZE_Y; k++)
     {
         for (int i = 0; i < ARRAY_SIZE_X; i++)
@@ -193,6 +196,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
+    // Rendering using Villain::DebugRenderer
     for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
         btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
         btRigidBody* body = btRigidBody::upcast(obj);
@@ -214,12 +218,15 @@ void Game::onAppRender(float dt) {
         glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), z, glm::vec3(0.0f, 0.0f, 1.0f));
         const glm::mat4 rotation= transformY * transformX * transformZ;
 
+        // FIXME: Seems like this renders exactly half the scale of the actual collision shape
         debugRenderer.drawBox3DRotated(pos, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
     }
 
-    //debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
-    //debugRenderer.drawSphere(glm::vec3(0.0f, 20.0f, 0.0f), glm::vec4(0.8f, 0.0f, 2.0f, 2.0f), 5.0f);
-    //debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 10.f, 0.f));
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
+
+    // Rendering using custom renderer - recommended Bullet approach!
+    dynamicsWorld->debugDrawWorld();
+    bulletRenderer->end();
+    bulletRenderer->render(projection * view, 1.0f);
 }
