@@ -22,7 +22,6 @@ Game::~Game() {
 void Game::init() {
     camera.setZPlanes(0.1f, 1000.f); // for bigger render range
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
-
     debugRenderer.init();
 
     // Add camera
@@ -32,12 +31,11 @@ void Game::init() {
             ->addComponent(new LookController());
     addToScene(cam);
 
-
+    // Initialise Bullet Physics, add ground body and setup debug renderer
     initBulletPhysics();
     bulletRenderer = new BulletDebugRenderer();
     dynamicsWorld->setDebugDrawer(bulletRenderer);
     dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
-
     createGround();
 
     //create a few dynamic rigidbodies
@@ -83,27 +81,6 @@ void Game::init() {
         }
     }
 
-
-    // Create Bullet dynamic rigid body
-    //btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
-    //btCollisionShape* colShape = new btSphereShape(btScalar(1.));
-    //collisionShapes.push_back(colShape);
-
-    ///// Create Dynamic Objects
-    //btTransform startTransform;
-    //startTransform.setIdentity();
-
-    //btScalar mass(1.f);
-    //colShape->calculateLocalInertia(mass, localInertia);
-
-    //startTransform.setOrigin(btVector3(50, 50, 0));
-
-    ////using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-    //btDefaultMotionState* bodyMotionState = new btDefaultMotionState(startTransform);
-    //btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, bodyMotionState, colShape, localInertia);
-    //btRigidBody* body = new btRigidBody(rbInfo);
-
-    //dynamicsWorld->addRigidBody(body);
 }
 
 void Game::initBulletPhysics() {
