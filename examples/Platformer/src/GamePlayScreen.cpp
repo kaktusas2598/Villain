@@ -98,7 +98,6 @@ void GamePlayScreen::onExit() {
     rM->clearShader("light2D");
     rM->clearShaderMap();
 
-    debugRenderer.dispose();
     boxes.clear();
     world.reset();
 
