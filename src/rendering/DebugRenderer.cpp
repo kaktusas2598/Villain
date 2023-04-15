@@ -170,7 +170,7 @@ namespace Villain {
         vertices.resize(vertices.size() + 2);
         vertices[i].position = start;
         vertices[i].color = color;
-        vertices[i + 0].position = end;
+        vertices[i + 1].position = end;
         vertices[i + 1].color = color;
 
         indices.reserve(indices.size() + 2);
