@@ -68,7 +68,7 @@ void Game::addPlayer() {
     playerTransform.setIdentity();
     btScalar playerMass(5.f);
     btVector3 localInertia(0, 0, 0);
-    capsuleShape->calculateLocalInertia(playerMass, localInertia);
+    //capsuleShape->calculateLocalInertia(playerMass, localInertia);
     playerTransform.setOrigin(btVector3(-60.0, 30, 0.0));
 
     btDefaultMotionState* bodyMotionState = new btDefaultMotionState(playerTransform);

@@ -42,15 +42,17 @@ BulletCharacterController::BulletCharacterController(btRigidBody *body, const bt
 
 void BulletCharacterController::setupBody() {
 	assert(rigidBody);
+    // Disable unwanted rotations
     rigidBody->setSleepingThresholds(0.0, 0.0);
 	rigidBody->setAngularFactor(0.0);
+
     gravity = rigidBody->getGravity();
     printf("Initial player gravity: %fX, %fY, %fZ\n", gravity.getX(), gravity.getY(), gravity.getZ());
 
     // MINE TEMP
     //rigidBody->setGravity({0.0, -9.8, 0.0});
     //rigidBody->setRollingFriction(1.0f);
-    //rigidBody->setFriction(1.0f);
+    rigidBody->setFriction(1.5f);
 }
 
 void BulletCharacterController::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep) {
@@ -59,7 +61,6 @@ void BulletCharacterController::updateAction(btCollisionWorld* collisionWorld, b
 	onGround = groundSteps.haveGround;
     groundPoint = groundSteps.groundPoint;
 
-    printf("Player on ground: %i\n", (int)onGround);
     updateVelocity(deltaTimeStep);
 	//if (mStepping || groundSteps.mHaveStep) {
 		//if (!mStepping) {
@@ -71,9 +72,9 @@ void BulletCharacterController::updateAction(btCollisionWorld* collisionWorld, b
 
     if (onGround /*|| mStepping*/) {
         // Avoid going down on ramps, if already on ground, and clearGravity() is not enough
-        //rigidBody->setGravity({ 0, 0, 0 });
+        rigidBody->setGravity({ 0, 0, 0 });
     } else {
-        //rigidBody->setGravity(gravity);
+        rigidBody->setGravity(gravity);
     }
 }
 
@@ -126,7 +127,6 @@ void BulletCharacterController::debugDraw(btIDebugDraw* debugDrawer) {
 }
 
 void BulletCharacterController::setMovementDirection(const btVector3 &walkDirection) {
-    printf("moving\n");
 	moveDirection = walkDirection;
     moveDirection.setY(0);
 	if (!moveDirection.fuzzyZero()) {
@@ -150,7 +150,7 @@ void BulletCharacterController::jump(const btVector3 &dir) {
 
 	jumpDir = dir;
 	if (dir.fuzzyZero()) {
-		jumpDir.setValue(0, 1, 0);// ? does not seem correct
+		jumpDir.setValue(0, 1, 0);
 	}
 	jumpDir.normalize();
 }
@@ -164,7 +164,6 @@ btScalar FindGroundAndSteps::addSingleResult(btManifoldPoint &cp,
     const btCollisionObjectWrapper *colObj0, int partId0, int index0,
     const btCollisionObjectWrapper *colObj1, int partId1, int index1) {
 
-    printf("In addSingleResult()\n");
     if (colObj0->m_collisionObject == controller->getBody()) {
 		/* The first object should always be the rigid body of the
 		controller, but check anyway.
@@ -188,6 +187,7 @@ btScalar FindGroundAndSteps::addSingleResult(btManifoldPoint &cp,
 }
 
 btVector3 FindGroundAndSteps::getInvNormal() {
+    printf("In getInvNormal()\n");
     if (!haveStep) {
 		return btVector3(0, 0, 0);
 	}
@@ -203,17 +203,16 @@ btVector3 FindGroundAndSteps::getInvNormal() {
 }
 
 void FindGroundAndSteps::checkGround(const btManifoldPoint &cp) {
-    printf("In checkGround()\n");
     if (haveGround) {
 		return;
 	}
 
 	btTransform inverse = controller->getBody()->getWorldTransform().inverse();
 	btVector3 localPoint = inverse(cp.m_positionWorldOnB);
-	localPoint[2] += controller->shapeHalfHeight;
+	localPoint[1] += controller->shapeHalfHeight;
 
 	float r = localPoint.length();
-	float cosTheta = localPoint[2] / r;
+	float cosTheta = localPoint[1] / r;
 
 	if (fabs(r - controller->shapeRadius) <= controller->radiusThreshold
 			&& cosTheta < controller->maxCosGround) {
