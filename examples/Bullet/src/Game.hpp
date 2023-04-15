@@ -29,6 +29,9 @@ class Game : public Villain::Application {
         void createGround();
         void createRigidBody();
 
+        void addPlayer();
+        void addRigidBoxes();
+
         // Bullet Physics objects
         btDefaultCollisionConfiguration* collisionConfiguration;
         btCollisionDispatcher* dispatcher;

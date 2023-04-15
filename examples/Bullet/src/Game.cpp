@@ -12,6 +12,8 @@
 #include "components/MoveController.hpp"
 
 #include "rendering/DebugRenderer.hpp"
+#include "BulletCharacterController.hpp"
+#include "BulletCharacterComponent.hpp"
 
 using namespace Villain;
 
@@ -24,26 +26,95 @@ void Game::init() {
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
 
-    // Add camera
-    SceneNode* cam = (new SceneNode("Free look camera", glm::vec3(-50.0f, 10.0f, 0.0f)))
-            ->addComponent(new CameraComponent(&camera))
-            ->addComponent(new MoveController())
-            ->addComponent(new LookController());
-    addToScene(cam);
-
-    // Initialise Bullet Physics, add ground body and setup debug renderer
     initBulletPhysics();
+
+    createGround();
+
+    addPlayer();
+
+    addRigidBoxes();
+}
+
+void Game::initBulletPhysics() {
+    // BULLET PHYSICS INITIALISATION CODE
+    ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+
+    ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+    ///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+    overlappingPairCache = new btDbvtBroadphase();
+
+    ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+    solver = new btSequentialImpulseConstraintSolver;
+
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
+
+    // Setup custom debug drawer
     bulletRenderer = new BulletDebugRenderer();
     dynamicsWorld->setDebugDrawer(bulletRenderer);
     dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
-    createGround();
+}
 
-    //create a few dynamic rigidbodies
-    // Re-using the same collision is better for memory usage and performance
-    btBoxShape* boxShape = new btBoxShape(btVector3(btScalar(1.), btScalar(1.), btScalar(1.)));
+// NOTE: Not sure about any of these parameters, justr trying to build character controller
+void Game::addPlayer() {
+    // TEMP add character controller, try to create rigid body and shape
+    btCapsuleShape* capsuleShape = new btCapsuleShape(btScalar(0.5), btScalar(2.));
+    collisionShapes.push_back(capsuleShape);
+
+    btTransform playerTransform;
+    playerTransform.setIdentity();
+    btScalar playerMass(5.f);
+    btVector3 localInertia(0, 0, 0);
+    capsuleShape->calculateLocalInertia(playerMass, localInertia);
+    playerTransform.setOrigin(btVector3(-60.0, 30, 0.0));
+
+    btDefaultMotionState* bodyMotionState = new btDefaultMotionState(playerTransform);
+    btRigidBody::btRigidBodyConstructionInfo playerBodyInfo(playerMass, bodyMotionState, capsuleShape, localInertia);
+
+    btRigidBody* playerBody = new btRigidBody(playerBodyInfo);
+    playerBody->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+
+    BulletCharacterController* playerController = new BulletCharacterController(playerBody, capsuleShape);
+    dynamicsWorld->addAction(playerController);
+    dynamicsWorld->addRigidBody(playerBody);
+
+    // Add camera/player node
+    SceneNode* cam = (new SceneNode("Player", glm::vec3(0.0f, 10.0f, 100.0f)))
+            ->addComponent(new CameraComponent(&camera))
+            //->addComponent(new MoveController())
+            ->addComponent(new LookController())
+            ->addComponent(new BulletCharacterComponent(playerController));
+    addToScene(cam);
+}
+
+void Game::createGround() {
+    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
+
+    collisionShapes.push_back(groundShape);
+
+    btTransform groundTransform;
+    groundTransform.setIdentity();
+    groundTransform.setOrigin(btVector3(0, 0, 0));
+
+    btScalar groundMass(0.); // If mass is 0, body becomes static
+    btVector3 localInertia(0, 0, 0);
+
+    //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+    btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
+    btRigidBody::btRigidBodyConstructionInfo groundInfo(groundMass, groundMotionState, groundShape, localInertia);
+    btRigidBody* groundBody = new btRigidBody(groundInfo);
+
+    dynamicsWorld->addRigidBody(groundBody);
+}
+
+void Game::addRigidBoxes() {
+    // Re-using the same collision for all boxes is better for memory usage and performance
+    btBoxShape* boxShape = new btBoxShape(btVector3(btScalar(2.), btScalar(2.), btScalar(2.)));
     collisionShapes.push_back(boxShape);
 
-    /// Create Dynamic Objects
     btTransform startTransform;
     startTransform.setIdentity();
 
@@ -70,55 +141,15 @@ void Game::init() {
                 btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, bodyMotionState, boxShape, localInertia);
 
                 // Add bounciness!
-                //rbInfo.m_restitution = 1.3f;
+                rbInfo.m_restitution = 0.9f;
                 rbInfo.m_friction = 1.5f;
 
                 btRigidBody* body = new btRigidBody(rbInfo);
 
                 dynamicsWorld->addRigidBody(body);
-
             }
         }
     }
-
-}
-
-void Game::initBulletPhysics() {
-    // BULLET PHYSICS INITIALISATION CODE
-    ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-    collisionConfiguration = new btDefaultCollisionConfiguration();
-
-    ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-    ///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
-    overlappingPairCache = new btDbvtBroadphase();
-
-    ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-    solver = new btSequentialImpulseConstraintSolver;
-
-    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
-}
-
-void Game::createGround() {
-    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
-
-    collisionShapes.push_back(groundShape);
-
-    btTransform groundTransform;
-    groundTransform.setIdentity();
-    groundTransform.setOrigin(btVector3(0, 0, 0));
-
-    btScalar groundMass(0.); // If mass is 0, body becomes static
-    btVector3 localInertia(0, 0, 0);
-
-    //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
-    btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
-    btRigidBody::btRigidBodyConstructionInfo groundInfo(groundMass, groundMotionState, groundShape, localInertia);
-    btRigidBody* groundBody = new btRigidBody(groundInfo);
-
-    dynamicsWorld->addRigidBody(groundBody);
 }
 
 void Game::cleanupBulletPhysics() {
