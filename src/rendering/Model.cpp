@@ -120,7 +120,10 @@ namespace Villain {
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
             aiString str;
             mat->GetTexture(type, i, &str);
-            Texture* texture = new Texture(str.C_Str()); //directory
+            // NOTE: 2023-04-16, Started setting here GL_REPEAT explicitely which is
+            // default wrapping mode anyway and this fixes issues with 3D models, so it will probably stay
+            // atm default mode in engine is GL_CLAMP_TO_EDGE
+            Texture* texture = new Texture(str.C_Str(), GL_REPEAT); //directory
             texture->setType(typeName);
             textures->push_back(texture);
         }
