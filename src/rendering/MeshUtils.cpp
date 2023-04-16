@@ -35,7 +35,7 @@ namespace Villain {
     }
 
     // TODO: need ability to specify different orientations
-    // This could be method for XZ planes in general, but when normal vector needs to change
+    // Refactor addAABB() at the very least to use this for top and bottom faces
     void MeshUtils::addTopFace(
             std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
@@ -43,12 +43,17 @@ namespace Villain {
         addFace(indices, vertices->size(), false);
         glm::vec2 minExtents = glm::vec2(center.x, center.z) - halfSize;
         glm::vec2 maxExtents = glm::vec2(center.x, center.z) + halfSize;
-        vertices->push_back({glm::vec3(maxExtents.x, center.y, minExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[1], uvCoords[3])});
-        vertices->push_back({glm::vec3(minExtents.y, center.y, minExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[0], uvCoords[3])});
-        vertices->push_back({glm::vec3(minExtents.y, center.y, maxExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[0], uvCoords[2])});
-        vertices->push_back({glm::vec3(maxExtents.x, center.y, maxExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[1], uvCoords[2])});
-        glm::vec3 normal = getNormal((*vertices)[vertices->size() - 3].Position, (*vertices)[vertices->size() - 2].Position, (*vertices)[vertices->size() - 1].Position);
-        printf("Top face normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+        glm::vec3 positions[4] = {
+            {maxExtents.x, center.y, minExtents.y},
+            {minExtents.x, center.y, minExtents.y},
+            {minExtents.x, center.y, maxExtents.y},
+            {maxExtents.x, center.y, maxExtents.y}};
+        glm::vec3 normal = getNormal(positions[0], positions[1], positions[2]);
+        printf("Face normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+        vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
     }
 
     // TODO: UVs are assuming single texture used for all faces
@@ -70,12 +75,11 @@ namespace Villain {
         vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, minExtents.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
         vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, minExtents.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)});
         // Top Face
-        addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, minExtents.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, maxExtents.y, minExtents.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, maxExtents.y, maxExtents.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, maxExtents.z), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec3 topCenter = center; topCenter.y += halfSize.y;
+        addTopFace(vertices, indices, topCenter, glm::vec2(halfSize.x, halfSize.z));
         // Bottom Face
+        //glm::vec3 bottomCenter = center; bottomCenter.y -= halfSize.y;
+        //addTopFace(vertices, indices, bottomCenter, glm::vec2(halfSize.x, halfSize.z));
         addFace(indices, vertices->size(), false);
         vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, maxExtents.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f)});
         vertices->push_back({glm::vec3(minExtents.x, minExtents.y, maxExtents.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)});
