@@ -45,7 +45,7 @@ void Game::addPlayer() {
     btScalar playerMass(15.f);
     btVector3 localInertia(0, 0, 0);
     capsuleShape->calculateLocalInertia(playerMass, localInertia);
-    playerTransform.setOrigin(btVector3(-60.0, 10, 0.0));
+    playerTransform.setOrigin(btVector3(-5.0, 10, 2.0));
 
     btDefaultMotionState* bodyMotionState = new btDefaultMotionState(playerTransform);
     btRigidBody::btRigidBodyConstructionInfo playerBodyInfo(playerMass, bodyMotionState, capsuleShape, localInertia);
@@ -97,7 +97,6 @@ void Game::createGround() {
         ->addComponent(new BulletBodyComponent(groundBody))
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
     addToScene(groundNode);
-
 }
 
 void Game::addRigidBoxes() {
@@ -131,7 +130,7 @@ void Game::addRigidBoxes() {
             for (int j = 0; j < ARRAY_SIZE_Z; j++)
             {
                 startTransform.setOrigin(btVector3(
-                    btScalar(0.2 * i),
+                    btScalar(30 + 0.2 * i),
                     btScalar(100 + .2 * k),
                     btScalar(0.2 * j)));
 
@@ -187,10 +186,20 @@ void Game::onAppRender(float dt) {
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 projection = camera.getProjMatrix();
 
-    // Draw coordinate gizmo
+    // Draw coordinate gizmo: XYZ axis and little arrows for each axis
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(4.5f, 0.f, -0.5f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(4.5f, 0.f, 0.5f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(-0.5f, 4.5f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.5f, 4.5f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(-0.5f, 0.0f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.5f, 0.0f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
 
