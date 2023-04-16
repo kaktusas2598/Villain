@@ -24,12 +24,12 @@ namespace Villain {
 
         // TEMP method for now to get some floors
         static void addTopFace(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices);
-        // Setup vertices and indices for cube
-        static void addCube(
+        // Setup vertices and indices for 3D Axis-Aligned Bounding Box, by default 1f sized cube centered around the origin
+        static void addAABB(
                 std::vector<VertexP1N1UV>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
-                const glm::vec3& size = glm::vec3(1.0f));
+                const glm::vec3& halfSize = glm::vec3(0.5f));
     };
 }
 

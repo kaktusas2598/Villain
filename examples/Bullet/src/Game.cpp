@@ -24,7 +24,8 @@ void Game::init() {
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
 
-    physicsEngine = new BulletEngine({0.0, -9.81, 0.0});
+    physicsEngine = new BulletEngine({0.0, -9.8, 0.0});
+    physicsEngine->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
     createGround();
 
@@ -40,7 +41,7 @@ void Game::addPlayer() {
 
     btTransform playerTransform;
     playerTransform.setIdentity();
-    btScalar playerMass(3.f);
+    btScalar playerMass(15.f);
     btVector3 localInertia(0, 0, 0);
     capsuleShape->calculateLocalInertia(playerMass, localInertia);
     playerTransform.setOrigin(btVector3(-60.0, 10, 0.0));
@@ -73,12 +74,12 @@ void Game::createGround() {
     MeshUtils::addTopFace(&vertices, &indices);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
-    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
+    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(.5), btScalar(250.)));
     physicsEngine->addCollisionShape(groundShape);
 
     btTransform groundTransform;
     groundTransform.setIdentity();
-    groundTransform.setOrigin(btVector3(0, 0, 0));
+    groundTransform.setOrigin(btVector3(0, -0.5, 0));
 
     btScalar groundMass(0.); // If mass is 0, body becomes static
     btVector3 localInertia(0, 0, 0);
@@ -101,13 +102,14 @@ void Game::addRigidBoxes() {
     // Create common mesh for all boxes
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
-    Material mat("cartoonWood", textures, 8);
-    MeshUtils::addCube(&vertices, &indices);
+    MeshUtils::addAABB(&vertices, &indices);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
+    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
+    Material mat("cartoonWood", textures, 8);
+
     // Re-using the same collision for all boxes is better for memory usage and performance
-    btBoxShape* boxShape = new btBoxShape(btVector3(btScalar(.5), btScalar(.5), btScalar(.5)));
+    btBoxShape* boxShape = new btBoxShape({0.5, 0.5, 0.5});
     physicsEngine->addCollisionShape(boxShape);
 
     btTransform startTransform;
@@ -136,7 +138,7 @@ void Game::addRigidBoxes() {
                 btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, bodyMotionState, boxShape, localInertia);
 
                 // Add bounciness!
-                rbInfo.m_restitution = 0.9f;
+                rbInfo.m_restitution = 0.2f;
                 rbInfo.m_friction = 1.5f;
 
                 btRigidBody* body = new btRigidBody(rbInfo);
