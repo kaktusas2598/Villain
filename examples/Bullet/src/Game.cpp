@@ -12,6 +12,8 @@
 #include "components/MoveController.hpp"
 
 #include "rendering/DebugRenderer.hpp"
+#include "rendering/MeshUtils.hpp"
+#include "BulletBodyComponent.hpp"
 #include "BulletCharacterController.hpp"
 #include "BulletCharacterComponent.hpp"
 
@@ -60,16 +62,15 @@ void Game::initBulletPhysics() {
 
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
 void Game::addPlayer() {
-    // TEMP add character controller, try to create rigid body and shape
     btCapsuleShape* capsuleShape = new btCapsuleShape(btScalar(0.5), btScalar(2.));
     collisionShapes.push_back(capsuleShape);
 
     btTransform playerTransform;
     playerTransform.setIdentity();
-    btScalar playerMass(5.f);
+    btScalar playerMass(3.f);
     btVector3 localInertia(0, 0, 0);
-    //capsuleShape->calculateLocalInertia(playerMass, localInertia);
-    playerTransform.setOrigin(btVector3(-60.0, 30, 0.0));
+    capsuleShape->calculateLocalInertia(playerMass, localInertia);
+    playerTransform.setOrigin(btVector3(-60.0, 10, 0.0));
 
     btDefaultMotionState* bodyMotionState = new btDefaultMotionState(playerTransform);
     btRigidBody::btRigidBodyConstructionInfo playerBodyInfo(playerMass, bodyMotionState, capsuleShape, localInertia);
@@ -82,7 +83,7 @@ void Game::addPlayer() {
     dynamicsWorld->addRigidBody(playerBody);
 
     // Add camera/player node
-    SceneNode* cam = (new SceneNode("Player", glm::vec3(0.0f, 10.0f, 100.0f)))
+    SceneNode* cam = (new SceneNode("Player"))
             ->addComponent(new CameraComponent(&camera))
             //->addComponent(new MoveController())
             ->addComponent(new LookController())
@@ -91,6 +92,14 @@ void Game::addPlayer() {
 }
 
 void Game::createGround() {
+    // Create mesh for ground
+    std::vector<VertexP1N1UV> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone")};
+    Material mat("redSandstonePavement", textures, 8);
+    MeshUtils::addTopFace(&vertices, &indices);
+    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
+
     btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
 
     collisionShapes.push_back(groundShape);
@@ -108,11 +117,25 @@ void Game::createGround() {
     btRigidBody* groundBody = new btRigidBody(groundInfo);
 
     dynamicsWorld->addRigidBody(groundBody);
+    // Add bodies to scene graph
+    SceneNode* groundNode = (new SceneNode("Ground"))
+        ->addComponent(new BulletBodyComponent(groundBody))
+        ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+    addToScene(groundNode);
+
 }
 
 void Game::addRigidBoxes() {
+    // Create common mesh for all boxes
+    std::vector<VertexP1N1UV> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
+    Material mat("cartoonWood", textures, 8);
+    MeshUtils::addCube(&vertices, &indices);
+    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
+
     // Re-using the same collision for all boxes is better for memory usage and performance
-    btBoxShape* boxShape = new btBoxShape(btVector3(btScalar(2.), btScalar(2.), btScalar(2.)));
+    btBoxShape* boxShape = new btBoxShape(btVector3(btScalar(.5), btScalar(.5), btScalar(.5)));
     collisionShapes.push_back(boxShape);
 
     btTransform startTransform;
@@ -122,9 +145,9 @@ void Game::addRigidBoxes() {
     btVector3 localInertia(0, 0, 0);
     boxShape->calculateLocalInertia(mass, localInertia);
 
-    const int ARRAY_SIZE_X = 5;
-    const int ARRAY_SIZE_Y = 5;
-    const int ARRAY_SIZE_Z = 5;
+    const int ARRAY_SIZE_X = 8;
+    const int ARRAY_SIZE_Y = 8;
+    const int ARRAY_SIZE_Z = 8;
     for (int k = 0; k < ARRAY_SIZE_Y; k++)
     {
         for (int i = 0; i < ARRAY_SIZE_X; i++)
@@ -147,6 +170,12 @@ void Game::addRigidBoxes() {
                 btRigidBody* body = new btRigidBody(rbInfo);
 
                 dynamicsWorld->addRigidBody(body);
+
+                // Add bodies to scene graph
+                SceneNode* bodyNode = (new SceneNode("Dynamic Body"))
+                    ->addComponent(new BulletBodyComponent(body))
+                    ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+                addToScene(bodyNode);
             }
         }
     }
