@@ -18,11 +18,13 @@ namespace Villain {
          */
         static void addFace(std::vector<unsigned int>* indices, int startLocation, bool direction);
 
+        // TODO: Method to generate vertex data (including normals and uvs) and indices for sphere
+
         // TODO:
         //template <class VertexType>
         //static void addQuad(std::vector<VertexType>* vertices);
 
-        // TEMP method for now to get some floors
+        // NOTE: Need a good way to generate a face in any orientation, at the very least Axis-Aligned
         static void addTopFace(
                 std::vector<VertexP1N1UV>* vertices,
                 std::vector<unsigned int>* indices,
