@@ -29,73 +29,110 @@ namespace Villain {
         return glm::normalize(v3);
     }
 
-    // TODO: need ability to specify different orientations, positions and sizes
-    void MeshUtils::addQuad(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize) {
-
-    }
-
-    // TODO: need ability to specify different orientations
-    // Refactor addAABB() at the very least to use this for top and bottom faces
-    void MeshUtils::addTopFace(
+    // TODO: need ability to specify different orientations in easier way,
+    // too much similar code in add XZ, XY and YZ plane methods
+    void MeshUtils::addXZPlane(
             std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
-            float* uvCoords) {
-        addFace(indices, vertices->size(), false);
+            float* uvCoords, bool direction) {
+        addFace(indices, vertices->size(), direction);
+        glm::vec3 normal;
         glm::vec2 minExtents = glm::vec2(center.x, center.z) - halfSize;
         glm::vec2 maxExtents = glm::vec2(center.x, center.z) + halfSize;
+
         glm::vec3 positions[4] = {
             {maxExtents.x, center.y, minExtents.y},
             {minExtents.x, center.y, minExtents.y},
             {minExtents.x, center.y, maxExtents.y},
             {maxExtents.x, center.y, maxExtents.y}};
-        glm::vec3 normal = getNormal(positions[0], positions[1], positions[2]);
-        printf("Face normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+        if (direction) // Bottom face
+            normal = getNormal(positions[2], positions[1], positions[0]);
+        else // Top face
+            normal = getNormal(positions[0], positions[1], positions[2]);
+        printf("XZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+
         vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
         vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
         vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
         vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
     }
 
-    // TODO: UVs are assuming single texture used for all faces
-    // Need to be able to specify size/position?- becomes AABB, not just a cube at that point, nice
-    // Also 1 normal per face seems to work fine for basic shading
+    void MeshUtils::addXYPlane(
+            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            const glm::vec3& center, const glm::vec2& halfSize,
+            float* uvCoords, bool direction) {
+        addFace(indices, vertices->size(), direction);
+        glm::vec3 normal;
+        glm::vec2 minExtents = glm::vec2(center.x, center.y) - halfSize;
+        glm::vec2 maxExtents = glm::vec2(center.x, center.y) + halfSize;
+
+        glm::vec3 positions[4] = {
+            {minExtents.x, minExtents.y, center.z},
+            {minExtents.x, maxExtents.y, center.z},
+            {maxExtents.x, maxExtents.y, center.z},
+            {maxExtents.x, minExtents.y, center.z}};
+        if (direction) // Back face
+            normal = getNormal(positions[2], positions[1], positions[0]);
+        else // Front face
+            normal = getNormal(positions[0], positions[1], positions[2]);
+        printf("XY plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+
+        vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
+    }
+    void MeshUtils::addYZPlane(
+            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            const glm::vec3& center, const glm::vec2& halfSize,
+            float* uvCoords, bool direction) {
+        addFace(indices, vertices->size(), direction);
+        glm::vec3 normal;
+        glm::vec2 minExtents = glm::vec2(center.y, center.z) - halfSize;
+        glm::vec2 maxExtents = glm::vec2(center.y, center.z) + halfSize;
+
+        glm::vec3 positions[4] = {
+            {center.x, maxExtents.x, maxExtents.y},
+            {center.x, maxExtents.x, minExtents.y},
+            {center.x, minExtents.x, minExtents.y},
+            {center.x, minExtents.x, maxExtents.y}};
+        if (direction) // Right face
+            normal = getNormal(positions[2], positions[1], positions[0]);
+        else // Left face
+            normal = getNormal(positions[0], positions[1], positions[2]);
+        printf("YZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+
+        vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
+
+    }
+
     void MeshUtils::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize) {
         glm::vec3 minExtents = center - halfSize;
         glm::vec3 maxExtents = center + halfSize;
         // Front Face
-        addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(minExtents.x, minExtents.y, maxExtents.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, maxExtents.y, maxExtents.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, maxExtents.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, maxExtents.z), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec3 frontCenter = center; frontCenter.z += halfSize.z;
+        addXYPlane(vertices, indices, frontCenter, glm::vec2(halfSize.x, halfSize.y), defaultUVMap, false);
         //Back Face
-        addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(minExtents.x, minExtents.y, minExtents.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, maxExtents.y, minExtents.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, minExtents.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, minExtents.z), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec3 backCenter = center; backCenter.z -= halfSize.z;
+        addXYPlane(vertices, indices, backCenter, glm::vec2(halfSize.x, halfSize.y), defaultUVMap, true);
         // Top Face
         glm::vec3 topCenter = center; topCenter.y += halfSize.y;
-        addTopFace(vertices, indices, topCenter, glm::vec2(halfSize.x, halfSize.z));
+        addXZPlane(vertices, indices, topCenter, glm::vec2(halfSize.x, halfSize.z), defaultUVMap, false);
         // Bottom Face
-        //glm::vec3 bottomCenter = center; bottomCenter.y -= halfSize.y;
-        //addTopFace(vertices, indices, bottomCenter, glm::vec2(halfSize.x, halfSize.z));
-        addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, maxExtents.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, minExtents.y, maxExtents.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, minExtents.y, minExtents.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, minExtents.z), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec3 bottomCenter = center; bottomCenter.y -= halfSize.y;
+        addXZPlane(vertices, indices, bottomCenter, glm::vec2(halfSize.x, halfSize.z), defaultUVMap, true);
         // Left Face
-        addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(minExtents.x, maxExtents.y, maxExtents.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, maxExtents.y, minExtents.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, minExtents.y, minExtents.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(minExtents.x, minExtents.y, maxExtents.z), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec3 leftCenter = center; leftCenter.x -= halfSize.y;
+        addYZPlane(vertices, indices, leftCenter, glm::vec2(halfSize.y, halfSize.z), defaultUVMap, false);
         // Right Face
-        addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, minExtents.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, maxExtents.y, maxExtents.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, maxExtents.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(maxExtents.x, minExtents.y, minExtents.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec3 rightCenter = center; rightCenter.x += halfSize.y;
+        addYZPlane(vertices, indices, rightCenter, glm::vec2(halfSize.y, halfSize.z), defaultUVMap, true);
+    }
+
+    void MeshUtils::addSphere(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center) {
+        // TODO:
     }
 }

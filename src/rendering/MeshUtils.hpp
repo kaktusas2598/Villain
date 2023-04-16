@@ -21,32 +21,50 @@ namespace Villain {
         // Calculate normal from a triangle
         static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3);
 
-        // TODO: Method to generate vertex data (including normals and uvs) and indices for sphere
-
         // TODO:
         //template <class VertexType>
         //static void addQuad(std::vector<VertexType>* vertices);
 
         // NOTE: Need a good way to generate a face in any orientation, at the very least Axis-Aligned
-        static void addTopFace(
+        static void addXZPlane(
                 std::vector<VertexP1N1UV>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec2& halfSize = glm::vec3(0.5f),
-                float* uvCoords = defaultUVMap
+                float* uvCoords = defaultUVMap,
+                bool direction = false
                 );
 
-        static void addQuad(
+        static void addXYPlane(
                 std::vector<VertexP1N1UV>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
-                const glm::vec2& halfSize = glm::vec3(0.5f));
+                const glm::vec2& halfSize = glm::vec3(0.5f),
+                float* uvCoords = defaultUVMap,
+                bool direction = false
+                );
+
+        static void addYZPlane(
+                std::vector<VertexP1N1UV>* vertices,
+                std::vector<unsigned int>* indices,
+                const glm::vec3& center = glm::vec3(0.0f),
+                const glm::vec2& halfSize = glm::vec3(0.5f),
+                float* uvCoords = defaultUVMap,
+                bool direction = false
+                );
+
         // Setup vertices and indices for 3D Axis-Aligned Bounding Box, by default 1f sized cube centered around the origin
         static void addAABB(
                 std::vector<VertexP1N1UV>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec3& halfSize = glm::vec3(0.5f));
+
+        static void addSphere(
+                std::vector<VertexP1N1UV>* vertices,
+                std::vector<unsigned int>* indices,
+                float radius,
+                const glm::vec3& center = glm::vec3(0.0f));
 
         private:
         // Min X(S), Max X(S), MIN Y(T), MAX Y(T)
