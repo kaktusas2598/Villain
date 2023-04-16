@@ -13,7 +13,7 @@ class BulletBodyComponent: public Villain::NodeComponent {
             GetTransform()->setPos({origin.getX(), origin.getY(), origin.getZ()});
             // Synchonise node euler rotation with bullet rigid body's
             float x,y,z;
-            rigidBody->getWorldTransform().getRotation().getEulerZYX(x, y, z);
+            rigidBody->getWorldTransform().getRotation().getEulerZYX(z, y, x);
             GetTransform()->setEulerRot(glm::degrees(x), glm::degrees(y), glm::degrees(z));
         }
 

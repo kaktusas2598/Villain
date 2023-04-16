@@ -82,6 +82,7 @@ void Game::createGround() {
     btTransform groundTransform;
     groundTransform.setIdentity();
     groundTransform.setOrigin(btVector3(0, -0.5, 0));
+    //groundTransform.setRotation(btQuaternion(btVector3(1, 0, 0), glm::radians(15.f)));
 
     btScalar groundMass(0.); // If mass is 0, body becomes static
     btVector3 localInertia(0, 0, 0);
