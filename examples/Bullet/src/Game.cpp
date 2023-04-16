@@ -6,6 +6,7 @@
 #include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
+#include "components/MoveController.hpp"
 
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/MeshUtils.hpp"
@@ -69,9 +70,9 @@ void Game::createGround() {
     // Create mesh for ground
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone")};
+    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
     Material mat("redSandstonePavement", textures, 8);
-    MeshUtils::addTopFace(&vertices, &indices);
+    MeshUtils::addTopFace(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f));
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(.5), btScalar(250.)));

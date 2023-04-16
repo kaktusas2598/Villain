@@ -15,11 +15,11 @@ namespace Villain {
     class ResourceManager {
         public:
 
-            Texture* loadTexture(std::string fileName, std::string id) {
+            Texture* loadTexture(std::string fileName, std::string id, GLint wrappingMode = GL_CLAMP_TO_EDGE) {
                 if (textureMap.find(id) != textureMap.end())
                     return textureMap[id];
                 std::cout << "Loading texture: " << fileName.c_str() << std::endl;
-                Texture* texture = new Texture(fileName);
+                Texture* texture = new Texture(fileName, wrappingMode);
                 textureMap[id] = texture;
                 return textureMap[id];
             }

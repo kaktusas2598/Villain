@@ -9,7 +9,7 @@ namespace Villain  {
     class Texture {
         public:
             // 2D Texture
-            Texture(const std::string& fileName);
+            Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE);
             // Cubemap Texture
             Texture(std::vector<std::string> faces);
             ~Texture();

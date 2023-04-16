@@ -6,7 +6,7 @@
 
 namespace Villain {
 
-    Texture::Texture(const std::string& fileName)
+    Texture::Texture(const std::string& fileName, GLint wrappingMode)
         : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_2D) {
 
         stbi_set_flip_vertically_on_load(1);
@@ -20,8 +20,8 @@ namespace Villain {
         // how to wrap texture on x(s) and y(t) axis
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrappingMode));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMode));
         // TODO: do I need mipmap stuff?
 
         // Generate texture
