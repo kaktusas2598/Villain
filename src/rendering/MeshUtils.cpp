@@ -2,6 +2,8 @@
 
 namespace Villain {
 
+    float MeshUtils::defaultUVMap[4] = {0.0f, 1.0f, 0.0f, 1.0f};
+
     void MeshUtils::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
         if (direction) {
             indices->push_back(startLocation + 2);
@@ -21,12 +23,23 @@ namespace Villain {
     }
 
     // TODO: need ability to specify different orientations, positions and sizes
-    void MeshUtils::addTopFace(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices) {
+    void MeshUtils::addQuad(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize) {
+
+    }
+
+    // TODO: need ability to specify different orientations
+    // This could be method for XZ planes in general, but when normal vector needs to change
+    void MeshUtils::addTopFace(
+            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            const glm::vec3& center, const glm::vec2& halfSize,
+            float* uvCoords) {
         addFace(indices, vertices->size(), false);
-        vertices->push_back({glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)});
-        vertices->push_back({glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)});
-        vertices->push_back({glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)});
-        vertices->push_back({glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)});
+        glm::vec2 minExtents = glm::vec2(center.x, center.z) - halfSize;
+        glm::vec2 maxExtents = glm::vec2(center.x, center.z) + halfSize;
+        vertices->push_back({glm::vec3(maxExtents.x, center.y, minExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({glm::vec3(minExtents.y, center.y, minExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({glm::vec3(minExtents.y, center.y, maxExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({glm::vec3(maxExtents.x, center.y, maxExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[1], uvCoords[2])});
     }
 
     // TODO: UVs are assuming single texture used for all faces

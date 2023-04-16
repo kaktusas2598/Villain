@@ -72,7 +72,8 @@ void Game::createGround() {
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
     Material mat("redSandstonePavement", textures, 8);
-    MeshUtils::addTopFace(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f));
+    float uvCoords[4] = {0.0f, 500.0f, 0.0f, 500.0f};
+    MeshUtils::addTopFace(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(.5), btScalar(250.)));
