@@ -46,6 +46,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
                 addSpecialObject(pixel.B, i, j);
 
                 // Floor vertices, normals are defaults just to make shader work
+                //Villain::MeshUtils::addTopFace(&vertices, &indices, glm::vec3(i, 0.0f, j), glm::vec2(0.5f), texCoords);
                 Villain::MeshUtils::addFace(&indices, vertices.size(), true);
                 addVertices(&vertices, i, j, true, false, true, 0.0f, texCoords);
 
