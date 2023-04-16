@@ -1,15 +1,11 @@
 #include "Game.hpp"
 
 #include "Engine.hpp"
-#include "ErrorHandler.hpp"
-#include "LevelParser.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
-#include "components/ModelRenderer.hpp"
-#include "components/MoveController.hpp"
 
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/MeshUtils.hpp"
@@ -20,7 +16,7 @@
 using namespace Villain;
 
 Game::~Game() {
-    cleanupBulletPhysics();
+    delete physicsEngine;
 }
 
 void Game::init() {
@@ -28,7 +24,7 @@ void Game::init() {
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
 
-    initBulletPhysics();
+    physicsEngine = new BulletEngine({0.0, -9.81, 0.0});
 
     createGround();
 
@@ -37,33 +33,10 @@ void Game::init() {
     addRigidBoxes();
 }
 
-void Game::initBulletPhysics() {
-    // BULLET PHYSICS INITIALISATION CODE
-    ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-    collisionConfiguration = new btDefaultCollisionConfiguration();
-
-    ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-    ///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
-    overlappingPairCache = new btDbvtBroadphase();
-
-    ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-    solver = new btSequentialImpulseConstraintSolver;
-
-    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
-
-    // Setup custom debug drawer
-    bulletRenderer = new BulletDebugRenderer();
-    dynamicsWorld->setDebugDrawer(bulletRenderer);
-    dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
-}
-
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
 void Game::addPlayer() {
     btCapsuleShape* capsuleShape = new btCapsuleShape(btScalar(0.5), btScalar(2.));
-    collisionShapes.push_back(capsuleShape);
+    physicsEngine->addCollisionShape(capsuleShape);
 
     btTransform playerTransform;
     playerTransform.setIdentity();
@@ -79,8 +52,8 @@ void Game::addPlayer() {
     playerBody->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
     BulletCharacterController* playerController = new BulletCharacterController(playerBody, capsuleShape);
-    dynamicsWorld->addAction(playerController);
-    dynamicsWorld->addRigidBody(playerBody);
+    physicsEngine->addAction(playerController);
+    physicsEngine->addRigidBody(playerBody);
 
     // Add camera/player node
     SceneNode* cam = (new SceneNode("Player"))
@@ -101,8 +74,7 @@ void Game::createGround() {
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(1.), btScalar(250.)));
-
-    collisionShapes.push_back(groundShape);
+    physicsEngine->addCollisionShape(groundShape);
 
     btTransform groundTransform;
     groundTransform.setIdentity();
@@ -116,7 +88,7 @@ void Game::createGround() {
     btRigidBody::btRigidBodyConstructionInfo groundInfo(groundMass, groundMotionState, groundShape, localInertia);
     btRigidBody* groundBody = new btRigidBody(groundInfo);
 
-    dynamicsWorld->addRigidBody(groundBody);
+    physicsEngine->addRigidBody(groundBody);
     // Add bodies to scene graph
     SceneNode* groundNode = (new SceneNode("Ground"))
         ->addComponent(new BulletBodyComponent(groundBody))
@@ -136,7 +108,7 @@ void Game::addRigidBoxes() {
 
     // Re-using the same collision for all boxes is better for memory usage and performance
     btBoxShape* boxShape = new btBoxShape(btVector3(btScalar(.5), btScalar(.5), btScalar(.5)));
-    collisionShapes.push_back(boxShape);
+    physicsEngine->addCollisionShape(boxShape);
 
     btTransform startTransform;
     startTransform.setIdentity();
@@ -169,7 +141,7 @@ void Game::addRigidBoxes() {
 
                 btRigidBody* body = new btRigidBody(rbInfo);
 
-                dynamicsWorld->addRigidBody(body);
+                physicsEngine->addRigidBody(body);
 
                 // Add bodies to scene graph
                 SceneNode* bodyNode = (new SceneNode("Dynamic Body"))
@@ -181,46 +153,19 @@ void Game::addRigidBoxes() {
     }
 }
 
-void Game::cleanupBulletPhysics() {
-    //cleanup in the reverse order of creation/initialization
-	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
-		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-		}
-		dynamicsWorld->removeCollisionObject(obj);
-		delete obj;
-	}
-
-	//delete collision shapes
-	for (int j = 0; j < collisionShapes.size(); j++)
-	{
-		btCollisionShape* shape = collisionShapes[j];
-		collisionShapes[j] = 0;
-		delete shape;
-	}
-
-	delete dynamicsWorld;
-	delete solver;
-	delete overlappingPairCache;
-	delete dispatcher;
-	delete collisionConfiguration;
-
-	collisionShapes.clear();
-}
-
 void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_BACKQUOTE)) {
+        physicsEngine->setDebugMode(!physicsEngine->getDebugMode());
     }
 }
 
 void Game::onAppPreUpdate(float dt) {
     handleEvents(dt);
     // Update Bullet Physics simulation
-    dynamicsWorld->stepSimulation(dt);
+    physicsEngine->update(dt);
 }
 
 void Game::onAppRender(float dt) {
@@ -231,11 +176,9 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
     debugRenderer.end();
     debugRenderer.render(projection * view, 2.0f);
 
-    // Rendering using custom renderer - recommended Bullet approach!
-    dynamicsWorld->debugDrawWorld();
-    bulletRenderer->render(projection * view, 1.0f);
+    // Draw bullet physics
+    physicsEngine->render(projection * view);
 }
