@@ -8,6 +8,8 @@ void BulletCharacterComponent::handleInput(float deltaTime) {
     btVector3 right = btVector3(GetTransform()->getRight().x, GetTransform()->getRight().y, GetTransform()->getRight().z);
     btVector3 up = btVector3(GetTransform()->getUp().x, GetTransform()->getUp().y, GetTransform()->getUp().z);
 
+    controller->setMovementDirection(btVector3(0.0, 0.0, 0.0));
+
     if (InputManager::Instance()->isKeyDown(SDLK_w)) {
         controller->setMovementDirection(front);
     }

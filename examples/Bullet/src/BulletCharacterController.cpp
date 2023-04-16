@@ -47,12 +47,6 @@ void BulletCharacterController::setupBody() {
 	rigidBody->setAngularFactor(0.0);
 
     gravity = rigidBody->getGravity();
-    printf("Initial player gravity: %fX, %fY, %fZ\n", gravity.getX(), gravity.getY(), gravity.getZ());
-
-    // MINE TEMP
-    //rigidBody->setGravity({0.0, -9.8, 0.0});
-    //rigidBody->setRollingFriction(1.0f);
-    rigidBody->setFriction(1.5f);
 }
 
 void BulletCharacterController::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep) {
@@ -70,12 +64,12 @@ void BulletCharacterController::updateAction(btCollisionWorld* collisionWorld, b
 		//stepUp(deltaTimeStep);
 	//}
 
-    if (onGround /*|| mStepping*/) {
+    //if (onGround [>|| mStepping<]) {
         // Avoid going down on ramps, if already on ground, and clearGravity() is not enough
-        rigidBody->setGravity({ 0, 0, 0 });
-    } else {
-        rigidBody->setGravity(gravity);
-    }
+        //rigidBody->setGravity({ 0, 0, 0 });
+    //} else {
+        //rigidBody->setGravity(gravity);
+    //}
 }
 
 void BulletCharacterController::updateVelocity(float dt) {

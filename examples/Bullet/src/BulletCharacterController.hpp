@@ -56,7 +56,7 @@ class BulletCharacterController: /*public Villain::NodeComponent,*/ public btAct
         btScalar walkAccel = 25.0; // Start walking acceleration
 
         // The initial speed for the jump.
-        // The default is about 1m starting still, with g=-9.81
+        // The default(4.5) is about 1m starting still, with g=-9.81
         btScalar jumpSpeed = 4.5;
         btScalar speedDamping = 0.1; // Damping used to stop movements
         btVector3 gravity;
