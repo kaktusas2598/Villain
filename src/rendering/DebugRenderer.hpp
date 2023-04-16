@@ -24,7 +24,11 @@ namespace Villain {
             void drawBox(const glm::vec4& destRect, float depth, const glm::vec4& color, float angle);
             void drawCircle(const glm::vec2& center, float depth, const glm::vec4& color, float radius);
             void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color = glm::vec4(1.0f));
+            // Draw axis-aligned quad
+            void drawQuad(const glm::vec3& center, glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color = glm::vec4(1.0f));
+            // Draw axis-aligned box
             void drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size);
+            // Draw rotated box
             void drawBox3DRotated(const glm::vec3& position, const glm::vec3& size, const glm::mat4& rotation, const glm::vec4& color = glm::vec4(1.0f));
             void drawSphere(const glm::vec3& center, float radius, const glm::vec4& color = glm::vec4(1.0f));
 

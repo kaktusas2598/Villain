@@ -178,6 +178,42 @@ namespace Villain {
         indices.push_back(i + 1);
     }
 
+    // NOTE: This method is not final yet, might be removed in the near future, not tested
+    void DebugRenderer::drawQuad(const glm::vec3& center, glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color) {
+        int i = vertices.size();
+        if (x && z) { // floor on xz plane
+            vertices[i + 0].position = glm::vec3(center.x - size.x/2, center.y, center.z + size.y/2);
+            vertices[i + 1].position = glm::vec3(center.x + size.x/2, center.y, center.z + size.y/2);
+            vertices[i + 2].position = glm::vec3(center.x + size.x/2, center.y, center.z - size.y/2);
+            vertices[i + 3].position = glm::vec3(center.x - size.x/2, center.y, center.z - size.y/2);
+        } else if (x && y) {
+            vertices[i + 0].position = glm::vec3(center.x - size.x/2, center.y + size.y/2, center.z);
+            vertices[i + 1].position = glm::vec3(center.x + size.x/2, center.y + size.y/2, center.z);
+            vertices[i + 2].position = glm::vec3(center.x + size.x/2, center.y - size.y/2, center.z);
+            vertices[i + 3].position = glm::vec3(center.x - size.x/2, center.y - size.y/2, center.z);
+        } else if (y && z) {
+            vertices[i + 0].position = glm::vec3(center.x, center.y + size.x/2, center.z - size.y/2);
+            vertices[i + 1].position = glm::vec3(center.x, center.y + size.x/2, center.z + size.y/2);
+            vertices[i + 2].position = glm::vec3(center.x, center.y - size.x/2, center.z + size.y/2);
+            vertices[i + 3].position = glm::vec3(center.x, center.y - size.x/2, center.z - size.y/2);
+        } else {
+            //std::cerr << "Impossible plane combo!\n";
+        }
+        indices.reserve(indices.size() + 8);
+
+        indices.push_back(i);
+        indices.push_back(i + 1);
+
+        indices.push_back(i + 1);
+        indices.push_back(i + 2);
+
+        indices.push_back(i + 2);
+        indices.push_back(i + 3);
+
+        indices.push_back(i + 3);
+        indices.push_back(i);
+    }
+
     void DebugRenderer::drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size) {
         int i = vertices.size(); // Index for 1st new vertex added
         vertices.resize(vertices.size() + 8);
