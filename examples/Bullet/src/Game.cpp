@@ -25,6 +25,18 @@ void Game::init() {
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
 
+    std::vector<std::string> faces{
+        "assets/textures/skybox/posx.jpg",
+        "assets/textures/skybox/negx.jpg",
+        "assets/textures/skybox/posy.jpg",
+        "assets/textures/skybox/negy.jpg",
+        "assets/textures/skybox/posz.jpg",
+        "assets/textures/skybox/negz.jpg"
+    };
+
+    skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
+
+
     physicsEngine = new BulletEngine({0.0, -9.8, 0.0});
     physicsEngine->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
@@ -206,4 +218,6 @@ void Game::onAppRender(float dt) {
 
     // Draw bullet physics
     physicsEngine->render(projection * view);
+
+    skybox->render(projection, view);
 }

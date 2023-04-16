@@ -4,6 +4,7 @@
 #include "Application.hpp"
 #include "Camera3D.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include "rendering/SkyBox.hpp"
 
 #include "BulletEngine.hpp"
 
@@ -22,6 +23,7 @@ class Game : public Villain::Application {
         BulletEngine* physicsEngine = nullptr;
         Villain::Camera3D camera;
         Villain::DebugRenderer debugRenderer;
+        std::unique_ptr<Villain::SkyBox> skybox;
 
         void createGround();
         void createRigidBody();
