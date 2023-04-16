@@ -18,6 +18,9 @@ namespace Villain {
          */
         static void addFace(std::vector<unsigned int>* indices, int startLocation, bool direction);
 
+        // Calculate normal from a triangle
+        static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3);
+
         // TODO: Method to generate vertex data (including normals and uvs) and indices for sphere
 
         // TODO:

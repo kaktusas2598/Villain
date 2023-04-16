@@ -22,6 +22,13 @@ namespace Villain {
         }
     }
 
+    glm::vec3 MeshUtils::getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3) {
+        glm::vec3 v1 = i2 - i1;
+        glm::vec3 v2 = i3 - i1;
+        glm::vec3 v3 = glm::cross(v1, v2);
+        return glm::normalize(v3);
+    }
+
     // TODO: need ability to specify different orientations, positions and sizes
     void MeshUtils::addQuad(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize) {
 
@@ -40,6 +47,8 @@ namespace Villain {
         vertices->push_back({glm::vec3(minExtents.y, center.y, minExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[0], uvCoords[3])});
         vertices->push_back({glm::vec3(minExtents.y, center.y, maxExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[0], uvCoords[2])});
         vertices->push_back({glm::vec3(maxExtents.x, center.y, maxExtents.y), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(uvCoords[1], uvCoords[2])});
+        glm::vec3 normal = getNormal((*vertices)[vertices->size() - 3].Position, (*vertices)[vertices->size() - 2].Position, (*vertices)[vertices->size() - 1].Position);
+        printf("Top face normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
     }
 
     // TODO: UVs are assuming single texture used for all faces
