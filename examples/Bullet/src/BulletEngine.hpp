@@ -27,8 +27,9 @@ class BulletEngine {
             dynamicsWorld->addRigidBody(rigidBody);
         }
 
-        inline void setDebugMode(bool mode) { debugMode = mode; }
-        bool getDebugMode() const { return debugMode; }
+        inline void setDebugMode(int mode) {
+            dynamicsWorld->getDebugDrawer()->setDebugMode(mode);
+        }
     private:
         btDefaultCollisionConfiguration* collisionConfiguration;
         btCollisionDispatcher* dispatcher;
@@ -38,6 +39,4 @@ class BulletEngine {
 
         btAlignedObjectArray<btCollisionShape*> collisionShapes;
         BulletDebugRenderer* bulletRenderer;
-
-        bool debugMode = true;
 };

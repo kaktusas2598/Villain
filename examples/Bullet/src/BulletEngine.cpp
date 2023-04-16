@@ -13,11 +13,9 @@ void BulletEngine::update(float deltaTime) {
 }
 
 void BulletEngine::render(const glm::mat4& MVP) {
-    if (debugMode) {
-        // Rendering using custom renderer - recommended Bullet approach!
-        dynamicsWorld->debugDrawWorld();
-        bulletRenderer->render(MVP, 1.0f);
-    }
+    // Rendering using custom renderer - recommended Bullet approach!
+    dynamicsWorld->debugDrawWorld();
+    bulletRenderer->render(MVP, 1.0f);
 }
 
 void BulletEngine::initPhysics() {

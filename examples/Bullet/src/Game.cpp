@@ -157,8 +157,19 @@ void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_BACKQUOTE)) {
-        physicsEngine->setDebugMode(!physicsEngine->getDebugMode());
+
+    // Bullet debug modes
+    if (InputManager::Instance()->isKeyDown(SDLK_1)) {
+        physicsEngine->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_2)) {
+        physicsEngine->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_3)) {
+        physicsEngine->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
+    }
+    if (InputManager::Instance()->isKeyDown(SDLK_0)) {
+        physicsEngine->setDebugMode(btIDebugDraw::DBG_NoDebug);
     }
 }
 
