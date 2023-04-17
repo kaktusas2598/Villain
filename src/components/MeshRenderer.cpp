@@ -17,11 +17,19 @@ namespace Villain {
                 RenderingEngine& renderingEngine,
                 Camera& camera
                 ) {
+            const Frustum camFrustum = camera.getFrustum();
+
             shader.bind();
             // NOTE: should implenent mesh batch renderer
             shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
 
-            mesh->draw(shader, this->material);
+            if (mesh->getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
+                // Draw mesh using it's own material
+                mesh->draw(shader, this->material);
+                //std::cout << "Mesh in frustum\n";
+            } else {
+                //std::cout << "Mesh culled by frustum\n";
+            }
         }
 
     // Explicit instantiation of template specialisations to avoid linker errors, alternativaly and even better
