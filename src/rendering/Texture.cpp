@@ -11,25 +11,41 @@ namespace Villain {
 
         stbi_set_flip_vertically_on_load(1);
 
+        GLCall(glGenTextures(1, &rendererID));
+
         localBuffer = stbi_load(fileName.c_str(), &width, &height, &BPP, 4);
 
-        GLCall(glGenTextures(1, &rendererID));
-        GLCall(glBindTexture(GL_TEXTURE_2D, rendererID));
+        if (localBuffer) {
+            // NOTE: Does not seem to work fine, need to investigate this futher
+            //GLenum format;
+            //if (BPP == 1)
+                //format = GL_RED;
+            //else if (BPP == 3)
+                //format = GL_RGB;
+            //else if (BPP == 4)
+                //format = GL_RGBA;
+            //else
+                //std::cout << "Unrecognized color format" << std::endl;
 
-        // Tell open GL how to filter texture when minifying or magnifying
-        // how to wrap texture on x(s) and y(t) axis
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrappingMode));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMode));
-        // TODO: do I need mipmap stuff?
+            GLCall(glBindTexture(GL_TEXTURE_2D, rendererID));
+            // Generate texture
+            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
+            // Generate mipmap to remove artifacts on far away objects and reduce memory footprint
+            // 2023-04-17: Should have done this way earlier as it increased performance in some examples
+            GLCall(glGenerateMipmap(GL_TEXTURE_2D));
+            // Tell open GL how to filter texture when minifying or magnifying
+            // how to wrap texture on x(s) and y(t) axis
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrappingMode));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMode));
 
-        // Generate texture
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
-        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-
-        if (localBuffer)
+            GLCall(glBindTexture(GL_TEXTURE_2D, 0));
             stbi_image_free(localBuffer);
+        } else {
+            std::cout << "Failed loading texture : " << fileName << std::endl;
+            stbi_image_free(localBuffer);
+        }
     }
 
     Texture::Texture(std::vector<std::string> faces)
