@@ -69,3 +69,41 @@ void BulletEngine::exitPhysics() {
 
 	collisionShapes.clear();
 }
+
+btRigidBody* BulletEngine::createRigidBody(
+        btCollisionShape* collisionShape,
+        bool newShape,
+        const btVector3& position,
+        btScalar mass,
+        btScalar friction,
+        btScalar restituion) {
+    // Only add collision shape if it's different
+    if (newShape)
+        collisionShapes.push_back(collisionShape);
+
+    btTransform startTransform;
+    startTransform.setIdentity();
+    startTransform.setOrigin(position);
+
+    //rigidbody is dynamic if and only if mass is non zero, otherwise static
+    bool isDynamic = (mass != 0.f);
+
+    btVector3 localInertia(0, 0, 0);
+    if (isDynamic)
+        collisionShape->calculateLocalInertia(mass, localInertia);
+    //
+    //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+    btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo constructionInfo(mass, motionState, collisionShape, localInertia);
+
+    if (friction != 0.5)
+        constructionInfo.m_friction = friction;
+    if (restituion != 0.)
+        constructionInfo.m_restitution = restituion;
+
+    btRigidBody* rigidBody = new btRigidBody(constructionInfo);
+
+    // Add new rigid body to world to be simulated
+    dynamicsWorld->addRigidBody(rigidBody);
+    return rigidBody;
+}

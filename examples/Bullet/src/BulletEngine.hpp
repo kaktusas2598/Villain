@@ -14,17 +14,21 @@ class BulletEngine {
         void initPhysics();
         void exitPhysics();
 
+        // NOTE:: Transform probably would be better as param instead of just position
+        btRigidBody* createRigidBody(
+                btCollisionShape* collisionShape,
+                bool newShape,
+                const btVector3& position,
+                btScalar mass,
+                btScalar friction = 0.5,
+                btScalar restituion = 0.);
+
         void addCollisionShape(btCollisionShape* shape) {
             collisionShapes.push_back(shape);
         }
 
         void addAction(btActionInterface* action) {
             dynamicsWorld->addAction(action);
-        }
-
-        // TODO: Engine should also be able to construct body itself
-        void addRigidBody(btRigidBody* rigidBody) {
-            dynamicsWorld->addRigidBody(rigidBody);
         }
 
         inline void setDebugMode(int mode) {

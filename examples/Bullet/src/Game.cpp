@@ -45,6 +45,24 @@ void Game::init() {
     addPlayer();
 
     addRigidBoxes();
+
+    //////////////////////////////////////////
+    /// TEMP TEST code gor MeshUtils planes
+    // Create mesh for wall
+    std::vector<VertexP1N1UV> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
+    Material mat("redSandstonePavement", textures, 8);
+    float uvCoords[4] = {0.0f, 100.0f, 0.0f, 100.0f};
+    MeshUtils::addXYPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(50.0f), uvCoords, false);
+    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
+
+    btRigidBody* wallBody = physicsEngine->createRigidBody(new btBoxShape({btScalar(50.), btScalar(50.), btScalar(.5)}), true, {0, 0, 25}, 0.);
+    SceneNode* wallNode = (new SceneNode("Ground"))
+        ->addComponent(new BulletBodyComponent(wallBody))
+        ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+    addToScene(wallNode);
+    /////////////////////////////////////////
 }
 
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
@@ -52,22 +70,10 @@ void Game::addPlayer() {
     btCapsuleShape* capsuleShape = new btCapsuleShape(btScalar(0.5), btScalar(2.));
     physicsEngine->addCollisionShape(capsuleShape);
 
-    btTransform playerTransform;
-    playerTransform.setIdentity();
-    btScalar playerMass(15.f);
-    btVector3 localInertia(0, 0, 0);
-    capsuleShape->calculateLocalInertia(playerMass, localInertia);
-    playerTransform.setOrigin(btVector3(-5.0, 10, 2.0));
-
-    btDefaultMotionState* bodyMotionState = new btDefaultMotionState(playerTransform);
-    btRigidBody::btRigidBodyConstructionInfo playerBodyInfo(playerMass, bodyMotionState, capsuleShape, localInertia);
-
-    btRigidBody* playerBody = new btRigidBody(playerBodyInfo);
-    playerBody->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-
+    btRigidBody* playerBody = physicsEngine->createRigidBody(capsuleShape, false, {-5., 10.0, 2.0}, 15.);
     BulletCharacterController* playerController = new BulletCharacterController(playerBody, capsuleShape);
     physicsEngine->addAction(playerController);
-    physicsEngine->addRigidBody(playerBody);
+
 
     // Add camera/player node
     SceneNode* cam = (new SceneNode("Player"))
@@ -85,27 +91,12 @@ void Game::createGround() {
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
     Material mat("redSandstonePavement", textures, 8);
     float uvCoords[4] = {0.0f, 500.0f, 0.0f, 500.0f};
-    MeshUtils::addTopFace(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords);
+    MeshUtils::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
-    btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(250.), btScalar(.5), btScalar(250.)));
-    physicsEngine->addCollisionShape(groundShape);
+    btRigidBody* groundBody = physicsEngine->createRigidBody(new btBoxShape({btScalar(250.), btScalar(.5), btScalar(250.)}), true, {0, 0, 0}, 0.);
 
-    btTransform groundTransform;
-    groundTransform.setIdentity();
-    groundTransform.setOrigin(btVector3(0, -0.5, 0));
-    //groundTransform.setRotation(btQuaternion(btVector3(1, 0, 0), glm::radians(15.f)));
-
-    btScalar groundMass(0.); // If mass is 0, body becomes static
-    btVector3 localInertia(0, 0, 0);
-
-    //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
-    btDefaultMotionState* groundMotionState = new btDefaultMotionState(groundTransform);
-    btRigidBody::btRigidBodyConstructionInfo groundInfo(groundMass, groundMotionState, groundShape, localInertia);
-    btRigidBody* groundBody = new btRigidBody(groundInfo);
-
-    physicsEngine->addRigidBody(groundBody);
-    // Add bodies to scene graph
+    // Add ground to scene graph
     SceneNode* groundNode = (new SceneNode("Ground"))
         ->addComponent(new BulletBodyComponent(groundBody))
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
@@ -124,14 +115,7 @@ void Game::addRigidBoxes() {
 
     // Re-using the same collision for all boxes is better for memory usage and performance
     btBoxShape* boxShape = new btBoxShape({0.5, 0.5, 0.5});
-    physicsEngine->addCollisionShape(boxShape);
-
-    btTransform startTransform;
-    startTransform.setIdentity();
-
-    btScalar mass(1.f);
-    btVector3 localInertia(0, 0, 0);
-    boxShape->calculateLocalInertia(mass, localInertia);
+    physicsEngine->addCollisionShape(boxShape); // Adding shape to engine here and passing false to createRigidBody() below
 
     const int ARRAY_SIZE_X = 8;
     const int ARRAY_SIZE_Y = 8;
@@ -142,22 +126,9 @@ void Game::addRigidBoxes() {
         {
             for (int j = 0; j < ARRAY_SIZE_Z; j++)
             {
-                startTransform.setOrigin(btVector3(
-                    btScalar(30 + 0.2 * i),
-                    btScalar(100 + .2 * k),
-                    btScalar(0.2 * j)));
-
-                //createRigidBody(mass, startTransform, colShape);
-                btDefaultMotionState* bodyMotionState = new btDefaultMotionState(startTransform);
-                btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, bodyMotionState, boxShape, localInertia);
-
-                // Add bounciness!
-                rbInfo.m_restitution = 0.2f;
-                rbInfo.m_friction = 1.5f;
-
-                btRigidBody* body = new btRigidBody(rbInfo);
-
-                physicsEngine->addRigidBody(body);
+                btRigidBody* body = physicsEngine->createRigidBody(boxShape, false,
+                        {btScalar(30 + 0.2 * i), btScalar(100 + .2 * k), btScalar(0.2 * j)}
+                        , 1., 1.5, 0.3);
 
                 // Add bodies to scene graph
                 SceneNode* bodyNode = (new SceneNode("Dynamic Body"))
@@ -209,8 +180,8 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.5f, 4.5f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    debugRenderer.drawLine(glm::vec3(-0.5f, 0.0f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    debugRenderer.drawLine(glm::vec3(0.5f, 0.0f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(-0.5f, 0.f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.5f, 0.f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
 
     debugRenderer.end();
