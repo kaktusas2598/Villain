@@ -14,6 +14,8 @@
 #include "BulletCharacterController.hpp"
 #include "BulletCharacterComponent.hpp"
 
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+
 using namespace Villain;
 
 Game::~Game() {
@@ -63,6 +65,10 @@ void Game::init() {
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
     addToScene(wallNode);
     /////////////////////////////////////////
+
+    // TODO:
+    // Investigate and implement casting rays, add example, like shooting projectiles for example
+    // add more collision shapes like spheres and cylinders (MeshUtils methods as well)
 }
 
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
@@ -76,12 +82,12 @@ void Game::addPlayer() {
 
 
     // Add camera/player node
-    SceneNode* cam = (new SceneNode("Player"))
+    SceneNode* player = (new SceneNode("Player"))
             ->addComponent(new CameraComponent(&camera))
             //->addComponent(new MoveController())
             ->addComponent(new LookController())
             ->addComponent(new BulletCharacterComponent(playerController));
-    addToScene(cam);
+    addToScene(player);
 }
 
 void Game::createGround() {
@@ -131,7 +137,7 @@ void Game::addRigidBoxes() {
                         , 1., 1.5, 0.3);
 
                 // Add bodies to scene graph
-                SceneNode* bodyNode = (new SceneNode("Dynamic Body"))
+                SceneNode* bodyNode = (new SceneNode("Dynamic Body " + std::to_string(j)))
                     ->addComponent(new BulletBodyComponent(body))
                     ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
                 addToScene(bodyNode);
@@ -171,21 +177,58 @@ void Game::onAppRender(float dt) {
     glm::mat4 projection = camera.getProjMatrix();
 
     // Draw coordinate gizmo: XYZ axis and little arrows for each axis
-    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    debugRenderer.drawLine(glm::vec3(4.5f, 0.f, -0.5f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    debugRenderer.drawLine(glm::vec3(4.5f, 0.f, 0.5f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 1.f, 0.f), glm::vec3(5.f, 1.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(4.5f, 1.f, -0.5f), glm::vec3(5.f, 1.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(4.5f, 1.f, 0.5f), glm::vec3(5.f, 1.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 1.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(-0.5f, 4.5f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.5f, 4.5f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
-    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    debugRenderer.drawLine(glm::vec3(-0.5f, 0.f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-    debugRenderer.drawLine(glm::vec3(0.5f, 0.f, 4.5f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 1.f, 0.f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(-0.5f, 1.f, 4.5f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.5f, 1.f, 4.5f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+
+    /////////
+    // Get first ray hit
+    glm::vec3 cameraPos = camera.getPosition();
+    glm::vec3 cameraFront = camera.getFront();
+    printf("Camera pos: %f.3, %f.3, %f.3\n", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+    printf("Camera front: %f.3, %f.3, %f.3\n", camera.getFront().x, camera.getFront().y, camera.getFront().z);
+
+    cameraPos.y = 1.0f;
+    //cameraFront.y = 0.7f;
+    glm::vec3 cameraTo = cameraPos + cameraFront * 1000.0f;
+    btVector3 from = {cameraPos.x, cameraPos.y, cameraPos.z};
+    btVector3 to = {cameraTo.x, cameraTo.y, cameraTo.z};
+
+    btCollisionWorld::ClosestRayResultCallback closestResults(from, to);
+    closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+
+    physicsEngine->getWorld()->rayTest(from, to, closestResults);
+
+    if (closestResults.hasHit()) {
+        //closestResults.m_collisionObject->getCollisionShape()->getShapeType()
+        debugRenderer.drawLine(cameraPos, cameraTo, glm::vec4(0.0f, 1.f, 0.f, 1.0));
+
+        btVector3 p = from.lerp(to, closestResults.m_closestHitFraction);
+        debugRenderer.drawLine(cameraPos, {p.getX(), p.getY(), p.getZ()}, glm::vec4(1.0f, 0.f, 0.f, 1.0));
+        physicsEngine->getWorld()->getDebugDrawer()->drawSphere(p, 0.1, {0, 0, 1});
+        physicsEngine->getWorld()->getDebugDrawer()->drawLine(p, p + closestResults.m_hitNormalWorld, {0, 0, 1});
+    }
+    /////////
 
 
     debugRenderer.end();
-    debugRenderer.render(projection * view, 2.0f);
+    debugRenderer.render(projection * view  , 2.0f);
+
+    // 2nd render batch for screen space crosshair display
+    const float CROSSHAIR_SIZE = 0.05f;
+    debugRenderer.drawLine(glm::vec3(-CROSSHAIR_SIZE, 0.0f, 0.0f), glm::vec3(CROSSHAIR_SIZE, 0.0f, 0.0f), glm::vec4(1.0f));
+    debugRenderer.drawLine(glm::vec3(0.0f, -CROSSHAIR_SIZE, 0.0f), glm::vec3(0.0f, CROSSHAIR_SIZE, 0.0f), glm::vec4(1.0f));
+    debugRenderer.end();
+    debugRenderer.render(glm::mat4(1.0f), 2.0f);
 
     // Draw bullet physics
     physicsEngine->render(projection * view);

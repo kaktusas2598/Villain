@@ -27,6 +27,8 @@ class BulletEngine {
             collisionShapes.push_back(shape);
         }
 
+        btDynamicsWorld* getWorld() const { return dynamicsWorld; }
+
         void addAction(btActionInterface* action) {
             dynamicsWorld->addAction(action);
         }
