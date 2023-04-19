@@ -30,6 +30,8 @@ class Game : public Villain::Application {
 
         void addPlayer();
         void addRigidBoxes();
+
+        glm::vec3 getRayFromScreenSpace(const glm::vec2 & pos);
 };
 
 #endif // __GAME__

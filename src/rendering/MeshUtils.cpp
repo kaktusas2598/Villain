@@ -132,7 +132,74 @@ namespace Villain {
         addYZPlane(vertices, indices, rightCenter, glm::vec2(halfSize.y, halfSize.z), defaultUVMap, true);
     }
 
+    // Credits go to: https://www.songho.ca/opengl/gl_sphere.html
+    // NOTE: DebugRenderer has very very similar code to render debug sphere, should be reused
     void MeshUtils::addSphere(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center) {
-        // TODO:
+        const float sectorCount = 36; //<<< num of longitude divisions
+        const float stackCount = 18; //<<< num of latitude divisions
+        float x, y, z, xy; // Position
+        float nx, ny, nz, lengthInv = 1.0f / radius; // Normal
+        float s, t; // UV coords
+
+        int start = vertices->size(); // Index for 1st new vertex added
+        // NOTE: Both here and in DebugRenderer vertex and index count is HARDCODED!
+        // It will change based on the number of sectors and stacks
+        vertices->resize(vertices->size() + 703);
+
+        float sectorStep = 2 * M_PI / sectorCount;
+        float stackStep = M_PI / stackCount;
+        float sectorAngle, stackAngle;
+        int vertexIndex = start;
+
+        for (int i = 0; i <= stackCount; ++i) {
+            stackAngle = M_PI / 2 - i * stackStep; //<<< from pi/2 to -pi/2
+            xy = radius * cosf(stackAngle);
+            z = radius * sinf(stackAngle);
+
+            for (int j = 0; j <= sectorCount; ++j) {
+                sectorAngle = j * sectorStep;
+                (*vertices)[vertexIndex].Position.x = xy * cosf(sectorAngle);
+                (*vertices)[vertexIndex].Position.y = xy * sinf(sectorAngle);
+                (*vertices)[vertexIndex].Position.z = z;
+                // shift sphere by center vector to transform it
+                (*vertices)[vertexIndex].Position += center;
+
+                nx = x * lengthInv;
+                ny = y * lengthInv;
+                nz = z * lengthInv;
+                (*vertices)[vertexIndex].Normal = {nx, ny, nz};
+
+                s = (float)j / sectorCount;
+                t = (float)i / stackCount;
+                (*vertices)[vertexIndex].UV = {s, t};
+
+                vertexIndex++;
+            }
+        }
+        indices->reserve(indices->size() + 3672);
+        int indexCount = 0;
+        unsigned int k1, k2;
+        for (int i = 0; i < stackCount; ++i) {
+            k1 = i * (sectorCount + 1); // beginning of current stack
+            k2 = k1 + sectorCount + 1; // beginning of next stack
+            for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+                // 2 triangles per sector excluding first and last stacks
+                if (i != 0) {
+                    (*indices).push_back(k1);
+                    (*indices).push_back(k2);
+                    (*indices).push_back(k1 + 1);
+                    indexCount += 3;
+                }
+
+                if (i != (stackCount - 1)) {
+                    (*indices).push_back(k1 + 1);
+                    (*indices).push_back(k2);
+                    (*indices).push_back(k2 + 1);
+                    indexCount += 3;
+                }
+            }
+        }
+        printf("Sphere index count : %i\n", indexCount);
+
     }
 }
