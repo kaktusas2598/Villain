@@ -177,7 +177,6 @@ namespace Villain {
             }
         }
         indices->reserve(indices->size() + 3672);
-        int indexCount = 0;
         unsigned int k1, k2;
         for (int i = 0; i < stackCount; ++i) {
             k1 = i * (sectorCount + 1); // beginning of current stack
@@ -188,18 +187,14 @@ namespace Villain {
                     (*indices).push_back(k1);
                     (*indices).push_back(k2);
                     (*indices).push_back(k1 + 1);
-                    indexCount += 3;
                 }
 
                 if (i != (stackCount - 1)) {
                     (*indices).push_back(k1 + 1);
                     (*indices).push_back(k2);
                     (*indices).push_back(k2 + 1);
-                    indexCount += 3;
                 }
             }
         }
-        printf("Sphere index count : %i\n", indexCount);
-
     }
 }
