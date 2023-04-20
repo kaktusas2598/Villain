@@ -20,11 +20,30 @@
 
 using namespace Villain;
 
+
+// Custom collision callback
+// NOTE: Will get segfault if we collide with bodies without user pointer set
+bool collisionCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* obj1, int id1, int index1,
+        const btCollisionObjectWrapper* obj2, int id2, int index2) {
+    // NOTE: Engine wrapper class could have a vector of BulletBodyComponent to help access them as well
+    BulletBodyComponent* graphComp = ((BulletBodyComponent*)obj1->getCollisionObject()->getUserPointer());
+    ((BulletBodyComponent*)obj2->getCollisionObject()->getUserPointer())->Colliding = true;
+    graphComp->Colliding = true;
+
+    printf("Node collided: %s\n", graphComp->getParent()->getName().c_str());
+
+    // NOTE: Can set Colliding back to false after custom collision logic is used
+    return true;
+}
+
 Game::~Game() {
     delete physicsEngine;
 }
 
 void Game::init() {
+    // Register custom collision callback
+    gContactAddedCallback = collisionCallback;
+
     camera.setZPlanes(0.1f, 1000.f); // for bigger render range
     camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
@@ -62,17 +81,18 @@ void Game::init() {
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     btRigidBody* wallBody = physicsEngine->createRigidBody(new btBoxShape({btScalar(50.), btScalar(50.), btScalar(.5)}), true, {0, 0, 25}, 0.);
-    SceneNode* wallNode = (new SceneNode("Ground"))
-        ->addComponent(new BulletBodyComponent(wallBody))
+    BulletBodyComponent* wallComp = new BulletBodyComponent(wallBody);
+    wallBody->setUserPointer(wallComp);
+    SceneNode* wallNode = (new SceneNode("Wall"))
+        ->addComponent(wallComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
     addToScene(wallNode);
     /////////////////////////////////////////
 
     // TODO:
-    // 1. implement casting rays, add example, like shooting projectiles for example
     // 3. investigate soft bodies
-    // 4. collision callbacks, identify specific bodies
     // 5. Bullet utils class for common stuff like converting glm::vec3 to btVector3 etc.
+    // 6. investigate constraints
 
     // TODO: BulletEngine class needs to support bt soft world
     //btSoftBody* cloth = btSoftBodyHelpers::CreatePatch(
@@ -86,11 +106,12 @@ void Game::init() {
     MeshUtils::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
     btRigidBody* sphereBody = physicsEngine->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
+    BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
+    sphereBody->setUserPointer(sphereComp);
     SceneNode* ball = (new SceneNode("Ball"))
-        ->addComponent(new BulletBodyComponent(sphereBody))
+        ->addComponent(sphereComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(sphereMesh, earthMat));
     addToScene(ball);
-
 }
 
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
@@ -123,11 +144,14 @@ void Game::createGround() {
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     btRigidBody* groundBody = physicsEngine->createRigidBody(new btBoxShape({btScalar(250.), btScalar(.5), btScalar(250.)}), true, {0, 0, 0}, 0.);
+    groundBody->setCollisionFlags(groundBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
     // Add ground to scene graph
+    BulletBodyComponent* groundComp = new BulletBodyComponent(groundBody);
     SceneNode* groundNode = (new SceneNode("Ground"))
-        ->addComponent(new BulletBodyComponent(groundBody))
+        ->addComponent(groundComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+    groundBody->setUserPointer(groundComp);
     addToScene(groundNode);
 }
 
@@ -159,8 +183,10 @@ void Game::addRigidBoxes() {
                         , 1., 1.5, 0.3);
 
                 // Add bodies to scene graph
+                BulletBodyComponent* boxComp = new BulletBodyComponent(body);
+                body->setUserPointer(boxComp);
                 SceneNode* bodyNode = (new SceneNode("Dynamic Body " + std::to_string(j)))
-                    ->addComponent(new BulletBodyComponent(body))
+                    ->addComponent(boxComp)
                     ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
                 addToScene(bodyNode);
             }
@@ -171,6 +197,10 @@ void Game::addRigidBoxes() {
 void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
+    }
+
+    if (InputManager::Instance()->isKeyPressed(SDLK_f)) {
+        shootSphere();
     }
 
     // Bullet debug modes
@@ -194,19 +224,45 @@ void Game::onAppPreUpdate(float dt) {
     physicsEngine->update(dt);
 }
 
-glm::vec3 Game::getRayFromScreenSpace(const glm::vec2 & pos) {
-    const float halfScreenW = Engine::getScreenWidth()/2.f;
-    const float halfScreenH = Engine::getScreenHeight()/2.f;
+// Gets mouse ray direction vector in world space
+glm::vec3 Game::mouseRayToWorld(const glm::vec2 & pos) {
+    // Normalised device coords
+    float x = (2.0f * pos.x) / Engine::getScreenWidth() - 1.0f;
+    float y = 1.0f - (2.0f * pos.y) / Engine::getScreenHeight();
+    // Homogeneous clip coords
+    glm::vec4 rayClip = {x, y, -1.0f, 1.0f};
+    // Camera/eye/view coords
+    glm::vec4 rayEye = glm::inverse(camera.getProjMatrix()) * rayClip;
+    rayEye = {rayEye.x, rayEye.y, -1.0f, 0.0f};
+    // World coords
+    glm::vec3 rayWorld = glm::vec3(glm::inverse(camera.getViewMatrix()) * rayEye);
+    return glm::normalize(rayWorld);
+}
 
-    glm::mat4 invMat= glm::inverse(camera.getProjMatrix() * camera.getViewMatrix());
-    glm::vec4 near = glm::vec4((pos.x - halfScreenW) / halfScreenW, -1*(pos.y - halfScreenH) / halfScreenH, -1, 1.0);
-    glm::vec4 far = glm::vec4((pos.x - halfScreenH) / halfScreenW, -1*(pos.y - halfScreenH) / halfScreenH, 1, 1.0);
-    glm::vec4 nearResult = invMat*near;
-    glm::vec4 farResult = invMat*far;
-    nearResult /= nearResult.w;
-    farResult /= farResult.w;
-    glm::vec3 dir = glm::vec3(farResult - nearResult );
-    return normalize(dir);
+void Game::shootSphere() {
+    glm::vec3 cameraPos = camera.getPosition();
+    glm::vec3 cameraFront = camera.getFront();
+    glm::vec3 startPos = cameraPos + camera.getFront() * 5.f;
+    btVector3 ballStartPos = {startPos.x, startPos.y, startPos.z};
+
+    std::vector<VertexP1N1UV> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/moon1024.bmp", "moon")};
+    Material moonMat("moon", textures, 8);
+    MeshUtils::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
+    Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    btRigidBody* sphereBody = physicsEngine->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);
+    SceneNode* ball = (new SceneNode("Ball"))
+        ->addComponent(new BulletBodyComponent(sphereBody))
+        ->addComponent(new MeshRenderer<VertexP1N1UV>(sphereMesh, moonMat));
+    addToScene(ball);
+
+    // Set callision flags for custom callback
+    sphereBody->setCollisionFlags(sphereBody->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+
+    glm::vec3 cameraTo = cameraFront * 20.0f;
+    btVector3 to = {cameraTo.x, cameraTo.y, cameraTo.z};
+    sphereBody->setLinearVelocity(to);
 }
 
 void Game::onAppRender(float dt) {
@@ -226,30 +282,36 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(-0.5f, 1.f, 4.5f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.5f, 1.f, 4.5f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-
     /////////
-    // Get first ray hit
     glm::vec3 cameraPos = camera.getPosition();
     glm::vec3 cameraFront = camera.getFront();
+
+    glm::vec2 mouseCoords = InputManager::Instance()->getMouseCoords();
+    glm::vec3 mouseWorld = mouseRayToWorld(mouseCoords);
+    //printf("Mouse screen coords: %f.3, %f.3\n", mouseCoords.x, mouseCoords.y);
+    //printf("Mouse World Coords: %f.3, %f.3, %f.3\n", mouseWorld.x, mouseWorld.y, mouseWorld.z);
+    debugRenderer.drawLine(cameraPos, cameraPos + mouseWorld * 1000.0f, glm::vec4(1.0f));
+
+
     //printf("Camera pos: %f.3, %f.3, %f.3\n", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
     //printf("Camera front: %f.3, %f.3, %f.3\n", camera.getFront().x, camera.getFront().y, camera.getFront().z);
-    cameraPos.y = 1.0f;
-    //cameraFront.y = 0.7f;
     glm::vec3 cameraTo = cameraPos + cameraFront * 1000.0f;
+    //glm::vec3 cameraTo = cameraPos + mouseWorld * 1000.0f;
     btVector3 from = {cameraPos.x, cameraPos.y, cameraPos.z};
     btVector3 to = {cameraTo.x, cameraTo.y, cameraTo.z};
 
+    // Get first ray hit
     btCollisionWorld::ClosestRayResultCallback closestResults(from, to);
     closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 
     physicsEngine->getWorld()->rayTest(from, to, closestResults);
 
-    //glm::vec3 mouseRay = getRayFromScreenSpace(InputManager::Instance()->getMouseCoords());
-    //printf("Mouse ray: %f.3, %f.3, %f.3\n", mouseRay.x, mouseRay.y, mouseRay.z);
-    //debugRenderer.drawLine(cameraPos, mouseRay, glm::vec4(0.0f, 0.1f, 1.f, 1.0));
-
     if (closestResults.hasHit()) {
+		//closestResults.m_collisionObject->getUserPointer()
+		//physicsEngine->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(closestResults.m_collisionObject));
+
         //closestResults.m_collisionObject->getCollisionShape()->getShapeType()
+        //btRigidBody* body = btRigidBody::upcast(obj1);
         debugRenderer.drawLine(cameraPos, cameraTo, glm::vec4(0.0f, 1.f, 0.f, 1.0));
 
         btVector3 p = from.lerp(to, closestResults.m_closestHitFraction);
@@ -259,7 +321,6 @@ void Game::onAppRender(float dt) {
     }
     /////////
 
-
     debugRenderer.end();
     debugRenderer.render(projection * view  , 2.0f);
 
@@ -268,7 +329,6 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(-CROSSHAIR_SIZE, 0.0f, 0.0f), glm::vec3(CROSSHAIR_SIZE, 0.0f, 0.0f), glm::vec4(1.0f));
     debugRenderer.drawLine(glm::vec3(0.0f, -CROSSHAIR_SIZE, 0.0f), glm::vec3(0.0f, CROSSHAIR_SIZE, 0.0f), glm::vec4(1.0f));
     debugRenderer.end();
-    //debugRenderer.drawLine({0, -1, 0}, mouseRay, glm::vec4(0.0f, 0.1f, 1.f, 1.0));
     debugRenderer.render(glm::mat4(1.0f), 2.0f);
 
     // Draw bullet physics

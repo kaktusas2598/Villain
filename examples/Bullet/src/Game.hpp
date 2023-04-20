@@ -30,8 +30,9 @@ class Game : public Villain::Application {
 
         void addPlayer();
         void addRigidBoxes();
+        void shootSphere();
 
-        glm::vec3 getRayFromScreenSpace(const glm::vec2 & pos);
+        glm::vec3 mouseRayToWorld(const glm::vec2 & pos);
 };
 
 #endif // __GAME__

@@ -49,7 +49,7 @@ namespace Villain {
             normal = getNormal(positions[2], positions[1], positions[0]);
         else // Top face
             normal = getNormal(positions[0], positions[1], positions[2]);
-        printf("XZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+        //printf("XZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
 
         vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
         vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
@@ -75,7 +75,7 @@ namespace Villain {
             normal = getNormal(positions[2], positions[1], positions[0]);
         else // Front face
             normal = getNormal(positions[0], positions[1], positions[2]);
-        printf("XY plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+        //printf("XY plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
 
         vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
         vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
@@ -100,7 +100,7 @@ namespace Villain {
             normal = getNormal(positions[2], positions[1], positions[0]);
         else // Left face
             normal = getNormal(positions[0], positions[1], positions[2]);
-        printf("YZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+        //printf("YZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
 
         vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
         vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});

@@ -17,6 +17,8 @@ class BulletBodyComponent: public Villain::NodeComponent {
             GetTransform()->setEulerRot(glm::degrees(x), glm::degrees(y), glm::degrees(z));
         }
 
+        inline btRigidBody* getBody() const { return rigidBody; }
+        bool Colliding = false;
     private:
         btRigidBody* rigidBody = nullptr;
 };
