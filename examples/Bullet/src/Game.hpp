@@ -19,6 +19,8 @@ class Game : public Villain::Application {
         void onAppPreUpdate(float dt);
         void onAppRender(float deltaTime);
 
+        // Static so that scene graph parent of physics can be accessed in collision callbacks
+        static Villain::SceneNode* WorldNode;
     private:
         BulletEngine* physicsEngine = nullptr;
         Villain::Camera3D camera;

@@ -20,6 +20,7 @@
 
 using namespace Villain;
 
+Villain::SceneNode* Game::WorldNode = nullptr;
 
 // Custom collision callback
 // NOTE: Will get segfault if we collide with bodies without user pointer set
@@ -30,7 +31,13 @@ bool collisionCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* obj1
     ((BulletBodyComponent*)obj2->getCollisionObject()->getUserPointer())->Colliding = true;
     graphComp->Colliding = true;
 
+
     printf("Node collided: %s\n", graphComp->getParent()->getName().c_str());
+    if (!graphComp->getBody()->isStaticObject()) {
+        Game::WorldNode->removeChild(graphComp->getParent());
+		//physicsEngine->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(closestResults.m_collisionObject));
+        // TODO: Also remove from physics world!
+    }
 
     // NOTE: Can set Colliding back to false after custom collision logic is used
     return true;
@@ -41,6 +48,7 @@ Game::~Game() {
 }
 
 void Game::init() {
+    WorldNode = new SceneNode("Physics World");
     // Register custom collision callback
     gContactAddedCallback = collisionCallback;
 
@@ -86,7 +94,7 @@ void Game::init() {
     SceneNode* wallNode = (new SceneNode("Wall"))
         ->addComponent(wallComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-    addToScene(wallNode);
+    WorldNode->addChild(wallNode);
     /////////////////////////////////////////
 
     // TODO:
@@ -111,7 +119,9 @@ void Game::init() {
     SceneNode* ball = (new SceneNode("Ball"))
         ->addComponent(sphereComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(sphereMesh, earthMat));
-    addToScene(ball);
+    WorldNode->addChild(ball);
+
+    addToScene(WorldNode);
 }
 
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
@@ -130,7 +140,7 @@ void Game::addPlayer() {
             //->addComponent(new MoveController())
             ->addComponent(new LookController())
             ->addComponent(new BulletCharacterComponent(playerController));
-    addToScene(player);
+    WorldNode->addChild(player);
 }
 
 void Game::createGround() {
@@ -152,7 +162,7 @@ void Game::createGround() {
         ->addComponent(groundComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
     groundBody->setUserPointer(groundComp);
-    addToScene(groundNode);
+    WorldNode->addChild(groundNode);
 }
 
 void Game::addRigidBoxes() {
@@ -188,7 +198,7 @@ void Game::addRigidBoxes() {
                 SceneNode* bodyNode = (new SceneNode("Dynamic Body " + std::to_string(j)))
                     ->addComponent(boxComp)
                     ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-                addToScene(bodyNode);
+                WorldNode->addChild(bodyNode);
             }
         }
     }
@@ -252,10 +262,12 @@ void Game::shootSphere() {
     MeshUtils::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
     btRigidBody* sphereBody = physicsEngine->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);
+    BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
+    sphereBody->setUserPointer(sphereComp);
     SceneNode* ball = (new SceneNode("Ball"))
-        ->addComponent(new BulletBodyComponent(sphereBody))
+        ->addComponent(sphereComp)
         ->addComponent(new MeshRenderer<VertexP1N1UV>(sphereMesh, moonMat));
-    addToScene(ball);
+    WorldNode->addChild(ball);
 
     // Set callision flags for custom callback
     sphereBody->setCollisionFlags(sphereBody->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
