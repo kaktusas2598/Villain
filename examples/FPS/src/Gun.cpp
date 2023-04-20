@@ -5,7 +5,7 @@
 
 using namespace Villain;
 
-const float GUN_OFFSET = -0.1325f;
+const float GUN_OFFSET = -0.2325f;
 const float SCALE = 0.0625f;
 const float START = 0.0f;
 const float SIZE_Y = SCALE * 2;
@@ -35,8 +35,7 @@ Gun::Gun() : MeshRenderer<VertexP1N1UV>(nullptr, Villain::Material()) {
 
 void Gun::update(float deltaTime) {
     Camera3D* mainCam = dynamic_cast<Camera3D*>(parent->getEngine()->getRenderingEngine()->getMainCamera());
-    //GetTransform()->setPos(mainCam->getPosition() + mainCam->getFront() * 0.105f);
-    GetTransform()->setPos(mainCam->getFront());
+    GetTransform()->setPos(mainCam->getPosition() + mainCam->getFront() * 0.55f);
     GetTransform()->getPos().y += GUN_OFFSET;
 
     glm::vec3 directionToCamera = mainCam->getPosition() - GetTransform()->getPos();

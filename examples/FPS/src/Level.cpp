@@ -84,12 +84,16 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
         }
     }
 
+
     std::vector<Villain::Texture*> floorTextures = {Villain::ResourceManager::Instance()->loadTexture(tileAtlasFileName, "atlas")};
     material = new Villain::Material{"bricks", floorTextures, 8};
     mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
 
     // Add level to scene graph with generated mesh and all game objects as children
     application->addToScene(levelNode->addComponent(new Villain::MeshRenderer<VertexP1N1UV>(mesh, *material)));
+
+    // Add gun last to make it is drawn last which will fix transparency issues
+    levelNode->addChild((new Villain::SceneNode("Gun", glm::vec3(0.0f)))->addComponent(new Gun()));
 }
 
 void Level::addDoor(int x, int y) {
@@ -132,13 +136,6 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
             ->addComponent(new Villain::CameraComponent(camera));
         playerNode->addComponent(player);
         playerNode->addComponent(new Villain::LookController());
-
-        // And gun mesh for player, always relative to it
-        // FIXME: Relative position not really working very well, not sure, but most likely a problem
-        // with Transform class?
-        Gun* gun = new Gun();
-        playerNode->addChild((new Villain::SceneNode("Gun", glm::vec3(0.0f, 0.0f, -1.0f)))->addComponent(gun));
-
         levelNode->addChild(playerNode);
     }
     if (blueValue == 128) {
