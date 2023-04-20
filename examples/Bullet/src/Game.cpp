@@ -14,6 +14,7 @@
 #include "BulletBodyComponent.hpp"
 #include "BulletCharacterController.hpp"
 #include "BulletCharacterComponent.hpp"
+#include "BulletUtils.hpp"
 
 using namespace Villain;
 
@@ -95,6 +96,8 @@ void Game::init() {
     // TODO:
     // 5. Bullet utils class for common stuff like converting glm::vec3 to btVector3 etc.
     // 6. investigate constraints
+
+    // SOFT BODIES
     float s = 4;
     float h = 10;
     btSoftBody* cloth = btSoftBodyHelpers::CreatePatch(
@@ -106,9 +109,33 @@ void Game::init() {
     cloth->m_cfg.piterations = 50;
     cloth->setTotalMass(20.f);
     PhysicsWorld->getWorld()->addSoftBody(cloth);
-    // TODO: Build Mesh using data from Bullet
-    //cloth->m_faces
-    //cloth->m_links
+
+    // Generate mesh for soft body
+    // TODO: Finish this, not working yet
+    indices.clear();
+    vertices.clear();
+    vertices.resize(cloth->m_faces.size() * 3);
+    indices.reserve(cloth->m_faces.size() * 3);
+    printf("Cloth face count: %i\n", cloth->m_faces.size());
+    for (int i = 0; i < cloth->m_faces.size(); i++) {
+        indices.push_back(3 * i);
+        indices.push_back(3 * i + 1);
+        indices.push_back(3 * i + 2);
+
+        // TODO: UV?
+        vertices.push_back({BulletUtils::toGlm(cloth->m_faces[i].m_n[0]->m_x), BulletUtils::toGlm(cloth->m_faces[i].m_n[0]->m_n), glm::vec2(0.0f)});
+        vertices.push_back({BulletUtils::toGlm(cloth->m_faces[i].m_n[1]->m_x), BulletUtils::toGlm(cloth->m_faces[i].m_n[1]->m_n), glm::vec2(0.5f)});
+        vertices.push_back({BulletUtils::toGlm(cloth->m_faces[i].m_n[2]->m_x), BulletUtils::toGlm(cloth->m_faces[i].m_n[2]->m_n), glm::vec2(1.0f)});
+    }
+    // Add soft body to scene graph
+    Mesh<VertexP1N1UV>* clothMesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    //BulletBodyComponent* clothComp = new BulletBodyComponent(cloth);
+    //wallBody->setUserPointer(wallComp);
+    SceneNode* clothNode = (new SceneNode("Cloth"))
+        //->addComponent(wallComp)
+        ->addComponent(new MeshRenderer<VertexP1N1UV>(clothMesh, mat));
+    WorldNode->addChild(clothNode);
+
 
     btSoftBody* elipsoid = btSoftBodyHelpers::CreateEllipsoid(
             PhysicsWorld->getWorld()->getWorldInfo(),
@@ -116,9 +143,20 @@ void Game::init() {
     elipsoid->m_cfg.viterations = 50;
     elipsoid->m_cfg.piterations = 50;
     elipsoid->m_cfg.kPR = 10; // Change pressure
-    cloth->setTotalMass(10.f);
-    //cloth->setMass(0, 0); // Set 1st vertex(0) to be static (mass 0)
+    elipsoid->setTotalMass(10.f);
+    elipsoid->setMass(0, 0); // Set 1st vertex(0) to be static (mass 0)
     PhysicsWorld->getWorld()->addSoftBody(elipsoid);
+
+    //btSoftBody* rope = btSoftBodyHelpers::CreateRope(
+            //PhysicsWorld->getWorld()->getWorldInfo(),
+            //{10., 5, -10},
+            //{10., 5, 10},
+            //50, 4+8);
+    //rope->m_cfg.viterations = 50;
+    //rope->m_cfg.piterations = 50;
+    //rope->setTotalMass(5.f);
+    //PhysicsWorld->getWorld()->addSoftBody(rope);
+    ////////////////////////
 
     indices.clear();
     vertices.clear();
