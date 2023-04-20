@@ -110,6 +110,16 @@ void Game::init() {
     //cloth->m_faces
     //cloth->m_links
 
+    btSoftBody* elipsoid = btSoftBodyHelpers::CreateEllipsoid(
+            PhysicsWorld->getWorld()->getWorldInfo(),
+            {0, 10, -10}, {3.f, 3.f, 3.f}, 1000.f);
+    elipsoid->m_cfg.viterations = 50;
+    elipsoid->m_cfg.piterations = 50;
+    elipsoid->m_cfg.kPR = 10; // Change pressure
+    cloth->setTotalMass(10.f);
+    //cloth->setMass(0, 0); // Set 1st vertex(0) to be static (mass 0)
+    PhysicsWorld->getWorld()->addSoftBody(elipsoid);
+
     indices.clear();
     vertices.clear();
     textures.clear();
