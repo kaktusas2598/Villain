@@ -20,6 +20,7 @@
 
 using namespace Villain;
 
+BulletEngine* Game::PhysicsWorld = nullptr;
 Villain::SceneNode* Game::WorldNode = nullptr;
 
 // Custom collision callback
@@ -35,16 +36,14 @@ bool collisionCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* obj1
     printf("Node collided: %s\n", graphComp->getParent()->getName().c_str());
     if (!graphComp->getBody()->isStaticObject()) {
         Game::WorldNode->removeChild(graphComp->getParent());
-		//physicsEngine->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(closestResults.m_collisionObject));
-        // TODO: Also remove from physics world!
+        Game::PhysicsWorld->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(obj1->getCollisionObject()));
     }
-
     // NOTE: Can set Colliding back to false after custom collision logic is used
     return true;
 }
 
 Game::~Game() {
-    delete physicsEngine;
+    delete PhysicsWorld;
 }
 
 void Game::init() {
@@ -68,8 +67,8 @@ void Game::init() {
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 
 
-    physicsEngine = new BulletEngine({0.0, -9.8, 0.0});
-    physicsEngine->setDebugMode(btIDebugDraw::DBG_NoDebug);
+    PhysicsWorld = new BulletEngine({0.0, -9.8, 0.0});
+    PhysicsWorld->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
     createGround();
 
@@ -88,7 +87,7 @@ void Game::init() {
     MeshUtils::addXYPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(50.0f), uvCoords, false);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
-    btRigidBody* wallBody = physicsEngine->createRigidBody(new btBoxShape({btScalar(50.), btScalar(50.), btScalar(.5)}), true, {0, 0, 25}, 0.);
+    btRigidBody* wallBody = PhysicsWorld->createRigidBody(new btBoxShape({btScalar(50.), btScalar(50.), btScalar(.5)}), true, {0, 0, 25}, 0.);
     BulletBodyComponent* wallComp = new BulletBodyComponent(wallBody);
     wallBody->setUserPointer(wallComp);
     SceneNode* wallNode = (new SceneNode("Wall"))
@@ -104,7 +103,7 @@ void Game::init() {
 
     // TODO: BulletEngine class needs to support bt soft world
     //btSoftBody* cloth = btSoftBodyHelpers::CreatePatch(
-            //physicsEngine->getWorld()->getWorldInfo(), {}, {}, {}, {}, 1, 1, 1, false);
+            //PhysicsWorld->getWorld()->getWorldInfo(), {}, {}, {}, {}, 1, 1, 1, false);
 
     indices.clear();
     vertices.clear();
@@ -113,7 +112,7 @@ void Game::init() {
     Material earthMat("smallBlueDot", textures, 8);
     MeshUtils::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
-    btRigidBody* sphereBody = physicsEngine->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
+    btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
     BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
     sphereBody->setUserPointer(sphereComp);
     SceneNode* ball = (new SceneNode("Ball"))
@@ -127,11 +126,11 @@ void Game::init() {
 // NOTE: Not sure about any of these parameters, justr trying to build character controller
 void Game::addPlayer() {
     btCapsuleShape* capsuleShape = new btCapsuleShape(btScalar(0.5), btScalar(2.));
-    physicsEngine->addCollisionShape(capsuleShape);
+    PhysicsWorld->addCollisionShape(capsuleShape);
 
-    btRigidBody* playerBody = physicsEngine->createRigidBody(capsuleShape, false, {-5., 10.0, 2.0}, 15.);
+    btRigidBody* playerBody = PhysicsWorld->createRigidBody(capsuleShape, false, {-5., 10.0, 2.0}, 15.);
     BulletCharacterController* playerController = new BulletCharacterController(playerBody, capsuleShape);
-    physicsEngine->addAction(playerController);
+    PhysicsWorld->addAction(playerController);
 
 
     // Add camera/player node
@@ -153,7 +152,7 @@ void Game::createGround() {
     MeshUtils::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
-    btRigidBody* groundBody = physicsEngine->createRigidBody(new btBoxShape({btScalar(250.), btScalar(.5), btScalar(250.)}), true, {0, 0, 0}, 0.);
+    btRigidBody* groundBody = PhysicsWorld->createRigidBody(new btBoxShape({btScalar(250.), btScalar(.5), btScalar(250.)}), true, {0, 0, 0}, 0.);
     groundBody->setCollisionFlags(groundBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
     // Add ground to scene graph
@@ -177,7 +176,7 @@ void Game::addRigidBoxes() {
 
     // Re-using the same collision for all boxes is better for memory usage and performance
     btBoxShape* boxShape = new btBoxShape({0.5, 0.5, 0.5});
-    physicsEngine->addCollisionShape(boxShape); // Adding shape to engine here and passing false to createRigidBody() below
+    PhysicsWorld->addCollisionShape(boxShape); // Adding shape to engine here and passing false to createRigidBody() below
 
     const int ARRAY_SIZE_X = 8;
     const int ARRAY_SIZE_Y = 8;
@@ -188,7 +187,7 @@ void Game::addRigidBoxes() {
         {
             for (int j = 0; j < ARRAY_SIZE_Z; j++)
             {
-                btRigidBody* body = physicsEngine->createRigidBody(boxShape, false,
+                btRigidBody* body = PhysicsWorld->createRigidBody(boxShape, false,
                         {btScalar(30 + 0.2 * i), btScalar(100 + .2 * k), btScalar(0.2 * j)}
                         , 1., 1.5, 0.3);
 
@@ -215,23 +214,23 @@ void Game::handleEvents(float deltaTime) {
 
     // Bullet debug modes
     if (InputManager::Instance()->isKeyDown(SDLK_1)) {
-        physicsEngine->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+        PhysicsWorld->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
     }
     if (InputManager::Instance()->isKeyDown(SDLK_2)) {
-        physicsEngine->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+        PhysicsWorld->setDebugMode(btIDebugDraw::DBG_DrawAabb);
     }
     if (InputManager::Instance()->isKeyDown(SDLK_3)) {
-        physicsEngine->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
+        PhysicsWorld->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
     }
     if (InputManager::Instance()->isKeyDown(SDLK_0)) {
-        physicsEngine->setDebugMode(btIDebugDraw::DBG_NoDebug);
+        PhysicsWorld->setDebugMode(btIDebugDraw::DBG_NoDebug);
     }
 }
 
 void Game::onAppPreUpdate(float dt) {
     handleEvents(dt);
     // Update Bullet Physics simulation
-    physicsEngine->update(dt);
+    PhysicsWorld->update(dt);
 }
 
 // Gets mouse ray direction vector in world space
@@ -261,7 +260,7 @@ void Game::shootSphere() {
     Material moonMat("moon", textures, 8);
     MeshUtils::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
-    btRigidBody* sphereBody = physicsEngine->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);
+    btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);
     BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
     sphereBody->setUserPointer(sphereComp);
     SceneNode* ball = (new SceneNode("Ball"))
@@ -316,11 +315,11 @@ void Game::onAppRender(float dt) {
     btCollisionWorld::ClosestRayResultCallback closestResults(from, to);
     closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 
-    physicsEngine->getWorld()->rayTest(from, to, closestResults);
+    PhysicsWorld->getWorld()->rayTest(from, to, closestResults);
 
     if (closestResults.hasHit()) {
 		//closestResults.m_collisionObject->getUserPointer()
-		//physicsEngine->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(closestResults.m_collisionObject));
+		//PhysicsWorld->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(closestResults.m_collisionObject));
 
         //closestResults.m_collisionObject->getCollisionShape()->getShapeType()
         //btRigidBody* body = btRigidBody::upcast(obj1);
@@ -328,8 +327,8 @@ void Game::onAppRender(float dt) {
 
         btVector3 p = from.lerp(to, closestResults.m_closestHitFraction);
         debugRenderer.drawLine(cameraPos, {p.getX(), p.getY(), p.getZ()}, glm::vec4(1.0f, 0.f, 0.f, 1.0));
-        physicsEngine->getWorld()->getDebugDrawer()->drawSphere(p, 0.1, {0, 0, 1});
-        physicsEngine->getWorld()->getDebugDrawer()->drawLine(p, p + closestResults.m_hitNormalWorld, {0, 0, 1});
+        PhysicsWorld->getWorld()->getDebugDrawer()->drawSphere(p, 0.1, {0, 0, 1});
+        PhysicsWorld->getWorld()->getDebugDrawer()->drawLine(p, p + closestResults.m_hitNormalWorld, {0, 0, 1});
     }
     /////////
 
@@ -344,7 +343,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.render(glm::mat4(1.0f), 2.0f);
 
     // Draw bullet physics
-    physicsEngine->render(projection * view);
+    PhysicsWorld->render(projection * view);
 
     skybox->render(projection, view);
 }

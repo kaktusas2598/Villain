@@ -21,8 +21,8 @@ class Game : public Villain::Application {
 
         // Static so that scene graph parent of physics can be accessed in collision callbacks
         static Villain::SceneNode* WorldNode;
+        static BulletEngine* PhysicsWorld;
     private:
-        BulletEngine* physicsEngine = nullptr;
         Villain::Camera3D camera;
         Villain::DebugRenderer debugRenderer;
         std::unique_ptr<Villain::SkyBox> skybox;
