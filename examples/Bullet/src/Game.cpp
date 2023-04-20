@@ -342,10 +342,10 @@ void Game::onAppRender(float dt) {
 
     // Not neccessary, just making sure for now all soft bodies are drawn even not in debug mode
     for (int i = 0; i < PhysicsWorld->getWorld()->getSoftBodyArray().size(); i++) {
-		btSoftBody* psb = (btSoftBody*)PhysicsWorld->getWorld()->getSoftBodyArray()[i];
+        btSoftBody* psb = (btSoftBody*)PhysicsWorld->getWorld()->getSoftBodyArray()[i];
         btSoftBodyHelpers::DrawFrame(psb, PhysicsWorld->getWorld()->getDebugDrawer());
         btSoftBodyHelpers::Draw(psb, PhysicsWorld->getWorld()->getDebugDrawer(), PhysicsWorld->getWorld()->getDrawFlags());
-	}
+    }
 
     // 2nd render batch for screen space crosshair display
     const float CROSSHAIR_SIZE = 0.05f;

@@ -51,6 +51,8 @@ class BulletEngine {
         btBroadphaseInterface* overlappingPairCache;
         btSequentialImpulseConstraintSolver* solver;
         //btDiscreteDynamicsWorld* dynamicsWorld;
+        // NOTE: Switching from discrete world to softrigid world dropped FPS from 60 to ~20FPS
+        // with only 1 soft body
         btSoftRigidDynamicsWorld* dynamicsWorld;
         btSoftBodySolver* softBodySolver;
 

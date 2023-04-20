@@ -65,6 +65,11 @@ void BulletEngine::exitPhysics() {
 		delete obj;
 	}
 
+    for (int i = 0; i < dynamicsWorld->getSoftBodyArray().size(); i++) {
+        dynamicsWorld->removeSoftBody(dynamicsWorld->getSoftBodyArray()[i]);
+        delete dynamicsWorld->getSoftBodyArray()[i];
+	}
+
 	//delete collision shapes
 	for (int j = 0; j < collisionShapes.size(); j++)
 	{
@@ -75,6 +80,7 @@ void BulletEngine::exitPhysics() {
 
 	delete dynamicsWorld;
 	delete solver;
+	delete softBodySolver;
 	delete overlappingPairCache;
 	delete dispatcher;
 	delete collisionConfiguration;
