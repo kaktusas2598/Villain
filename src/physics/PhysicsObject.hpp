@@ -6,12 +6,13 @@
 namespace Villain {
 
     // Super basic physics object
+    // TODO: Might want to make this abstract class and implement a few different types of physics objects:
+    // Rigid Bodies, Static obstacles, Triggers
     class PhysicsObject {
         public:
             PhysicsObject(Collider* col, const glm::vec3& vel) :
                 position(col->getCentre()), oldPosition(position), velocity(vel), collider(col) {}
             PhysicsObject(const PhysicsObject& other);
-            PhysicsObject operator=(PhysicsObject other);
             virtual ~PhysicsObject() {}
 
             void integrate(float deltaTime);

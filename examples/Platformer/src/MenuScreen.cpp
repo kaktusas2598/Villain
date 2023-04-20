@@ -37,7 +37,7 @@ if (Villain::InputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
     }
 }
 
-void MenuScreen::draw(float deltaTime) {
+void MenuScreen::draw() {
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 

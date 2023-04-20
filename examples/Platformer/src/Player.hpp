@@ -2,9 +2,9 @@
 #define __PLAYER__
 
 #include "Capsule.hpp"
-#include "DebugRenderer.hpp"
-#include "SpriteBatch.hpp"
-#include "TileAtlas.hpp"
+#include "rendering/DebugRenderer.hpp"
+#include "rendering/SpriteBatch.hpp"
+#include "rendering/TileAtlas.hpp"
 
 enum class PlayerMoveState { STANDING, RUNNING, PUNCHING, JUMPING};
 

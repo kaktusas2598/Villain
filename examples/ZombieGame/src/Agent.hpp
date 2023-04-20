@@ -1,8 +1,8 @@
 #ifndef __AGENT__
 #define __AGENT__
 
-#include "SpriteBatch.hpp"
-#include "Texture.hpp"
+#include "rendering/SpriteBatch.hpp"
+#include "rendering/Texture.hpp"
 #include "glm/glm.hpp"
 
 #include "Level.hpp"

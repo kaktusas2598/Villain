@@ -1,6 +1,6 @@
 #include "ModelRenderer.hpp"
 
-#include "Material.hpp"
+#include "rendering/Material.hpp"
 #include "ResourceManager.hpp"
 
 namespace Villain {

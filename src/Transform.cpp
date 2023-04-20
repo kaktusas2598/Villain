@@ -16,8 +16,10 @@ namespace Villain {
                 glm::radians(eulerRot.z),
                 glm::vec3(0.0f, 0.0f, 1.0f));
 
-        // Y * X * Z
-        const glm::mat4 rotationMatrix = transformY * transformX * transformZ;
+        // Y * X * Z as in learnopengl scene graph tutorial
+        //const glm::mat4 rotationMatrix = transformY * transformX * transformZ;
+        // Z * Y * X seems to work with Bullet physics better
+        const glm::mat4 rotationMatrix = transformZ * transformY * transformX;
 
         // translation * rotation * scale (also know as TRS matrix)
         model = glm::translate(glm::mat4(1.0f), position) *

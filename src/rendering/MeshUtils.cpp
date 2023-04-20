@@ -1,0 +1,200 @@
+#include "MeshUtils.hpp"
+
+namespace Villain {
+
+    float MeshUtils::defaultUVMap[4] = {0.0f, 1.0f, 0.0f, 1.0f};
+
+    void MeshUtils::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
+        if (direction) {
+            indices->push_back(startLocation + 2);
+            indices->push_back(startLocation + 1);
+            indices->push_back(startLocation + 0);
+            indices->push_back(startLocation + 3);
+            indices->push_back(startLocation + 2);
+            indices->push_back(startLocation + 0);
+        } else {
+            indices->push_back(startLocation + 0);
+            indices->push_back(startLocation + 1);
+            indices->push_back(startLocation + 2);
+            indices->push_back(startLocation + 2);//0
+            indices->push_back(startLocation + 3);//2
+            indices->push_back(startLocation + 0);//3
+        }
+    }
+
+    glm::vec3 MeshUtils::getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3) {
+        glm::vec3 v1 = i2 - i1;
+        glm::vec3 v2 = i3 - i1;
+        glm::vec3 v3 = glm::cross(v1, v2);
+        return glm::normalize(v3);
+    }
+
+    // TODO: need ability to specify different orientations in easier way,
+    // too much similar code in add XZ, XY and YZ plane methods
+    void MeshUtils::addXZPlane(
+            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            const glm::vec3& center, const glm::vec2& halfSize,
+            float* uvCoords, bool direction) {
+        addFace(indices, vertices->size(), direction);
+        glm::vec3 normal;
+        glm::vec2 minExtents = glm::vec2(center.x, center.z) - halfSize;
+        glm::vec2 maxExtents = glm::vec2(center.x, center.z) + halfSize;
+
+        glm::vec3 positions[4] = {
+            {maxExtents.x, center.y, minExtents.y},
+            {minExtents.x, center.y, minExtents.y},
+            {minExtents.x, center.y, maxExtents.y},
+            {maxExtents.x, center.y, maxExtents.y}};
+        if (direction) // Bottom face
+            normal = getNormal(positions[2], positions[1], positions[0]);
+        else // Top face
+            normal = getNormal(positions[0], positions[1], positions[2]);
+        //printf("XZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+
+        vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
+    }
+
+    void MeshUtils::addXYPlane(
+            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            const glm::vec3& center, const glm::vec2& halfSize,
+            float* uvCoords, bool direction) {
+        addFace(indices, vertices->size(), direction);
+        glm::vec3 normal;
+        glm::vec2 minExtents = glm::vec2(center.x, center.y) - halfSize;
+        glm::vec2 maxExtents = glm::vec2(center.x, center.y) + halfSize;
+
+        glm::vec3 positions[4] = {
+            {minExtents.x, minExtents.y, center.z},
+            {minExtents.x, maxExtents.y, center.z},
+            {maxExtents.x, maxExtents.y, center.z},
+            {maxExtents.x, minExtents.y, center.z}};
+        if (direction) // Back face
+            normal = getNormal(positions[2], positions[1], positions[0]);
+        else // Front face
+            normal = getNormal(positions[0], positions[1], positions[2]);
+        //printf("XY plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+
+        vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
+    }
+    void MeshUtils::addYZPlane(
+            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            const glm::vec3& center, const glm::vec2& halfSize,
+            float* uvCoords, bool direction) {
+        addFace(indices, vertices->size(), direction);
+        glm::vec3 normal;
+        glm::vec2 minExtents = glm::vec2(center.y, center.z) - halfSize;
+        glm::vec2 maxExtents = glm::vec2(center.y, center.z) + halfSize;
+
+        glm::vec3 positions[4] = {
+            {center.x, maxExtents.x, maxExtents.y},
+            {center.x, maxExtents.x, minExtents.y},
+            {center.x, minExtents.x, minExtents.y},
+            {center.x, minExtents.x, maxExtents.y}};
+        if (direction) // Right face
+            normal = getNormal(positions[2], positions[1], positions[0]);
+        else // Left face
+            normal = getNormal(positions[0], positions[1], positions[2]);
+        //printf("YZ plane normal: %fX, %fY, %fZ\n", normal.x, normal.y, normal.z);
+
+        vertices->push_back({positions[0], normal, glm::vec2(uvCoords[1], uvCoords[3])});
+        vertices->push_back({positions[1], normal, glm::vec2(uvCoords[0], uvCoords[3])});
+        vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
+        vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
+
+    }
+
+    void MeshUtils::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize) {
+        glm::vec3 minExtents = center - halfSize;
+        glm::vec3 maxExtents = center + halfSize;
+        // Front Face
+        glm::vec3 frontCenter = center; frontCenter.z += halfSize.z;
+        addXYPlane(vertices, indices, frontCenter, glm::vec2(halfSize.x, halfSize.y), defaultUVMap, false);
+        //Back Face
+        glm::vec3 backCenter = center; backCenter.z -= halfSize.z;
+        addXYPlane(vertices, indices, backCenter, glm::vec2(halfSize.x, halfSize.y), defaultUVMap, true);
+        // Top Face
+        glm::vec3 topCenter = center; topCenter.y += halfSize.y;
+        addXZPlane(vertices, indices, topCenter, glm::vec2(halfSize.x, halfSize.z), defaultUVMap, false);
+        // Bottom Face
+        glm::vec3 bottomCenter = center; bottomCenter.y -= halfSize.y;
+        addXZPlane(vertices, indices, bottomCenter, glm::vec2(halfSize.x, halfSize.z), defaultUVMap, true);
+        // Left Face
+        glm::vec3 leftCenter = center; leftCenter.x -= halfSize.y;
+        addYZPlane(vertices, indices, leftCenter, glm::vec2(halfSize.y, halfSize.z), defaultUVMap, false);
+        // Right Face
+        glm::vec3 rightCenter = center; rightCenter.x += halfSize.y;
+        addYZPlane(vertices, indices, rightCenter, glm::vec2(halfSize.y, halfSize.z), defaultUVMap, true);
+    }
+
+    // Credits go to: https://www.songho.ca/opengl/gl_sphere.html
+    // NOTE: DebugRenderer has very very similar code to render debug sphere, should be reused
+    void MeshUtils::addSphere(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center) {
+        const float sectorCount = 36; //<<< num of longitude divisions
+        const float stackCount = 18; //<<< num of latitude divisions
+        float x, y, z, xy; // Position
+        float nx, ny, nz, lengthInv = 1.0f / radius; // Normal
+        float s, t; // UV coords
+
+        int start = vertices->size(); // Index for 1st new vertex added
+        // NOTE: Both here and in DebugRenderer vertex and index count is HARDCODED!
+        // It will change based on the number of sectors and stacks
+        vertices->resize(vertices->size() + 703);
+
+        float sectorStep = 2 * M_PI / sectorCount;
+        float stackStep = M_PI / stackCount;
+        float sectorAngle, stackAngle;
+        int vertexIndex = start;
+
+        for (int i = 0; i <= stackCount; ++i) {
+            stackAngle = M_PI / 2 - i * stackStep; //<<< from pi/2 to -pi/2
+            xy = radius * cosf(stackAngle);
+            z = radius * sinf(stackAngle);
+
+            for (int j = 0; j <= sectorCount; ++j) {
+                sectorAngle = j * sectorStep;
+                (*vertices)[vertexIndex].Position.x = xy * cosf(sectorAngle);
+                (*vertices)[vertexIndex].Position.y = xy * sinf(sectorAngle);
+                (*vertices)[vertexIndex].Position.z = z;
+                // shift sphere by center vector to transform it
+                (*vertices)[vertexIndex].Position += center;
+
+                nx = x * lengthInv;
+                ny = y * lengthInv;
+                nz = z * lengthInv;
+                (*vertices)[vertexIndex].Normal = {nx, ny, nz};
+
+                s = (float)j / sectorCount;
+                t = (float)i / stackCount;
+                (*vertices)[vertexIndex].UV = {s, t};
+
+                vertexIndex++;
+            }
+        }
+        indices->reserve(indices->size() + 3672);
+        unsigned int k1, k2;
+        for (int i = 0; i < stackCount; ++i) {
+            k1 = i * (sectorCount + 1); // beginning of current stack
+            k2 = k1 + sectorCount + 1; // beginning of next stack
+            for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+                // 2 triangles per sector excluding first and last stacks
+                if (i != 0) {
+                    (*indices).push_back(k1);
+                    (*indices).push_back(k2);
+                    (*indices).push_back(k1 + 1);
+                }
+
+                if (i != (stackCount - 1)) {
+                    (*indices).push_back(k1 + 1);
+                    (*indices).push_back(k2);
+                    (*indices).push_back(k2 + 1);
+                }
+            }
+        }
+    }
+}

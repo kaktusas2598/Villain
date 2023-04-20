@@ -4,9 +4,9 @@
 #include "ErrorHandler.hpp"
 #include "LevelParser.hpp"
 #include "ResourceManager.hpp"
-#include "Light.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
+#include "components/Light.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
@@ -15,7 +15,7 @@
 #include "physics/BoundingSphere.hpp"
 
 #include "DebugConsole.hpp"
-#include "DebugRenderer.hpp"
+#include "rendering/DebugRenderer.hpp"
 
 using namespace Villain;
 
@@ -75,11 +75,8 @@ void Game::init() {
     modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
-    //SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/donut.obj"));
     //modelNode->getTransform()->setScale(4.0f);
-
     addToScene(modelNode);
-
 
     SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/rock.obj"));
     rockNode->getTransform()->setScale(0.01f);
@@ -131,10 +128,6 @@ void Game::init() {
         ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
 }
 
-Game::~Game() {
-    debugRenderer.dispose();
-}
-
 void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
@@ -152,14 +145,26 @@ void Game::onAppRender(float dt) {
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 projection = camera.getProjMatrix();
 
-    debugRenderer.drawBox3D(glm::vec3(0.0f, 2.5f, -12.0f), glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(10.0f, 5.0f, 0.1f));
+    // Draw coordinate gizmo
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+    // Draw example shapes test
     debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
     debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
+    debugRenderer.drawSphere(glm::vec3(2.0f, 6.0f, -10.0f), 5.0f, glm::vec4(0.8f, 0.0f, 2.0f, 2.0f));
 
-    //debugRenderer.drawSphere(glm::vec3(0.0f, 20.0f, 0.0f), glm::vec4(0.8f, 0.0f, 2.0f, 2.0f), 5.0f);
+    glm::vec3 position = glm::vec3(2.0);
+    glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 rotation = transformY * transformX * transformZ;
+    debugRenderer.drawBox3D(position, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f));
+    debugRenderer.drawBox3DRotated(position, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
 
     debugRenderer.end();
-    debugRenderer.render(projection * view, 2.0f);
+    debugRenderer.render(projection * view, 1.0f);
 
     skybox->render(projection, view);
 }

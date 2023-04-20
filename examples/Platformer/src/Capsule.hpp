@@ -1,7 +1,7 @@
 #ifndef __CAPSULE__
 #define __CAPSULE__
 
-#include "DebugRenderer.hpp"
+#include "rendering/DebugRenderer.hpp"
 
 #include <box2d/box2d.h>
 #include <glm/glm.hpp>

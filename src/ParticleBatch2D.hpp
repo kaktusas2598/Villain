@@ -1,7 +1,7 @@
 #ifndef __PARTICLE_BATCH_2D__
 #define __PARTICLE_BATCH_2D__
 
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include <functional>
 
 namespace Villain {

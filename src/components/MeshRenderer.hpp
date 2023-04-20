@@ -1,8 +1,8 @@
 #ifndef __MESH_RENDERER__
 #define __MESH_RENDERER__
 
-#include "../Material.hpp"
-#include "../Mesh.hpp"
+#include "../rendering/Material.hpp"
+#include "../rendering/Mesh.hpp"
 #include "../NodeComponent.hpp"
 
 namespace Villain {

@@ -13,6 +13,7 @@
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
+* Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
 * Error logging to stdout, log file and editor console
 * 2D orthographics and 3D perspective cameras
 * Camera Frustum culling to increase performance
@@ -25,21 +26,25 @@
 
 * Engine editor with scene management
 * Skeletal animation support
-* Built in collision detection: AABB, SAT, circle
-* Rigid Body implementation
-* Spatial Partitioning models
+* Physics Engine:
+    * Potential Box2D and Bullet physics integration
+    * Built in collision detection: AABB, SAT, circle
+    * Rigid Body implementation
+    * Spatial Partitioning models
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Shadow mapping and normal mapping
+* Post-processing effects
 * Stencil buffer
 * Instanced drawing
-* and many more...
+* and more...
 
 
-![2D example](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
-![3D example](screenshots/3Dimgui.png?raw=true "Villain Engine Demo: 3D phong lighting/skybox demo")
+![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
+![3D features](screenshots/3Dimgui.png?raw=true "Villain Engine Demo: 3D demo with models/lighting etc.")
+![FPS](screenshots/FPS.png?raw=true "Villain Engine Demo: Wolfenstein/Doom clone")
 
 ## Used Libraries
 
@@ -55,8 +60,11 @@
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
  * [lua](https://www.lua.org/) - For scripting, configuration
 
-## Libraries used by examples
+
+## Libraries and assets used by examples
  * [Box2D](https://box2d.org/) - A 2D Physics Engine for Games
+ * [Bullet Physics](https://bulletphysics.org/) - Real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
+ * [Sponza Palace](https://github.com/jimmiebergmann/Sponza) - Sponza Palace Obj model made by Jimmie Bergmann
 
 
 ## Instructions
@@ -70,6 +78,7 @@ First install the dependencies and when use build instructions below.
     sudo apt-get install -y libsdl2-ttf-dev
     sudo apt-get install -y liblua5.4-dev
     sudo apt-get install -y libassimp-dev
+    sudo apt-get install -y libbullet-dev (Optional at the moment)
 
 ### Building
 
@@ -94,8 +103,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
- * Improve DebugRenderer: add lines and 3d primitive draw calls, use unique_ptr abstractions like VertexBuffer class
- * Fix drawSphere() in DebugRenderer - for some reason only drawing top half of sphere
  * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
@@ -106,5 +113,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * SpotLight could take Camera* as an optional param to make it act as a flashlight
  * Improve Phong shading by implementing Blinn-Phong shading
  * Investigate gamma correction and sRGB textures
- * Fix Engine not compiling on Windows due to Nuklear
-
+ * Fix Engine on Windows
+ * Investigate integrating Box2D and Bullet physics
+ * Need MeshUtils class, ability to create vertices and indices for primitive shapes, 2D quads, planes, cubes, spheres and so on

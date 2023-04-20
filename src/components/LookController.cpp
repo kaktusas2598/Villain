@@ -4,8 +4,11 @@ namespace Villain {
 
     void LookController::handleInput(float deltaTime) {
         if (!Engine::editModeActive()) {
+
+            // Not sure if really need this, it hides the cursor but there are other methods to do that
             SDL_SetRelativeMouseMode(SDL_TRUE);
-            SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), 0, 0); // this seem to fix moving camera issue, but cursor disappears?
+            // Warping mouse cursor in center for the infinite camera movement
+            SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), Engine::getScreenWidth()/2, Engine::getScreenHeight()/2);
 
             // Also disable mouse in edit mode for now
             glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();

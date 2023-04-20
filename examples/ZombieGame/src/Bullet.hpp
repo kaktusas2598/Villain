@@ -2,7 +2,7 @@
 #define __BULLET__
 
 #include "glm/glm.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include "Level.hpp"
 
 class Agent;

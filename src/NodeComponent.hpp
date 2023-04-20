@@ -26,6 +26,7 @@ namespace Villain {
             inline Transform* GetTransform()             { return parent->getTransform(); }
             inline const Transform& GetTransform() const { return *parent->getTransform(); }
 
+            inline SceneNode* getParent() { return parent; }
             virtual void setParent(SceneNode* p) { parent = p; }
         protected:
             SceneNode* parent;

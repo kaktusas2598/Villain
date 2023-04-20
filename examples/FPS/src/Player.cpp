@@ -4,18 +4,14 @@
 
 using namespace Villain;
 
-const float PLAYER_SIZE = 0.3f;
-const float OPEN_DISTANCE = 2.0f;
+const float Player::PLAYER_SIZE = 0.3f;
+const float SHOOT_DISTANCE = 100.f;
 
 // Custom Move Controller for this game, locked on y height
 void Player::handleInput(float deltaTime) {
     // NOTE: Commented out Movement logic below, because all we need to do here is lock y height and then we can use
     // generic Look and Move controllers, but the problem is that MoveController reacts to space/lshift, need
-    // ability to override that
-    //glm::vec3 pos = GetTransform()->getPos();
-    //pos.y = 1.0f;
-    //GetTransform()->setPos(pos);
-
+    // ability to override that, so using our move logix for now
     movement = glm::vec3(0.0f);
     if (InputManager::Instance()->isKeyDown(SDLK_w)) {
         movement += GetTransform()->getForward();
@@ -31,13 +27,20 @@ void Player::handleInput(float deltaTime) {
     }
 
     if (InputManager::Instance()->isKeyDown(SDLK_e)) {
-        for(auto& door : currentLevel->getDoors()) {
-            float distanceToDoor = glm::length(door->GetTransform()->getPos() - GetTransform()->getPos());
-            if (distanceToDoor < OPEN_DISTANCE) {
-                door->open();
-            }
-        }
+        // TODO: only pass true when all monsters are killed
+        currentLevel->openDoors(GetTransform()->getPos(), true);
     }
+
+    if (InputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)) {
+        glm::vec2 lineStart = glm::vec2(GetTransform()->getPos().x, GetTransform()->getPos().z);
+        // Needed camera's front vector here, but playuer's should be the same
+        glm::vec2 castDirection = glm::normalize(glm::vec2(GetTransform()->getForward().x, GetTransform()->getForward().z));
+        //std::cout << "Camera front: " << castDirection.x << ", " << castDirection.y << "\n";
+        glm::vec2 lineEnd = lineStart + castDirection * SHOOT_DISTANCE;
+
+        currentLevel->checkIntersections(lineStart, lineEnd, true);
+    }
+
 }
 
 void Player::update(float deltaTime) {
@@ -54,5 +57,14 @@ void Player::update(float deltaTime) {
     movement.z *= collision.z;
 
     GetTransform()->translatePosition(movement * speed * deltaTime);
+}
+
+void Player::damage(int amount) {
+    health -= amount;
+
+    if (health <= 0) {
+        std::cout << "GAME OVER\n";
+        Engine::setRunning(false);
+    }
 }
 

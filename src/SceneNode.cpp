@@ -2,6 +2,8 @@
 
 #include "NodeComponent.hpp"
 
+#include <algorithm> // For std::remove
+
 namespace Villain {
 
     SceneNode::SceneNode(const std::string& name, const glm::vec3& pos, const glm::vec3& rot, float scale)
@@ -34,6 +36,9 @@ namespace Villain {
         return this;
     }
 
+    void SceneNode::removeChild(SceneNode* child) {
+        children.erase(std::remove(children.begin(), children.end(), child), children.end());
+    }
 
     void SceneNode::handleInput(float deltaTime) {
         for (auto& c: components) {

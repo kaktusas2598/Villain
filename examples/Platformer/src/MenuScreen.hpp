@@ -3,7 +3,7 @@
 
 #include "IGameScreen.hpp"
 #include "Camera2D.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 
 class MenuScreen : public Villain::IGameScreen {
@@ -24,7 +24,7 @@ class MenuScreen : public Villain::IGameScreen {
 
         // Called in main app loop
         virtual void update(float deltaTime) override;
-        virtual void draw(float deltaTime) override;
+        virtual void draw() override;
 
     private:
 };

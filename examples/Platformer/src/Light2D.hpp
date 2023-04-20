@@ -1,7 +1,7 @@
 #ifndef __LIGHT_2D__
 #define __LIGHT_2D__
 
-#include "SpriteBatch.hpp"
+#include "rendering/SpriteBatch.hpp"
 
 // HACK:
 class Light2D {

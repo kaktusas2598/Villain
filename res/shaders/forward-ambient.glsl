@@ -7,8 +7,6 @@ layout(location = 2) in vec2 texCoords;
 layout(location = 3) in vec3 tangent; // Calculated by Assimp
 layout(location = 4) in vec3 biTangent; // Calculated by Assimp
 
-out vec3 v_normal;
-out vec3 v_fragPos;
 out vec2 v_texCoords;
 
 uniform mat4 projection;
