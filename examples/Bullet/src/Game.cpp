@@ -15,9 +15,6 @@
 #include "BulletCharacterController.hpp"
 #include "BulletCharacterComponent.hpp"
 
-#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
-#include "BulletSoftBody/btSoftBodyHelpers.h"
-
 using namespace Villain;
 
 BulletEngine* Game::PhysicsWorld = nullptr;
@@ -33,8 +30,8 @@ bool collisionCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* obj1
     graphComp->Colliding = true;
 
 
-    printf("Node collided: %s\n", graphComp->getParent()->getName().c_str());
     if (!graphComp->getBody()->isStaticObject()) {
+        printf("Node collided: %s\n", graphComp->getParent()->getName().c_str());
         Game::WorldNode->removeChild(graphComp->getParent());
         Game::PhysicsWorld->getWorld()->removeCollisionObject(const_cast<btCollisionObject*>(obj1->getCollisionObject()));
     }
@@ -66,7 +63,6 @@ void Game::init() {
 
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 
-
     PhysicsWorld = new BulletEngine({0.0, -9.8, 0.0});
     PhysicsWorld->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
@@ -97,13 +93,22 @@ void Game::init() {
     /////////////////////////////////////////
 
     // TODO:
-    // 3. investigate soft bodies
     // 5. Bullet utils class for common stuff like converting glm::vec3 to btVector3 etc.
     // 6. investigate constraints
-
-    // TODO: BulletEngine class needs to support bt soft world
-    //btSoftBody* cloth = btSoftBodyHelpers::CreatePatch(
-            //PhysicsWorld->getWorld()->getWorldInfo(), {}, {}, {}, {}, 1, 1, 1, false);
+    float s = 4;
+    float h = 10;
+    btSoftBody* cloth = btSoftBodyHelpers::CreatePatch(
+            PhysicsWorld->getWorld()->getWorldInfo(),
+            {-s, h, -s}, {s, h, -s}, {-s, h, s}, {s, h, s},
+            50, 50, 4+8, true);
+    // Fixes rendering problems, arbitrary value used
+    cloth->m_cfg.viterations = 50;
+    cloth->m_cfg.piterations = 50;
+    cloth->setTotalMass(20.f);
+    PhysicsWorld->getWorld()->addSoftBody(cloth);
+    // TODO: Build Mesh using data from Bullet
+    //cloth->m_faces
+    //cloth->m_links
 
     indices.clear();
     vertices.clear();
@@ -334,6 +339,13 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.end();
     debugRenderer.render(projection * view  , 2.0f);
+
+    // Not neccessary, just making sure for now all soft bodies are drawn even not in debug mode
+    for (int i = 0; i < PhysicsWorld->getWorld()->getSoftBodyArray().size(); i++) {
+		btSoftBody* psb = (btSoftBody*)PhysicsWorld->getWorld()->getSoftBodyArray()[i];
+        btSoftBodyHelpers::DrawFrame(psb, PhysicsWorld->getWorld()->getDebugDrawer());
+        btSoftBodyHelpers::Draw(psb, PhysicsWorld->getWorld()->getDebugDrawer(), PhysicsWorld->getWorld()->getDrawFlags());
+	}
 
     // 2nd render batch for screen space crosshair display
     const float CROSSHAIR_SIZE = 0.05f;

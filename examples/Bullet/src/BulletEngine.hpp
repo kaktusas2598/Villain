@@ -1,14 +1,21 @@
 #pragma once
 
 #include "btBulletDynamicsCommon.h"
+// Custom renderer
 #include "BulletDebugRenderer.hpp"
+// For soft bodies
+#include "BulletSoftBody/btSoftRigidDynamicsWorld.h"
+#include "BulletSoftBody/btSoftBodyHelpers.h"
+#include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
+// Ray cast callbacks
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 
 class BulletEngine {
     public:
         BulletEngine(const btVector3& gravity = {0.0, -9.81, 0.0});
         ~BulletEngine();
 
-        void update(float deltaTime);
+            void update(float deltaTime);
         void render(const glm::mat4& MVP);
 
         void initPhysics();
@@ -27,7 +34,8 @@ class BulletEngine {
             collisionShapes.push_back(shape);
         }
 
-        btDynamicsWorld* getWorld() const { return dynamicsWorld; }
+        //btDynamicsWorld* getWorld() const { return dynamicsWorld; }
+        btSoftRigidDynamicsWorld* getWorld() const { return dynamicsWorld; }
 
         void addAction(btActionInterface* action) {
             dynamicsWorld->addAction(action);
@@ -37,11 +45,14 @@ class BulletEngine {
             dynamicsWorld->getDebugDrawer()->setDebugMode(mode);
         }
     private:
-        btDefaultCollisionConfiguration* collisionConfiguration;
+        btSoftBodyRigidBodyCollisionConfiguration* collisionConfiguration;
+        //btDefaultCollisionConfiguration* collisionConfiguration;
         btCollisionDispatcher* dispatcher;
         btBroadphaseInterface* overlappingPairCache;
         btSequentialImpulseConstraintSolver* solver;
-        btDiscreteDynamicsWorld* dynamicsWorld;
+        //btDiscreteDynamicsWorld* dynamicsWorld;
+        btSoftRigidDynamicsWorld* dynamicsWorld;
+        btSoftBodySolver* softBodySolver;
 
         btAlignedObjectArray<btCollisionShape*> collisionShapes;
         BulletDebugRenderer* bulletRenderer;

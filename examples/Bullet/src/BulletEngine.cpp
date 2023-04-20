@@ -1,5 +1,7 @@
 #include "BulletEngine.hpp"
 
+#include "BulletSoftBody/btDefaultSoftBodySolver.h"
+
 BulletEngine::BulletEngine(const btVector3& gravity) {
     initPhysics();
     dynamicsWorld->setGravity(gravity);
@@ -21,7 +23,8 @@ void BulletEngine::render(const glm::mat4& MVP) {
 void BulletEngine::initPhysics() {
     // BULLET PHYSICS INITIALISATION CODE
     ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-    collisionConfiguration = new btDefaultCollisionConfiguration();
+    //collisionConfiguration = new btDefaultCollisionConfiguration();
+    collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
 
     ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
@@ -31,8 +34,17 @@ void BulletEngine::initPhysics() {
 
     ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
     solver = new btSequentialImpulseConstraintSolver;
+    softBodySolver = new btDefaultSoftBodySolver();
 
-    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    //dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    dynamicsWorld = new btSoftRigidDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration, softBodySolver);
+
+    // Setting Soft body world info
+    dynamicsWorld->getWorldInfo().m_broadphase = overlappingPairCache;
+    dynamicsWorld->getWorldInfo().m_dispatcher = dispatcher;
+    dynamicsWorld->getWorldInfo().m_gravity = dynamicsWorld->getGravity();
+    dynamicsWorld->getWorldInfo().m_sparsesdf.Initialize();
+
 
     // Setup custom debug drawer
     bulletRenderer = new BulletDebugRenderer();
