@@ -18,8 +18,10 @@ namespace Villain {
          */
         static void addFace(std::vector<unsigned int>* indices, int startLocation, bool direction);
 
-        // Calculate normal from a triangle
+        // Calculate normal for a triangle
         static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3);
+        // Calculate tangents and bitangents for a triangle, positions and UVs required
+        static void getTangents(VertexP1N1T1B1UV* i1, VertexP1N1T1B1UV* i2, VertexP1N1T1B1UV* i3);
 
         // TODO:
         //template <class VertexType>
@@ -35,6 +37,7 @@ namespace Villain {
                 bool direction = false
                 );
 
+        //template <class VertexType>
         static void addXYPlane(
                 std::vector<VertexP1N1UV>* vertices,
                 std::vector<unsigned int>* indices,

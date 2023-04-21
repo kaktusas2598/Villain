@@ -29,6 +29,24 @@ namespace Villain {
         return glm::normalize(v3);
     }
 
+    void getTangents(VertexP1N1T1B1UV* i1, VertexP1N1T1B1UV* i2, VertexP1N1T1B1UV* i3) {
+        glm::vec3 edge1 = i2->Position - i1->Position;
+        glm::vec3 edge2 = i3->Position - i1->Position;
+        glm::vec2 deltaUV1 = i2->UV - i1->UV;
+        glm::vec2 deltaUV2 = i3->UV - i1->UV;
+        float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+        i1->Tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        i1->Tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        i1->Tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+        i3->Tangent = i2->Tangent = i1->Tangent;
+
+        i1->BiTangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        i1->BiTangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        i1->BiTangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+        i3->BiTangent = i2->BiTangent = i1->BiTangent;
+    }
+
     // TODO: need ability to specify different orientations in easier way,
     // too much similar code in add XZ, XY and YZ plane methods
     void MeshUtils::addXZPlane(
