@@ -29,13 +29,9 @@ namespace Villain {
         // Calculate tangents and bitangents for a triangle, positions and UVs required
         static void getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3);
 
-        // TODO:
-        //template <class VertexType>
-        //static void addQuad(std::vector<VertexType>* vertices);
-
         // NOTE: Need a good way to generate a face in any orientation, at the very least Axis-Aligned
         static void addXZPlane(
-                std::vector<VertexP1N1UV>* vertices,
+                std::vector<VertexType>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec2& halfSize = glm::vec3(0.5f),
@@ -53,7 +49,7 @@ namespace Villain {
                 );
 
         static void addYZPlane(
-                std::vector<VertexP1N1UV>* vertices,
+                std::vector<VertexType>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec2& halfSize = glm::vec3(0.5f),

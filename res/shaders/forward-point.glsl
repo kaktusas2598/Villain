@@ -24,11 +24,10 @@ uniform vec3 viewPosition;
 void main() {
     vec3 normal;
     if (texture(material.texture_normal1, v_texCoords).rgb != vec3(0, 0, 0)) {
-        normal = texture(material.texture_normal1, v_texCoords).rgb;
         // transform normal vector to range [-1,1]
+        normal = 2.0 * texture(material.texture_normal1, v_texCoords).rgb - 1.0f;
         //normal = normalize(normal * 2.0 - 1.0);
         // More correct way using TBN matrix to convert tangent space normal to local space
-        normal = normal * 2.0 - 1.0;
         normal = normalize(v_TBN * normal);
     } else {
         // No normal map

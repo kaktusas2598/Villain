@@ -63,7 +63,7 @@ namespace Villain {
     // too much similar code in add XZ, XY and YZ plane methods
     template <class VertexType>
     void MeshUtils<VertexType>::addXZPlane(
-            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            std::vector<VertexType>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
             float* uvCoords, bool direction) {
         addFace(indices, vertices->size(), direction);
@@ -117,7 +117,7 @@ namespace Villain {
 
     template <class VertexType>
     void MeshUtils<VertexType>::addYZPlane(
-            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+            std::vector<VertexType>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
             float* uvCoords, bool direction) {
         addFace(indices, vertices->size(), direction);
@@ -241,6 +241,8 @@ namespace Villain {
     template void MeshUtils<VertexP1N1UV>::addXZPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
     template void MeshUtils<VertexP1N1UV>::addYZPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
     template void MeshUtils<VertexP1N1T1B1UV>::addXYPlane(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
+    template void MeshUtils<VertexP1N1T1B1UV>::addXZPlane(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
+    template void MeshUtils<VertexP1N1T1B1UV>::addYZPlane(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
 
     template void MeshUtils<VertexP1N1UV>::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize);
 

@@ -216,15 +216,16 @@ void Game::addPlayer() {
 
 void Game::createGround() {
     // Create mesh for ground
-    std::vector<VertexP1N1UV> vertices;
+    std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
     std::vector<Texture*> specularTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_rough_4k.jpg", "redSandstoneRough", GL_REPEAT)};
     std::vector<Texture*> normalTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT)};
     Material mat("redSandstonePavement", textures, 8, specularTextures, normalTextures);
     float uvCoords[4] = {0.0f, 500.0f, 0.0f, 500.0f};
-    MeshUtils<VertexP1N1UV>::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    MeshUtils<VertexP1N1T1B1UV>::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
+    MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
+    Mesh<VertexP1N1T1B1UV>* mesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
     btRigidBody* groundBody = PhysicsWorld->createRigidBody(new btBoxShape({btScalar(250.), btScalar(.5), btScalar(250.)}), true, {0, 0, 0}, 0.);
     groundBody->setCollisionFlags(groundBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
@@ -233,7 +234,7 @@ void Game::createGround() {
     BulletBodyComponent* groundComp = new BulletBodyComponent(groundBody);
     SceneNode* groundNode = (new SceneNode("Ground"))
         ->addComponent(groundComp)
-        ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+        ->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(mesh, mat));
     groundBody->setUserPointer(groundComp);
     WorldNode->addChild(groundNode);
 }
