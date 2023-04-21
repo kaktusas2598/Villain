@@ -2,9 +2,11 @@
 
 namespace Villain {
 
-    float MeshUtils::defaultUVMap[4] = {0.0f, 1.0f, 0.0f, 1.0f};
+    template <class VertexType>
+    float MeshUtils<VertexType>::defaultUVMap[4] = {0.0f, 1.0f, 0.0f, 1.0f};
 
-    void MeshUtils::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
+    template <class VertexType>
+    void MeshUtils<VertexType>::addFace(std::vector<unsigned int>* indices, int startLocation, bool direction) {
         if (direction) {
             indices->push_back(startLocation + 2);
             indices->push_back(startLocation + 1);
@@ -22,34 +24,45 @@ namespace Villain {
         }
     }
 
-    glm::vec3 MeshUtils::getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3) {
+    template <class VertexType>
+    void MeshUtils<VertexType>::addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices) {
+        // Assuming we index by triangles
+        for (int i = 0; i < indices->size(); i+=3) {
+            getTangents((*vertices)[(*indices)[i]], (*vertices)[(*indices)[i + 1]], (*vertices)[(*indices)[i + 2]]);
+        }
+    }
+
+    template <class VertexType>
+    glm::vec3 MeshUtils<VertexType>::getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3) {
         glm::vec3 v1 = i2 - i1;
         glm::vec3 v2 = i3 - i1;
         glm::vec3 v3 = glm::cross(v1, v2);
         return glm::normalize(v3);
     }
 
-    void getTangents(VertexP1N1T1B1UV* i1, VertexP1N1T1B1UV* i2, VertexP1N1T1B1UV* i3) {
-        glm::vec3 edge1 = i2->Position - i1->Position;
-        glm::vec3 edge2 = i3->Position - i1->Position;
-        glm::vec2 deltaUV1 = i2->UV - i1->UV;
-        glm::vec2 deltaUV2 = i3->UV - i1->UV;
+    template <class VertexType>
+    void MeshUtils<VertexType>::getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3) {
+        glm::vec3 edge1 = i2.Position - i1.Position;
+        glm::vec3 edge2 = i3.Position - i1.Position;
+        glm::vec2 deltaUV1 = i2.UV - i1.UV;
+        glm::vec2 deltaUV2 = i3.UV - i1.UV;
         float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
-        i1->Tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        i1->Tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-        i1->Tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-        i3->Tangent = i2->Tangent = i1->Tangent;
+        i1.Tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        i1.Tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        i1.Tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+        i3.Tangent = i2.Tangent = i1.Tangent;
 
-        i1->BiTangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-        i1->BiTangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-        i1->BiTangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-        i3->BiTangent = i2->BiTangent = i1->BiTangent;
+        i1.BiTangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        i1.BiTangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        i1.BiTangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+        i3.BiTangent = i2.BiTangent = i1.BiTangent;
     }
 
     // TODO: need ability to specify different orientations in easier way,
     // too much similar code in add XZ, XY and YZ plane methods
-    void MeshUtils::addXZPlane(
+    template <class VertexType>
+    void MeshUtils<VertexType>::addXZPlane(
             std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
             float* uvCoords, bool direction) {
@@ -75,8 +88,9 @@ namespace Villain {
         vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
     }
 
-    void MeshUtils::addXYPlane(
-            std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
+    template <class VertexType>
+    void MeshUtils<VertexType>::addXYPlane(
+            std::vector<VertexType>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
             float* uvCoords, bool direction) {
         addFace(indices, vertices->size(), direction);
@@ -100,7 +114,9 @@ namespace Villain {
         vertices->push_back({positions[2], normal, glm::vec2(uvCoords[0], uvCoords[2])});
         vertices->push_back({positions[3], normal, glm::vec2(uvCoords[1], uvCoords[2])});
     }
-    void MeshUtils::addYZPlane(
+
+    template <class VertexType>
+    void MeshUtils<VertexType>::addYZPlane(
             std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices,
             const glm::vec3& center, const glm::vec2& halfSize,
             float* uvCoords, bool direction) {
@@ -127,7 +143,8 @@ namespace Villain {
 
     }
 
-    void MeshUtils::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize) {
+    template <class VertexType>
+    void MeshUtils<VertexType>::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize) {
         glm::vec3 minExtents = center - halfSize;
         glm::vec3 maxExtents = center + halfSize;
         // Front Face
@@ -152,7 +169,8 @@ namespace Villain {
 
     // Credits go to: https://www.songho.ca/opengl/gl_sphere.html
     // NOTE: DebugRenderer has very very similar code to render debug sphere, should be reused
-    void MeshUtils::addSphere(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center) {
+    template <class VertexType>
+    void MeshUtils<VertexType>::addSphere(std::vector<VertexType>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center) {
         const float sectorCount = 36; //<<< num of longitude divisions
         const float stackCount = 18; //<<< num of latitude divisions
         float x, y, z, xy; // Position
@@ -215,4 +233,17 @@ namespace Villain {
             }
         }
     }
+
+    template void MeshUtils<VertexP1N1T1B1UV>::addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices);
+    template void MeshUtils<VertexP1N1T1B1UV>::getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3);
+
+    template void MeshUtils<VertexP1N1UV>::addXYPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
+    template void MeshUtils<VertexP1N1UV>::addXZPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
+    template void MeshUtils<VertexP1N1UV>::addYZPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
+    template void MeshUtils<VertexP1N1T1B1UV>::addXYPlane(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
+
+    template void MeshUtils<VertexP1N1UV>::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize);
+
+    template void MeshUtils<VertexP1N1UV>::addSphere(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center);
+    template void MeshUtils<VertexP1N1T1B1UV>::addSphere(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center);
 }

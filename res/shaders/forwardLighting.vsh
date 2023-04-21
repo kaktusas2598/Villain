@@ -4,12 +4,13 @@ layout(location = 2) in vec2 texCoords;
 layout(location = 3) in vec3 tangent;
 layout(location = 4) in vec3 biTangent;
 
-out vec3 v_normal;
-out vec3 v_fragPos;
+out vec3 v_normal; // If using normal maps, not needed
+out vec3 v_fragPos; // World position
 out vec2 v_texCoords;
 
-out mat3 v_TBN;
+out mat3 v_TBN; // Tangent-Bitangent-Normal matrix
 
+// MVP matrices
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;

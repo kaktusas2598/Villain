@@ -40,6 +40,7 @@ namespace Villain {
     template MeshRenderer<VertexP1N1UV>::MeshRenderer(Mesh<VertexP1N1UV>* mesh, Material material);
     template MeshRenderer<VertexP1C1UV>::MeshRenderer(Mesh<VertexP1C1UV>* mesh, Material material);
     template MeshRenderer<VertexP1N1C1UV>::MeshRenderer(Mesh<VertexP1N1C1UV>* mesh, Material material);
+    template MeshRenderer<VertexP1N1T1B1UV>::MeshRenderer(Mesh<VertexP1N1T1B1UV>* mesh, Material material);
 
     template void MeshRenderer<VertexP1>::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
     template void MeshRenderer<VertexP1UV>::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
@@ -47,4 +48,5 @@ namespace Villain {
     template void MeshRenderer<VertexP1N1UV>::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
     template void MeshRenderer<VertexP1C1UV>::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
     template void MeshRenderer<VertexP1N1C1UV>::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
+    template void MeshRenderer<VertexP1N1T1B1UV>::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
 }

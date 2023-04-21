@@ -76,22 +76,33 @@ void Game::init() {
     //////////////////////////////////////////
     /// TEMP TEST code gor MeshUtils planes
     // Create mesh for wall
-    std::vector<VertexP1N1UV> vertices;
+    std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
-    Material mat("redSandstonePavement", textures, 8);
+    std::vector<Texture*> specularTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_rough_4k.jpg", "redSandstoneRough", GL_REPEAT)};
+    std::vector<Texture*> normalTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT)};
+    Material mat("redSandstonePavement", textures, 8, specularTextures, normalTextures);
     float uvCoords[4] = {0.0f, 100.0f, 0.0f, 100.0f};
-    MeshUtils::addXYPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(50.0f), uvCoords, false);
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    MeshUtils<VertexP1N1T1B1UV>::addXYPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(50.0f), uvCoords, false);
+    MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
+    Mesh<VertexP1N1T1B1UV>* mesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
     btRigidBody* wallBody = PhysicsWorld->createRigidBody(new btBoxShape({btScalar(50.), btScalar(50.), btScalar(.5)}), true, {0, 0, 25}, 0.);
     BulletBodyComponent* wallComp = new BulletBodyComponent(wallBody);
     wallBody->setUserPointer(wallComp);
     SceneNode* wallNode = (new SceneNode("Wall"))
         ->addComponent(wallComp)
-        ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+        ->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(mesh, mat));
     WorldNode->addChild(wallNode);
     /////////////////////////////////////////
+
+
+    // Light to test normal mapping
+     glm::vec3 redLight = glm::vec3(1.0f);
+    SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(0.f, 5.f, 20.f)))
+                ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+    WorldNode->addChild(pointLight);
+
 
     // TODO:
     // 5. Bullet utils class for common stuff like converting glm::vec3 to btVector3 etc.
@@ -128,12 +139,12 @@ void Game::init() {
         vertices.push_back({BulletUtils::toGlm(cloth->m_faces[i].m_n[2]->m_x), BulletUtils::toGlm(cloth->m_faces[i].m_n[2]->m_n), glm::vec2(1.0f)});
     }
     // Add soft body to scene graph
-    Mesh<VertexP1N1UV>* clothMesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    Mesh<VertexP1N1T1B1UV>* clothMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
     //BulletBodyComponent* clothComp = new BulletBodyComponent(cloth);
     //wallBody->setUserPointer(wallComp);
     SceneNode* clothNode = (new SceneNode("Cloth"))
         //->addComponent(wallComp)
-        ->addComponent(new MeshRenderer<VertexP1N1UV>(clothMesh, mat));
+        ->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(clothMesh, mat));
     WorldNode->addChild(clothNode);
 
 
@@ -163,14 +174,14 @@ void Game::init() {
     textures.clear();
     textures = {ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot")};
     Material earthMat("smallBlueDot", textures, 8);
-    MeshUtils::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
-    Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
+    Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
     BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
     sphereBody->setUserPointer(sphereComp);
     SceneNode* ball = (new SceneNode("Ball"))
         ->addComponent(sphereComp)
-        ->addComponent(new MeshRenderer<VertexP1N1UV>(sphereMesh, earthMat));
+        ->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, earthMat));
     WorldNode->addChild(ball);
 
     addToScene(WorldNode);
@@ -200,9 +211,11 @@ void Game::createGround() {
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
-    Material mat("redSandstonePavement", textures, 8);
+    std::vector<Texture*> specularTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_rough_4k.jpg", "redSandstoneRough", GL_REPEAT)};
+    std::vector<Texture*> normalTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT)};
+    Material mat("redSandstonePavement", textures, 8, specularTextures, normalTextures);
     float uvCoords[4] = {0.0f, 500.0f, 0.0f, 500.0f};
-    MeshUtils::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
+    MeshUtils<VertexP1N1UV>::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     btRigidBody* groundBody = PhysicsWorld->createRigidBody(new btBoxShape({btScalar(250.), btScalar(.5), btScalar(250.)}), true, {0, 0, 0}, 0.);
@@ -221,7 +234,7 @@ void Game::addRigidBoxes() {
     // Create common mesh for all boxes
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
-    MeshUtils::addAABB(&vertices, &indices);
+    MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
@@ -311,7 +324,7 @@ void Game::shootSphere() {
     std::vector<unsigned int> indices;
     std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/moon1024.bmp", "moon")};
     Material moonMat("moon", textures, 8);
-    MeshUtils::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
+    MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);
     BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);

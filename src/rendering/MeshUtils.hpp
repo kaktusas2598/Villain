@@ -8,7 +8,10 @@ namespace Villain {
 
 
     // Various utility methods to generate vertex data, primitives
-    class MeshUtils {
+    // NOTE:Not all Vertex types can be used, like it wouldn;t make sense to generate tangents
+    // for simple debug vertices, so maybe class should not be template and instead some methods may be, but
+    // then they need to be declared in header
+    template <class VertexType> class MeshUtils {
         public:
 
         /*
@@ -18,10 +21,13 @@ namespace Villain {
          */
         static void addFace(std::vector<unsigned int>* indices, int startLocation, bool direction);
 
+        // Generate tangents and bitangents for a mesh
+        static void addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices);
+
         // Calculate normal for a triangle
         static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3);
         // Calculate tangents and bitangents for a triangle, positions and UVs required
-        static void getTangents(VertexP1N1T1B1UV* i1, VertexP1N1T1B1UV* i2, VertexP1N1T1B1UV* i3);
+        static void getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3);
 
         // TODO:
         //template <class VertexType>
@@ -37,9 +43,8 @@ namespace Villain {
                 bool direction = false
                 );
 
-        //template <class VertexType>
         static void addXYPlane(
-                std::vector<VertexP1N1UV>* vertices,
+                std::vector<VertexType>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec2& halfSize = glm::vec3(0.5f),
@@ -63,8 +68,9 @@ namespace Villain {
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec3& halfSize = glm::vec3(0.5f));
 
+        // Generate sphere positions, normals and UVs
         static void addSphere(
-                std::vector<VertexP1N1UV>* vertices,
+                std::vector<VertexType>* vertices,
                 std::vector<unsigned int>* indices,
                 float radius,
                 const glm::vec3& center = glm::vec3(0.0f));
