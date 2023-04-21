@@ -24,11 +24,14 @@ void main() {
 
     // Calculate TBN matrix for normal mapping
     vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));
-    vec3 B = normalize(vec3(model * vec4(biTangent, 0.0)));
     vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
-    v_TBN = mat3(T, B, N);
-    // Also if bitangent not passed to vertex shader, we can do this:
-    // vec3 B = cross(N, T);
 
+    // re-orthogonalize T with respect to N
+    T = normalize(T - dot(T, N) * N);
+    // then retrieve perpendicular vector B with the cross product of T and N
+    vec3 B = cross(N, T);
+    /*Or cheaper way : vec3 B = normalize(vec3(model * vec4(biTangent, 0.0)));*/
+
+    v_TBN = mat3(T, B, N);
 }
 
