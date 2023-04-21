@@ -47,7 +47,11 @@ uniform Material material;
 BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDir) {
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 reflectDirection = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
+    // Blinn-Phong shading addition
+    vec3 halfwayDirection = normalize(lightDir + viewDir);
+    /*float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);*/
+    // Phong
+    float spec = pow(max(dot(normal, halfwayDirection), 0.0), material.shininess);
 
     BaseLight newLight;
     if (texture2D(material.texture_specular1, v_texCoords) == vec4(0, 0, 0, 0)) {
