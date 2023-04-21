@@ -114,5 +114,5 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Improve Phong shading by implementing Blinn-Phong shading
  * Investigate gamma correction and sRGB textures
  * Fix Engine on Windows
- * Investigate integrating Box2D and Bullet physics
- * Need MeshUtils class, ability to create vertices and indices for primitive shapes, 2D quads, planes, cubes, spheres and so on
+ * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
+    that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!
