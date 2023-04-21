@@ -101,14 +101,20 @@ void Game::init() {
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.0f);
     glm::vec3 greenLight = glm::vec3(0.0f, 1.0f, 0.0f);
     SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(0.f, 5.f, 10.f)))
-                ->addComponent(new PointLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+            ->addComponent(new PointLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
     WorldNode->addChild(pointLight);
-    SceneNode* pointLight2 = ((new SceneNode("Point Light 2", glm::vec3(-20.f, 5.f, 10.f)))
-                ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
-    WorldNode->addChild(pointLight2);
-    SceneNode* pointLight3 = ((new SceneNode("Point Light 3", glm::vec3(20.f, 5.f, 10.f)))
-                ->addComponent(new PointLight(greenLight * glm::vec3(0.2f), greenLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
-    WorldNode->addChild(pointLight3);
+    //SceneNode* pointLight2 = ((new SceneNode("Point Light 2", glm::vec3(-20.f, 5.f, 10.f)))
+            //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+    //WorldNode->addChild(pointLight2);
+    //SceneNode* pointLight3 = ((new SceneNode("Point Light 3", glm::vec3(20.f, 5.f, 10.f)))
+            //->addComponent(new PointLight(greenLight * glm::vec3(0.2f), greenLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+    //WorldNode->addChild(pointLight3);
+
+    SceneNode* spotLight = ((new SceneNode("Spot Light"))
+                ->addComponent(new SpotLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), &camera)));
+    wallNode->addChild(spotLight);
+
+    //////////////////////
 
 
 
