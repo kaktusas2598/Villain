@@ -32,8 +32,6 @@ namespace Villain  {
             // Available types: texture_diffuse, texture_specular, texture_normal
             std::string type;
             GLenum target; ///< GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
-            // For when we want to bind multiple textures to same framebuffer
-            //GLuint* renderIDs
     };
 }
 
