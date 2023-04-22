@@ -342,8 +342,8 @@ namespace Villain {
             case SDL_WINDOWEVENT_SIZE_CHANGED:
                 screenWidth = event.window.data1;
                 screenHeight = event.window.data2;
-                glViewport(0, 0, screenWidth, screenHeight);
                 sceneBuffer->rescale(screenWidth, screenHeight);
+                glViewport(0, 0, screenWidth, screenHeight);
                 application->onAppWindowResize(screenWidth, screenHeight);
                 renderingEngine->resizeCameras(screenWidth, screenHeight);
                 break;
