@@ -47,7 +47,7 @@ namespace Villain {
             Texture* getDislacementMap() { return dispMap; }
         private:
             std::string name; //<<< Material name
-            float specularFactor ; //<<< shininess
+            float specularFactor ; //<<< shininess, higher value makes material more reflective and specular highlight becomes smaller
             glm::vec4 diffuseColor = glm::vec4(1.0f);
             Texture* diffuseMap = nullptr; //<<< Base colour, diffuse map
             Texture* specularMap = nullptr;//<<< Specularity map

@@ -81,7 +81,7 @@ void Game::init() {
     Material mat(
             "redSandstonePavement",
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
-            32, nullptr,
+            128, nullptr,
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT),
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_disp_4k.jpg", "redSandstoneDisp", GL_REPEAT)
             );
@@ -230,7 +230,7 @@ void Game::createGround() {
     Material mat(
             "redSandstonePavement",
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
-            32, nullptr,
+            128, nullptr,
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT),
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_disp_4k.jpg", "redSandstoneDisp", GL_REPEAT)
             );
@@ -262,7 +262,7 @@ void Game::addRigidBoxes() {
     //std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
     Material mat("cartoonWood",
             ResourceManager::Instance()->loadTexture("assets/textures/woodDiffuse.jpg", "crateBase"),
-            8, nullptr,
+            128, nullptr,
             ResourceManager::Instance()->loadTexture("assets/textures/woodNormal.jpg", "crateNormal"));
 
     // Re-using the same collision for all boxes is better for memory usage and performance
