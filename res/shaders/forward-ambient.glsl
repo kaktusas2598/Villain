@@ -40,7 +40,6 @@ struct Material {
     sampler2D texture_disp;
 };
 
-// TODO: need to add getter/setter for this in RenderingEngine and add it to imgui
 uniform vec3 color; // Ambient light color
 uniform Material material;
 
