@@ -87,7 +87,7 @@ namespace Villain {
         // TODO: will need some configs here, gravity vector for example
         physicsEngine = std::make_unique<PhysicsEngine>();
         // NOTE: must be initialized before application
-        renderingEngine = new RenderingEngine();
+        renderingEngine = new RenderingEngine(this);
 
         //initialize the current game
         application = app;

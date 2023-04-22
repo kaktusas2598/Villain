@@ -5,6 +5,9 @@
 
 namespace Villain {
 
+    // TODO: Need to:
+    // 1. ability to attach multiple textures
+    // 2. assign different types of attachments
     class FrameBuffer {
         public:
             FrameBuffer(float width, float height);

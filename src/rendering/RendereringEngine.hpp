@@ -9,7 +9,7 @@ namespace Villain {
 
     class RenderingEngine {
         public:
-            RenderingEngine();
+            RenderingEngine(Engine* e);
             ~RenderingEngine();
             void render(SceneNode* node);
 
@@ -21,6 +21,7 @@ namespace Villain {
             // Call on window/viewport resize event
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
         private:
+            Engine* engine = nullptr;
             // TODO: will need to support multiple cameras at once
             Camera* mainCamera;
 

@@ -54,6 +54,7 @@ namespace Villain {
 
     void FrameBuffer::bind() const {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fboID));
+        //GLCall(glViewport(0, 0, width, height)); // Good idea everytime binding to new render target to set size accordingly
     }
 
     void FrameBuffer::unbind() const {

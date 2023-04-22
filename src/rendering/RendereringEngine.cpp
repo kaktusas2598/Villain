@@ -10,7 +10,7 @@
 
 namespace Villain {
 
-    RenderingEngine::RenderingEngine() {
+    RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
         defaultShader = new Shader();
         defaultShader->createFromResource("forward-ambient");
@@ -30,6 +30,15 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node) {
+        // Will cause framebuffer in editor to be unbound
+        if (engine->editModeActive()) {
+            engine->getSceneBuffer()->bind();
+            //glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        } else {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        }
+
         defaultShader->bind();
         defaultShader->setUniformVec3("color", ambientLight);
         activeLight = nullptr;
