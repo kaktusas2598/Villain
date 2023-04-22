@@ -15,6 +15,7 @@ namespace Villain {
 
             inline void addLight(BaseLight* light) { lights.push_back(light); }
             inline BaseLight* getActiveLight() { return activeLight; }
+            glm::vec3* getAmbientLightColor() { return &ambientLight; }
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
             inline Camera* getMainCamera() { return mainCamera; }
             // Call on window/viewport resize event
@@ -27,6 +28,7 @@ namespace Villain {
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
+            glm::vec3 ambientLight = glm::vec3(0.2f);
     };
 }
 

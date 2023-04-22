@@ -297,13 +297,12 @@ namespace Villain {
         static bool showDemoWindow = false;
         ImGui::Begin("Settings");
 
-        // Engine Info
+        // Engine Info and settings
         ImGui::Text("Engine FPS: %.1f ", engine.getFps());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+        ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
         ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
-        //TODO:clear color
-        //ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Separator();
 
         // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
