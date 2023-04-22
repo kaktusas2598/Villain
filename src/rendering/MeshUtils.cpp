@@ -28,7 +28,24 @@ namespace Villain {
     void MeshUtils<VertexType>::addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices) {
         // Assuming we index by triangles
         for (int i = 0; i < indices->size(); i+=3) {
-            getTangents((*vertices)[(*indices)[i]], (*vertices)[(*indices)[i + 1]], (*vertices)[(*indices)[i + 2]]);
+            VertexP1N1T1B1UV& i1 = (*vertices)[(*indices)[i]];
+            VertexP1N1T1B1UV& i2 = (*vertices)[(*indices)[i + 1]];
+            VertexP1N1T1B1UV& i3 = (*vertices)[(*indices)[i + 2]];
+            glm::vec3 edge1 = i2.Position - i1.Position;
+            glm::vec3 edge2 = i3.Position - i1.Position;
+            glm::vec2 deltaUV1 = i2.UV - i1.UV;
+            glm::vec2 deltaUV2 = i3.UV - i1.UV;
+            float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+            i1.Tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+            i1.Tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+            i1.Tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+            i3.Tangent = i2.Tangent = i1.Tangent;
+
+            i1.BiTangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+            i1.BiTangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+            i1.BiTangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+            i3.BiTangent = i2.BiTangent = i1.BiTangent;
         }
     }
 
@@ -38,25 +55,6 @@ namespace Villain {
         glm::vec3 v2 = i3 - i1;
         glm::vec3 v3 = glm::cross(v1, v2);
         return glm::normalize(v3);
-    }
-
-    template <class VertexType>
-    void MeshUtils<VertexType>::getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3) {
-        glm::vec3 edge1 = i2.Position - i1.Position;
-        glm::vec3 edge2 = i3.Position - i1.Position;
-        glm::vec2 deltaUV1 = i2.UV - i1.UV;
-        glm::vec2 deltaUV2 = i3.UV - i1.UV;
-        float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-        i1.Tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        i1.Tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-        i1.Tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-        i3.Tangent = i2.Tangent = i1.Tangent;
-
-        i1.BiTangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-        i1.BiTangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-        i1.BiTangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-        i3.BiTangent = i2.BiTangent = i1.BiTangent;
     }
 
     // TODO: need ability to specify different orientations in easier way,
@@ -235,7 +233,6 @@ namespace Villain {
     }
 
     template void MeshUtils<VertexP1N1T1B1UV>::addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices);
-    template void MeshUtils<VertexP1N1T1B1UV>::getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3);
 
     template void MeshUtils<VertexP1N1UV>::addXYPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
     template void MeshUtils<VertexP1N1UV>::addXZPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);

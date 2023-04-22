@@ -26,8 +26,6 @@ namespace Villain {
 
         // Calculate normal for a triangle
         static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3);
-        // Calculate tangents and bitangents for a triangle, positions and UVs required
-        static void getTangents(VertexP1N1T1B1UV& i1, VertexP1N1T1B1UV& i2, VertexP1N1T1B1UV& i3);
 
         // NOTE: Need a good way to generate a face in any orientation, at the very least Axis-Aligned
         static void addXZPlane(
