@@ -85,8 +85,7 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
     }
 
 
-    std::vector<Villain::Texture*> floorTextures = {Villain::ResourceManager::Instance()->loadTexture(tileAtlasFileName, "atlas")};
-    material = new Villain::Material{"bricks", floorTextures, 8};
+    material = new Villain::Material{"bricks", Villain::ResourceManager::Instance()->loadTexture(tileAtlasFileName, "atlas"), 8};
     mesh = new Villain::Mesh<VertexP1N1UV>(vertices, indices);
 
     // Add level to scene graph with generated mesh and all game objects as children

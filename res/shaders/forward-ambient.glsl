@@ -29,26 +29,27 @@ struct Material {
     vec4 diffuseColor;
     float shininess;
 
-    sampler2D texture_diffuse1;
-    sampler2D texture_diffuse2;
-    sampler2D texture_diffuse3;
-    sampler2D texture_specular1;
-    sampler2D texture_specular2;
-    sampler2D texture_normal1;
-    sampler2D texture_normal2;
-};
+    bool useDiffuseMap;
+    bool useSpecularMap;
+    bool useNormalMap;
+    bool useDispMap;
 
+    sampler2D texture_diffuse;
+    sampler2D texture_specular;
+    sampler2D texture_normal;
+    sampler2D texture_disp;
+};
 
 // TODO: need to add getter/setter for this in RenderingEngine and add it to imgui
 uniform vec3 color; // Ambient light color
 uniform Material material;
 
 void main() {
-    vec4 textureColor = texture2D(material.texture_diffuse1, v_texCoords);
-    if (textureColor == vec4(0, 0, 0, 0))
-        o_color = vec4(color, 1.0);
-    else
+    if (material.useDiffuseMap) {
+        vec4 textureColor = texture2D(material.texture_diffuse, v_texCoords);
         o_color = textureColor * vec4(color, 1.0);
-    o_color = texture2D(material.texture_diffuse1, v_texCoords);
+    } else {
+        o_color = vec4(color, 1.0);
+    }
 }
 

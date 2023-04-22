@@ -9,9 +9,8 @@ const double CLOSE_DELAY = 2.0f;
 
 Door::Door(const glm::vec3& open) : MeshRenderer<VertexP1N1UV>(nullptr, Material()) {
 
-    std::vector<Texture *> textures = {ResourceManager::Instance()->loadTexture(
-            "assets/textures/WolfCollection.png", "door")};
-    material = Material{"door", textures, 8};
+    material = Material{"door", ResourceManager::Instance()->loadTexture(
+            "assets/textures/WolfCollection.png", "door"), 8};
     std::vector<VertexP1N1UV> vertices;
 
     // NOTE: Now Mesh class only needs vertices and indices and it could contain methods to build common primitives like these Also need an easy way to generate UV coords in 3D, and calculate normals vertices.push_back({glm::vec3(Start, Start, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.f)}); vertices.push_back({glm::vec3(Start, Height, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.25f)});

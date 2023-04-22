@@ -115,8 +115,18 @@ namespace Villain {
             textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
 
             matName = std::string(material->GetName().C_Str());
+            Texture* diffuseMap = nullptr;
+            Texture* specularMap = nullptr;
+            Texture* normalMap = nullptr;
+            if (!diffuseMaps->empty())
+                diffuseMap = (*diffuseMaps)[0];
+            if (!specularMaps->empty())
+                specularMap = (*specularMaps)[0];
+            if (!normalMaps->empty())
+                normalMap = (*normalMaps)[0];
+
             // TODO: stop hardcoding specularity factor(32) here
-            Material mat(matName, *diffuseMaps, 32.0f, *specularMaps, *normalMaps);
+            Material mat(matName, diffuseMap, 32.0f, specularMap, normalMap);
             mat.setDiffuseColor(diffuseColor);
             materials[matName] = mat;
             return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName);

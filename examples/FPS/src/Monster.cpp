@@ -30,7 +30,7 @@ const float SHOOT_DISTANCE = 100.0f;
 Monster::Monster(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level), deathTime(0.0f) {
 
     currentState = AIState::STATE_IDLE;
-    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk1")}, 8};
+    material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk1"), 8};
     std::vector<VertexP1N1UV> vertices;
 
     // NOTE: Now Mesh class only needs vertices and indices and it could contain methods to build common primitives like these Also need an easy way to generate UV coords in 3D, and calculate normals vertices.push_back({glm::vec3(Start, Start, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.f)}); vertices.push_back({glm::vec3(Start, Height, Start), glm::vec3(0.0f), glm::vec2(0.5f, 0.25f)});
@@ -80,9 +80,9 @@ void Monster::idleUpdate(float deltaTime) {
     float timeDecimals = time - (float)(int)(time);
     if (timeDecimals < 0.5f) {
         canLook = true;
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk1")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk1"), 8};
     } else {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk2")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk2"), 8};
         if (canLook) {
             // NOTE: almost exact copy of attack update, horrible practise and essentially a hack for now
             glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
@@ -109,13 +109,13 @@ void Monster::chaseUpdate(float deltaTime) {
 
     // HACKY Animations
     if (timeDecimals < 0.25f) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk1")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk1"), 8};
     } else if (timeDecimals < 0.5f){
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk2")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk2"), 8};
     } else if (timeDecimals < 0.75f){
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk3")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk3"), 8};
     } else {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("walk4")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("walk4"), 8};
     }
 
     // TODO: add some randomisation here to start attack state
@@ -149,11 +149,11 @@ void Monster::attackUpdate(float deltaTime) {
     float time = timer.readSeconds();
     float timeDecimals = time - (float)(int)(time);
     if (timeDecimals < 0.25f) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire1")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("fire1"), 8};
     } else if (timeDecimals < 0.5f) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire2")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("fire2"), 8};
     } else if (timeDecimals < 0.75f) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire3")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("fire3"), 8};
         if (canAttack) {
             glm::vec2 lineStart(GetTransform()->getPos().x, GetTransform()->getPos().z);
             glm::vec2 castDirection(-orientation.x, -orientation.z);
@@ -174,7 +174,7 @@ void Monster::attackUpdate(float deltaTime) {
             canAttack = false;
         }
     } else {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("fire2")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("fire2"), 8};
         canAttack = true;
     }
 }
@@ -194,13 +194,13 @@ void Monster::dyingUpdate(float deltaTime) {
     const float time4 = 0.6f;
 
     if (time < deathTime + time1) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die1")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("die1"), 8};
     } else if (time < deathTime + time2) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die2")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("die2"), 8};
     } else if (time < deathTime + time3) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die3")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("die3"), 8};
     } else if (time < deathTime + time4) {
-        material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("die4")}, 8};
+        material = Material{"enemySprite", ResourceManager::Instance()->getTexture("die4"), 8};
     } else {
         currentState = AIState::STATE_DEAD;
     }
@@ -208,7 +208,7 @@ void Monster::dyingUpdate(float deltaTime) {
 }
 
 void Monster::deadUpdate(float deltaTime) {
-    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("death")}, 8};
+    material = Material{"enemySprite", ResourceManager::Instance()->getTexture("death"), 8};
     GetTransform()->getPos().y = 0.01f; // prevent z-fighting
     GetTransform()->setEulerRot(90.0f, 0.0f, 0.0f);
 }
@@ -217,7 +217,7 @@ void Monster::damage(int amount) {
     if (currentState == AIState::STATE_IDLE) {
         currentState = AIState::STATE_CHASE;
     }
-    material = Material{"enemySprite", std::vector<Texture*>{ResourceManager::Instance()->getTexture("pain")}, 8};
+    material = Material{"enemySprite", ResourceManager::Instance()->getTexture("pain"), 8};
     health -= amount;
 
     if (health <= 0) {

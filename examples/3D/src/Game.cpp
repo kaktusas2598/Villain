@@ -36,15 +36,15 @@ void Game::init() {
 
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 
-    ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
+    //ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
     std::vector<VertexP1N1UV> vertices;
     // nomals here are wrong cause im lazy, just wanted to get uv working cause it's 2nd vertex attrib, so need normals
     vertices.push_back({glm::vec3(0.0f,  1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.5f, 1.0f)});
     vertices.push_back({glm::vec3(1.0f,  0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f)});
     vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
     std::vector<unsigned int> indices = {0, 1, 2};
-    std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
-    Material mat("wood", textures, 8);
+    //std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
+    Material mat("wood", ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate"), 8);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     SceneNode* planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));

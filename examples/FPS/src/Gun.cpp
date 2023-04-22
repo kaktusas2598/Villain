@@ -20,7 +20,7 @@ const float TEX_MIN_Y = -OFFSET_Y;
 const float TEX_MAX_Y = 1 - OFFSET_Y;
 
 Gun::Gun() : MeshRenderer<VertexP1N1UV>(nullptr, Villain::Material()) {
-    material = Material{"gun", std::vector<Texture*>{ResourceManager::Instance()->loadTexture("assets/textures/PISGB0.png", "gun")}, 8};
+    material = Material{"gun", ResourceManager::Instance()->loadTexture("assets/textures/PISGB0.png", "gun"), 8};
 
     std::vector<VertexP1N1UV> vertices;
     vertices.push_back({glm::vec3(-SIZE_X, START, START), glm::vec3(0.0f), glm::vec2(TEX_MAX_X, 1 - TEX_MAX_Y)});

@@ -2,13 +2,15 @@ struct Material {
     vec4 diffuseColor;
     float shininess;
 
-    sampler2D texture_diffuse1;
-    sampler2D texture_diffuse2;
-    sampler2D texture_diffuse3;
-    sampler2D texture_specular1;
-    sampler2D texture_specular2;
-    sampler2D texture_normal1;
-    sampler2D texture_normal2;
+    bool useDiffuseMap;
+    bool useSpecularMap;
+    bool useNormalMap;
+    bool useDispMap;
+
+    sampler2D texture_diffuse;
+    sampler2D texture_specular;
+    sampler2D texture_normal;
+    sampler2D texture_disp;
 };
 
 struct BaseLight {
@@ -54,15 +56,14 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
     float spec = pow(max(dot(normal, halfwayDirection), 0.0), material.shininess);
 
     BaseLight newLight;
-    if (texture2D(material.texture_specular1, v_texCoords) == vec4(0, 0, 0, 0)) {
-        newLight.specular = vec3(1.0);
+    if (material.useSpecularMap) {
+        newLight.specular = base.specular * spec * vec3(texture(material.texture_specular, v_texCoords));
     } else {
-        newLight.specular = base.specular * spec * vec3(texture(material.texture_specular1, v_texCoords));
+        newLight.specular = base.specular * spec;
     }
 
-    newLight.ambient = base.ambient * vec3(texture(material.texture_diffuse1, v_texCoords));
-    newLight.diffuse = base.diffuse * diff * vec3(texture(material.texture_diffuse1, v_texCoords)) * material.diffuseColor.xyz;
-    //newLight.specular = base.specular * spec * vec3(texture(material.texture_specular1, v_texCoords));
+    newLight.ambient = base.ambient * vec3(texture(material.texture_diffuse, v_texCoords));
+    newLight.diffuse = base.diffuse * diff * vec3(texture(material.texture_diffuse, v_texCoords)) * material.diffuseColor.xyz;
 
     return newLight;
 }

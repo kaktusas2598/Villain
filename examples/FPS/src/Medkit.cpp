@@ -21,7 +21,7 @@ const float TEX_MAX_Y = 1.0f;
 
 Medkit::Medkit(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), currentLevel(level) {
 
-    material = Material{"medkit", std::vector<Texture*>{ResourceManager::Instance()->loadTexture("assets/textures/MEDIA0.png", "medkit")}, 8};
+    material = Material{"medkit", ResourceManager::Instance()->loadTexture("assets/textures/MEDIA0.png", "medkit"), 8};
     std::vector<VertexP1N1UV> vertices;
 
     vertices.push_back({glm::vec3(-SIZE_X, START, START), glm::vec3(0.0f), glm::vec2(TEX_MAX_X, 1 - TEX_MAX_Y)});

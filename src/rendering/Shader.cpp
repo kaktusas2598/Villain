@@ -229,27 +229,32 @@ namespace Villain {
     }
 
     void Shader::setMaterialUniforms(Material& material) {
-        unsigned int diffuseIndex = 1;
-        unsigned int specularIndex = 1;
-        unsigned int normalIndex = 1;
         unsigned int i = 0;
 
-        for (auto& mat: material.getDiffuseMaps()) {
-            mat->bind(i);
-            std::string slot = std::to_string(diffuseIndex++);
-            this->setUniform1i("material.texture_diffuse" + slot, i);
+        if (material.getDiffuseMap() == nullptr) {
+            this->setUniform1i("material.useDiffuseMap", 0);
+        } else {
+            this->setUniform1i("material.useDiffuseMap", 1);
+            material.getDiffuseMap()->bind(i);
+            this->setUniform1i("material.texture_diffuse", i);
             i++;
         }
-        for (auto& mat: material.getSpecularMaps()) {
-            mat->bind(i);
-            std::string slot = std::to_string(specularIndex++);
-            this->setUniform1i("material.texture_specular" + slot, i);
+
+        if (material.getSpecularMap() == nullptr) {
+            this->setUniform1i("material.useSpecularMap", 0);
+        } else {
+            this->setUniform1i("material.useSpecularMap", 1);
+            material.getSpecularMap()->bind(i);
+            this->setUniform1i("material.texture_specular", i);
             i++;
         }
-        for (auto& mat: material.getNormalMaps()) {
-            mat->bind(i);
-            std::string slot = std::to_string(normalIndex++);
-            this->setUniform1i("material.texture_normal" + slot, i);
+
+        if (material.getNormalMap() == nullptr) {
+            this->setUniform1i("material.useNormalMap", 0);
+        } else {
+            this->setUniform1i("material.useNormalMap", 1);
+            material.getNormalMap()->bind(i);
+            this->setUniform1i("material.texture_normal", i);
             i++;
         }
 

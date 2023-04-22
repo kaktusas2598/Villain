@@ -11,16 +11,15 @@ namespace Villain {
 
     class Material {
         public:
-            Material(const std::string& name = std::string());
+            Material(const std::string& name = std::string()) { this->name = name; }
             virtual ~Material() {}
 
-            // TODO: engine should have default textures to display when there is no texture provided
-            Material(
-                    const std::string& name,
-                    std::vector<Texture*> diffuse,
-                    float shininess,
-                    std::vector<Texture*> specular = std::vector<Texture*>(),
-                    std::vector<Texture*> normal = std::vector<Texture*>());
+            // TODO: engine should have default textures to display when there is no texture provided?
+            Material(const std::string& name, Texture* diffuse, float shininess, Texture* specular = nullptr, Texture* normal = nullptr) :
+                diffuseMap(diffuse), specularFactor(shininess), specularMap(specular), normalMap(normal)
+            {
+                this->name = name;
+            }
 
             const std::string& getName() { return name; }
 
@@ -30,16 +29,17 @@ namespace Villain {
             const glm::vec4& getDiffuseColor() { return diffuseColor; }
             void setDiffuseColor(const glm::vec4& diffuse) { diffuseColor = diffuse; }
 
-            std::vector<Texture*>& getDiffuseMaps() { return diffuseMaps; }
-            std::vector<Texture*>& getSpecularMaps() { return specularMaps; }
-            std::vector<Texture*>& getNormalMaps() { return normalMaps; }
+            Texture* getDiffuseMap() { return diffuseMap; }
+            Texture* getSpecularMap() { return specularMap; }
+            Texture* getNormalMap() { return normalMap; }
         private:
             std::string name; //<<< Material name
             float specularFactor ; //<<< shininess
             glm::vec4 diffuseColor = glm::vec4(1.0f);
-            std::vector<Texture*> diffuseMaps;
-            std::vector<Texture*> specularMaps;
-            std::vector<Texture*> normalMaps;
+            Texture* diffuseMap = nullptr; //<<< Base colour, diffuse map
+            Texture* specularMap = nullptr;//<<< Specularity map
+            Texture* normalMap = nullptr; //<<< Normal/bump map
+            Texture* dispMap = nullptr; //<<< Parralax displacement map
     };
 }
 

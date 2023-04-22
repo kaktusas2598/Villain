@@ -78,10 +78,11 @@ void Game::init() {
     // Create mesh for wall
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
-    std::vector<Texture*> specularTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_rough_4k.jpg", "redSandstoneRough", GL_REPEAT)};
-    std::vector<Texture*> normalTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT)};
-    Material mat("redSandstonePavement", textures, 8, specularTextures, normalTextures);
+    Material mat(
+            "redSandstonePavement",
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
+            8, nullptr,
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT));
     float uvCoords[4] = {0.0f, 100.0f, 0.0f, 100.0f};
     MeshUtils<VertexP1N1T1B1UV>::addXYPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(50.0f), uvCoords, false);
     MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
@@ -185,12 +186,10 @@ void Game::init() {
 
     indices.clear();
     vertices.clear();
-    textures.clear();
-    textures = {ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot")};
-    Material earthMat("smallBlueDot", textures, 8);
+    Material earthMat("smallBlueDot", ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot"), 8);
     MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
     //FIXME: only half of sphere looks correct with tangents
-    //MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
+    MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
     Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
     BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
@@ -226,10 +225,12 @@ void Game::createGround() {
     // Create mesh for ground
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT)};
-    std::vector<Texture*> specularTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_rough_4k.jpg", "redSandstoneRough", GL_REPEAT)};
-    std::vector<Texture*> normalTextures = {ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT)};
-    Material mat("redSandstonePavement", textures, 8, specularTextures, normalTextures);
+    Material mat(
+            "redSandstonePavementGround",
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
+            8, nullptr,
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT));
+
     float uvCoords[4] = {0.0f, 500.0f, 0.0f, 500.0f};
     MeshUtils<VertexP1N1T1B1UV>::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
     MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
@@ -255,10 +256,10 @@ void Game::addRigidBoxes() {
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
     //std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
-    std::vector<Texture*> diffuse = {ResourceManager::Instance()->loadTexture("assets/textures/woodDiffuse.jpg", "crateBase")};
-    std::vector<Texture*> specular = {ResourceManager::Instance()->loadTexture("assets/textures/woodRoughness.jpg", "crateRough")};
-    std::vector<Texture*> normal = {ResourceManager::Instance()->loadTexture("assets/textures/woodNormal.jpg", "crateNormal")};
-    Material mat("cartoonWood", diffuse, 8, specular, normal);
+    Material mat("cartoonWood",
+            ResourceManager::Instance()->loadTexture("assets/textures/woodDiffuse.jpg", "crateBase"),
+            8, nullptr,
+            ResourceManager::Instance()->loadTexture("assets/textures/woodNormal.jpg", "crateNormal"));
 
     // Re-using the same collision for all boxes is better for memory usage and performance
     btBoxShape* boxShape = new btBoxShape({0.5, 0.5, 0.5});
@@ -342,8 +343,7 @@ void Game::shootSphere() {
 
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/moon1024.bmp", "moon")};
-    Material moonMat("moon", textures, 8);
+    Material moonMat("lua", ResourceManager::Instance()->loadTexture("assets/textures/moon1024.bmp", "lua"), 8);
     MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);
