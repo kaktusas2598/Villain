@@ -10,6 +10,7 @@
 * 2D and Cubemap texture support
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
+* Normal Mapping
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
@@ -35,7 +36,8 @@
 * LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
-* Shadow mapping and normal mapping
+* Parallax mapping
+* Shadow mapping
 * Post-processing effects
 * Stencil buffer
 * Instanced drawing
@@ -91,7 +93,6 @@ go to examples folder execute these scripts in order:
  Same scripts in the root folder will only build the engine as a library, CMakeLists.txt file can be modified by changing
  one line to build engine as an executable, but that requires having an entrypoint like int main() etc.
 
-
 ## Dev Notes
 
 I use neovim with clangd LSP server for editing code. To build compilation database for clangd, so I can get great autocompletion
@@ -107,7 +108,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * Implement Normal Mapping ( currently doing that, but not working, do I need gamma correction?)
  * Investigate shadow mapping techniques
  * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
  * SpotLight could take Camera* as an optional param to make it act as a flashlight
