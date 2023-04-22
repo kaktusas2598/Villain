@@ -124,7 +124,7 @@ namespace Villain {
                 specularMap = (*specularMaps)[0];
             if (!normalMaps->empty())
                 normalMap = (*normalMaps)[0];
-
+            // TODO: parallax displacement maps
             // TODO: stop hardcoding specularity factor(32) here
             Material mat(matName, diffuseMap, 32.0f, specularMap, normalMap);
             mat.setDiffuseColor(diffuseColor);
