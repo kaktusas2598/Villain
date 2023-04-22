@@ -2,63 +2,113 @@
 
 namespace Villain {
 
-    FrameBuffer::FrameBuffer(float width, float height) {
-        GLCall(glGenFramebuffers(1, &fboID));
-        bind();
-
-        GLCall(glGenTextures(1, &textureID));
-        GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0));
-
-        GLCall(glGenRenderbuffers(1, &rboID));
-        GLCall(glBindRenderbuffer(GL_RENDERBUFFER, rboID));
-        GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
-        GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboID));
+    FrameBuffer::FrameBuffer(int w, int h, int textureCount, GLenum* attachments) :
+        fboID(0), rboID(0), width(w), height(h), numTextures(textureCount)
+    {
+        textureIDs = new GLuint[textureCount];
+        initTextures();
+        initRenderTargets(attachments);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             Logger::Instance()->error("Framebuffer not complete.");
         }
+    }
 
-        unbind();
-        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-        GLCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+    void FrameBuffer::initTextures() {
+        // NOTE: potentially could be handled by Texture class
+        GLCall(glGenTextures(numTextures, textureIDs));
+        for (int i = 0; i < numTextures; i++) {
+            GLCall(glBindTexture(GL_TEXTURE_2D, textureIDs[i]));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+        }
+    }
 
+    void FrameBuffer::initRenderTargets(GLenum* attachments) {
+        if (attachments == nullptr) {
+            return;
+        }
+
+        GLenum drawBuffers[numTextures];
+        bool hasDepth = false;
+
+        for (int i = 0; i < numTextures; i++) {
+            // NOTE: stencil attachment is definitely incorrect for this case, need a separate condition
+            if (attachments[i] == GL_DEPTH_ATTACHMENT || attachments[i] == GL_STENCIL_ATTACHMENT) {
+                drawBuffers[i] = GL_NONE;
+                hasDepth = true;
+            } else {
+                drawBuffers[i] = attachments[i];
+            }
+
+            if (attachments[i] == GL_NONE) {
+                continue;
+            }
+
+            if (fboID == 0) {
+                GLCall(glGenFramebuffers(1, &fboID));
+                GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fboID));
+            }
+
+            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], GL_TEXTURE_2D, textureIDs[i], 0));
+        }
+
+        if (fboID == 0) {
+            return;
+        }
+
+        if (!hasDepth) {
+            GLCall(glGenRenderbuffers(1, &rboID));
+            GLCall(glBindRenderbuffer(GL_RENDERBUFFER, rboID));
+            GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
+            GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID));
+        }
+
+        // Seems to work fine without this?
+        GLCall(glDrawBuffers(numTextures, drawBuffers));
     }
 
     FrameBuffer::~FrameBuffer() {
-        GLCall(glDeleteFramebuffers(1, &fboID));
-        GLCall(glDeleteTextures(1, &textureID));
-        GLCall(glDeleteRenderbuffers(1, &rboID));
+        if (*textureIDs) GLCall(glDeleteTextures(numTextures, textureIDs));
+        if (fboID) GLCall(glDeleteFramebuffers(1, &fboID));
+        //GLCall(glDeleteTextures(1, &textureID));
+        if (rboID) GLCall(glDeleteRenderbuffers(1, &rboID));
+        if (textureIDs) delete[] textureIDs;
     }
 
     unsigned int FrameBuffer::getTextureID() {
-        return textureID;
+        // NOTE: not great
+        return textureIDs[0];
     }
-    void FrameBuffer::rescale(float width, float height) {
+    void FrameBuffer::rescale(int w, int h) {
+        width = w;
+        height = h;
+        bind();
         // FIXME: had to remove couple of GLCall(), need to try recreating
         // fbo every time we resize viewport probably as some functions below were causing errors
-        GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);
+        for (int i = 0; i < numTextures; i++) {
+            GLCall(glBindTexture(GL_TEXTURE_2D, textureIDs[i]));
+            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            // TODO: this is bad design once we start attaching depth and stencil attachments
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureIDs[i], 0);
 
-        GLCall(glBindRenderbuffer(GL_RENDERBUFFER, rboID));
-        GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboID);
+        }
+        if (rboID != 0) {
+            GLCall(glBindRenderbuffer(GL_RENDERBUFFER, rboID));
+            GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h));
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboID);
+        }
     }
 
-
     void FrameBuffer::bind() const {
-        GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fboID));
-        //GLCall(glViewport(0, 0, width, height)); // Good idea everytime binding to new render target to set size accordingly
+        GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fboID)); // or GL_DRAW_FRAMEBUFFER as target??
+        GLCall(glViewport(0, 0, width, height)); // Good idea everytime binding to new render target to set size accordingly
     }
 
     void FrameBuffer::unbind() const {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     }
-
 }

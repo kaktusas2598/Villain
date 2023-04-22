@@ -5,24 +5,25 @@
 
 namespace Villain {
 
-    // TODO: Need to:
-    // 1. ability to attach multiple textures
-    // 2. assign different types of attachments
     class FrameBuffer {
         public:
-            FrameBuffer(float width, float height);
+            FrameBuffer(int w, int h, int textureCount = 1, GLenum* attachments = new GLenum[1]{GL_COLOR_ATTACHMENT0});
             ~FrameBuffer();
 
             unsigned int getTextureID();
-            void rescale(float width, float height);
+            void rescale(int w, int h);
+            void initTextures();
+            void initRenderTargets(GLenum* attachments);
 
             void bind() const;
             void unbind() const;
 
         private:
             unsigned int fboID; //<<< framebuffer id
-            unsigned int textureID; //<<< fbo will render to this texture
             unsigned int rboID; //<<< renderbuffer id
+            int width, height; //<<< framebuffer size
+            int numTextures = 1; //<<< number of attached textures
+            GLuint* textureIDs; //<<< textures attached to the framebuffer
     };
 }
 
