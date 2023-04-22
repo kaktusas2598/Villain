@@ -264,6 +264,8 @@ namespace Villain {
             this->setUniform1i("material.useDispMap", 1);
             material.getDislacementMap()->bind(displacementSlot);
             this->setUniform1i("material.texture_disp", displacementSlot);
+            this->setUniform1f("material.dispMapScale", material.getDispMapScale());
+            this->setUniform1f("material.dispMapBias", material.getDispMapBias());
         }
 
         this->setUniform1f("material.shininess", material.getSpecularFactor());

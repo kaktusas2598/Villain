@@ -1,51 +1,35 @@
 #shader vertex
 #version 330 core
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
-layout(location = 2) in vec2 texCoords;
-layout(location = 3) in vec3 tangent; // Calculated by Assimp
-layout(location = 4) in vec3 biTangent; // Calculated by Assimp
-
-out vec2 v_texCoords;
-
-uniform mat4 projection;
-uniform mat4 view;
-uniform mat4 model;
-
-void main() {
-    gl_Position = projection * view * model * vec4(position, 1.0);
-    v_texCoords = texCoords;
-}
+#include forwardLighting.vsh
 
 #shader fragment
 #version 330 core
 
 layout(location = 0) out vec4 o_color;
 
+in vec3 v_normal;
+in vec3 v_fragPos;
 in vec2 v_texCoords;
 
-struct Material {
-    vec4 diffuseColor;
-    float shininess;
+in mat3 v_TBN;
 
-    bool useDiffuseMap;
-    bool useSpecularMap;
-    bool useNormalMap;
-    bool useDispMap;
-
-    sampler2D texture_diffuse;
-    sampler2D texture_specular;
-    sampler2D texture_normal;
-    sampler2D texture_disp;
-};
+#include lighting.glh
+#include sampling.glh
 
 uniform vec3 color; // Ambient light color
-uniform Material material;
+uniform vec3 viewPosition;
 
 void main() {
+    vec3 viewDirection = normalize(viewPosition - v_fragPos);
+    vec2 texCoords = v_texCoords;
+    // Parallax Mapping
+    if (material.useDispMap) {
+        texCoords = parallaxMapping(texCoords, viewDirection, material.texture_disp, material.dispMapScale, material.dispMapBias, v_TBN);
+    }
+
     if (material.useDiffuseMap) {
-        vec4 textureColor = texture2D(material.texture_diffuse, v_texCoords);
+        vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
         o_color = textureColor * vec4(color, 1.0);
     } else {
         o_color = vec4(color, 1.0);

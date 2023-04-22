@@ -1,6 +1,10 @@
 struct Material {
     vec4 diffuseColor;
+
     float shininess;
+
+    float dispMapScale; // To make sure we don't get too much of parallax disp
+    float dispMapBias; // Or offset
 
     bool useDiffuseMap;
     bool useSpecularMap;
@@ -46,7 +50,7 @@ struct SpotLight {
 uniform Material material;
 
 // TODO: need to pass material to these methods instead of harcoding uniform here
-BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDir) {
+BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDir, vec2 texCoords) {
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 reflectDirection = reflect(-lightDir, normal);
     // Blinn-Phong shading addition
@@ -57,32 +61,32 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
 
     BaseLight newLight;
     if (material.useSpecularMap) {
-        newLight.specular = base.specular * spec * vec3(texture(material.texture_specular, v_texCoords));
+        newLight.specular = base.specular * spec * vec3(texture(material.texture_specular, texCoords));
     } else {
         newLight.specular = base.specular * spec;
     }
 
-    newLight.ambient = base.ambient * vec3(texture(material.texture_diffuse, v_texCoords));
-    newLight.diffuse = base.diffuse * diff * vec3(texture(material.texture_diffuse, v_texCoords)) * material.diffuseColor.xyz;
+    newLight.ambient = base.ambient * vec3(texture(material.texture_diffuse, texCoords));
+    newLight.diffuse = base.diffuse * diff * vec3(texture(material.texture_diffuse, texCoords)) * material.diffuseColor.xyz;
 
     return newLight;
 }
 
-vec3 calculateDirLight(DirectionalLight light, vec3 normal, vec3 viewDirection) {
+vec3 calculateDirLight(DirectionalLight light, vec3 normal, vec3 viewDirection, vec2 texCoords) {
     vec3 lightDirection = /*v_TBN **/ normalize(-light.direction);
 
-    BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection);
+    BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection, texCoords);
 
     return (newLight.ambient + newLight.diffuse + newLight.specular);
 }
 
-vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDirection) {
+vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDirection, vec2 texCoords) {
     vec3 lightDirection = /*v_TBN **/ normalize(light.position - fragPos);
     // attenuation
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
-    BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection);
+    BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection, texCoords);
 
     newLight.ambient *= attenuation;
     newLight.diffuse *= attenuation;
@@ -90,13 +94,13 @@ vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewD
     return (newLight.ambient + newLight.diffuse + newLight.specular);
 }
 
-vec3 calculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDirection) {
+vec3 calculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDirection, vec2 texCoords) {
     vec3 lightDirection = /*v_TBN **/ normalize(light.position - fragPos);
     float theta = dot(lightDirection, normalize(-light.direction));
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
-    BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection);
+    BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection, texCoords);
 
     newLight.diffuse *= intensity;
     newLight.specular *= intensity;

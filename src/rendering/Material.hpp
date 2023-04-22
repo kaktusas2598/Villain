@@ -14,25 +14,31 @@ namespace Villain {
             Material(const std::string& name = std::string()) { this->name = name; }
             virtual ~Material() {}
 
-            // TODO: engine should have default textures to display when there is no texture provided?
+            // NOTE: Should the engine have default textures to display when there is no texture provided?
             Material(
                     const std::string& name,
                     Texture* diffuse,
                     float shininess,
                     Texture* specular = nullptr,
                     Texture* normal = nullptr,
-                    Texture* displacement = nullptr) :
+                    Texture* displacement = nullptr,
+                    float dispScale = 0.1f, //0.04f
+                    float dispBias = 0.0f) :
                 diffuseMap(diffuse), specularFactor(shininess), specularMap(specular), normalMap(normal), dispMap(displacement)
             {
                 this->name = name;
+                this->dispMapScale = dispScale;
+                float baseBias = dispMapScale/2;
+                this->dispMapBias = -baseBias + baseBias * dispBias;
             }
 
-            const std::string& getName() { return name; }
-
-            float getSpecularFactor() { return specularFactor; }
-            void setSpecularFactor(float specular) { specularFactor = specular; }
-
+            const std::string& getName() const { return name; }
+            inline float getSpecularFactor() const { return specularFactor; }
+            inline float getDispMapScale() const { return dispMapScale; }
+            inline float getDispMapBias() const { return dispMapBias; }
             const glm::vec4& getDiffuseColor() { return diffuseColor; }
+
+            void setSpecularFactor(float specular) { specularFactor = specular; }
             void setDiffuseColor(const glm::vec4& diffuse) { diffuseColor = diffuse; }
 
             Texture* getDiffuseMap() { return diffuseMap; }
@@ -47,6 +53,8 @@ namespace Villain {
             Texture* specularMap = nullptr;//<<< Specularity map
             Texture* normalMap = nullptr; //<<< Normal/bump map
             Texture* dispMap = nullptr; //<<< Parralax displacement map
+            float dispMapScale = 0.1f; //<<< Displacement map scaling
+            float dispMapBias = 0.0f; //<<< Displacement map offset/bias
     };
 }
 

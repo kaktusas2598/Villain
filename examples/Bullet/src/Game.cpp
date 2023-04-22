@@ -82,7 +82,9 @@ void Game::init() {
             "redSandstonePavement",
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
             32, nullptr,
-            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT));
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT),
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_disp_4k.jpg", "redSandstoneDisp", GL_REPEAT)
+            );
     float uvCoords[4] = {0.0f, 100.0f, 0.0f, 100.0f};
     MeshUtils<VertexP1N1T1B1UV>::addXYPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(50.0f), uvCoords, false);
     MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
@@ -226,11 +228,12 @@ void Game::createGround() {
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
     Material mat(
-            "redSandstonePavementGround",
+            "redSandstonePavement",
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
-            8, nullptr,
-            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT));
-
+            32, nullptr,
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_nor_gl_4k.jpg", "redSandstoneNormal", GL_REPEAT),
+            ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_disp_4k.jpg", "redSandstoneDisp", GL_REPEAT)
+            );
     float uvCoords[4] = {0.0f, 500.0f, 0.0f, 500.0f};
     MeshUtils<VertexP1N1T1B1UV>::addXZPlane(&vertices, &indices, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(250.0f), uvCoords, false);
     MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);

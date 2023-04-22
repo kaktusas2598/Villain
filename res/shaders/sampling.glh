@@ -1,0 +1,7 @@
+// Calculate Parallex mapping displacement UV coordinates
+vec2 parallaxMapping(vec2 texCoords, vec3 viewDirection, sampler2D dispMap, float dispMapScale, float dispMapBias, mat3 TBN) {
+    float height = texture2D(dispMap, texCoords).r;
+    texCoords = texCoords + (viewDirection * TBN).xy * height * dispMapScale + dispMapBias;
+
+    return texCoords;
+}
