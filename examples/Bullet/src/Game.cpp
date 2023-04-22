@@ -254,8 +254,11 @@ void Game::addRigidBoxes() {
     MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
     Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
 
-    std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
-    Material mat("cartoonWood", textures, 8);
+    //std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
+    std::vector<Texture*> diffuse = {ResourceManager::Instance()->loadTexture("assets/textures/woodDiffuse.jpg", "crateBase")};
+    std::vector<Texture*> specular = {ResourceManager::Instance()->loadTexture("assets/textures/woodRoughness.jpg", "crateRough")};
+    std::vector<Texture*> normal = {ResourceManager::Instance()->loadTexture("assets/textures/woodNormal.jpg", "crateNormal")};
+    Material mat("cartoonWood", diffuse, 8, specular, normal);
 
     // Re-using the same collision for all boxes is better for memory usage and performance
     btBoxShape* boxShape = new btBoxShape({0.5, 0.5, 0.5});

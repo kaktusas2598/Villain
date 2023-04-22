@@ -86,7 +86,7 @@ void Game::init() {
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
-    // Light test
+    // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
     //SceneNode* dirLight = ((new SceneNode("Directional Light 1"))
                 //->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -1.0f, -0.3f))));
     //addToScene(dirLight);
@@ -100,14 +100,6 @@ void Game::init() {
     SceneNode* pointLight2 = ((new SceneNode("Point Light 2"))
                 ->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f, 10.0f, 10.0f), 1.0f, 0.022f, 0.0019f)));
     addToScene(pointLight2);
-
-    //SceneNode* pointLights;
-    //for (int i = 0; i < 5; i++) {
-        //pointLights = ((new SceneNode(std::to_string(i)))
-                //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f * i, 5.0f, 5.0f), 1.0f, 0.022f, 0.0019f)));
-        //addToScene(pointLights);
-
-    //}
 
     glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
     SceneNode* spotLight = ((new SceneNode("Spot Light"))
