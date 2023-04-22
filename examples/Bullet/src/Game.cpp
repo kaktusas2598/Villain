@@ -189,6 +189,8 @@ void Game::init() {
     textures = {ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot")};
     Material earthMat("smallBlueDot", textures, 8);
     MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
+    //FIXME: only half of sphere looks correct with tangents
+    //MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
     Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
     BulletBodyComponent* sphereComp = new BulletBodyComponent(sphereBody);
