@@ -57,7 +57,7 @@ namespace Villain {
 
         // Setup vertices and indices for 3D Axis-Aligned Bounding Box, by default 1f sized cube centered around the origin
         static void addAABB(
-                std::vector<VertexP1N1UV>* vertices,
+                std::vector<VertexType>* vertices,
                 std::vector<unsigned int>* indices,
                 const glm::vec3& center = glm::vec3(0.0f),
                 const glm::vec3& halfSize = glm::vec3(0.5f));

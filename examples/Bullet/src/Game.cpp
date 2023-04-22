@@ -253,10 +253,11 @@ void Game::createGround() {
 
 void Game::addRigidBoxes() {
     // Create common mesh for all boxes
-    std::vector<VertexP1N1UV> vertices;
+    std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
-    MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
+    MeshUtils<VertexP1N1T1B1UV>::addAABB(&vertices, &indices);
+    MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
+    Mesh<VertexP1N1T1B1UV>* mesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
     //std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
     Material mat("cartoonWood",
@@ -286,7 +287,7 @@ void Game::addRigidBoxes() {
                 body->setUserPointer(boxComp);
                 SceneNode* bodyNode = (new SceneNode("Dynamic Body " + std::to_string(j)))
                     ->addComponent(boxComp)
-                    ->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
+                    ->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(mesh, mat));
                 WorldNode->addChild(bodyNode);
             }
         }

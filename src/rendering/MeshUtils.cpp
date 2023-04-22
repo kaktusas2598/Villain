@@ -142,7 +142,7 @@ namespace Villain {
     }
 
     template <class VertexType>
-    void MeshUtils<VertexType>::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize) {
+    void MeshUtils<VertexType>::addAABB(std::vector<VertexType>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize) {
         glm::vec3 minExtents = center - halfSize;
         glm::vec3 maxExtents = center + halfSize;
         // Front Face
@@ -242,6 +242,7 @@ namespace Villain {
     template void MeshUtils<VertexP1N1T1B1UV>::addYZPlane(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
 
     template void MeshUtils<VertexP1N1UV>::addAABB(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize);
+    template void MeshUtils<VertexP1N1T1B1UV>::addAABB(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec3& halfSize);
 
     template void MeshUtils<VertexP1N1UV>::addSphere(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center);
     template void MeshUtils<VertexP1N1T1B1UV>::addSphere(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices, float radius, const glm::vec3& center);
