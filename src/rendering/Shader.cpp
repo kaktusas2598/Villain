@@ -229,33 +229,41 @@ namespace Villain {
     }
 
     void Shader::setMaterialUniforms(Material& material) {
-        unsigned int i = 0;
-
+        unsigned int diffuseSlot = 0;
+        unsigned int specularSlot = 1;
+        unsigned int normalSlot = 2;
+        unsigned int displacementSlot = 3;
+        // Base color/diffuse map
         if (material.getDiffuseMap() == nullptr) {
             this->setUniform1i("material.useDiffuseMap", 0);
         } else {
             this->setUniform1i("material.useDiffuseMap", 1);
-            material.getDiffuseMap()->bind(i);
-            this->setUniform1i("material.texture_diffuse", i);
-            i++;
+            material.getDiffuseMap()->bind(diffuseSlot);
+            this->setUniform1i("material.texture_diffuse", diffuseSlot);
         }
-
+        // Specular map
         if (material.getSpecularMap() == nullptr) {
             this->setUniform1i("material.useSpecularMap", 0);
         } else {
             this->setUniform1i("material.useSpecularMap", 1);
-            material.getSpecularMap()->bind(i);
-            this->setUniform1i("material.texture_specular", i);
-            i++;
+            material.getSpecularMap()->bind(specularSlot);
+            this->setUniform1i("material.texture_specular", specularSlot);
         }
-
+        // Normal/bump map
         if (material.getNormalMap() == nullptr) {
             this->setUniform1i("material.useNormalMap", 0);
         } else {
             this->setUniform1i("material.useNormalMap", 1);
-            material.getNormalMap()->bind(i);
-            this->setUniform1i("material.texture_normal", i);
-            i++;
+            material.getNormalMap()->bind(normalSlot);
+            this->setUniform1i("material.texture_normal", normalSlot);
+        }
+        // Parallax displacement map
+        if (material.getDislacementMap() == nullptr) {
+            this->setUniform1i("material.useDispMap", 0);
+        } else {
+            this->setUniform1i("material.useDispMap", 1);
+            material.getDislacementMap()->bind(displacementSlot);
+            this->setUniform1i("material.texture_disp", displacementSlot);
         }
 
         this->setUniform1f("material.shininess", material.getSpecularFactor());
