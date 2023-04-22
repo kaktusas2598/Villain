@@ -15,8 +15,14 @@ namespace Villain {
             virtual ~Material() {}
 
             // TODO: engine should have default textures to display when there is no texture provided?
-            Material(const std::string& name, Texture* diffuse, float shininess, Texture* specular = nullptr, Texture* normal = nullptr) :
-                diffuseMap(diffuse), specularFactor(shininess), specularMap(specular), normalMap(normal)
+            Material(
+                    const std::string& name,
+                    Texture* diffuse,
+                    float shininess,
+                    Texture* specular = nullptr,
+                    Texture* normal = nullptr,
+                    Texture* displacement = nullptr) :
+                diffuseMap(diffuse), specularFactor(shininess), specularMap(specular), normalMap(normal), dispMap(displacement)
             {
                 this->name = name;
             }
@@ -32,6 +38,7 @@ namespace Villain {
             Texture* getDiffuseMap() { return diffuseMap; }
             Texture* getSpecularMap() { return specularMap; }
             Texture* getNormalMap() { return normalMap; }
+            Texture* getDislacementMap() { return dispMap; }
         private:
             std::string name; //<<< Material name
             float specularFactor ; //<<< shininess

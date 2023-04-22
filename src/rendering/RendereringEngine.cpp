@@ -31,7 +31,6 @@ namespace Villain {
 
     void RenderingEngine::render(SceneNode* node) {
         defaultShader->bind();
-        // NOTE: Commented out for now, because there needs to be a nice way to set it somewhere
         defaultShader->setUniformVec3("color", ambientLight);
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);
