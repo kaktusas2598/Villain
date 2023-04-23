@@ -21,6 +21,7 @@ namespace Villain {
 
             shader.bind();
             // NOTE: should implenent mesh batch renderer
+            // TODO: Add new updateUniforms() method without a matierla, because meshes set their own materials for each mesh
             shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
 
             if (mesh->getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
