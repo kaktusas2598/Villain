@@ -19,7 +19,7 @@ namespace Villain {
         GLCall(glGenTextures(numTextures, textureIDs));
         for (int i = 0; i < numTextures; i++) {
             textures[i] = new Texture();
-            textures[i]->init(width, height, textureIDs[i]);
+            textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
         }
     }
 

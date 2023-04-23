@@ -10,7 +10,7 @@ namespace Villain  {
         public:
             // Initialise empty texture, used by framebuffers
             Texture() : rendererID(0), target(GL_TEXTURE_2D) {}
-            void init(int w, int h, unsigned int id = 0);
+            void init(int w, int h, unsigned int id = 0, GLfloat filter = GL_LINEAR, GLint internalFormat = GL_RGBA, GLenum format = GL_RGBA, bool clamp = false);
 
             // 2D Texture
             Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE);

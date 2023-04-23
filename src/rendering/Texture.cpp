@@ -6,7 +6,7 @@
 
 namespace Villain {
 
-    void Texture::init(int w, int h, unsigned int id) {
+    void Texture::init(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format, bool clamp) {
         rendererID = id;
         width = w;
         height = h;
@@ -14,9 +14,15 @@ namespace Villain {
             GLCall(glGenTextures(1, &rendererID));
         }
         GLCall(glBindTexture(target, rendererID));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexImage2D(target, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filter));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, filter));
+
+        if (clamp) {
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP));
+        }
+
+        GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, NULL));
     }
 
     Texture::Texture(const std::string& fileName, GLint wrappingMode)
