@@ -71,9 +71,11 @@ namespace Villain {
         rendererID = createShader(ss[0].str(), ss[1].str());
     }
 
-    void Shader::createFromResource(const std::string& source) {
+    Shader* Shader::createFromResource(const std::string& source) {
         std::string src = FileUtils::loadResource("res/shaders/" + source + ".glsl");
-        this->createFromSource(src);
+        Shader* shader = new Shader();
+        shader->createFromSource(src);
+        return shader;
     }
 
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {

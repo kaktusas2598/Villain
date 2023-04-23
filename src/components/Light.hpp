@@ -7,8 +7,19 @@
 
 namespace Villain {
 
-    // TODO: Specular color can be changed by specular intensity probably, same with diffuse?
+    class ShadowInfo {
+        public:
+            ShadowInfo(const glm::mat4& proj): projection(proj) {}
+
+            inline glm::mat4 getProjection() const { return projection; }
+        private:
+            glm::mat4 projection;
+    };
+
+    // TODO:
+    // 1. Specular color can be changed by specular intensity probably, same with diffuse?
     // Because it feels strange passing 3 colour values just to setup a light
+    // 2. Spot light needs attenuation
     //
     // Base color components used by all light sources
     class BaseLight : public NodeComponent {
@@ -18,14 +29,17 @@ namespace Villain {
             glm::vec3 SpecularColor;
 
             BaseLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :
-                AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular) {}
+                AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular), shader(nullptr), shadowInfo(nullptr) {}
             ~BaseLight();
             virtual void addToEngine(Engine* engine) override;
             virtual std::string type() = 0;
-
-            Shader* getShader() { return shader; }
+            inline ShadowInfo* getShadowInfo() const { return shadowInfo; }
+            inline Shader* getShader() { return shader; }
         protected:
+            void setShadowInfo(ShadowInfo* info);
             Shader* shader;
+        private:
+            ShadowInfo* shadowInfo;
     };
 
     class DirectionalLight : public BaseLight {

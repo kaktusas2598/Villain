@@ -13,8 +13,7 @@ namespace Villain {
 
     RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
-        defaultShader = new Shader();
-        defaultShader->createFromResource("forward-ambient");
+        defaultShader = Shader::createFromResource("forward-ambient");
 
         mainCamera = new Camera3D();
         altCamera = new Camera3D();
@@ -31,6 +30,8 @@ namespace Villain {
         screenQuad = MeshUtils<VertexP1N1UV>::getXYPlane(glm::vec3(0.0f), glm::vec2(1.0f), new float[4]{0.0, 1.0, 0.0, 1.0});
         // TODO: refactor hardcoded shadow map size
         shadowBuffer = new FrameBuffer(1024, 1024);
+        // internalFormat - GL_DEPTH_COMPONENT_16?, format - GL_DEPTH_COMPONENT? GL_TEXTURE_2D, GL_NEAREST, clamp = true
+        //shadowBuffer = new FrameBuffer(1024, 1024, 1, GL_DEPTH_ATTACHMENT);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight());
     }
 
@@ -90,6 +91,7 @@ namespace Villain {
             }
 
             //// NOTE: shadow mapping techniques will be here
+            ShadowInfo* shadowInfo = activeLight->getShadowInfo();
 
             //// Using additive blending here to render lights one by one and blend onto the scene
             //// this is so called forward multi-pass rendering

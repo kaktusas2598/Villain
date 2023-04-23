@@ -30,11 +30,12 @@ namespace Villain {
             Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile = std::string());
             ~Shader();
 
+            // Create shader from embedded resource library
+            static Shader* createFromResource(const std::string& source);
+
             // To be used with empty constructor if we don't want to load shaders from files
             void createFromSource(const std::string& vertexSource, const std::string& fragmentSource);
             void createFromSource(const std::string& source);
-            // From embedded resource library
-            void createFromResource(const std::string& source);
 
             void bind() const;
             void unbind() const;
