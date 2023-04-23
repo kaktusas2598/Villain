@@ -8,6 +8,8 @@ namespace Villain  {
 
     class Texture {
         public:
+            // Initialise empty texture, used by framebuffers
+            Texture(int w, int h, unsigned int id = 0);
             // 2D Texture
             Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE);
             // Cubemap Texture

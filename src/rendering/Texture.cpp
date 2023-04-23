@@ -6,6 +6,16 @@
 
 namespace Villain {
 
+    Texture::Texture(int w, int h, unsigned int id): width(w), height(h), rendererID(id), target(GL_TEXTURE_2D) {
+        if (rendererID == 0) {
+            GLCall(glGenTextures(1, &rendererID));
+        }
+        GLCall(glBindTexture(target, rendererID));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GLCall(glTexImage2D(target, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+    }
+
     Texture::Texture(const std::string& fileName, GLint wrappingMode)
         : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_2D) {
 
