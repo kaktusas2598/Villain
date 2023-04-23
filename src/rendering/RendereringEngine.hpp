@@ -28,6 +28,7 @@ namespace Villain {
             // Call on window/viewport resize event
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
         private:
+            void bindMainTarget();
             Engine* engine = nullptr;
             Camera* mainCamera = nullptr;
             Camera* altCamera = nullptr;

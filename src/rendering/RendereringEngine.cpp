@@ -44,7 +44,7 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node) {
-        // Render to ambient scene to mirror buffer for rear view mirror effect
+        // 1st Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
         mirrorBuffer->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -60,14 +60,10 @@ namespace Villain {
         defaultShader->setUniformVec3("color", ambientLight);
         activeLight = nullptr;
         node->render(defaultShader, this, &cam3D);
+        //////////
 
-        // Will cause framebuffer in editor to be unbound
-        if (engine->editModeActive()) {
-            engine->getSceneBuffer()->bind();
-        } else {
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
-        }
+        // 2nd Rendering Pass: main pass
+        bindMainTarget();
 
         //shadowBuffer->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -93,6 +89,15 @@ namespace Villain {
             //// NOTE: shadow mapping techniques will be here
             ShadowInfo* shadowInfo = activeLight->getShadowInfo();
 
+            // Render shadows for each light into depth map and go back to main pass
+            shadowBuffer->bind();
+            glClear(GL_DEPTH_BUFFER_BIT);
+            if (shadowInfo) {
+
+            }
+
+            bindMainTarget();
+
             //// Using additive blending here to render lights one by one and blend onto the scene
             //// this is so called forward multi-pass rendering
             glEnable(GL_BLEND);
@@ -114,12 +119,7 @@ namespace Villain {
     // TEMP, render to texture test on plane, moved to different method so that
     // stuff like debug renderer and skybox also get rendered to shadow buffer in the 1st pass
     void RenderingEngine::postRender() {
-        //if (engine->editModeActive()) {
-            //engine->getSceneBuffer()->bind();
-        //} else {
-            //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            //glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
-        //}
+        //bindMainTarget();
 
         //activeLight = nullptr;
         //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -143,5 +143,15 @@ namespace Villain {
         defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
         defaultShader->setUniformVec3("color", ambientLight);
         screenQuad->draw(*defaultShader, mirrorMat);
+    }
+
+    void RenderingEngine::bindMainTarget() {
+        // Will cause framebuffer in editor to be unbound
+        if (engine->editModeActive()) {
+            engine->getSceneBuffer()->bind();
+        } else {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        }
     }
 }
