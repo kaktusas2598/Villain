@@ -6,6 +6,7 @@ namespace Villain {
         fboID(0), rboID(0), width(w), height(h), numTextures(textureCount)
     {
         textureIDs = new GLuint[textureCount];
+        textures = new Texture*[textureCount];
         initTextures();
         initRenderTargets(attachments);
 
@@ -15,13 +16,10 @@ namespace Villain {
     }
 
     void FrameBuffer::initTextures() {
-        // NOTE: potentially could be handled by Texture class
         GLCall(glGenTextures(numTextures, textureIDs));
         for (int i = 0; i < numTextures; i++) {
-            GLCall(glBindTexture(GL_TEXTURE_2D, textureIDs[i]));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+            textures[i] = new Texture();
+            textures[i]->init(width, height, textureIDs[i]);
         }
     }
 
@@ -77,10 +75,6 @@ namespace Villain {
         if (textureIDs) delete[] textureIDs;
     }
 
-    unsigned int FrameBuffer::getTextureID() {
-        // NOTE: not great
-        return textureIDs[0];
-    }
     void FrameBuffer::rescale(int w, int h) {
         width = w;
         height = h;
@@ -88,10 +82,7 @@ namespace Villain {
         // FIXME: had to remove couple of GLCall(), need to try recreating
         // fbo every time we resize viewport probably as some functions below were causing errors
         for (int i = 0; i < numTextures; i++) {
-            GLCall(glBindTexture(GL_TEXTURE_2D, textureIDs[i]));
-            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            textures[i]->init(w, h, textureIDs[i]);
             // TODO: this is bad design once we start attaching depth and stencil attachments
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureIDs[i], 0);
 

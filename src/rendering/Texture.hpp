@@ -9,11 +9,15 @@ namespace Villain  {
     class Texture {
         public:
             // Initialise empty texture, used by framebuffers
-            Texture(int w, int h, unsigned int id = 0);
+            Texture() : rendererID(0), target(GL_TEXTURE_2D) {}
+            void init(int w, int h, unsigned int id = 0);
+
             // 2D Texture
             Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE);
+
             // Cubemap Texture
             Texture(std::vector<std::string> faces);
+
             ~Texture();
 
             void bind(unsigned int slot = 0) const;

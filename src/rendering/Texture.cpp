@@ -6,7 +6,10 @@
 
 namespace Villain {
 
-    Texture::Texture(int w, int h, unsigned int id): width(w), height(h), rendererID(id), target(GL_TEXTURE_2D) {
+    void Texture::init(int w, int h, unsigned int id) {
+        rendererID = id;
+        width = w;
+        height = h;
         if (rendererID == 0) {
             GLCall(glGenTextures(1, &rendererID));
         }
