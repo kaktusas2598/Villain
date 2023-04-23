@@ -2,16 +2,23 @@
 #define __RENDERING_ENGINE__
 
 #include "Camera.hpp"
+#include "FrameBuffer.hpp"
 #include "../components/Light.hpp"
 #include "SceneNode.hpp"
+#include "Vertex.hpp"
 
 namespace Villain {
+
+    template <class VertexType>
+    class Mesh;
+    class Texture;
 
     class RenderingEngine {
         public:
             RenderingEngine(Engine* e);
             ~RenderingEngine();
             void render(SceneNode* node);
+            void postRender();
 
             inline void addLight(BaseLight* light) { lights.push_back(light); }
             inline BaseLight* getActiveLight() { return activeLight; }
@@ -22,14 +29,19 @@ namespace Villain {
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
         private:
             Engine* engine = nullptr;
-            // TODO: will need to support multiple cameras at once
-            Camera* mainCamera;
+            Camera* mainCamera = nullptr;
+            Camera* altCamera = nullptr;
+
+            Mesh<VertexP1N1UV>* screenQuad = nullptr;
+            Transform planeTransform;
+            FrameBuffer* shadowBuffer = nullptr;
+            FrameBuffer* mirrorBuffer = nullptr;
 
             Shader* defaultShader = nullptr;
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
-            glm::vec3 ambientLight = glm::vec3(0.2f);
+            glm::vec3 ambientLight = glm::vec3(0.5f);
     };
 }
 
