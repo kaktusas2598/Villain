@@ -121,3 +121,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
    2. Abstract movement/mouse control for each type of camera defined by user or defaulted by engine
    3. Ability to initialise camera with any type of projection or no projection (identity matrix)
    4. Perspective/top down ortho/isometrix ortho and none projection types
+   5. Camera could contain Transform as well
