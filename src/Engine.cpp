@@ -233,7 +233,7 @@ namespace Villain {
         if (editMode)
             sceneBuffer->bind();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glClearDepth(1.0);
         //SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
         //glViewport(0, 0, screenWidth, screenHeight);
@@ -243,6 +243,7 @@ namespace Villain {
         // let rendering engine take care of all things?
         application->render(renderingEngine);
         application->onAppRender(deltaTime);
+        application->postRenderPass(renderingEngine);
 
         if (editMode)
             sceneBuffer->unbind();

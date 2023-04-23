@@ -25,6 +25,8 @@ namespace Villain {
             void handleEvents(float deltaTime);
             void update(float deltaTime);
             void render(RenderingEngine* RenderingEngine);
+            // HACK: used for now to make sure stuff not handled by RenderingEngine gets drawn to custom framebuffer
+            void postRenderPass(RenderingEngine* RenderingEngine);
             inline void setEngine(Engine* engine) { rootNode.setEngine(engine); }
 
             StateMachine* getStateMachine() { return stateMachine.get(); }

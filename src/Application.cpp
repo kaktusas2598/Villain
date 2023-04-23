@@ -99,6 +99,10 @@ namespace Villain {
         }
     }
 
+    void Application::postRenderPass(RenderingEngine* renderingEngine) {
+        renderingEngine->postRender();
+    }
+
     void Application::exit() {
         // NOTE: gotta be a better way
         Engine::setRunning(false);
