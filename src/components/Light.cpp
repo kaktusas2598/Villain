@@ -26,7 +26,8 @@ namespace Villain {
         // NOTE: messing with light projection completely messes up shadows if not set correctly
         //setShadowInfo(new ShadowInfo(glm::ortho(-40., 40., -40., 40., 0.1, 75.)));
         //setShadowInfo(new ShadowInfo(glm::ortho(-10., 10., -10., 10., 0.1, 7.5)));
-        setShadowInfo(new ShadowInfo(glm::ortho(-100., 100., -100., 100., 0.1, 75.)));
+        //setShadowInfo(new ShadowInfo(glm::ortho(-100., 100., -100., 100., 0.1, 75.)));
+        setShadowInfo(new ShadowInfo(glm::ortho(-100., 100., -100., 100., 0.1, 100.)));
     }
 
     PointLight::PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, float cnst, float linr, float quadr) :

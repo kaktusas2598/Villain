@@ -79,7 +79,7 @@ namespace Villain {
             // HACK: for now all spot lights will act as a flashlight
             // and use main camera's position
             if (activeLight->type() == "spot") {
-                SpotLight* flashlight = dynamic_cast<SpotLight*>(activeLight);
+                SpotLight* flashlight = (SpotLight*)activeLight;
                 flashlight->Position = mainCamera->getPosition();
                 flashlight->Direction = dynamic_cast<Camera3D*>(mainCamera)->getFront();
             }
@@ -104,8 +104,14 @@ namespace Villain {
 
                 shadowMapShader->bind();
                 shadowMapShader->setUniformMat4f("lightMatrix", lightMatrix);
+
+                // For shadow map reverse culling to try and solve peter panning problem
+                if (shadowInfo->getFlipFaces()) glCullFace(GL_FRONT);
                 // Render scene to shadow map
+                // NOTE: Will need to fish shader uniform logic inside mesh and model renderer so they only set what's needed
                 node->render(shadowMapShader, this, altCamera);
+                // Revert culling back to normal behaviour
+                if (shadowInfo->getFlipFaces()) glCullFace(GL_BACK);
             }
 
             bindMainTarget();
@@ -118,14 +124,13 @@ namespace Villain {
             glDepthFunc(GL_EQUAL);
 
             light->getShader()->bind();
-            // TODO: '4' needs to be refactored to sampler map which Shader class can also utilise while setting materials
-            shadowBuffer->getTexture()->bind(4);
-            light->getShader()->setUniform1i("shadowMap", 4);
-            // Bias is hacky way to remove shadow stripes caused by floating point errors,
-            // it might have negative effect of ignoring some shadows, need to adjust it
-            light->getShader()->setUniform1f("shadowBias", shadowBias);
-            light->getShader()->setUniformMat4f("lightMatrix", lightMatrix);
-
+            if (shadowInfo) {
+                // TODO: '4' needs to be refactored to sampler map which Shader class can also utilise while setting materials
+                shadowBuffer->getTexture()->bind(4);
+                light->getShader()->setUniform1i("shadowMap", 4);
+                light->getShader()->setUniform1f("shadowBias", shadowInfo->getBias()/1024.f);
+                light->getShader()->setUniformMat4f("lightMatrix", lightMatrix);
+            }
             node->render(light->getShader(), this, mainCamera);
 
             // Reset to default blending
@@ -133,8 +138,6 @@ namespace Villain {
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
         }
-
-
     }
 
     // TEMP, render to texture test on plane, moved to different method so that

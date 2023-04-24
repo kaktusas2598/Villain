@@ -9,11 +9,18 @@ namespace Villain {
 
     class ShadowInfo {
         public:
-            ShadowInfo(const glm::mat4& proj): projection(proj) {}
+            ShadowInfo(const glm::mat4& proj, float bias = 4.f, bool flipCullFaces = true)
+                : projection(proj), shadowBias(bias), flipFaces(flipCullFaces) {}
 
             inline glm::mat4 getProjection() const { return projection; }
+            inline float getBias() const { return shadowBias; }
+            inline bool getFlipFaces() const { return flipFaces; }
         private:
             glm::mat4 projection;
+            // Shadow map resolution-indepentent bias, so with default shadow map size of 1024 and bias of 1.f
+            // actual bias will be 1.f /1024 = 0.001f
+            float shadowBias; // Adjust to reduce/remove shadow acne artifacts
+            bool flipFaces; // Turn on to solve peter panning artifacts
     };
 
     // TODO:

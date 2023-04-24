@@ -26,7 +26,6 @@ namespace Villain {
             inline BaseLight* getActiveLight() { return activeLight; }
             glm::vec3* getAmbientLightColor() { return &ambientLight; }
             inline glm::mat4 getLightMatrix() const { return lightMatrix; }
-            inline float* getShadowBias() { return &shadowBias; }
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
             inline Camera* getMainCamera() { return mainCamera; }
             // Call on window/viewport resize event
@@ -49,7 +48,6 @@ namespace Villain {
             std::vector<BaseLight*> lights;
             glm::vec3 ambientLight = glm::vec3(0.5f);
             glm::mat4 lightMatrix = glm::mat4(1.0f);
-            float shadowBias = 0.05f;
     };
 }
 
