@@ -67,6 +67,9 @@ namespace Villain {
             GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID));
         }
 
+        //glDrawBuffer(GL_NONE);
+        //glReadBuffer(GL_NONE);
+
         // Seems to work fine without this?
         GLCall(glDrawBuffers(numTextures, drawBuffers));
     }
