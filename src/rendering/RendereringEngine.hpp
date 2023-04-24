@@ -13,8 +13,6 @@ namespace Villain {
     class Mesh;
     class Texture;
 
-    // TODO: define sampler map to automatically bind different texture types including
-    // shadow maps to their own slot
     class RenderingEngine {
         public:
             RenderingEngine(Engine* e);
@@ -24,6 +22,7 @@ namespace Villain {
 
             inline void addLight(BaseLight* light) { lights.push_back(light); }
             inline BaseLight* getActiveLight() { return activeLight; }
+            static unsigned int getSamplerSlot(const std::string& samplerType) { return samplerMap.find(samplerType)->second; }
             glm::vec3* getAmbientLightColor() { return &ambientLight; }
             inline glm::mat4 getLightMatrix() const { return lightMatrix; }
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
@@ -46,6 +45,7 @@ namespace Villain {
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
+            static std::map<std::string, unsigned int> samplerMap;
             glm::vec3 ambientLight = glm::vec3(0.5f);
             glm::mat4 lightMatrix = glm::mat4(1.0f);
     };

@@ -11,6 +11,8 @@
 
 namespace Villain {
 
+    std::map<std::string, unsigned int> RenderingEngine::samplerMap;
+
     RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
         defaultShader = Shader::createFromResource("forward-ambient");
@@ -18,6 +20,12 @@ namespace Villain {
 
         mainCamera = new Camera3D();
         altCamera = new Camera3D();
+
+        samplerMap.emplace("diffuse", 0);
+        samplerMap.emplace("specular", 1);
+        samplerMap.emplace("normal", 2);
+        samplerMap.emplace("disp", 3);
+        samplerMap.emplace("shadow", 4);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
@@ -125,9 +133,8 @@ namespace Villain {
 
             light->getShader()->bind();
             if (shadowInfo) {
-                // TODO: '4' needs to be refactored to sampler map which Shader class can also utilise while setting materials
-                shadowBuffer->getTexture()->bind(4);
-                light->getShader()->setUniform1i("shadowMap", 4);
+                shadowBuffer->getTexture()->bind(getSamplerSlot("shadow"));
+                light->getShader()->setUniform1i("shadowMap", getSamplerSlot("shadow"));
                 light->getShader()->setUniform1f("shadowBias", shadowInfo->getBias()/1024.f);
                 light->getShader()->setUniformMat4f("lightMatrix", lightMatrix);
             }

@@ -230,41 +230,37 @@ namespace Villain {
     }
 
     void Shader::setMaterialUniforms(Material& material) {
-        unsigned int diffuseSlot = 0;
-        unsigned int specularSlot = 1;
-        unsigned int normalSlot = 2;
-        unsigned int displacementSlot = 3;
         // Base color/diffuse map
         if (material.getDiffuseMap() == nullptr) {
             this->setUniform1i("material.useDiffuseMap", 0);
         } else {
             this->setUniform1i("material.useDiffuseMap", 1);
-            material.getDiffuseMap()->bind(diffuseSlot);
-            this->setUniform1i("material.texture_diffuse", diffuseSlot);
+            material.getDiffuseMap()->bind(RenderingEngine::getSamplerSlot("diffuse"));
+            this->setUniform1i("material.texture_diffuse", RenderingEngine::getSamplerSlot("diffuse"));
         }
         // Specular map
         if (material.getSpecularMap() == nullptr) {
             this->setUniform1i("material.useSpecularMap", 0);
         } else {
             this->setUniform1i("material.useSpecularMap", 1);
-            material.getSpecularMap()->bind(specularSlot);
-            this->setUniform1i("material.texture_specular", specularSlot);
+            material.getSpecularMap()->bind(RenderingEngine::getSamplerSlot("specular"));
+            this->setUniform1i("material.texture_specular", RenderingEngine::getSamplerSlot("specular"));
         }
         // Normal/bump map
         if (material.getNormalMap() == nullptr) {
             this->setUniform1i("material.useNormalMap", 0);
         } else {
             this->setUniform1i("material.useNormalMap", 1);
-            material.getNormalMap()->bind(normalSlot);
-            this->setUniform1i("material.texture_normal", normalSlot);
+            material.getNormalMap()->bind(RenderingEngine::getSamplerSlot("normal"));
+            this->setUniform1i("material.texture_normal", RenderingEngine::getSamplerSlot("normal"));
         }
         // Parallax displacement map
         if (material.getDislacementMap() == nullptr) {
             this->setUniform1i("material.useDispMap", 0);
         } else {
             this->setUniform1i("material.useDispMap", 1);
-            material.getDislacementMap()->bind(displacementSlot);
-            this->setUniform1i("material.texture_disp", displacementSlot);
+            material.getDislacementMap()->bind(RenderingEngine::getSamplerSlot("disp"));
+            this->setUniform1i("material.texture_disp", RenderingEngine::getSamplerSlot("disp"));
             this->setUniform1f("material.dispMapScale", material.getDispMapScale());
             this->setUniform1f("material.dispMapBias", material.getDispMapBias());
         }
