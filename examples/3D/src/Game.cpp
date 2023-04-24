@@ -87,9 +87,9 @@ void Game::init() {
     addToScene(wall);
 
     // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
-    SceneNode* dirLight = ((new SceneNode("Directional Light 1"))
-                ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -1.0f, -0.3f))));
-    addToScene(dirLight);
+    directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
+                ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
+    addToScene(directionalLight);
 
     //glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     //SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
@@ -145,7 +145,7 @@ void Game::onAppRender(float dt) {
     // Draw example shapes test
     debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
     debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
-    debugRenderer.drawSphere(glm::vec3(2.0f, 6.0f, -10.0f), 5.0f, glm::vec4(0.8f, 0.0f, 2.0f, 2.0f));
+    debugRenderer.drawSphere(glm::vec3(2.0f, 6.0f, -10.0f), 5.0f, glm::vec4(0.8f, 0.0f, 1.0f, 1.0f));
 
     glm::vec3 position = glm::vec3(2.0);
     glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -154,6 +154,11 @@ void Game::onAppRender(float dt) {
     glm::mat4 rotation = transformY * transformX * transformZ;
     debugRenderer.drawBox3D(position, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f));
     debugRenderer.drawBox3DRotated(position, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
+
+
+    // Directional light has no position, but we need to set some sort of position for shadow map! So this
+    // is just a representation os such position
+    debugRenderer.drawSphere(directionalLight->getTransform()->getPos(), 1.0f, glm::vec4(0.8f, 1.0f, 0.0f, 1.0f));
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 1.0f);

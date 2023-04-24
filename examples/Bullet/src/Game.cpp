@@ -64,6 +64,30 @@ void Game::init() {
 
     skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
 
+    // LIGHTING
+    glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.0f);
+    glm::vec3 greenLight = glm::vec3(0.0f, 1.0f, 0.0f);
+    //SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(0.f, 5.f, 10.f)))
+    //->addComponent(new PointLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+    //WorldNode->addChild(pointLight);
+    //SceneNode* pointLight2 = ((new SceneNode("Point Light 2", glm::vec3(-20.f, 5.f, 10.f)))
+    //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+    //WorldNode->addChild(pointLight2);
+    //SceneNode* pointLight3 = ((new SceneNode("Point Light 3", glm::vec3(20.f, 5.f, 10.f)))
+    //->addComponent(new PointLight(greenLight * glm::vec3(0.2f), greenLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
+    //WorldNode->addChild(pointLight3);
+
+    //SceneNode* spotLight = ((new SceneNode("Spot Light"))
+    //->addComponent(new SpotLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), &camera)));
+    //wallNode->addChild(spotLight);
+
+
+    directionalLight = new DirectionalLight(glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f),glm::vec3(-0.2f, -1.0f, -0.3f));
+    SceneNode* dirLight = ((new SceneNode("Directional Light 1", glm::vec3(-25, 20, 0)))
+            ->addComponent(directionalLight));
+    WorldNode->addChild(dirLight);
+    //////////////////////
+
     PhysicsWorld = new BulletEngine({0.0, -9.8, 0.0});
     PhysicsWorld->setDebugMode(btIDebugDraw::DBG_NoDebug);
 
@@ -99,34 +123,13 @@ void Game::init() {
     WorldNode->addChild(wallNode);
     /////////////////////////////////////////
 
-
-    // Light to test normal mapping
-    glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.0f);
-    glm::vec3 greenLight = glm::vec3(0.0f, 1.0f, 0.0f);
-    SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(0.f, 5.f, 10.f)))
-            ->addComponent(new PointLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
-    WorldNode->addChild(pointLight);
-    //SceneNode* pointLight2 = ((new SceneNode("Point Light 2", glm::vec3(-20.f, 5.f, 10.f)))
-            //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
-    //WorldNode->addChild(pointLight2);
-    //SceneNode* pointLight3 = ((new SceneNode("Point Light 3", glm::vec3(20.f, 5.f, 10.f)))
-            //->addComponent(new PointLight(greenLight * glm::vec3(0.2f), greenLight, glm::vec3(1.0f),glm::vec3(0.0f, 5.0f, 20.0f), 1.0f, 0.022f, 0.0019f)));
-    //WorldNode->addChild(pointLight3);
-
-    SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                ->addComponent(new SpotLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), &camera)));
-    wallNode->addChild(spotLight);
-
-    //////////////////////
-
-
-
     // TODO:
     // 5. Bullet utils class for common stuff like converting glm::vec3 to btVector3 etc.
     // 6. investigate constraints
 
     // SOFT BODIES
-    float s = 4;
+    // TODO: TEMP commented while testing shadow mapping!
+    /*float s = 4;
     float h = 10;
     btSoftBody* cloth = btSoftBodyHelpers::CreatePatch(
             PhysicsWorld->getWorld()->getWorldInfo(),
@@ -173,7 +176,7 @@ void Game::init() {
     elipsoid->m_cfg.kPR = 10; // Change pressure
     elipsoid->setTotalMass(10.f);
     elipsoid->setMass(0, 0); // Set 1st vertex(0) to be static (mass 0)
-    PhysicsWorld->getWorld()->addSoftBody(elipsoid);
+    PhysicsWorld->getWorld()->addSoftBody(elipsoid);*/
 
     //btSoftBody* rope = btSoftBodyHelpers::CreateRope(
             //PhysicsWorld->getWorld()->getWorldInfo(),
@@ -382,6 +385,11 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 1.f, 0.f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(-0.5f, 1.f, 4.5f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.5f, 1.f, 4.5f), glm::vec3(0.f, 1.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+    // Directional light has no position, but we need to set some sort of position for shadow map! So this
+    // is just a representation os such position
+    debugRenderer.drawSphere(directionalLight->GetTransform()->getPos(), 1.0f, glm::vec4(0.8f, 1.0f, 0.0f, 1.0f));
+    debugRenderer.drawLine(directionalLight->GetTransform()->getPos(), (directionalLight->GetTransform()->getPos() + directionalLight->Direction * 3.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
     /////////
     glm::vec3 cameraPos = camera.getPosition();
