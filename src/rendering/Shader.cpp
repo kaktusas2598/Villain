@@ -212,16 +212,15 @@ namespace Villain {
         this->setMaterialUniforms(material);
 
         // Set light uniforms
-        // NOTE: this is really not good due to having to dynamic_cast every time and check
         if (renderingEngine.getActiveLight() != nullptr) {
             if (renderingEngine.getActiveLight()->type() == "directional") {
-                DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(renderingEngine.getActiveLight());
+                DirectionalLight* dirLight = (DirectionalLight*)(renderingEngine.getActiveLight());
                 this->setDirectionalLightUniforms("dirLight", *dirLight);
             } else if (renderingEngine.getActiveLight()->type() == "spot") {
-                SpotLight* spotLight = dynamic_cast<SpotLight*>(renderingEngine.getActiveLight());
+                SpotLight* spotLight = (SpotLight*)(renderingEngine.getActiveLight());
                 this->setSpotLightUniforms("spotLight", *spotLight);
             } else if (renderingEngine.getActiveLight()->type() == "point") {
-                PointLight* pointLight = dynamic_cast<PointLight*>(renderingEngine.getActiveLight());
+                PointLight* pointLight = (PointLight*)(renderingEngine.getActiveLight());
                 this->setPointLightUniforms("pointLight", *pointLight);
             }
         }
@@ -275,6 +274,9 @@ namespace Villain {
     }
 
     void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight) {
+        // HACK: for shadow mapping, cause technically dir lights have no position
+        setUniformVec3(name + ".position", dirLight.GetTransform()->getPos());
+
         setUniformVec3(name + ".direction", dirLight.Direction);
         setUniformVec3(name + ".base.ambient", dirLight.AmbientColor);
         setUniformVec3(name + ".base.diffuse", dirLight.DiffuseColor);
