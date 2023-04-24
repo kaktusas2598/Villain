@@ -26,6 +26,10 @@ struct BaseLight {
 struct DirectionalLight {
     vec3 direction;
     BaseLight base;
+
+    // 2023-04-24 UPDATE: Technicaly Directional lights have no position, but we need to simulate it
+    // for shadow map, so we can dynamically calculate light direction using position taken from scene node
+    vec3 position;
 };
 
 struct PointLight {
@@ -48,6 +52,8 @@ struct SpotLight {
 
 
 uniform Material material;
+
+uniform sampler2D shadowMap;
 
 // TODO: need to pass material to these methods instead of harcoding uniform here
 BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDir, vec2 texCoords) {
@@ -72,8 +78,9 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
     return newLight;
 }
 
-vec3 calculateDirLight(DirectionalLight light, vec3 normal, vec3 viewDirection, vec2 texCoords) {
-    vec3 lightDirection = /*v_TBN **/ normalize(-light.direction);
+vec3 calculateDirLight(DirectionalLight light, vec3 normal, vec3 fragPos, vec3 viewDirection, vec2 texCoords) {
+    /*vec3 lightDirection = [>v_TBN *<] normalize(-light.direction);*/
+    vec3 lightDirection = normalize(light.position - fragPos);
 
     BaseLight newLight = calculateLight(light.base, normal, lightDirection, viewDirection, texCoords);
 

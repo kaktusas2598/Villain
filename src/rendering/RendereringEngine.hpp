@@ -13,6 +13,8 @@ namespace Villain {
     class Mesh;
     class Texture;
 
+    // TODO: define sampler map to automatically bind different texture types including
+    // shadow maps to their own slot
     class RenderingEngine {
         public:
             RenderingEngine(Engine* e);
@@ -23,6 +25,8 @@ namespace Villain {
             inline void addLight(BaseLight* light) { lights.push_back(light); }
             inline BaseLight* getActiveLight() { return activeLight; }
             glm::vec3* getAmbientLightColor() { return &ambientLight; }
+            inline glm::mat4 getLightMatrix() const { return lightMatrix; }
+            inline float* getShadowBias() { return &shadowBias; }
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
             inline Camera* getMainCamera() { return mainCamera; }
             // Call on window/viewport resize event
@@ -39,10 +43,13 @@ namespace Villain {
             FrameBuffer* mirrorBuffer = nullptr;
 
             Shader* defaultShader = nullptr;
+            Shader* shadowMapShader = nullptr;
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
             glm::vec3 ambientLight = glm::vec3(0.5f);
+            glm::mat4 lightMatrix = glm::mat4(1.0f);
+            float shadowBias = 0.05f;
     };
 }
 

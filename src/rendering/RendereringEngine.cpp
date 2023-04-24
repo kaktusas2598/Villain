@@ -14,6 +14,7 @@ namespace Villain {
     RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
         defaultShader = Shader::createFromResource("forward-ambient");
+        shadowMapShader = Shader::createFromResource("shadowMap");
 
         mainCamera = new Camera3D();
         altCamera = new Camera3D();
@@ -29,10 +30,8 @@ namespace Villain {
         cam3D->setNoProjection(); // Super hacky ATM
         screenQuad = MeshUtils<VertexP1N1UV>::getXYPlane(glm::vec3(0.0f), glm::vec2(1.0f), new float[4]{0.0, 1.0, 0.0, 1.0});
         // TODO: refactor hardcoded shadow map size
-        shadowBuffer = new FrameBuffer(1024, 1024);
-        // internalFormat - GL_DEPTH_COMPONENT_16?, format - GL_DEPTH_COMPONENT? GL_TEXTURE_2D, GL_NEAREST, clamp = true
-        //shadowBuffer = new FrameBuffer(1024, 1024, 1, GL_DEPTH_ATTACHMENT);
-        mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight());
+        shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
+        mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -41,6 +40,7 @@ namespace Villain {
         delete altCamera;
         delete screenQuad;
         delete shadowBuffer;
+        delete mirrorBuffer;
     }
 
     void RenderingEngine::render(SceneNode* node) {
@@ -64,8 +64,6 @@ namespace Villain {
 
         // 2nd Rendering Pass: main pass
         bindMainTarget();
-
-        //shadowBuffer->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         defaultShader->bind();
@@ -86,14 +84,28 @@ namespace Villain {
                 flashlight->Direction = dynamic_cast<Camera3D*>(mainCamera)->getFront();
             }
 
-            //// NOTE: shadow mapping techniques will be here
             ShadowInfo* shadowInfo = activeLight->getShadowInfo();
 
             // Render shadows for each light into depth map and go back to main pass
+            glViewport(0, 0, 1024, 1024);
             shadowBuffer->bind();
             glClear(GL_DEPTH_BUFFER_BIT);
             if (shadowInfo) {
+                Camera3D* altCam = (Camera3D*)altCamera;
+                altCam->setPosition(activeLight->GetTransform()->getPos());
+                //altCam->setRotation(activeLight->GetTransform()->getEulerRot());
 
+                // TODO: support more light types for shadow mapping
+                DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(activeLight);
+                glm::mat4 lightView =  glm::lookAt(activeLight->GetTransform()->getPos(), glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0));
+                //glm::mat4 lightView =  glm::lookAt(activeLight->GetTransform()->getPos(), dirLight->Direction, glm::vec3(0.0, 1.0, 0.0));
+
+                lightMatrix = shadowInfo->getProjection() * lightView;
+
+                shadowMapShader->bind();
+                shadowMapShader->setUniformMat4f("lightMatrix", lightMatrix);
+                // Render scene to shadow map
+                node->render(shadowMapShader, this, altCamera);
             }
 
             bindMainTarget();
@@ -104,6 +116,15 @@ namespace Villain {
             glBlendFunc(GL_ONE, GL_ONE);
             glDepthMask(GL_FALSE);
             glDepthFunc(GL_EQUAL);
+
+            light->getShader()->bind();
+            // TODO: '4' needs to be refactored to sampler map which Shader class can also utilise while setting materials
+            shadowBuffer->getTexture()->bind(4);
+            light->getShader()->setUniform1i("shadowMap", 4);
+            // Bias is hacky way to remove shadow stripes caused by floating point errors,
+            // it might have negative effect of ignoring some shadows, need to adjust it
+            light->getShader()->setUniform1f("shadowBias", shadowBias);
+            light->getShader()->setUniformMat4f("lightMatrix", lightMatrix);
 
             node->render(light->getShader(), this, mainCamera);
 
@@ -136,7 +157,10 @@ namespace Villain {
         // Smaller render target on top, tried to make rear view mirror,
         // but that probably requires rendering scene again with rotated camera?
         //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
+        Camera3D* altCam = (Camera3D*)altCamera;
+        altCam->setNoProjection(true);
+        //Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
+        Material mirrorMat{"null", shadowBuffer->getTexture(), 1};
         planeTransform.setScale(0.25);
         planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.3f));
         planeTransform.setEulerRot(0.0, 180.0, 90.0);
