@@ -5,3 +5,8 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDirection, sampler2D dispMap, floa
 
     return texCoords;
 }
+
+// 0 if pixel is in shadow, 1 if not
+float sampleShadowMap(sampler2D shadowMap, vec2 coords, float compare) {
+    return step(compare, texture2D(shadowMap, coords.xy).r);
+}
