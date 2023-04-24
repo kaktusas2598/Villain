@@ -16,7 +16,7 @@ namespace Villain {
             Texture* getTexture() const { return textures[0]; }
 
             void rescale(int w, int h);
-            void initTextures();
+            void initTextures(GLenum* attachments);
             void initRenderTargets(GLenum* attachments);
 
             void bind() const;

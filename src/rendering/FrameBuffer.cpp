@@ -7,7 +7,7 @@ namespace Villain {
     {
         textureIDs = new GLuint[textureCount];
         textures = new Texture*[textureCount];
-        initTextures();
+        initTextures(attachments);
         initRenderTargets(attachments);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -15,11 +15,15 @@ namespace Villain {
         }
     }
 
-    void FrameBuffer::initTextures() {
+    void FrameBuffer::initTextures(GLenum* attachments) {
         GLCall(glGenTextures(numTextures, textureIDs));
         for (int i = 0; i < numTextures; i++) {
             textures[i] = new Texture();
-            textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
+            if (attachments[i] == GL_DEPTH_ATTACHMENT) {
+                textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, true);
+            } else {
+                textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
+            }
         }
     }
 
@@ -32,8 +36,8 @@ namespace Villain {
         bool hasDepth = false;
 
         for (int i = 0; i < numTextures; i++) {
-            // NOTE: stencil attachment is definitely incorrect for this case, need a separate condition
-            if (attachments[i] == GL_DEPTH_ATTACHMENT || attachments[i] == GL_STENCIL_ATTACHMENT) {
+            // NOTE: Need another condition for GL_STENCIL_ATTACHMENT
+            if (attachments[i] == GL_DEPTH_ATTACHMENT) {
                 drawBuffers[i] = GL_NONE;
                 hasDepth = true;
             } else {
