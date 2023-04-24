@@ -117,7 +117,9 @@ namespace Villain {
                 if (shadowInfo->getFlipFaces()) glCullFace(GL_FRONT);
                 // Render scene to shadow map
                 // NOTE: Will need to fish shader uniform logic inside mesh and model renderer so they only set what's needed
+                frustumCullingEnabled = false; // Frustum culling system not properly implemented and won't work for shadow mapping
                 node->render(shadowMapShader, this, altCamera);
+                frustumCullingEnabled = true;
                 // Revert culling back to normal behaviour
                 if (shadowInfo->getFlipFaces()) glCullFace(GL_BACK);
             }

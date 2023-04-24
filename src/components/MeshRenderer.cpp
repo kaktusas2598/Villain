@@ -1,6 +1,7 @@
 #include "MeshRenderer.hpp"
 
 #include "rendering/Material.hpp"
+#include "rendering/RendereringEngine.hpp"
 #include "ResourceManager.hpp"
 
 namespace Villain {
@@ -24,12 +25,16 @@ namespace Villain {
             // TODO: Add new updateUniforms() method without a matierla, because meshes set their own materials for each mesh
             shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
 
-            if (mesh->getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
-                // Draw mesh using it's own material
-                mesh->draw(shader, this->material);
-                //std::cout << "Mesh in frustum\n";
+            if (renderingEngine.isFrustumCullingEnabled()) {
+                if (mesh->getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
+                    // Draw mesh using it's own material
+                    mesh->draw(shader, this->material);
+                    //std::cout << "Mesh in frustum\n";
+                } else {
+                    //std::cout << "Mesh culled by frustum\n";
+                }
             } else {
-                //std::cout << "Mesh culled by frustum\n";
+                mesh->draw(shader, this->material);
             }
         }
 

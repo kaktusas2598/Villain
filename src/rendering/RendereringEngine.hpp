@@ -27,6 +27,7 @@ namespace Villain {
             inline glm::mat4 getLightMatrix() const { return lightMatrix; }
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
             inline Camera* getMainCamera() { return mainCamera; }
+            inline bool isFrustumCullingEnabled() { return frustumCullingEnabled; }
             // Call on window/viewport resize event
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
         private:
@@ -34,6 +35,7 @@ namespace Villain {
             Engine* engine = nullptr;
             Camera* mainCamera = nullptr;
             Camera* altCamera = nullptr;
+            bool frustumCullingEnabled = true;
 
             Mesh<VertexP1N1UV>* screenQuad = nullptr;
             Transform planeTransform;
