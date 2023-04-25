@@ -84,16 +84,7 @@ namespace Villain {
         for (auto& light: lights) {
             activeLight = light;
 
-            // HACK: for now all spot lights will act as a flashlight
-            // and use main camera's position
-            if (activeLight->type() == "spot") {
-                SpotLight* flashlight = (SpotLight*)activeLight;
-                flashlight->Position = mainCamera->getPosition();
-                flashlight->Direction = dynamic_cast<Camera3D*>(mainCamera)->getFront();
-            }
-
             ShadowInfo* shadowInfo = activeLight->getShadowInfo();
-
             // Render shadows for each light into depth map and go back to main pass
             glViewport(0, 0, 1024, 1024);
             shadowBuffer->bind();
@@ -103,10 +94,19 @@ namespace Villain {
                 altCam->setPosition(activeLight->GetTransform()->getPos());
                 //altCam->setRotation(activeLight->GetTransform()->getEulerRot());
 
-                // TODO: support more light types for shadow mapping
-                DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(activeLight);
-                glm::mat4 lightView =  glm::lookAt(activeLight->GetTransform()->getPos(), glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0));
-                //glm::mat4 lightView =  glm::lookAt(activeLight->GetTransform()->getPos(), dirLight->Direction, glm::vec3(0.0, 1.0, 0.0));
+                glm::mat4 lightView;
+                if (activeLight->type() == "directional") {
+                    //DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(activeLight);
+                    //glm::mat4 lightView =  glm::lookAt(activeLight->GetTransform()->getPos(), dirLight->Direction, glm::vec3(0.0, 1.0, 0.0));
+                    lightView =  glm::lookAt(activeLight->GetTransform()->getPos(), glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0));
+                } else if (activeLight->type() == "spot") {
+                    SpotLight* spotLight = (SpotLight*)(activeLight);
+                    lightView =  glm::lookAt(spotLight->Position, spotLight->Position + spotLight->Direction, glm::vec3(0.0, 1.0, 0.0));
+                } else if (activeLight->type() == "point") {
+                    // TODO:
+                } else {
+                    printf("Unsupported light type for shadow mapping.\n");
+                }
 
                 lightMatrix = shadowInfo->getProjection() * lightView;
 

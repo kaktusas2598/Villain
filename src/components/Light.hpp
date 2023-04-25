@@ -60,12 +60,10 @@ namespace Villain {
     class PointLight : public BaseLight {
         public:
             glm::vec3 Position;
-            // Attenuation factors
-            float Constant;
-            float Linear;
-            float Quadratic;
+            // X - Constant, Y - Linear, Z - Quadratic
+            glm::vec3 Attenuation;
 
-            PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, float cnst, float linr, float quadr);
+            PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f});
             virtual std::string type() { return std::string("point"); }
             virtual void update(float deltaTime);
     };
@@ -76,13 +74,14 @@ namespace Villain {
             glm::vec3 Direction;
             float CutOff;
             float OuterCutOff;
+            // X - Constant, Y - Linear, Z - Quadratic
+            glm::vec3 Attenuation;
             Camera3D* camera = nullptr;
 
-            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, Camera3D* cam = nullptr);
+            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f}, Camera3D* cam = nullptr);
             virtual std::string type() { return std::string("spot"); }
             virtual void update(float deltaTime);
     };
-
 }
 
 #endif // __LIGHT__

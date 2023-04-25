@@ -281,12 +281,12 @@ namespace Villain {
 
     void Shader::setPointLightUniforms(const std::string& name, PointLight& pointLight) {
         setUniformVec3(name + ".position", pointLight.Position);
+        setUniform1f(name + ".constant", pointLight.Attenuation.x);
+        setUniform1f(name + ".linear", pointLight.Attenuation.y);
+        setUniform1f(name + ".quadratic", pointLight.Attenuation.z);
         setUniformVec3(name + ".base.ambient", pointLight.AmbientColor);
         setUniformVec3(name + ".base.diffuse", pointLight.DiffuseColor);
         setUniformVec3(name + ".base.specular", pointLight.SpecularColor);
-        setUniform1f(name + ".constant", pointLight.Constant);
-        setUniform1f(name + ".linear", pointLight.Linear);
-        setUniform1f(name + ".quadratic", pointLight.Quadratic);
     }
 
     void Shader::setSpotLightUniforms(const std::string& name, SpotLight& spotLight) {
@@ -294,6 +294,9 @@ namespace Villain {
         setUniformVec3(name + ".direction", spotLight.Direction);
         setUniform1f(name + ".cutOff", spotLight.CutOff);
         setUniform1f(name + ".outerCutOff", spotLight.OuterCutOff);
+        setUniform1f(name + ".constant", spotLight.Attenuation.x);
+        setUniform1f(name + ".linear", spotLight.Attenuation.y);
+        setUniform1f(name + ".quadratic", spotLight.Attenuation.z);
         setUniformVec3(name + ".base.ambient", spotLight.AmbientColor);
         setUniformVec3(name + ".base.diffuse", spotLight.DiffuseColor);
         setUniformVec3(name + ".base.specular", spotLight.SpecularColor);

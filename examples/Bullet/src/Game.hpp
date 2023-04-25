@@ -36,7 +36,8 @@ class Game : public Villain::Application {
 
         glm::vec3 mouseRayToWorld(const glm::vec2 & pos);
 
-        // TEMP: For debugging shadow mapping for directional lights
+        // TEMP: For debugging shadow mapping
+        Villain::SpotLight* flashlight;
         Villain::DirectionalLight* directionalLight;
 };
 
