@@ -10,7 +10,7 @@ uniform float shadowBias;
 
 // 0 if pixel is in shadow, 1 if not
 float calcShadowAmount(sampler2D shadowMap, vec4 shadowMapCoords0) {
-    // NOTE: should be moved to engine for more flexibility
+    // NOTE: should be moved to engine for more flexibility? But introducing more uniforms might not be good for performance
     const float NUM_SAMPLES = 3.0;
     const float SAMPLES_START = (NUM_SAMPLES - 1.0)/2.0;
     const float NUM_SAMPLES_SQUARED = NUM_SAMPLES * NUM_SAMPLES;
