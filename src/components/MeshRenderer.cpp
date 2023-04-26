@@ -18,7 +18,6 @@ namespace Villain {
                 RenderingEngine& renderingEngine,
                 Camera& camera
                 ) {
-            const Frustum camFrustum = camera.getFrustum();
 
             shader.bind();
             // NOTE: should implenent mesh batch renderer
@@ -26,6 +25,7 @@ namespace Villain {
             shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
 
             if (renderingEngine.isFrustumCullingEnabled()) {
+                const Frustum camFrustum = camera.getFrustum();
                 if (mesh->getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
                     // Draw mesh using it's own material
                     mesh->draw(shader, this->material);

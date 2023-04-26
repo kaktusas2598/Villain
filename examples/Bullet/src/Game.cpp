@@ -49,8 +49,9 @@ void Game::init() {
     // Register custom collision callback
     gContactAddedCallback = collisionCallback;
 
-    camera.setZPlanes(0.1f, 1000.f); // for bigger render range
-    camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    camera = new Camera();
+    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
+    camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
 
     std::vector<std::string> faces{
@@ -219,7 +220,7 @@ void Game::addPlayer() {
 
     // Add camera/player node
     SceneNode* player = (new SceneNode("Player"))
-            ->addComponent(new CameraComponent(&camera))
+            ->addComponent(new CameraComponent(camera))
             //->addComponent(new MoveController())
             ->addComponent(new LookController())
             ->addComponent(new BulletCharacterComponent(playerController));
@@ -327,25 +328,10 @@ void Game::onAppPreUpdate(float dt) {
     PhysicsWorld->update(dt);
 }
 
-// Gets mouse ray direction vector in world space
-glm::vec3 Game::mouseRayToWorld(const glm::vec2 & pos) {
-    // Normalised device coords
-    float x = (2.0f * pos.x) / Engine::getScreenWidth() - 1.0f;
-    float y = 1.0f - (2.0f * pos.y) / Engine::getScreenHeight();
-    // Homogeneous clip coords
-    glm::vec4 rayClip = {x, y, -1.0f, 1.0f};
-    // Camera/eye/view coords
-    glm::vec4 rayEye = glm::inverse(camera.getProjMatrix()) * rayClip;
-    rayEye = {rayEye.x, rayEye.y, -1.0f, 0.0f};
-    // World coords
-    glm::vec3 rayWorld = glm::vec3(glm::inverse(camera.getViewMatrix()) * rayEye);
-    return glm::normalize(rayWorld);
-}
-
 void Game::shootSphere() {
-    glm::vec3 cameraPos = camera.getPosition();
-    glm::vec3 cameraFront = camera.getFront();
-    glm::vec3 startPos = cameraPos + camera.getFront() * 5.f;
+    glm::vec3 cameraPos = camera->getPosition();
+    glm::vec3 cameraFront = camera->getFront();
+    glm::vec3 startPos = cameraPos + camera->getFront() * 5.f;
     btVector3 ballStartPos = {startPos.x, startPos.y, startPos.z};
 
     std::vector<VertexP1N1UV> vertices;
@@ -370,8 +356,8 @@ void Game::shootSphere() {
 }
 
 void Game::onAppRender(float dt) {
-    glm::mat4 view = camera.getViewMatrix();
-    glm::mat4 projection = camera.getProjMatrix();
+    glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 projection = camera->getProjMatrix();
 
     // Draw coordinate gizmo: XYZ axis and little arrows for each axis
     debugRenderer.drawLine(glm::vec3(0.f, 1.f, 0.f), glm::vec3(5.f, 1.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -400,15 +386,14 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawSphere(pointLight2->GetTransform()->getPos(), 1.0f, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
 
     /////////
-    glm::vec3 cameraPos = camera.getPosition();
-    glm::vec3 cameraFront = camera.getFront();
+    glm::vec3 cameraPos = camera->getPosition();
+    glm::vec3 cameraFront = camera->getFront();
 
     glm::vec2 mouseCoords = InputManager::Instance()->getMouseCoords();
-    glm::vec3 mouseWorld = mouseRayToWorld(mouseCoords);
+    glm::vec3 mouseWorld = camera->mouseRayToWorld(mouseCoords);
     //printf("Mouse screen coords: %f.3, %f.3\n", mouseCoords.x, mouseCoords.y);
     //printf("Mouse World Coords: %f.3, %f.3, %f.3\n", mouseWorld.x, mouseWorld.y, mouseWorld.z);
     debugRenderer.drawLine(cameraPos, cameraPos + mouseWorld * 1000.0f, glm::vec4(1.0f));
-
 
     //printf("Camera pos: %f.3, %f.3, %f.3\n", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
     //printf("Camera front: %f.3, %f.3, %f.3\n", camera.getFront().x, camera.getFront().y, camera.getFront().z);

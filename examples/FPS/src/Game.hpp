@@ -18,7 +18,6 @@ class Game : public Villain::Application {
         void moveToNextLevel();
         std::string getCurrentLevelName();
     private:
-        Villain::Camera3D* camera;
         Level* currentLevel = nullptr;
         int currentLevelNum = 0;
 

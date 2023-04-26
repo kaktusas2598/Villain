@@ -34,7 +34,7 @@ Gun::Gun() : MeshRenderer<VertexP1N1UV>(nullptr, Villain::Material()) {
 }
 
 void Gun::update(float deltaTime) {
-    Camera3D* mainCam = dynamic_cast<Camera3D*>(parent->getEngine()->getRenderingEngine()->getMainCamera());
+    Camera* mainCam = parent->getEngine()->getRenderingEngine()->getMainCamera();
     GetTransform()->setPos(mainCam->getPosition() + mainCam->getFront() * 0.55f);
     GetTransform()->getPos().y += GUN_OFFSET;
 

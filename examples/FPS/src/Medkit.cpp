@@ -35,7 +35,7 @@ Medkit::Medkit(Level* level) : MeshRenderer<VertexP1N1UV>(nullptr, Material()), 
 }
 
 void Medkit::update(float deltaTime) {
-    Camera3D* mainCam = dynamic_cast<Camera3D*>(parent->getEngine()->getRenderingEngine()->getMainCamera());
+    Camera* mainCam = parent->getEngine()->getRenderingEngine()->getMainCamera();
 
     glm::vec3 directionToCamera = mainCam->getPosition() - GetTransform()->getPos();
 

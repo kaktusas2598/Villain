@@ -2,7 +2,7 @@
 #define __GAME__
 
 #include "Application.hpp"
-#include "Camera3D.hpp"
+#include "Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/SkyBox.hpp"
 
@@ -23,7 +23,7 @@ class Game : public Villain::Application {
         static Villain::SceneNode* WorldNode;
         static BulletEngine* PhysicsWorld;
     private:
-        Villain::Camera3D camera;
+        Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
         std::unique_ptr<Villain::SkyBox> skybox;
 
@@ -33,8 +33,6 @@ class Game : public Villain::Application {
         void addPlayer();
         void addRigidBoxes();
         void shootSphere();
-
-        glm::vec3 mouseRayToWorld(const glm::vec2 & pos);
 
         // TEMP: For debugging shadow mapping
         Villain::SpotLight* flashlight;
