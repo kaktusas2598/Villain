@@ -24,10 +24,7 @@ namespace Villain {
         shader = Shader::createFromResource("forward-directional");
 
         // NOTE: messing with light projection completely messes up shadows if not set correctly
-        // all objects lit by this light must be included in light frustum
-        //setShadowInfo(new ShadowInfo(glm::ortho(-40., 40., -40., 40., 0.1, 75.)));
-        //setShadowInfo(new ShadowInfo(glm::ortho(-10., 10., -10., 10., 0.1, 7.5)));
-        //setShadowInfo(new ShadowInfo(glm::ortho(-100., 100., -100., 100., 0.1, 75.)));
+        // all lit objects must be included in light frustum
         setShadowInfo(new ShadowInfo(glm::ortho(-100., 100., -100., 100., 0.1, 100.)));
     }
 
@@ -35,7 +32,9 @@ namespace Villain {
                 BaseLight(ambient, diffuse, specular), Position(pos), Attenuation(attenuation) {
 
         shader = Shader::createFromResource("forward-point");
-        // TODO: shadow mapping implementation, use cubemap textures
+        // TODO: Zfar plane should probably be same as camera range(use attenuation to calculate)
+        setShadowInfo(new ShadowInfo(glm::perspective((double)glm::radians(90.0f), 1., 1.0, 50.)));
+        getShadowInfo()->setFarPlane(50.0f);
     }
 
     void PointLight::update(float deltaTime) {

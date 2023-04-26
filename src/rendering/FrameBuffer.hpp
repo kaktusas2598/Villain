@@ -8,7 +8,8 @@ namespace Villain {
 
     class FrameBuffer {
         public:
-            FrameBuffer(int w, int h, int textureCount = 1, GLenum* attachments = new GLenum[1]{GL_COLOR_ATTACHMENT0});
+            // @param cubeMap - if true, generate and attach cubemap directly to a framebuffer, else use GL_TEXTURE_2D as attachments
+            FrameBuffer(int w, int h, int textureCount = 1, GLenum* attachments = new GLenum[1]{GL_COLOR_ATTACHMENT0}, bool cubeMap = false);
             ~FrameBuffer();
 
             // NOTE: These are not great, in the future might need ability to get multiple textures
@@ -16,7 +17,7 @@ namespace Villain {
             Texture* getTexture() const { return textures[0]; }
 
             void rescale(int w, int h);
-            void initTextures(GLenum* attachments);
+            void initTextures(GLenum* attachments, GLenum target);
             void initRenderTargets(GLenum* attachments);
 
             void bind() const;

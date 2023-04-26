@@ -2,12 +2,16 @@
 
 namespace Villain {
 
-    FrameBuffer::FrameBuffer(int w, int h, int textureCount, GLenum* attachments) :
+    FrameBuffer::FrameBuffer(int w, int h, int textureCount, GLenum* attachments, bool cubeMap) :
         fboID(0), rboID(0), width(w), height(h), numTextures(textureCount)
     {
         textureIDs = new GLuint[textureCount];
         textures = new Texture*[textureCount];
-        initTextures(attachments);
+        if (cubeMap) {
+            initTextures(attachments, GL_TEXTURE_CUBE_MAP);
+        } else {
+            initTextures(attachments, GL_TEXTURE_2D);
+        }
         initRenderTargets(attachments);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -15,14 +19,20 @@ namespace Villain {
         }
     }
 
-    void FrameBuffer::initTextures(GLenum* attachments) {
+    void FrameBuffer::initTextures(GLenum* attachments, GLenum target) {
         GLCall(glGenTextures(numTextures, textureIDs));
         for (int i = 0; i < numTextures; i++) {
-            textures[i] = new Texture();
+            textures[i] = new Texture(target);
             if (attachments[i] == GL_DEPTH_ATTACHMENT) {
-                textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, true);
+                if (target == GL_TEXTURE_2D)
+                    textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, true);
+                else
+                    textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
             } else {
-                textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
+                if (target == GL_TEXTURE_2D)
+                    textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
+                else
+                    textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA);
             }
         }
     }
@@ -53,7 +63,7 @@ namespace Villain {
                 GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fboID));
             }
 
-            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], GL_TEXTURE_2D, textureIDs[i], 0));
+            GLCall(glFramebufferTexture(GL_FRAMEBUFFER, attachments[i], textureIDs[i], 0));
         }
 
         if (fboID == 0) {
@@ -77,7 +87,6 @@ namespace Villain {
     FrameBuffer::~FrameBuffer() {
         if (*textureIDs) GLCall(glDeleteTextures(numTextures, textureIDs));
         if (fboID) GLCall(glDeleteFramebuffers(1, &fboID));
-        //GLCall(glDeleteTextures(1, &textureID));
         if (rboID) GLCall(glDeleteRenderbuffers(1, &rboID));
         if (textureIDs) delete[] textureIDs;
     }

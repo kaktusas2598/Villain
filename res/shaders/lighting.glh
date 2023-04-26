@@ -57,7 +57,6 @@ struct SpotLight {
 
 
 uniform Material material;
-
 uniform sampler2D shadowMap;
 
 // TODO: need to pass material to these methods instead of harcoding uniform here

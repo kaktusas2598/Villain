@@ -40,7 +40,8 @@ namespace Villain {
         const std::string INCLUDE_DIRECTIVE = "#include";
 
         std::string line;
-        std::stringstream ss[2];
+        bool geometryShaderIncluded = false;
+        std::stringstream ss[3];
         ShaderType type = ShaderType::NONE;
         for (std::string line; std::getline(iss, line); ) {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
@@ -60,15 +61,22 @@ namespace Villain {
 
                 } else if (line.find("fragment") != std::string::npos) {
                     type = ShaderType::FRAGMENT;
-
+                } else if (line.find("geometry") != std::string::npos) {
+                    type = ShaderType::GEOMETRY;
+                    geometryShaderIncluded = true;
                 }
+
             } else {
                 if (type != ShaderType::NONE)
                     ss[(int)type] << line << '\n';
             }
         }
 
-        rendererID = createShader(ss[0].str(), ss[1].str());
+        if (geometryShaderIncluded) {
+            rendererID = createShader(ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::GEOMETRY].str(), ss[(int)ShaderType::FRAGMENT].str());
+        } else {
+            rendererID = createShader(ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str());
+        }
     }
 
     Shader* Shader::createFromResource(const std::string& source) {

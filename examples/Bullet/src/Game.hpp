@@ -39,6 +39,9 @@ class Game : public Villain::Application {
         // TEMP: For debugging shadow mapping
         Villain::SpotLight* flashlight;
         Villain::DirectionalLight* directionalLight;
+        Villain::PointLight* pointLight1;
+        Villain::PointLight* pointLight2;
+        Villain::PointLight* pointLight3;
 };
 
 #endif // __GAME__

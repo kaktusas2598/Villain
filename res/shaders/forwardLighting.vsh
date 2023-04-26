@@ -7,8 +7,7 @@ layout(location = 4) in vec3 biTangent;
 out vec3 v_normal; // If using normal maps, not needed
 out vec3 v_fragPos; // World position
 out vec2 v_texCoords;
-out vec4 v_shadowMapCoords;
-
+out vec4 v_shadowMapCoords; // Used for directional shadow mapping for dir and spot lights
 out mat3 v_TBN; // Tangent-Bitangent-Normal matrix
 
 // MVP matrices

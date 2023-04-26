@@ -40,10 +40,12 @@ namespace Villain {
             Mesh<VertexP1N1UV>* screenQuad = nullptr;
             Transform planeTransform;
             FrameBuffer* shadowBuffer = nullptr;
+            FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
 
             Shader* defaultShader = nullptr;
-            Shader* shadowMapShader = nullptr;
+            Shader* dirShadowMapShader = nullptr;
+            Shader* omnidirShadowMapShader = nullptr;
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
