@@ -105,13 +105,10 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
- * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * Investigate shadow mapping techniques
  * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
- * SpotLight could take Camera* as an optional param to make it act as a flashlight
  * Improve Phong shading by implementing Blinn-Phong shading
  * Investigate gamma correction and sRGB textures
  * Fix Engine on Windows
