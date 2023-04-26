@@ -4,13 +4,14 @@
 ## Supported Features
 
 * Multi-pass forward rendering system using scene graph for 3D applications
-* Phong based lighting system for Scene Graph
+* Phong-blinn based lighting system for Scene Graph
+* Directional and Omnidirectional shadow mapping with PCF Soft shadows
 * Builds as a library
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
-* Normal Mapping
+* Normal and Parallax Mapping support
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
@@ -36,8 +37,7 @@
 * LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
-* Parallax mapping
-* Shadow mapping
+* Mesh batch rendering
 * Post-processing effects
 * Stencil buffer
 * Instanced drawing
@@ -45,8 +45,9 @@
 
 
 ![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
-![3D features](screenshots/3Dimgui.png?raw=true "Villain Engine Demo: 3D demo with models/lighting etc.")
+![3D features](screenshots/SponzaDemo.png?raw=true "Villain Engine Demo: 3D demo with models/lighting/shadow/normal mapping etc.")
 ![FPS](screenshots/FPS.png?raw=true "Villain Engine Demo: Wolfenstein/Doom clone")
+![Bullet Physics](screenshots/Bullet.png?raw=true "Villain Engine Demo: Bullet Physics integration")
 
 ## Used Libraries
 

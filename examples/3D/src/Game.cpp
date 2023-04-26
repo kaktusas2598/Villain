@@ -87,9 +87,9 @@ void Game::init() {
     addToScene(wall);
 
     // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
-    //directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
-                //->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
-    //addToScene(directionalLight);
+    directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
+                ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
+    addToScene(directionalLight);
 
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     //SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
@@ -101,10 +101,10 @@ void Game::init() {
     //SceneNode* point2 = ((new SceneNode("Point Light 2"))->addComponent(pointLight2));
     //addToScene(point2);
 
-    glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
-    SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                ->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), glm::vec3(1.0f, 0.022f, 0.0019f), &camera)));
-    addToScene(spotLight);
+    //glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
+    //SceneNode* spotLight = ((new SceneNode("Spot Light"))
+                //->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), glm::vec3(1.0f, 0.022f, 0.0019f), &camera)));
+    //addToScene(spotLight);
 
 
     // Physics demo
