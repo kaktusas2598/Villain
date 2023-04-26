@@ -7,6 +7,29 @@
 
 namespace Villain {
 
+    struct MeshBatchConfig {
+        unsigned int RenderType = GL_TRIANGLES;
+        // NOTE: this will have to be ordered by distance to camera and rendered back to front
+        unsigned int Priority = 1; // Lower priority batches get rendered first
+        unsigned int TextureID = 0; // Optional texture
+        glm::mat4 TransformMatrix = glm::mat4(1.0f); // Model/world transform matrix
+
+        MeshBatchConfig(unsigned renderType = GL_TRIANGLES, unsigned priority = 1, unsigned texture = 0) :
+            RenderType(renderType), Priority(priority), TextureID(texture) {}
+
+        bool operator==(const MeshBatchConfig& other) const {
+            if (RenderType != other.RenderType || Priority != other.Priority
+                    || TextureID != other.TextureID || TransformMatrix != other.TransformMatrix) {
+                return false;
+            }
+            return true;
+        }
+
+        bool operator!=(const MeshBatchConfig& other) const {
+            return !(*this == other);
+        }
+    };
+
     // This is a complete experimental work, trying to implement 3D Mesh Batch Renderer
     // The goal is to get way more FPS with big 3D models like sponza and this will
     // take quite a while to implement
@@ -19,8 +42,20 @@ namespace Villain {
     // 5. Batches ordered by texture, shader, trnasform uniform and meshes position from camera (rendered from back to front)
     class MeshBatch {
         public:
-            MeshBatch(Shader* shader);
+            //MeshBatch(Shader* shader);
+            MeshBatch(unsigned int maxVert, Shader* shader);
             ~MeshBatch();
+
+            bool isBatchConfig(const MeshBatchConfig& cfg) const { return config == cfg; }
+            bool isEmpty() const { return usedVertices == 0; }
+            bool isEnoughRoom(unsigned numVertices) const;
+
+            MeshBatch* getFullest(MeshBatch* batch);
+            int getPriority() const { return config.Priority; }
+
+            //void add(const std::vector& vertices, const MeshBatchConfig& config);
+            //void add(const std::vector& vertices);
+            void render();
 
             void init();
 
@@ -54,6 +89,10 @@ namespace Villain {
             std::vector<VertexP1N1UV> vertices;
             std::vector<GLuint> indices;
             int numElements = 0;
+            unsigned maxVertices;
+            unsigned usedVertices;
+            MeshBatchConfig config;
+            VertexP1N1UV lastVertex;
 
             Shader* defaultShader = nullptr;
     };
