@@ -27,11 +27,6 @@ namespace Villain {
             float farPlane; // Only used for omnidirectional shadow mapping
     };
 
-    // TODO:
-    // 1. Specular color can be changed by specular intensity probably, same with diffuse?
-    // Because it feels strange passing 3 colour values just to setup a light
-    // 2. Spot light needs attenuation
-    //
     // Base color components used by all light sources
     class BaseLight : public NodeComponent {
         public:

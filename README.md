@@ -109,7 +109,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
  * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
- * Improve Phong shading by implementing Blinn-Phong shading
  * Investigate gamma correction and sRGB textures
  * Fix Engine on Windows
  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
@@ -120,3 +119,8 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
    3. Ability to initialise camera with any type of projection or no projection (identity matrix)
    4. Perspective/top down ortho/isometrix ortho and none projection types
    5. Camera could contain Transform as well
+ * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
+   sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
+ * Read about Deferred shading and decide if it's feasible to introduce it
+ * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
+ * Investigate HDR, Bloom

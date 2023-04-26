@@ -150,7 +150,9 @@ namespace Villain {
                 // Render scene to shadow map
                 frustumCullingEnabled = false; // NOTE: Frustum culling system not properly implemented and won't work for shadow mapping
                 // NOTE: Will need to fix shader uniform logic inside mesh and model renderer so they only set what's needed
+                activeLight = nullptr; // Disabling active light while rendering to shadow map, to avoid trying to set light uniforms
                 node->render(shadowMapShader, this, altCamera);
+                activeLight = light;
                 frustumCullingEnabled = true;
                 // Revert culling back to normal behaviour
                 if (shadowInfo->getFlipFaces()) glCullFace(GL_BACK);
@@ -192,6 +194,7 @@ namespace Villain {
     // TEMP, render to texture test on plane, moved to different method so that
     // stuff like debug renderer and skybox also get rendered to shadow buffer in the 1st pass
     void RenderingEngine::postRender() {
+        activeLight = nullptr;
         // Smaller render target on top
         //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Camera3D* altCam = (Camera3D*)altCamera;

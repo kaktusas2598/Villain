@@ -34,7 +34,7 @@ namespace Villain {
         shader = Shader::createFromResource("forward-point");
         // TODO: Zfar plane should probably be same as camera range(use attenuation to calculate)
         setShadowInfo(new ShadowInfo(glm::perspective((double)glm::radians(90.0f), 1., 1.0, 50.)));
-        getShadowInfo()->setFarPlane(50.0f);
+        getShadowInfo()->setFarPlane(50.0f); // Not nice approach here, as farPlane is only needed for point light shadow mapping
     }
 
     void PointLight::update(float deltaTime) {
