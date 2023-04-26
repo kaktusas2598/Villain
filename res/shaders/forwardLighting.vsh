@@ -7,7 +7,7 @@ layout(location = 4) in vec3 biTangent;
 out vec3 v_normal; // If using normal maps, not needed
 out vec3 v_fragPos; // World position
 out vec2 v_texCoords;
-
+out vec4 v_shadowMapCoords; // Used for directional shadow mapping for dir and spot lights
 out mat3 v_TBN; // Tangent-Bitangent-Normal matrix
 
 // MVP matrices
@@ -15,12 +15,16 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+// TODO: shadow map stuff is not needed in ambient shader
+uniform mat4 lightMatrix;
+
 void main() {
-    gl_Position = projection * view * model * vec4(position, 1.0);
     // Calculate fragment position for lighting in world space
     v_fragPos = vec3(model * vec4(position, 1.0));
+    gl_Position = projection * view * vec4(v_fragPos, 1.0);
     v_normal = normal;
     v_texCoords = texCoords;
+    v_shadowMapCoords = lightMatrix * vec4(v_fragPos, 1.0);
 
     // Calculate TBN matrix for normal mapping
     vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));

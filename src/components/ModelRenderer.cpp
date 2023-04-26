@@ -1,6 +1,7 @@
 #include "ModelRenderer.hpp"
 
 #include "rendering/Material.hpp"
+#include "rendering/RendereringEngine.hpp"
 #include "ResourceManager.hpp"
 
 namespace Villain {
@@ -28,12 +29,16 @@ namespace Villain {
         shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
         //model->draw(shader);
         for (auto& mesh: model->getMeshes()) {
-            if (mesh.getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
-                // Draw mesh using it's own material
+            if (renderingEngine.isFrustumCullingEnabled()) {
+                if (mesh.getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
+                    // Draw mesh using it's own material
+                    mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);
+                    //display++;
+                }
+                //total++;
+            } else {
                 mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);
-                //display++;
             }
-            //total++;
         }
         //std::cout << "Total meshes: " << total << ", Visible meshes: " << display << "\n";
     }

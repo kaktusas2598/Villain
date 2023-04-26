@@ -22,6 +22,37 @@ uniform PointLight pointLight;
 // but we need to convert all relevant vectors, view matrix and normal matrix if used
 uniform vec3 viewPosition;
 
+uniform samplerCube shadowCubeMap;
+uniform float farPlane;
+
+float calcShadowAmount(PointLight light, samplerCube shadowMap, vec3 fragPos) {
+    vec3 fragToLight = fragPos - light.position;
+    float closestDepth = texture(shadowMap, fragToLight).r;
+    closestDepth *= farPlane;
+    float currentDepth = length(fragToLight);
+
+    float bias = shadowBias;
+    // NO PCF
+    //return (currentDepth - bias) > closestDepth ? 0.0 : 1.0;
+
+    float shadow  = 0.0;
+    float samples = 3.0; // NOTE: with 4 samples, FPS drops, but so far 3 samples produces nice results
+    float offset  = 0.1;
+    // PCF Shadows
+    for(float x = -offset; x < offset; x += offset / (samples * 0.5)) {
+        for(float y = -offset; y < offset; y += offset / (samples * 0.5)) {
+            for(float z = -offset; z < offset; z += offset / (samples * 0.5)) {
+                float closestDepth = texture(shadowMap, fragToLight + vec3(x, y, z)).r;
+                closestDepth *= farPlane;   // undo mapping [0;1]
+                if(currentDepth - bias < closestDepth)
+                    shadow += 1.0;
+            }
+        }
+    }
+    shadow /= (samples * samples * samples);
+    return shadow;
+}
+
 void main() {
     vec3 viewDirection = normalize(viewPosition - v_fragPos);
     vec2 texCoords = v_texCoords;
@@ -42,7 +73,7 @@ void main() {
     }
 
     vec3 outputColor = vec3(0.0);
-    outputColor += calculatePointLight(pointLight, normal, v_fragPos, viewDirection, texCoords);
+    outputColor += calculatePointLight(pointLight, normal, v_fragPos, viewDirection, texCoords) * calcShadowAmount(pointLight, shadowCubeMap, v_fragPos);
 
     color = vec4(outputColor, 1.0);
 }

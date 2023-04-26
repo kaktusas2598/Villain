@@ -5,3 +5,41 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDirection, sampler2D dispMap, floa
 
     return texCoords;
 }
+
+uniform float shadowBias;
+
+// 0 if pixel is in shadow, 1 if not
+float calcShadowAmount(sampler2D shadowMap, vec4 shadowMapCoords0) {
+    // NOTE: should be moved to engine for more flexibility? But introducing more uniforms might not be good for performance
+    const float NUM_SAMPLES = 3.0;
+    const float SAMPLES_START = (NUM_SAMPLES - 1.0)/2.0;
+    const float NUM_SAMPLES_SQUARED = NUM_SAMPLES * NUM_SAMPLES;
+
+    // Perspective divide and transform to [0,1] range
+    vec3 shadowMapCoords = (shadowMapCoords0.xyz / shadowMapCoords0.w);
+    shadowMapCoords = shadowMapCoords * 0.5 + 0.5; // Or instead of this can construct and use shadowBiasMatrix
+    // Make sure pixels out of view of light projection are clamped to 1, tested and works
+    if (shadowMapCoords.z > 1.0) {
+        shadowMapCoords.z = 1.0;
+    }
+    //float depth = texture(shadowMap, shadowMapCoords.xy).r;
+    float bias = shadowBias;
+    //float bias = max(shadowBias * (1.0 - dot(normalize(v_normal), normalize(-dirLight.direction))), 0.005);
+    //float bias = max(shadowBias * (1.0 - dot(normalize(v_normal), normalize(dirLight.position - v_fragPos))), 0.005);
+
+    // Without PCF
+    //return (depth + bias) < shadowMapCoords.z ? 0.0 : 1.0;
+    // WITHOUT bias
+    //return depth < shadowMapCoords.z ? 0.0 : 1.0;
+
+    // Apply PCF (Percentage-Closer Filter)
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for (float x = -SAMPLES_START; x <= SAMPLES_START; x+=1.0){
+        for (float y = -SAMPLES_START; y <= SAMPLES_START; y+=1.0){
+            float depth = texture(shadowMap, shadowMapCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += (depth + bias) < shadowMapCoords.z ? 0.0 : 1.0;
+        }
+    }
+    return shadow / NUM_SAMPLES_SQUARED;
+}

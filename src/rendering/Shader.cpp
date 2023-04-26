@@ -40,7 +40,8 @@ namespace Villain {
         const std::string INCLUDE_DIRECTIVE = "#include";
 
         std::string line;
-        std::stringstream ss[2];
+        bool geometryShaderIncluded = false;
+        std::stringstream ss[3];
         ShaderType type = ShaderType::NONE;
         for (std::string line; std::getline(iss, line); ) {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
@@ -60,20 +61,29 @@ namespace Villain {
 
                 } else if (line.find("fragment") != std::string::npos) {
                     type = ShaderType::FRAGMENT;
-
+                } else if (line.find("geometry") != std::string::npos) {
+                    type = ShaderType::GEOMETRY;
+                    geometryShaderIncluded = true;
                 }
+
             } else {
                 if (type != ShaderType::NONE)
                     ss[(int)type] << line << '\n';
             }
         }
 
-        rendererID = createShader(ss[0].str(), ss[1].str());
+        if (geometryShaderIncluded) {
+            rendererID = createShader(ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::GEOMETRY].str(), ss[(int)ShaderType::FRAGMENT].str());
+        } else {
+            rendererID = createShader(ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str());
+        }
     }
 
-    void Shader::createFromResource(const std::string& source) {
+    Shader* Shader::createFromResource(const std::string& source) {
         std::string src = FileUtils::loadResource("res/shaders/" + source + ".glsl");
-        this->createFromSource(src);
+        Shader* shader = new Shader();
+        shader->createFromSource(src);
+        return shader;
     }
 
     unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
@@ -210,16 +220,15 @@ namespace Villain {
         this->setMaterialUniforms(material);
 
         // Set light uniforms
-        // NOTE: this is really not good due to having to dynamic_cast every time and check
         if (renderingEngine.getActiveLight() != nullptr) {
             if (renderingEngine.getActiveLight()->type() == "directional") {
-                DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(renderingEngine.getActiveLight());
+                DirectionalLight* dirLight = (DirectionalLight*)(renderingEngine.getActiveLight());
                 this->setDirectionalLightUniforms("dirLight", *dirLight);
             } else if (renderingEngine.getActiveLight()->type() == "spot") {
-                SpotLight* spotLight = dynamic_cast<SpotLight*>(renderingEngine.getActiveLight());
+                SpotLight* spotLight = (SpotLight*)(renderingEngine.getActiveLight());
                 this->setSpotLightUniforms("spotLight", *spotLight);
             } else if (renderingEngine.getActiveLight()->type() == "point") {
-                PointLight* pointLight = dynamic_cast<PointLight*>(renderingEngine.getActiveLight());
+                PointLight* pointLight = (PointLight*)(renderingEngine.getActiveLight());
                 this->setPointLightUniforms("pointLight", *pointLight);
             }
         }
@@ -229,41 +238,37 @@ namespace Villain {
     }
 
     void Shader::setMaterialUniforms(Material& material) {
-        unsigned int diffuseSlot = 0;
-        unsigned int specularSlot = 1;
-        unsigned int normalSlot = 2;
-        unsigned int displacementSlot = 3;
         // Base color/diffuse map
         if (material.getDiffuseMap() == nullptr) {
             this->setUniform1i("material.useDiffuseMap", 0);
         } else {
             this->setUniform1i("material.useDiffuseMap", 1);
-            material.getDiffuseMap()->bind(diffuseSlot);
-            this->setUniform1i("material.texture_diffuse", diffuseSlot);
+            material.getDiffuseMap()->bind(RenderingEngine::getSamplerSlot("diffuse"));
+            this->setUniform1i("material.texture_diffuse", RenderingEngine::getSamplerSlot("diffuse"));
         }
         // Specular map
         if (material.getSpecularMap() == nullptr) {
             this->setUniform1i("material.useSpecularMap", 0);
         } else {
             this->setUniform1i("material.useSpecularMap", 1);
-            material.getSpecularMap()->bind(specularSlot);
-            this->setUniform1i("material.texture_specular", specularSlot);
+            material.getSpecularMap()->bind(RenderingEngine::getSamplerSlot("specular"));
+            this->setUniform1i("material.texture_specular", RenderingEngine::getSamplerSlot("specular"));
         }
         // Normal/bump map
         if (material.getNormalMap() == nullptr) {
             this->setUniform1i("material.useNormalMap", 0);
         } else {
             this->setUniform1i("material.useNormalMap", 1);
-            material.getNormalMap()->bind(normalSlot);
-            this->setUniform1i("material.texture_normal", normalSlot);
+            material.getNormalMap()->bind(RenderingEngine::getSamplerSlot("normal"));
+            this->setUniform1i("material.texture_normal", RenderingEngine::getSamplerSlot("normal"));
         }
         // Parallax displacement map
         if (material.getDislacementMap() == nullptr) {
             this->setUniform1i("material.useDispMap", 0);
         } else {
             this->setUniform1i("material.useDispMap", 1);
-            material.getDislacementMap()->bind(displacementSlot);
-            this->setUniform1i("material.texture_disp", displacementSlot);
+            material.getDislacementMap()->bind(RenderingEngine::getSamplerSlot("disp"));
+            this->setUniform1i("material.texture_disp", RenderingEngine::getSamplerSlot("disp"));
             this->setUniform1f("material.dispMapScale", material.getDispMapScale());
             this->setUniform1f("material.dispMapBias", material.getDispMapBias());
         }
@@ -273,6 +278,9 @@ namespace Villain {
     }
 
     void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight) {
+        // HACK: for shadow mapping, cause technically dir lights have no position
+        setUniformVec3(name + ".position", dirLight.GetTransform()->getPos());
+
         setUniformVec3(name + ".direction", dirLight.Direction);
         setUniformVec3(name + ".base.ambient", dirLight.AmbientColor);
         setUniformVec3(name + ".base.diffuse", dirLight.DiffuseColor);
@@ -281,12 +289,12 @@ namespace Villain {
 
     void Shader::setPointLightUniforms(const std::string& name, PointLight& pointLight) {
         setUniformVec3(name + ".position", pointLight.Position);
+        setUniform1f(name + ".constant", pointLight.Attenuation.x);
+        setUniform1f(name + ".linear", pointLight.Attenuation.y);
+        setUniform1f(name + ".quadratic", pointLight.Attenuation.z);
         setUniformVec3(name + ".base.ambient", pointLight.AmbientColor);
         setUniformVec3(name + ".base.diffuse", pointLight.DiffuseColor);
         setUniformVec3(name + ".base.specular", pointLight.SpecularColor);
-        setUniform1f(name + ".constant", pointLight.Constant);
-        setUniform1f(name + ".linear", pointLight.Linear);
-        setUniform1f(name + ".quadratic", pointLight.Quadratic);
     }
 
     void Shader::setSpotLightUniforms(const std::string& name, SpotLight& spotLight) {
@@ -294,6 +302,9 @@ namespace Villain {
         setUniformVec3(name + ".direction", spotLight.Direction);
         setUniform1f(name + ".cutOff", spotLight.CutOff);
         setUniform1f(name + ".outerCutOff", spotLight.OuterCutOff);
+        setUniform1f(name + ".constant", spotLight.Attenuation.x);
+        setUniform1f(name + ".linear", spotLight.Attenuation.y);
+        setUniform1f(name + ".quadratic", spotLight.Attenuation.z);
         setUniformVec3(name + ".base.ambient", spotLight.AmbientColor);
         setUniformVec3(name + ".base.diffuse", spotLight.DiffuseColor);
         setUniformVec3(name + ".base.specular", spotLight.SpecularColor);

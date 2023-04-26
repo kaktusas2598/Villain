@@ -11,10 +11,12 @@ layout(location = 0) out vec4 color;
 in vec3 v_normal;
 in vec3 v_fragPos;
 in vec2 v_texCoords;
+in vec4 v_shadowMapCoords;
 
 in mat3 v_TBN;
 
 #include lighting.glh
+// Includes parralax mapping and shadow mapping calculations and shadowBias uniform
 #include sampling.glh
 
 uniform SpotLight spotLight;
@@ -42,7 +44,8 @@ void main() {
     }
 
     vec3 outputColor = vec3(0.0);
-    outputColor += calculateSpotLight(spotLight, normal, v_fragPos, viewDirection, texCoords);
+    // Add light calculation multiplied by shadow map effect
+    outputColor += calculateSpotLight(spotLight, normal, v_fragPos, viewDirection, texCoords) * calcShadowAmount(shadowMap, v_shadowMapCoords);
 
     color = vec4(outputColor, 1.0);
 }

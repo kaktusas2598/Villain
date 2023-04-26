@@ -6,6 +6,50 @@
 
 namespace Villain {
 
+    void Texture::init(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format, bool clamp) {
+        rendererID = id;
+        width = w;
+        height = h;
+        if (rendererID == 0) {
+            GLCall(glGenTextures(1, &rendererID));
+        }
+        GLCall(glBindTexture(target, rendererID));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filter));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, filter));
+
+        if (clamp) {
+            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
+            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
+            // Set border color for shadow mapping as white so we don't get duplicate shadows
+            float borderColour[] = {1.0, 1.0, 1.0, 1.0};
+            GLCall(glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, borderColour));
+        }
+
+        //GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, NULL));
+        GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_FLOAT, NULL));
+    }
+
+    void Texture::initCubeMap(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format) {
+        rendererID = id;
+        width = w;
+        height = h;
+        if (rendererID == 0) {
+            GLCall(glGenTextures(1, &rendererID));
+        }
+        GLCall(glBindTexture(target, rendererID));
+        for (unsigned int i = 0; i < 6; ++i) {
+            GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, width, height, 0, format, GL_FLOAT, NULL));
+        }
+
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filter));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, filter));
+
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+
+    }
+
     Texture::Texture(const std::string& fileName, GLint wrappingMode)
         : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_2D) {
 

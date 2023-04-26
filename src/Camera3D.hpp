@@ -5,6 +5,9 @@
 
 namespace Villain {
 
+    // TODO: Camera/Camera2D and Camera3D should be refactor to same class having Transform and option to choose
+    // any type of projection and custom movement controls
+    //
     // Perspective projection camera
     class Camera3D : public Camera {
         public:
@@ -25,6 +28,7 @@ namespace Villain {
             glm::vec3 getFront() { return front; }
             glm::vec3 getRight() { return right; }
             glm::vec3 getUp() { return up; }
+            glm::vec3 getRotation() { return glm::vec3(pitch, yaw, 0.0f); }
             float getZnear() { return zNear; }
             float getZfar() { return zFar; }
             void setZPlanes(float near, float far) { zNear = near, zFar = far; }
@@ -44,7 +48,10 @@ namespace Villain {
                 frustum.bottomFace = { position, glm::cross(frontMultFar + up * halfVSide, right) };
                 return frustum;
             }
+            // HACK: hacked property for shadow map framebuffer
+            void setNoProjection(bool noProj = true) { noProjection = noProj; }
         private:
+            bool noProjection = false;
             // Using Euler Angles
             void updateCameraVectors();
 

@@ -7,9 +7,26 @@
 
 namespace Villain {
 
-    // TODO: Specular color can be changed by specular intensity probably, same with diffuse?
-    // Because it feels strange passing 3 colour values just to setup a light
-    //
+    class ShadowInfo {
+        public:
+            ShadowInfo(const glm::mat4& proj, float bias = 4.f, bool flipCullFaces = true)
+                : projection(proj), shadowBias(bias), flipFaces(flipCullFaces) {}
+
+            void setFarPlane(float far) { farPlane = far; }
+
+            inline glm::mat4 getProjection() const { return projection; }
+            inline float getBias() const { return shadowBias; }
+            inline bool getFlipFaces() const { return flipFaces; }
+            inline float getFarPlane() const { return farPlane; }
+        private:
+            glm::mat4 projection;
+            // Shadow map resolution-indepentent bias, so with default shadow map size of 1024 and bias of 1.f
+            // actual bias will be 1.f /1024 = 0.001f
+            float shadowBias; // Adjust to reduce/remove shadow acne artifacts
+            bool flipFaces; // Turn on to solve peter panning artifacts
+            float farPlane; // Only used for omnidirectional shadow mapping
+    };
+
     // Base color components used by all light sources
     class BaseLight : public NodeComponent {
         public:
@@ -18,14 +35,17 @@ namespace Villain {
             glm::vec3 SpecularColor;
 
             BaseLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :
-                AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular) {}
+                AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular), shader(nullptr), shadowInfo(nullptr) {}
             ~BaseLight();
             virtual void addToEngine(Engine* engine) override;
             virtual std::string type() = 0;
-
-            Shader* getShader() { return shader; }
+            inline ShadowInfo* getShadowInfo() const { return shadowInfo; }
+            inline Shader* getShader() { return shader; }
         protected:
+            void setShadowInfo(ShadowInfo* info);
             Shader* shader;
+        private:
+            ShadowInfo* shadowInfo;
     };
 
     class DirectionalLight : public BaseLight {
@@ -39,12 +59,10 @@ namespace Villain {
     class PointLight : public BaseLight {
         public:
             glm::vec3 Position;
-            // Attenuation factors
-            float Constant;
-            float Linear;
-            float Quadratic;
+            // X - Constant, Y - Linear, Z - Quadratic
+            glm::vec3 Attenuation;
 
-            PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, float cnst, float linr, float quadr);
+            PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f});
             virtual std::string type() { return std::string("point"); }
             virtual void update(float deltaTime);
     };
@@ -55,13 +73,14 @@ namespace Villain {
             glm::vec3 Direction;
             float CutOff;
             float OuterCutOff;
+            // X - Constant, Y - Linear, Z - Quadratic
+            glm::vec3 Attenuation;
             Camera3D* camera = nullptr;
 
-            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, Camera3D* cam = nullptr);
+            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f}, Camera3D* cam = nullptr);
             virtual std::string type() { return std::string("spot"); }
             virtual void update(float deltaTime);
     };
-
 }
 
 #endif // __LIGHT__

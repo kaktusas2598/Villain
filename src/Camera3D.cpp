@@ -20,10 +20,14 @@ namespace Villain {
     }
 
     glm::mat4 Camera3D::getViewMatrix() {
+        if (noProjection)
+            return glm::mat4(1.0f);
         return glm::lookAt(position, position + front, up);
     }
 
     glm::mat4 Camera3D::getProjMatrix() {
+        if (noProjection)
+            return glm::mat4(1.0f);
         // First param - FOV could be changed for zooming effect
         // 2nd param - aspect ratio
         // 3rd and 4th params - near and far planes

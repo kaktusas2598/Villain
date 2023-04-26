@@ -4,13 +4,14 @@
 ## Supported Features
 
 * Multi-pass forward rendering system using scene graph for 3D applications
-* Phong based lighting system for Scene Graph
+* Phong-blinn based lighting system for Scene Graph
+* Directional and Omnidirectional shadow mapping with PCF Soft shadows
 * Builds as a library
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
-* Normal Mapping
+* Normal and Parallax Mapping support
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
@@ -36,8 +37,7 @@
 * LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
-* Parallax mapping
-* Shadow mapping
+* Mesh batch rendering
 * Post-processing effects
 * Stencil buffer
 * Instanced drawing
@@ -45,8 +45,9 @@
 
 
 ![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
-![3D features](screenshots/3Dimgui.png?raw=true "Villain Engine Demo: 3D demo with models/lighting etc.")
+![3D features](screenshots/SponzaDemo.png?raw=true "Villain Engine Demo: 3D demo with models/lighting/shadow/normal mapping etc.")
 ![FPS](screenshots/FPS.png?raw=true "Villain Engine Demo: Wolfenstein/Doom clone")
+![Bullet Physics](screenshots/Bullet.png?raw=true "Villain Engine Demo: Bullet Physics integration")
 
 ## Used Libraries
 
@@ -104,15 +105,22 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
- * Refactor Renderer class to draw without index buffer object
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * Investigate shadow mapping techniques
  * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
- * SpotLight could take Camera* as an optional param to make it act as a flashlight
- * Improve Phong shading by implementing Blinn-Phong shading
  * Investigate gamma correction and sRGB textures
  * Fix Engine on Windows
  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
     that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!
+ * Camera system Refactor:
+   1. Merge Camera2D/Camera3D into single Camera class
+   2. Abstract movement/mouse control for each type of camera defined by user or defaulted by engine
+   3. Ability to initialise camera with any type of projection or no projection (identity matrix)
+   4. Perspective/top down ortho/isometrix ortho and none projection types
+   5. Camera could contain Transform as well
+ * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
+   sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
+ * Read about Deferred shading and decide if it's feasible to introduce it
+ * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
+ * Investigate HDR, Bloom
