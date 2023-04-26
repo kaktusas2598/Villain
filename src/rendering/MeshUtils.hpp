@@ -1,6 +1,7 @@
 #ifndef __MESH_UTILS__
 #define __MESH_UTILS__
 
+#include "Mesh.hpp"
 #include "Vertex.hpp"
 #include <vector>
 
@@ -13,6 +14,18 @@ namespace Villain {
     // then they need to be declared in header
     template <class VertexType> class MeshUtils {
         public:
+
+        static Mesh<VertexType>* getXYPlane(
+                const glm::vec3& center = glm::vec3(0.0f),
+                const glm::vec2& halfSize = glm::vec3(0.5f),
+                float* uvCoords = defaultUVMap,
+                bool direction = false
+            ) {
+           std::vector<VertexType> vertices;
+           std::vector<unsigned int> indices;
+           MeshUtils::addXYPlane(&vertices, &indices, center, halfSize, uvCoords, direction);
+           return new Mesh<VertexType>(vertices, indices);
+        }
 
         /*
          * Generate triangle indices for a quad

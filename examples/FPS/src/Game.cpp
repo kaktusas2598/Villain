@@ -52,10 +52,8 @@ void Game::init() {
     hudCamera.setPosition(camPos);
 
     spriteBatch.init();
-    hudShader = new Shader();
-    hudShader->createFromResource("spriteBatch");
-    textShader = new Shader();
-    textShader->createFromResource("text");
+    hudShader = Shader::createFromResource("spriteBatch");
+    textShader = Shader::createFromResource("text");
     freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
     moveToNextLevel();

@@ -2,11 +2,16 @@
 
 namespace Villain {
 
-    FrameBuffer::FrameBuffer(int w, int h, int textureCount, GLenum* attachments) :
+    FrameBuffer::FrameBuffer(int w, int h, int textureCount, GLenum* attachments, bool cubeMap) :
         fboID(0), rboID(0), width(w), height(h), numTextures(textureCount)
     {
         textureIDs = new GLuint[textureCount];
-        initTextures();
+        textures = new Texture*[textureCount];
+        if (cubeMap) {
+            initTextures(attachments, GL_TEXTURE_CUBE_MAP);
+        } else {
+            initTextures(attachments, GL_TEXTURE_2D);
+        }
         initRenderTargets(attachments);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -14,14 +19,21 @@ namespace Villain {
         }
     }
 
-    void FrameBuffer::initTextures() {
-        // NOTE: potentially could be handled by Texture class
+    void FrameBuffer::initTextures(GLenum* attachments, GLenum target) {
         GLCall(glGenTextures(numTextures, textureIDs));
         for (int i = 0; i < numTextures; i++) {
-            GLCall(glBindTexture(GL_TEXTURE_2D, textureIDs[i]));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+            textures[i] = new Texture(target);
+            if (attachments[i] == GL_DEPTH_ATTACHMENT) {
+                if (target == GL_TEXTURE_2D)
+                    textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, true);
+                else
+                    textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
+            } else {
+                if (target == GL_TEXTURE_2D)
+                    textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
+                else
+                    textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA);
+            }
         }
     }
 
@@ -34,8 +46,8 @@ namespace Villain {
         bool hasDepth = false;
 
         for (int i = 0; i < numTextures; i++) {
-            // NOTE: stencil attachment is definitely incorrect for this case, need a separate condition
-            if (attachments[i] == GL_DEPTH_ATTACHMENT || attachments[i] == GL_STENCIL_ATTACHMENT) {
+            // NOTE: Need another condition for GL_STENCIL_ATTACHMENT
+            if (attachments[i] == GL_DEPTH_ATTACHMENT) {
                 drawBuffers[i] = GL_NONE;
                 hasDepth = true;
             } else {
@@ -51,7 +63,7 @@ namespace Villain {
                 GLCall(glBindFramebuffer(GL_FRAMEBUFFER, fboID));
             }
 
-            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], GL_TEXTURE_2D, textureIDs[i], 0));
+            GLCall(glFramebufferTexture(GL_FRAMEBUFFER, attachments[i], textureIDs[i], 0));
         }
 
         if (fboID == 0) {
@@ -65,6 +77,9 @@ namespace Villain {
             GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboID));
         }
 
+        //glDrawBuffer(GL_NONE);
+        //glReadBuffer(GL_NONE);
+
         // Seems to work fine without this?
         GLCall(glDrawBuffers(numTextures, drawBuffers));
     }
@@ -72,15 +87,10 @@ namespace Villain {
     FrameBuffer::~FrameBuffer() {
         if (*textureIDs) GLCall(glDeleteTextures(numTextures, textureIDs));
         if (fboID) GLCall(glDeleteFramebuffers(1, &fboID));
-        //GLCall(glDeleteTextures(1, &textureID));
         if (rboID) GLCall(glDeleteRenderbuffers(1, &rboID));
         if (textureIDs) delete[] textureIDs;
     }
 
-    unsigned int FrameBuffer::getTextureID() {
-        // NOTE: not great
-        return textureIDs[0];
-    }
     void FrameBuffer::rescale(int w, int h) {
         width = w;
         height = h;
@@ -88,10 +98,7 @@ namespace Villain {
         // FIXME: had to remove couple of GLCall(), need to try recreating
         // fbo every time we resize viewport probably as some functions below were causing errors
         for (int i = 0; i < numTextures; i++) {
-            GLCall(glBindTexture(GL_TEXTURE_2D, textureIDs[i]));
-            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            textures[i]->init(w, h, textureIDs[i]);
             // TODO: this is bad design once we start attaching depth and stencil attachments
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureIDs[i], 0);
 
