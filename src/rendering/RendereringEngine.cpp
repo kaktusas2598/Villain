@@ -1,7 +1,5 @@
 #include "RendereringEngine.hpp"
 
-#include "Camera2D.hpp"
-#include "Camera3D.hpp"
 #include "Engine.hpp"
 #include "InputManager.hpp"
 #include "Mesh.hpp"

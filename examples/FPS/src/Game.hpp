@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Application.hpp"
-#include "Camera3D.hpp"
-#include "Level.hpp"
-
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 #include "FreeType.hpp"
+#include "Level.hpp"
 #include "rendering/SpriteBatch.hpp"
 
 class Game : public Villain::Application {
