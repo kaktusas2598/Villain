@@ -83,10 +83,10 @@ void Game::init() {
     WorldNode->addChild(spotLight);
 
 
-    //directionalLight = new DirectionalLight(glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f),glm::vec3(-0.2f, -1.0f, -0.3f));
-    //SceneNode* dirLight = ((new SceneNode("Directional Light 1", glm::vec3(-25, 20, 0)))
-            //->addComponent(directionalLight));
-    //WorldNode->addChild(dirLight);
+    directionalLight = new DirectionalLight(glm::vec3(0.2f), glm::vec3(0.5f), glm::vec3(1.0f),glm::vec3(-0.2f, -1.0f, -0.3f));
+    SceneNode* dirLight = ((new SceneNode("Directional Light 1", glm::vec3(-25, 20, 0)))
+            ->addComponent(directionalLight));
+    WorldNode->addChild(dirLight);
     //////////////////////
 
     PhysicsWorld = new BulletEngine({0.0, -9.8, 0.0});

@@ -158,24 +158,25 @@ namespace Villain {
             //how much extra time we have in the frame
             float totalDeltaTime = frameTime / DESIRED_FRAMETIME;
 
-            // input manager update used to be here
-
-            //SEMI FIXED TIME STEP ??
             int updateCount = 0;
+            float deltaTime;
+
+            nk_input_begin(nuklearContext);
+
             while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && isRunning) {
+                // NOTE: Probably not correct to have input handling in here, but if we move this outside semi-fixed step
+                // loop, events are not being caught in example application's update() methods
                 //update input manager
                 TheInputManager::Instance()->update();
                 SDL_Event event;
-                nk_input_begin(nuklearContext);
                 while (SDL_PollEvent(&event)) {
                     ImGui_ImplSDL2_ProcessEvent(&event);
                     handleEvents(event);
                     nk_sdl_handle_event(&event);
                 }
-                nk_input_end(nuklearContext);
 
                 //limit deltatime to 1.0 so no speedup (1.0 being one frame and .2 being a fifth of a frame)
-                float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
+                deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
 
                 deltaTime = deltaTime / DESIRED_FPS;
 
@@ -188,18 +189,15 @@ namespace Villain {
                 application->update(deltaTime);
                 application->onAppPostUpdate(deltaTime);
 
-                // HACK: To solve Segfault in IMGUI, have to check it's running here again, because after we switch state
-                // in update() method, it calls exit, but it still continues through the loop and hits render function and that causes
-                // imgui to try and render on empty context
-                if (isRunning) render(deltaTime);
-
-                //std::cout << deltaTime << std::endl;
-                //std::cout <<  " T: " << totalDeltaTime << std::endl;
                 totalDeltaTime -= deltaTime;
 
                 //if we have reached the maximum physics steps, just continue on with the frame
                 updateCount++;
             }
+
+            render(deltaTime);
+
+            nk_input_end(nuklearContext);
 
             fps = frameLimiter.end();
             // TODO: window title is currently isolated in init() method, we can drop that and load
@@ -232,11 +230,6 @@ namespace Villain {
         // In debug/edit mode render scene to texture and output it in imgui
         if (editMode)
             sceneBuffer->bind();
-
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //glClearDepth(1.0);
-        //SDL_GetWindowSize(window.getSDLWindow(), &screenWidth, &screenHeight);
-        //glViewport(0, 0, screenWidth, screenHeight);
 
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
