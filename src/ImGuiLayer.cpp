@@ -221,6 +221,8 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawScene(Engine& engine) {
+        // Remove any padding around scene view window
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Scene");
         {
             ImGui::BeginChild("GameRender");
@@ -238,6 +240,7 @@ namespace Villain {
             ImGui::EndChild();
         }
         ImGui::End();
+        ImGui::PopStyleVar();
     }
 
     void ImGuiLayer::drawSceneGraph(Engine& engine) {
