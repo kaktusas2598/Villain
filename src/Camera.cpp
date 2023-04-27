@@ -37,25 +37,19 @@ namespace Villain {
     }
 
     glm::mat4 Camera::getViewMatrix() {
-        // TODO:
         switch (projectionType) {
             case ProjectionType::NONE:
                 return glm::mat4(1.0f);
             case ProjectionType::PERSPECTIVE:
                 return glm::lookAt(position, position + front, up);
             case ProjectionType::ORTHOGRAPHIC:
-                break;
+                // TODO: test
+                return glm::lookAt(position, position + front, up);
             case ProjectionType::ORTHOGRAPHIC_2D:
-                //glm::vec3 cameraTranslate(-position.x, -position.y, -position.z);
-                // Set ortohrapic projection and center camera around position vector
+                // Center camera on the screen and apply zoom
                 glm::vec3 cameraTranslate(-position.x + screenWidth/2.0f, -position.y + screenHeight/2.0f, -position.z);
-                glm::mat4 cameraMatrix = glm::translate(projection, cameraTranslate);
-                // Camera zoom
-                cameraMatrix = glm::scale(cameraMatrix, glm::vec3(zoom));
-                //glm::vec3 scale(zoom, zoom, 0.0f);
-                //cameraMatrix = glm::scale(glm::mat4(1.0f), scale) * cameraMatrix;
-
-                return cameraMatrix;
+                glm::mat4 cameraMatrix = glm::translate(glm::mat4(1.0f), cameraTranslate);
+                return glm::scale(cameraMatrix, glm::vec3(zoom));
         }
         return glm::mat4(1.0f);
     }
@@ -70,7 +64,6 @@ namespace Villain {
                 break;
             case ProjectionType::ORTHOGRAPHIC_2D:
                 projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
-                return glm::mat4(1.0f); // Can't return actual projection because it's combined with view matrix and returned as one
                 break;
             case ProjectionType::PERSPECTIVE:
                 projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);

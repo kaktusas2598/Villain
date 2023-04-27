@@ -5,7 +5,7 @@
 #include <vector>
 #include "CollisionLayer.hpp"
 #include "TileLayer.hpp"
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 
 namespace Villain {
 
@@ -48,8 +48,8 @@ namespace Villain {
             void addTexture(const std::string& id) { textureIDs.push_back(id); }
 
             //NOTE: Probably camera and batch can go to constructor
-            void setCamera(Camera2D* cam) { camera = cam; }
-            Camera2D* getCamera() { return camera; }
+            void setCamera(Camera* cam) { camera = cam; }
+            Camera* getCamera() { return camera; }
 
             void setBatch(SpriteBatch* spriteBatch) { batch = spriteBatch; }
             SpriteBatch* getBatch() { return batch; }
@@ -71,7 +71,7 @@ namespace Villain {
 
             std::vector<std::string> textureIDs;
 
-            Camera2D* camera;
+            Camera* camera;
             SpriteBatch* batch;
     };
 }

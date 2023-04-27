@@ -3,7 +3,7 @@
 
 #include "IGameScreen.hpp"
 #include "box2d/box2d.h"
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 #include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 #include "rendering/DebugRenderer.hpp"
@@ -39,7 +39,7 @@ class GamePlayScreen : public Villain::IGameScreen {
         Villain::Texture* boxTexture;
         Villain::Texture* playerSpriteAtlas;
         Villain::SpriteBatch spriteBatch;
-        Villain::Camera2D camera;
+        Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
         bool debugRenderMode = true;
 

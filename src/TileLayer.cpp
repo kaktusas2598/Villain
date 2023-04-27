@@ -32,7 +32,7 @@ namespace Villain {
         // }
     }
 
-    void TileLayer::render(SpriteBatch* batch, Camera2D* cam) {
+    void TileLayer::render(SpriteBatch* batch, Camera* cam) {
 		if (!isVisible) {
 			return;
 		}

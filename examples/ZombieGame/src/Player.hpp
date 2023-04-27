@@ -1,7 +1,7 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 #include "Human.hpp"
 #include "Bullet.hpp"
 
@@ -14,7 +14,7 @@ class Player : public Human {
 
         void addGun(Gun* gun);
 
-        void init(glm::vec3 pos, float sp, Villain::Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size = 48.0f, float sc = 1.0f);
+        void init(glm::vec3 pos, float sp, Villain::Texture* t, Villain::Camera* cam, std::vector<Bullet>* pewpew, float size = 48.0f, float sc = 1.0f);
         void update(
                 float deltaTime,
                 Villain::Level& level,
@@ -24,7 +24,7 @@ class Player : public Human {
     private:
         std::vector<Gun*> guns;
         int currentGunIndex;
-        Villain::Camera2D* camera;
+        Villain::Camera* camera;
         std::vector<Bullet>* bullets;
 
 };

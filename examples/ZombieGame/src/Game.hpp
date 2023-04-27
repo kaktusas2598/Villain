@@ -2,10 +2,10 @@
 #define __GAME__
 
 #include "Application.hpp"
+#include "Camera.hpp"
 #include "ResourceManager.hpp"
 #include "rendering/SpriteFont.hpp"
 #include "rendering/SpriteBatch.hpp"
-#include "Camera2D.hpp"
 #include "Level.hpp"
 #include "Timer.hpp"
 #include "ParticleEngine2D.hpp"
@@ -35,8 +35,8 @@ class Game : public Villain::Application {
         void addBlood(const glm::vec2& pos, int numParticles);
 
         Villain::SpriteBatch spriteBatch;
-        Villain::Camera2D camera;
-        Villain::Camera2D hudCamera;
+        Villain::Camera* camera;
+        Villain::Camera* hudCamera;
         Villain::Texture* playerSpritesheet;
         Villain::Texture* zombieSpritesheet;
         std::vector<Bullet> bullets;

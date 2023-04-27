@@ -76,9 +76,10 @@ void GamePlayScreen::onEntry() {
     //spriteFont = new SpriteFont("assets/fonts/chintzy.ttf", 32);
     //freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
-    camera.rescale(Villain::Engine::getScreenWidth(), Villain::Engine::getScreenHeight());
+    camera = new Villain::Camera(Villain::ProjectionType::ORTHOGRAPHIC_2D);
+    camera->rescale(Villain::Engine::getScreenWidth(), Villain::Engine::getScreenHeight());
     // Zoom out because Box2D uses meters and not pixels
-    camera.setZoom(32.0f);
+    camera->setZoom(32.0f);
     //hudCamera.init(configScript.get<int>("window.width"), configScript.get<int>("window.height"));
     //glm::vec3 camPos = camera.getPosition();
     //camPos.x = mainApplication->getScreenWidth()/2.0;
@@ -124,8 +125,8 @@ void GamePlayScreen::draw() {
     if (textureShader != nullptr) {
         textureShader->bind();
         // Set uniforms
-        textureShader->setUniformMat4f("view", camera.getViewMatrix());
-        textureShader->setUniformMat4f("projection", glm::mat4(1.0f));
+        textureShader->setUniformMat4f("view", camera->getViewMatrix());
+        textureShader->setUniformMat4f("projection", camera->getProjMatrix());
         textureShader->setUniform1i("spriteTexture", 0);
 
         spriteBatch.begin();
@@ -160,7 +161,7 @@ void GamePlayScreen::draw() {
             //debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
 
             debugRenderer.end();
-            debugRenderer.render(camera.getViewMatrix(), 2.0f);
+            debugRenderer.render(camera->getProjMatrix() * camera->getViewMatrix(), 2.0f);
         }
 
         // HACK: Render test lights
@@ -177,7 +178,7 @@ void GamePlayScreen::draw() {
         Light2D mouseLight;
         mouseLight.color = glm::vec4(0.1f, 1.0f, 0.1f, 1.0f);
         mouseLight.size = 10.0f;
-        glm::vec2 mouseCoords = camera.screenToWorld(Villain::InputManager::Instance()->getMouseCoords());
+        glm::vec2 mouseCoords = camera->screenToWorld(Villain::InputManager::Instance()->getMouseCoords());
         //mouseCoords.x += 5.0f / 2;
         //mouseCoords.y += 5.0f / 2;
         mouseLight.position = glm::vec3(mouseCoords.x, mouseCoords.y, 0.0f);
@@ -188,7 +189,7 @@ void GamePlayScreen::draw() {
         spriteBatch.begin();
 
         light2DShader->bind();
-        light2DShader->setUniformMat4f("MVP", camera.getViewMatrix());
+        light2DShader->setUniformMat4f("MVP", camera->getProjMatrix() * camera->getViewMatrix());
 
         playerLight.draw(spriteBatch);
         mouseLight.draw(spriteBatch);
@@ -203,7 +204,7 @@ void GamePlayScreen::draw() {
 
 void GamePlayScreen::onAppWindowResize(int newWidth, int newHeight) {
     std::cout << newWidth << ", " << newHeight << "\n";
-    camera.rescale(newWidth, newHeight);
+    camera->rescale(newWidth, newHeight);
     //glm::vec3 camPos = camera.getPosition();
     //camPos.x = newWidth/2.0;
     //camPos.y = newHeight/2.0;

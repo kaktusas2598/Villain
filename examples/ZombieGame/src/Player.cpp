@@ -18,7 +18,7 @@ void Player::addGun(Gun* gun) {
     }
 }
 
-void Player::init(glm::vec3 pos, float sp, Villain::Texture* t, Villain::Camera2D* cam, std::vector<Bullet>* pewpew, float size, float sc) {
+void Player::init(glm::vec3 pos, float sp, Villain::Texture* t, Villain::Camera* cam, std::vector<Bullet>* pewpew, float size, float sc) {
     speed = sp;
     position = pos;
     texture = t;

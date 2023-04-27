@@ -23,7 +23,7 @@ class Game : public Villain::Application {
 
         // For static stuff, player gun, HUD, text, should be part of scene graph
         Villain::SpriteBatch spriteBatch;
-        Villain::Camera2D hudCamera;
+        Villain::Camera* hudCamera;
         Villain::Shader* hudShader = nullptr;
         Villain::Shader* textShader = nullptr;
         Villain::FreeType* freeType;

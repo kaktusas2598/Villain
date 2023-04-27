@@ -4,7 +4,7 @@
 #include "Application.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteBatch.hpp"
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 #include "Timer.hpp"
 
 #include "FreeType.hpp"
@@ -50,8 +50,8 @@ class Game : public Villain::Application {
 
 
         Villain::SpriteBatch spriteBatch;
-        Villain::Camera2D camera;
-        Villain::Camera2D hudCamera;
+        Villain::Camera* camera;
+        Villain::Camera* hudCamera;
 
         Villain::Timer colorTimer;
 
