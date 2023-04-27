@@ -113,12 +113,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Fix Engine on Windows
  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
     that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!
- * Camera system Refactor:
-   1. Merge Camera2D/Camera3D into single Camera class
-   2. Abstract movement/mouse control for each type of camera defined by user or defaulted by engine
-   3. Ability to initialise camera with any type of projection or no projection (identity matrix)
-   4. Perspective/top down ortho/isometrix ortho and none projection types
-   5. Camera could contain Transform as well
  * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
    sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
  * Read about Deferred shading and decide if it's feasible to introduce it
