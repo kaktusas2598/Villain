@@ -13,6 +13,11 @@ namespace Villain {
     }
 
     void PhysicsObject::integrate(float deltaTime) {
+        oldPosition = position;
+        // In exclicit numerical integration, position is integrated before velocity, but for systems
+        // with changing velocity, semi-implicit euler integration is better (below)
+        // NOTE: investigate other numerical integration methods for physics
+        velocity += force/mass * deltaTime; // a = F/m
         position += velocity * deltaTime;
     }
 }

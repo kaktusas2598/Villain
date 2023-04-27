@@ -29,12 +29,17 @@ namespace Villain {
             }
 
             inline void setVelocity(const glm::vec3& vel) { velocity = vel; }
+            //inline void applyForce(const glm::vec3& force);
         private:
             glm::vec3 position{0.f, 0.f, 0.f};
             glm::vec3 oldPosition;
             glm::vec3 velocity{0.f, 0.f, 0.f};
 
             Collider* collider = nullptr;
+
+            // Rigid Body specific
+            float mass = 1.0f;
+            glm::vec3 force{0.0, 0.0, 0.0};
     };
 }
 
