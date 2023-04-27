@@ -78,7 +78,7 @@ void Game::init() {
     //SceneNode* point3 = ((new SceneNode("Point Light 3", glm::vec3(20.f, 5.f, 10.f)))->addComponent(pointLight3));
     //WorldNode->addChild(point3);
 
-    flashlight = new SpotLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(10.f, 10.f, 0.f), glm::vec3(0.9f, -0.8f, -0.1f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), glm::vec3(1.f, 0.022f, 0.0019f));//, &camera);
+    flashlight = new SpotLight(glm::vec3(0.2f), glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(10.f, 10.f, 0.f), glm::vec3(0.9f, -0.8f, -0.1f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), glm::vec3(1.f, 0.022f, 0.0019f), camera);
     SceneNode* spotLight = ((new SceneNode("Spot Light", glm::vec3(10., 10., 5.)))->addComponent(flashlight));
     WorldNode->addChild(spotLight);
 

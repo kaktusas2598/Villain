@@ -17,7 +17,7 @@
 * Debug/Edit mode UI
 * Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
 * Error logging to stdout, log file and editor console
-* 2D orthographics and 3D perspective cameras
+* Different Camera Types: Perspective, Orthographic, Orthographic 2D or no projection
 * Camera Frustum culling to increase performance
 * TrueType font rendering (Only ASCII encoding ATM)
 * Finite State Machine
@@ -124,3 +124,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Read about Deferred shading and decide if it's feasible to introduce it
  * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
  * Investigate HDR, Bloom
+ * Improve and fix spot light shadows
