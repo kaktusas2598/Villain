@@ -158,6 +158,10 @@ namespace Villain {
 
             nk_input_begin(nuklearContext);
 
+            // Semi-Fixed time step with number of steps to prevent "Spiral of Death" if update logic takes too long,
+            // but it might cause a bit of a slowdown for physics systems under heavy load
+            // NOTE: Investigate fixed-time step with interpolation instead for
+            // super precise simulations, read: https://gafferongames.com/post/fix_your_timestep/
             while (totalDeltaTime > 0.0f && updateCount < MAX_PHYSICS_STEPS && isRunning) {
                 // NOTE: Probably not correct to have input handling in here, but if we move this outside semi-fixed step
                 // loop, events are not being caught in example application's update() methods
