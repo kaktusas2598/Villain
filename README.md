@@ -108,14 +108,16 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Possibly refactor Logger class to be a wrapper for spdlog
- * Beyond camera frustum culling(done), find more ways to optimise performance on a large model (sponza palace)
- * Investigate gamma correction and sRGB textures
- * Fix Engine on Windows
+ * Fix Engine on Windows:
+   - NuklearUI sometimes not compiling
+   - C++ filesystem module not compiling
+   - Crashes on glBufferData?
  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
     that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!
  * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
    sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
  * Read about Deferred shading and decide if it's feasible to introduce it
  * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
+ * Investigate gamma correction and sRGB textures
  * Investigate HDR, Bloom
  * Improve and fix spot light shadows
