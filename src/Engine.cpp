@@ -80,7 +80,7 @@ namespace Villain {
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
         // TODO: will need some configs here, gravity vector for example
-        physicsEngine = std::make_unique<PhysicsEngine>();
+        physicsEngine = std::make_unique<PhysicsEngine>(this);
         // NOTE: must be initialized before application
         renderingEngine = new RenderingEngine(this);
 
@@ -235,6 +235,7 @@ namespace Villain {
         // let rendering engine take care of all things?
         application->render(renderingEngine);
         application->onAppRender(deltaTime);
+        physicsEngine->render();
         application->postRenderPass(renderingEngine);
 
         if (editMode)

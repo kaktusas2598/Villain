@@ -2,6 +2,7 @@
 
 #include "BoundingAABB.hpp"
 #include "BoundingSphere.hpp"
+#include "Logger.hpp"
 
 namespace Villain {
 
@@ -15,9 +16,12 @@ namespace Villain {
             // Doesn't seem like a good way because of those casts
             BoundingAABB* self = (BoundingAABB*)this;
             return self->intersectAABB((BoundingAABB&)other);
+        } else if (colliderType == ColliderType::SPHERE && other.getType() == ColliderType::AABB) {
+            BoundingSphere* self = (BoundingSphere*)this;
+            return self->intersectAABB((BoundingAABB&)other);
         } else {
-            // TODO: aabb/sphere or error because collider type is invalid
-            return IntersectData(false, glm::vec3(1.f));
+            Logger::Instance()->error("Collision type not supported");
+            return IntersectData(false, glm::vec3(-1.f));
         }
     }
 }

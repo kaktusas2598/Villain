@@ -5,7 +5,9 @@
 
 namespace Villain {
 
-    // TODO: more collider types, mesh collider?
+    class DebugRenderer;
+
+    // TODO: more collider types, mesh collider? Plane
     enum class ColliderType {
         SPHERE, AABB,
         TYPE_SIZE
@@ -19,6 +21,7 @@ namespace Villain {
             IntersectData intersect(const Collider& other) const;
             virtual void transform(const glm::vec3& translation) {}
             virtual const glm::vec3& getCentre() const = 0;
+            virtual void render(DebugRenderer* renderer) = 0;
 
             inline ColliderType getType() const { return colliderType; }
         private:

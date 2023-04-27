@@ -12,6 +12,7 @@
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
+#include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
 
 #include "DebugConsole.hpp"
@@ -109,8 +110,10 @@ void Game::init() {
 
 
     // Physics demo
-    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), glm::vec3(6.0f, 0.f, 0.f)));
-    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), glm::vec3(-6.0f, 0.f, 0.f)));
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), 1.0f, glm::vec3(6.0f, 0.f, 0.f)));
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), 1.0f, glm::vec3(-6.0f, 0.f, 0.f)));
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingAABB(glm::vec3(120.0, -20.0, -50.0), glm::vec3(122.0, 50.0, 50.0)), 0.0f));
+    getRootNode()->getEngine()->getPhysicsEngine()->addObject(PhysicsObject(new BoundingAABB(glm::vec3(-142.0, -20.0, -50.0), glm::vec3(-140.0, 50.0, 50.0)), 0.0f));
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
     addToScene((new SceneNode("physics object 0"))
@@ -119,6 +122,8 @@ void Game::init() {
     addToScene((new SceneNode("physics object 1"))
         ->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
         ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+    addToScene((new SceneNode("AABB"))->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(2))));
+    addToScene((new SceneNode("AABB2"))->addComponent(new PhysicsObjectComponent(&getRootNode()->getEngine()->getPhysicsEngine()->getObject(3))));
 }
 
 void Game::handleEvents(float deltaTime) {

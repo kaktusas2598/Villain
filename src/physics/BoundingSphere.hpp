@@ -2,6 +2,7 @@
 #define __BOUNDING_SPHERE__
 
 #include "Collider.hpp"
+#include "BoundingAABB.hpp"
 
 namespace Villain {
 
@@ -13,7 +14,10 @@ namespace Villain {
                 : Collider(ColliderType::SPHERE), centre(c), radius(r) {}
 
             IntersectData intersectBoundingSphere(const BoundingSphere& other);
+            IntersectData intersectAABB(const BoundingAABB& other);
             virtual void transform(const glm::vec3& translation);
+
+            virtual void render(DebugRenderer* renderer);
 
             virtual const glm::vec3& getCentre() const { return centre; }
             inline float getRadius() const { return radius; }

@@ -1,6 +1,7 @@
 #include "BoundingAABB.hpp"
 
 #include "glm/gtx/component_wise.hpp"
+#include "rendering/DebugRenderer.hpp"
 
 namespace Villain {
 
@@ -19,5 +20,17 @@ namespace Villain {
             ((distances.y > distances.z) ? distances.y: distances.z);
 
         return IntersectData(maxDistance < 0, distances);
+    }
+
+    void BoundingAABB::transform(const glm::vec3& translation) {
+        minExtents += translation;
+        maxExtents += translation;
+        centre += translation;
+    }
+
+    void BoundingAABB::render(DebugRenderer* renderer) {
+        glm::vec3 size = (maxExtents - minExtents) / 2.f;
+        glm::vec3 centre = minExtents + size;
+        renderer->drawBox3D(centre, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), size);
     }
 }

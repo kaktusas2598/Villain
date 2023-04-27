@@ -1,5 +1,6 @@
 #include "PhysicsEngine.hpp"
 
+#include "Engine.hpp"
 #include "IntersectData.hpp"
 
 namespace Villain {
@@ -26,16 +27,33 @@ namespace Villain {
                     // so colliders will need to have mass
                     //
                     // Collision response goes here, ideally detection and response will need to be separate
-                    glm::vec3 direction = glm::normalize(intersectData.getDirection());
-                    glm::vec3 otherDirection = glm::reflect(glm::normalize(objects[i].getVelocity()), intersectData.getDirection());
-                    objects[i].setVelocity(glm::reflect(otherDirection, objects[i].getVelocity()));
-                    objects[j].setVelocity(glm::reflect(direction, objects[j].getVelocity()));
+                    //glm::vec3 direction = glm::normalize(intersectData.getDirection());
+                    //if (objects[i].getCollider().getType() == ColliderType::AABB || objects[j].getCollider().getType() == ColliderType::AABB) {
+                        //printf("Collision direction: %f.1, %f.1, %f.1\n", direction.x, direction.y, direction.z);
+                    //}
+                    //glm::vec3 otherDirection = glm::reflect(glm::normalize(objects[i].getVelocity()), intersectData.getDirection());
+                    //objects[i].setVelocity(glm::reflect(otherDirection, objects[i].getVelocity()));
+                    //objects[j].setVelocity(glm::reflect(direction, objects[j].getVelocity()));
+
                     // Working most basic collision response, just invert velocity
-                    //objects[i].setVelocity(objects[i].getVelocity() * -1.f);
-                    //objects[j].setVelocity(objects[j].getVelocity() * -1.f);
+                    objects[i].setVelocity(objects[i].getVelocity() * -1.f);
+                    objects[j].setVelocity(objects[j].getVelocity() * -1.f);
                 }
             }
         }
 
+    }
+
+    void PhysicsEngine::render() {
+        if (debugMode) {
+            Camera* cam = engine->getRenderingEngine()->getMainCamera();
+
+            for (unsigned int i = 0; i < objects.size(); i++) {
+                const_cast<Collider&>(objects[i].getCollider()).render(debugRenderer);
+            }
+
+            debugRenderer->end();
+            debugRenderer->render(cam->getProjMatrix() * cam->getViewMatrix(), 2.0f);
+        }
     }
 }

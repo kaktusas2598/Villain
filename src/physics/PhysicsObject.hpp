@@ -10,8 +10,8 @@ namespace Villain {
     // Rigid Bodies, Static obstacles, Triggers
     class PhysicsObject {
         public:
-            PhysicsObject(Collider* col, const glm::vec3& vel) :
-                position(col->getCentre()), oldPosition(position), velocity(vel), collider(col) {}
+            PhysicsObject(Collider* col, float m = 1.0f, const glm::vec3& vel = glm::vec3(0.0f)) :
+                position(col->getCentre()), oldPosition(position), velocity(vel), mass(m), collider(col) {}
             PhysicsObject(const PhysicsObject& other);
             virtual ~PhysicsObject() {}
 
@@ -29,7 +29,8 @@ namespace Villain {
             }
 
             inline void setVelocity(const glm::vec3& vel) { velocity = vel; }
-            //inline void applyForce(const glm::vec3& force);
+            bool isDynamic() const { return mass > 0.0f; }
+            inline void applyForce(const glm::vec3& F) { force += F; }
         private:
             glm::vec3 position{0.f, 0.f, 0.f};
             glm::vec3 oldPosition;
@@ -38,8 +39,11 @@ namespace Villain {
             Collider* collider = nullptr;
 
             // Rigid Body specific
-            float mass = 1.0f;
-            glm::vec3 force{0.0, 0.0, 0.0};
+            float mass = 1.0f; // static objects have mass of zero
+            glm::vec3 force;
+            glm::vec3 linearVelocity;
+            glm::vec3 angularVelocity;
+            float torque;
     };
 }
 
