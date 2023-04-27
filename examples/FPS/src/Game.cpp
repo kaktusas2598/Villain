@@ -46,10 +46,11 @@ void Game::init() {
                 //->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))[>, &camera<])));
     //addToScene(spotLight);
 
-    hudCamera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
-    glm::vec3 camPos = hudCamera.getPosition();
+    hudCamera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    hudCamera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    glm::vec3 camPos = hudCamera->getPosition();
     camPos.y = Engine::getScreenHeight()/2.0;
-    hudCamera.setPosition(camPos);
+    hudCamera->setPosition(camPos);
 
     spriteBatch.init();
     hudShader = Shader::createFromResource("spriteBatch");
@@ -72,8 +73,8 @@ void Game::onAppRender(float dt) {
 
     hudShader->bind();
     hudShader->setUniformMat4f("model", model);
-    hudShader->setUniformMat4f("view", hudCamera.getViewMatrix());
-    hudShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
+    hudShader->setUniformMat4f("view", hudCamera->getViewMatrix());
+    hudShader->setUniformMat4f("projection", hudCamera->getProjMatrix());
     hudShader->setUniform1i("spriteTexture", 0);
     spriteBatch.begin();
 
@@ -91,8 +92,8 @@ void Game::onAppRender(float dt) {
     // Setup 2nd render pass for text
     textShader->bind();
     textShader->setUniformMat4f("model", model);
-    textShader->setUniformMat4f("view", hudCamera.getViewMatrix());
-    textShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
+    textShader->setUniformMat4f("view", hudCamera->getViewMatrix());
+    textShader->setUniformMat4f("projection", hudCamera->getProjMatrix());
     textShader->setUniform1i("spriteTexture", 0);
     spriteBatch.begin();
 

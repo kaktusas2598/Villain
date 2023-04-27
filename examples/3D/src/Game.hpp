@@ -2,8 +2,7 @@
 #define __GAME__
 
 #include "Application.hpp"
-
-#include "Camera3D.hpp"
+#include "Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/SkyBox.hpp"
 
@@ -19,7 +18,7 @@ class Game : public Villain::Application {
         void onAppRender(float deltaTime);
 
     private:
-        Villain::Camera3D camera;
+        Villain::Camera* camera;
         std::unique_ptr<Villain::SkyBox> skybox;
         Villain::DebugRenderer debugRenderer;
 

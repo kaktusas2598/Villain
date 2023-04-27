@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Application.hpp"
-#include "Camera3D.hpp"
-#include "Level.hpp"
-
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 #include "FreeType.hpp"
+#include "Level.hpp"
 #include "rendering/SpriteBatch.hpp"
 
 class Game : public Villain::Application {
@@ -18,13 +16,12 @@ class Game : public Villain::Application {
         void moveToNextLevel();
         std::string getCurrentLevelName();
     private:
-        Villain::Camera3D* camera;
         Level* currentLevel = nullptr;
         int currentLevelNum = 0;
 
         // For static stuff, player gun, HUD, text, should be part of scene graph
         Villain::SpriteBatch spriteBatch;
-        Villain::Camera2D hudCamera;
+        Villain::Camera* hudCamera;
         Villain::Shader* hudShader = nullptr;
         Villain::Shader* textShader = nullptr;
         Villain::FreeType* freeType;

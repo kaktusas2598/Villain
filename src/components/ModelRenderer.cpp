@@ -20,7 +20,6 @@ namespace Villain {
             Camera& camera
             ) {
 		//unsigned int display = 0, total = 0;
-		const Frustum camFrustum = camera.getFrustum();
 
         shader.bind();
         // TODO: need different method to update uniforms, stuff like matrixes can be updated the same for all meshes
@@ -30,6 +29,7 @@ namespace Villain {
         //model->draw(shader);
         for (auto& mesh: model->getMeshes()) {
             if (renderingEngine.isFrustumCullingEnabled()) {
+                const Frustum camFrustum = camera.getFrustum();
                 if (mesh.getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
                     // Draw mesh using it's own material
                     mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);

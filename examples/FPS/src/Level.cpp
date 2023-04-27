@@ -128,7 +128,7 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
     }
     if (blueValue == 1) {
         // Add camera and player
-        Villain::Camera3D* camera = new Villain::Camera3D();
+        Villain::Camera* camera = new Villain::Camera();
         camera->setZPlanes(0.1f, 1000.f); // for bigger render range
         player = new Player(this);
         Villain::SceneNode* playerNode = (new Villain::SceneNode("Player", glm::vec3((x + 0.5f) * ROOM_WIDTH, 1.f, (y + 0.5f) * ROOM_LENGTH)))

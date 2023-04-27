@@ -1,7 +1,7 @@
 #ifndef __LAYER__
 #define __LAYER__
 
-#include "Camera2D.hpp"
+#include "Camera.hpp"
 #include "rendering/SpriteBatch.hpp"
 
 namespace Villain {
@@ -11,7 +11,7 @@ namespace Villain {
         public:
             virtual void init() {};
             virtual void update() = 0;
-            virtual void render(SpriteBatch* batch, Camera2D* cam) = 0;
+            virtual void render(SpriteBatch* batch, Camera* cam) = 0;
         //protected:
             virtual ~Layer() {}
     };

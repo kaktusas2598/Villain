@@ -20,8 +20,9 @@
 using namespace Villain;
 
 void Game::init() {
-    camera.setZPlanes(0.1f, 1000.f); // for bigger render range
-    camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    camera = new Camera();
+    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
+    camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
 
     debugRenderer.init();
 
@@ -63,7 +64,7 @@ void Game::init() {
 
     // Add camera
     SceneNode* cam = (new SceneNode("Free look camera"))
-            ->addComponent(new CameraComponent(&camera))
+            ->addComponent(new CameraComponent(camera))
             ->addComponent(new MoveController())
             ->addComponent(new LookController());
     addToScene(cam);
@@ -134,8 +135,8 @@ void Game::onAppPostUpdate(float dt) {
 }
 
 void Game::onAppRender(float dt) {
-    glm::mat4 view = camera.getViewMatrix();
-    glm::mat4 projection = camera.getProjMatrix();
+    glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 projection = camera->getProjMatrix();
 
     // Draw coordinate gizmo
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));

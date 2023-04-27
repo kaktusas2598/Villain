@@ -10,7 +10,7 @@ namespace Villain {
     class CollisionLayer : public Layer {
         public:
             virtual void update();
-            virtual void render(SpriteBatch* batch, Camera2D* cam);
+            virtual void render(SpriteBatch* batch, Camera* cam);
 
             std::vector<SDL_Rect>& getColliders() { return colliders; }
         private:

@@ -17,7 +17,7 @@ namespace Villain {
             // Calculates number of tile rows and columns shown on screen, can be called on window resize event too
             void init();
             virtual void update();
-            virtual void render(SpriteBatch *batch, Camera2D* cam);
+            virtual void render(SpriteBatch *batch, Camera* cam);
 
             void setTileIDs(const std::vector<std::vector<int>> &data) { tileIDs = data; }
             void setTileSize(int tilesize) { tileSize = tilesize; }

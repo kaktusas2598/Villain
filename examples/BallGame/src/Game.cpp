@@ -37,12 +37,14 @@ using namespace Villain;
 
 void Game::init() {
     // RESOURCES INIT
-    camera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
-    hudCamera.init(Engine::getScreenWidth(), Engine::getScreenHeight());
-    glm::vec3 camPos = camera.getPosition();
+    camera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    hudCamera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    hudCamera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    glm::vec3 camPos = camera->getPosition();
     camPos.x = Engine::getScreenWidth()/2.0;
     camPos.y = Engine::getScreenHeight()/2.0;
-    camera.setPosition(camPos);
+    camera->setPosition(camPos);
 
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/spriteBatch.frag", "batch");
     ResourceManager::Instance()->loadShader("assets/shaders/spriteBatch.vert", "assets/shaders/text.frag", "textBatch");
@@ -70,13 +72,13 @@ Game::~Game() {
 
 void Game::handleEvents() {
     if(TheInputManager::Instance()->isKeyDown(SDLK_q))
-        camera.setZoom(camera.getZoom() + 0.01f);
+        camera->setZoom(camera->getZoom() + 0.01f);
     if(TheInputManager::Instance()->isKeyDown(SDLK_e))
-        camera.setZoom(camera.getZoom() - 0.01f);
+        camera->setZoom(camera->getZoom() - 0.01f);
 
     // Get SDL window mouse coords and convert to camera woorld coords
     glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
-    mouseCoords = camera.screenToWorld(mouseCoords);
+    mouseCoords = camera->screenToWorld(mouseCoords);
 
     // Format message and add it in debug console
     std::ostringstream ss;
@@ -182,28 +184,28 @@ void Game::onAppPreUpdate(float dt) {
 
 void Game::onAppPostUpdate(float dt) {
     ballController.updateBalls(balls, grid.get(), dt, Engine::getScreenWidth(), Engine::getScreenHeight());
-    camera.update();
+    //camera->update();
 }
 
 void Game::onAppRender(float dt) {
 
     //glm::mat4 projection = glm::ortho(0.0f, (float)getScreenWidth(), 0.0f, (float)getScreenHeight(), 0.1f, 100.0f);
 
-    ballRenderers[currentRenderer]->renderBalls(spriteBatch, balls, camera.getCameraMatrix());
+    ballRenderers[currentRenderer]->renderBalls(spriteBatch, balls, camera->getProjMatrix() * camera->getViewMatrix());
 
     Shader* textShader = ResourceManager::Instance()->getShader("textBatch");
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
         textShader->bind();
-        textShader->setUniformMat4f("view", hudCamera.getCameraMatrix());
-        textShader->setUniformMat4f("projection", glm::mat4(1.0f));
+        textShader->setUniformMat4f("view", hudCamera->getViewMatrix());
+        textShader->setUniformMat4f("projection", hudCamera->getProjMatrix());
         textShader->setUniform1i("spriteTexture", 0);
 
         textBatch.begin();
 
         std::stringstream ss;
         ss << "FPS: " << (int) Engine::getFps();
-        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
 
         textBatch.end();
 
@@ -226,11 +228,11 @@ void Game::onMouseUp() {
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
     std::cout << "Window resize event, new size: " << newWidth << ", " << newHeight << "\n";
-    camera.init(newWidth, newHeight);
-    glm::vec3 camPos = camera.getPosition();
+    camera->rescale(newWidth, newHeight);
+    glm::vec3 camPos = camera->getPosition();
     camPos.x = newWidth/2.0;
     camPos.y = newHeight/2.0;
-    camera.setPosition(camPos);
+    camera->setPosition(camPos);
 
     //grid->resize(newWidth, newHeight);
 }

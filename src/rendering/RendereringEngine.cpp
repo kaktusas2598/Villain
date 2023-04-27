@@ -1,7 +1,5 @@
 #include "RendereringEngine.hpp"
 
-#include "Camera2D.hpp"
-#include "Camera3D.hpp"
 #include "Engine.hpp"
 #include "InputManager.hpp"
 #include "Mesh.hpp"
@@ -19,8 +17,8 @@ namespace Villain {
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
 
-        mainCamera = new Camera3D();
-        altCamera = new Camera3D();
+        mainCamera = new Camera(ProjectionType::PERSPECTIVE);
+        altCamera = new Camera(ProjectionType::NONE);
 
         samplerMap.emplace("diffuse", 0);
         samplerMap.emplace("specular", 1);
@@ -35,8 +33,6 @@ namespace Villain {
 
         glEnable(GL_BLEND);
 
-        Camera3D* cam3D = dynamic_cast<Camera3D*>(altCamera);
-        cam3D->setNoProjection(); // Super hacky ATM
         screenQuad = MeshUtils<VertexP1N1UV>::getXYPlane(glm::vec3(0.0f), glm::vec2(1.0f), new float[4]{0.0, 1.0, 0.0, 1.0});
         // TODO: refactor hardcoded shadow map size
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
@@ -58,18 +54,17 @@ namespace Villain {
         mirrorBuffer->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Camera3D* mainCam = (Camera3D*)mainCamera;
-        Camera3D cam3D = *(Camera3D*)mainCamera;
-            cam3D.setPosition(mainCamera->getPosition());
-            // Rotates camera
-            glm::vec3 rot = mainCam->getRotation();
-            rot.y += 180.0f;
-            cam3D.setRotation(rot);
+        Camera mirrorCamera = *mainCamera;
+        mirrorCamera.setPosition(mainCamera->getPosition());
+        // Rotates camera
+        glm::vec3 rot = mirrorCamera.getRotation();
+        rot.y += 180.0f;
+        mirrorCamera.setRotation(rot);
 
         defaultShader->bind();
         defaultShader->setUniformVec3("color", ambientLight);
         activeLight = nullptr;
-        node->render(defaultShader, this, &cam3D);
+        node->render(defaultShader, this, &mirrorCamera);
         //////////
 
         // 2nd Rendering Pass: main pass
@@ -197,14 +192,14 @@ namespace Villain {
         activeLight = nullptr;
         // Smaller render target on top
         //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Camera3D* altCam = (Camera3D*)altCamera;
-        altCam->setNoProjection(true);
         Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
         //Material mirrorMat{"null", shadowBuffer->getTexture(), 1};
         planeTransform.setScale(0.25);
         planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.3f));
         planeTransform.setEulerRot(0.0, 180.0, 90.0);
+        frustumCullingEnabled = false;
         defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
+        frustumCullingEnabled = true;
         defaultShader->setUniformVec3("color", ambientLight);
         screenQuad->draw(*defaultShader, mirrorMat);
     }

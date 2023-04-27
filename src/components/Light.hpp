@@ -2,7 +2,7 @@
 #define __LIGHT__
 
 #include <glm/glm.hpp>
-#include "Camera3D.hpp"
+#include "Camera.hpp"
 #include "NodeComponent.hpp"
 
 namespace Villain {
@@ -75,9 +75,9 @@ namespace Villain {
             float OuterCutOff;
             // X - Constant, Y - Linear, Z - Quadratic
             glm::vec3 Attenuation;
-            Camera3D* camera = nullptr;
+            Camera* camera = nullptr;
 
-            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f}, Camera3D* cam = nullptr);
+            SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f}, Camera* cam = nullptr);
             virtual std::string type() { return std::string("spot"); }
             virtual void update(float deltaTime);
     };

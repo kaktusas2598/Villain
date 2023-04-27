@@ -2,7 +2,6 @@
 #define __MENU_SCREEN__
 
 #include "IGameScreen.hpp"
-#include "Camera2D.hpp"
 #include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 

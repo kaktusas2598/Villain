@@ -33,12 +33,14 @@ void Game::init() {
     SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
     //SoundManager::Instance()->playMusic("drive");
 
-    camera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
-    hudCamera.rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
-    glm::vec3 camPos = camera.getPosition();
+    camera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    hudCamera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    hudCamera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    glm::vec3 camPos = camera->getPosition();
     camPos.x = Engine::getScreenWidth()/2.0;
     camPos.y = Engine::getScreenHeight()/2.0;
-    camera.setPosition(camPos);
+    camera->setPosition(camPos);
 
     bloodParticles = new ParticleBatch2D();
     bloodParticles->init(
@@ -73,7 +75,7 @@ void Game::init() {
             glm::vec3(100.0f, 100.0f, 0.5f),
             HUMAN_SPEED,
             ResourceManager::Instance()->loadTexture("assets/textures/player2.png", "player2"),
-            &camera,
+            camera,
             &bullets,
             128.0f,
             0.25f);
@@ -83,7 +85,7 @@ void Game::init() {
     LevelParser levelParser;
     //level = levelParser.parseLevel("assets/maps/map1.tmx"); //NOTE: relative tileset path does not work in this case because of launcher pwd(project dir)
     level = levelParser.parseLevel("map1.tmx");
-    level->setCamera(&camera);
+    level->setCamera(camera);
     level->setBatch(&spriteBatch);
 
     // Randomise some NPCs
@@ -128,13 +130,13 @@ Game::~Game() {
 
 void Game::handleEvents() {
     if(TheInputManager::Instance()->isKeyDown(SDLK_q))
-        camera.setZoom(camera.getZoom() + 0.01f);
+        camera->setZoom(camera->getZoom() + 0.01f);
     if(TheInputManager::Instance()->isKeyDown(SDLK_e))
-        camera.setZoom(camera.getZoom() - 0.01f);
+        camera->setZoom(camera->getZoom() - 0.01f);
 
     // Get SDL window mouse coords and convert to camera woorld coords
     glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
-    mouseCoords = camera.screenToWorld(mouseCoords);
+    mouseCoords = camera->screenToWorld(mouseCoords);
 
     // Format message and add it in debug console
     std::ostringstream ss;
@@ -279,9 +281,9 @@ void Game::onAppPreUpdate(float dt) {
     particleEngine.update(dt);
 
     // Center camera around player
-    float cameraZ = camera.getPosition().z;
+    float cameraZ = camera->getPosition().z;
     glm::vec3 cameraPos = glm::vec3(player->getPosition().x, player->getPosition().y, cameraZ);
-    camera.setPosition(cameraPos);
+    camera->setPosition(cameraPos);
 }
 
 void Game::onAppPostUpdate(float dt) {
@@ -299,8 +301,8 @@ void Game::onAppRender(float dt) {
     //glm::mat4 view = glm::mat4(1.0f);
     //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     //glm::mat4 projection = glm::ortho(0.0f, (float)TheEngine::Instance()->getScreenWidth(), 0.0f, (float)TheEngine::Instance()->getScreenHeight(), 0.1f, 100.0f);
-    glm::mat4 view = camera.getViewMatrix();
-    glm::mat4 projection = camera.getProjMatrix();
+    glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 projection = camera->getProjMatrix();
 
     float colorMin = 0.0f, colorMax = 255.0f, colorCurr = colorMin;
     colorCurr+= (int)colorTimer.read() % 255;
@@ -327,7 +329,7 @@ void Game::onAppRender(float dt) {
             agentPosition = glm::vec2(humans[i]->getPosition());
             agentDimensions = glm::vec2(humans[i]->getSize());
             // Camera Culling! Only draw agents in camera clip space
-            if (camera.quadInView(agentPosition, agentDimensions)) {
+            if (camera->quadInView(agentPosition, agentDimensions)) {
                 humans[i]->draw(spriteBatch);
             }
         }
@@ -352,8 +354,8 @@ void Game::onAppRender(float dt) {
     if (textShader != nullptr) {
         glm::vec4 color(0.0f, 0.2f, 1.0f, 1.0f);
         textShader->bind();
-        textShader->setUniformMat4f("view", hudCamera.getViewMatrix());
-        textShader->setUniformMat4f("projection", hudCamera.getProjMatrix());
+        textShader->setUniformMat4f("view", hudCamera->getViewMatrix());
+        textShader->setUniformMat4f("projection", hudCamera->getProjMatrix());
         textShader->setUniform1i("spriteTexture", 0);
 
         textBatch.begin();
@@ -361,15 +363,15 @@ void Game::onAppRender(float dt) {
         //spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), glm::vec2(3.0f), 0.6f, color);
         std::stringstream ss;
         ss << "HP: " << (int)player->getHealth();
-        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 70.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 70.0f)), 2.0f, 0.6f, color);
         ss.str(""); // Empty string stream
 
         ss << "Humans: " << humans.size();
-        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
         ss.str(""); // Empty string stream
 
         ss << "Zombies: " << zombies.size();
-        freeType->draw(textBatch, ss.str(), hudCamera.screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.6f, color);
 
         textBatch.end();
 
@@ -389,9 +391,9 @@ void Game::addBlood(const glm::vec2& pos, int numParticles) {
 }
 
 void Game::onAppWindowResize(int newWidth, int newHeight) {
-   camera.rescale(newWidth, newHeight);
-   glm::vec3 camPos = camera.getPosition();
+   camera->rescale(newWidth, newHeight);
+   glm::vec3 camPos = camera->getPosition();
    camPos.x = newWidth/2.0;
    camPos.y = newHeight/2.0;
-   camera.setPosition(camPos);
+   camera->setPosition(camPos);
 }

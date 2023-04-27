@@ -5,7 +5,7 @@ namespace Villain {
     void CollisionLayer::update() {
     }
 
-    void CollisionLayer::render(SpriteBatch* batch, Camera2D* cam) {
+    void CollisionLayer::render(SpriteBatch* batch, Camera* cam) {
         // TODO: Render here bounding boxes optionally
     }
 }

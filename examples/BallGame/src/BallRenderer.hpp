@@ -1,8 +1,8 @@
 #ifndef __BALL_RENDERER__
 #define __BALL_RENDERER__
 
-#include "Shader.hpp"
-#include "SpriteBatch.hpp"
+#include "rendering/Shader.hpp"
+#include "rendering/SpriteBatch.hpp"
 #include "Ball.hpp"
 
 class BallRenderer {
