@@ -4,23 +4,19 @@
 
 namespace Villain {
 
-    void FrameLimiter::init(float maxFPS)
-    {
+    void FrameLimiter::init(float maxFPS) {
         setMaxFPS(maxFPS);
     }
 
-    void FrameLimiter::setMaxFPS(float maxFPS)
-    {
+    void FrameLimiter::setMaxFPS(float maxFPS) {
         m_maxFPS = maxFPS;
     }
 
-    void FrameLimiter::begin()
-    {
+    void FrameLimiter::begin() {
         m_startTicks = SDL_GetTicks();
     }
 
-    float FrameLimiter::end()
-    {
+    float FrameLimiter::end() {
         calculateFPS();
 
         //time the frame took
@@ -37,11 +33,7 @@ namespace Villain {
         return m_fps;
     }
 
-    void FrameLimiter::calculateFPS()
-    {
-        //note to self: static variables are like global variables but only to the scope
-        //of the function. So they will retain their state after returning from
-        //the function.
+    void FrameLimiter::calculateFPS() {
 
         //taking the average over 10 frames
         static const int NUM_SAMPLES = 10;
