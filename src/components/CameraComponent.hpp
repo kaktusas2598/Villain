@@ -9,7 +9,11 @@ namespace Villain {
 
     class CameraComponent: public NodeComponent {
         public:
-            CameraComponent(Camera* cam): camera(cam) {}
+            CameraComponent(Camera* cam): camera(cam) {
+                // HACK: Generating unique id for component mask, this is not great though, because it
+                // will really complicate writing new components and having to add this every time!
+                id = GetId<CameraComponent>();
+            }
 
             virtual void handleInput(float deltaTime) override;
             virtual void addToEngine(Engine* engine) override;

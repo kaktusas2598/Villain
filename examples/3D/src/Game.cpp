@@ -63,6 +63,7 @@ void Game::init() {
 
     //addToScene(planeNode);
 
+    //SceneNode* cam = (new SceneNode("Free look camera"))->addComponentNew<CameraComponent>(camera);
     // Add camera
     SceneNode* cam = (new SceneNode("Free look camera"))
             ->addComponent(new CameraComponent(camera))

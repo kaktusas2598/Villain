@@ -11,6 +11,15 @@
 // Custom baked fonts for ImGui
 #include "imgui/Roboto-Regular.h"
 
+// TODO: refactor scene graph rendering/editing to separate class, to avoid stuff like this
+#include "components/CameraComponent.hpp"
+#include "components/Light.hpp"
+#include "components/LookController.hpp"
+#include "components/MeshRenderer.hpp"
+#include "components/ModelRenderer.hpp"
+#include "components/MoveController.hpp"
+#include "components/PhysicsObjectComponent.hpp"
+
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
@@ -278,7 +287,10 @@ namespace Villain {
                 if (!node->getComponents().empty()) {
                     if (ImGui::BeginTabItem("Components")) {
                         for (auto& compo: node->getComponents()) {
-                            // draw components here
+                            // TODO: draw components here
+                            if (compo->getID() == GetId<CameraComponent>()) {
+                                ImGui::Text("Camera");
+                            }
                             ImGui::Separator();
                         }
 
@@ -287,7 +299,7 @@ namespace Villain {
                 }
                 ImGui::EndTabBar();
             }
-                                // Children
+            // Children
             for (auto& child: node->getChildren()) {
                 drawNode(child);
             }

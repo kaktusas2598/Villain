@@ -45,7 +45,8 @@ namespace Villain {
             std::vector<SceneNode*>& getChildren() { return children; }
             std::vector<NodeComponent*>& getComponents() { return components; }
         private:
-            // ECS
+            // ECS TODO: component mask can be used if we template addComponent method, but when we
+            // want to change it completely, it can't take NodeComponent* anymore
             EntityID id;
             ComponentMask componentMask;
 

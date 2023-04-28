@@ -37,12 +37,13 @@ namespace Villain {
             inline Transform* GetTransform()             { return parent->getTransform(); }
             inline const Transform& GetTransform() const { return *parent->getTransform(); }
 
+            int getID() const { return id; }
             inline SceneNode* getParent() { return parent; }
             virtual void setParent(SceneNode* p) { parent = p; }
         protected:
             SceneNode* parent;
+            int id = -1;
         private:
-
             NodeComponent(const NodeComponent& other) {}
             void operator=(const NodeComponent& other) {}
     };
