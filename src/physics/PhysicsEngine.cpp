@@ -36,8 +36,10 @@ namespace Villain {
                     //objects[j].setVelocity(glm::reflect(direction, objects[j].getVelocity()));
 
                     // Working most basic collision response, just invert velocity
-                    objects[i].setVelocity(objects[i].getVelocity() * -1.f);
-                    objects[j].setVelocity(objects[j].getVelocity() * -1.f);
+                    if (objects[i].isDynamic())
+                        objects[i].setVelocity(objects[i].getVelocity() * -1.f);
+                    if (objects[j].isDynamic())
+                        objects[j].setVelocity(objects[j].getVelocity() * -1.f);
                 }
             }
         }

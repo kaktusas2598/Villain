@@ -15,18 +15,16 @@ namespace Villain {
             bool hasChanged() { return needsUpdate; }
 
             void translatePosition(const glm::vec3& translation) { position += translation; }
-            //const glm::vec3& getPos() const { return position; }
             float getScale() const { return scale; }
-
             glm::vec3& getPos() { return position; }
             glm::vec3& getEulerRot() { return eulerRot; }
             float* getScalePtr() { return &scale; }
 
-            //void setRot(float angleDeg, glm::vec3 rotationAxis = glm::vec3(0.f, 0.f, 1.f)) {
-                //rotation = glm::angleAxis(glm::radians(angleDeg), rotationAxis);
-            //}
-            void setEulerRot(float x, float y, float z) { eulerRot.x = x; eulerRot.y = y; eulerRot.z = z; needsUpdate = true; }
+            void setEulerRot(float x, float y, float z) {
+                oldEulerRot = eulerRot; eulerRot.x = x; eulerRot.y = y; eulerRot.z = z; needsUpdate = true;
+            }
             inline void setPos(const glm::vec3& pos) { position = pos; needsUpdate = true; }
+            inline void setRot(const glm::quat& rot) { orientation = rot; }
             inline void setScale(float sc) { scale = sc; needsUpdate = true; }
             inline void setParent(Transform* p) { parent = p; }
 
@@ -39,13 +37,13 @@ namespace Villain {
             glm::mat4 getMatrix() const;
 
             glm::vec3 position = glm::vec3(0.0f);
-            //glm::quat rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
-            // NOTE: for now we will use euler rotations instead of quaternions, but in the future quaternions should be preffered way
+            glm::quat orientation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
             glm::vec3 eulerRot = glm::vec3(0.0f);
             float scale = 1.0f;
 
             glm::vec3 oldPos = glm::vec3(0.0f);
-            glm::quat oldRot = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
+            glm::vec3 oldEulerRot = glm::vec3(0.0f);
+            glm::quat oldOrientation = glm::angleAxis(glm::radians(0.f), glm::vec3(0.f, 0.f, 0.f));
             float oldSc = 1.0f;
 
             Transform* parent;
