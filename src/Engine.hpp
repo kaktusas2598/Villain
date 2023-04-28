@@ -4,6 +4,7 @@
 #include "DebugConsole.hpp"
 #include "ImGuiLayer.hpp"
 #include "InputManager.hpp"
+#include "Timer.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "rendering/FrameBuffer.hpp"
 #include "rendering/RendereringEngine.hpp"
@@ -50,6 +51,8 @@ namespace Villain {
             static void setRunning(bool running) { isRunning = running; }
 
             static float getFps() { return fps; }
+            static uint32_t getUpdateTime() { return updateTime; }
+            static uint32_t getRenderTime() { return renderTime; }
             static bool editModeActive() { return editMode; }
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
@@ -73,6 +76,9 @@ namespace Villain {
             static int screenHeight;
 
             static float fps; ///< main application's fps
+            static uint32_t updateTime;
+            static uint32_t renderTime;
+            Timer profiler;
             bool mouseMotion = false;
 
             std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;

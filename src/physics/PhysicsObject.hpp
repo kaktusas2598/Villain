@@ -44,6 +44,11 @@ namespace Villain {
             glm::vec3 linearVelocity;
             glm::vec3 angularVelocity;
             float torque;
+            // TODO:
+            //   - RigidBody class extending this one(rename this to CollisionObject)
+            //   - quaternions
+            //   - friction
+            //   - restitution
     };
 }
 

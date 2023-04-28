@@ -27,6 +27,8 @@ namespace Villain {
     bool Engine::isRunning = false;
     bool Engine::editMode = false;
     float Engine::fps = 0;
+    uint32_t Engine::updateTime = 0;
+    uint32_t Engine::renderTime = 0;
 
     int Engine::getScreenWidth() { return screenWidth; }
     int Engine::getScreenHeight() { return screenHeight; }
@@ -158,6 +160,7 @@ namespace Villain {
 
             nk_input_begin(nuklearContext);
 
+            profiler.start();
             // Semi-Fixed time step with number of steps to prevent "Spiral of Death" if update logic takes too long,
             // but it might cause a bit of a slowdown for physics systems under heavy load
             // NOTE: Investigate fixed-time step with interpolation instead for
@@ -193,8 +196,11 @@ namespace Villain {
                 //if we have reached the maximum physics steps, just continue on with the frame
                 updateCount++;
             }
+            updateTime = profiler.read();
 
             render(deltaTime);
+
+            renderTime = profiler.read();
 
             nk_input_end(nuklearContext);
 
