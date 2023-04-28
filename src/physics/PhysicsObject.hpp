@@ -2,6 +2,7 @@
 #define __PHYSICS_OBJECT__
 
 #include "Collider.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace Villain {
 
@@ -38,17 +39,17 @@ namespace Villain {
 
             Collider* collider = nullptr;
 
+            // TODO: Implement all of this, possibly refactor into new RigidBody class extending this one
             // Rigid Body specific
             float mass = 1.0f; // static objects have mass of zero
             glm::vec3 force;
             glm::vec3 linearVelocity;
             glm::vec3 angularVelocity;
+            glm::quat spin;
             float torque;
-            // TODO:
-            //   - RigidBody class extending this one(rename this to CollisionObject)
-            //   - quaternions
-            //   - friction
-            //   - restitution
+            float momentOfIntertia; // Calculated from Collider shape, measurements and mass needed
+            float friction; //<<< Friction coefficient
+            float restitution; //<<< Elasticity
     };
 }
 
