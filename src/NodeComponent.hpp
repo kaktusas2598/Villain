@@ -5,6 +5,17 @@
 #include "Camera.hpp"
 
 namespace Villain {
+
+    // Component signature idea borrowed from ECS designs
+    // Generate unique ID for every new component, eg:
+    // int id = GetId<CameraComponent>();
+    //
+    extern int componentCounter;
+    template <class T> int GetId() {
+        static int componentId = componentCounter++;
+        return componentId;
+    }
+
     class RenderingEngine;
     class Shader;
 

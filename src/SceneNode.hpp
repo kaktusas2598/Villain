@@ -2,10 +2,17 @@
 #define __SCENE_NODE__
 
 #include "Transform.hpp"
+#include <bitset>
 #include <string>
 #include <vector>
 
 namespace Villain {
+
+    // Ideas borrowed from SceneGraph, each Node/Entity will have a bitmask to represent which components it has,
+    // which will also make it easier to use it in imgui
+    typedef unsigned long long EntityID;
+    const int MAX_COMPONENTS = 32;
+    typedef std::bitset<MAX_COMPONENTS> ComponentMask;
 
     class Camera;
     class Engine;
@@ -38,7 +45,12 @@ namespace Villain {
             std::vector<SceneNode*>& getChildren() { return children; }
             std::vector<NodeComponent*>& getComponents() { return components; }
         private:
+            // ECS
+            EntityID id;
+            ComponentMask componentMask;
+
             std::string uid;
+
             Transform transform;
             std::vector<SceneNode*> children;
             std::vector<NodeComponent*> components;
