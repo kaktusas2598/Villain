@@ -269,18 +269,16 @@ namespace Villain {
 
                     ImGui::Text("Position"); ImGui::SameLine();
                     ImGui::PushItemWidth(40);
+                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
                     ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
+                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
                     ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
+                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
                     ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
+                    ImGui::PopStyleColor(3);
                     ImGui::PopItemWidth();
 
                     ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
-                    //ImGui::Text("Rotation"); ImGui::SameLine();
-                    //ImGui::PushItemWidth(40);
-                    //ImGui::DragFloat("RX", &node->getTransform()->getEulerRot().x); ImGui::SameLine();
-                    //ImGui::DragFloat("RY", &node->getTransform()->getEulerRot().y); ImGui::SameLine();
-                    //ImGui::DragFloat("RZ", &node->getTransform()->getEulerRot().z);
-                    //ImGui::PopItemWidth();
 
                     ImGui::EndTabItem();
                 }
