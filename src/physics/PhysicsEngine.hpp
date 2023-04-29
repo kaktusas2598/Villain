@@ -18,9 +18,14 @@ namespace Villain {
 
             ~PhysicsEngine() {
                 delete debugRenderer;
+                for (unsigned int i = 0; i < objects.size(); i++) {
+                    delete objects[i];
+                    objects[i] = nullptr;
+                }
+                objects.clear();
             }
 
-            void addObject(const PhysicsObject& object);
+            void addObject(PhysicsObject* object);
             void simulate(float deltaTime);
 
             // Temporarily for now both collision detection and response done in same step
@@ -30,11 +35,11 @@ namespace Villain {
             void render();
 
             // TEMP
-            inline const PhysicsObject& getObject(unsigned int index) const { return objects[index]; }
+            inline PhysicsObject* getObject(unsigned int index) const { return objects[index]; }
             inline unsigned int getNumObjects() const { return objects.size(); }
         private:
             Engine* engine = nullptr;
-            std::vector<PhysicsObject> objects;
+            std::vector<PhysicsObject*> objects;
             // TODO:: add new 'Solver' class, to calculate collision responses
             DebugRenderer* debugRenderer = nullptr;
             bool debugMode = true;

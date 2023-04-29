@@ -5,13 +5,13 @@
 
 namespace Villain {
 
-    void PhysicsEngine::addObject(const PhysicsObject& object) {
+    void PhysicsEngine::addObject(PhysicsObject* object) {
         objects.push_back(object);
     }
 
     void PhysicsEngine::simulate(float deltaTime) {
         for (unsigned int i = 0; i < objects.size(); i++) {
-            objects[i].integrate(deltaTime);
+            objects[i]->integrate(deltaTime);
         }
     }
 
@@ -20,8 +20,8 @@ namespace Villain {
     void PhysicsEngine::handleCollisions() {
         for (unsigned int i = 0; i < objects.size(); i++) {
             for (unsigned int j = i + 1; j < objects.size(); j++) {
-                IntersectData intersectData = objects[i].getCollider()
-                    .intersect(objects[j].getCollider());
+                IntersectData intersectData = objects[i]->getCollider()
+                    .intersect(objects[j]->getCollider());
                 if (intersectData.isIntersecting()) {
                     // TODO: will need to implement proper conservation of momentum here, impulses
                     // so colliders will need to have mass
@@ -36,10 +36,10 @@ namespace Villain {
                     //objects[j].setVelocity(glm::reflect(direction, objects[j].getVelocity()));
 
                     // Working most basic collision response, just invert velocity
-                    if (objects[i].isDynamic())
-                        objects[i].setVelocity(objects[i].getVelocity() * -1.f);
-                    if (objects[j].isDynamic())
-                        objects[j].setVelocity(objects[j].getVelocity() * -1.f);
+                    if (objects[i]->isDynamic())
+                        objects[i]->setVelocity(objects[i]->getVelocity() * -1.f);
+                    if (objects[j]->isDynamic())
+                        objects[j]->setVelocity(objects[j]->getVelocity() * -1.f);
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace Villain {
             Camera* cam = engine->getRenderingEngine()->getMainCamera();
 
             for (unsigned int i = 0; i < objects.size(); i++) {
-                const_cast<Collider&>(objects[i].getCollider()).render(debugRenderer);
+                const_cast<Collider&>(objects[i]->getCollider()).render(debugRenderer);
             }
 
             debugRenderer->end();
