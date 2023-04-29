@@ -1,5 +1,6 @@
 #include "ImGuiLayer.hpp"
 
+#include "Camera.hpp"
 #include "DebugConsole.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
@@ -288,6 +289,18 @@ namespace Villain {
                             // TODO: draw components here
                             if (compo->getID() == GetId<CameraComponent>()) {
                                 ImGui::Text("Camera");
+                                Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
+                                static int projectionType = (int)camera->getProjectionType();
+                                ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
+                                ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
+                                ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
+                                ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
+                                camera->setProjectionType((ProjectionType)projectionType);
+                            }
+                            auto light = dynamic_cast<BaseLight*>(compo);
+                            if (light != nullptr) {
+                                ImGui::Text("%s light", light->type().c_str());
+                                ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
                             }
                             ImGui::Separator();
                         }

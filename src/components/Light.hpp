@@ -18,6 +18,8 @@ namespace Villain {
             inline float getBias() const { return shadowBias; }
             inline bool getFlipFaces() const { return flipFaces; }
             inline float getFarPlane() const { return farPlane; }
+
+            inline float* getBiasPointer() { return &shadowBias; }
         private:
             glm::mat4 projection;
             // Shadow map resolution-indepentent bias, so with default shadow map size of 1024 and bias of 1.f

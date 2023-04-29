@@ -48,6 +48,9 @@ namespace Villain {
             float getZnear() { return zNear; }
             float getZfar() { return zFar; }
 
+            ProjectionType getProjectionType() { return projectionType; }
+            void setProjectionType(ProjectionType type) { projectionType = type; }
+
             void setPosition(const glm::vec3& newPos) { position = newPos; }
             void setZoom(float z) { zoom = z; }
             void setZPlanes(float near, float far) { zNear = near, zFar = far; }
