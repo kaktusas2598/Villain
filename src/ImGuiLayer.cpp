@@ -287,6 +287,7 @@ namespace Villain {
                         for (auto& compo: node->getComponents()) {
                             // TODO: draw components here
                             if (compo->getID() == GetId<CameraComponent>()) {
+                                CameraComponent* camera = static_cast<CameraComponent*>(compo);
                                 ImGui::Text("Camera");
                             }
                             ImGui::Separator();
