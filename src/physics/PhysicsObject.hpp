@@ -46,7 +46,7 @@ namespace Villain {
             // primary
             glm::vec3 position{0.f, 0.f, 0.f};
             glm::vec3 oldPosition;
-            //glm::vec3 momentum{0.0, 0.0f, 0.0f}; // does it make sense to initialise momentum to zero?
+            glm::vec3 momentum{0.0, 0.0f, 0.0f}; // does it make sense to initialise momentum to zero?
 
             // secondary
             glm::vec3 linearVelocity{0.f, 0.f, 0.f};
