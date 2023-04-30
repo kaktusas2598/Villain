@@ -85,7 +85,6 @@ namespace Villain {
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMode));
 
             GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-            stbi_image_free(localBuffer);
         } else {
             std::cout << "Failed loading texture : " << fileName << std::endl;
             stbi_image_free(localBuffer);
@@ -125,6 +124,8 @@ namespace Villain {
     Texture::~Texture() {
         std::cout << "Deleting texture: " << filePath << std::endl;
         GLCall(glDeleteTextures(1, &rendererID));
+        if (localBuffer)
+            stbi_image_free(localBuffer);
     }
 
     void Texture::bind(unsigned int slot) const {
