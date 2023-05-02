@@ -206,7 +206,7 @@ namespace Villain {
         postFXShader->setUniform1i("blur", 0);
         postFXShader->setUniform1i("edgeDetection", 0);
         frustumCullingEnabled = false;
-        Material postFXMat{"null", sceneBuffer->getTexture(), 1};
+        Material postFXMat{"scene", sceneBuffer->getTexture(), 1};
         screenQuad->draw(*postFXShader, postFXMat);
         frustumCullingEnabled = true;
 
