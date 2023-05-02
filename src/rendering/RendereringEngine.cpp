@@ -14,6 +14,7 @@ namespace Villain {
     RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
         defaultShader = Shader::createFromResource("forward-ambient");
+        postFXShader = Shader::createFromResource("postProcessing");
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
 
@@ -68,7 +69,8 @@ namespace Villain {
         //////////
 
         // 2nd Rendering Pass: main pass
-        bindMainTarget();
+        //bindMainTarget();
+        engine->getSceneBuffer()->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         defaultShader->bind();
@@ -154,7 +156,8 @@ namespace Villain {
             }
 
             // Main lighting pass
-            bindMainTarget();
+            //bindMainTarget();
+            engine->getSceneBuffer()->bind();
 
             //// Using additive blending here to render lights one by one and blend onto the scene
             //// this is so called forward multi-pass rendering
@@ -184,6 +187,7 @@ namespace Villain {
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
         }
+        bindMainTarget();
     }
 
     // TEMP, render to texture test on plane, moved to different method so that
@@ -191,7 +195,6 @@ namespace Villain {
     void RenderingEngine::postRender() {
         activeLight = nullptr;
         // Smaller render target on top
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
         //Material mirrorMat{"null", shadowBuffer->getTexture(), 1};
         planeTransform.setScale(0.25);
@@ -199,9 +202,26 @@ namespace Villain {
         planeTransform.setEulerRot(0.0, 180.0, 90.0);
         frustumCullingEnabled = false;
         defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
-        frustumCullingEnabled = true;
         defaultShader->setUniformVec3("color", ambientLight);
         screenQuad->draw(*defaultShader, mirrorMat);
+        frustumCullingEnabled = true;
+
+        // TODO: Post-Processing Effects
+        //glClear(GL_COLOR_BUFFER_BIT);
+        Material postFXMat{"null", engine->getSceneBuffer()->getTexture(), 1};
+        planeTransform.setScale(1.0);
+        planeTransform.setPos(glm::vec3(0.0f));
+        //planeTransform.setEulerRot(0.0, 0.0, 0.0);
+        frustumCullingEnabled = false;
+        //postFXShader->setUniformVec3("color", ambientLight);
+        Transform transform;
+        //defaultShader->updateUniforms(transform, postFXMat, *this, *altCamera);
+        engine->getSceneBuffer()->getTexture()->bind();
+        postFXShader->setUniform1i("texture1", 0);
+        //postFXShader->setUniform1i("invertColors", 1);
+        screenQuad->draw(*postFXShader, postFXMat);
+        frustumCullingEnabled = true;
+
     }
 
     void RenderingEngine::bindMainTarget() {

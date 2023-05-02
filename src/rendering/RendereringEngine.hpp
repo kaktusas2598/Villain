@@ -44,6 +44,7 @@ namespace Villain {
             FrameBuffer* mirrorBuffer = nullptr;
 
             Shader* defaultShader = nullptr;
+            Shader* postFXShader = nullptr;
             Shader* dirShadowMapShader = nullptr;
             Shader* omnidirShadowMapShader = nullptr;
 
