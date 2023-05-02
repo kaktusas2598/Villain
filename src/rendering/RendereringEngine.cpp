@@ -38,6 +38,7 @@ namespace Villain {
         // TODO: refactor hardcoded shadow map size
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
+        sceneBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
     }
 
@@ -70,7 +71,7 @@ namespace Villain {
 
         // 2nd Rendering Pass: main pass
         //bindMainTarget();
-        engine->getSceneBuffer()->bind();
+        sceneBuffer->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         defaultShader->bind();
@@ -157,7 +158,7 @@ namespace Villain {
 
             // Main lighting pass
             //bindMainTarget();
-            engine->getSceneBuffer()->bind();
+            sceneBuffer->bind();
 
             //// Using additive blending here to render lights one by one and blend onto the scene
             //// this is so called forward multi-pass rendering
@@ -187,13 +188,28 @@ namespace Villain {
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
         }
-        bindMainTarget();
     }
 
     // TEMP, render to texture test on plane, moved to different method so that
     // stuff like debug renderer and skybox also get rendered to shadow buffer in the 1st pass
     void RenderingEngine::postRender() {
+        bindMainTarget();
         activeLight = nullptr;
+        // TODO: Post-Processing Effects
+        //glClear(GL_COLOR_BUFFER_BIT);
+        sceneBuffer->getTexture()->bind();
+        postFXShader->bind();
+        postFXShader->setUniform1i("texture1", 0);
+        postFXShader->setUniform1i("invertColors", 0);
+        postFXShader->setUniform1i("grayScale", 0);
+        postFXShader->setUniform1i("sharpen", 0);
+        postFXShader->setUniform1i("blur", 0);
+        postFXShader->setUniform1i("edgeDetection", 0);
+        frustumCullingEnabled = false;
+        Material postFXMat{"null", sceneBuffer->getTexture(), 1};
+        screenQuad->draw(*postFXShader, postFXMat);
+        frustumCullingEnabled = true;
+
         // Smaller render target on top
         Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
         //Material mirrorMat{"null", shadowBuffer->getTexture(), 1};
@@ -205,23 +221,6 @@ namespace Villain {
         defaultShader->setUniformVec3("color", ambientLight);
         screenQuad->draw(*defaultShader, mirrorMat);
         frustumCullingEnabled = true;
-
-        // TODO: Post-Processing Effects
-        //glClear(GL_COLOR_BUFFER_BIT);
-        Material postFXMat{"null", engine->getSceneBuffer()->getTexture(), 1};
-        planeTransform.setScale(1.0);
-        planeTransform.setPos(glm::vec3(0.0f));
-        //planeTransform.setEulerRot(0.0, 0.0, 0.0);
-        frustumCullingEnabled = false;
-        //postFXShader->setUniformVec3("color", ambientLight);
-        Transform transform;
-        //defaultShader->updateUniforms(transform, postFXMat, *this, *altCamera);
-        engine->getSceneBuffer()->getTexture()->bind();
-        postFXShader->setUniform1i("texture1", 0);
-        //postFXShader->setUniform1i("invertColors", 1);
-        screenQuad->draw(*postFXShader, postFXMat);
-        frustumCullingEnabled = true;
-
     }
 
     void RenderingEngine::bindMainTarget() {
