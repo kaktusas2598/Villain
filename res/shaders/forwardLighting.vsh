@@ -22,6 +22,7 @@ void main() {
     // Calculate fragment position for lighting in world space
     v_fragPos = vec3(model * vec4(position, 1.0));
     gl_Position = projection * view * vec4(v_fragPos, 1.0);
+    // Does normal needs to be translated to world space here?
     v_normal = normal;
     v_texCoords = texCoords;
     v_shadowMapCoords = lightMatrix * vec4(v_fragPos, 1.0);
