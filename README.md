@@ -12,6 +12,7 @@
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
 * Normal and Parallax Mapping support
+* Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
 * 2D Tiled map parsing/loading from tmx/xml files
 * 2D Particle Engine
 * Debug/Edit mode UI
@@ -38,7 +39,6 @@
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Mesh batch rendering
-* Post-processing effects
 * Stencil buffer
 * Instanced drawing
 * and more...
