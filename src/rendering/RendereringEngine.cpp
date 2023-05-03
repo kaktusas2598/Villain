@@ -190,7 +190,6 @@ namespace Villain {
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
         }
-        bindMainTarget();
     }
 
     // TEMP, render to texture test on plane, moved to different method so that
@@ -199,6 +198,7 @@ namespace Villain {
         activeLight = nullptr;
 
         // TODO: Post-Processing Effects
+        // FIXME: had to create new mesh, screenQuad was not working for post fx
         std::vector<VertexP1UV> vertices{
             {glm::vec3(1.0f,  1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
             {glm::vec3(-1.0f,  1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
@@ -213,15 +213,23 @@ namespace Villain {
 
         Mesh<VertexP1UV> postFxQuad(vertices, indices);
 
+        //bindMainTarget();
+        // FIXME: post fx quad started appearing after disabling depth test, but now post fx and mirror
+        // are not applied in editor overlay
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        glDisable(GL_DEPTH_TEST);
+
+        printf("Scene buffer width: %i, height: %i\n", engine->getSceneBuffer()->getTexture()->getWidth(), engine->getSceneBuffer()->getTexture()->getHeight());
         //glClear(GL_COLOR_BUFFER_BIT);
         //sceneBuffer->getTexture()->bind();
         engine->getSceneBuffer()->getTexture()->bind();
         postFXShader->bind();
         postFXShader->setUniform1i("texture1", 0);
-        postFXShader->setUniform1i("invertColors", 1);
-        postFXShader->setUniform1i("grayScale", 0);
+        postFXShader->setUniform1i("invertColors", 0);
+        postFXShader->setUniform1i("grayScale", 1);
         postFXShader->setUniform1i("sharpen", 0);
-        postFXShader->setUniform1i("blur", 0);
+        postFXShader->setUniform1i("blur", 1);
         postFXShader->setUniform1i("edgeDetection", 0);
         frustumCullingEnabled = false;
         //Material postFXMat{"scene", sceneBuffer->getTexture(), 1};
@@ -232,12 +240,13 @@ namespace Villain {
         // Smaller render target on top
         Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
         planeTransform.setScale(0.25);
-        planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.3f));
+        planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.2f));
         planeTransform.setEulerRot(0.0, 180.0, 90.0);
         defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
         defaultShader->setUniformVec3("color", ambientLight);
         screenQuad->draw(*defaultShader, mirrorMat);
         frustumCullingEnabled = true;
+        glEnable(GL_DEPTH_TEST);
     }
 
     void RenderingEngine::bindMainTarget() {
