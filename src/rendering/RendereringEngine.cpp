@@ -31,6 +31,10 @@ namespace Villain {
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
+        // Enable MSAA, number of samples set in Window class
+        // Implementation would be different in Deffered renderer
+        // NOTE: might be costly technique performance-wise, beware
+        glEnable(GL_MULTISAMPLE);
 
         glEnable(GL_BLEND);
 

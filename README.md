@@ -9,6 +9,7 @@
 * Builds as a library
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
+* Mipmapped textures with anisotropic filtering, 4x MultiSample Anti-Aliasing enabled
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
 * Normal and Parallax Mapping support
