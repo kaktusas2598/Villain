@@ -52,7 +52,7 @@ namespace Villain {
             void setProjectionType(ProjectionType type) { projectionType = type; }
 
             void setPosition(const glm::vec3& newPos) { position = newPos; }
-            void setZoom(float z) { zoom = z; }
+            void setZoom(float z);
             void setZPlanes(float near, float far) { zNear = near, zFar = far; }
 
             // TODO: need more testing, maybe try implementing for other projection types

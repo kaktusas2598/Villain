@@ -216,6 +216,14 @@ namespace Villain {
             zoom = 45.0f;
     }
 
+    void Camera::setZoom(float z) {
+        zoom = z;
+        if (zoom < 1.0f)
+            zoom = 1.0f;
+        if (zoom > 45.0f)
+            zoom = 45.0f;
+    }
+
     void Camera::updateCameraVectors() {
         // TODO: implement roll
 
