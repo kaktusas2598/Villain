@@ -74,13 +74,23 @@ namespace Villain {
             GLCall(glBindTexture(GL_TEXTURE_2D, rendererID));
             // Generate texture
             GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
+
+            // TODO: support more mipmap types
+            //GL_NEAREST_MIPMAP_NEAREST | GL_NEAREST_MIPMAP_LINEAR | GL_LINEAR_MIPMAP_NEAREST | GL_LINEAR_MIPMAP_LINEAR
+
             // Generate mipmap to remove artifacts on far away objects and reduce memory footprint
             // 2023-04-17: Should have done this way earlier as it increased performance in some examples
+            // NOTE: must be done after glTexImage2D call
             GLCall(glGenerateMipmap(GL_TEXTURE_2D));
+            // Setting anisotropy filter, best used with GL_LINEAR_MIPMAP_LINEAR, extension, but became core in OpenGL 4.6
+            GLfloat maxAnisotropy;
+            GLCall(glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy)); // Query GPU for max available anisotropy
+            GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy));
+
             // Tell open GL how to filter texture when minifying or magnifying
             // how to wrap texture on x(s) and y(t) axis
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)); // Mipmaping on magnification makes no sense
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrappingMode));
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrappingMode));
 
