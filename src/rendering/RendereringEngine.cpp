@@ -216,8 +216,12 @@ namespace Villain {
         //bindMainTarget();
         // FIXME: post fx quad started appearing after disabling depth test, but now post fx and mirror
         // are not applied in editor overlay
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        if (engine->editModeActive()) {
+            engine->getEditorBuffer()->bind();
+        } else {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        }
         glDisable(GL_DEPTH_TEST);
 
         printf("Scene buffer width: %i, height: %i\n", engine->getSceneBuffer()->getTexture()->getWidth(), engine->getSceneBuffer()->getTexture()->getHeight());

@@ -80,6 +80,7 @@ namespace Villain {
         }
 
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
+        editorSceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
         // TODO: will need some configs here, gravity vector for example
         physicsEngine = std::make_unique<PhysicsEngine>(this);
@@ -242,10 +243,15 @@ namespace Villain {
         application->render(renderingEngine);
         application->onAppRender(deltaTime);
         physicsEngine->render();
+        // Is this is a HACK: ?
+        // Had to create another FBO to render post fx into, so it can be previewed in editor
+        if (editMode)
+            editorSceneBuffer->bind();
+
         application->postRenderPass(renderingEngine);
 
-        //if (editMode)
-            //sceneBuffer->unbind();
+        if (editMode)
+            editorSceneBuffer->unbind();
 
         // Then render Nuklear UI
         /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
@@ -343,6 +349,7 @@ namespace Villain {
                 screenWidth = event.window.data1;
                 screenHeight = event.window.data2;
                 sceneBuffer->rescale(screenWidth, screenHeight);
+                editorSceneBuffer->rescale(screenWidth, screenHeight);
                 glViewport(0, 0, screenWidth, screenHeight);
                 application->onAppWindowResize(screenWidth, screenHeight);
                 renderingEngine->resizeCameras(screenWidth, screenHeight);
