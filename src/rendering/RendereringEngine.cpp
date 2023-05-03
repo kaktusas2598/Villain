@@ -39,6 +39,17 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
+
+        // HACK: had to create new mesh, screenQuad was not working for post fx - whole scene becomes rotated by 90
+        std::vector<VertexP1UV> vertices{
+            {glm::vec3(1.0f,  1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+            {glm::vec3(-1.0f,  1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
+            {glm::vec3(-1.0f,  -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+            {glm::vec3(1.0f,  -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}
+        };
+        std::vector<unsigned int>indices;
+        MeshUtils<VertexP1UV>::addFace(&indices, 0, false);
+        postFxQuad = new Mesh<VertexP1UV>(vertices, indices);
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -190,25 +201,8 @@ namespace Villain {
         }
     }
 
-    // TEMP, render to texture test on plane, moved to different method so that
-    // stuff like debug renderer and skybox also get rendered to shadow buffer in the 1st pass
     void RenderingEngine::postRender() {
         activeLight = nullptr;
-
-        // FIXME: had to create new mesh, screenQuad was not working for post fx
-        std::vector<VertexP1UV> vertices{
-            {glm::vec3(1.0f,  1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
-            {glm::vec3(-1.0f,  1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
-            {glm::vec3(-1.0f,  -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
-            {glm::vec3(1.0f,  -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}
-        };
-
-        std::vector<unsigned int>indices{
-            0, 1, 2,
-            2, 3, 0
-        };
-
-        Mesh<VertexP1UV> postFxQuad(vertices, indices);
 
         bindMainTarget();
         glDisable(GL_DEPTH_TEST);
@@ -223,7 +217,8 @@ namespace Villain {
         postFXShader->setUniform1i("edgeDetection", outline);
         frustumCullingEnabled = false;
         Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};
-        postFxQuad.draw(*postFXShader, postFXMat);
+        postFxQuad->draw(*postFXShader, postFXMat);
+        //screenQuad->draw(*postFXShader, postFXMat);
         defaultShader->bind();
 
         // Smaller render target on top

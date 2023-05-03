@@ -48,6 +48,7 @@ namespace Villain {
             bool frustumCullingEnabled = true;
 
             Mesh<VertexP1N1UV>* screenQuad = nullptr;
+            Mesh<VertexP1UV>* postFxQuad = nullptr;
             Transform planeTransform;
             FrameBuffer* shadowBuffer = nullptr;
             FrameBuffer* omniShadowBuffer = nullptr;
