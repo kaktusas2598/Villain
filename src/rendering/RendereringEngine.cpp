@@ -213,7 +213,7 @@ namespace Villain {
         bindMainTarget();
         glDisable(GL_DEPTH_TEST);
 
-        printf("Scene buffer width: %i, height: %i\n", engine->getSceneBuffer()->getTexture()->getWidth(), engine->getSceneBuffer()->getTexture()->getHeight());
+        // FIXME: weird bug: on platformer example, screen does not seem to get cleared if no post fx is used, wtf?
         engine->getSceneBuffer()->getTexture()->bind();
         postFXShader->bind();
         postFXShader->setUniform1i("texture1", 0);
