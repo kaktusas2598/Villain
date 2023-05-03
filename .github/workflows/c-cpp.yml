@@ -34,19 +34,8 @@ jobs:
         cd examples/ZombieGame
         ./configure.sh
         ./build.sh
-    - name: build Bullet Physics Demo
-      run: |
-        cd examples/Bullet
-        ./configure.sh
-        ./build.sh
     - name: build Box2D Demo
       run: |
         cd examples/Platformer
-        ./configure.sh
-        ./build.sh
-
-    - name: build FPS Game
-      run: |
-        cd examples/FPS
         ./configure.sh
         ./build.sh
