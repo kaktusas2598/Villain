@@ -37,6 +37,8 @@ namespace Villain {
             bool* getSharpen() { return &sharpen; }
             bool* getBlur() { return &blur; }
             bool* getEdgeDetection() { return &outline; }
+            // Additional FBOs
+            bool* getMirrorFramebufferEnabled() { return &mirrorBufferEnabled; }
 
         private:
             void bindMainTarget();
@@ -67,6 +69,7 @@ namespace Villain {
             bool sharpen = false;
             bool blur = false;
             bool outline = false;
+            bool mirrorBufferEnabled = false;
     };
 }
 

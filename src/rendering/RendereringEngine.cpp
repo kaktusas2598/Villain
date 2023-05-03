@@ -51,26 +51,27 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node) {
-        // 1st Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
-        mirrorBuffer->bind();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // 1st Optional Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
+        if (mirrorBufferEnabled) {
+            mirrorBuffer->bind();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Camera mirrorCamera = *mainCamera;
-        mirrorCamera.setPosition(mainCamera->getPosition());
-        // Rotates camera
-        glm::vec3 rot = mirrorCamera.getRotation();
-        rot.y += 180.0f;
-        mirrorCamera.setRotation(rot);
+            Camera mirrorCamera = *mainCamera;
+            mirrorCamera.setPosition(mainCamera->getPosition());
+            // Rotates camera
+            glm::vec3 rot = mirrorCamera.getRotation();
+            rot.y += 180.0f;
+            mirrorCamera.setRotation(rot);
 
-        defaultShader->bind();
-        defaultShader->setUniformVec3("color", ambientLight);
-        activeLight = nullptr;
-        node->render(defaultShader, this, &mirrorCamera);
-        //////////
+            defaultShader->bind();
+            defaultShader->setUniformVec3("color", ambientLight);
+            activeLight = nullptr;
+            node->render(defaultShader, this, &mirrorCamera);
+        }
 
         // 2nd Rendering Pass: main pass
         //bindMainTarget();
-        engine->getSceneBuffer()->bind();
+        engine->getSceneBuffer()->bind(); // Rendering to scene buffer for later postfx
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         defaultShader->bind();
@@ -227,20 +228,18 @@ namespace Villain {
         defaultShader->bind();
 
         // Smaller render target on top
-        Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
-        planeTransform.setScale(0.25);
-        planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.2f));
-        planeTransform.setEulerRot(0.0, 180.0, 90.0);
-        defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
-        defaultShader->setUniformVec3("color", ambientLight);
-        screenQuad->draw(*defaultShader, mirrorMat);
+        if (mirrorBufferEnabled) {
+            Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
+            planeTransform.setScale(0.25);
+            planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.2f));
+            planeTransform.setEulerRot(0.0, 180.0, 90.0);
+            defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
+            defaultShader->setUniformVec3("color", ambientLight);
+            screenQuad->draw(*defaultShader, mirrorMat);
+        }
 
         frustumCullingEnabled = true;
         glEnable(GL_DEPTH_TEST);
-
-        if (engine->editModeActive()) {
-            engine->getSceneBuffer()->unbind();
-        }
     }
 
     void RenderingEngine::bindMainTarget() {
