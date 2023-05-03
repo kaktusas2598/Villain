@@ -38,9 +38,6 @@ if (Villain::InputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
 }
 
 void MenuScreen::draw() {
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
     // GUI
     struct nk_colorf bg;
     struct nk_context * ctx = mainApplication->getNuklearContext();
@@ -65,8 +62,8 @@ void MenuScreen::draw() {
     }
     nk_end(ctx);
 
-    glEnable(GL_BLEND);
+    //glEnable(GL_BLEND);
     // Back to regular blending
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
