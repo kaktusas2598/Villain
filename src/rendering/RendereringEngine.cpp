@@ -38,7 +38,6 @@ namespace Villain {
         // TODO: refactor hardcoded shadow map size
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
-        sceneBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
     }
 
@@ -71,7 +70,6 @@ namespace Villain {
 
         // 2nd Rendering Pass: main pass
         //bindMainTarget();
-        //sceneBuffer->bind();
         engine->getSceneBuffer()->bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -160,7 +158,6 @@ namespace Villain {
             // Main lighting pass
             //bindMainTarget();
             engine->getSceneBuffer()->bind();
-            //sceneBuffer->bind();
 
             //// Using additive blending here to render lights one by one and blend onto the scene
             //// this is so called forward multi-pass rendering
@@ -213,17 +210,9 @@ namespace Villain {
         Mesh<VertexP1UV> postFxQuad(vertices, indices);
 
         bindMainTarget();
-        //if (engine->editModeActive()) {
-            //engine->getEditorBuffer()->bind();
-        //} else {
-            //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            //glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
-        //}
         glDisable(GL_DEPTH_TEST);
 
         printf("Scene buffer width: %i, height: %i\n", engine->getSceneBuffer()->getTexture()->getWidth(), engine->getSceneBuffer()->getTexture()->getHeight());
-        //glClear(GL_COLOR_BUFFER_BIT);
-        //sceneBuffer->getTexture()->bind();
         engine->getSceneBuffer()->getTexture()->bind();
         postFXShader->bind();
         postFXShader->setUniform1i("texture1", 0);
@@ -233,7 +222,6 @@ namespace Villain {
         postFXShader->setUniform1i("blur", blur);
         postFXShader->setUniform1i("edgeDetection", outline);
         frustumCullingEnabled = false;
-        //Material postFXMat{"scene", sceneBuffer->getTexture(), 1};
         Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};
         postFxQuad.draw(*postFXShader, postFXMat);
         defaultShader->bind();
@@ -246,10 +234,10 @@ namespace Villain {
         defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
         defaultShader->setUniformVec3("color", ambientLight);
         screenQuad->draw(*defaultShader, mirrorMat);
+
         frustumCullingEnabled = true;
         glEnable(GL_DEPTH_TEST);
 
-        // If in editor mode make sure to unbind fbos, so that we can render scene buffer in editor's viewport
         if (engine->editModeActive()) {
             engine->getSceneBuffer()->unbind();
         }

@@ -233,20 +233,23 @@ namespace Villain {
         imGuiLayer.start();
 
         // In debug/edit mode render scene to texture and output it in imgui
-        //if (editMode)
-            //sceneBuffer->bind();
+        if (editMode)
+            sceneBuffer->bind();
 
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
         // let rendering engine take care of all things?
         application->render(renderingEngine);
+
         application->onAppRender(deltaTime);
         physicsEngine->render();
 
+        // Render additional fbos, apply post-processing fx
         application->postRenderPass(renderingEngine);
 
-        //if (editMode)
-            //sceneBuffer->unbind();
+        // If in editor mode make sure to unbind fbos, so that we can render scene buffer in editor's viewport
+        if (editMode)
+            sceneBuffer->unbind();
 
         // Then render Nuklear UI
         /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state

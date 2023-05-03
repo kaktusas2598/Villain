@@ -50,7 +50,6 @@ namespace Villain {
             FrameBuffer* shadowBuffer = nullptr;
             FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
-            FrameBuffer* sceneBuffer = nullptr;
 
             Shader* defaultShader = nullptr;
             Shader* postFXShader = nullptr;
