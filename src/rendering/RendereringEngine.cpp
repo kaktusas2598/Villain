@@ -39,17 +39,6 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
-
-        // HACK: had to create new mesh, screenQuad was not working for post fx - whole scene becomes rotated by 90
-        std::vector<VertexP1UV> vertices{
-            {glm::vec3(1.0f,  1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
-            {glm::vec3(-1.0f,  1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
-            {glm::vec3(-1.0f,  -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
-            {glm::vec3(1.0f,  -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}
-        };
-        std::vector<unsigned int>indices;
-        MeshUtils<VertexP1UV>::addFace(&indices, 0, false);
-        postFxQuad = new Mesh<VertexP1UV>(vertices, indices);
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -217,8 +206,11 @@ namespace Villain {
         postFXShader->setUniform1i("edgeDetection", outline);
         frustumCullingEnabled = false;
         Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};
-        postFxQuad->draw(*postFXShader, postFXMat);
-        //screenQuad->draw(*postFXShader, postFXMat);
+        planeTransform.setScale(1.0);
+        planeTransform.setPos(glm::vec3(0.0, 0.0, -0.2f));
+        planeTransform.setEulerRot(0.0, 180.0, 90.0);
+        postFXShader->updateUniforms(planeTransform, postFXMat, *this, *altCamera);
+        screenQuad->draw(*postFXShader, postFXMat);
         defaultShader->bind();
 
         // Smaller render target on top
@@ -226,7 +218,6 @@ namespace Villain {
             Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
             planeTransform.setScale(0.25);
             planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.2f));
-            planeTransform.setEulerRot(0.0, 180.0, 90.0);
             defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
             defaultShader->setUniformVec3("color", ambientLight);
             screenQuad->draw(*defaultShader, mirrorMat);
