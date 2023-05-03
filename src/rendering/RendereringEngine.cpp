@@ -197,7 +197,6 @@ namespace Villain {
     void RenderingEngine::postRender() {
         activeLight = nullptr;
 
-        // TODO: Post-Processing Effects
         // FIXME: had to create new mesh, screenQuad was not working for post fx
         std::vector<VertexP1UV> vertices{
             {glm::vec3(1.0f,  1.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
@@ -214,8 +213,6 @@ namespace Villain {
         Mesh<VertexP1UV> postFxQuad(vertices, indices);
 
         //bindMainTarget();
-        // FIXME: post fx quad started appearing after disabling depth test, but now post fx and mirror
-        // are not applied in editor overlay
         if (engine->editModeActive()) {
             engine->getEditorBuffer()->bind();
         } else {
@@ -230,11 +227,11 @@ namespace Villain {
         engine->getSceneBuffer()->getTexture()->bind();
         postFXShader->bind();
         postFXShader->setUniform1i("texture1", 0);
-        postFXShader->setUniform1i("invertColors", 0);
-        postFXShader->setUniform1i("grayScale", 1);
-        postFXShader->setUniform1i("sharpen", 0);
-        postFXShader->setUniform1i("blur", 1);
-        postFXShader->setUniform1i("edgeDetection", 0);
+        postFXShader->setUniform1i("invertColors", invertColors);
+        postFXShader->setUniform1i("grayScale", grayScale);
+        postFXShader->setUniform1i("sharpen", sharpen);
+        postFXShader->setUniform1i("blur", blur);
+        postFXShader->setUniform1i("edgeDetection", outline);
         frustumCullingEnabled = false;
         //Material postFXMat{"scene", sceneBuffer->getTexture(), 1};
         Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};

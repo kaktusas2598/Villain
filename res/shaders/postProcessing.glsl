@@ -27,6 +27,7 @@ uniform bool edgeDetection; // or outline
 // For kernel effects, feel free to tweak
 const float offset = 1.0 / 300.0;
 
+// FIXME: make sure you can apply multiple post fx at once
 void main() {
     color = texture(texture1, v_texCoords);
 
