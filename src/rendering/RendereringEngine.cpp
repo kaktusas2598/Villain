@@ -212,13 +212,13 @@ namespace Villain {
 
         Mesh<VertexP1UV> postFxQuad(vertices, indices);
 
-        //bindMainTarget();
-        if (engine->editModeActive()) {
-            engine->getEditorBuffer()->bind();
-        } else {
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
-        }
+        bindMainTarget();
+        //if (engine->editModeActive()) {
+            //engine->getEditorBuffer()->bind();
+        //} else {
+            //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            //glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
+        //}
         glDisable(GL_DEPTH_TEST);
 
         printf("Scene buffer width: %i, height: %i\n", engine->getSceneBuffer()->getTexture()->getWidth(), engine->getSceneBuffer()->getTexture()->getHeight());
@@ -248,6 +248,11 @@ namespace Villain {
         screenQuad->draw(*defaultShader, mirrorMat);
         frustumCullingEnabled = true;
         glEnable(GL_DEPTH_TEST);
+
+        // If in editor mode make sure to unbind fbos, so that we can render scene buffer in editor's viewport
+        if (engine->editModeActive()) {
+            engine->getSceneBuffer()->unbind();
+        }
     }
 
     void RenderingEngine::bindMainTarget() {

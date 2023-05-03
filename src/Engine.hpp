@@ -59,7 +59,6 @@ namespace Villain {
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
             inline Application* getApplication() { return application; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
-            FrameBuffer* getEditorBuffer() { return editorSceneBuffer.get(); }
             Window getWindow() { return window; }
 
             static int getScreenWidth();
@@ -83,7 +82,6 @@ namespace Villain {
             bool mouseMotion = false;
 
             std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;
-            std::unique_ptr<FrameBuffer> editorSceneBuffer = nullptr;
             struct nk_context* nuklearContext;
 
             std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;

@@ -241,7 +241,7 @@ namespace Villain {
             float height = ImGui::GetContentRegionAvail().y;
 
             ImGui::Image(
-                    (ImTextureID)engine.getEditorBuffer()->getTextureID(),
+                    (ImTextureID)engine.getSceneBuffer()->getTextureID(),
                     //ImGui::GetContentRegionAvail(),
                     ImGui::GetWindowSize(),
                     ImVec2(0, 1),
