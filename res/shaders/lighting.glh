@@ -65,9 +65,9 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
     vec3 reflectDirection = reflect(-lightDir, normal);
     // Blinn-Phong shading addition
     vec3 halfwayDirection = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
+    float spec = pow(max(dot(normal, halfwayDirection), 0.0), material.shininess);
     // Phong
-    /*float spec = pow(max(dot(normal, halfwayDirection), 0.0), material.shininess);*/
+    //float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
 
     BaseLight newLight;
     if (material.useSpecularMap) {
