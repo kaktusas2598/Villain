@@ -30,6 +30,16 @@ namespace Villain {
             inline bool isFrustumCullingEnabled() { return frustumCullingEnabled; }
             // Call on window/viewport resize event
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
+
+            // Post-processing effects/filters
+            bool* getInvertColors() { return &invertColors; }
+            bool* getGrayScale() { return &grayScale; }
+            bool* getSharpen() { return &sharpen; }
+            bool* getBlur() { return &blur; }
+            bool* getEdgeDetection() { return &outline; }
+            // Additional FBOs
+            bool* getMirrorFramebufferEnabled() { return &mirrorBufferEnabled; }
+
         private:
             void bindMainTarget();
             Engine* engine = nullptr;
@@ -44,6 +54,7 @@ namespace Villain {
             FrameBuffer* mirrorBuffer = nullptr;
 
             Shader* defaultShader = nullptr;
+            Shader* postFXShader = nullptr;
             Shader* dirShadowMapShader = nullptr;
             Shader* omnidirShadowMapShader = nullptr;
 
@@ -52,6 +63,13 @@ namespace Villain {
             static std::map<std::string, unsigned int> samplerMap;
             glm::vec3 ambientLight = glm::vec3(0.5f);
             glm::mat4 lightMatrix = glm::mat4(1.0f);
+
+            bool invertColors = false;
+            bool grayScale = false;
+            bool sharpen = false;
+            bool blur = false;
+            bool outline = false;
+            bool mirrorBufferEnabled = false;
     };
 }
 

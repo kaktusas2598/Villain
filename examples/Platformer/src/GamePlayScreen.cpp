@@ -119,8 +119,6 @@ void GamePlayScreen::update(float deltaTime) {
 }
 
 void GamePlayScreen::draw() {
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // Setting up rendering batch and rendering it all at once with a single draw call
     if (textureShader != nullptr) {
         textureShader->bind();

@@ -232,6 +232,7 @@ namespace Villain {
         }
     }
 
+    template void MeshUtils<VertexP1UV>::addFace(std::vector<unsigned int>*, int, bool);
     template void MeshUtils<VertexP1N1T1B1UV>::addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices);
 
     template void MeshUtils<VertexP1N1UV>::addXYPlane(std::vector<VertexP1N1UV>* vertices, std::vector<unsigned int>* indices, const glm::vec3& center, const glm::vec2& halfSize, float* uvCoords, bool direction);
