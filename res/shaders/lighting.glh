@@ -62,11 +62,11 @@ uniform sampler2D shadowMap;
 // TODO: need to pass material to these methods instead of harcoding uniform here
 BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDir, vec2 texCoords) {
     float diff = max(dot(normal, lightDir), 0.0);
-    vec3 reflectDirection = reflect(-lightDir, normal);
     // Blinn-Phong shading addition
     vec3 halfwayDirection = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDirection), 0.0), material.shininess);
     // Phong
+    //vec3 reflectDirection = reflect(-lightDir, normal);
     //float spec = pow(max(dot(viewDir, reflectDirection), 0.0), material.shininess);
 
     BaseLight newLight;
