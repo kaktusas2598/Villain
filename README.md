@@ -43,6 +43,7 @@
 * Stencil buffer
 * Instanced drawing
 * and more...
+* Gamma correction/sRGB textures, HDR and Bloom
 
 
 ![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
@@ -119,6 +120,10 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
    sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
  * Read about Deferred shading and decide if it's feasible to introduce it
  * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
- * Investigate gamma correction and sRGB textures
- * Investigate HDR, Bloom
  * Improve and fix spot light shadows
+ * Investigate alternative Anti-Aliasing methods like FXAA
+ * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
+ * Read about Physically Based Rendering (PBR)
+ * Read about Screen Space Ambient Occlusion (SSAO)
+ * Investigate terrain mesh generation and rendering
+ * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
