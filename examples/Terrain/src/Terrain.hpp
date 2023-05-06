@@ -12,7 +12,7 @@ class Terrain {
     public:
         Terrain() {}
 
-        void init();
+        void init(float scale = 1.0f);
         void render(Villain::Camera* camera);
         void loadFromFile(const std::string& fileName);
 
@@ -21,11 +21,14 @@ class Terrain {
             // this assumes terrain will be square, will it always though?
             return heightMap[x * terrainSize + z];
         }
+        float getWorldScale() const { return worldScale; }
+
     protected:
         void loadHeightMap(const std::string& fileName);
 
         float* heightMap = nullptr;
         int terrainSize = 0;
+        float worldScale = 1.0f;
 
         TriangleList triangleList;
         Villain::Shader* terrainShader;

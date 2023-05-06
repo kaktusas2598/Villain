@@ -55,7 +55,7 @@ void TriangleList::populateBuffers(const Terrain* terrain) {
 
 void TriangleList::Vertex::initVertex(const Terrain* terrain, int x, int z) {
     float y = terrain->getHeight(x, z);
-    Pos = glm::vec3(x, y, z);
+    Pos = glm::vec3(x * terrain->getWorldScale(), y, z * terrain->getWorldScale());
 }
 
 void TriangleList::initVertices(const Terrain* terrain, std::vector<Vertex>& vertices) {

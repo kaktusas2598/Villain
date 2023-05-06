@@ -11,7 +11,8 @@ void Terrain::loadFromFile(const std::string& fileName) {
     triangleList.createTriangleList(terrainSize, terrainSize, this);
 }
 
-void Terrain::init() {
+void Terrain::init(float scale) {
+    worldScale = scale;
     // TODO: will need to move it somewhere else, terrain shader will probably be provided by the engine
     terrainShader = new Villain::Shader("assets/shaders/terrain.glsl");
 }
