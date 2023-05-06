@@ -54,6 +54,7 @@ namespace Villain {
             static uint32_t getUpdateTime() { return updateTime; }
             static uint32_t getRenderTime() { return renderTime; }
             static bool editModeActive() { return editMode; }
+            bool* wireFrameModeActive() { return &wireFrameMode; }
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
@@ -70,6 +71,7 @@ namespace Villain {
             static bool editMode; ///< enables IMGui Overlay
             Window window; ///< main window instance
             ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
+            bool wireFrameMode = false;
 
             // Screen dimensions will be static so they can be accessed from anywhere in the Engine
             static int screenWidth;

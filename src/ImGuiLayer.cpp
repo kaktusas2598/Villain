@@ -329,6 +329,7 @@ namespace Villain {
         ImGui::Text("Render frame time: %.1u ms", engine.getRenderTime());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+        ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
         ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
         ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());
         ImGui::Text("Post-Processing Effects");
