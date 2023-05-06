@@ -26,7 +26,6 @@ void Game::onAppPreUpdate(float dt) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
-
 }
 
 void Game::onAppRender(float dt) {
