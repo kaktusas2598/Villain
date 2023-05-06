@@ -3,6 +3,7 @@
 
 #include "Application.hpp"
 #include "Camera.hpp"
+#include "Terrain.hpp"
 #include "rendering/DebugRenderer.hpp"
 
 class Game : public Villain::Application {
@@ -17,6 +18,8 @@ class Game : public Villain::Application {
     private:
         Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
+
+        Terrain baseTerrain;
 };
 
 #endif // __GAME__

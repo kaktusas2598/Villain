@@ -20,6 +20,9 @@ void Game::init() {
             ->addComponent(new MoveController())
             ->addComponent(new LookController());
     addToScene(cam);
+
+    baseTerrain.init();
+    baseTerrain.loadFromFile("assets/textures/heightmap.save");
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -39,4 +42,6 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 1.0f);
+
+    baseTerrain.render(camera);
 }
