@@ -15,7 +15,7 @@ void Game::init() {
     debugRenderer.init();
 
     // Add camera
-    SceneNode* cam = (new SceneNode("Free look camera"))
+    SceneNode* cam = (new SceneNode("Free look camera", glm::vec3(0.0, 0.0, 10.0)))
             ->addComponent(new CameraComponent(camera))
             ->addComponent(new MoveController())
             ->addComponent(new LookController());
