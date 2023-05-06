@@ -17,7 +17,7 @@ void TriangleList::createTriangleList(int w, int d, const Terrain* terrain) {
 
 void TriangleList::render() {
     glBindVertexArray(vao);
-    glDrawArrays(GL_POINTS, 0, width * depth);
+    glDrawElements(GL_TRIANGLES, (depth - 1) * (width - 1) * 6, GL_UNSIGNED_INT, NULL);
     glBindVertexArray(0);
 }
 
@@ -27,6 +27,9 @@ void TriangleList::createGLState() {
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
     int POS_LOC = 0;
     size_t numFloats = 0;
@@ -39,10 +42,15 @@ void TriangleList::createGLState() {
 void TriangleList::populateBuffers(const Terrain* terrain) {
     std::vector<Vertex> vertices;
     vertices.resize(width * depth);
-
     initVertices(terrain, vertices);
 
+    std::vector<unsigned int> indices;
+    int numQuads = (width - 1) * (depth - 1);
+    indices.resize(numQuads * 6);
+    initIndices(indices);
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
 }
 
 void TriangleList::Vertex::initVertex(const Terrain* terrain, int x, int z) {
@@ -58,6 +66,29 @@ void TriangleList::initVertices(const Terrain* terrain, std::vector<Vertex>& ver
             assert(index < vertices.size());
             vertices[index].initVertex(terrain, x, z);
             index++;
+        }
+    }
+}
+
+void TriangleList::initIndices(std::vector<unsigned int>& indices) {
+    int index = 0;
+
+    for (int z = 0; z < depth - 1; z++) {
+        for (int x = 0; x < width - 1; x++) {
+            unsigned int indexBottomLeft = z * width + x;
+            unsigned int indexTopLeft = (z + 1) * width + x;
+            unsigned int indexTopRight = (z + 1) * width + x + 1;
+            unsigned int indexBottomRight = z * width + x + 1;
+
+            // Top left triangle
+            indices[index++] = indexBottomLeft;
+            indices[index++] = indexTopLeft;
+            indices[index++] = indexTopRight;
+
+            // Bottom right triangle
+            indices[index++] = indexBottomLeft;
+            indices[index++] = indexTopRight;
+            indices[index++] = indexBottomRight;
         }
     }
 }

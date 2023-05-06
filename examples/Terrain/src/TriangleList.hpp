@@ -30,6 +30,7 @@ class TriangleList {
         void createGLState();
         void populateBuffers(const Terrain* terrain);
         void initVertices(const Terrain* terrain, std::vector<Vertex>& vertices);
+        void initIndices(std::vector<unsigned int>& indices);
 };
 
 #endif // __TRIANGLE_LIST__
