@@ -33,12 +33,4 @@ void Terrain::loadHeightMap(const std::string& fileName) {
     assert(fileSize % sizeof(float) == 0);
 
     terrainSize = sqrtf(fileSize / sizeof(float));
-
-    printf("File size: %i\n", fileSize);
-    printf("Terrain size: %i\n", terrainSize);
-
-    //for (int i = 0; i < terrainSize * terrainSize; i++) {
-    //printf("%f ", heightMap[i]);
-    //}
 }
-
