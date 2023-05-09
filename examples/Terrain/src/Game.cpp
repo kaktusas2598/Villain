@@ -9,7 +9,7 @@ using namespace Villain;
 
 void Game::init() {
     camera = new Camera();
-    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
+    camera->setZPlanes(0.1f, 4000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
 
     debugRenderer.init();
@@ -27,7 +27,8 @@ void Game::init() {
 
     // Terrain generated using fault formation algorithm
     faultFormationTerrain.init(4.0f);
-    faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f);
+    float filter = 0.5f;
+    faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f, filter);
 }
 
 void Game::onAppPreUpdate(float dt) {

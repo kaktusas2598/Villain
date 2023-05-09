@@ -1,6 +1,6 @@
 #include "FaultFormationTerrain.hpp"
 
-void FaultFormationTerrain::createFaultFormation(int size, int iterations, float minHt, float maxHt) {
+void FaultFormationTerrain::createFaultFormation(int size, int iterations, float minHt, float maxHt, float filter) {
     terrainSize = size;
     minHeight = minHt;
     maxHeight = maxHt;
@@ -11,18 +11,20 @@ void FaultFormationTerrain::createFaultFormation(int size, int iterations, float
         heightMap[i] = 0.0f;
     }
 
-    createFaultFormationInternal(iterations, minHeight, maxHeight);
+    createFaultFormationInternal(iterations, minHeight, maxHeight, filter);
 
     // Normalize height map here to ensure after fault formation iterations have taken place, it's
     // clamped between minHeight and maxHeight
     // First find current limits of fault formation generated terrain
-    float min = 0, max = 0;
+    float max, min;
+    max = min = heightMap[0];
     for (int i = 0; i < terrainSize * terrainSize; i++) {
         if (heightMap[i] > max)
             max = heightMap[i];
         if (heightMap[i] < min)
             min = heightMap[i];
     }
+
     float minMaxDelta = max - min;
     float minMaxRange = maxHeight - minHeight;
 
@@ -34,8 +36,7 @@ void FaultFormationTerrain::createFaultFormation(int size, int iterations, float
     triangleList.createTriangleList(terrainSize, terrainSize, this);
 }
 
-// TODO: read more about fault formation algorithm
-void FaultFormationTerrain::createFaultFormationInternal(int iterations, float minHt, float maxHt) {
+void FaultFormationTerrain::createFaultFormationInternal(int iterations, float minHt, float maxHt, float filter) {
     float deltaHeight = maxHt - minHt;
 
     for (int currIter = 0; currIter < iterations; currIter++) {
@@ -61,6 +62,50 @@ void FaultFormationTerrain::createFaultFormationInternal(int iterations, float m
             }
         }
     }
+
+    applyFIRFilter(filter);
+}
+
+void FaultFormationTerrain::applyFIRFilter(float filter) {
+    // 1st filter sweep: left to right
+    for (int z = 0; z < terrainSize; z++) {
+        float previousValue = heightMap[z];
+        for (int x = 1; x < terrainSize; x++) {
+            previousValue = FIRFilterSinglePoint(x, z, previousValue, filter);
+        }
+    }
+
+    // 2nd filter sweep: right to left
+    for (int z = 0; z < terrainSize; z++) {
+        float previousValue = heightMap[(terrainSize - 1) * terrainSize + z];
+        for (int x = terrainSize - 2; x >= 0; x--) {
+            previousValue = FIRFilterSinglePoint(x, z, previousValue, filter);
+        }
+    }
+
+    // 3rd sweep from bottom to top
+    for (int x = 0; x < terrainSize; x++) {
+        float previousValue = heightMap[x * terrainSize];
+        for (int z = 1; z < terrainSize; z++) {
+            previousValue = FIRFilterSinglePoint(x, z, previousValue, filter);
+        }
+    }
+
+    // 4th sweep from top to bottom
+    for (int x = 0; x < terrainSize; x++) {
+        float previousValue = heightMap[x * terrainSize + terrainSize - 1];
+        for (int z = terrainSize - 2; z >= 0; z--) {
+            previousValue = FIRFilterSinglePoint(x, z, previousValue, filter);
+        }
+    }
+}
+
+float FaultFormationTerrain::FIRFilterSinglePoint(int x, int z, float prevVal, float filter) {
+    float currValue = heightMap[x * terrainSize + z];
+    // LERP from previous to new value
+    float newValue = filter * prevVal + (1 - filter) * currValue;
+    heightMap[x * terrainSize + z] = newValue;
+    return newValue;
 }
 
 void FaultFormationTerrain::generateRandomTerrainPoints(TerrainPoint& p1, TerrainPoint& p2) {

@@ -7,7 +7,7 @@ class FaultFormationTerrain : public Terrain {
     public:
         FaultFormationTerrain() {}
 
-        void createFaultFormation(int size, int iterations, float minHt, float maxHt);
+        void createFaultFormation(int size, int iterations, float minHt, float maxHt, float filter);
 
     private:
         struct TerrainPoint {
@@ -23,8 +23,12 @@ class FaultFormationTerrain : public Terrain {
             }
         };
 
-        void createFaultFormationInternal(int iterations, float minHt, float maxHt);
+        void createFaultFormationInternal(int iterations, float minHt, float maxHt, float filter);
         void generateRandomTerrainPoints(TerrainPoint& p1, TerrainPoint& p2);
+
+        // Finite Impulse Response filter
+        void applyFIRFilter(float filter);
+        float FIRFilterSinglePoint(int x, int z, float prevVal, float filter);
 };
 
 #endif // __FAULT_FORMATION_TERRAIN__
