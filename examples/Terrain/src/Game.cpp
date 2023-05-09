@@ -27,6 +27,7 @@ void Game::init() {
 
     // Terrain generated using fault formation algorithm
     faultFormationTerrain.init(4.0f);
+    // FIR filter value - lower values will give more jagged edges, while higher values will produce smoother terrain
     float filter = 0.5f;
     faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f, filter);
 }
