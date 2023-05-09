@@ -21,8 +21,13 @@ void Game::init() {
             ->addComponent(new LookController());
     addToScene(cam);
 
+    // Basic terrain loaded from heightmap
     baseTerrain.init(4.0f);
     baseTerrain.loadFromFile("assets/textures/heightmap.save");
+
+    // Terrain generated using fault formation algorithm
+    faultFormationTerrain.init(4.0f);
+    faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f);
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -43,5 +48,19 @@ void Game::onAppRender(float dt) {
     debugRenderer.end();
     debugRenderer.render(projection * view, 1.0f);
 
-    baseTerrain.render(camera);
+    if (terrainType == 1)
+        faultFormationTerrain.render(camera);
+    else
+        baseTerrain.render(camera);
+}
+
+
+void Game::onAppImGuiRender(float deltaTime) {
+    ImGui::Begin("Terrain Settings");
+
+    ImGui::Text("Terrain type: ");
+    ImGui::RadioButton("From height map texture", &terrainType, 0);
+    ImGui::RadioButton("Generated using fault formation", &terrainType, 1);
+
+    ImGui::End();
 }

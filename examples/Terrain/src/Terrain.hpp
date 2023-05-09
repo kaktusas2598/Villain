@@ -32,6 +32,10 @@ class Terrain {
 
         TriangleList triangleList;
         Villain::Shader* terrainShader;
+
+        // Required for terrain generation
+        float minHeight = 0.0f;
+        float maxHeight = 0.0f;
 };
 
 #endif // __TERRAIN__
