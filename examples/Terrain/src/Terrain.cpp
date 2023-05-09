@@ -19,6 +19,8 @@ void Terrain::init(float scale) {
 
 void Terrain::render(Villain::Camera* camera) {
     terrainShader->bind();
+    terrainShader->setUniform1f("minHeight", minHeight);
+    terrainShader->setUniform1f("maxHeight", maxHeight);
     terrainShader->setUniformMat4f("projection", camera->getProjMatrix());
     terrainShader->setUniformMat4f("view", camera->getViewMatrix());
     triangleList.render();
@@ -32,5 +34,13 @@ void Terrain::loadHeightMap(const std::string& fileName) {
     // Make sure file contains whole number of floats
     assert(fileSize % sizeof(float) == 0);
 
-    terrainSize = sqrtf(fileSize / sizeof(float));
+    terrainSize = sqrtf((float)fileSize / sizeof(float));
+
+    // Find min/maxHeight
+    for (int i = 0; i < terrainSize * terrainSize; i++) {
+        if (heightMap[i] > maxHeight)
+            maxHeight = heightMap[i];
+        if (heightMap[i] < minHeight)
+            minHeight = heightMap[i];
+    }
 }

@@ -7,13 +7,21 @@ layout(location = 0) in vec3 position;
 uniform mat4 projection;
 uniform mat4 view;
 
+uniform float minHeight;
+uniform float maxHeight;
+
 out vec4 color;
 
 void main() {
     gl_Position = projection * view * vec4(position, 1.0);
 
-    // HACK: using current height map top height to generate gradient of colours
-    color = vec4(position.y / 200.0);
+    float deltaHeight = maxHeight - minHeight;
+    float heightRatio = (position.y - minHeight) / deltaHeight;
+
+    // Map color component from 0.2 to 1.0 so that the lowest parts are not completely black
+    float c = heightRatio * 0.8 + 0.2;
+
+    color = vec4(c, c, c, 1.0);
 }
 
 #shader fragment
