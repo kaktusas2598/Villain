@@ -26,8 +26,8 @@ void Terrain::render(Villain::Camera* camera) {
     triangleList.render();
 }
 
+// TODO: besides binary file full of floats, basic terrain should also support image height maps
 void Terrain::loadHeightMap(const std::string& fileName) {
-    // TODO: load binary file here, height map texture will have to convert colors to floats
     int fileSize;
     heightMap = (float*)Villain::FileUtils::loadBinaryFile(fileName, fileSize);
 
