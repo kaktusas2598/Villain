@@ -39,7 +39,7 @@ void MidpointDisplacementTerrain::createMidpointDisplacement(int size, float rou
 }
 
 void MidpointDisplacementTerrain::createMidpointDisplacementF32(float roughness) {
-    int rectSize = terrainSize;
+    int rectSize = calculateNextPowerOf2(terrainSize);
     float currentHeight = (float)rectSize / 2.0f;
     float heightReduce = pow(2.0f, - roughness);
 
@@ -64,13 +64,22 @@ void MidpointDisplacementTerrain::diamondStep(int rectSize, float currentHeight)
             int nextX = (x + rectSize) % terrainSize;
             int nextY = (y + rectSize) % terrainSize;
 
+            // To fix edge anomaly for when terrain size if not power of 2
+            // NOTE: still wouldn't recommend using terrain sizes not power of 2 as this doesn't seem to fix it properly
+            if (nextX < x) {
+                nextX = terrainSize - 1;
+            }
+            if (nextY < y) {
+                nextY = terrainSize - 1;
+            }
+
             float topLeft = heightMap[x * terrainSize + y];
             float topRight = heightMap[nextX * terrainSize + y];
             float bottomLeft = heightMap[x * terrainSize + nextY];
             float bottomRight = heightMap[nextX * terrainSize + nextY];
 
-            int midX = x + halfRectSize;
-            int midY = y + halfRectSize;
+            int midX = (x + halfRectSize) % terrainSize;
+            int midY = (y + halfRectSize) % terrainSize;
 
             float randValue = randDist(rndEngine);
             float midPoint = (topLeft + topRight + bottomLeft + bottomRight) / 4.0f;
@@ -91,8 +100,8 @@ void MidpointDisplacementTerrain::squareStep(int rectSize, float currentHeight) 
             int nextX = (x + rectSize) % terrainSize;
             int nextY = (y + rectSize) % terrainSize;
 
-            int midX = x + halfRectSize;
-            int midY = y + halfRectSize;
+            int midX = (x + halfRectSize) % terrainSize;
+            int midY = (y + halfRectSize) % terrainSize;
 
             int prevMidX = (x - halfRectSize + terrainSize) % terrainSize;
             int prevMidY = (y - halfRectSize + terrainSize) % terrainSize;
