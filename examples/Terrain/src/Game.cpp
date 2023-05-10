@@ -30,6 +30,9 @@ void Game::init() {
     // FIR filter value - lower values will give more jagged edges, while higher values will produce smoother terrain
     float filter = 0.5f;
     faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f, filter);
+
+    midpointDisplacementTerrain.init(4.0f);
+    midpointDisplacementTerrain.createMidpointDisplacement(128, 1.0f, 0.0f, 100.0f);
 }
 
 void Game::onAppPreUpdate(float dt) {
@@ -52,6 +55,8 @@ void Game::onAppRender(float dt) {
 
     if (terrainType == 1)
         faultFormationTerrain.render(camera);
+    else if (terrainType == 2)
+        midpointDisplacementTerrain.render(camera);
     else
         baseTerrain.render(camera);
 }
@@ -63,6 +68,7 @@ void Game::onAppImGuiRender(float deltaTime) {
     ImGui::Text("Terrain type: ");
     ImGui::RadioButton("From height map texture", &terrainType, 0);
     ImGui::RadioButton("Generated using fault formation", &terrainType, 1);
+    ImGui::RadioButton("Generated using midpoint displacement", &terrainType, 2);
 
     ImGui::End();
 }

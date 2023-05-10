@@ -4,6 +4,7 @@
 #include "Application.hpp"
 #include "Camera.hpp"
 #include "FaultFormationTerrain.hpp"
+#include "MidpointDisplacementTerrain.hpp"
 #include "Terrain.hpp"
 #include "rendering/DebugRenderer.hpp"
 
@@ -23,6 +24,7 @@ class Game : public Villain::Application {
 
         Terrain baseTerrain;
         FaultFormationTerrain faultFormationTerrain;
+        MidpointDisplacementTerrain midpointDisplacementTerrain;
 
         int terrainType = 0;
 };
