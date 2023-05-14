@@ -1,5 +1,6 @@
 #include "Game.hpp"
 
+#include "ResourceManager.hpp"
 #include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
 #include "components/MoveController.hpp"
@@ -24,15 +25,18 @@ void Game::init() {
     // Basic terrain loaded from heightmap
     baseTerrain.init(4.0f);
     baseTerrain.loadFromFile("assets/textures/heightmap.save");
+    baseTerrain.setTerrainTexture(ResourceManager::Instance()->loadTexture("assets/textures/rock01.jpg", "rock01"));
 
     // Terrain generated using fault formation algorithm
     faultFormationTerrain.init(4.0f);
     // FIR filter value - lower values will give more jagged edges, while higher values will produce smoother terrain
     float filter = 0.5f;
     faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f, filter);
+    faultFormationTerrain.setTerrainTexture(ResourceManager::Instance()->getTexture("rock01"));
 
     midpointDisplacementTerrain.init(4.0f);
     midpointDisplacementTerrain.createMidpointDisplacement(128, 1.0f, 0.0f, 100.0f);
+    midpointDisplacementTerrain.setTerrainTexture(ResourceManager::Instance()->getTexture("rock01"));
 }
 
 void Game::onAppPreUpdate(float dt) {

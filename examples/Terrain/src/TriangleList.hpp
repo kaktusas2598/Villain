@@ -17,8 +17,10 @@ class TriangleList {
         void render();
 
     private:
+        // TODO: refactor to use struct from Vertex.hpp instead
         struct Vertex {
             glm::vec3 Pos;
+            glm::vec2 UV;
 
             void initVertex(const Terrain* terrain, int x, int z);
         };

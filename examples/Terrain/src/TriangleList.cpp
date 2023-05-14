@@ -31,12 +31,18 @@ void TriangleList::createGLState() {
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
+    // TODO: Refactor to use VertexType structs to abstract these gl calls
     int POS_LOC = 0;
+    int TEX_LOC = 1;
     size_t numFloats = 0;
 
     glEnableVertexAttribArray(POS_LOC);
     glVertexAttribPointer(POS_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
-    numFloats += 3; // Preparing for future here, but probably all of this will be handled by engine anyway
+    numFloats += 3;
+
+    glEnableVertexAttribArray(TEX_LOC);
+    glVertexAttribPointer(TEX_LOC, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
+    numFloats += 3;
 }
 
 void TriangleList::populateBuffers(const Terrain* terrain) {
@@ -56,6 +62,9 @@ void TriangleList::populateBuffers(const Terrain* terrain) {
 void TriangleList::Vertex::initVertex(const Terrain* terrain, int x, int z) {
     float y = terrain->getHeight(x, z);
     Pos = glm::vec3(x * terrain->getWorldScale(), y, z * terrain->getWorldScale());
+
+    float size = (float)terrain->getSize();
+    UV = glm::vec2((float)x / size, (float)z / size);
 }
 
 void TriangleList::initVertices(const Terrain* terrain, std::vector<Vertex>& vertices) {

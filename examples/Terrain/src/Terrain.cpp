@@ -23,6 +23,11 @@ void Terrain::render(Villain::Camera* camera) {
     terrainShader->setUniform1f("maxHeight", maxHeight);
     terrainShader->setUniformMat4f("projection", camera->getProjMatrix());
     terrainShader->setUniformMat4f("view", camera->getViewMatrix());
+    // TODO: bind all terrain textures
+    for (int i = 0; i < 4; i++) {
+        if (textures[i] != nullptr)
+            textures[i]->bind(i);
+    }
     triangleList.render();
 }
 
