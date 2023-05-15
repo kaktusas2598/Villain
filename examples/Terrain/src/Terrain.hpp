@@ -16,14 +16,19 @@ class Terrain {
         void render(Villain::Camera* camera);
         void loadFromFile(const std::string& fileName);
         void setTerrainTexture(Villain::Texture* tex) { textures[0] = tex; }
+        void destroy();
 
+        float* getHeightMap() { return heightMap; }
         float getHeight(int x, int z) const {
             // TODO: this needs to be much better, need out of bounds check and also
             // this assumes terrain will be square, will it always though?
             return heightMap[x * terrainSize + z];
         }
+        float getHeightInterpolated(float x, float z) const;
         float getSize() const { return terrainSize; }
         float getWorldScale() const { return worldScale; }
+        float getMinHeight() const { return minHeight; }
+        float getMaxHeight() const { return maxHeight; }
 
     protected:
         void loadHeightMap(const std::string& fileName);

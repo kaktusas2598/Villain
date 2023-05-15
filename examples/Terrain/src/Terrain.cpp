@@ -17,16 +17,24 @@ void Terrain::init(float scale) {
     terrainShader = new Villain::Shader("assets/shaders/terrain.glsl");
 }
 
+void Terrain::destroy() {
+    if (heightMap) {
+        delete heightMap;
+        heightMap = nullptr;
+    }
+}
+
 void Terrain::render(Villain::Camera* camera) {
     terrainShader->bind();
     terrainShader->setUniform1f("minHeight", minHeight);
     terrainShader->setUniform1f("maxHeight", maxHeight);
     terrainShader->setUniformMat4f("projection", camera->getProjMatrix());
     terrainShader->setUniformMat4f("view", camera->getViewMatrix());
-    // TODO: bind all terrain textures
+    // NOTE: 4 is max supported terrain textures ATM
     for (int i = 0; i < 4; i++) {
-        if (textures[i] != nullptr)
+        if (textures[i] != nullptr) {
             textures[i]->bind(i);
+        }
     }
     triangleList.render();
 }
@@ -48,4 +56,23 @@ void Terrain::loadHeightMap(const std::string& fileName) {
         if (heightMap[i] < minHeight)
             minHeight = heightMap[i];
     }
+}
+
+float Terrain::getHeightInterpolated(float x, float z) const {
+    float baseHeight = getHeight((int)x, (int)z);
+
+    if (((int)x + 1 >= terrainSize) || ((int)z + 1 >= terrainSize)) {
+        return baseHeight;
+    }
+
+    float nextXHeight = getHeight(x + 1, z);
+    float ratioX = x - floorf(x);
+    float interpolatedHeightX = (float)(nextXHeight - baseHeight) * ratioX + (float)baseHeight;
+
+    float nextZHeight = getHeight(x, z + 1);
+    float ratioZ = z - floorf(z);
+    float interpolatedHeightZ = (float)(nextZHeight - baseHeight) * ratioZ + (float)baseHeight;
+
+    float finalHeight = (interpolatedHeightX + interpolatedHeightZ) / 2.0f;
+    return finalHeight;
 }
