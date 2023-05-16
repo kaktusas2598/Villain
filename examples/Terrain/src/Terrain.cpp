@@ -31,11 +31,12 @@ void Terrain::render(Villain::Camera* camera) {
     terrainShader->setUniformMat4f("projection", camera->getProjMatrix());
     terrainShader->setUniformMat4f("view", camera->getViewMatrix());
     // NOTE: 4 is max supported terrain textures ATM
-    for (int i = 0; i < 4; i++) {
-        if (textures[i] != nullptr) {
-            textures[i]->bind(i);
-        }
-    }
+    textures[0]->bind();
+    //for (int i = 0; i < 4; i++) {
+        //if (textures[i] != nullptr) {
+            //textures[i]->bind(i);
+        //}
+    //}
     triangleList.render();
 }
 

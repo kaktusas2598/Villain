@@ -26,6 +26,9 @@ class Game : public Villain::Application {
         FaultFormationTerrain faultFormationTerrain;
         MidpointDisplacementTerrain midpointDisplacementTerrain;
 
+        Villain::Texture* terrainGeneratedTexture = nullptr;
+        Villain::Texture* heightMapDebugTexture = nullptr;
+
         int terrainType = 0;
 };
 
