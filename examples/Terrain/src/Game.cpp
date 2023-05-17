@@ -140,7 +140,7 @@ void Game::onAppImGuiRender(float deltaTime) {
     ImGui::End();
 
     ImGui::Begin("Generated terrain texture");
-    // FIXME: broken for now because truing to get multi texturing working
+    // NOTE: commented out because terrain generator is not used ATM
     //ImGui::Image(
         //(ImTextureID)terrainGeneratedTexture->getID(),
         //ImGui::GetContentRegionAvail(), // will squish image to fit it in
