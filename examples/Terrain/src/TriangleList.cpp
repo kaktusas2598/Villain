@@ -113,7 +113,7 @@ void TriangleList::calcNormals(std::vector<Vertex>& vertices, std::vector<unsign
     unsigned index = 0;
 
     // Calculate each triangle's normal and accumulate it
-    for (unsigned int i = 0; i < indices.size(); i+=3) {
+    for (unsigned int i = 0; i < indices.size(); i += 3) {
         // NOTE: Pretty much identical to calculate normals method in MeshUtils class
         unsigned int i0 = indices[i];
         unsigned int i1 = indices[i + 1];
@@ -131,7 +131,7 @@ void TriangleList::calcNormals(std::vector<Vertex>& vertices, std::vector<unsign
     }
 
     // normalize all vertex normals
-    for (unsigned int i = 0; i < vertices.size(); i+=3) {
+    for (unsigned int i = 0; i < vertices.size(); i++) {
         vertices[i].Normal = glm::normalize(vertices[i].Normal);
     }
 }
