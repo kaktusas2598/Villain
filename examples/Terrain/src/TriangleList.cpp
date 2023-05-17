@@ -55,6 +55,8 @@ void TriangleList::populateBuffers(const Terrain* terrain) {
     indices.resize(numQuads * 6);
     initIndices(indices);
 
+    calcNormals(vertices, indices);
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
 }
@@ -64,7 +66,7 @@ void TriangleList::Vertex::initVertex(const Terrain* terrain, int x, int z) {
     Pos = glm::vec3(x * terrain->getWorldScale(), y, z * terrain->getWorldScale());
 
     float size = (float)terrain->getSize();
-    UV = glm::vec2((float)x / size, (float)z / size);
+    UV = glm::vec2(terrain->getTextureScale() * x / size, terrain->getTextureScale() * z / size);
 }
 
 void TriangleList::initVertices(const Terrain* terrain, std::vector<Vertex>& vertices) {
@@ -99,5 +101,32 @@ void TriangleList::initIndices(std::vector<unsigned int>& indices) {
             indices[index++] = indexTopRight;
             indices[index++] = indexBottomRight;
         }
+    }
+}
+
+void TriangleList::calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
+    unsigned index = 0;
+
+    // Calculate each triangle's normal and accumulate it
+    for (unsigned int i = 0; i < indices.size(); i+=3) {
+        // NOTE: Pretty much identical to calculate normals method in MeshUtils class
+        unsigned int i0 = indices[i];
+        unsigned int i1 = indices[i + 1];
+        unsigned int i2 = indices[i + 2];
+
+        glm::vec3 v1 = vertices[i1].Pos- vertices[i0].Pos;
+        glm::vec3 v2 = vertices[i2].Pos- vertices[i0].Pos;
+        glm::vec3 normal = glm::cross(v1, v2);
+        normal = glm::normalize(normal);
+
+        // Vertex normal is average of all face(triangle) normals sharing vertex
+        vertices[i0].Normal += normal;
+        vertices[i1].Normal += normal;
+        vertices[i2].Normal += normal;
+    }
+
+    // normalize all vertex normals
+    for (unsigned int i = 0; i < vertices.size(); i+=3) {
+        vertices[i].Normal = glm::normalize(vertices[i].Normal);
     }
 }

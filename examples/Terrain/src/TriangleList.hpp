@@ -21,6 +21,7 @@ class TriangleList {
         struct Vertex {
             glm::vec3 Pos;
             glm::vec2 UV;
+            glm::vec3 Normal{0.0f};
 
             void initVertex(const Terrain* terrain, int x, int z);
         };
@@ -33,6 +34,7 @@ class TriangleList {
         void populateBuffers(const Terrain* terrain);
         void initVertices(const Terrain* terrain, std::vector<Vertex>& vertices);
         void initIndices(std::vector<unsigned int>& indices);
+        void calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };
 
 #endif // __TRIANGLE_LIST__
