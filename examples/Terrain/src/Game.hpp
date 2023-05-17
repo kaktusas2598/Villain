@@ -21,6 +21,7 @@ class Game : public Villain::Application {
     private:
         Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
+        Villain::SceneNode* lightNode;
 
         Terrain baseTerrain;
         FaultFormationTerrain faultFormationTerrain;

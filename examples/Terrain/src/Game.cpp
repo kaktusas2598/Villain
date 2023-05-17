@@ -23,30 +23,41 @@ void Game::init() {
             ->addComponent(new LookController());
     addToScene(cam);
 
+    lightNode = new SceneNode("Directional Terrain Light", glm::vec3(0.0, 400.0, 0.0));
+    addToScene(lightNode);
+
     // Basic terrain loaded from heightmap
     baseTerrain.init(4.0f);
     baseTerrain.loadFromFile("assets/textures/heightmap.save");
     baseTerrain.setTerrainTexture(ResourceManager::Instance()->loadTexture("assets/textures/rock01.jpg", "rock01"));
+    // --------------------
 
     // Terrain generated using fault formation algorithm
     faultFormationTerrain.init(4.0f);
     // FIR filter value - lower values will give more jagged edges, while higher values will produce smoother terrain
     float filter = 0.5f;
     faultFormationTerrain.createFaultFormation(256, 500, 0.0f, 300.0f, filter);
-    faultFormationTerrain.setTerrainTexture(ResourceManager::Instance()->getTexture("rock01"));
+    // --------------------
 
-    midpointDisplacementTerrain.init(4.0f);
-    midpointDisplacementTerrain.createMidpointDisplacement(256, 1.0f, 0.0f, 300.0f);
-    //midpointDisplacementTerrain.setTerrainTexture(ResourceManager::Instance()->getTexture("rock01"));
-    TextureGenerator terrainTextureGenerator;
-    //terrainTextureGenerator.loadTile("assets/textures/test.jpg");
-    terrainTextureGenerator.loadTile("assets/textures/rock01.jpg");
-    terrainTextureGenerator.loadTile("assets/textures/grass1.jpg");
-    terrainTextureGenerator.loadTile("assets/textures/water.png");
+    std::vector<std::string> textureFilenames;
+    textureFilenames.push_back("assets/textures/rock01.jpg");
+    textureFilenames.push_back("assets/textures/seamless.jpg");
+    textureFilenames.push_back("assets/textures/grass1.jpg");
+    textureFilenames.push_back("assets/textures/water.png");
 
-    terrainGeneratedTexture = terrainTextureGenerator.generateTexture(1024, &faultFormationTerrain, 0.0f, 300.0f);
-    midpointDisplacementTerrain.setTerrainTexture(terrainGeneratedTexture);
+    midpointDisplacementTerrain.init(2.0f, 1.0f, textureFilenames);
+    midpointDisplacementTerrain.createMidpointDisplacement(512, 1.0f, 0.0f, 300.0f);
 
+    //TextureGenerator terrainTextureGenerator;
+    //terrainTextureGenerator.loadTile("assets/textures/rock01.jpg");
+    //terrainTextureGenerator.loadTile("assets/textures/grass1.jpg");
+    //terrainTextureGenerator.loadTile("assets/textures/water.png");
+
+    //terrainGeneratedTexture = terrainTextureGenerator.generateTexture(1024, &faultFormationTerrain, 0.0f, 300.0f);
+    //midpointDisplacementTerrain.setTerrainTexture(terrainGeneratedTexture);
+    // --------------------
+
+    // Generate height map texture data for imgui debug
     ////////////////////////
     int BPP = 3;
     int textureBytes = midpointDisplacementTerrain.getSize() * midpointDisplacementTerrain.getSize() * BPP;
@@ -96,34 +107,49 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
+    debugRenderer.drawSphere(lightNode->getTransform()->getPos(), 5.0f, glm::vec4(1.0f));
+
     debugRenderer.end();
     debugRenderer.render(projection * view, 1.0f);
 
-    if (terrainType == 1)
+    if (terrainType == 1) {
         faultFormationTerrain.render(camera);
-    else if (terrainType == 2)
+    } else if (terrainType == 2) {
+        glm::vec3 dir = -1.f * glm::normalize(glm::vec3(100.f, 0.0f, 100.f) - lightNode->getTransform()->getPos());
+        midpointDisplacementTerrain.setLightDirection(dir);
         midpointDisplacementTerrain.render(camera);
-    else
+    } else
         baseTerrain.render(camera);
 }
 
 
 void Game::onAppImGuiRender(float deltaTime) {
     ImGui::Begin("Terrain Settings");
+
     ImGui::Text("Terrain type: ");
     ImGui::RadioButton("From height map texture", &terrainType, 0);
     ImGui::RadioButton("Generated using fault formation", &terrainType, 1);
     ImGui::RadioButton("Generated using midpoint displacement", &terrainType, 2);
+
+    ImGui::Text("Multi texture heights");
+    ImGui::SliderFloat("Height 0", midpointDisplacementTerrain.getHeight0(), midpointDisplacementTerrain.getMinHeight(), midpointDisplacementTerrain.getMaxHeight());
+    ImGui::SliderFloat("Height 1", midpointDisplacementTerrain.getHeight1(), midpointDisplacementTerrain.getMinHeight(), midpointDisplacementTerrain.getMaxHeight());
+    ImGui::SliderFloat("Height 2", midpointDisplacementTerrain.getHeight2(), midpointDisplacementTerrain.getMinHeight(), midpointDisplacementTerrain.getMaxHeight());
+    ImGui::SliderFloat("Height 3", midpointDisplacementTerrain.getHeight3(), midpointDisplacementTerrain.getMinHeight(), midpointDisplacementTerrain.getMaxHeight());
+
     ImGui::End();
 
     ImGui::Begin("Generated terrain texture");
-    ImGui::Image(
-        (ImTextureID)terrainGeneratedTexture->getID(),
-        ImGui::GetContentRegionAvail(), // will squish image to fit it in
-        ImVec2(0, 1),
-        ImVec2(1, 0)
-        );
-    ImGui::End();
+    // FIXME: broken for now because truing to get multi texturing working
+    //ImGui::Image(
+        //(ImTextureID)terrainGeneratedTexture->getID(),
+        //ImGui::GetContentRegionAvail(), // will squish image to fit it in
+        //ImVec2(0, 1),
+        //ImVec2(1, 0)
+        //);
+    //ImGui::End();
+
+    // TODO: Multi texture uniforms for texture 0 - 3 heights
 
     ImGui::Begin("Terrain height map");
     ImGui::Image(

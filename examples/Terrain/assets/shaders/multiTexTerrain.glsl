@@ -15,6 +15,7 @@ uniform float maxHeight;
 out vec4 color;
 out vec2 inUV;
 out vec3 worldPos;
+out vec3 inNormal;
 
 void main() {
     gl_Position = projection * view * vec4(position, 1.0);
@@ -29,6 +30,7 @@ void main() {
     inUV = uv;
     // NOTE: If doing any world transformations, then also need to provide world/model matrix as uniform
     worldPos = position;
+    inNormal = normal;
 }
 
 #shader fragment
@@ -37,6 +39,7 @@ void main() {
 in vec4 color;
 in vec2 inUV;
 in vec3 worldPos;
+in vec3 inNormal;
 
 uniform sampler2D textureHeight0;
 uniform sampler2D textureHeight1;
@@ -47,6 +50,8 @@ uniform float height0 = 20.0;
 uniform float height1 = 80.0;
 uniform float height2 = 180.0;
 uniform float height3 = 230.0;
+
+uniform vec3 reverseLightDir;
 
 vec4 calcTexColor() {
     vec4 texColor;
@@ -83,5 +88,13 @@ layout(location = 0) out vec4 outColor;
 
 void main() {
     vec4 texColor = calcTexColor();
-    outColor = texColor * color;
+
+    vec3 normal = normalize(inNormal);
+    // Calculate diffuse lighting
+    // NOTE: will need to integrate with multi-pass forward rendering lighting?
+    float diffuse = dot(normal, reverseLightDir);
+    // poor man's version of ambient lighting below, providing at least some diffuse light
+    //diffuse = max(0.3, diffuse);
+
+    outColor = texColor * color * diffuse;
 }

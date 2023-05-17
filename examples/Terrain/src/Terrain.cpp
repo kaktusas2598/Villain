@@ -11,10 +11,19 @@ void Terrain::loadFromFile(const std::string& fileName) {
     triangleList.createTriangleList(terrainSize, terrainSize, this);
 }
 
-void Terrain::init(float scale) {
+void Terrain::init(float scale, float texScale, std::vector<std::string> textureFilenames) {
     worldScale = scale;
+    textureScale = texScale;
+
+    for (int i = 0; i < textureFilenames.size(); i++) {
+        textures[i] = new Villain::Texture(textureFilenames[i], GL_REPEAT);
+    }
     // TODO: will need to move it somewhere else, terrain shader will probably be provided by the engine
-    terrainShader = new Villain::Shader("assets/shaders/terrain.glsl");
+    //terrainShader = new Villain::Shader("assets/shaders/terrain.glsl");
+    if (textureFilenames.size())
+        terrainShader = new Villain::Shader("assets/shaders/multiTexTerrain.glsl");
+    else
+        terrainShader = Villain::Shader::createFromResource("basicTerrain");
 }
 
 void Terrain::destroy() {
@@ -30,13 +39,31 @@ void Terrain::render(Villain::Camera* camera) {
     terrainShader->setUniform1f("maxHeight", maxHeight);
     terrainShader->setUniformMat4f("projection", camera->getProjMatrix());
     terrainShader->setUniformMat4f("view", camera->getViewMatrix());
-    // NOTE: 4 is max supported terrain textures ATM
-    textures[0]->bind();
-    //for (int i = 0; i < 4; i++) {
-        //if (textures[i] != nullptr) {
-            //textures[i]->bind(i);
-        //}
-    //}
+
+    // Specific to multi texture shader
+    terrainShader->setUniform1i("textureHeight0", 0);
+    terrainShader->setUniform1i("textureHeight1", 1);
+    terrainShader->setUniform1i("textureHeight2", 2);
+    terrainShader->setUniform1i("textureHeight3", 3);
+    terrainShader->setUniform1f("height0", height0);
+    terrainShader->setUniform1f("height1", height1);
+    terrainShader->setUniform1f("height2", height2);
+    terrainShader->setUniform1f("height3", height3);
+
+    ////////////////////////////////
+    static float foo = 0.0f;
+    foo += 0.002f;
+    float y = glm::min(-0.4f, cosf(foo));
+    glm::vec3 lightDir(sinf(foo * 5.0f), y, cosf(foo * 5.0f));
+    terrainShader->setUniformVec3("reverseLightDir", lightDirection);
+    ////////////////////////////////
+
+    for (int i = 0; i < 4; i++) {
+        if (textures[i]) {
+            textures[i]->bind(i);
+            terrainShader->setUniform1i("useTexture", 1);
+        }
+    }
     triangleList.render();
 }
 
