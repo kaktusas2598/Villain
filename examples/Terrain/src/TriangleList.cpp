@@ -34,6 +34,7 @@ void TriangleList::createGLState() {
     // TODO: Refactor to use VertexType structs to abstract these gl calls
     int POS_LOC = 0;
     int TEX_LOC = 1;
+    int NORMAL_LOC = 2;
     size_t numFloats = 0;
 
     glEnableVertexAttribArray(POS_LOC);
@@ -42,6 +43,10 @@ void TriangleList::createGLState() {
 
     glEnableVertexAttribArray(TEX_LOC);
     glVertexAttribPointer(TEX_LOC, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
+    numFloats += 3;
+
+    glEnableVertexAttribArray(NORMAL_LOC);
+    glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
     numFloats += 3;
 }
 
