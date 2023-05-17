@@ -34,11 +34,15 @@ in vec4 color;
 in vec2 outUV;
 
 uniform sampler2D terrainTexture;
+uniform bool useTexture = false;
 
 layout(location = 0) out vec4 outColor;
 
 void main() {
-    //outColor = color;
-    vec4 texColor = texture(terrainTexture, outUV);
-    outColor = texColor * color;
+    if (useTexture) {
+        vec4 texColor = texture(terrainTexture, outUV);
+        outColor = texColor * color;
+    } else {
+        outColor = color;
+    }
 }
