@@ -25,8 +25,33 @@ namespace Villain {
             GLCall(glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, borderColour));
         }
 
-        //GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, NULL));
         GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_FLOAT, NULL));
+    }
+
+    void Texture::init(int w, int h, int bpp, unsigned char* textureData) {
+        width = w;
+        height = h;
+        BPP = bpp;
+
+        GLenum format;
+        if (BPP == 1)
+            format = GL_RED;
+        else if (BPP == 3)
+            format = GL_RGB;
+        else if (BPP == 4)
+            format = GL_RGBA;
+        else
+            std::cout << "Unrecognized color format" << std::endl;
+
+        GLCall(glGenTextures(1, &rendererID));
+        GLCall(glBindTexture(target, rendererID));
+        GLCall(glTexImage2D(target, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureData));
+
+        GLCall(glGenerateMipmap(GL_TEXTURE_2D));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT));
     }
 
     void Texture::initCubeMap(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format) {
@@ -51,26 +76,17 @@ namespace Villain {
     }
 
     Texture::Texture(const std::string& fileName, GLint wrappingMode)
-        : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(0), target(GL_TEXTURE_2D) {
+        : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(4), target(GL_TEXTURE_2D) {
 
         stbi_set_flip_vertically_on_load(1);
 
         GLCall(glGenTextures(1, &rendererID));
 
-        localBuffer = stbi_load(fileName.c_str(), &width, &height, &BPP, 4);
+        // NOTE: Pass nullptr instead of &BPP and set desired channels to 4 to ensure consistency
+        // Alternatively 3rd argument can be &BPP and 4th argument null, so that we actually set same BPP as in file
+        localBuffer = stbi_load(fileName.c_str(), &width, &height, nullptr, 4);
 
         if (localBuffer) {
-            // NOTE: Does not seem to work fine, need to investigate this futher
-            //GLenum format;
-            //if (BPP == 1)
-                //format = GL_RED;
-            //else if (BPP == 3)
-                //format = GL_RGB;
-            //else if (BPP == 4)
-                //format = GL_RGBA;
-            //else
-                //std::cout << "Unrecognized color format" << std::endl;
-
             GLCall(glBindTexture(GL_TEXTURE_2D, rendererID));
             // Generate texture
             GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
@@ -147,4 +163,17 @@ namespace Villain {
         GLCall(glBindTexture(target, 0));
     }
 
+    glm::vec3 Texture::getColor(int x, int y) {
+        int wrappedX = x % width;
+        int wrappedY = y % height;
+
+        unsigned char* pixelPointer = localBuffer + (wrappedX + wrappedY * width) * BPP;
+
+        glm::vec3 color;
+        color.r = (float)pixelPointer[0];
+        color.g = (float)pixelPointer[1];
+        color.b = (float)pixelPointer[2];
+
+        return color;
+    }
 }

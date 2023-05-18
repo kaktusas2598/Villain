@@ -3,6 +3,7 @@
 
 #include "ErrorHandler.hpp"
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace Villain  {
 
@@ -11,6 +12,8 @@ namespace Villain  {
             // Initialise empty texture, used by framebuffers
             Texture(GLenum targetType = GL_TEXTURE_2D) : rendererID(0), target(targetType) {}
             void init(int w, int h, unsigned int id = 0, GLfloat filter = GL_LINEAR, GLint internalFormat = GL_RGBA, GLenum format = GL_RGBA, bool clamp = false);
+            void init(int w, int h, int bpp, unsigned char* textureData);
+
             // Created specifically to init depth cubemap used for omnidirectional shadow mapping
             void initCubeMap(int w, int h, unsigned int id = 0, GLfloat filter = GL_NEAREST, GLint internalFormat = GL_DEPTH_COMPONENT16, GLenum format = GL_DEPTH_COMPONENT);
 
@@ -27,6 +30,7 @@ namespace Villain  {
 
             inline int getWidth() const { return width; }
             inline int getHeight() const { return height; }
+            glm::vec3 getColor(int x, int y);
 
             void setType(std::string& t) { type = t; }
             inline std::string getType() const { return type; }

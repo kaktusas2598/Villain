@@ -10,6 +10,7 @@ namespace Villain {
     class FileUtils {
         public:
             static std::string loadFile(const std::string& filePath);
+            static char* loadBinaryFile(const std::string& filePath, int& size);
             static std::string loadResource(const std::string& filePath);
     };
 }
