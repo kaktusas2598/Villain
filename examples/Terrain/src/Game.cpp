@@ -115,7 +115,7 @@ void Game::onAppRender(float dt) {
     if (terrainType == 1) {
         faultFormationTerrain.render(camera);
     } else if (terrainType == 2) {
-        glm::vec3 dir = -1.f * glm::normalize(glm::vec3(100.f, 0.0f, 100.f) - lightNode->getTransform()->getPos());
+        glm::vec3 dir = -1.f * glm::normalize(glm::vec3(0.0f) - lightNode->getTransform()->getPos());
         midpointDisplacementTerrain.setLightDirection(dir);
         midpointDisplacementTerrain.render(camera);
     } else

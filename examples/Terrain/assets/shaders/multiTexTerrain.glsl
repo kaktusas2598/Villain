@@ -92,9 +92,9 @@ void main() {
     vec3 normal = normalize(inNormal);
     // Calculate diffuse lighting
     // NOTE: will need to integrate with multi-pass forward rendering lighting?
-    float diffuse = dot(normal, reverseLightDir);
+    float diffuse = max(dot(normal, reverseLightDir), 0.0);
     // poor man's version of ambient lighting below, providing at least some diffuse light
-    //diffuse = max(0.3, diffuse);
+    diffuse = max(0.3, diffuse);
 
     outColor = texColor * color * diffuse;
 }
