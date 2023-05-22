@@ -27,6 +27,11 @@ void GeomipGrid::createGeomipGrid(int xSize, int ySize, int patch, const Terrain
     depth = ySize;
     patchSize = patch;
 
+    numPatchesX = (width - 1) / (patchSize - 1);
+    numPatchesZ = (depth - 1) / (patchSize - 1);
+    //maxLOD = lodManager.initLodManager(patchSize, numPatchesX, numPatchesZ, terrain->getWorldScale());
+    //lodInfo.resize(maxLOD + 1);
+
     createGLState();
 
     populateBuffers(terrain);
