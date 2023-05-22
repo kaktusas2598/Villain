@@ -8,6 +8,7 @@
 void Terrain::loadFromFile(const std::string& fileName) {
     loadHeightMap(fileName);
 
+    // TODO: replace/or add ability to switch to Geomipmapping here
     triangleList.createTriangleList(terrainSize, terrainSize, this);
 }
 
@@ -64,7 +65,8 @@ void Terrain::render(Villain::Camera* camera) {
             terrainShader->setUniform1i("useTexture", 1);
         }
     }
-    triangleList.render();
+    //triangleList.render();
+    geomipGrid.render();
 }
 
 // TODO: besides binary file full of floats, basic terrain should also support image height maps

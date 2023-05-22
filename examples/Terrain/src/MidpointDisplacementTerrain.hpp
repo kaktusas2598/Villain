@@ -7,7 +7,7 @@ class MidpointDisplacementTerrain : public Terrain {
     public:
         MidpointDisplacementTerrain() {}
 
-        void createMidpointDisplacement(int size, float roughness, float minHt, float maxHt);
+        void createMidpointDisplacement(int size, int patch, float roughness, float minHt, float maxHt);
 
     private:
         void createMidpointDisplacementF32(float roughness);

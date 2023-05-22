@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Camera.hpp"
+#include "GeomipGrid.hpp"
 #include "TriangleList.hpp"
 #include "rendering/Shader.hpp"
 
@@ -42,10 +43,12 @@ class Terrain {
 
         float* heightMap = nullptr;
         int terrainSize = 0;
+        int patchSize = 0;
         float worldScale = 1.0f;
         float textureScale = 1.0f;
         glm::vec3 lightDirection{0.0f};
 
+        GeomipGrid geomipGrid;
         TriangleList triangleList;
         Villain::Shader* terrainShader;
         Villain::Texture* textures[4] = {nullptr};
