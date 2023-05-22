@@ -36,9 +36,12 @@ void MidpointDisplacementTerrain::createMidpointDisplacement(int size, int patch
         heightMap[i] = ((heightMap[i] - min) / minMaxDelta) * minMaxRange + minHeight;
     }
 
-    // TODO: ability to switch between simple triangle mesh(TriangleList) and geomipmapped grid
-    //triangleList.createTriangleList(terrainSize, terrainSize, this);
-    geomipGrid.createGeomipGrid(terrainSize, terrainSize, patchSize, this);
+    if (patch == 0) {
+        triangleList.createTriangleList(terrainSize, terrainSize, this);
+    } else {
+        geomipGrid.createGeomipGrid(terrainSize, terrainSize, patchSize, this);
+        useLOD = true;
+    }
 }
 
 void MidpointDisplacementTerrain::createMidpointDisplacementF32(float roughness) {

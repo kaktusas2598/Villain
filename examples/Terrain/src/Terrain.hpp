@@ -52,6 +52,7 @@ class Terrain {
         TriangleList triangleList;
         Villain::Shader* terrainShader;
         Villain::Texture* textures[4] = {nullptr};
+        bool useLOD = false; //<< By default use simple terrain mesh without Level of Detail
 
         // Required for terrain generation
         float minHeight = 0.0f;

@@ -30,7 +30,7 @@ class Game : public Villain::Application {
         Villain::Texture* terrainGeneratedTexture = nullptr;
         Villain::Texture* heightMapDebugTexture = nullptr;
 
-        int terrainType = 0;
+        int terrainType = 2;
 };
 
 #endif // __GAME__
