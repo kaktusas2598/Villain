@@ -49,6 +49,8 @@ class Terrain {
 
         TriangleList triangleList;
         Villain::Shader* terrainShader;
+        // Textures used for different heights
+        // NOTE: Could also implement parsing height independent blending map for stuff like paths on terrain
         Villain::Texture* textures[4] = {nullptr};
 
         // Required for terrain generation
