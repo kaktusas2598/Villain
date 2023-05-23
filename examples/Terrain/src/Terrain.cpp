@@ -33,7 +33,7 @@ void Terrain::destroy() {
     }
 }
 
-void Terrain::render(Villain::Camera* camera) {
+void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera* camera) {
     terrainShader->bind();
     terrainShader->setUniform1f("minHeight", minHeight);
     terrainShader->setUniform1f("maxHeight", maxHeight);
@@ -64,6 +64,10 @@ void Terrain::render(Villain::Camera* camera) {
             terrainShader->setUniform1i("useTexture", 1);
         }
     }
+    terrainShader->setUniformVec3("fogColor", *renderingEngine.getFogColor());
+    terrainShader->setUniform1f("fogDensity", *renderingEngine.getFogDensity());
+    terrainShader->setUniform1f("fogGradient", *renderingEngine.getFogGradient());
+
     triangleList.render();
 }
 

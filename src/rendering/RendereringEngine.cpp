@@ -68,7 +68,10 @@ namespace Villain {
             mirrorCamera.setRotation(rot);
 
             defaultShader->bind();
-            defaultShader->setUniformVec3("color", ambientLight);
+            defaultShader->setUniformVec3("ambientLight", ambientLight);
+            defaultShader->setUniformVec3("fogColor", fogColor);
+            defaultShader->setUniform1f("fogDensity", fogDensity);
+            defaultShader->setUniform1f("fogGradient", fogGradient);
             activeLight = nullptr;
             node->render(defaultShader, this, &mirrorCamera);
         }
@@ -79,7 +82,10 @@ namespace Villain {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         defaultShader->bind();
-        defaultShader->setUniformVec3("color", ambientLight);
+        defaultShader->setUniformVec3("ambientLight", ambientLight);
+        defaultShader->setUniformVec3("fogColor", fogColor);
+        defaultShader->setUniform1f("fogDensity", fogDensity);
+        defaultShader->setUniform1f("fogGradient", fogGradient);
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);
 

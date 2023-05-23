@@ -113,13 +113,13 @@ void Game::onAppRender(float dt) {
     debugRenderer.render(projection * view, 1.0f);
 
     if (terrainType == 1) {
-        faultFormationTerrain.render(camera);
+        faultFormationTerrain.render(*getRootNode()->getEngine()->getRenderingEngine(), camera);
     } else if (terrainType == 2) {
         glm::vec3 dir = -1.f * glm::normalize(glm::vec3(0.0f) - lightNode->getTransform()->getPos());
         midpointDisplacementTerrain.setLightDirection(dir);
-        midpointDisplacementTerrain.render(camera);
+        midpointDisplacementTerrain.render(*getRootNode()->getEngine()->getRenderingEngine(), camera);
     } else
-        baseTerrain.render(camera);
+        baseTerrain.render(*getRootNode()->getEngine()->getRenderingEngine(), camera);
 }
 
 

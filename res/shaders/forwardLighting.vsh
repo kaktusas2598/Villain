@@ -10,6 +10,12 @@ out vec2 v_texCoords;
 out vec4 v_shadowMapCoords; // Used for directional shadow mapping for dir and spot lights
 out mat3 v_TBN; // Tangent-Bitangent-Normal matrix
 
+// For Fog calculation using exponential formula
+out float visibility; // Determines how foggy vertex is
+uniform float fogDensity = 0.007;
+uniform float fogGradient = 1.5;
+uniform vec3 fogColor;
+
 // MVP matrices
 uniform mat4 projection;
 uniform mat4 view;
@@ -38,5 +44,12 @@ void main() {
     /*Or cheaper way : vec3 B = normalize(vec3(model * vec4(biTangent, 0.0)));*/
 
     v_TBN = mat3(T, B, N);
-}
 
+    // FOG
+    if (fogColor != vec3(0.0)) {
+        vec4 relativeToCamera = view * vec4(v_fragPos, 1.0);
+        float distance = length(relativeToCamera.xyz);
+        visibility = exp(-pow(distance * fogDensity, fogGradient));
+        visibility = clamp(visibility, 0.1, 1.0);
+    }
+}

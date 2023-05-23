@@ -17,6 +17,12 @@ out vec2 inUV;
 out vec3 worldPos;
 out vec3 inNormal;
 
+// For Fog calculation using exponential formula
+out float visibility;
+uniform float fogDensity = 0.035; // increasing this, increases fog thickness and decreases visibility
+uniform float fogGradient = 5.0; // increasing this, sharpens switch to fog
+uniform vec3 fogColor;
+
 void main() {
     gl_Position = projection * view * vec4(position, 1.0);
 
@@ -31,6 +37,14 @@ void main() {
     // NOTE: If doing any world transformations, then also need to provide world/model matrix as uniform
     worldPos = position;
     inNormal = normal;
+
+    // FOG
+    if (fogColor != vec3(0.0)) {
+        vec4 relativeToCamera = view * vec4(position, 1.0); // Will have to change once we have model matrix for terrain
+        float distance = length(relativeToCamera.xyz);
+        visibility = exp(-pow(distance * fogDensity, fogGradient));
+        visibility = clamp(visibility, 0.1, 1.0);
+    }
 }
 
 #shader fragment
@@ -40,6 +54,7 @@ in vec4 color;
 in vec2 inUV;
 in vec3 worldPos;
 in vec3 inNormal;
+in float visibility;
 
 uniform sampler2D textureHeight0;
 uniform sampler2D textureHeight1;
@@ -52,6 +67,7 @@ uniform float height2 = 180.0;
 uniform float height3 = 230.0;
 
 uniform vec3 reverseLightDir;
+uniform vec3 fogColor;
 
 vec4 calcTexColor() {
     vec4 texColor;
@@ -97,4 +113,9 @@ void main() {
     diffuse = max(0.3, diffuse);
 
     outColor = texColor * color * diffuse;
+
+    //if (worldPos.y < 100) {
+    if (fogColor != vec3(0.0)) {
+        outColor = mix(vec4(fogColor, 1.0), outColor, visibility);
+    }
 }
