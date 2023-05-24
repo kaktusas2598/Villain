@@ -23,7 +23,7 @@ void Game::init() {
             ->addComponent(new LookController());
     addToScene(cam);
 
-    lightNode = new SceneNode("Directional Terrain Light", glm::vec3(0.0, 400.0, 0.0));
+    lightNode = new SceneNode("Directional Terrain Light", glm::vec3(0.0, 400.0, 400.0));
     addToScene(lightNode);
 
     // Basic terrain loaded from heightmap

@@ -65,8 +65,14 @@ void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera*
         }
     }
     terrainShader->setUniformVec3("fogColor", *renderingEngine.getFogColor());
+    terrainShader->setUniform1i("useExponentialFog", *renderingEngine.exponentialFogEnabled());
+    // Exponential Fog Parameters
     terrainShader->setUniform1f("fogDensity", *renderingEngine.getFogDensity());
     terrainShader->setUniform1f("fogGradient", *renderingEngine.getFogGradient());
+    // Layered Fog Parameters
+    terrainShader->setUniform1f("layeredFogTop", *renderingEngine.getLayeredFogTop());
+    terrainShader->setUniform1f("layeredFogEnd", *renderingEngine.getLayeredFogEnd());
+    terrainShader->setUniformVec3("viewPosition", camera->getPosition());
 
     triangleList.render();
 }

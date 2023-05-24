@@ -17,11 +17,67 @@ out vec2 inUV;
 out vec3 worldPos;
 out vec3 inNormal;
 
-// For Fog calculation using exponential formula
 out float visibility;
+uniform bool useExponentialFog = false;
+// For Fog calculation using exponential formula
 uniform float fogDensity = 0.035; // increasing this, increases fog thickness and decreases visibility
 uniform float fogGradient = 5.0; // increasing this, sharpens switch to fog
 uniform vec3 fogColor;
+// For layered fog
+uniform vec3 viewPosition; // Camera world position
+uniform float layeredFogTop = 250.0; // Maximum height of fog
+uniform float layeredFogEnd = 200.0; // Max distance?
+
+// NOTE: beyond this would be interesting to investigate volumetric fog techniques
+float calcLayeredFog() {
+    vec3 cameraProj = viewPosition;
+    cameraProj.y = 0.0;
+
+    // NOTE: All mentions of position in this function should change once we provide model matrix to terrain
+    vec3 pixelProj = position;
+    pixelProj.y = 0.0;
+
+    float deltaD = length(cameraProj - pixelProj) / layeredFogEnd;
+    float deltaY = 0.0;
+    float densityIntegral = 0.0;
+
+    if (viewPosition.y > layeredFogTop) { // Camera is above the top of the fog
+        if (position.y < layeredFogTop) { // Pixel is inside the fog
+            deltaY = (layeredFogTop - position.y) / layeredFogTop;
+            densityIntegral = deltaY * deltaY * 0.5f;
+        }    // else, the pixel is above the fog and no change is made
+    } else { // Camera is inside the fog
+        if (position.y < layeredFogTop) { // Pixel is inside the fog
+            deltaY = abs(viewPosition.y - position.y) / layeredFogTop;
+            float deltaCamera = (layeredFogTop - viewPosition.y) / layeredFogTop;
+            float densityIntegralCamera = deltaCamera * deltaCamera * 0.5f;
+            float deltaPixel = (layeredFogTop - position.y) / layeredFogTop;
+            float densityIntegralPixel = deltaPixel* deltaPixel * 0.5f;
+            densityIntegral = abs(densityIntegralCamera - densityIntegralPixel);
+
+        } else { // Pixel is above the fog
+            deltaY = (layeredFogTop - viewPosition.y) / layeredFogTop;
+            densityIntegral = deltaY * deltaY * 0.5f;
+        }
+    }
+
+    float linearFogDensity = 0.0f;
+    if (deltaY != 0.0) {
+        linearFogDensity = (sqrt(1.0 + ((deltaD / deltaY) * (deltaD / deltaY)))) * densityIntegral;
+    }
+
+    float fogFactor = exp(-linearFogDensity);
+    return fogFactor;
+}
+
+float calcExponentialFog() {
+    vec4 relativeToCamera = view * vec4(position, 1.0); // Will have to change once we have model matrix for terrain
+    float distance = length(relativeToCamera.xyz);
+
+    float fogFactor = exp(-pow(distance * fogDensity, fogGradient));
+    fogFactor = clamp(fogFactor, 0.1, 1.0);
+    return fogFactor;
+}
 
 void main() {
     gl_Position = projection * view * vec4(position, 1.0);
@@ -40,10 +96,11 @@ void main() {
 
     // FOG
     if (fogColor != vec3(0.0)) {
-        vec4 relativeToCamera = view * vec4(position, 1.0); // Will have to change once we have model matrix for terrain
-        float distance = length(relativeToCamera.xyz);
-        visibility = exp(-pow(distance * fogDensity, fogGradient));
-        visibility = clamp(visibility, 0.1, 1.0);
+        if (useExponentialFog) {
+            visibility = calcExponentialFog();
+        } else {
+            visibility = calcLayeredFog();
+        }
     }
 }
 
@@ -114,7 +171,6 @@ void main() {
 
     outColor = texColor * color * diffuse;
 
-    //if (worldPos.y < 100) {
     if (fogColor != vec3(0.0)) {
         outColor = mix(vec4(fogColor, 1.0), outColor, visibility);
     }
