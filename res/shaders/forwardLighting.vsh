@@ -15,6 +15,9 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+out float visibility; // Determines how foggy vertex is
+#include fog.glh
+
 // TODO: shadow map stuff is not needed in ambient shader
 uniform mat4 lightMatrix;
 
@@ -38,5 +41,12 @@ void main() {
     /*Or cheaper way : vec3 B = normalize(vec3(model * vec4(biTangent, 0.0)));*/
 
     v_TBN = mat3(T, B, N);
-}
 
+    // FOG
+    if (fogColor != vec3(0.0)) {
+        vec4 relativeToCamera = view * vec4(v_fragPos, 1.0);
+        float distance = length(relativeToCamera.xyz);
+        visibility = exp(-pow(distance * fogDensity, fogGradient));
+        visibility = clamp(visibility, 0.1, 1.0);
+    }
+}

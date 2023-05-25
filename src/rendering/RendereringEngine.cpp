@@ -68,7 +68,8 @@ namespace Villain {
             mirrorCamera.setRotation(rot);
 
             defaultShader->bind();
-            defaultShader->setUniformVec3("color", ambientLight);
+            defaultShader->setUniformVec3("ambientLight", ambientLight);
+            defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), mirrorCamera);
             activeLight = nullptr;
             node->render(defaultShader, this, &mirrorCamera);
         }
@@ -79,7 +80,8 @@ namespace Villain {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         defaultShader->bind();
-        defaultShader->setUniformVec3("color", ambientLight);
+        defaultShader->setUniformVec3("ambientLight", ambientLight);
+        defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *const_cast<Camera*>(mainCamera));
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);
 

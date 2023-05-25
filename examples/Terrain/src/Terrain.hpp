@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Camera.hpp"
+#include "rendering/RendereringEngine.hpp"
 #include "TriangleList.hpp"
 #include "rendering/Shader.hpp"
 
@@ -13,7 +14,7 @@ class Terrain {
         Terrain() {}
 
         void init(float scale = 1.0f, float texScale = 1.0f, std::vector<std::string> textureFilenames={});
-        void render(Villain::Camera* camera);
+        void render(Villain::RenderingEngine& renderingEngine, Villain::Camera* camera);
         void loadFromFile(const std::string& fileName);
         void setTerrainTexture(Villain::Texture* tex) { textures[0] = tex; }
         void setLightDirection(glm::vec3& lightDir) { lightDirection = lightDir; }
@@ -48,6 +49,8 @@ class Terrain {
 
         TriangleList triangleList;
         Villain::Shader* terrainShader;
+        // Textures used for different heights
+        // NOTE: Could also implement parsing height independent blending map for stuff like paths on terrain
         Villain::Texture* textures[4] = {nullptr};
 
         // Required for terrain generation
