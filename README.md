@@ -1,30 +1,38 @@
 # Villain
 2D/3D Game/Physics/Rendering Engine/Framework in development. Built using SDL2/OpenGL and C++17!
 
+
 ## Supported Features
 
+### Core Engine
+* Builds as a library
+* 2D Tiled map parsing/loading from TMX/XML files
+* Debug/Edit mode UI
+* Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
+* Error logging to stdout, log file and editor console
+* Supported Camera projection types: Perspective, Orthographic, Orthographic 2D or no projection
+* Camera Frustum culling to increase performance
+* Finite State Machine
+
+### Rendering
 * Multi-pass forward rendering system using scene graph for 3D applications
 * Phong-blinn based lighting system for Scene Graph
 * Directional and Omnidirectional shadow mapping with PCF Soft shadows
-* Builds as a library
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
 * Mipmapped textures with anisotropic filtering, 4x MultiSample Anti-Aliasing enabled
 * 2D texture batch rendering, multiple texture and colour support
 * 3D Model loading using assimp
-* Normal and Parallax Mapping support
+* Normal and Parallax mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
-* 2D Tiled map parsing/loading from tmx/xml files
-* 2D Particle Engine
-* Debug/Edit mode UI
-* Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
-* Error logging to stdout, log file and editor console
-* Different Camera Types: Perspective, Orthographic, Orthographic 2D or no projection
-* Camera Frustum culling to increase performance
+* Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
-* Finite State Machine
 * Sprite animation
 * Basic Nuklear UI support
+
+### Physics
+* 2D Particle Engine
+* More features TBA
 
 ## Planned Features
 
@@ -77,6 +85,7 @@
 First install the dependencies and when use build instructions below.
 
 ### Dependencies
+    sudo apt-get install -y libglew-dev
     sudo apt-get install -y libsdl2-dev
     sudo apt-get install -y libsdl2-mixer-dev
     sudo apt-get install -y libsdl2-image-dev
