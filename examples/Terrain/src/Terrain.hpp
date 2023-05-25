@@ -5,8 +5,9 @@
 
 #include "Camera.hpp"
 #include "GeomipGrid.hpp"
-#include "TriangleList.hpp"
+#include "rendering/RendereringEngine.hpp"
 #include "rendering/Shader.hpp"
+#include "TriangleList.hpp"
 
 // NOTE: should this be called BaseTerrain to be able to have different types of terrain?
 class Terrain {
@@ -14,7 +15,7 @@ class Terrain {
         Terrain() {}
 
         void init(float scale = 1.0f, float texScale = 1.0f, std::vector<std::string> textureFilenames={});
-        void render(Villain::Camera* camera);
+        void render(Villain::RenderingEngine& renderingEngine, Villain::Camera* camera);
         void loadFromFile(const std::string& fileName);
         void setTerrainTexture(Villain::Texture* tex) { textures[0] = tex; }
         void setLightDirection(glm::vec3& lightDir) { lightDirection = lightDir; }
@@ -51,6 +52,8 @@ class Terrain {
         GeomipGrid geomipGrid;
         TriangleList triangleList;
         Villain::Shader* terrainShader;
+        // Textures used for different heights
+        // NOTE: Could also implement parsing height independent blending map for stuff like paths on terrain
         Villain::Texture* textures[4] = {nullptr};
         bool useLOD = false; //<< By default use simple terrain mesh without Level of Detail
 

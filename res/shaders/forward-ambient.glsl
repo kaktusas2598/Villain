@@ -11,13 +11,15 @@ layout(location = 0) out vec4 o_color;
 in vec3 v_normal;
 in vec3 v_fragPos;
 in vec2 v_texCoords;
+in float visibility;
 
 in mat3 v_TBN;
 
 #include lighting.glh
 #include sampling.glh
 
-uniform vec3 color; // Ambient light color
+uniform vec3 ambientLight;
+uniform vec3 fogColor;
 uniform vec3 viewPosition;
 
 void main() {
@@ -30,9 +32,14 @@ void main() {
 
     if (material.useDiffuseMap) {
         vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
-        o_color = textureColor * vec4(color, 1.0);
+        o_color = textureColor * vec4(ambientLight, 1.0);
     } else {
-        o_color = vec4(color, 1.0);
+        o_color = vec4(ambientLight, 1.0);
     }
+
+    if (fogColor != vec3(0.0)) {
+        o_color = mix(vec4(fogColor, 1.0), o_color, visibility);
+    }
+
 }
 

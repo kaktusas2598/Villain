@@ -33,7 +33,7 @@ void Terrain::destroy() {
     }
 }
 
-void Terrain::render(Villain::Camera* camera) {
+void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera* camera) {
     terrainShader->bind();
     terrainShader->setUniform1f("minHeight", minHeight);
     terrainShader->setUniform1f("maxHeight", maxHeight);
@@ -50,13 +50,7 @@ void Terrain::render(Villain::Camera* camera) {
     terrainShader->setUniform1f("height2", height2);
     terrainShader->setUniform1f("height3", height3);
 
-    ////////////////////////////////
-    static float foo = 0.0f;
-    foo += 0.002f;
-    float y = glm::min(-0.4f, cosf(foo));
-    glm::vec3 lightDir(sinf(foo * 5.0f), y, cosf(foo * 5.0f));
     terrainShader->setUniformVec3("reverseLightDir", lightDirection);
-    ////////////////////////////////
 
     for (int i = 0; i < 4; i++) {
         if (textures[i]) {
@@ -64,6 +58,9 @@ void Terrain::render(Villain::Camera* camera) {
             terrainShader->setUniform1i("useTexture", 1);
         }
     }
+
+    terrainShader->setFogUniforms(renderingEngine, *camera);
+
     if (useLOD) {
         geomipGrid.render();
     } else {

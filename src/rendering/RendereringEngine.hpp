@@ -28,6 +28,15 @@ namespace Villain {
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
             inline Camera* getMainCamera() { return mainCamera; }
             inline bool isFrustumCullingEnabled() { return frustumCullingEnabled; }
+
+            // Fog parameters
+            glm::vec3* getFogColor() { return &fogColor; }
+            float* getFogDensity() { return &fogDensity; }
+            float* getFogGradient() { return &fogGradient; }
+            float* getLayeredFogTop() { return &layeredFogTop; }
+            float* getLayeredFogEnd() { return &layeredFogEnd; }
+            bool* exponentialFogEnabled() { return &useExponentialFog; }
+
             // Call on window/viewport resize event
             void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
 
@@ -63,6 +72,15 @@ namespace Villain {
             static std::map<std::string, unsigned int> samplerMap;
             glm::vec3 ambientLight = glm::vec3(0.5f);
             glm::mat4 lightMatrix = glm::mat4(1.0f);
+
+            glm::vec3 fogColor = glm::vec3(0.0f); //<<< Common for all fog types
+            bool useExponentialFog = false;
+            // Exponential Fog Parameters
+            float fogDensity = 0.007f;
+            float fogGradient = 1.5f;
+            // Layered Fog Parameters
+            float layeredFogTop = 250.0f; // Maximum height of fog
+            float layeredFogEnd = 100.0f; // Max distance?
 
             bool invertColors = false;
             bool grayScale = false;

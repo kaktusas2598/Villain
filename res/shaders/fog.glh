@@ -1,0 +1,62 @@
+uniform bool useExponentialFog = false; // Defaults to layered fog
+
+// For Fog calculation using exponential formula
+uniform float fogDensity = 0.035; // increasing this, increases fog thickness and decreases visibility
+uniform float fogGradient = 5.0; // increasing this, sharpens switch to fog
+uniform vec3 fogColor;
+
+// For layered fog
+uniform vec3 viewPosition; // Camera world position
+uniform float layeredFogTop = 250.0; // Maximum height of fog
+uniform float layeredFogEnd = 200.0; // Max distance?
+
+// NOTE: beyond this would be interesting to investigate volumetric fog techniques
+float calcLayeredFog(vec3 worldPosition) {
+    vec3 cameraProj = viewPosition;
+    cameraProj.y = 0.0;
+
+    vec3 pixelProj = worldPosition;
+    pixelProj.y = 0.0;
+
+    float deltaD = length(cameraProj - pixelProj) / layeredFogEnd;
+    float deltaY = 0.0;
+    float densityIntegral = 0.0;
+
+    if (viewPosition.y > layeredFogTop) { // Camera is above the top of the fog
+        if (worldPosition.y < layeredFogTop) { // Pixel is inside the fog
+            deltaY = (layeredFogTop - worldPosition.y) / layeredFogTop;
+            densityIntegral = deltaY * deltaY * 0.5f;
+        }    // else, the pixel is above the fog and no change is made
+    } else { // Camera is inside the fog
+        if (worldPosition.y < layeredFogTop) { // Pixel is inside the fog
+            deltaY = abs(viewPosition.y - worldPosition.y) / layeredFogTop;
+            float deltaCamera = (layeredFogTop - viewPosition.y) / layeredFogTop;
+            float densityIntegralCamera = deltaCamera * deltaCamera * 0.5f;
+            float deltaPixel = (layeredFogTop - worldPosition.y) / layeredFogTop;
+            float densityIntegralPixel = deltaPixel* deltaPixel * 0.5f;
+            densityIntegral = abs(densityIntegralCamera - densityIntegralPixel);
+
+        } else { // Pixel is above the fog
+            deltaY = (layeredFogTop - viewPosition.y) / layeredFogTop;
+            densityIntegral = deltaY * deltaY * 0.5f;
+        }
+    }
+
+    float linearFogDensity = 0.0f;
+    if (deltaY != 0.0) {
+        linearFogDensity = (sqrt(1.0 + ((deltaD / deltaY) * (deltaD / deltaY)))) * densityIntegral;
+    }
+
+    float fogFactor = exp(-linearFogDensity);
+    return fogFactor;
+}
+
+float calcExponentialFog(vec3 worldPosition) {
+    vec4 relativeToCamera = view * vec4(worldPosition, 1.0);
+    float distance = length(relativeToCamera.xyz);
+
+    float fogFactor = exp(-pow(distance * fogDensity, fogGradient));
+    fogFactor = clamp(fogFactor, 0.1, 1.0);
+    return fogFactor;
+}
+
