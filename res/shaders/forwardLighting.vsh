@@ -10,16 +10,13 @@ out vec2 v_texCoords;
 out vec4 v_shadowMapCoords; // Used for directional shadow mapping for dir and spot lights
 out mat3 v_TBN; // Tangent-Bitangent-Normal matrix
 
-// For Fog calculation using exponential formula
-out float visibility; // Determines how foggy vertex is
-uniform float fogDensity = 0.007;
-uniform float fogGradient = 1.5;
-uniform vec3 fogColor;
-
 // MVP matrices
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
+
+out float visibility; // Determines how foggy vertex is
+#include fog.glh
 
 // TODO: shadow map stuff is not needed in ambient shader
 uniform mat4 lightMatrix;

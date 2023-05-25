@@ -50,13 +50,7 @@ void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera*
     terrainShader->setUniform1f("height2", height2);
     terrainShader->setUniform1f("height3", height3);
 
-    ////////////////////////////////
-    static float foo = 0.0f;
-    foo += 0.002f;
-    float y = glm::min(-0.4f, cosf(foo));
-    glm::vec3 lightDir(sinf(foo * 5.0f), y, cosf(foo * 5.0f));
     terrainShader->setUniformVec3("reverseLightDir", lightDirection);
-    ////////////////////////////////
 
     for (int i = 0; i < 4; i++) {
         if (textures[i]) {
@@ -64,15 +58,8 @@ void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera*
             terrainShader->setUniform1i("useTexture", 1);
         }
     }
-    terrainShader->setUniformVec3("fogColor", *renderingEngine.getFogColor());
-    terrainShader->setUniform1i("useExponentialFog", *renderingEngine.exponentialFogEnabled());
-    // Exponential Fog Parameters
-    terrainShader->setUniform1f("fogDensity", *renderingEngine.getFogDensity());
-    terrainShader->setUniform1f("fogGradient", *renderingEngine.getFogGradient());
-    // Layered Fog Parameters
-    terrainShader->setUniform1f("layeredFogTop", *renderingEngine.getLayeredFogTop());
-    terrainShader->setUniform1f("layeredFogEnd", *renderingEngine.getLayeredFogEnd());
-    terrainShader->setUniformVec3("viewPosition", camera->getPosition());
+
+    terrainShader->setFogUniforms(renderingEngine, *camera);
 
     triangleList.render();
 }

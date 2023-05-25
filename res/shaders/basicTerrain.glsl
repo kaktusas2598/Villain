@@ -15,11 +15,8 @@ uniform float maxHeight;
 out vec4 color;
 out vec2 outUV;
 
-// For Fog calculation using exponential formula
 out float visibility;
-uniform float fogDensity = 0.035; // increasing this, increases fog thickness and decreases visibility
-uniform float fogGradient = 5.0; // increasing this, sharpens switch to fog
-uniform vec3 fogColor;
+#include fog.glh
 
 void main() {
     gl_Position = projection * view * vec4(position, 1.0);
@@ -33,12 +30,12 @@ void main() {
     color = vec4(c, c, c, 1.0);
     outUV = uv;
 
-    // FOG
     if (fogColor != vec3(0.0)) {
-        vec4 relativeToCamera = view * vec4(position, 1.0); // Will have to change once we have model matrix for terrain
-        float distance = length(relativeToCamera.xyz);
-        visibility = exp(-pow(distance * fogDensity, fogGradient));
-        visibility = clamp(visibility, 0.1, 1.0);
+        if (useExponentialFog) {
+            visibility = calcExponentialFog(position);
+        } else {
+            visibility = calcLayeredFog(position);
+        }
     }
 }
 

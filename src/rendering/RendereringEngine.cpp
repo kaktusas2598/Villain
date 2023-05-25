@@ -69,9 +69,7 @@ namespace Villain {
 
             defaultShader->bind();
             defaultShader->setUniformVec3("ambientLight", ambientLight);
-            defaultShader->setUniformVec3("fogColor", fogColor);
-            defaultShader->setUniform1f("fogDensity", fogDensity);
-            defaultShader->setUniform1f("fogGradient", fogGradient);
+            defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), mirrorCamera);
             activeLight = nullptr;
             node->render(defaultShader, this, &mirrorCamera);
         }
@@ -83,9 +81,7 @@ namespace Villain {
 
         defaultShader->bind();
         defaultShader->setUniformVec3("ambientLight", ambientLight);
-        defaultShader->setUniformVec3("fogColor", fogColor);
-        defaultShader->setUniform1f("fogDensity", fogDensity);
-        defaultShader->setUniform1f("fogGradient", fogGradient);
+        defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *const_cast<Camera*>(mainCamera));
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);
 
