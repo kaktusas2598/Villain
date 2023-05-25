@@ -50,9 +50,9 @@
 * Mesh batch rendering
 * Stencil buffer
 * Instanced drawing
-* and more...
 * Gamma correction/sRGB textures, HDR and Bloom
 
+## Screenshots
 
 ![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
 ![3D features](screenshots/SponzaDemo.png?raw=true "Villain Engine Demo: 3D demo with models/lighting/shadow/normal mapping etc.")
