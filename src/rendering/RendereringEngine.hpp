@@ -29,6 +29,8 @@ namespace Villain {
             inline Camera* getMainCamera() { return mainCamera; }
             inline bool isFrustumCullingEnabled() { return frustumCullingEnabled; }
             bool* getGammaCorrection() { return &gammaCorrection; }
+            void setGammaCorrection(bool gamma) { gammaCorrection = gamma; }
+            static bool gammaCorrectionEnabled() { return gammaCorrection; }
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }
@@ -89,7 +91,8 @@ namespace Villain {
             bool blur = false;
             bool outline = false;
             bool mirrorBufferEnabled = false;
-            bool gammaCorrection = false;
+
+            static bool gammaCorrection;
     };
 }
 

@@ -10,6 +10,7 @@
 namespace Villain {
 
     std::map<std::string, unsigned int> RenderingEngine::samplerMap;
+    bool RenderingEngine::gammaCorrection = false;
 
     RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
