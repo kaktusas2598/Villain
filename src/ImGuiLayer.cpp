@@ -331,6 +331,7 @@ namespace Villain {
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
         ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
 
+        ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
         ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
 
         ImGui::ColorEdit3("Fog color: ", (float*)engine.getRenderingEngine()->getFogColor());
