@@ -15,7 +15,7 @@ class GeomipGrid {
         GeomipGrid() {}
 
         void createGeomipGrid(int xSize, int ySize, int patch, const Terrain* terrain);
-        void render();
+        void render(const glm::vec3& cameraPos);
         // TODO: implement
         void destroy();
 
@@ -57,10 +57,16 @@ class GeomipGrid {
         void createGLState();
         void populateBuffers(const Terrain* terrain);
         void initVertices(const Terrain* terrain, std::vector<Vertex>& vertices);
-        void initIndices(std::vector<unsigned int>& indices);
+
+        int initIndices(std::vector<unsigned int>& indices);
+        int initIndicesLOD(int index, std::vector<unsigned int>& indices, int lod);
+        int initIndicesLODSingle(int index, std::vector<unsigned int>& indices, int lodCore, int lodLeft, int lodRight, int lodTop, int lodBottom);
+
         void calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 
         unsigned int addTriangle(unsigned int index, std::vector<unsigned int>& indices, unsigned v1, unsigned v2, unsigned v3);
+        unsigned int createTriangleFan(int index, std::vector<unsigned int>& indices, int lodCore, int lodLeft, int lodRight, int lodTop, int lodBottom, int x, int z);
+        int calcNumIndices();
 };
 
 
