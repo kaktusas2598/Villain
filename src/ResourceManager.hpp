@@ -5,7 +5,6 @@
 #include <map>
 #include "rendering/Texture.hpp"
 #include "rendering/Shader.hpp"
-#include <iostream>
 
 namespace Villain {
 
@@ -18,7 +17,6 @@ namespace Villain {
             Texture* loadTexture(std::string fileName, std::string id, GLint wrappingMode = GL_CLAMP_TO_EDGE, bool gammaCorrected = true) {
                 if (textureMap.find(id) != textureMap.end())
                     return textureMap[id];
-                std::cout << "Loading texture: " << fileName.c_str() << std::endl;
                 Texture* texture = new Texture(fileName, wrappingMode, gammaCorrected);
                 textureMap[id] = texture;
                 return textureMap[id];
@@ -27,7 +25,6 @@ namespace Villain {
             Shader* loadShader(const std::string& fileName, std::string id) {
                 if (shaderMap.find(id) != shaderMap.end())
                     return shaderMap[id];
-                std::cout << "Loading shader: " << fileName << std::endl;
                 Shader* shader = new Shader(fileName);
                 shaderMap[id] = shader;
                 return shaderMap[id];
@@ -37,7 +34,6 @@ namespace Villain {
             Shader* loadShader(const std::string& vertPath, const std::string& fragPath, std::string id) {
                 if (shaderMap.find(id) != shaderMap.end())
                     return shaderMap[id];
-                std::cout << "Loading shaders: " << vertPath << " and " << fragPath << std::endl;
                 Shader* shader = new Shader(vertPath, fragPath);
                 shaderMap[id] = shader;
                 return shaderMap[id];

@@ -84,6 +84,7 @@ namespace Villain {
 
         // NOTE: Pass nullptr instead of &BPP and set desired channels to 4 to ensure consistency
         // Alternatively 3rd argument can be &BPP and 4th argument null, so that we actually set same BPP as in file
+        std::cout << "Loading texture: " << fileName.c_str() << ". Gamma corrected: " << gammaCorrected << "\n";
         localBuffer = stbi_load(fileName.c_str(), &width, &height, nullptr, 4);
 
         if (localBuffer) {
