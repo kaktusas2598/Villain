@@ -39,7 +39,7 @@ namespace Villain {
 
     Engine::~Engine() {}
 
-    void Engine::init(Application* app, std::string title, int height, int width, unsigned int windowFlags) {
+    void Engine::init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection) {
         screenHeight = height;
         screenWidth = width;
 
@@ -86,6 +86,9 @@ namespace Villain {
         // NOTE: must be initialized before application
         renderingEngine = new RenderingEngine(this);
 
+        if (enableGammaCorrection)
+            renderingEngine->setGammaCorrection(true);
+
         //initialize the current game
         application = app;
         application->setEngine(this);
@@ -119,7 +122,8 @@ namespace Villain {
             configScript.get<std::string>("window.title"),
             configScript.get<int>("window.height"),
             configScript.get<int>("window.width"),
-            flags
+            flags,
+            configScript.get<bool>("rendering.gammaCorrection")
         );
     }
 
@@ -223,6 +227,7 @@ namespace Villain {
      */
     void Engine::render(float deltaTime){
 
+        //glEnable(GL_FRAMEBUFFER_SRGB);
         glEnable(GL_DEPTH_TEST);
         //enable alpha blending
         glEnable(GL_BLEND);
