@@ -75,7 +75,7 @@ namespace Villain {
 
     }
 
-    Texture::Texture(const std::string& fileName, GLint wrappingMode)
+    Texture::Texture(const std::string& fileName, GLint wrappingMode, bool gammaCorrected)
         : rendererID(0), filePath(fileName), localBuffer(nullptr), width(0), height(0), BPP(4), target(GL_TEXTURE_2D) {
 
         stbi_set_flip_vertically_on_load(1);
@@ -89,7 +89,11 @@ namespace Villain {
         if (localBuffer) {
             GLCall(glBindTexture(GL_TEXTURE_2D, rendererID));
             // Generate texture
-            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
+            if (gammaCorrected) {
+                GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
+            } else {
+                GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
+            }
 
             // TODO: support more mipmap types
             //GL_NEAREST_MIPMAP_NEAREST | GL_NEAREST_MIPMAP_LINEAR | GL_LINEAR_MIPMAP_NEAREST | GL_LINEAR_MIPMAP_LINEAR

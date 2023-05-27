@@ -18,7 +18,7 @@ namespace Villain  {
             void initCubeMap(int w, int h, unsigned int id = 0, GLfloat filter = GL_NEAREST, GLint internalFormat = GL_DEPTH_COMPONENT16, GLenum format = GL_DEPTH_COMPONENT);
 
             // 2D Texture
-            Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE);
+            Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE, bool gammaCorrected = true);
 
             // Cubemap Texture
             Texture(std::vector<std::string> faces);
