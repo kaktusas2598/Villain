@@ -2,6 +2,8 @@
 
 #include "Logger.hpp"
 #include "ResourceManager.hpp"
+#include "rendering/RendereringEngine.hpp"
+
 #include <sstream>
 
 namespace Villain {
@@ -137,6 +139,9 @@ namespace Villain {
     }
 
     std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
+        // Maps used for light calculations (normal, speculars) will be in linear space and don't need to be gamma gamma corrected
+        // or the lighting will look off
+        bool gammaCorrected = (type == aiTextureType_DIFFUSE) && RenderingEngine::gammaCorrectionEnabled();
         std::vector<Texture*>* textures = new std::vector<Texture*>();
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
             aiString str;
@@ -144,7 +149,7 @@ namespace Villain {
             // NOTE: 2023-04-16, Started setting here GL_REPEAT explicitely which is
             // default wrapping mode anyway and this fixes issues with 3D models, so it will probably stay
             // atm default mode in engine is GL_CLAMP_TO_EDGE
-            Texture* texture = ResourceManager::Instance()->loadTexture(str.C_Str(), str.C_Str(), GL_REPEAT);
+            Texture* texture = ResourceManager::Instance()->loadTexture(str.C_Str(), str.C_Str(), GL_REPEAT, gammaCorrected);
             texture->setType(typeName);
             textures->push_back(texture);
         }

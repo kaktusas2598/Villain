@@ -39,7 +39,7 @@ namespace Villain {
              * @param windowFlags window flags
              * @sa WindowFlags
              */
-            void init(Application* app, std::string title, int height, int width, unsigned int windowFlags);
+            void init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection = false);
             // Or initialise using Lua config script
             void init(Application* app, const std::string& luaConfigPath);
             void run(); ///< runs main application's loop

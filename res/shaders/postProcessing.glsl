@@ -11,11 +11,15 @@ layout(location = 0) out vec4 color;
 in vec2 v_texCoords;
 uniform sampler2D texture1;
 
+// Post Processing Effects
 uniform bool invertColors;
 uniform bool grayScale;
 uniform bool sharpen;
 uniform bool blur;
 uniform bool edgeDetection; // or outline
+
+// Gamma Correction
+uniform bool gammaCorrection;
 
 // For kernel effects, feel free to tweak
 const float offset = 1.0 / 300.0;
@@ -97,5 +101,11 @@ void main() {
         }
 
         color = vec4(col, 1.0);
+    }
+
+    // apply gamma correction, must be done as the last step
+    if (gammaCorrection) {
+        float gamma = 2.2;
+        color.rgb = pow(color.rgb, vec3(1.0/gamma));
     }
 }

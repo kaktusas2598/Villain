@@ -30,6 +30,8 @@ namespace Villain {
                     textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
             } else {
                 if (target == GL_TEXTURE_2D)
+                    // NOTE: need to investigate if SRGB internal format is required for Framebuffer texture attachments when
+                    // gamma correcting in post-processing quad
                     textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
                 else
                     textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA);
