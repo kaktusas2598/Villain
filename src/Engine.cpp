@@ -227,7 +227,6 @@ namespace Villain {
      */
     void Engine::render(float deltaTime){
 
-        //glEnable(GL_FRAMEBUFFER_SRGB);
         glEnable(GL_DEPTH_TEST);
         //enable alpha blending
         glEnable(GL_BLEND);
