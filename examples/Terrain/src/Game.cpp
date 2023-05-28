@@ -45,8 +45,7 @@ void Game::init() {
     textureFilenames.push_back("assets/textures/grass1.jpg");
     textureFilenames.push_back("assets/textures/water.png");
 
-    midpointDisplacementTerrain.init(2.0f, 1.0f, textureFilenames);
-    //midpointDisplacementTerrain.createMidpointDisplacement(512, 33, 1.0f, 0.0f, 300.0f);
+    midpointDisplacementTerrain.init(2.0f, 4.0f, textureFilenames);
     midpointDisplacementTerrain.createMidpointDisplacement(513, 33, 1.0f, 0.0f, 356.0f);
 
     //TextureGenerator terrainTextureGenerator;
