@@ -5,10 +5,16 @@
 #include <cmath>
 
 
-void Terrain::loadFromFile(const std::string& fileName) {
+void Terrain::loadFromFile(const std::string& fileName, int patch) {
     loadHeightMap(fileName);
+    patchSize = patch;
 
-    triangleList.createTriangleList(terrainSize, terrainSize, this);
+    if (patch == 0) {
+        triangleList.createTriangleList(terrainSize, terrainSize, this);
+    } else {
+        geomipGrid.createGeomipGrid(terrainSize, terrainSize, patchSize, this);
+        useLOD = true;
+    }
 }
 
 void Terrain::init(float scale, float texScale, std::vector<std::string> textureFilenames) {
@@ -61,7 +67,11 @@ void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera*
 
     terrainShader->setFogUniforms(renderingEngine, *camera);
 
-    triangleList.render();
+    if (useLOD) {
+        geomipGrid.render(camera->getPosition());
+    } else {
+        triangleList.render();
+    }
 }
 
 // TODO: besides binary file full of floats, basic terrain should also support image height maps

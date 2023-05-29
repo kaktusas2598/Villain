@@ -1,7 +1,8 @@
 #include "FaultFormationTerrain.hpp"
 
-void FaultFormationTerrain::createFaultFormation(int size, int iterations, float minHt, float maxHt, float filter) {
+void FaultFormationTerrain::createFaultFormation(int size, int iterations, float minHt, float maxHt, float filter, int patch) {
     terrainSize = size;
+    patchSize = patch;
     minHeight = minHt;
     maxHeight = maxHt;
 
@@ -33,7 +34,12 @@ void FaultFormationTerrain::createFaultFormation(int size, int iterations, float
         heightMap[i] = ((heightMap[i] - min) / minMaxDelta) * minMaxRange + minHeight;
     }
 
-    triangleList.createTriangleList(terrainSize, terrainSize, this);
+    if (patch == 0) {
+        triangleList.createTriangleList(terrainSize, terrainSize, this);
+    } else {
+        geomipGrid.createGeomipGrid(terrainSize, terrainSize, patchSize, this);
+        useLOD = true;
+    }
 }
 
 void FaultFormationTerrain::createFaultFormationInternal(int iterations, float minHt, float maxHt, float filter) {

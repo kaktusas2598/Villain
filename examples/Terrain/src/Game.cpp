@@ -19,11 +19,11 @@ void Game::init() {
     // Add camera
     SceneNode* cam = (new SceneNode("Free look camera", glm::vec3(0.0, 400.0, 10.0)))
             ->addComponent(new CameraComponent(camera))
-            ->addComponent(new MoveController())
+            ->addComponent(new MoveController(20.0f))
             ->addComponent(new LookController());
     addToScene(cam);
 
-    lightNode = new SceneNode("Directional Terrain Light", glm::vec3(0.0, 400.0, 400.0));
+    lightNode = new SceneNode("Directional Terrain Light", glm::vec3(0.0, 400.0, 500.0));
     addToScene(lightNode);
 
     // Basic terrain loaded from heightmap
@@ -46,7 +46,7 @@ void Game::init() {
     textureFilenames.push_back("assets/textures/water.png");
 
     midpointDisplacementTerrain.init(2.0f, 4.0f, textureFilenames);
-    midpointDisplacementTerrain.createMidpointDisplacement(512, 1.0f, 0.0f, 300.0f);
+    midpointDisplacementTerrain.createMidpointDisplacement(513, 33, 1.0f, 0.0f, 356.0f);
 
     //TextureGenerator terrainTextureGenerator;
     //terrainTextureGenerator.loadTile("assets/textures/rock01.jpg");
@@ -118,8 +118,9 @@ void Game::onAppRender(float dt) {
         glm::vec3 dir = -1.f * glm::normalize(glm::vec3(0.0f) - lightNode->getTransform()->getPos());
         midpointDisplacementTerrain.setLightDirection(dir);
         midpointDisplacementTerrain.render(*getRootNode()->getEngine()->getRenderingEngine(), camera);
-    } else
+    } else if (terrainType == 0){
         baseTerrain.render(*getRootNode()->getEngine()->getRenderingEngine(), camera);
+    }
 }
 
 

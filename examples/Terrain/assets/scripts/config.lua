@@ -8,5 +8,5 @@ window = {
 }
 
 rendering = {
-    gammaCorrection = false
+    gammaCorrection = true
 }

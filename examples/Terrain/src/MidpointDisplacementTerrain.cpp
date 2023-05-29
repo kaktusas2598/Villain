@@ -2,8 +2,9 @@
 
 #include <random>
 
-void MidpointDisplacementTerrain::createMidpointDisplacement(int size, float roughness, float minHt, float maxHt) {
+void MidpointDisplacementTerrain::createMidpointDisplacement(int size, int patch, float roughness, float minHt, float maxHt) {
     terrainSize = size;
+    patchSize = patch;
     minHeight = minHt;
     maxHeight = maxHt;
 
@@ -35,7 +36,12 @@ void MidpointDisplacementTerrain::createMidpointDisplacement(int size, float rou
         heightMap[i] = ((heightMap[i] - min) / minMaxDelta) * minMaxRange + minHeight;
     }
 
-    triangleList.createTriangleList(terrainSize, terrainSize, this);
+    if (patch == 0) {
+        triangleList.createTriangleList(terrainSize, terrainSize, this);
+    } else {
+        geomipGrid.createGeomipGrid(terrainSize, terrainSize, patchSize, this);
+        useLOD = true;
+    }
 }
 
 void MidpointDisplacementTerrain::createMidpointDisplacementF32(float roughness) {
