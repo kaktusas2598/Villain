@@ -59,7 +59,7 @@ void GeomipGrid::render(const glm::vec3& cameraPos, const glm::mat4& viewProj) {
             int z = patchZ * (patchSize - 1);
             int x = patchX * (patchSize - 1);
             // Frustum culling
-            if (!isPatchInsideViewFrustum_ViewSpace(x, z, viewProj)) {
+            if (!isPatchInsideViewFrustum_ClipSpace(x, z, viewProj)) {
                 //printf("0 ");
                 continue;
             }
@@ -319,7 +319,7 @@ unsigned int GeomipGrid::addTriangle(unsigned int index, std::vector<unsigned in
     return index;
 }
 
-bool GeomipGrid::isPatchInsideViewFrustum_ViewSpace(int x, int z, const glm::mat4& viewProj) {
+bool GeomipGrid::isPatchInsideViewFrustum_ClipSpace(int x, int z, const glm::mat4& viewProj) {
     int x0 = x;
     int x1 = x + patchSize - 1;
     int z0 = z;

@@ -69,7 +69,7 @@ class GeomipGrid {
         unsigned int createTriangleFan(int index, std::vector<unsigned int>& indices, int lodCore, int lodLeft, int lodRight, int lodTop, int lodBottom, int x, int z);
         int calcNumIndices();
 
-        bool isPatchInsideViewFrustum_ViewSpace(int x, int z, const glm::mat4& viewProj);
+        bool isPatchInsideViewFrustum_ClipSpace(int x, int z, const glm::mat4& viewProj);
         bool isPointInsideViewFrustum(const glm::vec3 point, const glm::mat4& viewProj);
 };
 
