@@ -16,7 +16,7 @@ class Terrain {
 
         void init(float scale = 1.0f, float texScale = 1.0f, std::vector<std::string> textureFilenames={});
         void render(Villain::RenderingEngine& renderingEngine, Villain::Camera* camera);
-        void loadFromFile(const std::string& fileName);
+        void loadFromFile(const std::string& fileName, int patch = 0);
         void setTerrainTexture(Villain::Texture* tex) { textures[0] = tex; }
         void setLightDirection(glm::vec3& lightDir) { lightDirection = lightDir; }
         void destroy();

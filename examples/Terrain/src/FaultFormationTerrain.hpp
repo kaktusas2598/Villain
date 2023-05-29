@@ -7,7 +7,7 @@ class FaultFormationTerrain : public Terrain {
     public:
         FaultFormationTerrain() {}
 
-        void createFaultFormation(int size, int iterations, float minHt, float maxHt, float filter);
+        void createFaultFormation(int size, int iterations, float minHt, float maxHt, float filter, int patch = 0);
 
     private:
         struct TerrainPoint {
