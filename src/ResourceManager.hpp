@@ -17,7 +17,11 @@ namespace Villain {
             Texture* loadTexture(std::string fileName, std::string id, GLint wrappingMode = GL_CLAMP_TO_EDGE, bool gammaCorrected = true) {
                 if (textureMap.find(id) != textureMap.end())
                     return textureMap[id];
-                Texture* texture = new Texture(fileName, wrappingMode, gammaCorrected);
+                TextureConstructionInfo texInfo = TextureConstructionInfo();
+                texInfo.WrappingMode = wrappingMode;
+                texInfo.SRGB = gammaCorrected;
+                Texture* texture = new Texture(fileName, texInfo);
+                //Texture* texture = new Texture(fileName, wrappingMode, gammaCorrected);
                 textureMap[id] = texture;
                 return textureMap[id];
             }
