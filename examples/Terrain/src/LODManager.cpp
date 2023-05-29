@@ -1,11 +1,11 @@
 #include "LODManager.hpp"
 #include <cstdio>
 
-int LODManager::initLodManager(int patchSize, int numPatchesX, int numPatchesZ, int worldScale) {
-    this->patchSize = patchSize;
-    this->numPatchesX = numPatchesX;
-    this->numPatchesZ = numPatchesZ;
-    this->worldScale = worldScale;
+int LODManager::initLodManager(int patch, int patchesX, int patchesZ, int worldSc) {
+    patchSize = patch;
+    numPatchesX = patchesX;
+    numPatchesZ = patchesZ;
+    worldScale = worldSc;
 
     calcMaxLOD();
 

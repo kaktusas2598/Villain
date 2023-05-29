@@ -49,11 +49,6 @@ void GeomipGrid::render(const glm::vec3& cameraPos) {
     lodManager.update(cameraPos);
     glBindVertexArray(vao);
 
-    //if (showPoints > 0) {
-        //glDrawElementsBaseVertex(GL_POINTS, lodInfo[0].Info[0][0][0][0].Count, GL_UNSIGNED_BYTE, (void*)0, 0);
-    //}
-
-    //if (showPoints != 2) {
     // Render every patch of terrain
     for (int patchZ = 0; patchZ < numPatchesZ; patchZ++) {
         for (int patchX = 0; patchX < numPatchesX; patchX++) {
@@ -73,7 +68,6 @@ void GeomipGrid::render(const glm::vec3& cameraPos) {
             glDrawElementsBaseVertex(GL_TRIANGLES, lodInfo[C].Info[L][R][T][B].Count, GL_UNSIGNED_INT, (void*)baseIndex, baseVertex);
         }
     }
-    //}
 
     glBindVertexArray(0);
 }

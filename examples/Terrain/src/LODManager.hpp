@@ -7,7 +7,7 @@
 // Selection of LOD permutation for a patch, max LOD calculation
 class LODManager {
     public:
-        int initLodManager(int patchSize, int numPatchesX, int numPatchesZ, int worldScale);
+        int initLodManager(int patch, int patchesX, int patchesZ, int worldSc);
 
         void update(const glm::vec3& cameraPos);
 
