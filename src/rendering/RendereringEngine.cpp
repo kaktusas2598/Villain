@@ -44,6 +44,10 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
+
+        pickingTexture = new PickingTexture();
+        pickingTexture->init(engine->getScreenWidth(), engine->getScreenHeight());
+        pickingShader = Shader::createFromResource("picking");
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -56,6 +60,10 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node) {
+        // Generate picking texture only if mouse is clicked so we can start selecting objects
+        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+            pickPass(node);
+        }
         // 1st Optional Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
         if (mirrorBufferEnabled) {
             mirrorBuffer->bind();
@@ -233,6 +241,20 @@ namespace Villain {
 
         frustumCullingEnabled = true;
         glEnable(GL_DEPTH_TEST);
+    }
+
+    void RenderingEngine::pickPass(SceneNode* node) {
+        pickingTexture->enableWriting();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        pickingShader->bind();
+
+        // TODO: set objectID for each node starting from 1 (0 is background)
+        // TODO: set drawID for each??
+        activeLight = nullptr;
+        node->render(pickingShader, this, mainCamera);
+
+        pickingTexture->disableWriting();
     }
 
     void RenderingEngine::bindMainTarget() {

@@ -6,6 +6,7 @@
 #include "../components/Light.hpp"
 #include "SceneNode.hpp"
 #include "Vertex.hpp"
+#include "rendering/PickingTexture.hpp"
 
 namespace Villain {
 
@@ -17,6 +18,7 @@ namespace Villain {
         public:
             RenderingEngine(Engine* e);
             ~RenderingEngine();
+            void pickPass(SceneNode* node);
             void render(SceneNode* node);
             void postRender();
 
@@ -64,6 +66,9 @@ namespace Villain {
             FrameBuffer* shadowBuffer = nullptr;
             FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
+
+            PickingTexture* pickingTexture = nullptr;
+            Shader* pickingShader = nullptr;
 
             Shader* defaultShader = nullptr;
             Shader* postFXShader = nullptr;
