@@ -270,7 +270,8 @@ void GeomipGrid::calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned
     for (int z = 0; z < depth - 1; z += (patchSize - 1)) {
         for (int x = 0; x < width - 1; x += (patchSize - 1)) {
             int baseVertex = z * width + x;
-            for (unsigned int i = 0; i < indices.size(); i += 3) {
+            int numIndices = lodInfo[0].Info[0][0][0][0].Count;
+            for (unsigned int i = 0; i < numIndices; i += 3) {
                 unsigned int i0 = baseVertex + indices[i];
                 unsigned int i1 = baseVertex + indices[i + 1];
                 unsigned int i2 = baseVertex + indices[i + 2];
