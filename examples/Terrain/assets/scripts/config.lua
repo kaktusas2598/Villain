@@ -6,3 +6,7 @@ window = {
 	borderless = true,
 	resizable = true
 }
+
+rendering = {
+    gammaCorrection = false
+}
