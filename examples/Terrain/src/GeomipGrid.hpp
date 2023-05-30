@@ -2,6 +2,7 @@
 #define __GEO_MIPMAPPING_GRID__
 
 #include "LODManager.hpp"
+#include "TerrainFrustumCulling.hpp"
 #include "glm/glm.hpp"
 #include <GL/glew.h>
 #include <vector>
@@ -71,6 +72,8 @@ class GeomipGrid {
 
         bool isPatchInsideViewFrustum_ClipSpace(int x, int z, const glm::mat4& viewProj);
         bool isPointInsideViewFrustum(const glm::vec3 point, const glm::mat4& viewProj);
+
+        bool isPatchInsideViewFrustum_WorldSpace(int x, int z, FrustumCulling& fc);
 };
 
 
