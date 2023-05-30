@@ -88,6 +88,20 @@ namespace Villain {
         engine->getSceneBuffer()->bind(); // Rendering to scene buffer for later postfx
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Check if any nodes are selected
+        int clickedNodeID = -1;
+        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+            PickingTexture::PixelInfo pixel = pickingTexture->readPixel(InputManager::Instance()->getMouseCoords().x, Engine::getScreenHeight() - InputManager::Instance()->getMouseCoords().y - 1);
+
+            if (pixel.ObjectID != 0) {
+                std::cout << "Node selected: " << pixel.ObjectID << "\n";
+                SceneNode* clickedNode = node->findByID(pixel.ObjectID);
+                if (clickedNode)
+                    std::cout << clickedNode->getName() << "\n";
+            }
+        }
+
+
         defaultShader->bind();
         defaultShader->setUniformVec3("ambientLight", ambientLight);
         defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *const_cast<Camera*>(mainCamera));

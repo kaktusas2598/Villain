@@ -26,7 +26,9 @@ namespace Villain {
         // materials are different per mesh
         Material material;
         shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
+        shader.setUniform1ui("objectIndex", parent->getID());
         //model->draw(shader);
+
         for (auto& mesh: model->getMeshes()) {
             if (renderingEngine.isFrustumCullingEnabled()) {
                 const Frustum camFrustum = camera.getFrustum();

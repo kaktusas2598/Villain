@@ -14,6 +14,8 @@ namespace Villain {
     const int MAX_COMPONENTS = 32;
     typedef std::bitset<MAX_COMPONENTS> ComponentMask;
 
+    static EntityID EntityCount = 0;
+
     class Camera;
     class Engine;
     class NodeComponent;
@@ -36,6 +38,17 @@ namespace Villain {
             void removeChild(SceneNode* child);
             //std::vector<SceneNode*>& getAllAttached();
 
+            EntityID getID() const { return id; }
+
+            SceneNode* findByID(EntityID iD) {
+                if (id == iD)
+                    return this;
+                for (unsigned int i = 0; i < children.size(); i++) {
+                    SceneNode* child = children[i]->findByID(iD);
+                    if (child != nullptr) return child;
+                }
+                return nullptr;
+            }
             Transform* getTransform() { return &transform; }
             void setEngine(Engine* e);
             inline Engine* getEngine() { return engine; }
