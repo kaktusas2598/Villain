@@ -88,16 +88,17 @@ namespace Villain {
         engine->getSceneBuffer()->bind(); // Rendering to scene buffer for later postfx
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Check if any nodes are selected
-        int clickedNodeID = -1;
+        // Check if any nodes are selected and use picking texture to get correct node
         if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
             PickingTexture::PixelInfo pixel = pickingTexture->readPixel(InputManager::Instance()->getMouseCoords().x, Engine::getScreenHeight() - InputManager::Instance()->getMouseCoords().y - 1);
+            selectedNodeID = pixel.ObjectID;
 
             if (pixel.ObjectID != 0) {
                 std::cout << "Node selected: " << pixel.ObjectID << "\n";
                 SceneNode* clickedNode = node->findByID(pixel.ObjectID);
-                if (clickedNode)
+                if (clickedNode) {
                     std::cout << clickedNode->getName() << "\n";
+                }
             }
         }
 
@@ -258,13 +259,12 @@ namespace Villain {
     }
 
     void RenderingEngine::pickPass(SceneNode* node) {
+        // Render all scene nodes to special integer picking texture, used to get correct selected object using mouse
         pickingTexture->enableWriting();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         pickingShader->bind();
 
-        // TODO: set objectID for each node starting from 1 (0 is background)
-        // TODO: set drawID for each??
         activeLight = nullptr;
         node->render(pickingShader, this, mainCamera);
 

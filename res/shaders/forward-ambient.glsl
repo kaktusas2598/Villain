@@ -22,6 +22,8 @@ uniform vec3 ambientLight;
 uniform vec3 fogColor;
 uniform vec3 viewPosition;
 
+uniform bool selected = false;
+
 void main() {
     vec3 viewDirection = normalize(viewPosition - v_fragPos);
     vec2 texCoords = v_texCoords;
@@ -39,6 +41,10 @@ void main() {
 
     if (fogColor != vec3(0.0)) {
         o_color = mix(vec4(fogColor, 1.0), o_color, visibility);
+    }
+
+    if (selected) {
+        o_color = o_color * vec4(0.0, 1.0, 0.0, 1.0);
     }
 
 }

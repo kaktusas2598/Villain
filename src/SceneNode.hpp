@@ -38,6 +38,9 @@ namespace Villain {
             void removeChild(SceneNode* child);
             //std::vector<SceneNode*>& getAllAttached();
 
+            bool isSelected() const { return selected; }
+            void setSelected(bool select) { selected = select; }
+
             EntityID getID() const { return id; }
 
             SceneNode* findByID(EntityID iD) {
@@ -69,6 +72,8 @@ namespace Villain {
             std::vector<SceneNode*> children;
             std::vector<NodeComponent*> components;
             Engine* engine = nullptr;
+
+            bool selected = false;
 
             SceneNode(const SceneNode& other) {}
             void operator=(const SceneNode& other) {}

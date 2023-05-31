@@ -27,12 +27,20 @@ namespace Villain {
         Material material;
         shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
         shader.setUniform1ui("objectIndex", parent->getID());
+        if (renderingEngine.getSelectedNodeID() != 0 && renderingEngine.getSelectedNodeID() == parent->getID()) {
+            parent->setSelected(true);
+        } else {
+            parent->setSelected(false);
+        }
+        shader.setUniform1i("selected", parent->isSelected());
         //model->draw(shader);
 
+        int i = 0;
         for (auto& mesh: model->getMeshes()) {
             if (renderingEngine.isFrustumCullingEnabled()) {
                 const Frustum camFrustum = camera.getFrustum();
                 if (mesh.getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
+                    shader.setUniform1ui("drawIndex", i);
                     // Draw mesh using it's own material
                     mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);
                     //display++;
@@ -41,6 +49,7 @@ namespace Villain {
             } else {
                 mesh.draw(shader, model->getMaterials()[mesh.getMaterialName()]);
             }
+            i++;
         }
         //std::cout << "Total meshes: " << total << ", Visible meshes: " << display << "\n";
     }

@@ -33,6 +33,7 @@ namespace Villain {
             bool* getGammaCorrection() { return &gammaCorrection; }
             void setGammaCorrection(bool gamma) { gammaCorrection = gamma; }
             static bool gammaCorrectionEnabled() { return gammaCorrection; }
+            int getSelectedNodeID() const { return selectedNodeID; }
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }
@@ -98,6 +99,8 @@ namespace Villain {
             bool mirrorBufferEnabled = false;
 
             static bool gammaCorrection;
+
+            int selectedNodeID = 0;
     };
 }
 
