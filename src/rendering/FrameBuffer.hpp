@@ -15,6 +15,8 @@ namespace Villain {
             // NOTE: These are not great, in the future might need ability to get multiple textures
             unsigned int getTextureID() const { return textureIDs[0]; }
             Texture* getTexture() const { return textures[0]; }
+            int getWidth() const { return width; }
+            int getHeight() const { return height; }
 
             void rescale(int w, int h);
             void initTextures(GLenum* attachments, GLenum target);
