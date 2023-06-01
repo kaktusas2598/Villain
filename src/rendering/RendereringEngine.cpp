@@ -92,6 +92,7 @@ namespace Villain {
         if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
             bool selectableArea = true;
             glm::vec2 clickPosition = InputManager::Instance()->getMouseCoords();
+
             if (engine->editModeActive()) {
                 glm::vec2 sceneImageViewportSize{engine->getImGuiLayer().getSceneViewportWidth(), engine->getImGuiLayer().getSceneViewportHeight()};
                 clickPosition = engine->getImGuiLayer().getMousePositionRelativeToScene();
