@@ -1,6 +1,7 @@
 #ifndef __IMGUI_LAYER__
 #define __IMGUI_LAYER__
 
+#include "glm/glm.hpp"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -28,6 +29,11 @@ namespace Villain {
 
         void render(Engine& engine);
 
+        glm::vec2 getSceneViewportPosition() const { return sceneViewportPosition; }
+        glm::vec2 getMousePositionRelativeToScene() const { return mousePosRelativeToSceneViewport; }
+        float getSceneViewportWidth() const { return sceneViewportWidth; }
+        float getSceneViewportHeight() const { return sceneViewportHeight; }
+
         // Draw different tools, can potentially be refactored to new classes
         void drawScene(Engine& engine);
         void drawSceneGraph(Engine& engine);
@@ -39,9 +45,11 @@ namespace Villain {
         void drawNode(SceneNode* node);
 
         static bool showDemoWindow; ///< Toggle IMGui Demo Window for Docs
+
+        float sceneViewportWidth = 0, sceneViewportHeight = 0;
+        glm::vec2 sceneViewportPosition{0.0f};
+        glm::vec2 mousePosRelativeToSceneViewport{0.0f};
     };
-
-
 }
 
 #endif // __IMGUI_LAYER__

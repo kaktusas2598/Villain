@@ -90,14 +90,36 @@ namespace Villain {
 
         // Check if any nodes are selected and use picking texture to get correct node
         if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
-            PickingTexture::PixelInfo pixel = pickingTexture->readPixel(InputManager::Instance()->getMouseCoords().x, Engine::getScreenHeight() - InputManager::Instance()->getMouseCoords().y - 1);
-            selectedNodeID = pixel.ObjectID;
+            bool selectableArea = true;
+            glm::vec2 clickPosition = InputManager::Instance()->getMouseCoords();
+            if (engine->editModeActive()) {
+                glm::vec2 sceneImageViewportSize{engine->getImGuiLayer().getSceneViewportWidth(), engine->getImGuiLayer().getSceneViewportHeight()};
+                clickPosition = engine->getImGuiLayer().getMousePositionRelativeToScene();
 
-            if (pixel.ObjectID != 0) {
-                std::cout << "Node selected: " << pixel.ObjectID << "\n";
-                SceneNode* clickedNode = node->findByID(pixel.ObjectID);
-                if (clickedNode) {
-                    std::cout << clickedNode->getName() << "\n";
+                // Only allow selecting inside sceme viewport ImGui Window
+                if (clickPosition.x < 0 ||
+                    clickPosition.x > sceneImageViewportSize.x ||
+                    clickPosition.y < 0 ||
+                    clickPosition.y > sceneImageViewportSize.y) {
+
+                    selectableArea = false;
+                }
+                // Find real coordinates by finding imgui scene viewport ratio to engine viewport
+                clickPosition.x = (engine->getScreenWidth() / sceneImageViewportSize.x) * clickPosition.x;
+                clickPosition.y = (engine->getScreenHeight() / sceneImageViewportSize.y) * clickPosition.y;
+                //printf("Real Coords X: %f Y: %f\n", clickPosition.x, clickPosition.y);
+            }
+
+            if (selectableArea) {
+                PickingTexture::PixelInfo pixel = pickingTexture->readPixel(clickPosition.x, Engine::getScreenHeight() - clickPosition.y - 1);
+                selectedNodeID = pixel.ObjectID;
+
+                if (pixel.ObjectID != 0) {
+                    std::cout << "Node selected: " << pixel.ObjectID << "\n";
+                    SceneNode* clickedNode = node->findByID(pixel.ObjectID);
+                    if (clickedNode) {
+                        std::cout << clickedNode->getName() << "\n";
+                    }
                 }
             }
         }

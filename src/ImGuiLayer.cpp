@@ -237,13 +237,50 @@ namespace Villain {
         {
             ImGui::BeginChild("GameRender");
 
-            float width = ImGui::GetContentRegionAvail().x;
-            float height = ImGui::GetContentRegionAvail().y;
+            // Get available area size to display scene viewport onto
+            sceneViewportWidth = ImGui::GetContentRegionAvail().x;
+            sceneViewportHeight = ImGui::GetContentRegionAvail().y;
+
+            // Rescale scene viewport image to be same aspect ratio as engine's aspect ratio
+            //float oldWidth = sceneViewportWidth, oldHeight = sceneViewportHeight;
+            // NOTE: Maybe alternatively we could change engine's aspect ratio (including's scene buffer)
+            // to make sure, inside editor, image fills up all available region, TODO?
+            float engineAspectRatio = Engine::getScreenWidth() / (float)Engine::getScreenHeight();
+            if (sceneViewportHeight >= sceneViewportWidth) {
+                sceneViewportHeight = sceneViewportWidth / engineAspectRatio;
+                // Scale image back up proportionally to fill viewport - causes issues, viewpoint changes,
+                // possible solution would be to introduce editor camera
+                //float ratio = oldHeight / sceneViewportHeight;
+                //sceneViewportHeight *= ratio;
+                //sceneViewportWidth *= ratio;
+            } else {
+                sceneViewportWidth = sceneViewportHeight * engineAspectRatio;
+                //float ratio = oldWidth / sceneViewportWidth;
+                //sceneViewportHeight *= ratio;
+                //sceneViewportWidth *= ratio;
+            }
+
+            //printf("Engine width: %d height: %d\n", Engine::getScreenWidth(), Engine::getScreenHeight());
+            //printf("Scene vieport(image only) width: %f height: %f\n", sceneViewportWidth, sceneViewportHeight);
+
+            // NOTE: https://github.com/ocornut/imgui/issues/3404
+            ImVec2 imGuiMousePosition = ImGui::GetMousePos(); // Global ImGui mouse coordinates, used with multiple viewports
+            // Global ImGui scene framebuffer window position, must be called before ImGui::Image()
+            sceneViewportPosition = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+
+            mousePosRelativeToSceneViewport = glm::vec2(imGuiMousePosition.x, imGuiMousePosition.y) - sceneViewportPosition;
+
+            //printf("Engine Mouse Coords X: %f Y: %f\n", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+            //printf("ImGui GetCursorScreenPos() X: %f Y: %f\n", sceneViewportPosition.x, sceneViewportPosition.y);
+            //printf("ImGui::GetMousePos() X: %f Y: %f\n", imGuiMousePosition.x, imGuiMousePosition.y);
+            //printf("Scene image Coords X: %f Y: %f\n", mousePosRelativeToSceneViewport.x, mousePosRelativeToSceneViewport.y);
 
             ImGui::Image(
                     (ImTextureID)engine.getSceneBuffer()->getTextureID(),
-                    //ImGui::GetContentRegionAvail(),
-                    ImGui::GetWindowSize(),
+                    //ImGui::GetContentRegionAvail(), // Fill in full available size (scews aspect ratio)
+                    ImVec2(sceneViewportWidth, sceneViewportHeight), // Use new scaled viewport size to
+                    //ImGui::GetWindowSize(),
+                    //ImVec2(Engine::getScreenWidth(), Engine::getScreenHeight()),
                     ImVec2(0, 1),
                     ImVec2(1, 0)
                     );
@@ -263,6 +300,17 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
+        // Open selected tree item representing node
+        // FIXME: this causes issue though: all other nodes are closed and can't be opened
+        // Instead, I need to introduce new window which could display parameters for selected node?
+        //if (node->getID() != 0) {
+            //if (node->getID() == node->getEngine()->getRenderingEngine()->getSelectedNodeID()) {
+                //ImGui::SetNextItemOpen(true);
+            //} else {
+                //ImGui::SetNextItemOpen(false);
+            //}
+        //}
+
         if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
                 if (ImGui::BeginTabItem("Transform")) {
