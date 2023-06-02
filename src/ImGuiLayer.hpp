@@ -34,21 +34,29 @@ namespace Villain {
         float getSceneViewportWidth() const { return sceneViewportWidth; }
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
+        void setSelectedNode(SceneNode* node) { selectedNode = node; }
+
         // Draw different tools, can potentially be refactored to new classes
+        void drawMenu();
         void drawScene(Engine& engine);
         void drawSceneGraph(Engine& engine);
         void drawSettings(Engine& engine);
         void drawAssetBrowser();
     private:
         void setupDockspace();
-        // Render Scene Graph nodes and components recursively
-        void drawNode(SceneNode* node);
+        void drawNode(SceneNode* node); //<<< Render Scene Graph nodes and components recursively
+        void drawSelectedNode();
 
-        static bool showDemoWindow; ///< Toggle IMGui Demo Window for Docs
+        void drawNodeProperties(SceneNode* node);
+        void drawNodeComponents(SceneNode* node);
+
+        static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
 
         float sceneViewportWidth = 0, sceneViewportHeight = 0;
         glm::vec2 sceneViewportPosition{0.0f};
         glm::vec2 mousePosRelativeToSceneViewport{0.0f};
+
+        SceneNode* selectedNode = nullptr;
     };
 }
 

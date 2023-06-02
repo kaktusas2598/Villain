@@ -116,10 +116,9 @@ namespace Villain {
                 selectedNodeID = pixel.ObjectID;
 
                 if (pixel.ObjectID != 0) {
-                    std::cout << "Node selected: " << pixel.ObjectID << "\n";
                     SceneNode* clickedNode = node->findByID(pixel.ObjectID);
                     if (clickedNode) {
-                        std::cout << clickedNode->getName() << "\n";
+                        engine->getImGuiLayer().setSelectedNode(clickedNode);
                     }
                 }
             }

@@ -174,16 +174,6 @@ namespace Villain {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-        // NOTE: temporary
-        //if (ImGui::BeginMainMenuBar()) {
-        //if (ImGui::BeginMenu("File")) {
-        //if (ImGui::MenuItem("Import")) {
-        ////isImportClicked = true;
-        //}
-        //ImGui::EndMenu();
-        //}
-        //ImGui::EndMainMenuBar();
-        //}
 
         ImGui::End();
     }
@@ -201,11 +191,13 @@ namespace Villain {
         setupDockspace();
 
         // Draw all different parts of the toolkit
+        drawMenu();
         DebugConsole::Instance()->render();
         drawScene(engine);
         drawSceneGraph(engine);
         drawSettings(engine);
         drawAssetBrowser();
+        drawSelectedNode();
         //TODO: file browser to load assets
         // some kind of scene manager or ECS manager
         // some kind of tool to render stuff with DebugRenderer
@@ -228,6 +220,24 @@ namespace Villain {
         }
 
         ImGui::EndFrame();
+    }
+
+    void ImGuiLayer::drawMenu() {
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Quit")) {
+                    Engine::setRunning(false);
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Settings")) {
+                if (ImGui::BeginMenu("Post Processing Effects")) {
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
+        }
     }
 
     void ImGuiLayer::drawScene(Engine& engine) {
@@ -300,59 +310,16 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
-        // Open selected tree item representing node
-        // FIXME: this causes issue though: all other nodes are closed and can't be opened
-        // Instead, I need to introduce new window which could display parameters for selected node?
-        //if (node->getID() != 0) {
-            //if (node->getID() == node->getEngine()->getRenderingEngine()->getSelectedNodeID()) {
-                //ImGui::SetNextItemOpen(true);
-            //} else {
-                //ImGui::SetNextItemOpen(false);
-            //}
-        //}
-
         if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
+            //selectedNode = node;
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
                 if (ImGui::BeginTabItem("Transform")) {
-                    ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
-
-                    ImGui::Text("Position"); ImGui::SameLine();
-                    ImGui::PushItemWidth(40);
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
-                    ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
-                    ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
-                    ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
-                    ImGui::PopStyleColor(3);
-                    ImGui::PopItemWidth();
-
-                    ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
-
+                    drawNodeProperties(node);
                     ImGui::EndTabItem();
                 }
                 if (!node->getComponents().empty()) {
                     if (ImGui::BeginTabItem("Components")) {
-                        for (auto& compo: node->getComponents()) {
-                            // TODO: draw components here
-                            if (compo->getID() == GetId<CameraComponent>()) {
-                                ImGui::Text("Camera");
-                                Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
-                                static int projectionType = (int)camera->getProjectionType();
-                                ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
-                                ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
-                                ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
-                                ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
-                                camera->setProjectionType((ProjectionType)projectionType);
-                            }
-                            auto light = dynamic_cast<BaseLight*>(compo);
-                            if (light != nullptr) {
-                                ImGui::Text("%s light", light->type().c_str());
-                                ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
-                            }
-                            ImGui::Separator();
-                        }
-
+                        drawNodeComponents(node);
                         ImGui::EndTabItem();
                     }
                 }
@@ -364,6 +331,61 @@ namespace Villain {
             }
 
             ImGui::TreePop();
+        }
+    }
+
+    void ImGuiLayer::drawSelectedNode() {
+        ImGui::Begin("Active Node");
+
+        if (selectedNode != nullptr) {
+            ImGui::Text(selectedNode->getName().c_str());
+
+            drawNodeProperties(selectedNode);
+
+            if (!selectedNode->getComponents().empty()) {
+                drawNodeComponents(selectedNode);
+            }
+        }
+
+        ImGui::End();
+    }
+
+    void ImGuiLayer::drawNodeProperties(SceneNode* node) {
+        ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
+
+        ImGui::Text("Position"); ImGui::SameLine();
+        ImGui::PushItemWidth(40);
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
+        ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
+        ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
+        ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
+        ImGui::PopStyleColor(3);
+        ImGui::PopItemWidth();
+
+        ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
+    }
+
+    void ImGuiLayer::drawNodeComponents(SceneNode* node) {
+        for (auto& compo: node->getComponents()) {
+            // TODO: draw components here
+            if (compo->getID() == GetId<CameraComponent>()) {
+                ImGui::Text("Camera");
+                Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
+                static int projectionType = (int)camera->getProjectionType();
+                ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
+                ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
+                ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
+                ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
+                camera->setProjectionType((ProjectionType)projectionType);
+            }
+            auto light = dynamic_cast<BaseLight*>(compo);
+            if (light != nullptr) {
+                ImGui::Text("%s light", light->type().c_str());
+                ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
+            }
+            ImGui::Separator();
         }
     }
 
