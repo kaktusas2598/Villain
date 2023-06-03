@@ -2,6 +2,7 @@
 #define __GEO_MIPMAPPING_GRID__
 
 #include "LODManager.hpp"
+#include "TerrainFrustumCulling.hpp"
 #include "glm/glm.hpp"
 #include <GL/glew.h>
 #include <vector>
@@ -15,7 +16,7 @@ class GeomipGrid {
         GeomipGrid() {}
 
         void createGeomipGrid(int xSize, int ySize, int patch, const Terrain* terrain);
-        void render(const glm::vec3& cameraPos);
+        void render(const glm::vec3& cameraPos, const glm::mat4& viewProj);
         // TODO: implement
         void destroy();
 
@@ -29,6 +30,7 @@ class GeomipGrid {
             void initVertex(const Terrain* terrain, int x, int z);
         };
 
+        const Terrain* baseTerrain = nullptr;
         int width, depth; //<<< Heights will be read from the height map
         int patchSize = 0;
         int maxLOD = 0;
@@ -67,6 +69,11 @@ class GeomipGrid {
         unsigned int addTriangle(unsigned int index, std::vector<unsigned int>& indices, unsigned v1, unsigned v2, unsigned v3);
         unsigned int createTriangleFan(int index, std::vector<unsigned int>& indices, int lodCore, int lodLeft, int lodRight, int lodTop, int lodBottom, int x, int z);
         int calcNumIndices();
+
+        bool isPatchInsideViewFrustum_ClipSpace(int x, int z, const glm::mat4& viewProj);
+        bool isPointInsideViewFrustum(const glm::vec3 point, const glm::mat4& viewProj);
+
+        bool isPatchInsideViewFrustum_WorldSpace(int x, int z, FrustumCulling& fc);
 };
 
 

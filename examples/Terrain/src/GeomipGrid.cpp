@@ -29,6 +29,7 @@ void GeomipGrid::createGeomipGrid(int xSize, int ySize, int patch, const Terrain
     width = xSize;
     depth = ySize;
     patchSize = patch;
+    baseTerrain = terrain;
 
     numPatchesX = (width - 1) / (patchSize - 1);
     numPatchesZ = (depth - 1) / (patchSize - 1);
@@ -44,14 +45,26 @@ void GeomipGrid::createGeomipGrid(int xSize, int ySize, int patch, const Terrain
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void GeomipGrid::render(const glm::vec3& cameraPos) {
+void GeomipGrid::render(const glm::vec3& cameraPos, const glm::mat4& viewProj) {
 
     lodManager.update(cameraPos);
+
+    FrustumCulling fc(viewProj);
+
     glBindVertexArray(vao);
 
     // Render every patch of terrain
     for (int patchZ = 0; patchZ < numPatchesZ; patchZ++) {
         for (int patchX = 0; patchX < numPatchesX; patchX++) {
+            int z = patchZ * (patchSize - 1);
+            int x = patchX * (patchSize - 1);
+            // Frustum culling
+            //if (!isPatchInsideViewFrustum_ClipSpace(x, z, viewProj)) {
+            // Supposed to be more optimized than clip space culling because atm terrain coords are already in world space
+            if (!isPatchInsideViewFrustum_WorldSpace(x, z, fc)) {
+                continue;
+            }
+
             // Get LOD configuration for current patch
             const LODManager::PatchLOD& plod = lodManager.getPatchLOD(patchX, patchZ);
             int C = plod.Core;
@@ -61,9 +74,6 @@ void GeomipGrid::render(const glm::vec3& cameraPos) {
             int B = plod.Bottom;
 
             size_t baseIndex = sizeof(unsigned int) * lodInfo[C].Info[L][R][T][B].Start;
-
-            int z = patchZ * (patchSize - 1);
-            int x = patchX * (patchSize - 1);
             int baseVertex = z * width + x;
             glDrawElementsBaseVertex(GL_TRIANGLES, lodInfo[C].Info[L][R][T][B].Count, GL_UNSIGNED_INT, (void*)baseIndex, baseVertex);
         }
@@ -305,4 +315,77 @@ unsigned int GeomipGrid::addTriangle(unsigned int index, std::vector<unsigned in
     indices[index++] = v3;
 
     return index;
+}
+
+bool GeomipGrid::isPatchInsideViewFrustum_ClipSpace(int x, int z, const glm::mat4& viewProj) {
+    int x0 = x;
+    int x1 = x + patchSize - 1;
+    int z0 = z;
+    int z1 = z + patchSize - 1;
+
+    glm::vec3 p00(x0 * baseTerrain->getWorldScale(), baseTerrain->getHeight(x0, z0), z0 * baseTerrain->getWorldScale());
+    glm::vec3 p01(x0 * baseTerrain->getWorldScale(), baseTerrain->getHeight(x0, z1), z1 * baseTerrain->getWorldScale());
+    glm::vec3 p10(x1 * baseTerrain->getWorldScale(), baseTerrain->getHeight(x1, z0), z0 * baseTerrain->getWorldScale());
+    glm::vec3 p11(x1 * baseTerrain->getWorldScale(), baseTerrain->getHeight(x1, z1), z1 * baseTerrain->getWorldScale());
+
+    bool insideViewFrustum =
+        isPointInsideViewFrustum(p00, viewProj) ||
+        isPointInsideViewFrustum(p01, viewProj) ||
+        isPointInsideViewFrustum(p10, viewProj) ||
+        isPointInsideViewFrustum(p11, viewProj);
+
+    return insideViewFrustum;
+}
+
+bool GeomipGrid::isPointInsideViewFrustum(const glm::vec3 point, const glm::mat4& viewProj) {
+    glm::vec4 p4D(point, 1.0f);
+    glm::vec4 clipSpaceP = viewProj * p4D;
+
+    // Check if point (x, y, z) is inside clip space [-w, w]
+    bool insideViewFrustum = ((clipSpaceP.x <= clipSpaceP.w) &&
+                              (clipSpaceP.x >= -clipSpaceP.w) &&
+                              (clipSpaceP.y <= clipSpaceP.w) &&
+                              (clipSpaceP.y >= -clipSpaceP.w) &&
+                              (clipSpaceP.z <= clipSpaceP.w) &&
+                              (clipSpaceP.z >= -clipSpaceP.w));
+
+    return insideViewFrustum;
+}
+
+bool GeomipGrid::isPatchInsideViewFrustum_WorldSpace(int x, int z, FrustumCulling& fc) {
+    int x0 = x;
+    int x1 = x + patchSize - 1;
+    int z0 = z;
+    int z1 = z + patchSize - 1;
+
+    float h00 = baseTerrain->getHeight(x0, z0);
+    float h01 = baseTerrain->getHeight(x0, z1);
+    float h10 = baseTerrain->getHeight(x1, z0);
+    float h11 = baseTerrain->getHeight(x1, z1);
+
+    float minHeight = std::min(h00, std::min(h01, std::min(h10, h11)));
+    float maxHeight = std::max(h00, std::max(h01, std::max(h10, h11)));
+
+    // Create points for bounding box
+    glm::vec3 p00_low(x0 * baseTerrain->getWorldScale(), minHeight, z0 * baseTerrain->getWorldScale());
+    glm::vec3 p01_low(x0 * baseTerrain->getWorldScale(), minHeight, z1 * baseTerrain->getWorldScale());
+    glm::vec3 p10_low(x1 * baseTerrain->getWorldScale(), minHeight, z0 * baseTerrain->getWorldScale());
+    glm::vec3 p11_low(x1 * baseTerrain->getWorldScale(), minHeight, z1 * baseTerrain->getWorldScale());
+
+    glm::vec3 p00_high(x0 * baseTerrain->getWorldScale(), maxHeight, z0 * baseTerrain->getWorldScale());
+    glm::vec3 p01_high(x0 * baseTerrain->getWorldScale(), maxHeight, z1 * baseTerrain->getWorldScale());
+    glm::vec3 p10_high(x1 * baseTerrain->getWorldScale(), maxHeight, z0 * baseTerrain->getWorldScale());
+    glm::vec3 p11_high(x1 * baseTerrain->getWorldScale(), maxHeight, z1 * baseTerrain->getWorldScale());
+
+    bool insideViewFrustum =
+        fc.isPointInsideViewFrustum(p00_low) ||
+        fc.isPointInsideViewFrustum(p01_low) ||
+        fc.isPointInsideViewFrustum(p10_low) ||
+        fc.isPointInsideViewFrustum(p11_low) ||
+        fc.isPointInsideViewFrustum(p00_high) ||
+        fc.isPointInsideViewFrustum(p01_high) ||
+        fc.isPointInsideViewFrustum(p10_high) ||
+        fc.isPointInsideViewFrustum(p11_high);
+
+    return insideViewFrustum;
 }
