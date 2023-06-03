@@ -305,6 +305,11 @@ namespace Villain {
         {
             ImGui::SetNextItemOpen(true);
             drawNode(engine.getApplication()->getRootNode());
+
+            if (ImGui::Button("New Node")) {
+                SceneNode* newNode = new SceneNode("testing");
+                engine.getApplication()->getRootNode()->addChild(newNode);
+            }
         }
         ImGui::End();
     }
@@ -317,12 +322,12 @@ namespace Villain {
                     drawNodeProperties(node);
                     ImGui::EndTabItem();
                 }
-                if (!node->getComponents().empty()) {
-                    if (ImGui::BeginTabItem("Components")) {
-                        drawNodeComponents(node);
-                        ImGui::EndTabItem();
-                    }
+
+                if (ImGui::BeginTabItem("Components")) {
+                    drawNodeComponents(node);
+                    ImGui::EndTabItem();
                 }
+
                 ImGui::EndTabBar();
             }
             // Children
@@ -345,6 +350,14 @@ namespace Villain {
             if (!selectedNode->getComponents().empty()) {
                 drawNodeComponents(selectedNode);
             }
+
+            // TODO: add component menu
+            const char* componentList[] = { "Apple", "Banana", "Cherry", "Kiwi", "Mango", "Orange", "Pineapple", "Strawberry", "Watermelon" };
+            static int selectedComponent = 1;
+            if (ImGui::ListBox("Add Component", &selectedComponent, componentList, IM_ARRAYSIZE(componentList), 4)) {
+                printf ("Selected component: %s\n", componentList[selectedComponent]);
+            }
+
         }
 
         ImGui::End();
@@ -368,24 +381,29 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawNodeComponents(SceneNode* node) {
-        for (auto& compo: node->getComponents()) {
-            // TODO: draw components here
-            if (compo->getID() == GetId<CameraComponent>()) {
-                ImGui::Text("Camera");
-                Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
-                static int projectionType = (int)camera->getProjectionType();
-                ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
-                ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
-                ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
-                ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
-                camera->setProjectionType((ProjectionType)projectionType);
+        if (!node->getComponents().empty()) {
+            for (auto& compo: node->getComponents()) {
+                // TODO: draw components here
+                if (compo->getID() == GetId<CameraComponent>()) {
+                    ImGui::Text("Camera");
+                    Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
+                    static int projectionType = (int)camera->getProjectionType();
+                    ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
+                    ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
+                    ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
+                    ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
+                    camera->setProjectionType((ProjectionType)projectionType);
+                }
+                auto light = dynamic_cast<BaseLight*>(compo);
+                if (light != nullptr) {
+                    ImGui::Text("%s light", light->type().c_str());
+                    ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
+                    //ImGui::ColorEdit3("Diffuse light : ", (float*)light->getDiffuseColor());
+                    ImGui::ColorEdit3("Diffuse light : ", (float*)&light->DiffuseColor);
+                }
+
+                ImGui::Separator();
             }
-            auto light = dynamic_cast<BaseLight*>(compo);
-            if (light != nullptr) {
-                ImGui::Text("%s light", light->type().c_str());
-                ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
-            }
-            ImGui::Separator();
         }
     }
 
