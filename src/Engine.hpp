@@ -60,6 +60,7 @@ namespace Villain {
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
             inline Application* getApplication() { return application; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
+            ImGuiLayer& getImGuiLayer() { return imGuiLayer; }
             Window getWindow() { return window; }
 
             static int getScreenWidth();

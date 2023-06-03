@@ -44,6 +44,10 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
+
+        pickingTexture = new PickingTexture();
+        pickingTexture->init(engine->getScreenWidth(), engine->getScreenHeight());
+        pickingShader = Shader::createFromResource("picking");
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -56,6 +60,10 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node) {
+        // Generate picking texture only if mouse is clicked so we can start selecting objects
+        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+            pickPass(node);
+        }
         // 1st Optional Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
         if (mirrorBufferEnabled) {
             mirrorBuffer->bind();
@@ -79,6 +87,43 @@ namespace Villain {
         //bindMainTarget();
         engine->getSceneBuffer()->bind(); // Rendering to scene buffer for later postfx
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Check if any nodes are selected and use picking texture to get correct node
+        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+            bool selectableArea = true;
+            glm::vec2 clickPosition = InputManager::Instance()->getMouseCoords();
+
+            if (engine->editModeActive()) {
+                glm::vec2 sceneImageViewportSize{engine->getImGuiLayer().getSceneViewportWidth(), engine->getImGuiLayer().getSceneViewportHeight()};
+                clickPosition = engine->getImGuiLayer().getMousePositionRelativeToScene();
+
+                // Only allow selecting inside sceme viewport ImGui Window
+                if (clickPosition.x < 0 ||
+                    clickPosition.x > sceneImageViewportSize.x ||
+                    clickPosition.y < 0 ||
+                    clickPosition.y > sceneImageViewportSize.y) {
+
+                    selectableArea = false;
+                }
+                // Find real coordinates by finding imgui scene viewport ratio to engine viewport
+                clickPosition.x = (engine->getScreenWidth() / sceneImageViewportSize.x) * clickPosition.x;
+                clickPosition.y = (engine->getScreenHeight() / sceneImageViewportSize.y) * clickPosition.y;
+                //printf("Real Coords X: %f Y: %f\n", clickPosition.x, clickPosition.y);
+            }
+
+            if (selectableArea) {
+                PickingTexture::PixelInfo pixel = pickingTexture->readPixel(clickPosition.x, Engine::getScreenHeight() - clickPosition.y - 1);
+                selectedNodeID = pixel.ObjectID;
+
+                if (pixel.ObjectID != 0) {
+                    SceneNode* clickedNode = node->findByID(pixel.ObjectID);
+                    if (clickedNode) {
+                        engine->getImGuiLayer().setSelectedNode(clickedNode);
+                    }
+                }
+            }
+        }
+
 
         defaultShader->bind();
         defaultShader->setUniformVec3("ambientLight", ambientLight);
@@ -233,6 +278,19 @@ namespace Villain {
 
         frustumCullingEnabled = true;
         glEnable(GL_DEPTH_TEST);
+    }
+
+    void RenderingEngine::pickPass(SceneNode* node) {
+        // Render all scene nodes to special integer picking texture, used to get correct selected object using mouse
+        pickingTexture->enableWriting();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        pickingShader->bind();
+
+        activeLight = nullptr;
+        node->render(pickingShader, this, mainCamera);
+
+        pickingTexture->disableWriting();
     }
 
     void RenderingEngine::bindMainTarget() {

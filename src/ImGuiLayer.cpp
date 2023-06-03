@@ -174,16 +174,6 @@ namespace Villain {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-        // NOTE: temporary
-        //if (ImGui::BeginMainMenuBar()) {
-        //if (ImGui::BeginMenu("File")) {
-        //if (ImGui::MenuItem("Import")) {
-        ////isImportClicked = true;
-        //}
-        //ImGui::EndMenu();
-        //}
-        //ImGui::EndMainMenuBar();
-        //}
 
         ImGui::End();
     }
@@ -201,11 +191,13 @@ namespace Villain {
         setupDockspace();
 
         // Draw all different parts of the toolkit
+        drawMenu();
         DebugConsole::Instance()->render();
         drawScene(engine);
         drawSceneGraph(engine);
         drawSettings(engine);
         drawAssetBrowser();
+        drawSelectedNode();
         //TODO: file browser to load assets
         // some kind of scene manager or ECS manager
         // some kind of tool to render stuff with DebugRenderer
@@ -230,6 +222,24 @@ namespace Villain {
         ImGui::EndFrame();
     }
 
+    void ImGuiLayer::drawMenu() {
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Quit")) {
+                    Engine::setRunning(false);
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Settings")) {
+                if (ImGui::BeginMenu("Post Processing Effects")) {
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
+        }
+    }
+
     void ImGuiLayer::drawScene(Engine& engine) {
         // Remove any padding around scene view window
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -237,13 +247,50 @@ namespace Villain {
         {
             ImGui::BeginChild("GameRender");
 
-            float width = ImGui::GetContentRegionAvail().x;
-            float height = ImGui::GetContentRegionAvail().y;
+            // Get available area size to display scene viewport onto
+            sceneViewportWidth = ImGui::GetContentRegionAvail().x;
+            sceneViewportHeight = ImGui::GetContentRegionAvail().y;
+
+            // Rescale scene viewport image to be same aspect ratio as engine's aspect ratio
+            //float oldWidth = sceneViewportWidth, oldHeight = sceneViewportHeight;
+            // NOTE: Maybe alternatively we could change engine's aspect ratio (including's scene buffer)
+            // to make sure, inside editor, image fills up all available region, TODO?
+            float engineAspectRatio = Engine::getScreenWidth() / (float)Engine::getScreenHeight();
+            if (sceneViewportHeight >= sceneViewportWidth) {
+                sceneViewportHeight = sceneViewportWidth / engineAspectRatio;
+                // Scale image back up proportionally to fill viewport - causes issues, viewpoint changes,
+                // possible solution would be to introduce editor camera
+                //float ratio = oldHeight / sceneViewportHeight;
+                //sceneViewportHeight *= ratio;
+                //sceneViewportWidth *= ratio;
+            } else {
+                sceneViewportWidth = sceneViewportHeight * engineAspectRatio;
+                //float ratio = oldWidth / sceneViewportWidth;
+                //sceneViewportHeight *= ratio;
+                //sceneViewportWidth *= ratio;
+            }
+
+            //printf("Engine width: %d height: %d\n", Engine::getScreenWidth(), Engine::getScreenHeight());
+            //printf("Scene vieport(image only) width: %f height: %f\n", sceneViewportWidth, sceneViewportHeight);
+
+            // NOTE: https://github.com/ocornut/imgui/issues/3404
+            ImVec2 imGuiMousePosition = ImGui::GetMousePos(); // Global ImGui mouse coordinates, used with multiple viewports
+            // Global ImGui scene framebuffer window position, must be called before ImGui::Image()
+            sceneViewportPosition = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+
+            mousePosRelativeToSceneViewport = glm::vec2(imGuiMousePosition.x, imGuiMousePosition.y) - sceneViewportPosition;
+
+            //printf("Engine Mouse Coords X: %f Y: %f\n", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+            //printf("ImGui GetCursorScreenPos() X: %f Y: %f\n", sceneViewportPosition.x, sceneViewportPosition.y);
+            //printf("ImGui::GetMousePos() X: %f Y: %f\n", imGuiMousePosition.x, imGuiMousePosition.y);
+            //printf("Scene image Coords X: %f Y: %f\n", mousePosRelativeToSceneViewport.x, mousePosRelativeToSceneViewport.y);
 
             ImGui::Image(
                     (ImTextureID)engine.getSceneBuffer()->getTextureID(),
-                    //ImGui::GetContentRegionAvail(),
-                    ImGui::GetWindowSize(),
+                    //ImGui::GetContentRegionAvail(), // Fill in full available size (scews aspect ratio)
+                    ImVec2(sceneViewportWidth, sceneViewportHeight), // Use new scaled viewport size to
+                    //ImGui::GetWindowSize(),
+                    //ImVec2(Engine::getScreenWidth(), Engine::getScreenHeight()),
                     ImVec2(0, 1),
                     ImVec2(1, 0)
                     );
@@ -258,56 +305,29 @@ namespace Villain {
         {
             ImGui::SetNextItemOpen(true);
             drawNode(engine.getApplication()->getRootNode());
+
+            if (ImGui::Button("New Node")) {
+                SceneNode* newNode = new SceneNode("testing");
+                engine.getApplication()->getRootNode()->addChild(newNode);
+            }
         }
         ImGui::End();
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
         if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
+            //selectedNode = node;
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
                 if (ImGui::BeginTabItem("Transform")) {
-                    ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
-
-                    ImGui::Text("Position"); ImGui::SameLine();
-                    ImGui::PushItemWidth(40);
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
-                    ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
-                    ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
-                    ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
-                    ImGui::PopStyleColor(3);
-                    ImGui::PopItemWidth();
-
-                    ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
-
+                    drawNodeProperties(node);
                     ImGui::EndTabItem();
                 }
-                if (!node->getComponents().empty()) {
-                    if (ImGui::BeginTabItem("Components")) {
-                        for (auto& compo: node->getComponents()) {
-                            // TODO: draw components here
-                            if (compo->getID() == GetId<CameraComponent>()) {
-                                ImGui::Text("Camera");
-                                Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
-                                static int projectionType = (int)camera->getProjectionType();
-                                ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
-                                ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
-                                ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
-                                ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
-                                camera->setProjectionType((ProjectionType)projectionType);
-                            }
-                            auto light = dynamic_cast<BaseLight*>(compo);
-                            if (light != nullptr) {
-                                ImGui::Text("%s light", light->type().c_str());
-                                ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
-                            }
-                            ImGui::Separator();
-                        }
 
-                        ImGui::EndTabItem();
-                    }
+                if (ImGui::BeginTabItem("Components")) {
+                    drawNodeComponents(node);
+                    ImGui::EndTabItem();
                 }
+
                 ImGui::EndTabBar();
             }
             // Children
@@ -316,6 +336,74 @@ namespace Villain {
             }
 
             ImGui::TreePop();
+        }
+    }
+
+    void ImGuiLayer::drawSelectedNode() {
+        ImGui::Begin("Active Node");
+
+        if (selectedNode != nullptr) {
+            ImGui::Text(selectedNode->getName().c_str());
+
+            drawNodeProperties(selectedNode);
+
+            if (!selectedNode->getComponents().empty()) {
+                drawNodeComponents(selectedNode);
+            }
+
+            // TODO: add component menu
+            const char* componentList[] = { "Apple", "Banana", "Cherry", "Kiwi", "Mango", "Orange", "Pineapple", "Strawberry", "Watermelon" };
+            static int selectedComponent = 1;
+            if (ImGui::ListBox("Add Component", &selectedComponent, componentList, IM_ARRAYSIZE(componentList), 4)) {
+                printf ("Selected component: %s\n", componentList[selectedComponent]);
+            }
+
+        }
+
+        ImGui::End();
+    }
+
+    void ImGuiLayer::drawNodeProperties(SceneNode* node) {
+        ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
+
+        ImGui::Text("Position"); ImGui::SameLine();
+        ImGui::PushItemWidth(40);
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
+        ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
+        ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
+        ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
+        ImGui::PopStyleColor(3);
+        ImGui::PopItemWidth();
+
+        ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
+    }
+
+    void ImGuiLayer::drawNodeComponents(SceneNode* node) {
+        if (!node->getComponents().empty()) {
+            for (auto& compo: node->getComponents()) {
+                // TODO: draw components here
+                if (compo->getID() == GetId<CameraComponent>()) {
+                    ImGui::Text("Camera");
+                    Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
+                    static int projectionType = (int)camera->getProjectionType();
+                    ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
+                    ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
+                    ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
+                    ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
+                    camera->setProjectionType((ProjectionType)projectionType);
+                }
+                auto light = dynamic_cast<BaseLight*>(compo);
+                if (light != nullptr) {
+                    ImGui::Text("%s light", light->type().c_str());
+                    ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
+                    //ImGui::ColorEdit3("Diffuse light : ", (float*)light->getDiffuseColor());
+                    ImGui::ColorEdit3("Diffuse light : ", (float*)&light->DiffuseColor);
+                }
+
+                ImGui::Separator();
+            }
         }
     }
 

@@ -6,6 +6,7 @@
 #include "../components/Light.hpp"
 #include "SceneNode.hpp"
 #include "Vertex.hpp"
+#include "rendering/PickingTexture.hpp"
 
 namespace Villain {
 
@@ -17,6 +18,7 @@ namespace Villain {
         public:
             RenderingEngine(Engine* e);
             ~RenderingEngine();
+            void pickPass(SceneNode* node);
             void render(SceneNode* node);
             void postRender();
 
@@ -31,6 +33,7 @@ namespace Villain {
             bool* getGammaCorrection() { return &gammaCorrection; }
             void setGammaCorrection(bool gamma) { gammaCorrection = gamma; }
             static bool gammaCorrectionEnabled() { return gammaCorrection; }
+            int getSelectedNodeID() const { return selectedNodeID; }
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }
@@ -65,6 +68,9 @@ namespace Villain {
             FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
 
+            PickingTexture* pickingTexture = nullptr;
+            Shader* pickingShader = nullptr;
+
             Shader* defaultShader = nullptr;
             Shader* postFXShader = nullptr;
             Shader* dirShadowMapShader = nullptr;
@@ -93,6 +99,8 @@ namespace Villain {
             bool mirrorBufferEnabled = false;
 
             static bool gammaCorrection;
+
+            int selectedNodeID = 0;
     };
 }
 

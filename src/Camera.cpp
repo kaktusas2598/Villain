@@ -93,6 +93,7 @@ namespace Villain {
         if (projectionType == ProjectionType::ORTHOGRAPHIC_2D) {
             Logger::Instance()->error("Use Camera::screenToWorld() instead\n");
         }
+        // Reference: https://antongerdelan.net/opengl/raycasting.html
         // Normalised device coords
         float x = (2.0f * pos.x) / screenWidth - 1.0f;
         float y = 1.0f - (2.0f * pos.y) / screenHeight;

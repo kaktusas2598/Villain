@@ -184,6 +184,9 @@ namespace Villain {
     void Shader::setUniform1f(const std::string& name, float value) {
         GLCall(glUniform1f(getUniformLocation(name), value));
     }
+    void Shader::setUniform1ui(const std::string& name, unsigned int value) {
+        GLCall(glUniform1ui(getUniformLocation(name), value));
+    }
 
     void Shader::setUniform3f(const std::string& name, float v0, float v1, float v2) {
         GLCall(glUniform3f(getUniformLocation(name), v0, v1, v2));

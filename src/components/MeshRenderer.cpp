@@ -1,5 +1,6 @@
 #include "MeshRenderer.hpp"
 
+#include "components/Light.hpp"
 #include "rendering/Material.hpp"
 #include "rendering/RendereringEngine.hpp"
 #include "ResourceManager.hpp"
@@ -23,6 +24,14 @@ namespace Villain {
             // NOTE: should implenent mesh batch renderer
             // TODO: Add new updateUniforms() method without a matierla, because meshes set their own materials for each mesh
             shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
+            shader.setUniform1ui("objectIndex", parent->getID());
+            shader.setUniform1ui("drawIndex", 0);
+            if (renderingEngine.getSelectedNodeID() != 0 && renderingEngine.getSelectedNodeID() == parent->getID()) {
+                parent->setSelected(true);
+            } else {
+                parent->setSelected(false);
+            }
+            shader.setUniform1i("selected", parent->isSelected());
 
             if (renderingEngine.isFrustumCullingEnabled()) {
                 const Frustum camFrustum = camera.getFrustum();

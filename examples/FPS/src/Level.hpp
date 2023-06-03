@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Application.hpp"
-#include "Bitmap.hpp"
 #include "Door.hpp"
 #include "rendering/Mesh.hpp"
 
@@ -45,7 +44,7 @@ class Level {
         // Selects tile from atlas using some value, most likely color component of bitmap
         float* getTexCoords(int val);
 
-        Bitmap* bitmap = nullptr;
+        Villain::Texture* bitmap = nullptr;
         Villain::Mesh<VertexP1N1UV>* mesh = nullptr;
         Villain::Material* material = nullptr;
 
