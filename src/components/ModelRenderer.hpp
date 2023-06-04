@@ -15,6 +15,8 @@ namespace Villain {
                 RenderingEngine& renderingEngine,
                 Camera& camera
                 ) override;
+
+            Model* getModel() const { return model; }
         private:
             Model* model;
     };

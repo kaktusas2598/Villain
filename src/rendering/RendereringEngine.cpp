@@ -108,7 +108,6 @@ namespace Villain {
                 // Find real coordinates by finding imgui scene viewport ratio to engine viewport
                 clickPosition.x = (engine->getScreenWidth() / sceneImageViewportSize.x) * clickPosition.x;
                 clickPosition.y = (engine->getScreenHeight() / sceneImageViewportSize.y) * clickPosition.y;
-                //printf("Real Coords X: %f Y: %f\n", clickPosition.x, clickPosition.y);
             }
 
             if (selectableArea) {

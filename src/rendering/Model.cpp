@@ -32,6 +32,7 @@ namespace Villain {
             return;
         }
         directory = path.substr(0, path.find_last_of('/'));
+        fileName = path.substr(path.find_last_of('/'), path.length());
 
         processNode(scene->mRootNode, scene);
     }

@@ -366,8 +366,8 @@ namespace Villain {
                 drawNodeComponents(selectedNode);
             }
 
-            // TODO: add component menu
 
+            ImGui::Separator();
             const char* componentList[] = {"Camera", "Light", "Basic Mesh", "Model", "Move Controller", "Look Controller", "Physics"};
             static int selectedComponent = 1;
             // NOTE: wrap ListBox() in if condition to check for click events on list items
@@ -474,12 +474,40 @@ namespace Villain {
                 if (light != nullptr) {
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
-                    ImGui::ColorEdit3("Diffuse light", (float*)&light->DiffuseColor);
+                    ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor);
                 }
 
                 auto meshN1UV = dynamic_cast<MeshRenderer<VertexP1N1UV>*>(compo);
                 if (meshN1UV != nullptr) {
                     ImGui::Text("Basic Mesh");
+                    static int loadedMesh = 0;
+                    auto originalMesh = meshN1UV->getMesh();
+                    std::vector<VertexP1N1UV> vertices;
+                    std::vector<unsigned int> indices;
+
+                    ImGui::RadioButton("DEFAULT", &loadedMesh, 0); ImGui::SameLine();
+                    ImGui::RadioButton("SPHERE", &loadedMesh, 1); ImGui::SameLine();
+                    ImGui::RadioButton("AABB", &loadedMesh, 2);
+
+                    static float sphereRadius = 1.0f;
+                    static float aabbSize = 1.0f;;
+                    ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
+                    ImGui::DragFloat("AABB size", &aabbSize, 1.0f, 0.0f, 100.0f, "%.1f");
+
+                    if (loadedMesh == 0)
+                        meshN1UV->setMesh(originalMesh);
+                    else if (loadedMesh == 1) {
+                        MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, sphereRadius);
+                        meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
+                    } else if (loadedMesh == 2) {
+                        MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), glm::vec3(aabbSize/2));
+                        meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
+                    }
+                }
+
+                auto model = dynamic_cast<ModelRenderer*>(compo);
+                if (model != nullptr) {
+                    ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
                 }
 
                 ImGui::Separator();

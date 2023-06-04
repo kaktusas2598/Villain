@@ -22,10 +22,14 @@ namespace Villain {
 
             std::map<std::string, Material>& getMaterials() { return materials; }
             std::vector<Mesh<VertexP1N1T1B1UV>>& getMeshes() { return meshes; }
+
+            std::string& getDirectory() { return directory; }
+            std::string& getFilename() { return fileName; }
         private:
             std::vector<Mesh<VertexP1N1T1B1UV>> meshes;
             std::map<std::string, Material> materials;
             std::string directory;
+            std::string fileName;
 
             void loadModel(std::string path);
             void processNode(aiNode* node, const aiScene* scene);
