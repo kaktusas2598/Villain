@@ -1,6 +1,7 @@
 #include "Terrain.hpp"
 
 #include "FileUtils.hpp"
+#include "ResourceManager.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -22,7 +23,7 @@ void Terrain::init(float scale, float texScale, std::vector<std::string> texture
     textureScale = texScale;
 
     for (int i = 0; i < textureFilenames.size(); i++) {
-        textures[i] = new Villain::Texture(textureFilenames[i], GL_REPEAT);
+        textures[i] = Villain::ResourceManager::Instance()->loadTexture(textureFilenames[i], textureFilenames[i], GL_REPEAT);
     }
     // TODO: will need to move it somewhere else, terrain shader will probably be provided by the engine
     //terrainShader = new Villain::Shader("assets/shaders/terrain.glsl");
