@@ -20,6 +20,7 @@
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
+#include "imgui/imgui.h"
 
 namespace Villain {
 
@@ -352,11 +353,63 @@ namespace Villain {
             }
 
             // TODO: add component menu
-            const char* componentList[] = { "Apple", "Banana", "Cherry", "Kiwi", "Mango", "Orange", "Pineapple", "Strawberry", "Watermelon" };
+
+            const char* componentList[] = {"Camera", "Light", "Basic Mesh", "Model", "Move Controller", "Look Controller", "Physics"};
             static int selectedComponent = 1;
-            if (ImGui::ListBox("Add Component", &selectedComponent, componentList, IM_ARRAYSIZE(componentList), 4)) {
-                printf ("Selected component: %s\n", componentList[selectedComponent]);
-            }
+            // NOTE: wrap ListBox() in if condition to check for click events on list items
+            ImGui::ListBox("Add Component", &selectedComponent, componentList, IM_ARRAYSIZE(componentList), 4);
+
+            std::vector<VertexP1N1UV> vertices;
+            std::vector<unsigned int> indices;
+            glm::vec3 diffuseColor = glm::vec3(1.0f);
+            glm::vec3 lightDirection = glm::vec3(0.0f);
+            float spotLightCutoff = 12.5f;
+            float spotLightOuterCutoff = 17.5f;
+
+            // Display component creation info depending on selection in the listbox
+            switch (selectedComponent) {
+                    case 0:
+                        if (ImGui::Button("Add camera")) {
+                            selectedNode->addComponent(new CameraComponent(new Camera(ProjectionType::ORTHOGRAPHIC)));
+                        }
+                        break;
+                    case 1:
+                        ImGui::ColorEdit3("Diffuse light ", (float*)&diffuseColor);
+                        ImGui::SliderFloat3("Direction (for spot and directional lights only)", (float*)&lightDirection, -1.f, 1.f);
+                        ImGui::DragFloat("Spot light cutoff angle", &spotLightCutoff, 1.0f, 0.0f, 180.0f);
+                        ImGui::DragFloat("Spot light outer cutoff angle", &spotLightOuterCutoff, 1.0f, 0.0f, 180.0f);
+                        ImGui::Separator();
+
+                        if (ImGui::Button("Add Point Light")) {
+                            selectedNode->addComponent(
+                                    new PointLight(diffuseColor * glm::vec3(0.2f), diffuseColor, glm::vec3(1.0f),
+                                        selectedNode->getTransform()->getPos()));
+                        } ImGui:: SameLine();
+                        if (ImGui::Button("Add Spot Light")) {
+                            selectedNode->addComponent(
+                                    new SpotLight(diffuseColor * glm::vec3(0.2f), diffuseColor, glm::vec3(1.0f),
+                                        selectedNode->getTransform()->getPos(), lightDirection,
+                                        glm::cos(glm::radians(spotLightCutoff)), glm::cos(glm::radians(spotLightOuterCutoff))));
+
+                        } ImGui:: SameLine();
+                        if (ImGui::Button("Add Directional Light")) {
+                            selectedNode->addComponent(
+                                    new DirectionalLight(diffuseColor * glm::vec3(0.2f), diffuseColor, glm::vec3(1.0f),
+                                        lightDirection));
+                        } ImGui:: SameLine();
+
+                        break;
+                    case 2:
+                        //selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        break;
+                    case 3:
+                        // TODO: need a way to select model, possibly using C++'s filesystem header
+                        //selectedNode->addComponent(new ModelRenderer(""))
+                        break;
+                    default:
+                        printf("Option %s not implemented\n", componentList[selectedComponent]);
+                        break;
+                }
 
         }
 
@@ -383,7 +436,8 @@ namespace Villain {
     void ImGuiLayer::drawNodeComponents(SceneNode* node) {
         if (!node->getComponents().empty()) {
             for (auto& compo: node->getComponents()) {
-                // TODO: draw components here
+                // TODO: find optimal way of adding any components and possibly custom components without too
+                // many conditionals
                 if (compo->getID() == GetId<CameraComponent>()) {
                     ImGui::Text("Camera");
                     Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
@@ -398,8 +452,12 @@ namespace Villain {
                 if (light != nullptr) {
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
-                    //ImGui::ColorEdit3("Diffuse light : ", (float*)light->getDiffuseColor());
-                    ImGui::ColorEdit3("Diffuse light : ", (float*)&light->DiffuseColor);
+                    ImGui::ColorEdit3("Diffuse light", (float*)&light->DiffuseColor);
+                }
+
+                auto meshN1UV = dynamic_cast<MeshRenderer<VertexP1N1UV>*>(compo);
+                if (meshN1UV != nullptr) {
+                    ImGui::Text("Basic Mesh");
                 }
 
                 ImGui::Separator();

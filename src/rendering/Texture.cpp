@@ -31,18 +31,28 @@ namespace Villain {
             }
         }
 
-        GLenum format;
-        if (BPP == 1) {
-            texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RED;
-            texInfo.Format = GL_RED;
-        } else if (BPP == 3) {
-            texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RGB;
-            texInfo.Format = GL_RGB;
-        } else if (BPP == 4) {
-            texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB_ALPHA : GL_RGBA;
-            texInfo.Format = GL_RGBA;
-        } else
-            std::cout << "Unrecognized color format" << std::endl;
+        // Recalibrate for gamma correction
+        if (texInfo.SRGB) {
+            if (BPP == 4)
+                texInfo.InternalFormat = GL_SRGB_ALPHA;
+            else
+                texInfo.InternalFormat = GL_SRGB;
+        }
+
+        // NOTE: Not neccessary for now, as stb loaded textures are hardcoded to 4 BPP,
+        // otherwise we will set our own formats using TextureConstructionInfo struct
+        //GLenum format;
+        //if (BPP == 1) {
+            //texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RED;
+            //texInfo.Format = GL_RED;
+        //} else if (BPP == 3) {
+            //texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RGB;
+            //texInfo.Format = GL_RGB;
+        //} else if (BPP == 4) {
+            //texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB_ALPHA : GL_RGBA;
+            //texInfo.Format = GL_RGBA;
+        //} else
+            //std::cout << "Unrecognized color format" << std::endl;
 
 
         GLCall(glBindTexture(target, rendererID));
@@ -66,8 +76,10 @@ namespace Villain {
             GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, texInfo.Filter));
         }
 
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, texInfo.WrappingMode));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, texInfo.WrappingMode));
+        if (texInfo.Clamp) {
+            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, texInfo.WrappingMode));
+            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, texInfo.WrappingMode));
+        }
 
         GLCall(glBindTexture(target, 0));
     }

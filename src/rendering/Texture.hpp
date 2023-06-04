@@ -8,7 +8,7 @@
 namespace Villain  {
 
     enum class TextureMapType {
-        DIFFUSE, SPECULAR, NORMAL, HEIGHT, DISPLACEMENT
+        NONE, DIFFUSE, SPECULAR, NORMAL, HEIGHT, DISPLACEMENT
     };
 
     // OpenGL texture parameters info for easier texture construction
@@ -19,13 +19,14 @@ namespace Villain  {
         // Other options: GL_RGB, GL_RED, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT16 and others
         GLint InternalFormat = GL_RGBA;
         GLenum Format = GL_RGBA;
-        GLint WrappingMode = GL_CLAMP_TO_EDGE;
         GLenum DataType = GL_UNSIGNED_BYTE; //<<< Can also be GL_FLOAT
+
+        bool Clamp = true;
+        GLint WrappingMode = GL_CLAMP_TO_EDGE;
 
         unsigned char* DataBuffer = nullptr;
         int Width = 0, Height = 0, BPP = 4;
         bool GenerateMipmap = true;
-        bool Clamp = true;
         bool SRGB = true;
         TextureMapType MapType = TextureMapType::DIFFUSE;
 
