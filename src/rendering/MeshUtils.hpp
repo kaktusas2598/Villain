@@ -82,6 +82,8 @@ namespace Villain {
                 float radius,
                 const glm::vec3& center = glm::vec3(0.0f));
 
+        // TODO: add methods for cylinders and cones
+
         private:
         // Min X(S), Max X(S), MIN Y(T), MAX Y(T)
         static float defaultUVMap[4];
