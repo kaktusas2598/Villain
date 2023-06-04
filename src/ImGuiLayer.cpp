@@ -21,6 +21,7 @@
 #include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "imgui/imgui.h"
+#include "rendering/MeshUtils.hpp"
 
 namespace Villain {
 
@@ -413,7 +414,15 @@ namespace Villain {
 
                         break;
                     case 2:
-                        //selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        // TODO:
+                        if (ImGui::Button("Add sphere mesh")) {
+                            MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 1.0f);
+                            selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        }
+                        if (ImGui::Button("Add Axis-Aligned Bounding Box mesh")) {
+                            MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
+                            selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        }
                         break;
                     case 3:
                         // TODO: need a way to select model, possibly using C++'s filesystem header
