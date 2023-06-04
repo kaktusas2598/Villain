@@ -219,6 +219,7 @@ namespace Villain {
             glDepthFunc(GL_EQUAL);
 
             light->getShader()->bind();
+            light->getShader()->setUniform1i("toonShadingEnabled", toonShadingEnabled);
             if (shadowInfo) {
                 if (activeLight->type() == "point") {
                     omniShadowBuffer->getTexture()->bind(getSamplerSlot("shadow"));

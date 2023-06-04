@@ -53,6 +53,7 @@ namespace Villain {
             bool* getSharpen() { return &sharpen; }
             bool* getBlur() { return &blur; }
             bool* getEdgeDetection() { return &outline; }
+            bool* getToonShadingEnabled() { return &toonShadingEnabled; }
             // Additional FBOs
             bool* getMirrorFramebufferEnabled() { return &mirrorBufferEnabled; }
 
@@ -98,6 +99,7 @@ namespace Villain {
             bool blur = false;
             bool outline = false;
             bool mirrorBufferEnabled = false;
+            bool toonShadingEnabled = false;
 
             static bool gammaCorrection;
 

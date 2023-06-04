@@ -55,6 +55,9 @@ struct SpotLight {
     float quadratic;
 };
 
+uniform bool toonShadingEnabled = true;
+const int toonColorLevels = 4;
+const float toonScaleFactor = 1.0f / toonColorLevels;
 
 uniform Material material;
 uniform sampler2D shadowMap;
@@ -62,6 +65,13 @@ uniform sampler2D shadowMap;
 // TODO: need to pass material to these methods instead of harcoding uniform here
 BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDir, vec2 texCoords) {
     float diff = max(dot(normal, lightDir), 0.0);
+    //float diff = max(dot(normal, -lightDir), 0.0);
+
+    if (toonShadingEnabled) {
+        if (diff > 0)
+            diff = ceil(diff * toonColorLevels) * toonScaleFactor;
+    }
+
     // Blinn-Phong shading addition
     vec3 halfwayDirection = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDirection), 0.0), material.shininess);

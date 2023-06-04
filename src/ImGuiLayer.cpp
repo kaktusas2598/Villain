@@ -525,11 +525,15 @@ namespace Villain {
         ImGui::Text("Render frame time: %.1u ms", engine.getRenderTime());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
-        ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
 
+        ImGui::Separator();
+        ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
         ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
+        ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());
+        ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());
         ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
 
+        ImGui::Separator();
         ImGui::ColorEdit3("Fog color: ", (float*)engine.getRenderingEngine()->getFogColor());
         ImGui::Checkbox("Exponential fog enable d(defaults to layered fog)", engine.getRenderingEngine()->exponentialFogEnabled());
         ImGui::DragFloat("Fog Density", (float*)engine.getRenderingEngine()->getFogDensity(), 0.0005f, 0.0f, 1.0f, "%.5f");
@@ -537,7 +541,7 @@ namespace Villain {
         ImGui::DragFloat("Layered Fog Top", (float*)engine.getRenderingEngine()->getLayeredFogTop(), 1.0f, 0.0f, 1000.0f, "%.1f");
         ImGui::DragFloat("Fog end", (float*)engine.getRenderingEngine()->getLayeredFogEnd(), 1.0, 0.0f, 1000.0f, "%.1f");
 
-        ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());
+        ImGui::Separator();
         ImGui::Text("Post-Processing Effects");
         ImGui::Checkbox("Invert colors", engine.getRenderingEngine()->getInvertColors());
         ImGui::Checkbox("Grayscale", engine.getRenderingEngine()->getGrayScale());
@@ -545,7 +549,6 @@ namespace Villain {
         ImGui::Checkbox("Blur", engine.getRenderingEngine()->getBlur());
         ImGui::Checkbox("Edge outline", engine.getRenderingEngine()->getEdgeDetection());
         ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
-        ImGui::Separator();
 
         // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (showDemoWindow)
