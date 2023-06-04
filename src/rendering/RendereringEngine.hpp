@@ -34,6 +34,7 @@ namespace Villain {
             void setGammaCorrection(bool gamma) { gammaCorrection = gamma; }
             static bool gammaCorrectionEnabled() { return gammaCorrection; }
             int getSelectedNodeID() const { return selectedNodeID; }
+            void setSelectedNodeID(int id) { selectedNodeID = id; }
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }

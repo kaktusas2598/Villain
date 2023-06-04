@@ -305,7 +305,9 @@ namespace Villain {
         ImGui::Begin("Scene Graph");
         {
             ImGui::SetNextItemOpen(true);
+            ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
             drawNode(engine.getApplication()->getRootNode());
+            ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 
             if (ImGui::Button("New Node")) {
                 SceneNode* newNode = new SceneNode("testing");
@@ -316,8 +318,19 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
-        if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
-            //selectedNode = node;
+        // Make sure tree nods fill all available width and disable single click to open behaviour
+        ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+        if (selectedNode == node) {
+            nodeFlags |= ImGuiTreeNodeFlags_Selected;
+        }
+
+        bool nodeOpen =  ImGui::TreeNodeEx(node->getName().c_str(), nodeFlags);
+        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+            selectedNode = node;
+            // Set id in rendering engine so that color mod is applied to shader when drawing selected node
+            node->getEngine()->getRenderingEngine()->setSelectedNodeID(selectedNode->getID());
+        }
+        if (nodeOpen) {
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
                 if (ImGui::BeginTabItem("Transform")) {
                     drawNodeProperties(node);
