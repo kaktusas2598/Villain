@@ -68,7 +68,7 @@ void Terrain::render(Villain::RenderingEngine& renderingEngine, Villain::Camera*
     terrainShader->setFogUniforms(renderingEngine, *camera);
 
     if (useLOD) {
-        geomipGrid.render(camera->getPosition());
+        geomipGrid.render(camera->getPosition(), camera->getProjMatrix() * camera->getViewMatrix());
     } else {
         triangleList.render();
     }
