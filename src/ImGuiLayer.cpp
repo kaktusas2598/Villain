@@ -22,6 +22,7 @@
 #include "components/PhysicsObjectComponent.hpp"
 #include "imgui/imgui.h"
 #include "rendering/MeshUtils.hpp"
+#include "nfd.h"
 
 namespace Villain {
 
@@ -315,6 +316,24 @@ namespace Villain {
             if (ImGui::Button("New Node")) {
                 SceneNode* newNode = new SceneNode("testing");
                 engine.getApplication()->getRootNode()->addChild(newNode);
+            }
+
+            // TEMP TEST CODE
+            if (ImGui::Button("Load")) {
+                nfdchar_t *outPath;
+                nfdfilteritem_t filterItem[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
+                // TODO: open dialog in project/runtime dir
+                // Possibly write basic imgui file dialog instead using c++ filesystem header and imgui trees
+                nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, NULL);
+                if (result == NFD_OKAY) {
+                    puts(outPath);
+                    NFD_FreePath(outPath);
+                }
+                else if (result == NFD_CANCEL) {
+                    puts("User pressed cancel.");
+                } else {
+                    printf("Error: %s\n", NFD_GetError());
+                }
             }
         }
         ImGui::End();

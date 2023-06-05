@@ -52,6 +52,7 @@ add_library(${PROJECT_NAME} STATIC ${sources} ${comp_sources})
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
 add_subdirectory(vendor/tinyxml2)
+add_subdirectory(vendor/nfd-extended)
 
 if (VILLAIN_ENABLE_BOX2D)
     option(BOX2D_BUILD_UNIT_TESTS OFF)
@@ -81,7 +82,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ShaderLibrary)
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ShaderLibrary nfd)
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"

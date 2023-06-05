@@ -8,11 +8,10 @@
 #include <cstdio> // For sprintf
 #include "Logger.hpp"
 
+#include "glm/gtc/matrix_transform.hpp"
+#include <nfd.h>
 #include "nuklear.h"
 #include "nuklear_sdl_gl3.h"
-
-#include "glm/gtc/matrix_transform.hpp"
-
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -46,7 +45,11 @@ namespace Villain {
         // Initialize SDL
         if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         {
-            exitWithError("Could Not Initialize SDL.");
+            exitWithError("Could Not Initialise SDL.");
+        }
+
+        if (NFD_Init() != NFD_OKAY) {
+            exitWithError("Could not initialise Native File Dialog.");
         }
 
         //Initialize PNG loading
@@ -372,6 +375,8 @@ namespace Villain {
         isRunning = false;
 
         imGuiLayer.exit();
+
+        NFD_Quit();
 
         TTF_Quit();
         //IMG_Quit();
