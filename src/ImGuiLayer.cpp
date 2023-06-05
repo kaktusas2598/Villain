@@ -475,6 +475,9 @@ namespace Villain {
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
                     ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor);
+                    // HACK: seems like I do this everywhere anyway, so maybe separate properties for specular and ambient colours of light sources
+                    // are not needed? yet to be decided
+                    light->AmbientColor = light->DiffuseColor * 0.2f;
                 }
 
                 auto meshN1UV = dynamic_cast<MeshRenderer<VertexP1N1UV>*>(compo);
