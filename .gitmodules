@@ -7,3 +7,6 @@
 [submodule "vendor/box2d"]
 	path = vendor/box2d
 	url = https://github.com/erincatto/box2d
+[submodule "vendor/nfd-extended"]
+	path = vendor/nfd-extended
+	url = https://github.com/btzy/nativefiledialog-extended
