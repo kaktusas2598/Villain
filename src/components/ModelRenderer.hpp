@@ -8,7 +8,7 @@ namespace Villain {
 
     class ModelRenderer : public NodeComponent {
         public:
-            ModelRenderer(const std::string& fileName);
+            ModelRenderer(Model *m) : model(m) {};
             ~ModelRenderer();
             virtual void render(
                 Shader& shader,

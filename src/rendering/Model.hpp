@@ -17,7 +17,11 @@ namespace Villain {
     // if model does not contain normal maps
     class Model {
         public:
-            Model (const char* path) { loadModel(path); }
+            Model (const char* path, unsigned instances = 1, std::vector<glm::mat4> instanceTransforms = {}){
+                numInstances = instances;
+                instanceMatrix = instanceTransforms;
+                loadModel(path);
+            }
             void draw(Shader& shader);
 
             std::map<std::string, Material>& getMaterials() { return materials; }
@@ -30,6 +34,11 @@ namespace Villain {
             std::map<std::string, Material> materials;
             std::string directory;
             std::string fileName;
+
+            // Instanced rendering properties
+            unsigned int numInstances = 1; //<<< Set to more than 1 instance for instanced rendering
+            std::vector<glm::mat4> instanceMatrix;
+            std::unique_ptr<VertexBuffer> instanceVbo;
 
             void loadModel(std::string path);
             void processNode(aiNode* node, const aiScene* scene);

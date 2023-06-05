@@ -33,6 +33,7 @@ class VertexBufferLayout {
 
 
         inline const std::vector<VertexBufferElement> getElements() const { return elements; }
+        inline const unsigned int getNumOfElements() const { return elements.size(); }
         inline unsigned int getStride() const { return stride; }
 
     private:

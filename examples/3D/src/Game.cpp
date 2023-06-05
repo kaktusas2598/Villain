@@ -74,18 +74,29 @@ void Game::init() {
     // Model renderer test
     // 2023-04-04 - Currently ~12FPS with 3 light sources
     // WIth frustum culling seeing increases from ~3 to ~10FPS, still not enough
-    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
+    Model* sponzaPalace = new Model("assets/models/sponza.obj");
+    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer(sponzaPalace));
     modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
     //modelNode->getTransform()->setScale(4.0f);
     addToScene(modelNode);
 
-    SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/rock.obj"));
+    Model* rockModel = new Model("assets/models/rock.obj");
+    SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer(rockModel));
     rockNode->getTransform()->setScale(0.01f);
     addToScene(rockNode);
 
-    SceneNode* wall = (new SceneNode("wall", glm::vec3(4.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/wall.obj"));
+    const unsigned NUM_INSTANCES = 1000;
+    std::vector<glm::mat4> instanceTransforms;
+    float radius = 5.0f, offset = 0.25f;
+    for (unsigned i = 0; i < NUM_INSTANCES; i++) {
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, -100.0f + i * 2.0, 0));
+        instanceTransforms.push_back(model);
+    }
+    Model* wallModel = new Model("assets/models/wall.obj", NUM_INSTANCES, instanceTransforms);
+    SceneNode* wall = (new SceneNode("wall", glm::vec3(0.f, 2.f, 0.f)))
+        ->addComponent(new ModelRenderer(wallModel));
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
@@ -119,12 +130,13 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
+    Model* sphereModel = new Model("assets/models/sphere.obj");;
     addToScene((new SceneNode("physics object 0"))
         ->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
-        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+        ->addComponent(new ModelRenderer(sphereModel)));
     addToScene((new SceneNode("physics object 1"))
         ->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
-        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+        ->addComponent(new ModelRenderer(sphereModel)));
     addToScene((new SceneNode("AABB"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(2))));
     addToScene((new SceneNode("AABB2"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(3))));
     addToScene((new SceneNode("Floor"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(4))));

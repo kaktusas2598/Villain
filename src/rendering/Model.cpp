@@ -132,11 +132,11 @@ namespace Villain {
             Material mat(matName, diffuseMap, 32.0f, specularMap, normalMap);
             mat.setDiffuseColor(diffuseColor);
             materials[matName] = mat;
-            return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName);
+            return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);
         }
 
         Logger::Instance()->warn("Mesh missing material information");
-        return Mesh<VertexP1N1T1B1UV>(vertices, indices);
+        return Mesh<VertexP1N1T1B1UV>(vertices, indices, numInstances, instanceMatrix);
     }
 
     std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {

@@ -6,10 +6,6 @@
 
 namespace Villain {
 
-    ModelRenderer::ModelRenderer(const std::string& fileName) {
-        model = new Model(fileName.c_str());
-    }
-
     ModelRenderer::~ModelRenderer() {
         delete model;
     }
@@ -37,7 +33,8 @@ namespace Villain {
 
         int i = 0;
         for (auto& mesh: model->getMeshes()) {
-            if (renderingEngine.isFrustumCullingEnabled()) {
+            // NOTE: For now instanced meshes are not culled by camera's frustum
+            if (renderingEngine.isFrustumCullingEnabled() && !mesh.isInstanced()) {
                 const Frustum camFrustum = camera.getFrustum();
                 if (mesh.getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
                     shader.setUniform1ui("drawIndex", i);
