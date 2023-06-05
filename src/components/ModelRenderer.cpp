@@ -6,10 +6,6 @@
 
 namespace Villain {
 
-    ModelRenderer::ModelRenderer(const std::string& fileName, unsigned instances, std::vector<glm::mat4> instanceTransforms) {
-        model = new Model(fileName.c_str(), instances, instanceTransforms);
-    }
-
     ModelRenderer::~ModelRenderer() {
         delete model;
     }
