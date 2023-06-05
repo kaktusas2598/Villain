@@ -51,6 +51,7 @@ namespace Villain {
         void drawNodeComponents(SceneNode* node);
 
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
+        static ImVec4 clearColor;
 
         float sceneViewportWidth = 0, sceneViewportHeight = 0;
         glm::vec2 sceneViewportPosition{0.0f};

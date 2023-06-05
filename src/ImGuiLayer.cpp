@@ -26,6 +26,7 @@
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
+    ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     ImGuiLayer::ImGuiLayer() {}
 
@@ -200,10 +201,11 @@ namespace Villain {
         drawSettings(engine);
         drawAssetBrowser();
         drawSelectedNode();
+        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+
         //TODO: file browser to load assets
         // some kind of scene manager or ECS manager
         // some kind of tool to render stuff with DebugRenderer
-        // ability to manage lights camera and everything
     }
 
     void ImGuiLayer::end() {
@@ -530,6 +532,7 @@ namespace Villain {
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
 
         ImGui::Separator();
+        ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
         ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
         ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());

@@ -35,15 +35,11 @@ namespace Villain {
 
             void render();
 
-            static bool layerVisibility; ///< Toggle collision layer render
-            static bool colliderVisibility; ///< Toggle collider component render
             static int textEditCallbackStub(ImGuiInputTextCallbackData* data);
             int textEditCallback(ImGuiInputTextCallbackData* data);
 
             static std::map<std::string, std::string> customInfo; ///< Display custom information in Console
             void setInfo(const std::string& key, const std::string& value) { customInfo[key] = value; }
-
-            static ImVec4 clearColor;
 
         private:
             DebugConsole();

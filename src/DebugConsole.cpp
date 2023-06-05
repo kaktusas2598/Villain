@@ -1,17 +1,12 @@
 #include "DebugConsole.hpp"
 
 #include "Engine.hpp"
-//#include "Level.hpp"
 #include "InputManager.hpp"
 #include "ScriptEngine.hpp"
 #include "imgui/imgui.h"
 
 namespace Villain {
 
-    bool DebugConsole::layerVisibility = false;
-    bool DebugConsole::colliderVisibility = false;
-    // TODO: store initial value somewhere
-    ImVec4 DebugConsole::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     std::map<std::string,std::string> DebugConsole::customInfo;
 
     DebugConsole* DebugConsole::s_pInstance = nullptr;
@@ -99,26 +94,11 @@ namespace Villain {
     void DebugConsole::render() {
         ImGui::Begin("Debug Console");
 
-        ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
-        ImGui::Separator();
 
         // Custom Info
         for (const auto& pair: customInfo) {
             ImGui::TextUnformatted(pair.second.c_str());
         }
-        //ImGui::Text("Active entities: %d", EntityManager::livingCount);
-        ImGui::Checkbox("Show collision layers", &layerVisibility);
-        ImGui::Checkbox("Show colliders", &colliderVisibility);
-        ImGui::Separator();
-
-        //Level* level = TheEngine::Instance()->getLevel();
-        //if (level != nullptr) {
-            //int i = 0;
-            //for (auto it = level->getCollisionLayers()->begin(); it != level->getCollisionLayers()->end(); ++it) {
-                //(*it)->setVisible(layerVisibility);
-                //i++;
-            //}
-        //}
 
         // Lua Console
         //----------------------------------
@@ -196,8 +176,6 @@ namespace Villain {
 
 
         ImGui::End();
-
-        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     }
 
 
