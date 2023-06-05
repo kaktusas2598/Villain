@@ -50,6 +50,7 @@
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Mesh batch rendering
+* Tessalated terrain
 * Stencil buffer
 * HDR and Bloom
 
