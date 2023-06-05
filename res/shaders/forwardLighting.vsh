@@ -3,6 +3,7 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
 layout(location = 3) in vec3 tangent;
 layout(location = 4) in vec3 biTangent;
+layout(location = 5) in mat4 instanceMatrix;
 
 out vec3 v_normal; // If using normal maps, not needed
 out vec3 v_fragPos; // World position
@@ -15,6 +16,8 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+uniform bool instancedRenderingEnabled = false;
+
 out float visibility; // Determines how foggy vertex is
 #include fog.glh
 
@@ -22,8 +25,12 @@ out float visibility; // Determines how foggy vertex is
 uniform mat4 lightMatrix;
 
 void main() {
+    mat4 worldTransform = model;
+    if (instancedRenderingEnabled) {
+        worldTransform = model * instanceMatrix;
+    }
     // Calculate fragment position for lighting in world space
-    v_fragPos = vec3(model * vec4(position, 1.0));
+    v_fragPos = vec3(worldTransform * vec4(position, 1.0));
     gl_Position = projection * view * vec4(v_fragPos, 1.0);
     // Does normal needs to be translated to world space here?
     v_normal = normal;
@@ -31,8 +38,8 @@ void main() {
     v_shadowMapCoords = lightMatrix * vec4(v_fragPos, 1.0);
 
     // Calculate TBN matrix for normal mapping
-    vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));
-    vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
+    vec3 T = normalize(vec3(worldTransform * vec4(tangent, 0.0)));
+    vec3 N = normalize(vec3(worldTransform * vec4(normal, 0.0)));
 
     // re-orthogonalize T with respect to N
     T = normalize(T - dot(T, N) * N);

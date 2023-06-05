@@ -10,7 +10,7 @@ namespace Villain {
     class Renderer {
         public:
             void clear() const;
-            void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+            void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, unsigned instances = 1) const;
 
             static Renderer *Instance() {
                 if (sInstance == 0)

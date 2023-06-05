@@ -33,7 +33,8 @@ namespace Villain {
             }
             shader.setUniform1i("selected", parent->isSelected());
 
-            if (renderingEngine.isFrustumCullingEnabled()) {
+            // NOTE: For now instanced meshes are not culled by camera's frustum
+            if (renderingEngine.isFrustumCullingEnabled() && !mesh->isInstanced()) {
                 const Frustum camFrustum = camera.getFrustum();
                 if (mesh->getBoundingVolume()->isOnFrustum(camFrustum, *GetTransform())) {
                     // Draw mesh using it's own material

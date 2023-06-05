@@ -85,7 +85,15 @@ void Game::init() {
     rockNode->getTransform()->setScale(0.01f);
     addToScene(rockNode);
 
-    SceneNode* wall = (new SceneNode("wall", glm::vec3(4.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/wall.obj"));
+    const unsigned NUM_INSTANCES = 1000;
+    std::vector<glm::mat4> instanceTransforms;
+    float radius = 5.0f, offset = 0.25f;
+    for (unsigned i = 0; i < NUM_INSTANCES; i++) {
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, -100.0f + i * 2.0, 0));
+        instanceTransforms.push_back(model);
+    }
+    SceneNode* wall = (new SceneNode("wall", glm::vec3(0.f, 2.f, 0.f)))
+        ->addComponent(new ModelRenderer("assets/models/wall.obj", NUM_INSTANCES, instanceTransforms));
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 

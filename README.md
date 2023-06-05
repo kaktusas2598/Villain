@@ -21,7 +21,9 @@
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
 * Mipmapped textures with anisotropic filtering, 4x MultiSample Anti-Aliasing enabled
+* Gamma-corrected textures
 * 2D texture batch rendering, multiple texture and colour support
+* Instanced rendering support for 3D models and meshes
 * 3D Model loading using assimp
 * Normal and Parallax mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
@@ -49,8 +51,7 @@
 * Environmental mapping(reflections and refractions)
 * Mesh batch rendering
 * Stencil buffer
-* Instanced drawing
-* Gamma correction/sRGB textures, HDR and Bloom
+* HDR and Bloom
 
 ## Screenshots
 
