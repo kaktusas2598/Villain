@@ -54,6 +54,7 @@ namespace Villain {
             bool* getBlur() { return &blur; }
             bool* getEdgeDetection() { return &outline; }
             bool* getToonShadingEnabled() { return &toonShadingEnabled; }
+            bool* getVisualiseNormals() { return &visualiseNormals; }
             // Additional FBOs
             bool* getMirrorFramebufferEnabled() { return &mirrorBufferEnabled; }
 
@@ -75,6 +76,7 @@ namespace Villain {
 
             Shader* defaultShader = nullptr;
             Shader* postFXShader = nullptr;
+            Shader* normalDebugShader = nullptr;
             Shader* dirShadowMapShader = nullptr;
             Shader* omnidirShadowMapShader = nullptr;
 
@@ -100,6 +102,7 @@ namespace Villain {
             bool outline = false;
             bool mirrorBufferEnabled = false;
             bool toonShadingEnabled = false;
+            bool visualiseNormals = false;
 
             static bool gammaCorrection;
 

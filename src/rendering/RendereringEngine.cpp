@@ -16,6 +16,7 @@ namespace Villain {
 
         defaultShader = Shader::createFromResource("forward-ambient");
         postFXShader = Shader::createFromResource("postProcessing");
+        normalDebugShader = Shader::createFromResource("normal-debug");
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
 
@@ -239,6 +240,11 @@ namespace Villain {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
+        }
+
+        if (visualiseNormals) {
+            normalDebugShader->bind();
+            node->render(normalDebugShader, this, mainCamera);
         }
     }
 
