@@ -74,6 +74,7 @@
  * [tinyxml2](https://github.com/leethomason/tinyxml2) - Simple, small, efficient C++ XML parser
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
  * [lua](https://www.lua.org/) - For scripting, configuration
+ * [Native File Dialog Extended](https://github.com/btzy/nativefiledialog-extended) - Native open file dialog
 
 
 ## Libraries and assets used by examples
@@ -95,6 +96,7 @@ First install the dependencies and when use build instructions below.
     sudo apt-get install -y liblua5.4-dev
     sudo apt-get install -y libassimp-dev
     sudo apt-get install -y libbullet-dev (Optional at the moment)
+    sudo apt-get install -y libgtk3-dev (Needed for native file dialog on linux only)
 
 ### Building
 
