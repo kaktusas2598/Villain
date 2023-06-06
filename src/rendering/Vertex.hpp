@@ -1,6 +1,8 @@
 #ifndef __Vertex__
 #define __Vertex__
 
+#define MAX_BONE_INFLUENCE 4
+
 /*
  * Defines different kind of Vertex types and each type of Vertex
  * implements getVertexLayout() method which setups vertex attribute pointers
@@ -67,6 +69,33 @@ struct VertexP1N1T1B1UV {
         layout.push<float>(2);
         layout.push<float>(3);
         layout.push<float>(3);
+        return layout;
+    }
+};
+
+// Same as VertexP1N1T1B1UV but with animation info
+struct VertexAnimated {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 UV;
+    glm::vec3 Tangent;
+    glm::vec3 BiTangent;
+
+    // Bones which will influence this vertex
+    int BoneIDs[MAX_BONE_INFLUENCE];
+    // Weights from each bone
+    float Weights[MAX_BONE_INFLUENCE];
+
+    static VertexBufferLayout getVertexLayout() {
+        VertexBufferLayout layout;
+        layout.push<float>(3);
+        layout.push<float>(3);
+        layout.push<float>(2);
+        layout.push<float>(3);
+        layout.push<float>(3);
+
+        layout.push<int>(4);
+        layout.push<float>(4);
         return layout;
     }
 };
