@@ -323,19 +323,12 @@ namespace Villain {
                 engine.getApplication()->getRootNode()->addChild(newNode);
             }
 
-            // TEMP TEST CODE
+            // TEMP TEST CODE for filesystem stuff!!!
             if (ImGui::Button("Load")) {
-                //std::cout << fs::current_path() << ":\n";
-                //std::string path = fs::current_path();
-                //for (const auto & entry : fs::directory_iterator(path))
-                    //std::cout << entry.path() << std::endl;
-                ////fs::temp_directory_path()
-
-
                 nfdchar_t *outPath;
                 nfdfilteritem_t filterItem[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
-                // TODO: open dialog in project/runtime dir
-                // Possibly write basic imgui file dialog instead using c++ filesystem header and imgui trees
+                // TODO: Possibly write basic imgui file dialog instead using c++ filesystem header and imgui trees
+                // reducing numbder of dependencies
                 nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, fs::current_path().c_str());
                 if (result == NFD_OKAY) {
                     puts(outPath);
