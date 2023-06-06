@@ -3,6 +3,7 @@
 
 #include "Material.hpp"
 #include "Mesh.hpp"
+#include "rendering/animation/BoneInfo.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -44,6 +45,16 @@ namespace Villain {
             void processNode(aiNode* node, const aiScene* scene);
             Mesh<VertexP1N1T1B1UV> processMesh(aiMesh* mesh, const aiScene* scene);
             std::vector<Texture*>* loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+
+            // Skeletal animation properties
+            std::map<std::string, BoneInfo> boneInfoMap;
+            int boneCounter = 0;
+
+            auto& getBoneInfoMap() { return boneInfoMap; }
+            int& getBoneCount() { return boneCounter; }
+            void resetVertexBoneData(VertexAnimated& vertex) {
+
+            }
     };
 }
 

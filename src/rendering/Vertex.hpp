@@ -73,14 +73,7 @@ struct VertexP1N1T1B1UV {
     }
 };
 
-// Same as VertexP1N1T1B1UV but with animation info
-struct VertexAnimated {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec2 UV;
-    glm::vec3 Tangent;
-    glm::vec3 BiTangent;
-
+struct VertexAnimated : public VertexP1N1T1B1UV {
     // Bones which will influence this vertex
     int BoneIDs[MAX_BONE_INFLUENCE];
     // Weights from each bone

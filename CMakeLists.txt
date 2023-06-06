@@ -38,15 +38,14 @@ message(STATUS "SDL2 include dir: ${SDL2_INCLUDE_DIR}")
 message(STATUS "Glew include dir: ${GLEW_INCLUDE_DIRS}")
 message(STATUS "Freetype include dir: ${FREETYPE_INCLUDE_DIRS}")
 
-file(GLOB sources src/*.cpp)
-file(GLOB comp_sources src/*/*.cpp)
+file(GLOB_RECURSE sources src/*.cpp)
 
 # Uncoment to build executable, but make sure to comment add_library() line
 #add_executable(${PROJECT_NAME} main.cpp ${sources})
 
 # Build as library
 # NV: On WSL I had to change shared to static to make this work, whyyyyy???
-add_library(${PROJECT_NAME} STATIC ${sources} ${comp_sources})
+add_library(${PROJECT_NAME} STATIC ${sources} )
 
 # Specify extra directories with their own CMakeLists.txt for this build
 add_subdirectory(vendor/glm)
