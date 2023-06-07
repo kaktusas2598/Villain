@@ -130,7 +130,7 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
-    Model* sphereModel = new Model("assets/models/sphere.obj");;
+    Model* sphereModel = new Model("assets/models/sphere.obj");
     addToScene((new SceneNode("physics object 0"))
         ->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
         ->addComponent(new ModelRenderer(sphereModel)));
