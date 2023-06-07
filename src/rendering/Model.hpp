@@ -30,6 +30,9 @@ namespace Villain {
 
             std::string& getDirectory() { return directory; }
             std::string& getFilename() { return fileName; }
+            auto& getBoneInfoMap() { return boneInfoMap; }
+            int& getBoneCount() { return boneCounter; }
+
         private:
             std::vector<Mesh<VertexP1N1T1B1UV>> meshes;
             std::map<std::string, Material> materials;
@@ -51,8 +54,6 @@ namespace Villain {
             std::map<std::string, BoneInfo> boneInfoMap;
             int boneCounter = 0;
 
-            auto& getBoneInfoMap() { return boneInfoMap; }
-            int& getBoneCount() { return boneCounter; }
             void setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight);
             void resetVertexBoneData(VertexP1N1T1B1UV& vertex) {
                 for (int i = 0; i < MAX_BONE_INFLUENCE; i++) {
