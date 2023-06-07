@@ -27,7 +27,10 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
         // Enable vertex attributes
         GLCall(glEnableVertexAttribArray(i));
         // Set up vertex attributes (position, colour, texture uv, normals)
-        GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalised, layout.getStride(), (const void*)offset));
+        if (element.type == GL_INT)
+            GLCall(glVertexAttribIPointer(i, element.count, GL_INT, layout.getStride(), (const void*)offset));
+        else
+            GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalised, layout.getStride(), (const void*)offset));
         offset += element.count * VertexBufferElement::getSizeOfType(element.type);
     }
 }

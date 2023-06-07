@@ -58,6 +58,8 @@ namespace Villain {
         for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
             VertexP1N1T1B1UV vertex;
 
+            resetVertexBoneData(vertex);
+
             glm::vec3 tempVec;
             tempVec.x = mesh->mVertices[i].x;
             tempVec.y = mesh->mVertices[i].y;
@@ -98,6 +100,8 @@ namespace Villain {
             for (unsigned int j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);
         }
+
+        extractBoneWeightForVertices(vertices, mesh, scene);
 
         // Set diffuse color for entire mesh and if it has any materials, set if from there
         // including diffuse maps and other
@@ -156,5 +160,41 @@ namespace Villain {
         }
 
         return textures;
+    }
+
+    void Model::setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight) {
+        for (int i = 0; i < MAX_BONE_INFLUENCE; i++) {
+            if (vertex.BoneIDs[i] < 0) {
+                vertex.Weights[i] = weight;
+                vertex.BoneIDs[i] = boneID;
+            }
+        }
+    }
+
+    void Model::extractBoneWeightForVertices(std::vector<VertexP1N1T1B1UV>& vertices, aiMesh* mesh, const aiScene* scene) {
+        for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
+            int boneID = -1;
+            std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+            if (boneInfoMap.find(boneName) == boneInfoMap.end()) {
+                BoneInfo boneInfo;
+                boneInfo.id = boneCounter;
+                boneInfo.offset = aiMatrixToGLM(mesh->mBones[boneIndex]->mOffsetMatrix);
+                boneInfoMap[boneName] = boneInfo;
+                boneID = boneCounter;
+                boneCounter++;
+            } else {
+                boneID = boneInfoMap[boneName].id;
+            }
+            assert(boneID != -1);
+
+            auto weights = mesh->mBones[boneIndex]->mWeights;
+            int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+            for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex) {
+                int vertexId = weights[weightIndex].mVertexId;
+                float weight = weights[weightIndex].mWeight;
+                assert(vertexId <= vertices.size());
+                setVertexBoneData(vertices[vertexId], boneID, weight);
+            }
+        }
     }
 }

@@ -6,10 +6,6 @@
 
 namespace Villain {
 
-    ModelRenderer::~ModelRenderer() {
-        delete model;
-    }
-
     void ModelRenderer::render(
             Shader& shader,
             RenderingEngine& renderingEngine,

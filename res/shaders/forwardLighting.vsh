@@ -3,7 +3,9 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
 layout(location = 3) in vec3 tangent;
 layout(location = 4) in vec3 biTangent;
-layout(location = 5) in mat4 instanceMatrix;
+layout(location = 5) in ivec4 boneIds;
+layout(location = 6) in vec4 weights;
+layout(location = 7) in mat4 instanceMatrix;
 
 out vec3 v_normal; // If using normal maps, not needed
 out vec3 v_fragPos; // World position

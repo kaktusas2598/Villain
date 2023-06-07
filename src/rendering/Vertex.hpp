@@ -59,26 +59,15 @@ struct VertexP1N1UV {
 struct VertexP1N1T1B1UV {
     glm::vec3 Position;
     glm::vec3 Normal;
+    // Texture coordinates
     glm::vec2 UV;
+    // Tangent and BiTangent used to calculate tangent space and realistic lighting
     glm::vec3 Tangent;
     glm::vec3 BiTangent;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(3);
-        layout.push<float>(2);
-        layout.push<float>(3);
-        layout.push<float>(3);
-        return layout;
-    }
-};
-
-struct VertexAnimated : public VertexP1N1T1B1UV {
     // Bones which will influence this vertex
     int BoneIDs[MAX_BONE_INFLUENCE];
     // Weights from each bone
     float Weights[MAX_BONE_INFLUENCE];
-
     static VertexBufferLayout getVertexLayout() {
         VertexBufferLayout layout;
         layout.push<float>(3);
@@ -92,7 +81,6 @@ struct VertexAnimated : public VertexP1N1T1B1UV {
         return layout;
     }
 };
-
 
 struct VertexP1N1C1UV {
     glm::vec3 Position;

@@ -9,7 +9,6 @@ namespace Villain {
     class ModelRenderer : public NodeComponent {
         public:
             ModelRenderer(Model *m) : model(m) {};
-            ~ModelRenderer();
             virtual void render(
                 Shader& shader,
                 RenderingEngine& renderingEngine,
