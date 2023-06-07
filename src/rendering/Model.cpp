@@ -2,6 +2,7 @@
 
 #include "Logger.hpp"
 #include "ResourceManager.hpp"
+#include "rendering/AssimpUtils.hpp"
 #include "rendering/RendereringEngine.hpp"
 
 #include <sstream>
@@ -60,27 +61,10 @@ namespace Villain {
 
             resetVertexBoneData(vertex);
 
-            glm::vec3 tempVec;
-            tempVec.x = mesh->mVertices[i].x;
-            tempVec.y = mesh->mVertices[i].y;
-            tempVec.z = mesh->mVertices[i].z;
-            vertex.Position = tempVec;
-
-            tempVec.x = mesh->mNormals[i].x;
-            tempVec.y = mesh->mNormals[i].y;
-            tempVec.z = mesh->mNormals[i].z;
-            vertex.Normal = tempVec;
-
-            tempVec.x = mesh->mTangents[i].x;
-            tempVec.y = mesh->mTangents[i].y;
-            tempVec.z = mesh->mTangents[i].z;
-            vertex.Tangent = tempVec;
-
-            tempVec.x = mesh->mBitangents[i].x;
-            tempVec.y = mesh->mBitangents[i].y;
-            tempVec.z = mesh->mBitangents[i].z;
-            vertex.BiTangent = tempVec;
-
+            vertex.Position = AssimpUtils::aiVector3ToGLM(mesh->mVertices[i]);
+            vertex.Normal = AssimpUtils::aiVector3ToGLM(mesh->mNormals[i]);
+            vertex.Tangent = AssimpUtils::aiVector3ToGLM(mesh->mTangents[i]);
+            vertex.BiTangent = AssimpUtils::aiVector3ToGLM(mesh->mBitangents[i]);
 
             // Check if texture coords are set, assimp supports up to 8 tex coords for each vertex
             if (mesh->mTextureCoords[0]) {
@@ -178,7 +162,7 @@ namespace Villain {
             if (boneInfoMap.find(boneName) == boneInfoMap.end()) {
                 BoneInfo boneInfo;
                 boneInfo.id = boneCounter;
-                boneInfo.offset = aiMatrixToGLM(mesh->mBones[boneIndex]->mOffsetMatrix);
+                boneInfo.offset = AssimpUtils::aiMatrixToGLM(mesh->mBones[boneIndex]->mOffsetMatrix);
                 boneInfoMap[boneName] = boneInfo;
                 boneID = boneCounter;
                 boneCounter++;
