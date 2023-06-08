@@ -6,6 +6,13 @@
 
 namespace Villain {
 
+    ModelRenderer::~ModelRenderer() {
+        if (animator)
+            delete animator;
+        if(currentAnimation)
+            delete currentAnimation;
+    }
+
     void ModelRenderer::render(
             Shader& shader,
             RenderingEngine& renderingEngine,
@@ -18,6 +25,8 @@ namespace Villain {
         // materials are different per mesh
         Material material;
         shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
+
+        // Mouse picking/selecting uniforms
         shader.setUniform1ui("objectIndex", parent->getID());
         if (renderingEngine.getSelectedNodeID() != 0 && renderingEngine.getSelectedNodeID() == parent->getID()) {
             parent->setSelected(true);
@@ -25,9 +34,20 @@ namespace Villain {
             parent->setSelected(false);
         }
         shader.setUniform1i("selected", parent->isSelected());
-        //model->draw(shader);
+
+        // Skeletal animation uniforms
+        if (currentAnimation != nullptr && model->getBoneCount() > 0) {
+            shader.setUniform1i("skeletalAnimationEnabled", 1);
+            auto transforms = animator->getFinalBoneMatrices();
+            for (int i = 0; i < transforms.size(); i++) {
+                shader.setUniformMat4f("finalBoneMatrices[" + std::to_string(i) + "]", transforms[i]);
+            }
+        } else {
+            shader.setUniform1i("skeletalAnimationEnabled", 0);
+        }
 
         int i = 0;
+        // Main render loop for each mesh
         for (auto& mesh: model->getMeshes()) {
             // NOTE: For now instanced meshes are not culled by camera's frustum
             if (renderingEngine.isFrustumCullingEnabled() && !mesh.isInstanced()) {
@@ -45,5 +65,10 @@ namespace Villain {
             i++;
         }
         //std::cout << "Total meshes: " << total << ", Visible meshes: " << display << "\n";
+    }
+
+    void ModelRenderer::update(float deltaTime) {
+        if (animator)
+            animator->updateAnimation(deltaTime);
     }
 }

@@ -63,8 +63,9 @@ namespace Villain {
 
             vertex.Position = AssimpUtils::aiVector3ToGLM(mesh->mVertices[i]);
             vertex.Normal = AssimpUtils::aiVector3ToGLM(mesh->mNormals[i]);
-            vertex.Tangent = AssimpUtils::aiVector3ToGLM(mesh->mTangents[i]);
-            vertex.BiTangent = AssimpUtils::aiVector3ToGLM(mesh->mBitangents[i]);
+
+            vertex.Tangent = mesh->HasTangentsAndBitangents() ? AssimpUtils::aiVector3ToGLM(mesh->mTangents[i]) : glm::vec3(0.0f);
+            vertex.BiTangent = mesh->HasTangentsAndBitangents() ? AssimpUtils::aiVector3ToGLM(mesh->mBitangents[i]) : glm::vec3(0.0f);
 
             // Check if texture coords are set, assimp supports up to 8 tex coords for each vertex
             if (mesh->mTextureCoords[0]) {

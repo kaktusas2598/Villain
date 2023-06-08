@@ -144,6 +144,12 @@ void Game::init() {
     printf("CameraComponent ID: %i\n", GetId<CameraComponent>());
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
+
+    // Skeletal Animation demo
+    Model* animatedModel = new Model("assets/models/deer1.dae");
+    SceneNode* animModelNode = (new SceneNode("Skeleton"))->addComponent(new ModelRenderer(animatedModel, "assets/models/deer1.dae"));
+    animModelNode->getTransform()->setEulerRot(-90.0f, 90.0f, 0.0f);
+    addToScene(animModelNode);
 }
 
 void Game::handleEvents(float deltaTime) {

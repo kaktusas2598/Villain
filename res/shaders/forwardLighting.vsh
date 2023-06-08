@@ -18,6 +18,12 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+// Skeletal animation specific properties
+const int MAX_BONES = 100;
+const int MAX_BONE_INFLUENCE = 4;
+uniform mat4 finalBoneMatrices[MAX_BONES];
+uniform bool skeletalAnimationEnabled = false;
+
 uniform bool instancedRenderingEnabled = false;
 
 out float visibility; // Determines how foggy vertex is
@@ -28,11 +34,31 @@ uniform mat4 lightMatrix;
 
 void main() {
     mat4 worldTransform = model;
+
     if (instancedRenderingEnabled) {
         worldTransform = model * instanceMatrix;
     }
+
+    vec4 totalPosition = vec4(0.0f);
+    if (skeletalAnimationEnabled) {
+        for(int i = 0; i < MAX_BONE_INFLUENCE; i++){
+            if (boneIds[i] == -1)
+                continue;
+            if (boneIds[i] >= MAX_BONES) {
+                totalPosition = vec4(position, 1.0);
+                break;
+            }
+            vec4 localPosition = finalBoneMatrices[boneIds[i]] * vec4(position, 1.0);
+            totalPosition += localPosition * weights[i];
+            // TODO: ?
+            vec3 localNormal = mat3(finalBoneMatrices[boneIds[i]]) * normal;
+        }
+    } else {
+        totalPosition = vec4(position, 1.0);
+    }
+
     // Calculate fragment position for lighting in world space
-    v_fragPos = vec3(worldTransform * vec4(position, 1.0));
+    v_fragPos = vec3(worldTransform * totalPosition);
     gl_Position = projection * view * vec4(v_fragPos, 1.0);
     // Does normal needs to be translated to world space here?
     v_normal = normal;
