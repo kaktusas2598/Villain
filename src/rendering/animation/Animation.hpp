@@ -27,7 +27,7 @@ namespace Villain {
             inline float getTicksPerSecond() { return ticksPerSecond; }
             inline float getDuration() { return duration; }
             inline const AssimpNodeData& getRootNode() { return rootNode; }
-            inline const std::map<std::string, BoneInfo>& getBoneIDMap() { return boneInfoMap; }
+            inline const std::map<std::string, BoneInfo>& getBoneInfoMap() { return boneInfoMap; }
 
         private:
             void readMissingBones(const aiAnimation* animation, Model& model);
