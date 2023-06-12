@@ -29,6 +29,7 @@ class Terrain {
         }
         float getHeightInterpolated(float x, float z) const;
         float getSize() const { return terrainSize; }
+        float getWorldSize() { return terrainSize * worldScale; }
         float getWorldScale() const { return worldScale; }
         float getTextureScale() const { return textureScale; }
         float getMinHeight() const { return minHeight; }
@@ -38,6 +39,12 @@ class Terrain {
         float* getHeight1() { return &height1; }
         float* getHeight2() { return &height2; }
         float* getHeight3() { return &height3; }
+
+        // Takes 3D position vector and returns new vector on the ground level of the terrain,
+        // used for terrain collision detection
+        glm::vec3 constrainPositionRelativeToTerrain(const glm::vec3& pos);
+        float getWorldHeight(float x, float z);
+        float getHeightInterpolatedForCollision(float x, float z) const;
 
     protected:
         void loadHeightMap(const std::string& fileName);
