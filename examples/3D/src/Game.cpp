@@ -150,15 +150,10 @@ void Game::init() {
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
     // Skeletal Animation demo
-    Model* animatedModel = new Model("assets/models/deer1.dae");
-    SceneNode* animModelNode = (new SceneNode("Male Deer"))->addComponent(new ModelRenderer(animatedModel, "assets/models/deer1.dae"));
+    Model* animatedModel = new Model("assets/models/chicken/chickenV2.dae");
+    SceneNode* animModelNode = (new SceneNode("Chicken", glm::vec3(5, 5, -5)))->addComponent(new ModelRenderer(animatedModel, "assets/models/chicken/chickenV2.dae"));
     animModelNode->getTransform()->setEulerRot(-90.0f, 90.0f, 0.0f);
     addToScene(animModelNode);
-
-    Model* chickenModel = new Model("assets/models/chicken/chickenV2.dae");
-    SceneNode* chickenNode = (new SceneNode("Chicken", glm::vec3(4.0f, 7.0f, -15.0f)))->addComponent(new ModelRenderer(chickenModel, "assets/models/chicken/chickenV2.dae"));
-    chickenNode->getTransform()->setEulerRot(-90.0f, 90.0f, 0.0f);
-    addToScene(chickenNode);
 
     // NOTE: Starting from Assimp 5.1 Collada parsing seems to be broken, not good :/
     //Model* vampire = new Model("assets/models/dancing_vampire.dae");
