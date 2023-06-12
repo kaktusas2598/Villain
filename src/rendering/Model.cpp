@@ -24,7 +24,10 @@ namespace Villain {
         // aiProcess_GenNormals
         // aiProcess_CalcTangentSpace - won't calculate if there are no normals
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+
+        printf("------------------------\n");
+        printf("Loading model from %s\n", path.c_str());
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             std::stringstream ss;
@@ -35,6 +38,8 @@ namespace Villain {
         directory = path.substr(0, path.find_last_of('/'));
         fileName = path.substr(path.find_last_of('/'), path.length());
 
+        printf("Number of animations: %d, meshes: %d\n", scene->mNumAnimations, scene->mNumMeshes);
+
         processNode(scene->mRootNode, scene);
     }
 
@@ -42,6 +47,7 @@ namespace Villain {
         // process any meshes
         for (unsigned int i = 0; i < node->mNumMeshes; i ++) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+            printf("Processing Mesh %s, Vertices: %d Indices: %d Bones: %d\n", mesh->mName.C_Str(), mesh->mNumVertices, mesh->mNumFaces * 3, mesh->mNumBones);
             meshes.push_back(processMesh(mesh, scene));
         }
         // process children nodes
@@ -152,11 +158,13 @@ namespace Villain {
             if (vertex.BoneIDs[i] < 0) {
                 vertex.Weights[i] = weight;
                 vertex.BoneIDs[i] = boneID;
+                //printf("Setting bone data, weight %f, ID %d\n", vertex.Weights[i], vertex.BoneIDs[i]);
             }
         }
     }
 
     void Model::extractBoneWeightForVertices(std::vector<VertexP1N1T1B1UV>& vertices, aiMesh* mesh, const aiScene* scene) {
+        printf("Parsing bone weights for %s\n", fileName.c_str());
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
             int boneID = -1;
             std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
@@ -165,6 +173,7 @@ namespace Villain {
                 boneInfo.id = boneCounter;
                 boneInfo.offset = AssimpUtils::aiMatrixToGLM(mesh->mBones[boneIndex]->mOffsetMatrix);
                 boneInfoMap[boneName] = boneInfo;
+                printf("Bone %s affecting %d vertices\n", boneName.c_str(), mesh->mBones[boneIndex]->mNumWeights);
                 boneID = boneCounter;
                 boneCounter++;
             } else {

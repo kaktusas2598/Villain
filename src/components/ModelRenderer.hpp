@@ -11,6 +11,7 @@ namespace Villain {
         public:
             ModelRenderer(Model *m, const std::string& animationPath = std::string()) : model(m) {
                 if (!animationPath.empty()) {
+                    printf("Loading animation...\n");
                     currentAnimation = new Animation(animationPath, model);
                     animator = new Animator(currentAnimation);
                 }

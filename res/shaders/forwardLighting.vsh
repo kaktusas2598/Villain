@@ -13,6 +13,10 @@ out vec2 v_texCoords;
 out vec4 v_shadowMapCoords; // Used for directional shadow mapping for dir and spot lights
 out mat3 v_TBN; // Tangent-Bitangent-Normal matrix
 
+// Skeletal animation debug
+flat out ivec4 v_boneIds;
+out vec4 v_weights;
+
 // MVP matrices
 uniform mat4 projection;
 uniform mat4 view;
@@ -39,11 +43,16 @@ void main() {
         worldTransform = model * instanceMatrix;
     }
 
+    v_boneIds = boneIds;
+    v_weights = weights;
+
     vec4 totalPosition = vec4(0.0f);
     if (skeletalAnimationEnabled) {
         for(int i = 0; i < MAX_BONE_INFLUENCE; i++){
             if (boneIds[i] == -1)
                 continue;
+            // NOTE: seems like the only reason animated models are drawn is this condition,
+            // does it mean boneIDs are not correctly set?
             if (boneIds[i] >= MAX_BONES) {
                 totalPosition = vec4(position, 1.0);
                 break;

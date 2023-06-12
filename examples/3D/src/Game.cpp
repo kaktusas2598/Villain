@@ -21,6 +21,10 @@
 using namespace Villain;
 
 void Game::init() {
+    GLint result;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
+    printf("Max vertex shader attrib count is %d\n", result);
+
     camera = new Camera();
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
@@ -147,9 +151,20 @@ void Game::init() {
 
     // Skeletal Animation demo
     Model* animatedModel = new Model("assets/models/deer1.dae");
-    SceneNode* animModelNode = (new SceneNode("Skeleton"))->addComponent(new ModelRenderer(animatedModel, "assets/models/deer1.dae"));
+    SceneNode* animModelNode = (new SceneNode("Male Deer"))->addComponent(new ModelRenderer(animatedModel, "assets/models/deer1.dae"));
     animModelNode->getTransform()->setEulerRot(-90.0f, 90.0f, 0.0f);
     addToScene(animModelNode);
+
+    Model* chickenModel = new Model("assets/models/chicken/chickenV2.dae");
+    SceneNode* chickenNode = (new SceneNode("Chicken", glm::vec3(4.0f, 7.0f, -15.0f)))->addComponent(new ModelRenderer(chickenModel, "assets/models/chicken/chickenV2.dae"));
+    chickenNode->getTransform()->setEulerRot(-90.0f, 90.0f, 0.0f);
+    addToScene(chickenNode);
+
+    // NOTE: Starting from Assimp 5.1 Collada parsing seems to be broken, not good :/
+    //Model* vampire = new Model("assets/models/dancing_vampire.dae");
+    //SceneNode* vampireNode = (new SceneNode("Vampire", glm::vec3(-5.0f, 7.0f, -15.0f)))->addComponent(new ModelRenderer(vampire, "assets/models/dancing_vampire.dae"));
+    //addToScene(vampireNode);
+
 }
 
 void Game::handleEvents(float deltaTime) {

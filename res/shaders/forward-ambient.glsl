@@ -13,6 +13,9 @@ in vec3 v_fragPos;
 in vec2 v_texCoords;
 in float visibility;
 
+flat in ivec4 v_boneIds;
+in vec4 v_weights;
+
 in mat3 v_TBN;
 
 #include lighting.glh

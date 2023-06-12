@@ -19,6 +19,10 @@ namespace Villain {
                 to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
                 to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
                 to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+                //printf("00: %f 10: %f 20: %f 30: %f\n", from.a1, from.a2, from.a3, from.a4);
+                //printf("01: %f 11: %f 21: %f 31: %f\n", from.b1, from.b2, from.b3, from.b4);
+                //printf("02: %f 12: %f 22: %f 32: %f\n", from.c1, from.c2, from.c3, from.c4);
+                //printf("03: %f 13: %f 23: %f 33: %f\n", from.d1, from.d2, from.d3, from.d4);
                 return to;
             }
 

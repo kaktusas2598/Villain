@@ -73,6 +73,7 @@ struct VertexP1N1T1B1UV {
         layout.push<float>(3);
         layout.push<float>(3);
         layout.push<float>(2);
+
         layout.push<float>(3);
         layout.push<float>(3);
 

@@ -14,7 +14,7 @@ namespace Villain {
             void playAnimation(Animation* animation);
             void calculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform);
 
-            std::vector<glm::mat4> getFinalBoneMatrices() { return finalBoneMatrices; }
+            std::vector<glm::mat4>& getFinalBoneMatrices() { return finalBoneMatrices; }
         private:
             std::vector<glm::mat4> finalBoneMatrices;
             Animation* currentAnimation;
