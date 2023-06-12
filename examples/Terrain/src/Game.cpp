@@ -96,6 +96,10 @@ void Game::onAppPreUpdate(float dt) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
+
+    // Restrict camera to terrain ground level for collision demonstration
+    glm::vec3 newCameraPos = midpointDisplacementTerrain.constrainPositionRelativeToTerrain(camera->getPosition());
+    camera->setPosition(newCameraPos);
 }
 
 void Game::onAppRender(float dt) {

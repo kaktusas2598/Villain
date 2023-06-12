@@ -112,3 +112,63 @@ float Terrain::getHeightInterpolated(float x, float z) const {
     float finalHeight = (interpolatedHeightX + interpolatedHeightZ) / 2.0f;
     return finalHeight;
 }
+
+glm::vec3 Terrain::constrainPositionRelativeToTerrain(const glm::vec3& pos) {
+    glm::vec3 newPos = pos;
+
+    // Make sure new position does not go out of bounds of terrain
+    if (pos.x < 0.0f)
+        newPos.x = 0.0f;
+
+    if (pos.z < 0.0f)
+        newPos.z = 0.0f;
+
+    if (pos.x > getWorldSize())
+        newPos.x = getWorldSize() - 0.5f;
+
+    if (pos.z > getWorldSize())
+        newPos.z = getWorldSize() - 0.5f;
+
+    // TODO: need to pass in probably, this could be players, vehicle height as well
+    const float bodyHeight = 50.0f;
+    newPos.y = getWorldHeight(pos.x, pos.z) + bodyHeight;
+
+
+    // Optional: simulate walking (slighly shifting up and down)
+    float f = sinf(pos.x * 4.0f) + cosf(pos.z * 4.0f);
+    f /= 35.0f;
+    newPos.y += f;
+
+    return newPos;
+}
+
+float Terrain::getWorldHeight(float x, float z) {
+    // Original height map is not scaled, so we need to scale coordinates back down before getting world height
+    float heightMapX = x / worldScale;
+    float heightMapZ = z / worldScale;
+
+    return getHeightInterpolatedForCollision(heightMapX, heightMapZ);
+}
+
+float Terrain::getHeightInterpolatedForCollision(float x, float z) const {
+    float x0z0Height = getHeight(x, z);
+
+    if(((int)x + 1 >= terrainSize) || ((int)z + 1) >= terrainSize) {
+        return x0z0Height;
+    }
+
+    float x1z0Height = getHeight((int)x + 1, z);
+    float x0z1Height = getHeight(x, (int)z + 1);
+    float x1z1Height = getHeight((int)x + 1, (int)z + 1);
+
+    // Calculate height for collision detection using bilinear interpolation
+    // NOTE: Alternative method for getting height might be using biraycentric coordinates
+    float factorX = x - floorf(x);
+    float interpolatedBottom = (x1z0Height - x0z0Height) * factorX + x0z0Height;
+    float interpolatedTop = (x1z1Height - x0z1Height) * factorX + x0z1Height;
+
+    float factorZ = z - floorf(z);
+    float finalHeight = (interpolatedTop - interpolatedBottom) * factorZ + interpolatedBottom;
+
+    return finalHeight;
+}
