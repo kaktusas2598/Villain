@@ -65,7 +65,7 @@ struct VertexP1N1T1B1UV {
     glm::vec3 Tangent;
     glm::vec3 BiTangent;
     // Bones which will influence this vertex
-    int BoneIDs[MAX_BONE_INFLUENCE];
+    int32_t BoneIDs[MAX_BONE_INFLUENCE];
     // Weights from each bone
     float Weights[MAX_BONE_INFLUENCE];
     static VertexBufferLayout getVertexLayout() {

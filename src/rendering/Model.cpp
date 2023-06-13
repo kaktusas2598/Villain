@@ -164,7 +164,8 @@ namespace Villain {
     }
 
     void Model::extractBoneWeightForVertices(std::vector<VertexP1N1T1B1UV>& vertices, aiMesh* mesh, const aiScene* scene) {
-        printf("Parsing bone weights for %s\n", fileName.c_str());
+        if (mesh->mNumBones > 0)
+            printf("Parsing bone weights for %s\n", fileName.c_str());
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
             int boneID = -1;
             std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();

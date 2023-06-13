@@ -9,7 +9,7 @@ namespace Villain {
 
     Animation::Animation(const std::string& path, Model* model) {
         Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate);
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
         assert(scene && scene->mRootNode);
         auto animation = scene->mAnimations[0];
         duration = animation->mDuration;
