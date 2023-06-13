@@ -100,6 +100,8 @@ namespace Villain {
             return glm::toMat4(rotation);
         }
 
+        // To avoid gimbal-lock we use quaternions to represent rotations and thus we have to use
+        // spherical linear interpolation(slerp) instead
         int r0Index = getRotationIndex(animationTime);
         int r1Index = r0Index + 1;
         float scaleFactor = getScaleFactor(rotations[r0Index].Timestamp, rotations[r1Index].Timestamp, animationTime);
