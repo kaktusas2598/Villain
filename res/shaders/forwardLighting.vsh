@@ -43,28 +43,24 @@ void main() {
         worldTransform = model * instanceMatrix;
     }
 
-    v_boneIds = boneIds;
-    v_weights = weights;
-
-    vec4 totalPosition = vec4(0.0f);
+    vec4 totalPosition = vec4(position, 1.0);
     if (skeletalAnimationEnabled) {
         for(int i = 0; i < MAX_BONE_INFLUENCE; i++){
             if (boneIds[i] == -1)
                 continue;
-            // NOTE: seems like the only reason animated models are drawn is this condition,
-            // does it mean boneIDs are not correctly set?
             if (boneIds[i] >= MAX_BONES) {
                 totalPosition = vec4(position, 1.0);
                 break;
             }
             vec4 localPosition = finalBoneMatrices[boneIds[i]] * vec4(position, 1.0);
             totalPosition += localPosition * weights[i];
-            // TODO: ?
+            // TODO: How to set normals properly for animated models
             vec3 localNormal = mat3(finalBoneMatrices[boneIds[i]]) * normal;
         }
-    } else {
-        totalPosition = vec4(position, 1.0);
     }
+
+    v_boneIds = boneIds;
+    v_weights = weights;
 
     // Calculate fragment position for lighting in world space
     v_fragPos = vec3(worldTransform * totalPosition);
