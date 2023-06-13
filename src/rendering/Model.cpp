@@ -68,7 +68,7 @@ namespace Villain {
             resetVertexBoneData(vertex);
 
             vertex.Position = AssimpUtils::aiVector3ToGLM(mesh->mVertices[i]);
-            vertex.Normal = AssimpUtils::aiVector3ToGLM(mesh->mNormals[i]);
+            vertex.Normal = mesh->HasNormals() ? AssimpUtils::aiVector3ToGLM(mesh->mNormals[i]) : glm::vec3(0.0f);
 
             vertex.Tangent = mesh->HasTangentsAndBitangents() ? AssimpUtils::aiVector3ToGLM(mesh->mTangents[i]) : glm::vec3(0.0f);
             vertex.BiTangent = mesh->HasTangentsAndBitangents() ? AssimpUtils::aiVector3ToGLM(mesh->mBitangents[i]) : glm::vec3(0.0f);
