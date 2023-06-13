@@ -164,8 +164,6 @@ namespace Villain {
     }
 
     void Model::extractBoneWeightForVertices(std::vector<VertexP1N1T1B1UV>& vertices, aiMesh* mesh, const aiScene* scene) {
-        if (mesh->mNumBones > 0)
-            printf("Parsing bone weights for %s\n", fileName.c_str());
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
             int boneID = -1;
             std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
@@ -174,7 +172,6 @@ namespace Villain {
                 boneInfo.id = boneCounter;
                 boneInfo.offset = AssimpUtils::aiMatrixToGLM(mesh->mBones[boneIndex]->mOffsetMatrix);
                 boneInfoMap[boneName] = boneInfo;
-                printf("Bone %s affecting %d vertices\n", boneName.c_str(), mesh->mBones[boneIndex]->mNumWeights);
                 boneID = boneCounter;
                 boneCounter++;
             } else {

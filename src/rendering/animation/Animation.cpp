@@ -53,14 +53,24 @@ namespace Villain {
     void Animation::readHierarchyData(AssimpNodeData& dest, const aiNode* src) {
         assert(src);
 
+        //static int spaceCount = 4;
+        //printf("Bone: %s Num children: %i\n", src->mName.data, src->mNumChildren);
+
         dest.Name = src->mName.data;
         dest.Transformation = AssimpUtils::aiMatrixToGLM(src->mTransformation);
         dest.ChildrenCount = src->mNumChildren;
 
+        //spaceCount += 4;
         for (int i = 0; i < src->mNumChildren; i++) {
+            //printf("\n");
+            //for (int j = 0; i < spaceCount; j++) {
+                //printf(" ");
+            //}
+            //printf("--- %d ---\n", i);
             AssimpNodeData data;
             readHierarchyData(data, src->mChildren[i]);
             dest.Children.push_back(data);
         }
+        //spaceCount -= 4;
     }
 }

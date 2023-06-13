@@ -36,6 +36,7 @@ namespace Villain {
             nodeTransform = bone->getLocalTransform();
         }
 
+        // NOTE: do we need to also apply global inverse transform from assimp??
         glm::mat4 globalTransform = parentTransform * nodeTransform;
         auto boneInfoMap = currentAnimation->getBoneInfoMap();
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) {
