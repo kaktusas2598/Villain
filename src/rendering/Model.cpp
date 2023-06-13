@@ -158,7 +158,7 @@ namespace Villain {
             if (vertex.BoneIDs[i] < 0) {
                 vertex.Weights[i] = weight;
                 vertex.BoneIDs[i] = boneID;
-                //printf("Setting bone data, weight %f, ID %d\n", vertex.Weights[i], vertex.BoneIDs[i]);
+                break;
             }
         }
     }
