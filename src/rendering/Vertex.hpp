@@ -1,7 +1,13 @@
 #ifndef __Vertex__
 #define __Vertex__
 
-#define MAX_BONE_INFLUENCE 4
+// TODO: move to namespace
+
+// Maximum number of bones influencing single vertex
+constexpr int MAX_BONE_INFLUENCE = 4;
+
+// Maximum number of bones per model
+constexpr int MAX_BONES = 100;
 
 /*
  * Defines different kind of Vertex types and each type of Vertex
