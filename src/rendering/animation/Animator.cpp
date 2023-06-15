@@ -6,8 +6,8 @@ namespace Villain {
         currentTime = 0.0f;
         currentAnimation = animation;
 
-        finalBoneMatrices.reserve(100);
-        for (int i = 0; i < 100; i++) {
+        finalBoneMatrices.reserve(MAX_BONES);
+        for (int i = 0; i < MAX_BONES; i++) {
             finalBoneMatrices.push_back(glm::mat4(1.0f));
         }
     }
@@ -26,7 +26,7 @@ namespace Villain {
         currentTime = 0.0f;
     }
 
-    void Animator::calculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform) {
+    void Animator::calculateBoneTransform(const AssimpNodeData* node, const glm::mat4& parentTransform) {
         std::string nodeName = node->Name;
         glm::mat4 nodeTransform = node->Transformation;
 

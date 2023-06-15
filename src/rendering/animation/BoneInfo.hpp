@@ -5,6 +5,12 @@
 
 namespace Villain {
 
+    // Maximum number of bones per model
+    constexpr int MAX_BONES = 100;
+
+    // Maximum number of bones influencing single vertex
+    constexpr int MAX_BONE_INFLUENCE = 4;
+
     struct BoneInfo {
         // index in finalBoneMatrices
         int id;

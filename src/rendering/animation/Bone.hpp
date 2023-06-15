@@ -32,7 +32,7 @@ namespace Villain {
 
             void update(float animationTime);
             glm::mat4 getLocalTransform() const { return localTransform; }
-            std::string getName() const { return name; }
+            const std::string& getName() const { return name; }
             int getID() const { return id; }
 
             int getPositionIndex(float animationTime);

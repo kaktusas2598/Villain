@@ -61,6 +61,7 @@ namespace Villain {
         dest.ChildrenCount = src->mNumChildren;
 
         //spaceCount += 4;
+        dest.Children.reserve(src->mNumChildren);
         for (int i = 0; i < src->mNumChildren; i++) {
             //printf("\n");
             //for (int j = 0; i < spaceCount; j++) {
