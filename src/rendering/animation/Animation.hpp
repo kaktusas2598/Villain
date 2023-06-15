@@ -2,6 +2,7 @@
 #define __ANIMATION__
 
 
+#include <assimp/Importer.hpp>
 #include "Bone.hpp"
 #include "BoneInfo.hpp"
 #include "rendering/Model.hpp"
@@ -38,6 +39,8 @@ namespace Villain {
             std::vector<Bone> bones;
             AssimpNodeData rootNode;
             std::map<std::string, BoneInfo> boneInfoMap;
+
+            const aiScene* scene = nullptr;
     };
 }
 
