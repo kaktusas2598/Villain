@@ -14,6 +14,7 @@ namespace Villain {
         auto animation = scene->mAnimations[0];
         duration = animation->mDuration;
         ticksPerSecond = animation->mTicksPerSecond;
+        bones.reserve(MAX_BONES);
         readHierarchyData(rootNode, scene->mRootNode);
         readMissingBones(animation, *model);
     }
