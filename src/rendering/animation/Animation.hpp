@@ -10,6 +10,7 @@
 
 namespace Villain {
 
+    // Isolates internal Assimp's structures for Animation class
     struct AssimpNodeData {
         glm::mat4 Transformation;
         std::string Name;
