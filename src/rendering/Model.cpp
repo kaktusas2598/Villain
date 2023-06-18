@@ -92,7 +92,9 @@ namespace Villain {
                 indices.push_back(face.mIndices[j]);
         }
 
-        extractBoneWeightForVertices(vertices, mesh, scene);
+        if (mesh->HasBones()) {
+            extractBoneWeightForVertices(vertices, mesh, scene);
+        }
 
         // Set diffuse color for entire mesh and if it has any materials, set if from there
         // including diffuse maps and other
@@ -154,6 +156,7 @@ namespace Villain {
     }
 
     void Model::setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight) {
+        // Set bone weight for a vertex, up to 4 bones per vertex supported
         for (int i = 0; i < MAX_BONE_INFLUENCE; i++) {
             if (vertex.BoneIDs[i] < 0) {
                 vertex.Weights[i] = weight;
@@ -167,6 +170,7 @@ namespace Villain {
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
             int boneID = -1;
             std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+            // Add new bone to info map if it's not added yet
             if (boneInfoMap.find(boneName) == boneInfoMap.end()) {
                 BoneInfo boneInfo;
                 boneInfo.id = boneCounter;
@@ -175,10 +179,12 @@ namespace Villain {
                 boneID = boneCounter;
                 boneCounter++;
             } else {
+                // Else get existing bone id from info map
                 boneID = boneInfoMap[boneName].id;
             }
             assert(boneID != -1);
 
+            // Set this bone's weight for all vertices affected by it
             auto weights = mesh->mBones[boneIndex]->mWeights;
             int numWeights = mesh->mBones[boneIndex]->mNumWeights;
             for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex) {

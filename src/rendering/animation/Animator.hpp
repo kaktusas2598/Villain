@@ -18,7 +18,7 @@ namespace Villain {
             std::vector<glm::mat4>& getFinalBoneMatrices() { return finalBoneMatrices; }
         private:
             std::vector<glm::mat4> finalBoneMatrices;
-            Animation* currentAnimation;
+            Animation* currentAnimation = nullptr;
             float currentTime;
     };
 }
