@@ -162,13 +162,14 @@ void Game::init() {
 
     std::string catPath = "assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx";
     Model* catModel = new Model(catPath.c_str());
-    SceneNode* catNode = (new SceneNode("Cat"))->addComponent(new ModelRenderer(catModel, catPath));
+    SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel, catPath));
     catNode->getTransform()->setScale(0.02);
+    catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
     addToScene(catNode);
 
     std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/FBX/Eagle.fbx";
     Model* eagleModel = new Model(eaglePath.c_str());
-    SceneNode* eagleNode = (new SceneNode("Eagle"))->addComponent(new ModelRenderer(eagleModel, eaglePath));
+    SceneNode* eagleNode = (new SceneNode("Eagle", {0, 12, -12}))->addComponent(new ModelRenderer(eagleModel, eaglePath));
     eagleNode->getTransform()->setScale(0.02);
     addToScene(eagleNode);
 
