@@ -47,7 +47,7 @@ namespace Villain {
         // process any meshes
         for (unsigned int i = 0; i < node->mNumMeshes; i ++) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            printf("Processing Mesh %s, Vertices: %d Indices: %d Bones: %d\n", mesh->mName.C_Str(), mesh->mNumVertices, mesh->mNumFaces * 3, mesh->mNumBones);
+            //printf("Processing Mesh %s, Vertices: %d Indices: %d Bones: %d\n", mesh->mName.C_Str(), mesh->mNumVertices, mesh->mNumFaces * 3, mesh->mNumBones);
             meshes.push_back(processMesh(mesh, scene));
         }
         // process children nodes
