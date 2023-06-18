@@ -5,6 +5,8 @@ namespace Villain {
     Animator::Animator(Animation* animation) {
         currentTime = 0.0f;
         currentAnimation = animation;
+        //printf("Animation duration: %f Ticks per second: %f\n", animation->getDuration(), animation->getTicksPerSecond());
+        //NOTE: animation time in seconds: duraction/ticksPerSeconds
 
         finalBoneMatrices.reserve(MAX_BONES);
         for (int i = 0; i < MAX_BONES; i++) {
@@ -13,7 +15,6 @@ namespace Villain {
     }
 
     void Animator::updateAnimation(float dt) {
-        deltaTime = dt;
         if (currentAnimation) {
             currentTime += currentAnimation->getTicksPerSecond() * dt;
             currentTime = fmod(currentTime, currentAnimation->getDuration());
@@ -42,7 +43,7 @@ namespace Villain {
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) {
             int index = boneInfoMap[nodeName].id;
             glm::mat4 offset = boneInfoMap[nodeName].offset;
-            finalBoneMatrices[index] = globalTransform * offset;
+            finalBoneMatrices[index] = currentAnimation->getGlobalInverseTransform() * globalTransform * offset;
         }
 
         for (int i = 0; i < node->ChildrenCount; i++)

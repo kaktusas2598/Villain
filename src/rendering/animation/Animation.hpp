@@ -5,6 +5,7 @@
 #include <assimp/Importer.hpp>
 #include "Bone.hpp"
 #include "BoneInfo.hpp"
+#include "rendering/AssimpUtils.hpp"
 #include "rendering/Model.hpp"
 
 namespace Villain {
@@ -29,6 +30,7 @@ namespace Villain {
             inline float getDuration() { return duration; }
             inline const AssimpNodeData& getRootNode() { return rootNode; }
             inline const std::map<std::string, BoneInfo>& getBoneInfoMap() { return boneInfoMap; }
+            inline glm::mat4 getGlobalInverseTransform() { return AssimpUtils::aiMatrixToGLM(globalInverseTransform); }
 
         private:
             void readMissingBones(const aiAnimation* animation, Model& model);
@@ -39,6 +41,8 @@ namespace Villain {
             std::vector<Bone> bones;
             AssimpNodeData rootNode;
             std::map<std::string, BoneInfo> boneInfoMap;
+            // Brings back model to unit scale before animating
+            aiMatrix4x4 globalInverseTransform;
 
             const aiScene* scene = nullptr;
     };

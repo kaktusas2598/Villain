@@ -12,6 +12,7 @@ namespace Villain {
 
             void updateAnimation(float dt);
             void playAnimation(Animation* animation);
+            void stopAnimation() { currentAnimation = nullptr; }
             void calculateBoneTransform(const AssimpNodeData* node, const glm::mat4& parentTransform);
 
             std::vector<glm::mat4>& getFinalBoneMatrices() { return finalBoneMatrices; }
@@ -19,7 +20,6 @@ namespace Villain {
             std::vector<glm::mat4> finalBoneMatrices;
             Animation* currentAnimation;
             float currentTime;
-            float deltaTime;
     };
 }
 

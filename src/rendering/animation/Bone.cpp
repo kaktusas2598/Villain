@@ -8,7 +8,7 @@ namespace Villain {
         name(boneName), id(ID), localTransform(1.0f)
     {
         // Read and store animation keyframes for this bone from aiNodeAnim
-        printf("Animation for bone %s, number of position keyframes: %i \n", boneName.c_str(), channel->mNumPositionKeys);
+        //printf("Animation for bone %s, number of position keyframes: %i \n", boneName.c_str(), channel->mNumPositionKeys);
         numPositions = channel->mNumPositionKeys;
         for (int positionIndex = 0; positionIndex < numPositions; ++positionIndex) {
             aiVector3D position = channel->mPositionKeys[positionIndex].mValue;
@@ -48,12 +48,13 @@ namespace Villain {
         localTransform = translation * rotation * scale;
     }
 
+    // Find keyframe in the node closest to specified animation time in ticks for interpolation
     int Bone::getPositionIndex(float animationTime) {
         for (int i = 0; i < numPositions - 1; ++i) {
             if (animationTime < positions[i + 1].Timestamp)
                 return i;
         }
-        assert(0);
+        return 0;
     }
 
     int Bone::getRotationIndex(float animationTime) {
@@ -61,7 +62,7 @@ namespace Villain {
             if (animationTime < rotations[i + 1].Timestamp)
                 return i;
         }
-        assert(0);
+        return 0;
 
     }
 
@@ -70,17 +71,17 @@ namespace Villain {
             if (animationTime < scales[i + 1].Timestamp)
                 return i;
         }
-        assert(0);
+        return 0;
 
     }
 
     // Calculate normalised value for lerp and slerp
     float Bone::getScaleFactor(float lastTimestamp, float nextTimestamp, float animationTime) {
-        float scaleFactor = 0.0f;
         float midwayLength = animationTime - lastTimestamp;
         float framesDiff = nextTimestamp - lastTimestamp;
-        scaleFactor = midwayLength / framesDiff;
-        return scaleFactor;
+        return midwayLength / framesDiff;
+        //float delta = nextTimestamp - lastTimestamp;
+        //return (animationTime - (float)nextTimestamp) / delta;
     }
 
     glm::mat4 Bone::interpolatePosition(float animationTime) {
