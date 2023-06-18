@@ -24,6 +24,9 @@ class Game : public Villain::Application {
 
         // TEMP: For debugging shadow mapping for directional lights
         Villain::SceneNode* directionalLight;
+
+        Villain::SceneNode* animatedNode;
+        int numBones = 0;
 };
 
 #endif // __GAME__

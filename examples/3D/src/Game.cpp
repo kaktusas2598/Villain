@@ -25,6 +25,10 @@ void Game::init() {
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
     printf("Max vertex shader attrib count is %d\n", result);
 
+    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
+    printf("Max uniform location count is %d\n", result);
+
+
     camera = new Camera();
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
@@ -104,6 +108,7 @@ void Game::init() {
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
+    // TODO: Lights TEMP disabled
     // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
     directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
                 ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
@@ -150,10 +155,31 @@ void Game::init() {
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
     // Skeletal Animation demo
-    Model* animatedModel = new Model("assets/models/chicken/chickenV2.dae");
-    SceneNode* animModelNode = (new SceneNode("Chicken", glm::vec3(5, 5, -5)))->addComponent(new ModelRenderer(animatedModel, "assets/models/chicken/chickenV2.dae"));
-    animModelNode->getTransform()->setEulerRot(-90.0f, 90.0f, 0.0f);
-    addToScene(animModelNode);
+    Model* animatedModel = new Model("assets/models/mudeater.dae");
+    animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel, "assets/models/mudeater.dae"));
+    animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
+    addToScene(animatedNode);
+
+    std::string catPath = "assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx";
+    Model* catModel = new Model(catPath.c_str());
+    SceneNode* catNode = (new SceneNode("Cat"))->addComponent(new ModelRenderer(catModel, catPath));
+    catNode->getTransform()->setScale(0.02);
+    addToScene(catNode);
+
+    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/FBX/Eagle.fbx";
+    Model* eagleModel = new Model(eaglePath.c_str());
+    SceneNode* eagleNode = (new SceneNode("Eagle"))->addComponent(new ModelRenderer(eagleModel, eaglePath));
+    eagleNode->getTransform()->setScale(0.02);
+    addToScene(eagleNode);
+
+    //std::string deerPath = "assets/models/deer1.fbx";
+    //Model* deerModel = new Model(deerPath.c_str());
+    //SceneNode* deerNode = (new SceneNode("Deer"))->addComponent(new ModelRenderer(deerModel, deerPath));
+    //deerNode->getTransform()->setScale(0.02);
+    //addToScene(deerNode);
+
+
+    numBones = animatedModel->getBoneCount();
 
     // NOTE: Starting from Assimp 5.1 Collada parsing seems to be broken, not good :/
     //Model* vampire = new Model("assets/models/dancing_vampire.dae");
@@ -165,6 +191,13 @@ void Game::init() {
 void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
+    }
+
+    // DEBUG
+    if (InputManager::Instance()->isKeyDown(SDLK_b)) {
+        animatedNode->displayBoneIndex = animatedNode->displayBoneIndex + 1;
+        // Make sure we don't try to display non existant bones
+        animatedNode->displayBoneIndex = animatedNode->displayBoneIndex % numBones;
     }
 }
 
