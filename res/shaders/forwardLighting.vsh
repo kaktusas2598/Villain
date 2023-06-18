@@ -44,8 +44,14 @@ void main() {
     }
 
     vec4 totalPosition = vec4(position, 1.0);
+    vec3 totalNormal = normal;
     if (skeletalAnimationEnabled) {
+        totalPosition = vec4(0.0);
+        totalNormal = vec3(0.0);
+        // FIXME: All rendering issues with mesh only show up in this path, so weights/boneIds or
+        // final matrix calculation is still wrong for some reason obviously
         for(int i = 0; i < MAX_BONE_INFLUENCE; i++){
+            // No bone set in this slot, so vertex is affected by less than 4 bones at least
             if (boneIds[i] == -1)
                 continue;
             if (boneIds[i] >= MAX_BONES) {
@@ -54,8 +60,8 @@ void main() {
             }
             vec4 localPosition = finalBoneMatrices[boneIds[i]] * vec4(position, 1.0);
             totalPosition += localPosition * weights[i];
-            // TODO: How to set normals properly for animated models
             vec3 localNormal = mat3(finalBoneMatrices[boneIds[i]]) * normal;
+            totalNormal += localNormal * weights[i];
         }
     }
 
@@ -66,13 +72,13 @@ void main() {
     v_fragPos = vec3(worldTransform * totalPosition);
     gl_Position = projection * view * vec4(v_fragPos, 1.0);
     // Does normal needs to be translated to world space here?
-    v_normal = normal;
+    v_normal = totalNormal;
     v_texCoords = texCoords;
     v_shadowMapCoords = lightMatrix * vec4(v_fragPos, 1.0);
 
     // Calculate TBN matrix for normal mapping
     vec3 T = normalize(vec3(worldTransform * vec4(tangent, 0.0)));
-    vec3 N = normalize(vec3(worldTransform * vec4(normal, 0.0)));
+    vec3 N = normalize(vec3(worldTransform * vec4(totalNormal, 0.0)));
 
     // re-orthogonalize T with respect to N
     T = normalize(T - dot(T, N) * N);
