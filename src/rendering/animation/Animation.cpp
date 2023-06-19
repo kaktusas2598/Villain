@@ -17,9 +17,15 @@ namespace Villain {
 
         auto animation = scene->mAnimations[0];
         duration = animation->mDuration;
-        ticksPerSecond = animation->mTicksPerSecond;
+        ticksPerSecond = animation->mTicksPerSecond != 0 ? animation->mTicksPerSecond : 24.f;
         bones.reserve(MAX_BONES);
+        printf("Model's bone info map: \n");
+        for(auto& node: model->getBoneInfoMap()) {
+            printf("%s\n", node.first.c_str());
+        }
+        // Replicates aiNode hierarchy used by Assimp to AssimpNodeData hierarchy
         readHierarchyData(rootNode, scene->mRootNode);
+        // Finds and adds any missing bones from aiAnimation and stores them in boneInfoMap for the model, also populates Bone vector
         readMissingBones(animation, *model);
     }
 
@@ -58,10 +64,16 @@ namespace Villain {
     void Animation::readHierarchyData(AssimpNodeData& dest, const aiNode* src) {
         assert(src);
 
+        if (boneInfoMap.find(src->mName.data) == boneInfoMap.end()) {
+            printf("Bone name: %s Children: %d Not found in boneinfo map! But exists in aiNode\n", src->mName.data, src->mNumChildren);
+        }
+
         dest.Name = src->mName.data;
         dest.Transformation = AssimpUtils::aiMatrixToGLM(src->mTransformation);
         dest.ChildrenCount = src->mNumChildren;
 
+        if (src->mNumChildren > 0)
+            printf("--- Children --- \n");
         dest.Children.reserve(src->mNumChildren);
         for (int i = 0; i < src->mNumChildren; i++) {
             AssimpNodeData data;

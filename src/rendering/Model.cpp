@@ -94,6 +94,23 @@ namespace Villain {
 
         if (mesh->HasBones()) {
             extractBoneWeightForVertices(vertices, mesh, scene);
+
+            // Double check weights for each vertex and normalize if needed, this helps solve animation
+            // issues on some models
+            for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+                float sum = 0;
+                for (int j = 0; j < MAX_BONE_INFLUENCE; j++) {
+                    if (vertices[i].Weights[j] != -1)
+                        sum += vertices[i].Weights[j];
+                }
+                if (sum < 1) {
+                    // Normalizing weights
+                    vertices[i].Weights[0] /= sum;
+                    vertices[i].Weights[1] /= sum;
+                    vertices[i].Weights[2] /= sum;
+                    vertices[i].Weights[3] /= sum;
+                }
+            }
         }
 
         // Set diffuse color for entire mesh and if it has any materials, set if from there

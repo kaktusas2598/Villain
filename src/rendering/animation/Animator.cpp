@@ -1,4 +1,5 @@
 #include "Animator.hpp"
+#include "Engine.hpp"
 
 namespace Villain {
 
@@ -16,6 +17,8 @@ namespace Villain {
 
     void Animator::updateAnimation(float dt) {
         if (currentAnimation) {
+            // Using speed factor seems a bit too slow, but only using ticks per second makes animation too fast
+            //currentTime += (Engine::getFps()/currentAnimation->getTicksPerSecond()) * dt;
             currentTime += currentAnimation->getTicksPerSecond() * dt;
             currentTime = fmod(currentTime, currentAnimation->getDuration());
             calculateBoneTransform(&currentAnimation->getRootNode(), glm::mat4(1.0f));

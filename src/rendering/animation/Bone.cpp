@@ -54,7 +54,7 @@ namespace Villain {
             if (animationTime < positions[i + 1].Timestamp)
                 return i;
         }
-        return 0;
+        return numPositions - 1;
     }
 
     int Bone::getRotationIndex(float animationTime) {
@@ -62,7 +62,7 @@ namespace Villain {
             if (animationTime < rotations[i + 1].Timestamp)
                 return i;
         }
-        return 0;
+        return numRotations - 1;
 
     }
 
@@ -71,7 +71,7 @@ namespace Villain {
             if (animationTime < scales[i + 1].Timestamp)
                 return i;
         }
-        return 0;
+        return numScales - 1;
 
     }
 
