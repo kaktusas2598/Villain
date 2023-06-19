@@ -173,20 +173,14 @@ void Game::init() {
     eagleNode->getTransform()->setScale(0.02);
     addToScene(eagleNode);
 
-    std::string deerPath = "assets/models/Rumba Dancing.fbx";
-    Model* deerModel = new Model(deerPath.c_str());
-    SceneNode* deerNode = (new SceneNode("Deer"))->addComponent(new ModelRenderer(deerModel, deerPath));
-    deerNode->getTransform()->setScale(0.02);
-    addToScene(deerNode);
+    std::string vampirePath = "assets/models/Rumba Dancing.fbx";
+    Model* vampireModel = new Model(vampirePath.c_str());
+    SceneNode* vampireNode = (new SceneNode("Dancing Vampire"))->addComponent(new ModelRenderer(vampireModel, vampirePath));
+    vampireNode->getTransform()->setScale(0.05);
+    addToScene(vampireNode);
 
 
     numBones = animatedModel->getBoneCount();
-
-    // NOTE: Starting from Assimp 5.1 Collada parsing seems to be broken, not good :/
-    //Model* vampire = new Model("assets/models/dancing_vampire.dae");
-    //SceneNode* vampireNode = (new SceneNode("Vampire", glm::vec3(-5.0f, 7.0f, -15.0f)))->addComponent(new ModelRenderer(vampire, "assets/models/dancing_vampire.dae"));
-    //addToScene(vampireNode);
-
 }
 
 void Game::handleEvents(float deltaTime) {
