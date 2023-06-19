@@ -173,11 +173,11 @@ void Game::init() {
     eagleNode->getTransform()->setScale(0.02);
     addToScene(eagleNode);
 
-    //std::string deerPath = "assets/models/deer1.fbx";
-    //Model* deerModel = new Model(deerPath.c_str());
-    //SceneNode* deerNode = (new SceneNode("Deer"))->addComponent(new ModelRenderer(deerModel, deerPath));
-    //deerNode->getTransform()->setScale(0.02);
-    //addToScene(deerNode);
+    std::string deerPath = "assets/models/Rumba Dancing.fbx";
+    Model* deerModel = new Model(deerPath.c_str());
+    SceneNode* deerNode = (new SceneNode("Deer"))->addComponent(new ModelRenderer(deerModel, deerPath));
+    deerNode->getTransform()->setScale(0.02);
+    addToScene(deerNode);
 
 
     numBones = animatedModel->getBoneCount();
