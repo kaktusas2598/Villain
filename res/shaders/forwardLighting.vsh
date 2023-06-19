@@ -48,8 +48,6 @@ void main() {
     if (skeletalAnimationEnabled) {
         totalPosition = vec4(0.0);
         totalNormal = vec3(0.0);
-        // FIXME: All rendering issues with mesh only show up in this path, so weights/boneIds or
-        // final matrix calculation is still wrong for some reason obviously
         for(int i = 0; i < MAX_BONE_INFLUENCE; i++){
             // No bone set in this slot, so vertex is affected by less than 4 bones at least
             if (boneIds[i] == -1)
