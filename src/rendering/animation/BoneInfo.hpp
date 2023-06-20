@@ -8,8 +8,8 @@ namespace Villain {
     struct BoneInfo {
         // index in finalBoneMatrices
         int id;
-        // Offset matrix transforms vertex from model/local space to bone space
-        glm::mat4 offset{1.0f};
+        // Offset matrix transforms vertex from model/local space to bone space A.K.A. Inverse Bind Pose Matrix!
+        glm::mat4 offset;
     };
 };
 

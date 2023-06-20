@@ -155,32 +155,42 @@ void Game::init() {
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
     // Skeletal Animation demo
-    Model* animatedModel = new Model("assets/models/mudeater.dae");
-    animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel, "assets/models/mudeater.dae"));
-    animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
-    addToScene(animatedNode);
+    //Model* animatedModel = new Model("assets/models/mudeater.dae");
+    //animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel, "assets/models/mudeater.dae"));
+    //animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
+    //addToScene(animatedNode);
 
-    std::string catPath = "assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx";
-    Model* catModel = new Model(catPath.c_str());
-    SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel, catPath));
-    catNode->getTransform()->setScale(0.02);
-    catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
-    addToScene(catNode);
+    //std::string catPath = "assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx";
+    //Model* catModel = new Model(catPath.c_str());
+    //SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel, catPath));
+    //catNode->getTransform()->setScale(0.02);
+    //catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
+    //addToScene(catNode);
 
-    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/FBX/Eagle.fbx";
-    Model* eagleModel = new Model(eaglePath.c_str());
-    SceneNode* eagleNode = (new SceneNode("Eagle", {0, 12, -12}))->addComponent(new ModelRenderer(eagleModel, eaglePath));
-    eagleNode->getTransform()->setScale(0.02);
-    addToScene(eagleNode);
+    //std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/FBX/Eagle.fbx";
+    //Model* eagleModel = new Model(eaglePath.c_str());
+    //SceneNode* eagleNode = (new SceneNode("Eagle", {0, 12, -12}))->addComponent(new ModelRenderer(eagleModel, eaglePath));
+    //eagleNode->getTransform()->setScale(0.02);
+    //addToScene(eagleNode);
 
     std::string vampirePath = "assets/models/Rumba Dancing.fbx";
-    Model* vampireModel = new Model(vampirePath.c_str());
+    vampireModel = new Model(vampirePath.c_str());
     SceneNode* vampireNode = (new SceneNode("Dancing Vampire"))->addComponent(new ModelRenderer(vampireModel, vampirePath));
     vampireNode->getTransform()->setScale(0.05);
     addToScene(vampireNode);
 
+    //std::string simpleAnimationPath = "assets/models/animation_with_skeleton.fbx";
+    //Model* simpleAnimationModel = new Model(simpleAnimationPath.c_str());
+    //SceneNode* simpleAnimationNode = (new SceneNode("simpleAnimation", {0, 12, -12}))->addComponent(new ModelRenderer(simpleAnimationModel, simpleAnimationPath));
+    //simpleAnimationNode->getTransform()->setScale(0.02);
+    //addToScene(simpleAnimationNode);
 
-    numBones = animatedModel->getBoneCount();
+    std::string thrillerPath = "assets/models/Thriller.fbx";
+    //std::string thrillerPath = "assets/models/Thriller Part 1.fbx";
+    Model* thrillerModel = new Model(thrillerPath.c_str());
+    SceneNode* thrillerNode = (new SceneNode("thriller", {0, 12, -12}))->addComponent(new ModelRenderer(thrillerModel, thrillerPath));
+    thrillerNode->getTransform()->setScale(0.02);
+    addToScene(thrillerNode);
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -190,9 +200,9 @@ void Game::handleEvents(float deltaTime) {
 
     // DEBUG
     if (InputManager::Instance()->isKeyDown(SDLK_b)) {
-        animatedNode->displayBoneIndex = animatedNode->displayBoneIndex + 1;
+        vampireModel->setDisplayedBoneIndex(vampireModel->getDisplayedBoneIndex() + 1);
         // Make sure we don't try to display non existant bones
-        animatedNode->displayBoneIndex = animatedNode->displayBoneIndex % numBones;
+        vampireModel->setDisplayedBoneIndex(vampireModel->getDisplayedBoneIndex() % vampireModel->getBoneCount());
     }
 }
 

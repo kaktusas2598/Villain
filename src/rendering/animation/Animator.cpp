@@ -19,7 +19,8 @@ namespace Villain {
         if (currentAnimation) {
             // Using speed factor seems a bit too slow, but only using ticks per second makes animation too fast
             //currentTime += (Engine::getFps()/currentAnimation->getTicksPerSecond()) * dt;
-            currentTime += currentAnimation->getTicksPerSecond() * dt;
+            if (!isPaused)
+                currentTime += currentAnimation->getTicksPerSecond() * dt;
             currentTime = fmod(currentTime, currentAnimation->getDuration());
             calculateBoneTransform(&currentAnimation->getRootNode(), glm::mat4(1.0f));
         }
@@ -35,17 +36,18 @@ namespace Villain {
         glm::mat4 nodeTransform = node->Transformation;
 
         Bone* bone = currentAnimation->findBone(nodeName);
-        if (bone) {
+        if (bone && !bindPoseOnly) {
             bone->update(currentTime);
             nodeTransform = bone->getLocalTransform();
         }
 
-        // NOTE: do we need to also apply global inverse transform from assimp??
         glm::mat4 globalTransform = parentTransform * nodeTransform;
         auto boneInfoMap = currentAnimation->getBoneInfoMap();
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) {
             int index = boneInfoMap[nodeName].id;
+            // Get inverse bind pose matrix for bone from aiBone struct in aiMesh
             glm::mat4 offset = boneInfoMap[nodeName].offset;
+            // Calculate final bone matrix transformation
             finalBoneMatrices[index] = currentAnimation->getGlobalInverseTransform() * globalTransform * offset;
         }
 

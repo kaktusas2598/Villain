@@ -38,9 +38,12 @@ namespace Villain {
         // Skeletal animation uniforms
         if (currentAnimation != nullptr && model->getBoneCount() > 0) {
             shader.setUniform1i("skeletalAnimationEnabled", 1);
-            auto transforms = animator->getFinalBoneMatrices();
+            auto& transforms = animator->getFinalBoneMatrices();
             for (int i = 0; i < transforms.size(); i++) {
                 shader.setUniformMat4f("finalBoneMatrices[" + std::to_string(i) + "]", transforms[i]);
+            }
+            if (model->getDisplayedBoneIndex() != -1) {
+                shader.setUniform1i("displayBoneIndex", model->getDisplayedBoneIndex());
             }
         } else {
             shader.setUniform1i("skeletalAnimationEnabled", 0);

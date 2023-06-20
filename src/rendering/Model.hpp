@@ -32,6 +32,8 @@ namespace Villain {
             std::string& getFilename() { return fileName; }
             auto& getBoneInfoMap() { return boneInfoMap; }
             int& getBoneCount() { return boneCounter; }
+            int getDisplayedBoneIndex() const { return displayedBoneIndex; }
+            void setDisplayedBoneIndex(int displayIndex) { displayedBoneIndex = displayIndex; }
 
         private:
             std::vector<Mesh<VertexP1N1T1B1UV>> meshes;
@@ -53,6 +55,7 @@ namespace Villain {
             // Skeletal animation properties
             std::map<std::string, BoneInfo> boneInfoMap;
             int boneCounter = 0;
+            int displayedBoneIndex = -1; //<<< For debugging bone weights
 
             void setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight);
             void resetVertexBoneData(VertexP1N1T1B1UV& vertex) {

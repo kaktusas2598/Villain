@@ -459,7 +459,9 @@ namespace Villain {
 
     void ImGuiLayer::drawNodeComponents(SceneNode* node) {
         if (!node->getComponents().empty()) {
+            int i = 0;
             for (auto& compo: node->getComponents()) {
+                ImGui::PushID(i); // Solves issues with multiple elements sharing same names
                 // TODO: find optimal way of adding any components and possibly custom components without too
                 // many conditionals
                 if (compo->getID() == GetId<CameraComponent>()) {
@@ -513,9 +515,24 @@ namespace Villain {
                 auto model = dynamic_cast<ModelRenderer*>(compo);
                 if (model != nullptr) {
                     ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
+                    if (model->getCurrentAnimation()) {
+                        ImGui::DragFloat("Animation time", model->getAnimator()->getCurrentTime(), 1.0f, 0.0f, model->getCurrentAnimation()->getDuration(), "%.1f");
+                        ImGui::Checkbox("Bind Pose", model->getAnimator()->getBindPose());
+                        for(auto& boneInfo: model->getModel()->getBoneInfoMap()) {
+                            if (boneInfo.second.id == model->getModel()->getDisplayedBoneIndex()) {
+                                ImGui::Text("Displayed Bone: '%s'", boneInfo.first.c_str());
+                            }
+                        }
+                        if (ImGui::Button("Pause Animation")) {
+                            model->getAnimator()->toggleAnimation();
+                        }
+
+                    }
                 }
 
                 ImGui::Separator();
+                ImGui::PopID();
+                i++;
             }
         }
     }

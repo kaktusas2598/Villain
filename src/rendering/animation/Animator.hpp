@@ -13,13 +13,21 @@ namespace Villain {
             void updateAnimation(float dt);
             void playAnimation(Animation* animation);
             void stopAnimation() { currentAnimation = nullptr; }
+            void pauseAnimation() { isPaused = true; }
+            void resumeAnimation() { isPaused = false; }
+            void toggleAnimation() { isPaused = !isPaused; }
+            bool* getBindPose() { return &bindPoseOnly; }
             void calculateBoneTransform(const AssimpNodeData* node, const glm::mat4& parentTransform);
+
+            float* getCurrentTime() { return &currentTime; }
 
             std::vector<glm::mat4>& getFinalBoneMatrices() { return finalBoneMatrices; }
         private:
             std::vector<glm::mat4> finalBoneMatrices;
             Animation* currentAnimation = nullptr;
             float currentTime;
+            bool isPaused = false;
+            bool bindPoseOnly = false;
     };
 }
 

@@ -8,7 +8,7 @@ namespace Villain {
         name(boneName), id(ID), localTransform(1.0f)
     {
         // Read and store animation keyframes for this bone from aiNodeAnim
-        //printf("Animation for bone %s, number of position keyframes: %i \n", boneName.c_str(), channel->mNumPositionKeys);
+        //printf("Animation for bone %s, Position keyframes: %i Rotation keyframes: %i Scaling keyframes: %i \n", boneName.c_str(), channel->mNumPositionKeys, channel->mNumRotationKeys, channel->mNumScalingKeys);
         numPositions = channel->mNumPositionKeys;
         for (int positionIndex = 0; positionIndex < numPositions; ++positionIndex) {
             aiVector3D position = channel->mPositionKeys[positionIndex].mValue;

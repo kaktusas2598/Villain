@@ -4,6 +4,7 @@
 #include "Application.hpp"
 #include "Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include "rendering/Model.hpp"
 #include "rendering/SkyBox.hpp"
 
 class Game : public Villain::Application {
@@ -26,7 +27,7 @@ class Game : public Villain::Application {
         Villain::SceneNode* directionalLight;
 
         Villain::SceneNode* animatedNode;
-        int numBones = 0;
+        Villain::Model* vampireModel;
 };
 
 #endif // __GAME__
