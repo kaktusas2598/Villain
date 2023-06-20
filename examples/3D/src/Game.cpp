@@ -174,7 +174,7 @@ void Game::init() {
     //addToScene(eagleNode);
 
     std::string vampirePath = "assets/models/Rumba Dancing.fbx";
-    vampireModel = new Model(vampirePath.c_str());
+    Model* vampireModel = new Model(vampirePath.c_str());
     SceneNode* vampireNode = (new SceneNode("Dancing Vampire"))->addComponent(new ModelRenderer(vampireModel, vampirePath));
     vampireNode->getTransform()->setScale(0.05);
     addToScene(vampireNode);
@@ -196,13 +196,6 @@ void Game::init() {
 void Game::handleEvents(float deltaTime) {
     if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
-    }
-
-    // DEBUG
-    if (InputManager::Instance()->isKeyDown(SDLK_b)) {
-        vampireModel->setDisplayedBoneIndex(vampireModel->getDisplayedBoneIndex() + 1);
-        // Make sure we don't try to display non existant bones
-        vampireModel->setDisplayedBoneIndex(vampireModel->getDisplayedBoneIndex() % vampireModel->getBoneCount());
     }
 }
 

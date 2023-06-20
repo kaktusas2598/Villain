@@ -25,9 +25,6 @@ class Game : public Villain::Application {
 
         // TEMP: For debugging shadow mapping for directional lights
         Villain::SceneNode* directionalLight;
-
-        Villain::SceneNode* animatedNode;
-        Villain::Model* vampireModel;
 };
 
 #endif // __GAME__
