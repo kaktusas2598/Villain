@@ -188,8 +188,9 @@ void Game::init() {
     std::string thrillerPath = "assets/models/Thriller.fbx";
     //std::string thrillerPath = "assets/models/Thriller Part 1.fbx";
     Model* thrillerModel = new Model(thrillerPath.c_str());
-    SceneNode* thrillerNode = (new SceneNode("thriller", {0, 12, -12}))->addComponent(new ModelRenderer(thrillerModel, thrillerPath));
-    thrillerNode->getTransform()->setScale(0.02);
+    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -12}))->addComponent(new ModelRenderer(thrillerModel, thrillerPath));
+    thrillerNode->getTransform()->setScale(0.05);
+    thrillerNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
     addToScene(thrillerNode);
 }
 
