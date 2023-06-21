@@ -19,8 +19,10 @@ namespace Villain {
         if (currentAnimation) {
             // Using speed factor seems a bit too slow, but only using ticks per second makes animation too fast
             //currentTime += (Engine::getFps()/currentAnimation->getTicksPerSecond()) * dt;
-            if (!isPaused)
-                currentTime += currentAnimation->getTicksPerSecond() * dt;
+            if (!isPaused) {
+                // TODO: instead of diving by 2, add speed member variable to constrol animation speed
+                currentTime += currentAnimation->getTicksPerSecond()/2 * dt;
+            }
             currentTime = fmod(currentTime, currentAnimation->getDuration());
             calculateBoneTransform(&currentAnimation->getRootNode(), glm::mat4(1.0f));
         }

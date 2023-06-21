@@ -19,12 +19,6 @@ namespace Villain {
         duration = animation->mDuration;
         ticksPerSecond = animation->mTicksPerSecond != 0 ? animation->mTicksPerSecond : 24.f;
         bones.reserve(MAX_BONES);
-        printf("Model's bone info map: \n");
-        for(auto& node: model->getBoneInfoMap()) {
-            printf("%s\n", node.first.c_str());
-        }
-        // NOTE: before readMissingBones went after readHierarchyData
-        //
         // Finds and adds any missing bones from aiAnimation and stores them in boneInfoMap for the model, also populates Bone vector
         readMissingBones(animation, *model);
         // Replicates aiNode hierarchy used by Assimp to AssimpNodeData hierarchy
@@ -51,13 +45,13 @@ namespace Villain {
         // channels: bones engaged in animation
         for (int i = 0; i < size; i++) {
             auto channel = animation->mChannels[i];
-            std::string boneName = channel->mNodeName.data;
+            std::string boneName = channel->mNodeName.C_Str();
 
             if (boneMap.find(boneName) == boneMap.end()) {
                 boneMap[boneName].id = boneCount;
                 boneCount++;
             }
-            bones.push_back(Bone(channel->mNodeName.data, boneMap[channel->mNodeName.data].id, channel));
+            bones.push_back(Bone(channel->mNodeName.C_Str(), boneMap[channel->mNodeName.data].id, channel));
         }
 
         boneInfoMap = boneMap;

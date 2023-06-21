@@ -173,24 +173,21 @@ void Game::init() {
     //eagleNode->getTransform()->setScale(0.02);
     //addToScene(eagleNode);
 
-    std::string vampirePath = "assets/models/Rumba Dancing.fbx";
+    //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
+    std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";
     Model* vampireModel = new Model(vampirePath.c_str());
-    SceneNode* vampireNode = (new SceneNode("Dancing Vampire"))->addComponent(new ModelRenderer(vampireModel, vampirePath));
+    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, vampirePath));
     vampireNode->getTransform()->setScale(0.05);
+    vampireNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(vampireNode);
 
-    //std::string simpleAnimationPath = "assets/models/animation_with_skeleton.fbx";
-    //Model* simpleAnimationModel = new Model(simpleAnimationPath.c_str());
-    //SceneNode* simpleAnimationNode = (new SceneNode("simpleAnimation", {0, 12, -12}))->addComponent(new ModelRenderer(simpleAnimationModel, simpleAnimationPath));
-    //simpleAnimationNode->getTransform()->setScale(0.02);
-    //addToScene(simpleAnimationNode);
-
-    std::string thrillerPath = "assets/models/Thriller.fbx";
-    //std::string thrillerPath = "assets/models/Thriller Part 1.fbx";
+    // This is part 4, also works, but fbx binary file has wrong texture paths
+    //std::string thrillerPath = "assets/models/Thriller.fbx";
+    std::string thrillerPath = "assets/models/ThrillerPart1-ZombieGirl.dae";
     Model* thrillerModel = new Model(thrillerPath.c_str());
-    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -12}))->addComponent(new ModelRenderer(thrillerModel, thrillerPath));
+    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, thrillerPath));
     thrillerNode->getTransform()->setScale(0.05);
-    thrillerNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
+    thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(thrillerNode);
 }
 
