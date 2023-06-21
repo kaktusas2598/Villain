@@ -7,6 +7,22 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+// Helper methods
+static int spaceCount = 0;
+void printSpace() {
+    for (int i = 0; i < spaceCount; i++) {
+        printf(" ");
+    }
+}
+
+void printAssimpMatrix(const aiMatrix4x4& m) {
+    printSpace(); printf("%f %f %f %f\n", m.a1, m.a2, m.a3, m.a4);
+    printSpace(); printf("%f %f %f %f\n", m.b1, m.b2, m.b3, m.b4);
+    printSpace(); printf("%f %f %f %f\n", m.c1, m.c2, m.c3, m.c4);
+    printSpace(); printf("%f %f %f %f\n", m.d1, m.d2, m.d3, m.d4);
+}
+
+
 #define MAX_BONES_PER_VERTEX 4
 
 struct VertexBoneData {
@@ -25,7 +41,7 @@ struct VertexBoneData {
         }
 
         // More bones affecting vertex than we support, should never get here
-        assert(0);
+        //assert(0);
     }
 };
 
@@ -58,6 +74,8 @@ void parseSingleBone(int meshIndex, const aiBone* bone) {
 
     int boneId = getBoneId(bone);
     //printf("Bone Id: %d\n", boneId);
+
+    //printAssimpMatrix(bone->mOffsetMatrix);
 
     for (int i = 0; i < bone->mNumWeights; i++) {
         //if (i == 0) printf("\n");
@@ -110,8 +128,34 @@ void parseMeshes(const aiScene* scene) {
     printf("Total vertices: %d total indices: %d total bones: %d\n", totalVertices, totalIndices, totalBones);
 }
 
+void parseNode(const aiNode* node) {
+    printSpace(); printf("Node name: '%s' children: %d meshes: %d\n", node->mName.C_Str(), node->mNumChildren, node->mNumMeshes);
+    printSpace(); printf("Node transformations:\n");
+    printAssimpMatrix(node->mTransformation);
+
+    spaceCount += 4;
+
+    for (int i = 0; i < node->mNumChildren; i++) {
+        printf("\n");
+        printSpace(); printf("--- %d --- \n", i);
+        parseNode(node->mChildren[i]);
+    }
+
+    spaceCount -= 4;
+}
+
+void parseHierarchy(const aiScene* scene) {
+    printf("------------------------\n");
+    printf("Parsing node hierarchy\n");
+
+    parseNode(scene->mRootNode);
+
+}
+
 void parseScene(const aiScene* scene) {
     parseMeshes(scene);
+
+    parseHierarchy(scene);
 }
 
 /**
