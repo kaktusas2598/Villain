@@ -34,6 +34,7 @@ namespace Villain {
         // Other useful options:
         // aiProcess_GenNormals
         // aiProcess_CalcTangentSpace - won't calculate if there are no normals
+        // aiProcess_OptimizeGraph - simplify aiNode graph, useful for complicated rigged models, but might not be useful for editor environments
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
         scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
@@ -175,17 +176,17 @@ namespace Villain {
             aiString str;
             if (mat->GetTexture(type, i, &str) == AI_SUCCESS) {
                 const aiTexture* embeddedTexture = scene->GetEmbeddedTexture(str.C_Str());
+                Texture* texture = nullptr;
                 if (embeddedTexture) {
-                    // TODO: add support for embedded textures
                     printf("Embedded texture found. Type: %s\n", embeddedTexture->achFormatHint);
-                    //int bufferSize = embeddedTexture->mWidth;
-                    //embeddedTexture->pcData
-                    //Texture* texture = new Texture(uint32_t bufferSize, void* buffer);
+                    int bufferSize = embeddedTexture->mWidth;
+                    // FIXME: embedded textures are not correct and also causes renderdoc to crash
+                    texture = new Texture(bufferSize, embeddedTexture->pcData, gammaCorrected);
                 } else {
-                    Texture* texture = ResourceManager::Instance()->loadTexture(str.C_Str(), str.C_Str(), GL_REPEAT, gammaCorrected);
-                    texture->setType(typeName);
-                    textures->push_back(texture);
+                    texture = ResourceManager::Instance()->loadTexture(str.C_Str(), str.C_Str(), GL_REPEAT, gammaCorrected);
                 }
+                texture->setType(typeName);
+                textures->push_back(texture);
             }
         }
 
@@ -206,6 +207,11 @@ namespace Villain {
     void Model::setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight) {
         // Set bone weight for a vertex, up to 4 bones per vertex supported
         for (int i = 0; i < MAX_BONE_INFLUENCE; i++) {
+            // Skip already existing bone indices and zero weights
+            if (vertex.BoneIDs[i] == boneID)
+                return;
+            if (weight == 0.0f)
+                return;
             if (vertex.BoneIDs[i] < 0) {
                 vertex.Weights[i] = weight;
                 vertex.BoneIDs[i] = boneID;

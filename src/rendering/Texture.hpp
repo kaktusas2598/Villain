@@ -42,6 +42,7 @@ namespace Villain  {
     class Texture {
         public:
             Texture(const std::string& fileName = std::string(), TextureConstructionInfo texInfo = TextureConstructionInfo());
+            Texture(uint32_t bufferSize, void* buffer, bool sRGB = true); // For embedded model textures
 
             // Initialise empty texture, used by framebuffers
             Texture(GLenum targetType = GL_TEXTURE_2D) : rendererID(0), target(targetType) {}
