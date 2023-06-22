@@ -16,12 +16,19 @@ const int MAX_BONE_INFLUENCE = 4;
 uniform mat4 finalBoneMatrices[MAX_BONES];
 uniform bool skeletalAnimationEnabled = false;
 
+uniform bool instancedRenderingEnabled = false;
+
 // World transform matrix
 uniform mat4 model;
 // Light space matrix - light projection and view
 uniform mat4 lightMatrix;
 
 void main() {
+    mat4 worldTransform = model;
+    if (instancedRenderingEnabled) {
+        worldTransform = model * instanceMatrix;
+    }
+
     vec4 totalPosition = vec4(position, 1.0);
     if (skeletalAnimationEnabled) {
         totalPosition = vec4(0.0);
@@ -38,7 +45,7 @@ void main() {
         }
     }
 
-    gl_Position = lightMatrix * model * totalPosition;
+    gl_Position = lightMatrix * worldTransform * totalPosition;
 }
 
 #shader fragment
