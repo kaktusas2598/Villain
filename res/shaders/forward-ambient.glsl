@@ -26,27 +26,29 @@ uniform vec3 fogColor;
 uniform vec3 viewPosition;
 
 uniform bool selected = false;
+uniform bool boneWeightDebugEnabled;
 uniform int displayBoneIndex;
 
 void main() {
-    // NOTE: Most of debug code for skeletal animation is temp now, it was only added in ambient shader
-    // meaning we need to remove all lights from scene while testing for now!
+    // NOTE: Need to find nicer way to here to avoid all these if statements
     // Skeletal animation debug
     bool found = false;
 
     // Color pixels depending on weights, bone is selected using displayBoneIndex
-    for(int i = 0; i < 4; i++){
-        if (v_boneIds[i] == displayBoneIndex) {
-            if (v_weights[i] >= 0.7) {
-                o_color = vec4(1.0, 0.0, 0.0, 1.0) * v_weights[i];
-            } else if (v_weights[i] >= 0.4 && v_weights[i] <= 0.7) {
-                o_color = vec4(0.0, 1.0, 0.0, 1.0) * v_weights[i];
-            } else if (v_weights[i] >= 0.1) {
-                o_color = vec4(1.0, 1.0, 0.0, 1.0) * v_weights[i];
-            }
+    if (boneWeightDebugEnabled) {
+        for(int i = 0; i < 4; i++){
+            if (v_boneIds[i] == displayBoneIndex) {
+                if (v_weights[i] >= 0.7) {
+                    o_color = vec4(1.0, 0.0, 0.0, 1.0) * v_weights[i];
+                } else if (v_weights[i] >= 0.4 && v_weights[i] <= 0.7) {
+                    o_color = vec4(0.0, 1.0, 0.0, 1.0) * v_weights[i];
+                } else if (v_weights[i] >= 0.1) {
+                    o_color = vec4(1.0, 1.0, 0.0, 1.0) * v_weights[i];
+                }
 
-            found = true;
-            break;
+                found = true;
+                break;
+            }
         }
     }
 

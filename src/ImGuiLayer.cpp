@@ -552,6 +552,7 @@ namespace Villain {
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
         ImGui::Checkbox("Visualise normals", engine.getRenderingEngine()->getVisualiseNormals());
+        ImGui::Checkbox("Visualise bone weights", engine.getRenderingEngine()->getVisualiseBoneWeights());
         ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
         ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());
         ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());

@@ -49,6 +49,7 @@ namespace Villain {
         } else {
             shader.setUniform1i("skeletalAnimationEnabled", 0);
         }
+        shader.setUniform1i("boneWeightDebugEnabled", *renderingEngine.getVisualiseBoneWeights());
 
         int i = 0;
         // Main render loop for each mesh
