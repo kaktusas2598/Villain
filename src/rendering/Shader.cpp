@@ -288,7 +288,9 @@ namespace Villain {
         }
 
         this->setUniform1f("material.shininess", material.getSpecularFactor());
+        this->setUniformVec4("material.ambientColor", material.getAmbientColor());
         this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
+        this->setUniformVec4("material.specularColor", material.getSpecularColor());
     }
 
     void Shader::setFogUniforms(RenderingEngine& renderingEngine, Camera& camera) {

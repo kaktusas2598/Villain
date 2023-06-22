@@ -64,7 +64,7 @@ void main() {
             vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
             o_color = textureColor * vec4(ambientLight, 1.0);
         } else {
-            o_color = vec4(ambientLight, 1.0);
+            o_color = vec4(ambientLight, 1.0) * material.diffuseColor;
         }
 
         if (fogColor != vec3(0.0)) {

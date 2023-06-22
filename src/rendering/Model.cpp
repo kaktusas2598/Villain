@@ -129,15 +129,33 @@ namespace Villain {
 
         // Set diffuse color for entire mesh and if it has any materials, set if from there
         // including diffuse maps and other
-        glm::vec4 diffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        glm::vec4 diffuseColor{1.0f};
+        glm::vec4 ambientColor{1.0f};
+        glm::vec4 specularColor{1.0f};
         if (mesh->mMaterialIndex >= 0) {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
+            // Set up material colours
             aiColor4D diffuse;
             if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse)) {
                 diffuseColor = glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
             }
 
+            aiColor4D ambient;
+            if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &ambient)) {
+                ambientColor = glm::vec4(ambient.r, ambient.g, ambient.b, ambient.a);
+            }
+
+            aiColor4D specular;
+            if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &specular)) {
+                specularColor = glm::vec4(specular.r, specular.g, specular.b, specular.a);
+            }
+
+            //float specularFactor = 32.0f;
+            //aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &specularFactor);
+            //printf("Specular factor: %f\n", specularFactor);
+
+            // Set up material textures
             std::vector<Texture*>* diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
             textures.insert(textures.end(), diffuseMaps->begin(), diffuseMaps->end());
             std::vector<Texture*>* specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
@@ -158,7 +176,9 @@ namespace Villain {
             // TODO: parallax displacement maps
             // TODO: stop hardcoding specularity factor(32) here
             Material mat(matName, diffuseMap, 32.0f, specularMap, normalMap);
+            mat.setAmbientColor(ambientColor);
             mat.setDiffuseColor(diffuseColor);
+            mat.setSpecularColor(specularColor);
             materials[matName] = mat;
             return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);
         }
