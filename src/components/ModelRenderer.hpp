@@ -9,9 +9,9 @@ namespace Villain {
 
     class ModelRenderer : public NodeComponent {
         public:
-            ModelRenderer(Model *m, const std::string& animationPath = std::string()) : model(m) {
+            ModelRenderer(Model *m, const std::string& animationPath = std::string(), float animationSpeed = 0.0f) : model(m) {
                 if (!animationPath.empty()) {
-                    currentAnimation = new Animation(animationPath, model);
+                    currentAnimation = new Animation(animationPath, model, animationSpeed);
                     animator = new Animator(currentAnimation);
                 }
             };

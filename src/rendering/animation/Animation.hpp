@@ -22,11 +22,12 @@ namespace Villain {
     class Animation {
         public:
             Animation() = default;
-            Animation(const std::string& path, Model* model);
+            Animation(const std::string& path, Model* model, float speed = 0);
             ~Animation() {}
 
             Bone* findBone(const std::string& name);
 
+            inline float* getSpeed() { return &ticksPerSecond; }
             inline float getTicksPerSecond() { return ticksPerSecond; }
             inline float getDuration() { return duration; }
             inline const AssimpNodeData& getRootNode() { return rootNode; }
@@ -38,7 +39,7 @@ namespace Villain {
             void readHierarchyData(AssimpNodeData& dest, const aiNode* src);
 
             float duration;
-            int ticksPerSecond;
+            float ticksPerSecond;
             std::vector<Bone> bones;
             AssimpNodeData rootNode;
             std::map<std::string, BoneInfo> boneInfoMap;

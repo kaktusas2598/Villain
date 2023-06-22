@@ -516,6 +516,7 @@ namespace Villain {
                 if (model != nullptr) {
                     ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
                     if (model->getCurrentAnimation()) {
+                        ImGui::DragFloat("Animation speed", model->getCurrentAnimation()->getSpeed(), 1.0f, 0.1f, 10000.0f, "%.1f");
                         ImGui::DragFloat("Animation time", model->getAnimator()->getCurrentTime(), 1.0f, 0.0f, model->getCurrentAnimation()->getDuration(), "%.1f");
                         ImGui::Checkbox("Bind Pose", model->getAnimator()->getBindPose());
                         for(auto& boneInfo: model->getModel()->getBoneInfoMap()) {
