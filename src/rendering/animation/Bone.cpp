@@ -79,7 +79,9 @@ namespace Villain {
     float Bone::getScaleFactor(float lastTimestamp, float nextTimestamp, float animationTime) {
         float midwayLength = animationTime - lastTimestamp;
         float framesDiff = nextTimestamp - lastTimestamp;
-        return midwayLength / framesDiff;
+        float factor = midwayLength / framesDiff;
+        assert(factor >= 0.0f && factor <= 1.0f);
+        return factor;
         //float delta = nextTimestamp - lastTimestamp;
         //return (animationTime - (float)nextTimestamp) / delta;
     }
