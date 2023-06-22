@@ -8,6 +8,8 @@ namespace Villain {
 
     Animation::Animation(const std::string& path, Model* model) {
         Assimp::Importer importer;
+        // NOTE: Do not like this! Model is already loaded in Model class, so there is really no need for this at all
+        // Model class should have instance of Animator and maybe a vector of Animation objects
         scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
         assert(scene && scene->mRootNode);
 

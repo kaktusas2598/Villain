@@ -6,8 +6,6 @@ namespace Villain {
     Animator::Animator(Animation* animation) {
         currentTime = 0.0f;
         currentAnimation = animation;
-        //printf("Animation duration: %f Ticks per second: %f\n", animation->getDuration(), animation->getTicksPerSecond());
-        //NOTE: animation time in seconds: duraction/ticksPerSeconds
 
         finalBoneMatrices.reserve(MAX_BONES);
         for (int i = 0; i < MAX_BONES; i++) {
@@ -43,6 +41,8 @@ namespace Villain {
             nodeTransform = bone->getLocalTransform();
         }
 
+        // TODO: instead of calculating these every single frame, need to calculate Bone transforms once then loading model
+        // and only calculate animation data here
         glm::mat4 globalTransform = parentTransform * nodeTransform;
         auto boneInfoMap = currentAnimation->getBoneInfoMap();
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) {
