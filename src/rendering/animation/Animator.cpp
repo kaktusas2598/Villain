@@ -34,14 +34,13 @@ namespace Villain {
         std::string nodeName = node->Name;
         glm::mat4 nodeTransform = node->Transformation;
 
+        // Important, if bone is animated(has channel), animation transform completely replaces aiNode->mTransformation matrix!
         Bone* bone = currentAnimation->findBone(nodeName);
         if (bone && !bindPoseOnly) {
             bone->update(currentTime);
             nodeTransform = bone->getLocalTransform();
         }
 
-        // TODO: instead of calculating these every single frame, need to calculate Bone transforms once then loading model
-        // and only calculate animation data here
         glm::mat4 globalTransform = parentTransform * nodeTransform;
         auto boneInfoMap = currentAnimation->getBoneInfoMap();
         if (boneInfoMap.find(nodeName) != boneInfoMap.end()) {

@@ -24,8 +24,8 @@ namespace Villain {
             virtual void update(float deltaTime) override;
 
             Model* getModel() const { return model; }
-            Animator* getAnimator() const { return model->getAnimator(); }
-            Animation* getCurrentAnimation() const { return model->getAnimator()->getCurrentAnimation(); }
+            Animator* getAnimator() { return model->getAnimator(); }
+            Animation* getCurrentAnimation() { return getAnimator() ? getAnimator()->getCurrentAnimation() : nullptr; }
         private:
             Model* model;
     };
