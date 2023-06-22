@@ -22,10 +22,11 @@ namespace Villain {
     class Animation {
         public:
             Animation() = default;
-            Animation(const std::string& path, Model* model, float speed = 0);
+            Animation(Model* model, const aiAnimation* animation, const aiNode* root, float speed = 0);
             ~Animation() {}
 
             Bone* findBone(const std::string& name);
+            void setSpeed(float speed) { ticksPerSecond = speed; }
 
             inline float* getSpeed() { return &ticksPerSecond; }
             inline float getTicksPerSecond() { return ticksPerSecond; }
@@ -43,10 +44,8 @@ namespace Villain {
             std::vector<Bone> bones;
             AssimpNodeData rootNode;
             std::map<std::string, BoneInfo> boneInfoMap;
-            // Brings back model to unit scale before animating
+            // Brings back model from world to local space, applied last
             aiMatrix4x4 globalInverseTransform;
-
-            const aiScene* scene = nullptr;
     };
 }
 

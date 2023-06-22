@@ -2,12 +2,24 @@
 
 #include "Logger.hpp"
 #include "ResourceManager.hpp"
+#include "rendering/animation/Animation.hpp"
+#include "rendering/animation/Animator.hpp"
 #include "rendering/AssimpUtils.hpp"
 #include "rendering/RendereringEngine.hpp"
 
 #include <sstream>
 
 namespace Villain {
+
+    Model::~Model() {
+        if (animator) delete animator;
+
+        for (auto it = animationMap.begin(); it != animationMap.end(); ++it) {
+            Animation* ptr = it->second;
+            delete ptr;
+            animationMap.erase(it);
+        }
+    }
 
     void Model::draw(Shader& shader) {
         for (auto& mesh: meshes) {
@@ -17,14 +29,13 @@ namespace Villain {
     }
 
     void Model::loadModel(std::string path) {
-        Assimp::Importer importer;
         // While loading scene, tell assimp to make sure uv coords are flipped along y axis
         // and all primitives are triangles
         // Other useful options:
         // aiProcess_GenNormals
         // aiProcess_CalcTangentSpace - won't calculate if there are no normals
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+        scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
         printf("------------------------\n");
         printf("Loading model from %s\n", path.c_str());
@@ -41,6 +52,8 @@ namespace Villain {
         printf("Number of animations: %d, meshes: %d\n", scene->mNumAnimations, scene->mNumMeshes);
 
         processNode(scene->mRootNode, scene);
+        // NOTE: Must be called after processing mesh! Not good design
+        processAnimations(scene);
     }
 
     void Model::processNode(aiNode* node, const aiScene* scene) {
@@ -170,6 +183,16 @@ namespace Villain {
         }
 
         return textures;
+    }
+
+    void Model::processAnimations(const aiScene* scene) {
+        if (scene->HasAnimations()) {
+            for (int i = 0; i < scene->mNumAnimations; i++) {
+                animationMap[scene->mAnimations[i]->mName.C_Str()] = new Animation(this, scene->mAnimations[i], scene->mRootNode);
+            }
+            // For now start playing first animation automatically
+            animator = new Animator(animationMap.begin()->second);
+        }
     }
 
     void Model::setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight) {

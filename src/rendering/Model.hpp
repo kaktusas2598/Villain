@@ -12,6 +12,9 @@
 
 namespace Villain {
 
+    class Animation;
+    class Animator;
+
     // Used for abstracting Model data
     // and loading using assimp loading interface
     // NOTE: We are using Vertex type which contains tangent space, but it will be useless
@@ -23,6 +26,8 @@ namespace Villain {
                 instanceMatrix = instanceTransforms;
                 loadModel(path);
             }
+            ~Model();
+
             void draw(Shader& shader);
 
             std::map<std::string, Material>& getMaterials() { return materials; }
@@ -34,8 +39,12 @@ namespace Villain {
             int& getBoneCount() { return boneCounter; }
             int getDisplayedBoneIndex() const { return displayedBoneIndex; }
             void setDisplayedBoneIndex(int displayIndex) { displayedBoneIndex = displayIndex; }
+            Animator* getAnimator() { return animator; }
 
         private:
+            Assimp::Importer importer;
+            const aiScene* scene = nullptr;
+
             std::vector<Mesh<VertexP1N1T1B1UV>> meshes;
             std::map<std::string, Material> materials;
             std::string directory;
@@ -53,9 +62,12 @@ namespace Villain {
 
 
             // Skeletal animation properties
+            Animator* animator = nullptr;
+            std::map<std::string, Animation*> animationMap;
             std::map<std::string, BoneInfo> boneInfoMap;
             int boneCounter = 0;
             int displayedBoneIndex = -1; //<<< For debugging bone weights
+
 
             void setVertexBoneData(VertexP1N1T1B1UV& vertex, int boneID, float weight);
             void resetVertexBoneData(VertexP1N1T1B1UV& vertex) {
@@ -66,6 +78,7 @@ namespace Villain {
                 }
             }
             void extractBoneWeightForVertices(std::vector<VertexP1N1T1B1UV>& vertices, aiMesh* mesh, const aiScene* scene);
+            void processAnimations(const aiScene* scene);
     };
 }
 

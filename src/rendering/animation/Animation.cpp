@@ -6,25 +6,18 @@
 
 namespace Villain {
 
-    Animation::Animation(const std::string& path, Model* model, float speed) {
-        Assimp::Importer importer;
-        // NOTE: Do not like this! Model is already loaded in Model class, so there is really no need for this at all
-        // Model class should have instance of Animator and maybe a vector of Animation objects
-        scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
-        assert(scene && scene->mRootNode);
-
+    Animation::Animation(Model* model, const aiAnimation* animation, const aiNode* root, float speed) {
         // Addition From OglDev
-        globalInverseTransform = scene->mRootNode->mTransformation;
+        globalInverseTransform = root->mTransformation;
         globalInverseTransform.Inverse();
 
-        auto animation = scene->mAnimations[0];
         duration = animation->mDuration;
         ticksPerSecond = speed == 0 ? (animation->mTicksPerSecond != 0 ? animation->mTicksPerSecond : 24.f) : speed;
         bones.reserve(MAX_BONES);
         // Finds and adds any missing bones from aiAnimation and stores them in boneInfoMap for the model, also populates Bone vector
         readMissingBones(animation, *model);
         // Replicates aiNode hierarchy used by Assimp to AssimpNodeData hierarchy
-        readHierarchyData(rootNode, scene->mRootNode);
+        readHierarchyData(rootNode, root);
     }
 
     Bone* Animation::findBone(const std::string& name) {

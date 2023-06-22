@@ -20,6 +20,7 @@ namespace Villain {
             void calculateBoneTransform(const AssimpNodeData* node, const glm::mat4& parentTransform);
 
             float* getCurrentTime() { return &currentTime; }
+            Animation* getCurrentAnimation() { return currentAnimation; }
 
             std::vector<glm::mat4>& getFinalBoneMatrices() { return finalBoneMatrices; }
         private:

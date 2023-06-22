@@ -9,13 +9,12 @@ namespace Villain {
 
     class ModelRenderer : public NodeComponent {
         public:
-            ModelRenderer(Model *m, const std::string& animationPath = std::string(), float animationSpeed = 0.0f) : model(m) {
-                if (!animationPath.empty()) {
-                    currentAnimation = new Animation(animationPath, model, animationSpeed);
-                    animator = new Animator(currentAnimation);
+            ModelRenderer(Model *m, float animationSpeed = 0.0f) : model(m) {
+                if (m->getAnimator()) {
+                    if (animationSpeed > 0) m->getAnimator()->getCurrentAnimation()->setSpeed(animationSpeed);
                 }
             };
-            ~ModelRenderer();
+            ~ModelRenderer() {}
 
             virtual void render(
                 Shader& shader,
@@ -25,14 +24,10 @@ namespace Villain {
             virtual void update(float deltaTime) override;
 
             Model* getModel() const { return model; }
-            Animation* getCurrentAnimation() const { return currentAnimation; }
-            Animator* getAnimator() const { return animator; }
+            Animator* getAnimator() const { return model->getAnimator(); }
+            Animation* getCurrentAnimation() const { return model->getAnimator()->getCurrentAnimation(); }
         private:
             Model* model;
-
-            // Optional skeletal animation properties
-            Animation* currentAnimation = nullptr;
-            Animator* animator = nullptr;
     };
 }
 

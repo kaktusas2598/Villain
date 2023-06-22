@@ -7,13 +7,6 @@
 
 namespace Villain {
 
-    ModelRenderer::~ModelRenderer() {
-        if (animator)
-            delete animator;
-        if(currentAnimation)
-            delete currentAnimation;
-    }
-
     void ModelRenderer::render(
             Shader& shader,
             RenderingEngine& renderingEngine,
@@ -37,9 +30,9 @@ namespace Villain {
         shader.setUniform1i("selected", parent->isSelected());
 
         // Skeletal animation uniforms
-        if (currentAnimation != nullptr && model->getBoneCount() > 0) {
+        if (model->getAnimator() && model->getAnimator()->getCurrentAnimation() && model->getBoneCount() > 0) {
             shader.setUniform1i("skeletalAnimationEnabled", 1);
-            auto& transforms = animator->getFinalBoneMatrices();
+            auto& transforms = model->getAnimator()->getFinalBoneMatrices();
             for (int i = 0; i < transforms.size(); i++) {
                 shader.setUniformMat4f("finalBoneMatrices[" + std::to_string(i) + "]", transforms[i]);
             }
@@ -73,8 +66,8 @@ namespace Villain {
     }
 
     void ModelRenderer::update(float deltaTime) {
-        if (animator) {
-            animator->updateAnimation(deltaTime);
+        if (model->getAnimator()) {
+            model->getAnimator()->updateAnimation(deltaTime);
             // Bone weight debug - switch to next bone using 'b'
             if (InputManager::Instance()->isKeyDown(SDLK_b)) {
                 model->setDisplayedBoneIndex(model->getDisplayedBoneIndex() + 1);

@@ -176,7 +176,7 @@ void Game::init() {
     //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
     std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";
     Model* vampireModel = new Model(vampirePath.c_str());
-    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, vampirePath, 620));
+    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, 420));
     vampireNode->getTransform()->setScale(0.05);
     vampireNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(vampireNode);
@@ -185,7 +185,7 @@ void Game::init() {
     //std::string thrillerPath = "assets/models/Thriller.fbx";
     std::string thrillerPath = "assets/models/ThrillerPart1-ZombieGirl.dae";
     Model* thrillerModel = new Model(thrillerPath.c_str());
-    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, thrillerPath, 620));
+    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, 420));
     thrillerNode->getTransform()->setScale(0.05);
     thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(thrillerNode);
