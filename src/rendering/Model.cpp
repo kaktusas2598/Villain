@@ -188,6 +188,7 @@ namespace Villain {
     void Model::processAnimations(const aiScene* scene) {
         if (scene->HasAnimations()) {
             for (int i = 0; i < scene->mNumAnimations; i++) {
+                printf("Animation %d: '%s\n", i, scene->mAnimations[i]->mName.C_Str());
                 animationMap[scene->mAnimations[i]->mName.C_Str()] = new Animation(this, scene->mAnimations[i], scene->mRootNode);
             }
             // For now start playing first animation automatically
