@@ -173,13 +173,20 @@ namespace Villain {
         std::vector<Texture*>* textures = new std::vector<Texture*>();
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
             aiString str;
-            mat->GetTexture(type, i, &str);
-            // NOTE: 2023-04-16, Started setting here GL_REPEAT explicitely which is
-            // default wrapping mode anyway and this fixes issues with 3D models, so it will probably stay
-            // atm default mode in engine is GL_CLAMP_TO_EDGE
-            Texture* texture = ResourceManager::Instance()->loadTexture(str.C_Str(), str.C_Str(), GL_REPEAT, gammaCorrected);
-            texture->setType(typeName);
-            textures->push_back(texture);
+            if (mat->GetTexture(type, i, &str) == AI_SUCCESS) {
+                const aiTexture* embeddedTexture = scene->GetEmbeddedTexture(str.C_Str());
+                if (embeddedTexture) {
+                    // TODO: add support for embedded textures
+                    printf("Embedded texture found. Type: %s\n", embeddedTexture->achFormatHint);
+                    //int bufferSize = embeddedTexture->mWidth;
+                    //embeddedTexture->pcData
+                    //Texture* texture = new Texture(uint32_t bufferSize, void* buffer);
+                } else {
+                    Texture* texture = ResourceManager::Instance()->loadTexture(str.C_Str(), str.C_Str(), GL_REPEAT, gammaCorrected);
+                    texture->setType(typeName);
+                    textures->push_back(texture);
+                }
+            }
         }
 
         return textures;
