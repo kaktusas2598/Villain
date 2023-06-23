@@ -41,3 +41,6 @@ out
 
 # CmakeRC files
 **/__cmrc_***
+
+# Tests
+tests/vendor

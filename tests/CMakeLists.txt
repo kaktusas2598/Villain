@@ -8,12 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Cmake will generate compile_commands.json file used by clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-add_subdirectory(catch2)
+add_subdirectory(../vendor/catch2 out)
 
 # Add engine as library, send lib file to this project's dir
 add_subdirectory(../ ${PROJECT_SOURCE_DIR})
 
-include_directories(../src catch2/src)
+include_directories(../src ../vendor/catch2/src)
 
 add_executable(${PROJECT_NAME} sample_test.cpp)
 

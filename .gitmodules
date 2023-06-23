@@ -8,5 +8,5 @@
 	path = vendor/box2d
 	url = https://github.com/erincatto/box2d
 [submodule "tests/catch2"]
-	path = tests/catch2
+	path = vendor/catch2
 	url = https://github.com/catchorg/Catch2
