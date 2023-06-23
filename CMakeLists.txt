@@ -5,6 +5,7 @@ project(VILLAIN)
 
 # Custom Engine Build Options
 option(VILLAIN_ENABLE_BOX2D "Enable Box2D Physics Engine" OFF)
+option(VILLAIN_BUILD_TESTS "Build tests" OFF)
 
 # Set C++ Standard
 set(CMAKE_CXX_STANDARD 17)
@@ -51,6 +52,10 @@ add_library(${PROJECT_NAME} STATIC ${sources} )
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
 add_subdirectory(vendor/tinyxml2)
+
+if(VILLAIN_BUILD_TESTS)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
+endif()
 
 if (VILLAIN_ENABLE_BOX2D)
     option(BOX2D_BUILD_UNIT_TESTS OFF)
