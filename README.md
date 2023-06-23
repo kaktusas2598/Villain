@@ -40,6 +40,7 @@
 ## Planned Features
 
 * Engine editor with scene management
+* Assed management system
 * Physics Engine:
     * Potential Box2D and Bullet physics integration
     * Built in collision detection: AABB, SAT, circle
@@ -54,6 +55,7 @@
 * Stencil buffer
 * HDR and Bloom
 * Blending skeletal animations
+* Embedded texture support
 
 ## Screenshots
 
@@ -136,6 +138,7 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Investigate alternative Anti-Aliasing methods like FXAA
  * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
  * Investigate volumetric lighting and fog techniques
+ * Investigate water rendering mechanics
  * Read about Physically Based Rendering (PBR)
  * Read about Screen Space Ambient Occlusion (SSAO)
  * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
