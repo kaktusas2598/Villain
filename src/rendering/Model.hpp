@@ -40,6 +40,7 @@ namespace Villain {
             int getDisplayedBoneIndex() const { return displayedBoneIndex; }
             void setDisplayedBoneIndex(int displayIndex) { displayedBoneIndex = displayIndex; }
             Animator* getAnimator() { return animator; }
+            std::map<std::string, Animation*>& getAnimations() { return animationMap; }
 
         private:
             Assimp::Importer importer;

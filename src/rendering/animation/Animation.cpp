@@ -11,6 +11,7 @@ namespace Villain {
         globalInverseTransform = root->mTransformation;
         globalInverseTransform.Inverse();
 
+        name = animation->mName.C_Str();
         duration = animation->mDuration;
         ticksPerSecond = speed == 0 ? (animation->mTicksPerSecond != 0 ? animation->mTicksPerSecond : 24.f) : speed;
         bones.reserve(MAX_BONES);

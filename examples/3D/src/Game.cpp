@@ -166,11 +166,12 @@ void Game::init() {
     //catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
     //addToScene(catNode);
 
-    //std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/FBX/Eagle.fbx";
-    //Model* eagleModel = new Model(eaglePath.c_str());
-    //SceneNode* eagleNode = (new SceneNode("Eagle", {0, 12, -12}))->addComponent(new ModelRenderer(eagleModel));
-    //eagleNode->getTransform()->setScale(0.02);
-    //addToScene(eagleNode);
+    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/Eagle.fbx";
+    Model* eagleModel = new Model(eaglePath.c_str());
+    SceneNode* eagleNode = (new SceneNode("Eagle", {12, 20, 0}))->addComponent(new ModelRenderer(eagleModel));
+    eagleNode->getTransform()->setScale(0.02);
+    eagleNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
+    addToScene(eagleNode);
 
     //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
     std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";

@@ -28,6 +28,7 @@ namespace Villain {
             Bone* findBone(const std::string& name);
             void setSpeed(float speed) { ticksPerSecond = speed; }
 
+            inline const std::string& getName() const { return name; }
             inline float* getSpeed() { return &ticksPerSecond; }
             inline float getTicksPerSecond() { return ticksPerSecond; }
             inline float getDuration() { return duration; }
@@ -39,6 +40,7 @@ namespace Villain {
             void readMissingBones(const aiAnimation* animation, Model& model);
             void readHierarchyData(AssimpNodeData& dest, const aiNode* src);
 
+            std::string name;
             float duration;
             float ticksPerSecond;
             std::vector<Bone> bones;
