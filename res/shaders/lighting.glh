@@ -1,5 +1,7 @@
 struct Material {
+    vec4 ambientColor;
     vec4 diffuseColor;
+    vec4 specularColor;
 
     float shininess;
 
@@ -83,11 +85,17 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
     if (material.useSpecularMap) {
         newLight.specular = base.specular * spec * vec3(texture(material.texture_specular, texCoords));
     } else {
-        newLight.specular = base.specular * spec;
+        newLight.specular = base.specular * spec * material.specularColor.xyz;
     }
 
-    newLight.ambient = base.ambient * vec3(texture(material.texture_diffuse, texCoords));
-    newLight.diffuse = base.diffuse * diff * vec3(texture(material.texture_diffuse, texCoords)) * material.diffuseColor.xyz;
+    if (material.useDiffuseMap) {
+        newLight.ambient = base.ambient * vec3(texture(material.texture_diffuse, texCoords));
+        newLight.diffuse = base.diffuse * diff * vec3(texture(material.texture_diffuse, texCoords)) * material.diffuseColor.xyz;
+    } else {
+        newLight.ambient = base.ambient * material.ambientColor.xyz;
+        newLight.diffuse = base.diffuse * diff * material.diffuseColor.xyz;
+    }
+
 
     return newLight;
 }

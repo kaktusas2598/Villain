@@ -84,6 +84,37 @@ namespace Villain {
         GLCall(glBindTexture(target, 0));
     }
 
+    Texture::Texture(uint32_t bufferSize, void* buffer, bool sRGB): target(GL_TEXTURE_2D) {
+        void * imageData = stbi_load_from_memory((const stbi_uc*)buffer, bufferSize, &width, &height, &BPP, 0);
+
+        GLCall(glGenTextures(1, &rendererID));
+        GLCall(glBindTexture(target, rendererID));
+
+        // Recalibrate for gamma correction
+        //GLenum internalFormat;
+        //if (sRGB) {
+            //if (BPP == 4)
+                //internalFormat = GL_SRGB_ALPHA;
+            //else
+                //internalFormat= GL_SRGB;
+        //}
+        GLCall(glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData));
+
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GLCall(glTexParameterf(target, GL_TEXTURE_BASE_LEVEL, 0));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT));
+
+        GLCall(glGenerateMipmap(target));
+
+        GLCall(glBindTexture(target, 0));
+
+
+        stbi_image_free(imageData);
+
+    }
+
     void Texture::init(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format, bool clamp) {
         rendererID = id;
         width = w;

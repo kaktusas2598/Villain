@@ -30,6 +30,7 @@
 * Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation
+* Skeletal animation
 * Basic Nuklear UI support
 
 ### Physics
@@ -39,7 +40,7 @@
 ## Planned Features
 
 * Engine editor with scene management
-* Skeletal animation support
+* Assed management system
 * Physics Engine:
     * Potential Box2D and Bullet physics integration
     * Built in collision detection: AABB, SAT, circle
@@ -53,6 +54,8 @@
 * Tessalated terrain
 * Stencil buffer
 * HDR and Bloom
+* Blending skeletal animations
+* Embedded texture support
 
 ## Screenshots
 
@@ -80,6 +83,7 @@
  * [Box2D](https://box2d.org/) - A 2D Physics Engine for Games
  * [Bullet Physics](https://bulletphysics.org/) - Real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
  * [Sponza Palace](https://github.com/jimmiebergmann/Sponza) - Sponza Palace Obj model made by Jimmie Bergmann
+ * Animated models from mixamo.com
 
 
 ## Instructions
@@ -134,6 +138,7 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Investigate alternative Anti-Aliasing methods like FXAA
  * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
  * Investigate volumetric lighting and fog techniques
+ * Investigate water rendering mechanics
  * Read about Physically Based Rendering (PBR)
  * Read about Screen Space Ambient Occlusion (SSAO)
  * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size

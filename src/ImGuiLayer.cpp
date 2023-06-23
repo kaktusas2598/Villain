@@ -459,7 +459,9 @@ namespace Villain {
 
     void ImGuiLayer::drawNodeComponents(SceneNode* node) {
         if (!node->getComponents().empty()) {
+            int i = 0;
             for (auto& compo: node->getComponents()) {
+                ImGui::PushID(i); // Solves issues with multiple elements sharing same names
                 // TODO: find optimal way of adding any components and possibly custom components without too
                 // many conditionals
                 if (compo->getID() == GetId<CameraComponent>()) {
@@ -513,9 +515,39 @@ namespace Villain {
                 auto model = dynamic_cast<ModelRenderer*>(compo);
                 if (model != nullptr) {
                     ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
+                    if (model->getCurrentAnimation()) {
+                        if (ImGui::BeginCombo("Active animation", model->getCurrentAnimation()->getName().c_str())) {
+                            for (const auto& anim: model->getModel()->getAnimations())  {
+                                bool isSelected = (anim.first == model->getCurrentAnimation()->getName());
+                                if (ImGui::Selectable(anim.first.c_str(), isSelected)) {
+                                    model->getAnimator()->playAnimation(anim.second);
+                                }
+
+                                if (isSelected) {
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+
+                            ImGui::EndCombo();
+                        }
+                        ImGui::DragFloat("Animation speed", model->getCurrentAnimation()->getSpeed(), 1.0f, 0.1f, 10000.0f, "%.1f");
+                        ImGui::DragFloat("Animation time", model->getAnimator()->getCurrentTime(), 1.0f, 0.0f, model->getCurrentAnimation()->getDuration(), "%.1f");
+                        ImGui::Checkbox("Bind Pose", model->getAnimator()->getBindPose());
+                        for(auto& boneInfo: model->getModel()->getBoneInfoMap()) {
+                            if (boneInfo.second.id == model->getModel()->getDisplayedBoneIndex()) {
+                                ImGui::Text("Displayed Bone: '%s'", boneInfo.first.c_str());
+                            }
+                        }
+                        if (ImGui::Button("Pause Animation")) {
+                            model->getAnimator()->toggleAnimation();
+                        }
+
+                    }
                 }
 
                 ImGui::Separator();
+                ImGui::PopID();
+                i++;
             }
         }
     }
@@ -535,6 +567,7 @@ namespace Villain {
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
         ImGui::Checkbox("Visualise normals", engine.getRenderingEngine()->getVisualiseNormals());
+        ImGui::Checkbox("Visualise bone weights", engine.getRenderingEngine()->getVisualiseBoneWeights());
         ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
         ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());
         ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());

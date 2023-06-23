@@ -21,6 +21,14 @@
 using namespace Villain;
 
 void Game::init() {
+    GLint result;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
+    printf("Max vertex shader attrib count is %d\n", result);
+
+    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
+    printf("Max uniform location count is %d\n", result);
+
+
     camera = new Camera();
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
@@ -100,6 +108,7 @@ void Game::init() {
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
+    // TODO: Lights TEMP disabled
     // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
     directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
                 ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
@@ -130,7 +139,7 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
-    Model* sphereModel = new Model("assets/models/sphere.obj");;
+    Model* sphereModel = new Model("assets/models/sphere.obj");
     addToScene((new SceneNode("physics object 0"))
         ->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
         ->addComponent(new ModelRenderer(sphereModel)));
@@ -144,6 +153,43 @@ void Game::init() {
     printf("CameraComponent ID: %i\n", GetId<CameraComponent>());
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
+
+    // Skeletal Animation demo
+    Model* animatedModel = new Model("assets/models/mudeater.dae");
+    SceneNode* animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel));
+    animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
+    addToScene(animatedNode);
+
+    //Model* catModel = new Model("assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx");
+    //SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel));
+    //catNode->getTransform()->setScale(0.02);
+    //catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
+    //addToScene(catNode);
+
+    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/Eagle.fbx";
+    Model* eagleModel = new Model(eaglePath.c_str());
+    SceneNode* eagleNode = (new SceneNode("Eagle", {12, 20, 0}))->addComponent(new ModelRenderer(eagleModel));
+    eagleNode->getTransform()->setScale(0.02);
+    eagleNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
+    addToScene(eagleNode);
+
+    //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
+    std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";
+    Model* vampireModel = new Model(vampirePath.c_str());
+    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, 420));
+    vampireNode->getTransform()->setScale(0.05);
+    vampireNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
+    addToScene(vampireNode);
+
+    // This is part 4, also works, but fbx binary file has wrong texture paths
+    //std::string thrillerPath = "assets/models/Thriller.fbx";
+    //std::string thrillerPath = "assets/models/Angry.fbx";
+    std::string thrillerPath = "assets/models/ThrillerPart1-ZombieGirl.dae";
+    Model* thrillerModel = new Model(thrillerPath.c_str());
+    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, 420));
+    thrillerNode->getTransform()->setScale(0.05);
+    thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
+    addToScene(thrillerNode);
 }
 
 void Game::handleEvents(float deltaTime) {

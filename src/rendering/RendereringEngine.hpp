@@ -55,6 +55,7 @@ namespace Villain {
             bool* getEdgeDetection() { return &outline; }
             bool* getToonShadingEnabled() { return &toonShadingEnabled; }
             bool* getVisualiseNormals() { return &visualiseNormals; }
+            bool* getVisualiseBoneWeights() { return &visualiseBoneWeights; }
             // Additional FBOs
             bool* getMirrorFramebufferEnabled() { return &mirrorBufferEnabled; }
 
@@ -103,6 +104,7 @@ namespace Villain {
             bool mirrorBufferEnabled = false;
             bool toonShadingEnabled = false;
             bool visualiseNormals = false;
+            bool visualiseBoneWeights = false;
 
             static bool gammaCorrection;
 
