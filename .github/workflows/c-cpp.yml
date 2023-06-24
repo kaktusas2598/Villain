@@ -26,6 +26,8 @@ jobs:
       run: ./configure.sh
     - name: build engine
       run: ./build.sh
+    - name: Run unit tests
+      run: ./runTests.sh
     - name: build Sponza example
       run: |
         cd examples/3D
