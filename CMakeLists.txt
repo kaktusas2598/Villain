@@ -16,7 +16,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Append to cmake module dir and add files like FindSDL2.cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
-# Enable code coverage flags for GCC
 if (VILLAIN_CODE_COVERAGE)
     set(CMAKE_BUILD_TYPE Coverage)
 endif()
@@ -110,6 +109,7 @@ if(VILLAIN_BUILD_TESTS)
     if(VILLAIN_CODE_COVERAGE)
         set(CMAKE_BUILD_TYPE Coverage)
         include(CodeCoverage)
+        # Enable code coverage flags for GCC
         set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
         set(LCOV_REMOVE_EXTRA "'${PROJECT_SOURCE_DIR}/tests/*'" "'${PROJECT_SOURCE_DIR}/vendor/*'")
         setup_target_for_coverage(coverage unit_tests coverage)
