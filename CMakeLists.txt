@@ -98,6 +98,7 @@ if(VILLAIN_BUILD_TESTS)
 
     file(GLOB_RECURSE sources_test tests/unit/*.cpp)
     add_executable(unit_tests ${sources_test})
+    # Link Catch2 and villain engine library to tests executable
     target_link_libraries(unit_tests PRIVATE ${PROJECT_NAME} Catch2::Catch2WithMain)
 
     # Register the tests with CTest
