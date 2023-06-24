@@ -21,7 +21,8 @@ jobs:
           libsdl2-image-dev \
           libsdl2-ttf-dev \
           liblua5.4-dev \
-          libassimp-dev
+          libassimp-dev \
+          lcov
     - name: configure engine
       run: ./configure.sh
     - name: build engine
