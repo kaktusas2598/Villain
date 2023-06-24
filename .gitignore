@@ -44,3 +44,4 @@ out
 
 # Tests
 tests/vendor
+**/generated-includes
