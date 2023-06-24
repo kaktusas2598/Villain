@@ -21,11 +21,14 @@ jobs:
           libsdl2-image-dev \
           libsdl2-ttf-dev \
           liblua5.4-dev \
-          libassimp-dev
+          libassimp-dev \
+          lcov
     - name: configure engine
       run: ./configure.sh
     - name: build engine
       run: ./build.sh
+    - name: Run unit tests
+      run: ./runTests.sh
     - name: build Sponza example
       run: |
         cd examples/3D
