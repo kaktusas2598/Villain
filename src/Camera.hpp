@@ -48,6 +48,10 @@ namespace Villain {
             float getZnear() { return zNear; }
             float getZfar() { return zFar; }
 
+            float getYaw() const { return yaw; }
+            float getPitch() const { return pitch; }
+            float getRoll() const { return roll; }
+
             ProjectionType getProjectionType() { return projectionType; }
             void setProjectionType(ProjectionType type) { projectionType = type; }
 

@@ -51,6 +51,35 @@ TEST_CASE("Camera Test") {
     }
 
     SECTION("Camera Mouse Movement") {
+        camera.processMouseMovement(1.0f, 1.0f);
+        REQUIRE(camera.getYaw() == -89.9f);
+        REQUIRE(camera.getPitch() == 0.1f);
+
+        camera.processMouseScroll(45.0f);
+        REQUIRE(camera.getZoom() == 1.0f);
+
+        camera.processMouseScroll(-45.0f);
+        REQUIRE(camera.getZoom() == 45.0f);
+
+        camera.setZoom(0.0f);
+        REQUIRE(camera.getZoom() == 1.0f);
+
+        camera.setZoom(46.0f);
+        REQUIRE(camera.getZoom() == 45.0f);
+    }
+
+    SECTION("Camera Rotation") {
+        camera.setRotation(glm::vec3(45.f, 45.f, 45.f));
+
+        REQUIRE(camera.getYaw() == 45.f);
+        REQUIRE(camera.getPitch() == 45.f);
+        REQUIRE(camera.getRoll() == 45.f);
+
+        REQUIRE(glm::all(glm::epsilonEqual(camera.getRotation(), glm::vec3(45.0, 45.0, 45.0), glm::epsilon<float>())));
+    }
+
+    SECTION("Camera View Matrix") {
+        REQUIRE(camera.getViewMatrix() == glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getFront(), camera.getUp()));
     }
 
     // ... add more test sections for other camera functionalities
