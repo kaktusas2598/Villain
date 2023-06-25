@@ -65,7 +65,7 @@ namespace Villain {
         front.x = cos(glm::radians(eulerRot.y)) * cos(glm::radians(eulerRot.x));
         front.y = sin(glm::radians(eulerRot.x));
         front.z = sin(glm::radians(eulerRot.y)) * cos(glm::radians(eulerRot.x));
-        return front;
+        return glm::normalize(front);
     }
 
     glm::vec3 Transform::getGlobalScale() const {
