@@ -6,7 +6,7 @@
 
 #include "Camera.hpp"
 
-TEST_CASE("Camera Test") {
+TEST_CASE("Perspective Camera Test", "[Camera]") {
     // Create a camera object for testing
     Villain::Camera camera(Villain::ProjectionType::PERSPECTIVE);
 
@@ -82,6 +82,91 @@ TEST_CASE("Camera Test") {
         REQUIRE(camera.getViewMatrix() == glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getFront(), camera.getUp()));
     }
 
-    // ... add more test sections for other camera functionalities
 }
 
+
+// FIXME: Raycasting definitely seems to be broken
+//TEST_CASE("Raycasting Test", "[Camera]") {
+    //Villain::Camera camera(Villain::ProjectionType::PERSPECTIVE);
+    //camera.setPosition(glm::vec3(0.0f, 0.0f, 1.0f));
+    //camera.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    //camera.rescale(800, 600);
+
+    //SECTION("Test conversion of mouse coordinates to world ray") {
+        //glm::vec2 mouseCoords(400.0f, 300.0f);
+        //glm::vec3 expectedRay(0.0f, 0.0f, -1.0f);
+
+        //glm::vec3 result = camera.mouseRayToWorld(mouseCoords);
+
+        //REQUIRE(result.x == Catch::Approx(expectedRay.x));
+        //REQUIRE(result.y == Catch::Approx(expectedRay.y));
+        //REQUIRE(result.z == Catch::Approx(expectedRay.z));
+    //}
+//}
+
+TEST_CASE("Camera Frustum Test", "[Camera]") {
+    Villain::Camera camera(Villain::ProjectionType::PERSPECTIVE);
+    camera.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    camera.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    camera.rescale(800, 600);
+
+    SECTION("Test getting the frustum of the camera") {
+        Villain::Frustum expected{
+            Villain::Plane({0.382683f, -0.923880f, 1.0f}, 1.0f),
+            Villain::Plane({1.0f, 1.0f, 1.0f}, 1.0f),
+            Villain::Plane({1.0f, 1.0f, 1.0f}, 1.0f),
+            Villain::Plane({1.0f, 1.0f, 1.0f}, 1.0f),
+            Villain::Plane({1.0f, 0.0f, 0.0f}, 0.1f),
+            Villain::Plane({-1.0f, 0.0f, 0.0f}, -100.0f)
+        };
+
+        Villain::Frustum result = camera.getFrustum();
+
+        // Compare each plane of the frustum
+        //printf("%f %f %f\n", result.bottomFace.getNormal().x, result.bottomFace.getNormal().y, result.bottomFace.getNormal().z);
+        REQUIRE(result.nearFace.getDistance() == expected.nearFace.getDistance());
+        REQUIRE(result.nearFace.getNormal() == expected.nearFace.getNormal());
+
+        REQUIRE(result.farFace.getDistance() == expected.farFace.getDistance());
+        REQUIRE(result.farFace.getNormal() == expected.farFace.getNormal());
+    }
+
+    SECTION("Unsupported projections for frustum") {
+        camera.setProjectionType(Villain::ProjectionType::ORTHOGRAPHIC_2D);
+
+        Villain::Frustum expected;
+        Villain::Frustum result = camera.getFrustum();
+
+        REQUIRE(result.nearFace.getDistance() == expected.nearFace.getDistance());
+        REQUIRE(result.nearFace.getNormal() == expected.nearFace.getNormal());
+
+        REQUIRE(result.leftFace.getDistance() == expected.leftFace.getDistance());
+        REQUIRE(result.leftFace.getNormal() == expected.leftFace.getNormal());
+
+    }
+}
+
+TEST_CASE("2D Camera Test", "[Camera]") {
+    Villain::Camera camera(Villain::ProjectionType::ORTHOGRAPHIC_2D);
+    camera.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    camera.setZoom(1.0f);
+    camera.rescale(800, 600);
+
+    SECTION("2D Culling") {
+        glm::vec2 quadPosition(0.0f, 0.0f);
+        glm::vec2 quadDimensions(100.0f, 100.0f);
+
+        bool result = camera.quadInView(quadPosition, quadDimensions);
+
+        REQUIRE(result == true);
+    }
+
+    SECTION("Screen to World Coordinate conversion") {
+        glm::vec2 screenCoords(400.0f, 300.0f);
+        glm::vec2 expectedWorldCoords(0.0f, 0.0f);
+
+        glm::vec2 result = camera.screenToWorld(screenCoords);
+
+        REQUIRE(result == expectedWorldCoords);
+    }
+}

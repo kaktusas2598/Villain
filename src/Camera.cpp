@@ -147,6 +147,7 @@ namespace Villain {
     Frustum Camera::getFrustum() {
         if (projectionType != ProjectionType::PERSPECTIVE) {
             Logger::Instance()->error("getFrustum(): Method not supported for this camera type\n");
+            return Frustum();
         }
         Frustum     frustum;
         const float halfVSide = zFar * tanf(glm::radians(zoom) * .5f);
