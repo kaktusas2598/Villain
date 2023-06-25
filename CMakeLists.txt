@@ -93,13 +93,17 @@ target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL
 
 if(VILLAIN_BUILD_TESTS)
     add_subdirectory(vendor/catch2 tests/out)
+    add_subdirectory(vendor/trompeloeil)
+
     include_directories(vendor/catch2/src)
+    include_directories(vendor/trompeloeil/include)
     enable_testing()
 
     file(GLOB_RECURSE sources_test tests/unit/*.cpp)
     add_executable(unit_tests ${sources_test})
     target_include_directories(unit_tests PUBLIC src)
     target_include_directories(unit_tests PUBLIC vendor/catch2/src)
+    target_include_directories(unit_tests PUBLIC vendor/trompeloeil/include)
     # Link Catch2 and villain engine library to tests executable
     target_link_libraries(unit_tests PRIVATE ${PROJECT_NAME} Catch2::Catch2WithMain)
 
