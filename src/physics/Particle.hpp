@@ -15,10 +15,14 @@ namespace Villain {
             glm::vec3 getVelocity() const { return velocity; }
             glm::vec3 getAcceleration() const { return acceleration; }
             float getInverseMass() const { return inverseMass; }
+            float getDamping() const { return damping; }
 
+            void setPosition(const glm::vec3& pos) { position = pos; }
+            void setVelocity(const glm::vec3& vel) { velocity = vel; }
             void setAcceleration(const glm::vec3& acc) { acceleration = acc; }
             void setMass(float m) { inverseMass = 1/m; }
             void setInverseMass(float m) { inverseMass = m; }
+            void setDamping(float d) { damping = d; }
 
         protected:
             glm::vec3 position; //<<< Linear position in world space
