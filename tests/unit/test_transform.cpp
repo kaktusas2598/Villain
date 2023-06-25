@@ -60,5 +60,67 @@ TEST_CASE("Transform class tests") {
         REQUIRE(transform.getScale() == 2.0f);
         REQUIRE(*transform.getScalePtr() == 2.0f);
     }
+
+    SECTION("Parent-child relationship") {
+        Villain::Transform parent({1.0f, 0.0f, 0.0f});
+        Villain::Transform child;
+
+        // Set up parent-child relationship
+        child.setParent(&parent);
+
+        // glm uses column-major order for matrixes, so this is actually
+        // 1 0 0 1
+        // 0 1 0 0
+        // 0 0 1 0
+        // 0 0 0 1
+        glm::mat4 expectedMatrix{
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            1.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        glm::mat4 actualMatrix = child.getTransformMatrix();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+            REQUIRE(actualMatrix[i][j] == Catch::Approx(expectedMatrix[i][j]));
+            }
+        }
+
+        // 2nd time it should not be updated and should be the same
+        actualMatrix = child.getTransformMatrix();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+            REQUIRE(actualMatrix[i][j] == Catch::Approx(expectedMatrix[i][j]));
+            }
+        }
+    }
+
+
+    SECTION("Global Scale") {
+        Villain::Transform transform;
+
+        // Set local scale
+        transform.setScale(2.0f);
+        REQUIRE(transform.getScale() == 2.0f);
+
+        // Set parent transform with scale
+        Villain::Transform parent;
+        parent.setScale(0.5f);
+
+        // Set up parent-child relationship
+        transform.setParent(&parent);
+
+        // Get global scale
+        glm::vec3 globalScale = transform.getGlobalScale();
+
+        // Expected global scale values after parent scaling
+        float expectedGlobalScale = 1.0f;
+
+        // Check global scale values
+        REQUIRE(globalScale.x == Catch::Approx(expectedGlobalScale));
+        REQUIRE(globalScale.y == Catch::Approx(expectedGlobalScale));
+        REQUIRE(globalScale.z == Catch::Approx(expectedGlobalScale));
+    }
 }
 
