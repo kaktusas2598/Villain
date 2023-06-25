@@ -37,7 +37,6 @@ namespace Villain {
 
         size = fileData.st_size;
         char* buffer = (char*)malloc(size);
-        assert(p);
 
         size_t bytesRead = fread(buffer, 1, size, file);
 

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: install dependencies
+    - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y \
@@ -21,22 +21,24 @@ jobs:
           libsdl2-image-dev \
           libsdl2-ttf-dev \
           liblua5.4-dev \
-          libassimp-dev
-    - name: configure engine
-      run: ./configure.sh
-    - name: build engine
-      run: ./build.sh
-    - name: build Sponza example
+          libassimp-dev \
+          lcov
+    - name: Run unit tests
+      run: |
+        ./configure.sh
+        ./build.sh
+        ./runTests.sh
+    - name: Build Sponza example
       run: |
         cd examples/3D
         ./configure.sh
         ./build.sh
-    - name: build Zombie game
+    - name: Build Zombie game
       run: |
         cd examples/ZombieGame
         ./configure.sh
         ./build.sh
-    - name: build Box2D Demo
+    - name: Build Box2D Demo
       run: |
         cd examples/Platformer
         ./configure.sh
