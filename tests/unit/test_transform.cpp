@@ -50,6 +50,14 @@ TEST_CASE("Transform class tests") {
         REQUIRE(transform.getUp().y == Catch::Approx(0.707107));
         REQUIRE(transform.getUp().z == Catch::Approx(0.0));
 
+
+        // Test quaternions update
+        // NOTE: Need to learn more about quaternions and confirm this is actually correct
+        transform.getTransformMatrix();
+        REQUIRE(transform.getOriantation().x == Catch::Approx(0.2706f));
+        REQUIRE(transform.getOriantation().y == Catch::Approx(0.2706f));
+        REQUIRE(transform.getOriantation().z == Catch::Approx(0.6532815f));
+        REQUIRE(transform.getOriantation().w == Catch::Approx(0.6532815f));
     }
 
     SECTION("Scaling") {
