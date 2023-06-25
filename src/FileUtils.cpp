@@ -28,11 +28,13 @@ namespace Villain {
             std::stringstream ss;
             ss << "Error opening " << filePath;
             Logger::Instance()->error(ss.str().c_str());
+            return nullptr;
         }
 
         struct stat fileData;
         if (stat(filePath.c_str(), &fileData) != 0) {
             Logger::Instance()->error("Error occured trying to stat binary file.");
+            return nullptr;
         }
 
         size = fileData.st_size;
