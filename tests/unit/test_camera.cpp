@@ -19,16 +19,14 @@ TEST_CASE("Perspective Camera Test", "[Camera]") {
         REQUIRE(camera.getProjectionType() == Villain::ProjectionType::PERSPECTIVE);
     }
 
-    SECTION("Camera Size") {
+    SECTION("Camera Aspect Ratio") {
         camera.rescale(100.f, 100.f);
-
-
         REQUIRE(camera.getAspectRatio() == Catch::Approx(1.0f)); // Assuming square aspect ratio
     }
 
     SECTION("Camera Keyboard Movement") {
         // Test camera movement
-        printf("Epsilon used: %f\n", glm::epsilon<float>());
+        //printf("Epsilon used: %f\n", glm::epsilon<float>());
         camera.processKeyboard(Villain::CameraMovement::FORWARD, 0.1f);
         // Use the epsilon comparison function to check if the values are close enough
         REQUIRE(glm::all(glm::epsilonEqual(camera.getPosition(), glm::vec3(0.0, 0.0, 0.75), glm::epsilon<float>())));
@@ -68,7 +66,7 @@ TEST_CASE("Perspective Camera Test", "[Camera]") {
         REQUIRE(camera.getZoom() == 45.0f);
     }
 
-    SECTION("Camera Rotation") {
+    SECTION("Camera Manipulation") {
         camera.setRotation(glm::vec3(45.f, 45.f, 45.f));
 
         REQUIRE(camera.getYaw() == 45.f);
@@ -76,6 +74,14 @@ TEST_CASE("Perspective Camera Test", "[Camera]") {
         REQUIRE(camera.getRoll() == 45.f);
 
         REQUIRE(glm::all(glm::epsilonEqual(camera.getRotation(), glm::vec3(45.0, 45.0, 45.0), glm::epsilon<float>())));
+
+        camera.setPosition({0, 0, 0});
+        camera.offsetPosition({1, 1});
+        REQUIRE(camera.getPosition().x == 1.f);
+        REQUIRE(camera.getPosition().y == 1.f);
+
+        camera.offsetScale(10.f);
+        REQUIRE(camera.getZoom() == 55.f);
     }
 
     SECTION("Camera View Matrix") {
@@ -85,24 +91,22 @@ TEST_CASE("Perspective Camera Test", "[Camera]") {
 }
 
 
-// FIXME: Raycasting definitely seems to be broken
-//TEST_CASE("Raycasting Test", "[Camera]") {
-    //Villain::Camera camera(Villain::ProjectionType::PERSPECTIVE);
-    //camera.setPosition(glm::vec3(0.0f, 0.0f, 1.0f));
-    //camera.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-    //camera.rescale(800, 600);
+TEST_CASE("Raycasting Test", "[Camera]") {
+    Villain::Camera camera(Villain::ProjectionType::PERSPECTIVE);
+    camera.setPosition(glm::vec3(0.0f, 0.0f, 1.0f));
+    // Face toward negative z direction
+    camera.setRotation(glm::vec3(0.0f, -90.0f, 0.0f));
+    camera.rescale(800, 600);
 
-    //SECTION("Test conversion of mouse coordinates to world ray") {
-        //glm::vec2 mouseCoords(400.0f, 300.0f);
-        //glm::vec3 expectedRay(0.0f, 0.0f, -1.0f);
+    SECTION("Test conversion of mouse coordinates to world ray") {
+        glm::vec2 mouseCoords(400.0f, 300.0f);
+        glm::vec3 expectedRay(0.0f, 0.0f, -1.0f);
 
-        //glm::vec3 result = camera.mouseRayToWorld(mouseCoords);
+        glm::vec3 result = camera.mouseRayToWorld(mouseCoords);
 
-        //REQUIRE(result.x == Catch::Approx(expectedRay.x));
-        //REQUIRE(result.y == Catch::Approx(expectedRay.y));
-        //REQUIRE(result.z == Catch::Approx(expectedRay.z));
-    //}
-//}
+        REQUIRE(glm::all(glm::epsilonEqual(result, expectedRay, glm::epsilon<float>())));
+    }
+}
 
 TEST_CASE("Camera Frustum Test", "[Camera]") {
     Villain::Camera camera(Villain::ProjectionType::PERSPECTIVE);
