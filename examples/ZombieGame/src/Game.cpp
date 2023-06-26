@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "ErrorHandler.hpp"
-#include "LevelParser.hpp"
+#include "tiled/LevelParser.hpp"
 #include "LuaScript.hpp"
 #include "ResourceManager.hpp"
 #include "glm/ext/matrix_transform.hpp"
