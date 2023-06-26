@@ -180,11 +180,7 @@ namespace Villain {
         float s, t; // UV coords
 
         int start = vertices->size(); // Index for 1st new vertex added
-        // NOTE: Both here and in DebugRenderer vertex and index count is HARDCODED!
-        // It will change based on the number of sectors and stacks
         vertices->resize(vertices->size() + (stackCount + 1) * (sectorCount + 1));
-        //REQUIRE(vertices.size() == (stacks + 1) * (sectors + 1));
-
 
         float sectorStep = 2 * M_PI / sectorCount;
         float stackStep = M_PI / stackCount;
@@ -217,7 +213,6 @@ namespace Villain {
             }
         }
         indices->reserve(indices->size() + (stackCount - 1) * sectorCount * 6);
-        //indices->reserve(indices->size() + 3672);
         unsigned int k1, k2;
         for (int i = 0; i < stackCount; ++i) {
             k1 = i * (sectorCount + 1); // beginning of current stack

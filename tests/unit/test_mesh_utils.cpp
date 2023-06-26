@@ -51,12 +51,8 @@ TEST_CASE("MeshUtils - Tangents and Bitangents", "[MeshUtils]") {
         REQUIRE(indices.size() == 6);
 
         // Test tangent and bitangent calculations
-        printf("Actual Tangent: %s\n", glm::to_string(vertices[0].Tangent).c_str());
-        printf("Actual BiTangent: %s\n", glm::to_string(vertices[0].BiTangent).c_str());
         REQUIRE(vertices[0].Tangent == (glm::vec3(0.0f, -1.0f, 0.0f)));
         REQUIRE(vertices[0].BiTangent == (glm::vec3(-1.0f, 0.0f, 0.0f)));
-        //REQUIRE(vertices[0].Tangent == (glm::vec3(1.0f, 0.0f, 0.0f)));
-        //REQUIRE(vertices[0].BiTangent == (glm::vec3(0.0f, 1.0f, 0.0f)));
     }
 }
 
@@ -90,8 +86,8 @@ TEST_CASE("MeshUtils - Sphere Generation", "[MeshUtils]") {
 
         // Test vertex and index counts
         REQUIRE(vertices.size() == (stacks + 1) * (sectors + 1));
-        // 144 -- 192
-        //
         REQUIRE(indices.size() == (stacks - 1) * sectors * 6);
+
+        // TODO: add more assertions, normal checking, uv
     }
 }
