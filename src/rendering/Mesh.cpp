@@ -91,14 +91,22 @@ namespace Villain {
         if (numInstances > 1) {
             instanceVbo->bind();
 
-            // Map the buffer data for writing
-            GLvoid* instanceData = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-            if (instanceData != nullptr) {
-                // Copy the updated instance matrices to the mapped memory
-                std::memcpy(instanceData, instances.data(), sizeof(glm::mat4) * instances.size());
+            // Check if the size needs to be changed
+            if (instances.size() != numInstances) {
+                // Resize the buffer object
+                instanceVbo->fill(instances.data(), sizeof(glm::mat4) * instances.size());
 
-                // Unmap the buffer
-                GLCall(glUnmapBuffer(GL_ARRAY_BUFFER));
+                numInstances = instances.size();
+            } else {
+                // Map the buffer data for writing
+                GLvoid* instanceData = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+                if (instanceData != nullptr) {
+                    // Copy the updated instance matrices to the mapped memory
+                    std::memcpy(instanceData, instances.data(), sizeof(glm::mat4) * instances.size());
+
+                    // Unmap the buffer
+                    GLCall(glUnmapBuffer(GL_ARRAY_BUFFER));
+                }
             }
 
             instanceVbo->unbind();

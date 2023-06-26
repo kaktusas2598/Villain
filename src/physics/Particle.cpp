@@ -8,7 +8,7 @@ namespace Villain {
         // Update linear position, velocity, and acceleration Newton-Euler using numerical integration
         position += velocity * duration;
         // TODO: implement general forces
-        glm::vec3 resultingAcc = acceleration;
+        glm::vec3 resultingAcc = acceleration * (1.0f / inverseMass);
         velocity += resultingAcc * duration;
         velocity *= powf(damping, duration);  // Impose drag
 
