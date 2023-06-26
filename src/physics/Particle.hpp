@@ -8,6 +8,13 @@ namespace Villain {
     // Simplest physical body, that can be simulated, point mass object
     class Particle {
         public:
+            Particle() :
+                position(0.0f),
+                velocity(0.0f),
+                acceleration(0.0f),
+                inverseMass(1.0f), // Assuming unit mass by default
+                damping(0.98f) // A reasonable damping value between 0 and 1
+            {}
 
             void integrate(float duration);
 
