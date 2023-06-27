@@ -118,7 +118,7 @@ namespace Villain {
                 if (pixel.ObjectID != 0) {
                     SceneNode* clickedNode = node->findByID(pixel.ObjectID);
                     if (clickedNode) {
-                        engine->getImGuiLayer().setSelectedNode(clickedNode);
+                        engine->getImGuiLayer().getSceneEditor().setSelectedNode(clickedNode);
                     }
                 }
             }

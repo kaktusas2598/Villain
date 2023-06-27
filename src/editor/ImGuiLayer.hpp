@@ -6,6 +6,8 @@
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "SceneGraphEditor.hpp"
+
 namespace Villain {
 
     class Engine;
@@ -34,21 +36,22 @@ namespace Villain {
         float getSceneViewportWidth() const { return sceneViewportWidth; }
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
-        void setSelectedNode(SceneNode* node) { selectedNode = node; }
+        //void setSelectedNode(SceneNode* node) { selectedNode = node; }
+        SceneGraphEditor& getSceneEditor() { return sceneEditor; }
 
         // Draw different tools, can potentially be refactored to new classes
         void drawMenu();
         void drawScene(Engine& engine);
-        void drawSceneGraph(Engine& engine);
+        //void drawSceneGraph(Engine& engine);
         void drawSettings(Engine& engine);
         void drawAssetBrowser();
     private:
         void setupDockspace();
-        void drawNodeHierarchy(SceneNode* node); //<<< Render Scene Graph nodes and components recursively
-        void drawSelectedNode();
+        //void drawNodeHierarchy(SceneNode* node); //<<< Render Scene Graph nodes and components recursively
+        //void drawSelectedNode();
 
-        void drawNodeProperties(SceneNode* node);
-        void drawNodeComponents(SceneNode* node);
+        //void drawNodeProperties(SceneNode* node);
+        //void drawNodeComponents(SceneNode* node);
 
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
         static ImVec4 clearColor;
@@ -57,7 +60,8 @@ namespace Villain {
         glm::vec2 sceneViewportPosition{0.0f};
         glm::vec2 mousePosRelativeToSceneViewport{0.0f};
 
-        SceneNode* selectedNode = nullptr;
+        //SceneNode* selectedNode = nullptr;
+        SceneGraphEditor sceneEditor;
     };
 }
 
