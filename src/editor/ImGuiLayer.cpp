@@ -14,10 +14,6 @@ namespace Villain {
     bool ImGuiLayer::showDemoWindow = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ImGuiLayer::ImGuiLayer() {}
-
-    ImGuiLayer::~ImGuiLayer() {}
-
     void ImGuiLayer::exit() {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplSDL2_Shutdown();
