@@ -14,7 +14,6 @@
 #include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
 
-#include "DebugConsole.hpp"
 #include "rendering/DebugRenderer.hpp"
 
 using namespace Villain;
@@ -212,20 +211,6 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
-    // Draw example shapes test
-    debugRenderer.drawBox3D(glm::vec3(5.0f, 2.5f, -5.0f), glm::vec4(0.1f, 0.9f, 0.1f, 1.0f), glm::vec3(0.1f, 5.0f, 10.0f));
-    debugRenderer.drawBox(glm::vec4(0.0f, 0.0f, 2.0f, 2.0f), -5.0f, glm::vec4(1.0f), 0.0f);
-    debugRenderer.drawSphere(glm::vec3(2.0f, 6.0f, -10.0f), 5.0f, glm::vec4(0.8f, 0.0f, 1.0f, 1.0f));
-
-    glm::vec3 position = glm::vec3(2.0);
-    glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    glm::mat4 rotation = transformY * transformX * transformZ;
-    debugRenderer.drawBox3D(position, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f));
-    debugRenderer.drawBox3DRotated(position, glm::vec3(1.0f), rotation, glm::vec4(0.8f, 0.0f, 0.0f, 1.0f));
-
 
     // Directional light has no position, but we need to set some sort of position for shadow map! So this
     // is just a representation os such position

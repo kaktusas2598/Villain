@@ -1,14 +1,15 @@
 #ifndef __Engine__
 #define __Engine__
 
-#include "DebugConsole.hpp"
-#include "ImGuiLayer.hpp"
 #include "InputManager.hpp"
 #include "Timer.hpp"
+#include "Window.hpp"
+
+#include "editor/DebugConsole.hpp"
+#include "editor/ImGuiLayer.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "rendering/FrameBuffer.hpp"
 #include "rendering/RendereringEngine.hpp"
-#include "Window.hpp"
 
 #include <functional>
 #include <stdio.h>
