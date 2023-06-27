@@ -93,6 +93,7 @@ namespace Villain {
         if (projectionType == ProjectionType::ORTHOGRAPHIC_2D) {
             Logger::Instance()->error("Use Camera::screenToWorld() instead\n");
         }
+        // Reference: https://antongerdelan.net/opengl/raycasting.html
         // Normalised device coords
         float x = (2.0f * pos.x) / screenWidth - 1.0f;
         float y = 1.0f - (2.0f * pos.y) / screenHeight;
@@ -146,6 +147,7 @@ namespace Villain {
     Frustum Camera::getFrustum() {
         if (projectionType != ProjectionType::PERSPECTIVE) {
             Logger::Instance()->error("getFrustum(): Method not supported for this camera type\n");
+            return Frustum();
         }
         Frustum     frustum;
         const float halfVSide = zFar * tanf(glm::radians(zoom) * .5f);
@@ -210,6 +212,14 @@ namespace Villain {
     void Camera::processMouseScroll(float yOffset) {
         // TODO: merge with ortho 2d zoom
         zoom -= (float)yOffset;
+        if (zoom < 1.0f)
+            zoom = 1.0f;
+        if (zoom > 45.0f)
+            zoom = 45.0f;
+    }
+
+    void Camera::setZoom(float z) {
+        zoom = z;
         if (zoom < 1.0f)
             zoom = 1.0f;
         if (zoom > 45.0f)

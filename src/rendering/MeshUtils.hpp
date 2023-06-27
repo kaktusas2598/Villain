@@ -80,7 +80,11 @@ namespace Villain {
                 std::vector<VertexType>* vertices,
                 std::vector<unsigned int>* indices,
                 float radius,
-                const glm::vec3& center = glm::vec3(0.0f));
+                const glm::vec3& center = glm::vec3(0.0f),
+                int sectors = 36,
+                int stacks = 18);
+
+        // TODO: add methods for cylinders and cones
 
         private:
         // Min X(S), Max X(S), MIN Y(T), MAX Y(T)

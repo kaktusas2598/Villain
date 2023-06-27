@@ -27,7 +27,14 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
         // Enable vertex attributes
         GLCall(glEnableVertexAttribArray(i));
         // Set up vertex attributes (position, colour, texture uv, normals)
-        GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalised, layout.getStride(), (const void*)offset));
+        // FIXME: Had to hardcode GL_INT instead of element.type here as OpenGL throws error then, WTF?? makes no sense whatsoever
+        // GL_INVALID_ENUM is generated if type is not an accepted value.
+        if (element.type == GL_INT) {
+            //GLCall(glVertexAttribIPointer(i, element.count, GL_INT, layout.getStride(), (const void*)offset));
+            GLCall(glVertexAttribIPointer(i, 4, GL_INT, layout.getStride(), (const void*)offset));
+        } else {
+            GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalised, layout.getStride(), (const void*)offset));
+        }
         offset += element.count * VertexBufferElement::getSizeOfType(element.type);
     }
 }

@@ -1,33 +1,46 @@
 # Villain
 2D/3D Game/Physics/Rendering Engine/Framework in development. Built using SDL2/OpenGL and C++17!
 
+
 ## Supported Features
 
-* Multi-pass forward rendering system using scene graph for 3D applications
-* Phong-blinn based lighting system for Scene Graph
-* Directional and Omnidirectional shadow mapping with PCF Soft shadows
+### Core Engine
 * Builds as a library
-* Vertex, Fragment and Geometry shader support
-* 2D and Cubemap texture support
-* 2D texture batch rendering, multiple texture and colour support
-* 3D Model loading using assimp
-* Normal and Parallax Mapping support
-* 2D Tiled map parsing/loading from tmx/xml files
-* 2D Particle Engine
+* 2D Tiled map parsing/loading from TMX/XML files
 * Debug/Edit mode UI
 * Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
 * Error logging to stdout, log file and editor console
-* Different Camera Types: Perspective, Orthographic, Orthographic 2D or no projection
+* Supported Camera projection types: Perspective, Orthographic, Orthographic 2D or no projection
 * Camera Frustum culling to increase performance
-* TrueType font rendering (Only ASCII encoding ATM)
 * Finite State Machine
+
+### Rendering
+* Multi-pass forward rendering system using scene graph for 3D applications
+* Phong-blinn based lighting system for Scene Graph
+* Directional and Omnidirectional shadow mapping with PCF Soft shadows
+* Vertex, Fragment and Geometry shader support
+* 2D and Cubemap texture support
+* Mipmapped textures with anisotropic filtering, 4x MultiSample Anti-Aliasing enabled
+* Gamma-corrected textures
+* 2D texture batch rendering, multiple texture and colour support
+* Instanced rendering support for 3D models and meshes
+* 3D Model loading using assimp
+* Normal and Parallax mapping support
+* Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
+* Exponential and Layered Fog
+* TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation
+* Skeletal animation
 * Basic Nuklear UI support
+
+### Physics
+* 2D Particle Engine
+* More features TBA
 
 ## Planned Features
 
 * Engine editor with scene management
-* Skeletal animation support
+* Assed management system
 * Physics Engine:
     * Potential Box2D and Bullet physics integration
     * Built in collision detection: AABB, SAT, circle
@@ -38,11 +51,13 @@
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Mesh batch rendering
-* Post-processing effects
+* Tessalated terrain
 * Stencil buffer
-* Instanced drawing
-* and more...
+* HDR and Bloom
+* Blending skeletal animations
+* Embedded texture support
 
+## Screenshots
 
 ![Zombie hell](screenshots/Zombies.png?raw=true "Villain Engine Demo: 2D Bullet Hell game")
 ![3D features](screenshots/SponzaDemo.png?raw=true "Villain Engine Demo: 3D demo with models/lighting/shadow/normal mapping etc.")
@@ -68,6 +83,7 @@
  * [Box2D](https://box2d.org/) - A 2D Physics Engine for Games
  * [Bullet Physics](https://bulletphysics.org/) - Real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
  * [Sponza Palace](https://github.com/jimmiebergmann/Sponza) - Sponza Palace Obj model made by Jimmie Bergmann
+ * Animated models from mixamo.com
 
 
 ## Instructions
@@ -75,6 +91,7 @@
 First install the dependencies and when use build instructions below.
 
 ### Dependencies
+    sudo apt-get install -y libglew-dev
     sudo apt-get install -y libsdl2-dev
     sudo apt-get install -y libsdl2-mixer-dev
     sudo apt-get install -y libsdl2-image-dev
@@ -118,6 +135,11 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
    sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
  * Read about Deferred shading and decide if it's feasible to introduce it
  * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
- * Investigate gamma correction and sRGB textures
- * Investigate HDR, Bloom
- * Improve and fix spot light shadows
+ * Investigate alternative Anti-Aliasing methods like FXAA
+ * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
+ * Investigate volumetric lighting and fog techniques
+ * Investigate water rendering mechanics
+ * Read about Physically Based Rendering (PBR)
+ * Read about Screen Space Ambient Occlusion (SSAO)
+ * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
+ * Move all usages of <random> header to new RandomUtils static class

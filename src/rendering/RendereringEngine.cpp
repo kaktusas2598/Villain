@@ -10,10 +10,13 @@
 namespace Villain {
 
     std::map<std::string, unsigned int> RenderingEngine::samplerMap;
+    bool RenderingEngine::gammaCorrection = false;
 
     RenderingEngine::RenderingEngine(Engine* e): engine(e) {
 
         defaultShader = Shader::createFromResource("forward-ambient");
+        postFXShader = Shader::createFromResource("postProcessing");
+        normalDebugShader = Shader::createFromResource("normal-debug");
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
 
@@ -30,6 +33,10 @@ namespace Villain {
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
+        // Enable MSAA, number of samples set in Window class
+        // Implementation would be different in Deffered renderer
+        // NOTE: might be costly technique performance-wise, beware
+        glEnable(GL_MULTISAMPLE);
 
         glEnable(GL_BLEND);
 
@@ -38,6 +45,10 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
+
+        pickingTexture = new PickingTexture();
+        pickingTexture->init(engine->getScreenWidth(), engine->getScreenHeight());
+        pickingShader = Shader::createFromResource("picking");
     }
 
     RenderingEngine::~RenderingEngine() {
@@ -50,29 +61,73 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node) {
-        // 1st Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
-        mirrorBuffer->bind();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Generate picking texture only if mouse is clicked so we can start selecting objects
+        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+            pickPass(node);
+        }
+        // 1st Optional Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
+        if (mirrorBufferEnabled) {
+            mirrorBuffer->bind();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Camera mirrorCamera = *mainCamera;
-        mirrorCamera.setPosition(mainCamera->getPosition());
-        // Rotates camera
-        glm::vec3 rot = mirrorCamera.getRotation();
-        rot.y += 180.0f;
-        mirrorCamera.setRotation(rot);
+            Camera mirrorCamera = *mainCamera;
+            mirrorCamera.setPosition(mainCamera->getPosition());
+            // Rotates camera
+            glm::vec3 rot = mirrorCamera.getRotation();
+            rot.y += 180.0f;
+            mirrorCamera.setRotation(rot);
 
-        defaultShader->bind();
-        defaultShader->setUniformVec3("color", ambientLight);
-        activeLight = nullptr;
-        node->render(defaultShader, this, &mirrorCamera);
-        //////////
+            defaultShader->bind();
+            defaultShader->setUniformVec3("ambientLight", ambientLight);
+            defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), mirrorCamera);
+            activeLight = nullptr;
+            node->render(defaultShader, this, &mirrorCamera);
+        }
 
         // 2nd Rendering Pass: main pass
-        bindMainTarget();
+        //bindMainTarget();
+        engine->getSceneBuffer()->bind(); // Rendering to scene buffer for later postfx
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Check if any nodes are selected and use picking texture to get correct node
+        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+            bool selectableArea = true;
+            glm::vec2 clickPosition = InputManager::Instance()->getMouseCoords();
+
+            if (engine->editModeActive()) {
+                glm::vec2 sceneImageViewportSize{engine->getImGuiLayer().getSceneViewportWidth(), engine->getImGuiLayer().getSceneViewportHeight()};
+                clickPosition = engine->getImGuiLayer().getMousePositionRelativeToScene();
+
+                // Only allow selecting inside sceme viewport ImGui Window
+                if (clickPosition.x < 0 ||
+                    clickPosition.x > sceneImageViewportSize.x ||
+                    clickPosition.y < 0 ||
+                    clickPosition.y > sceneImageViewportSize.y) {
+
+                    selectableArea = false;
+                }
+                // Find real coordinates by finding imgui scene viewport ratio to engine viewport
+                clickPosition.x = (engine->getScreenWidth() / sceneImageViewportSize.x) * clickPosition.x;
+                clickPosition.y = (engine->getScreenHeight() / sceneImageViewportSize.y) * clickPosition.y;
+            }
+
+            if (selectableArea) {
+                PickingTexture::PixelInfo pixel = pickingTexture->readPixel(clickPosition.x, Engine::getScreenHeight() - clickPosition.y - 1);
+                selectedNodeID = pixel.ObjectID;
+
+                if (pixel.ObjectID != 0) {
+                    SceneNode* clickedNode = node->findByID(pixel.ObjectID);
+                    if (clickedNode) {
+                        engine->getImGuiLayer().setSelectedNode(clickedNode);
+                    }
+                }
+            }
+        }
+
+
         defaultShader->bind();
-        defaultShader->setUniformVec3("color", ambientLight);
+        defaultShader->setUniformVec3("ambientLight", ambientLight);
+        defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *const_cast<Camera*>(mainCamera));
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);
 
@@ -154,7 +209,8 @@ namespace Villain {
             }
 
             // Main lighting pass
-            bindMainTarget();
+            //bindMainTarget();
+            engine->getSceneBuffer()->bind();
 
             //// Using additive blending here to render lights one by one and blend onto the scene
             //// this is so called forward multi-pass rendering
@@ -164,6 +220,7 @@ namespace Villain {
             glDepthFunc(GL_EQUAL);
 
             light->getShader()->bind();
+            light->getShader()->setUniform1i("toonShadingEnabled", toonShadingEnabled);
             if (shadowInfo) {
                 if (activeLight->type() == "point") {
                     omniShadowBuffer->getTexture()->bind(getSamplerSlot("shadow"));
@@ -184,24 +241,62 @@ namespace Villain {
             glDepthMask(GL_TRUE);
             glDepthFunc(GL_LESS);
         }
+
+        if (visualiseNormals) {
+            normalDebugShader->bind();
+            node->render(normalDebugShader, this, mainCamera);
+        }
     }
 
-    // TEMP, render to texture test on plane, moved to different method so that
-    // stuff like debug renderer and skybox also get rendered to shadow buffer in the 1st pass
     void RenderingEngine::postRender() {
         activeLight = nullptr;
-        // Smaller render target on top
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
-        //Material mirrorMat{"null", shadowBuffer->getTexture(), 1};
-        planeTransform.setScale(0.25);
-        planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.3f));
-        planeTransform.setEulerRot(0.0, 180.0, 90.0);
+
+        bindMainTarget();
+        glDisable(GL_DEPTH_TEST);
+
+        engine->getSceneBuffer()->getTexture()->bind();
+        postFXShader->bind();
+        postFXShader->setUniform1i("texture1", 0);
+        postFXShader->setUniform1i("invertColors", invertColors);
+        postFXShader->setUniform1i("grayScale", grayScale);
+        postFXShader->setUniform1i("sharpen", sharpen);
+        postFXShader->setUniform1i("blur", blur);
+        postFXShader->setUniform1i("edgeDetection", outline);
+        postFXShader->setUniform1i("gammaCorrection", gammaCorrection);
         frustumCullingEnabled = false;
-        defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
+        Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};
+        planeTransform.setScale(1.0);
+        planeTransform.setPos(glm::vec3(0.0, 0.0, -0.2f));
+        planeTransform.setEulerRot(0.0, 180.0, 90.0);
+        postFXShader->updateUniforms(planeTransform, postFXMat, *this, *altCamera);
+        screenQuad->draw(*postFXShader, postFXMat);
+        defaultShader->bind();
+
+        // Smaller render target on top
+        if (mirrorBufferEnabled) {
+            Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
+            planeTransform.setScale(0.25);
+            planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.2f));
+            defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
+            defaultShader->setUniformVec3("color", ambientLight);
+            screenQuad->draw(*defaultShader, mirrorMat);
+        }
+
         frustumCullingEnabled = true;
-        defaultShader->setUniformVec3("color", ambientLight);
-        screenQuad->draw(*defaultShader, mirrorMat);
+        glEnable(GL_DEPTH_TEST);
+    }
+
+    void RenderingEngine::pickPass(SceneNode* node) {
+        // Render all scene nodes to special integer picking texture, used to get correct selected object using mouse
+        pickingTexture->enableWriting();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        pickingShader->bind();
+
+        activeLight = nullptr;
+        node->render(pickingShader, this, mainCamera);
+
+        pickingTexture->disableWriting();
     }
 
     void RenderingEngine::bindMainTarget() {

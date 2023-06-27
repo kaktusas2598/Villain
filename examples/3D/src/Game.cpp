@@ -2,7 +2,6 @@
 
 #include "Engine.hpp"
 #include "ErrorHandler.hpp"
-#include "LevelParser.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 #include "components/CameraComponent.hpp"
@@ -21,6 +20,14 @@
 using namespace Villain;
 
 void Game::init() {
+    GLint result;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
+    printf("Max vertex shader attrib count is %d\n", result);
+
+    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
+    printf("Max uniform location count is %d\n", result);
+
+
     camera = new Camera();
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
@@ -74,21 +81,33 @@ void Game::init() {
     // Model renderer test
     // 2023-04-04 - Currently ~12FPS with 3 light sources
     // WIth frustum culling seeing increases from ~3 to ~10FPS, still not enough
-    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer("assets/models/sponza.obj"));
+    Model* sponzaPalace = new Model("assets/models/sponza.obj");
+    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer(sponzaPalace));
     modelNode->getTransform()->setScale(0.1f);
     // 2023-04-04 - Currently ~38FPS with 3 light sources
     // Temporary using donut to fix issues
     //modelNode->getTransform()->setScale(4.0f);
     addToScene(modelNode);
 
-    SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/rock.obj"));
+    Model* rockModel = new Model("assets/models/rock.obj");
+    SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer(rockModel));
     rockNode->getTransform()->setScale(0.01f);
     addToScene(rockNode);
 
-    SceneNode* wall = (new SceneNode("wall", glm::vec3(4.f, 1.f, 0.f)))->addComponent(new ModelRenderer("assets/models/wall.obj"));
+    const unsigned NUM_INSTANCES = 1000;
+    std::vector<glm::mat4> instanceTransforms;
+    float radius = 5.0f, offset = 0.25f;
+    for (unsigned i = 0; i < NUM_INSTANCES; i++) {
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, -100.0f + i * 2.0, 0));
+        instanceTransforms.push_back(model);
+    }
+    Model* wallModel = new Model("assets/models/wall.obj", NUM_INSTANCES, instanceTransforms);
+    SceneNode* wall = (new SceneNode("wall", glm::vec3(0.f, 2.f, 0.f)))
+        ->addComponent(new ModelRenderer(wallModel));
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
+    // TODO: Lights TEMP disabled
     // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
     directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
                 ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
@@ -119,12 +138,13 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
+    Model* sphereModel = new Model("assets/models/sphere.obj");
     addToScene((new SceneNode("physics object 0"))
         ->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
-        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+        ->addComponent(new ModelRenderer(sphereModel)));
     addToScene((new SceneNode("physics object 1"))
         ->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
-        ->addComponent(new ModelRenderer("assets/models/sphere.obj")));
+        ->addComponent(new ModelRenderer(sphereModel)));
     addToScene((new SceneNode("AABB"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(2))));
     addToScene((new SceneNode("AABB2"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(3))));
     addToScene((new SceneNode("Floor"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(4))));
@@ -132,6 +152,43 @@ void Game::init() {
     printf("CameraComponent ID: %i\n", GetId<CameraComponent>());
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
+
+    // Skeletal Animation demo
+    Model* animatedModel = new Model("assets/models/mudeater.dae");
+    SceneNode* animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel));
+    animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
+    addToScene(animatedNode);
+
+    //Model* catModel = new Model("assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx");
+    //SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel));
+    //catNode->getTransform()->setScale(0.02);
+    //catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
+    //addToScene(catNode);
+
+    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/Eagle.fbx";
+    Model* eagleModel = new Model(eaglePath.c_str());
+    SceneNode* eagleNode = (new SceneNode("Eagle", {12, 20, 0}))->addComponent(new ModelRenderer(eagleModel));
+    eagleNode->getTransform()->setScale(0.02);
+    eagleNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
+    addToScene(eagleNode);
+
+    //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
+    std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";
+    Model* vampireModel = new Model(vampirePath.c_str());
+    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, 420));
+    vampireNode->getTransform()->setScale(0.05);
+    vampireNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
+    addToScene(vampireNode);
+
+    // This is part 4, also works, but fbx binary file has wrong texture paths
+    //std::string thrillerPath = "assets/models/Thriller.fbx";
+    //std::string thrillerPath = "assets/models/Angry.fbx";
+    std::string thrillerPath = "assets/models/ThrillerPart1-ZombieGirl.dae";
+    Model* thrillerModel = new Model(thrillerPath.c_str());
+    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, 420));
+    thrillerNode->getTransform()->setScale(0.05);
+    thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
+    addToScene(thrillerNode);
 }
 
 void Game::handleEvents(float deltaTime) {

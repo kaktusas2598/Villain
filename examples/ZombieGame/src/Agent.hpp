@@ -5,7 +5,7 @@
 #include "rendering/Texture.hpp"
 #include "glm/glm.hpp"
 
-#include "Level.hpp"
+#include "tiled/Level.hpp"
 
 // Forward declaration to prevent circular includes
 class Zombie;

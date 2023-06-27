@@ -18,14 +18,26 @@ namespace Villain {
             std::vector<VertexType> Vertices;
             std::vector<unsigned int> Indices;
 
-            Mesh(std::vector<VertexType> vertices, std::vector<unsigned int> indices);
-            Mesh(std::vector<VertexType> vertices, std::vector<unsigned int> indices, const std::string& matName);
+            // Passing more than 1 instances enables instanced rendering and instanceMatrices vector must be provided
+            Mesh(
+                    std::vector<VertexType> vertices,
+                    std::vector<unsigned int> indices,
+                    unsigned instances = 1,
+                    std::vector<glm::mat4> instanceTransforms = {});
+            Mesh(
+                    std::vector<VertexType> vertices,
+                    std::vector<unsigned int> indices,
+                    const std::string& matName,
+                    unsigned instances = 1,
+                    std::vector<glm::mat4> instanceTransforms = {});
 
             void draw(Shader &shader);
             void draw(Shader &shader, Material& material);
 
             Sphere* getBoundingVolume() { return boundingVolume.get(); }
             const std::string& getMaterialName() const { return materialName; }
+
+            bool isInstanced() const { return numInstances > 1; }
         private:
             std::string materialName = std::string();
             //unsigned int VBO, VAO, EBO;
@@ -34,6 +46,11 @@ namespace Villain {
             std::unique_ptr<IndexBuffer> ibo;
 
             std::unique_ptr<Sphere> boundingVolume;
+
+            // Instanced rendering properties
+            unsigned int numInstances = 1; //<<< Set to more than 1 instance for instanced rendering
+            std::vector<glm::mat4> instanceMatrix;
+            std::unique_ptr<VertexBuffer> instanceVbo;
 
             void setupMesh();
     };

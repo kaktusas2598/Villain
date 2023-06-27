@@ -5,13 +5,22 @@ project(VILLAIN)
 
 # Custom Engine Build Options
 option(VILLAIN_ENABLE_BOX2D "Enable Box2D Physics Engine" OFF)
+option(VILLAIN_BUILD_TESTS "Build tests" OFF)
+option(VILLAIN_CODE_COVERAGE "Generate code coverage" OFF)
 
 # Set C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 # Append to cmake module dir and add files like FindSDL2.cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+
+if (VILLAIN_CODE_COVERAGE)
+    set(CMAKE_BUILD_TYPE Coverage)
+    set(CMAKE_CXX_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+endif()
 
 # Cmake will generate compile_commands.json file used by clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
@@ -38,20 +47,21 @@ message(STATUS "SDL2 include dir: ${SDL2_INCLUDE_DIR}")
 message(STATUS "Glew include dir: ${GLEW_INCLUDE_DIRS}")
 message(STATUS "Freetype include dir: ${FREETYPE_INCLUDE_DIRS}")
 
-file(GLOB sources src/*.cpp)
-file(GLOB comp_sources src/*/*.cpp)
+file(GLOB_RECURSE sources src/*.cpp)
 
 # Uncoment to build executable, but make sure to comment add_library() line
 #add_executable(${PROJECT_NAME} main.cpp ${sources})
 
 # Build as library
 # NV: On WSL I had to change shared to static to make this work, whyyyyy???
-add_library(${PROJECT_NAME} STATIC ${sources} ${comp_sources})
+add_library(${PROJECT_NAME} STATIC ${sources} )
 
 # Specify extra directories with their own CMakeLists.txt for this build
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
+set(tinyxml2_BUILD_TESTING 0)
 add_subdirectory(vendor/tinyxml2)
+
 
 if (VILLAIN_ENABLE_BOX2D)
     option(BOX2D_BUILD_UNIT_TESTS OFF)
@@ -82,6 +92,35 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ShaderLibrary)
+
+if(VILLAIN_BUILD_TESTS)
+    add_subdirectory(vendor/catch2 tests/out)
+    include_directories(vendor/catch2/src)
+    enable_testing()
+
+    file(GLOB_RECURSE sources_test tests/unit/*.cpp)
+    add_executable(unit_tests ${sources_test})
+    target_include_directories(unit_tests PUBLIC src)
+    target_include_directories(unit_tests PUBLIC vendor/catch2/src)
+    # Link Catch2 and villain engine library to tests executable
+    target_link_libraries(unit_tests PRIVATE ${PROJECT_NAME} Catch2::Catch2WithMain)
+
+    # Register the tests with CTest
+    include(CTest)
+    include(Catch)
+    catch_discover_tests(unit_tests)
+    # FIXME:
+    #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
+    if(VILLAIN_CODE_COVERAGE)
+        set(CMAKE_BUILD_TYPE Coverage)
+        include(CodeCoverage)
+        # Enable code coverage flags for GCC
+        set(CMAKE_CXX_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+        set(CMAKE_C_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+        set(LCOV_REMOVE_EXTRA "'${PROJECT_SOURCE_DIR}/tests/*'" "'${PROJECT_SOURCE_DIR}/vendor/*'")
+        setup_target_for_coverage(coverage unit_tests coverage)
+    endif()
+endif()
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"

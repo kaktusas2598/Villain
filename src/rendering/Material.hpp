@@ -36,10 +36,14 @@ namespace Villain {
             inline float getSpecularFactor() const { return specularFactor; }
             inline float getDispMapScale() const { return dispMapScale; }
             inline float getDispMapBias() const { return dispMapBias; }
+            const glm::vec4& getAmbientColor() { return ambientColor; }
             const glm::vec4& getDiffuseColor() { return diffuseColor; }
+            const glm::vec4& getSpecularColor() { return specularColor; }
 
             void setSpecularFactor(float specular) { specularFactor = specular; }
+            void setAmbientColor(const glm::vec4& ambient) { ambientColor = ambient; }
             void setDiffuseColor(const glm::vec4& diffuse) { diffuseColor = diffuse; }
+            void setSpecularColor(const glm::vec4& specular) { specularColor = specular; }
 
             Texture* getDiffuseMap() { return diffuseMap; }
             Texture* getSpecularMap() { return specularMap; }
@@ -48,7 +52,9 @@ namespace Villain {
         private:
             std::string name; //<<< Material name
             float specularFactor ; //<<< shininess, higher value makes material more reflective and specular highlight becomes smaller
-            glm::vec4 diffuseColor = glm::vec4(1.0f);
+            glm::vec4 diffuseColor{1.0f};
+            glm::vec4 ambientColor{1.0f};
+            glm::vec4 specularColor{1.0f};
             Texture* diffuseMap = nullptr; //<<< Base colour, diffuse map
             Texture* specularMap = nullptr;//<<< Specularity map
             Texture* normalMap = nullptr; //<<< Normal/bump map

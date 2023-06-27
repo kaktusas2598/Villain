@@ -11,10 +11,12 @@ namespace Villain {
     Shader::Shader(): rendererID(0) {}
 
     Shader::Shader(const std::string& fileName): rendererID(0) {
+        std::cout << "Loading shader: " << fileName << std::endl;
         createFromSource(FileUtils::loadFile(fileName));
     }
 
     Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile): rendererID(0) {
+        std::cout << "Loading shaders: " << vertexFile << " and " << fragmentFile << std::endl;
         std::string vertexShader = FileUtils::loadFile(vertexFile);
         std::string fragmentShader = FileUtils::loadFile(fragmentFile);
 
@@ -45,16 +47,8 @@ namespace Villain {
         ShaderType type = ShaderType::NONE;
         for (std::string line; std::getline(iss, line); ) {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
-                // process include directive
-                std::string file = line.substr(line.find(' ') + 1, line.length());
-                std::string incSource = FileUtils::loadResource("res/shaders/" + file);
-                std::istringstream inceIss(incSource);
-                std::string incLine;
-                // Append included file to shader
-                for (std::string incLine; std::getline(inceIss, incLine); ) {
-                    // NOTE: #shader directive must come before #include directive, to ensure type is set here
-                    ss[(int)type] << incLine << '\n';
-                }
+                // Recursively include shader headers
+                includeHeader(ss, type, line);
             } else if (line.find("#shader") != std::string::npos) {
                 if (line.find("vertex") != std::string::npos) {
                     type = ShaderType::VERTEX;
@@ -65,7 +59,6 @@ namespace Villain {
                     type = ShaderType::GEOMETRY;
                     geometryShaderIncluded = true;
                 }
-
             } else {
                 if (type != ShaderType::NONE)
                     ss[(int)type] << line << '\n';
@@ -76,6 +69,24 @@ namespace Villain {
             rendererID = createShader(ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::GEOMETRY].str(), ss[(int)ShaderType::FRAGMENT].str());
         } else {
             rendererID = createShader(ss[(int)ShaderType::VERTEX].str(), ss[(int)ShaderType::FRAGMENT].str());
+        }
+    }
+
+    void Shader::includeHeader(std::stringstream* ss, ShaderType shaderType, const std::string& line) {
+        // process include directive
+        std::string file = line.substr(line.find(' ') + 1, line.length());
+        std::string incSource = FileUtils::loadResource("res/shaders/" + file);
+        std::istringstream inceIss(incSource);
+        std::string incLine;
+
+        // Append included file to shader
+        for (std::string incLine; std::getline(inceIss, incLine); ) {
+            if (incLine.find("#include") != std::string::npos) {
+                includeHeader(ss, shaderType, incLine);
+            } else {
+                // NOTE: #shader directive must come before #include directive, to ensure type is set here
+                ss[(int)shaderType] << incLine << '\n';
+            }
         }
     }
 
@@ -172,6 +183,9 @@ namespace Villain {
     }
     void Shader::setUniform1f(const std::string& name, float value) {
         GLCall(glUniform1f(getUniformLocation(name), value));
+    }
+    void Shader::setUniform1ui(const std::string& name, unsigned int value) {
+        GLCall(glUniform1ui(getUniformLocation(name), value));
     }
 
     void Shader::setUniform3f(const std::string& name, float v0, float v1, float v2) {
@@ -274,7 +288,21 @@ namespace Villain {
         }
 
         this->setUniform1f("material.shininess", material.getSpecularFactor());
+        this->setUniformVec4("material.ambientColor", material.getAmbientColor());
         this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
+        this->setUniformVec4("material.specularColor", material.getSpecularColor());
+    }
+
+    void Shader::setFogUniforms(RenderingEngine& renderingEngine, Camera& camera) {
+        setUniformVec3("fogColor", *renderingEngine.getFogColor());
+        setUniform1i("useExponentialFog", *renderingEngine.exponentialFogEnabled());
+        // Exponential Fog Parameters
+        setUniform1f("fogDensity", *renderingEngine.getFogDensity());
+        setUniform1f("fogGradient", *renderingEngine.getFogGradient());
+        // Layered Fog Parameters
+        setUniform1f("layeredFogTop", *renderingEngine.getLayeredFogTop());
+        setUniform1f("layeredFogEnd", *renderingEngine.getLayeredFogEnd());
+        setUniformVec3("viewPosition", camera.getPosition());
     }
 
     void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight) {

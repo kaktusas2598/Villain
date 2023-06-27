@@ -39,7 +39,7 @@ namespace Villain {
 
     Engine::~Engine() {}
 
-    void Engine::init(Application* app, std::string title, int height, int width, unsigned int windowFlags) {
+    void Engine::init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection) {
         screenHeight = height;
         screenWidth = width;
 
@@ -86,6 +86,9 @@ namespace Villain {
         // NOTE: must be initialized before application
         renderingEngine = new RenderingEngine(this);
 
+        if (enableGammaCorrection)
+            renderingEngine->setGammaCorrection(true);
+
         //initialize the current game
         application = app;
         application->setEngine(this);
@@ -119,7 +122,8 @@ namespace Villain {
             configScript.get<std::string>("window.title"),
             configScript.get<int>("window.height"),
             configScript.get<int>("window.width"),
-            flags
+            flags,
+            configScript.get<bool>("rendering.gammaCorrection")
         );
     }
 
@@ -236,14 +240,26 @@ namespace Villain {
         if (editMode)
             sceneBuffer->bind();
 
+        if (wireFrameMode)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
         // let rendering engine take care of all things?
         application->render(renderingEngine);
+
         application->onAppRender(deltaTime);
         physicsEngine->render();
+
+        // Make sure we disable wireframe mode before post processing pass
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        // Render additional fbos, apply post-processing fx
         application->postRenderPass(renderingEngine);
 
+        // If in editor mode make sure to unbind fbos, so that we can render scene buffer in editor's viewport
         if (editMode)
             sceneBuffer->unbind();
 

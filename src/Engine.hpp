@@ -39,7 +39,7 @@ namespace Villain {
              * @param windowFlags window flags
              * @sa WindowFlags
              */
-            void init(Application* app, std::string title, int height, int width, unsigned int windowFlags);
+            void init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection = false);
             // Or initialise using Lua config script
             void init(Application* app, const std::string& luaConfigPath);
             void run(); ///< runs main application's loop
@@ -54,11 +54,13 @@ namespace Villain {
             static uint32_t getUpdateTime() { return updateTime; }
             static uint32_t getRenderTime() { return renderTime; }
             static bool editModeActive() { return editMode; }
+            bool* wireFrameModeActive() { return &wireFrameMode; }
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
             inline Application* getApplication() { return application; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
+            ImGuiLayer& getImGuiLayer() { return imGuiLayer; }
             Window getWindow() { return window; }
 
             static int getScreenWidth();
@@ -70,6 +72,7 @@ namespace Villain {
             static bool editMode; ///< enables IMGui Overlay
             Window window; ///< main window instance
             ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
+            bool wireFrameMode = false;
 
             // Screen dimensions will be static so they can be accessed from anywhere in the Engine
             static int screenWidth;

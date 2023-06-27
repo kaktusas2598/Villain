@@ -4,6 +4,7 @@
 #include "Application.hpp"
 #include "Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include "rendering/Model.hpp"
 #include "rendering/SkyBox.hpp"
 
 class Game : public Villain::Application {

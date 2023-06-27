@@ -16,6 +16,11 @@ namespace Villain {
                 RenderingEngine& renderingEngine,
                 Camera& camera
                 ) override;
+
+            Mesh<VertexType>* getMesh() const { return mesh; }
+            Material& getMaterial() { return material; }
+
+            void setMesh(Mesh<VertexType>* m) { mesh = m; }
         protected:
             Mesh<VertexType>* mesh;
             Material material;

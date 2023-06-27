@@ -26,7 +26,7 @@ const float Level::OPEN_DOOR_DISTANCE = 2.0f;
 
 Level::Level(const std::string& fileName, const std::string& tileAtlasFileName, Villain::Application* app) {
     application = app;
-    bitmap = new Bitmap(fileName);
+    bitmap = new Villain::Texture(fileName);
     generateLevel(tileAtlasFileName);
 }
 
@@ -38,43 +38,43 @@ void Level::generateLevel(const std::string& tileAtlasFileName) {
 
     for (int i = 0; i < bitmap->getWidth(); i++) {
         for (int j = 0; j < bitmap->getHeight(); j++) {
-            Pixel pixel = bitmap->getPixel(i, j);
-            if (pixel.R != 0 || pixel.G != 0 || pixel.B != 0) {
-                float* texCoords = getTexCoords(pixel.G);
+            glm::vec3 pixel = bitmap->getColor(i, j);
+            if (pixel.r != 0 || pixel.g != 0 || pixel.b != 0) {
+                float* texCoords = getTexCoords(pixel.g);
 
                 // Objects like doors, enemies will be denoted by blue colour component in bitmap
-                addSpecialObject(pixel.B, i, j);
+                addSpecialObject(pixel.b, i, j);
 
                 // Floor vertices, normals are defaults just to make shader work
                 Villain::MeshUtils<VertexP1N1UV>::addXZPlane(&vertices, &indices, glm::vec3(i + 0.5f, 0.0f, j + 0.5f), glm::vec2(0.5f), texCoords, false);
                 // Ceilings, also revert indices to make sure textures are drawn from the bottom
                 Villain::MeshUtils<VertexP1N1UV>::addXZPlane(&vertices, &indices, glm::vec3(i + 0.5f, ROOM_HEIGHT, j + 0.5f), glm::vec2(0.5f), texCoords, true);
 
-                texCoords = getTexCoords(pixel.R);
+                texCoords = getTexCoords(pixel.r);
                 // Genertate walls
-                Pixel pixel = bitmap->getPixel(i, j - 1); // get adjacent pixel
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                glm::vec3 pixel = bitmap->getColor(i, j - 1); // get adjacent pixel
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
                     collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, j * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, j * ROOM_LENGTH));
                     // Generate left wall
                     Villain::MeshUtils<VertexP1N1UV>::addXYPlane(&vertices, &indices, glm::vec3(i + 0.5f, ROOM_HEIGHT/2, j), glm::vec2(0.5f, 1.0f), texCoords, true);
                 }
-                pixel = bitmap->getPixel(i, j + 1);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                pixel = bitmap->getColor(i, j + 1);
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
                     collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate right wall
                     Villain::MeshUtils<VertexP1N1UV>::addXYPlane(&vertices, &indices, glm::vec3(i + 0.5f, ROOM_HEIGHT/2, j + 1.0f), glm::vec2(0.5f, 1.0f), texCoords, false);
                 }
-                pixel = bitmap->getPixel(i - 1, j);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                pixel = bitmap->getColor(i - 1, j);
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
                     collisionPosStart.push_back(glm::vec2(i * ROOM_WIDTH, j * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2(i * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate near wall
                     Villain::MeshUtils<VertexP1N1UV>::addYZPlane(&vertices, &indices, glm::vec3(i, ROOM_HEIGHT/2, j + 0.5f), glm::vec2(1.0f, 0.5f), texCoords, true);
                 }
-                pixel = bitmap->getPixel(i + 1, j);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                pixel = bitmap->getColor(i + 1, j);
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
                     collisionPosStart.push_back(glm::vec2((i + 1) * ROOM_WIDTH, j * ROOM_LENGTH));
                     collisionPosEnd.push_back(glm::vec2((i + 1) * ROOM_WIDTH, (j + 1) * ROOM_LENGTH));
                     // Generate far wall
@@ -103,8 +103,8 @@ void Level::addDoor(int x, int y) {
     glm::vec3 openPosition =  glm::vec3(0.0f);
     Door* newDoor = new Door(openPosition);
     Villain::SceneNode* newNode = nullptr;
-    Pixel bottomPixel = bitmap->getPixel(x, y - 1);
-    if (bottomPixel.R == 0 && bottomPixel.G == 0 && bottomPixel.B == 0) {
+    glm::vec3 bottomPixel = bitmap->getColor(x, y - 1);
+    if (bottomPixel.r == 0 && bottomPixel.g == 0 && bottomPixel.b == 0) {
         Villain::SceneNode* newNode = (new Villain::SceneNode(doorName.str(), glm::vec3(x + newDoor->Width + ROOM_WIDTH/2, 0.0f, y)))->addComponent(newDoor);
         newNode->getTransform()->setEulerRot(0.0f, 270.0f, 0.0f);
         openPosition = newNode->getTransform()->getPos() - glm::vec3(0.f, 0.f, DOOR_OPEN_MOVE_AMT);
@@ -213,8 +213,8 @@ glm::vec3 Level::checkCollisions(const glm::vec3& oldPos, const glm::vec3& newPo
         // Pretty bad way to check collision, need to improve so only checks nearby titles
         for (int i = 0; i < bitmap->getWidth(); i++) {
             for (int j = 0; j < bitmap->getHeight(); j++) {
-                Pixel pixel = bitmap->getPixel(i, j);
-                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0) {
+                glm::vec3 pixel = bitmap->getColor(i, j);
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
                     glm::vec2 blockPos; // get pos for a wall block
                     blockPos.x = blockSize.x * i;
                     blockPos.y = blockSize.y * j;

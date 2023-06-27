@@ -13,8 +13,6 @@ namespace Villain {
             // Also disable mouse in edit mode for now
             glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
 
-            // TODO: process mouse wheel here as well?
-
             mouseOffsets.x *= sensitivity;
             mouseOffsets.y *= sensitivity;
 

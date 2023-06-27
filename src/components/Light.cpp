@@ -23,8 +23,8 @@ namespace Villain {
 
         shader = Shader::createFromResource("forward-directional");
 
-        // NOTE: messing with light projection completely messes up shadows if not set correctly
-        // all lit objects must be included in light frustum
+        // NOTE: view camera could also be used to calculate shadow map transformation from the eye's POV
+        // TODO: add ability to set shadow area - used in setting up projection frustum
         setShadowInfo(new ShadowInfo(glm::ortho(-100., 100., -100., 100., 0.1, 100.)));
     }
 

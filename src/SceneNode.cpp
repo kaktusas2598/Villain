@@ -8,18 +8,22 @@ namespace Villain {
 
     SceneNode::SceneNode(const std::string& name, const glm::vec3& pos, const glm::vec3& rot, float scale)
         : uid(name), transform(pos, rot, scale), engine(nullptr) {
+            id = EntityCount;
+            EntityCount += 1;
     }
 
     SceneNode::~SceneNode() {
         for (unsigned int i = 0; i < components.size(); i++) {
             if (components[i]) {
                 delete components[i];
+                components[i] = nullptr;
             }
         }
 
         for(unsigned int i = 0; i < children.size(); i++) {
             if (children[i]) {
                 delete children[i];
+                children[i] = nullptr;
             }
         }
     }

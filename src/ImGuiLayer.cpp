@@ -1,5 +1,6 @@
 #include "ImGuiLayer.hpp"
 
+#include "Camera.hpp"
 #include "DebugConsole.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
@@ -19,10 +20,13 @@
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 #include "components/PhysicsObjectComponent.hpp"
+#include "imgui/imgui.h"
+#include "rendering/MeshUtils.hpp"
 
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
+    ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     ImGuiLayer::ImGuiLayer() {}
 
@@ -173,16 +177,6 @@ namespace Villain {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-        // NOTE: temporary
-        //if (ImGui::BeginMainMenuBar()) {
-        //if (ImGui::BeginMenu("File")) {
-        //if (ImGui::MenuItem("Import")) {
-        ////isImportClicked = true;
-        //}
-        //ImGui::EndMenu();
-        //}
-        //ImGui::EndMainMenuBar();
-        //}
 
         ImGui::End();
     }
@@ -200,15 +194,18 @@ namespace Villain {
         setupDockspace();
 
         // Draw all different parts of the toolkit
+        drawMenu();
         DebugConsole::Instance()->render();
         drawScene(engine);
         drawSceneGraph(engine);
         drawSettings(engine);
         drawAssetBrowser();
+        drawSelectedNode();
+        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+
         //TODO: file browser to load assets
         // some kind of scene manager or ECS manager
         // some kind of tool to render stuff with DebugRenderer
-        // ability to manage lights camera and everything
     }
 
     void ImGuiLayer::end() {
@@ -229,6 +226,24 @@ namespace Villain {
         ImGui::EndFrame();
     }
 
+    void ImGuiLayer::drawMenu() {
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Quit")) {
+                    Engine::setRunning(false);
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Settings")) {
+                if (ImGui::BeginMenu("Post Processing Effects")) {
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
+        }
+    }
+
     void ImGuiLayer::drawScene(Engine& engine) {
         // Remove any padding around scene view window
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -236,13 +251,50 @@ namespace Villain {
         {
             ImGui::BeginChild("GameRender");
 
-            float width = ImGui::GetContentRegionAvail().x;
-            float height = ImGui::GetContentRegionAvail().y;
+            // Get available area size to display scene viewport onto
+            sceneViewportWidth = ImGui::GetContentRegionAvail().x;
+            sceneViewportHeight = ImGui::GetContentRegionAvail().y;
+
+            // Rescale scene viewport image to be same aspect ratio as engine's aspect ratio
+            //float oldWidth = sceneViewportWidth, oldHeight = sceneViewportHeight;
+            // NOTE: Maybe alternatively we could change engine's aspect ratio (including's scene buffer)
+            // to make sure, inside editor, image fills up all available region, TODO?
+            float engineAspectRatio = Engine::getScreenWidth() / (float)Engine::getScreenHeight();
+            if (sceneViewportHeight >= sceneViewportWidth) {
+                sceneViewportHeight = sceneViewportWidth / engineAspectRatio;
+                // Scale image back up proportionally to fill viewport - causes issues, viewpoint changes,
+                // possible solution would be to introduce editor camera
+                //float ratio = oldHeight / sceneViewportHeight;
+                //sceneViewportHeight *= ratio;
+                //sceneViewportWidth *= ratio;
+            } else {
+                sceneViewportWidth = sceneViewportHeight * engineAspectRatio;
+                //float ratio = oldWidth / sceneViewportWidth;
+                //sceneViewportHeight *= ratio;
+                //sceneViewportWidth *= ratio;
+            }
+
+            //printf("Engine width: %d height: %d\n", Engine::getScreenWidth(), Engine::getScreenHeight());
+            //printf("Scene vieport(image only) width: %f height: %f\n", sceneViewportWidth, sceneViewportHeight);
+
+            // NOTE: https://github.com/ocornut/imgui/issues/3404
+            ImVec2 imGuiMousePosition = ImGui::GetMousePos(); // Global ImGui mouse coordinates, used with multiple viewports
+            // Global ImGui scene framebuffer window position, must be called before ImGui::Image()
+            sceneViewportPosition = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+
+            mousePosRelativeToSceneViewport = glm::vec2(imGuiMousePosition.x, imGuiMousePosition.y) - sceneViewportPosition;
+
+            //printf("Engine Mouse Coords X: %f Y: %f\n", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+            //printf("ImGui GetCursorScreenPos() X: %f Y: %f\n", sceneViewportPosition.x, sceneViewportPosition.y);
+            //printf("ImGui::GetMousePos() X: %f Y: %f\n", imGuiMousePosition.x, imGuiMousePosition.y);
+            //printf("Scene image Coords X: %f Y: %f\n", mousePosRelativeToSceneViewport.x, mousePosRelativeToSceneViewport.y);
 
             ImGui::Image(
                     (ImTextureID)engine.getSceneBuffer()->getTextureID(),
-                    //ImGui::GetContentRegionAvail(),
-                    ImGui::GetWindowSize(),
+                    //ImGui::GetContentRegionAvail(), // Fill in full available size (scews aspect ratio)
+                    ImVec2(sceneViewportWidth, sceneViewportHeight), // Use new scaled viewport size to
+                    //ImGui::GetWindowSize(),
+                    //ImVec2(Engine::getScreenWidth(), Engine::getScreenHeight()),
                     ImVec2(0, 1),
                     ImVec2(1, 0)
                     );
@@ -256,46 +308,42 @@ namespace Villain {
         ImGui::Begin("Scene Graph");
         {
             ImGui::SetNextItemOpen(true);
+            ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
             drawNode(engine.getApplication()->getRootNode());
+            ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
+
+            if (ImGui::Button("New Node")) {
+                SceneNode* newNode = new SceneNode("testing");
+                engine.getApplication()->getRootNode()->addChild(newNode);
+            }
         }
         ImGui::End();
     }
 
     void ImGuiLayer::drawNode(SceneNode* node) {
-        if (ImGui::TreeNodeEx(node->getName().c_str(), ImGuiTreeNodeFlags_SpanFullWidth)) {
+        // Make sure tree nods fill all available width and disable single click to open behaviour
+        ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+        if (selectedNode == node) {
+            nodeFlags |= ImGuiTreeNodeFlags_Selected;
+        }
+
+        bool nodeOpen =  ImGui::TreeNodeEx(node->getName().c_str(), nodeFlags);
+        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+            selectedNode = node;
+            // Set id in rendering engine so that color mod is applied to shader when drawing selected node
+            node->getEngine()->getRenderingEngine()->setSelectedNodeID(selectedNode->getID());
+        }
+        if (nodeOpen) {
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
                 if (ImGui::BeginTabItem("Transform")) {
-                    ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
-
-                    ImGui::Text("Position"); ImGui::SameLine();
-                    ImGui::PushItemWidth(40);
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
-                    ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
-                    ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
-                    ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
-                    ImGui::PopStyleColor(3);
-                    ImGui::PopItemWidth();
-
-                    ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
-
+                    drawNodeProperties(node);
                     ImGui::EndTabItem();
                 }
-                if (!node->getComponents().empty()) {
-                    if (ImGui::BeginTabItem("Components")) {
-                        for (auto& compo: node->getComponents()) {
-                            // TODO: draw components here
-                            if (compo->getID() == GetId<CameraComponent>()) {
-                                CameraComponent* camera = static_cast<CameraComponent*>(compo);
-                                ImGui::Text("Camera");
-                            }
-                            ImGui::Separator();
-                        }
-
-                        ImGui::EndTabItem();
-                    }
+                if (ImGui::BeginTabItem("Components")) {
+                    drawNodeComponents(node);
+                    ImGui::EndTabItem();
                 }
+
                 ImGui::EndTabBar();
             }
             // Children
@@ -304,6 +352,202 @@ namespace Villain {
             }
 
             ImGui::TreePop();
+        }
+    }
+
+    void ImGuiLayer::drawSelectedNode() {
+        ImGui::Begin("Active Node");
+
+        if (selectedNode != nullptr) {
+            ImGui::Text(selectedNode->getName().c_str());
+
+            drawNodeProperties(selectedNode);
+
+            if (!selectedNode->getComponents().empty()) {
+                drawNodeComponents(selectedNode);
+            }
+
+
+            ImGui::Separator();
+            const char* componentList[] = {"Camera", "Light", "Basic Mesh", "Model", "Move Controller", "Look Controller", "Physics"};
+            static int selectedComponent = 1;
+            // NOTE: wrap ListBox() in if condition to check for click events on list items
+            ImGui::ListBox("Add Component", &selectedComponent, componentList, IM_ARRAYSIZE(componentList), 4);
+
+            std::vector<VertexP1N1UV> vertices;
+            std::vector<unsigned int> indices;
+            glm::vec3 diffuseColor = glm::vec3(1.0f);
+            glm::vec3 lightDirection = glm::vec3(0.0f);
+            float spotLightCutoff = 12.5f;
+            float spotLightOuterCutoff = 17.5f;
+
+            // Display component creation info depending on selection in the listbox
+            switch (selectedComponent) {
+                    case 0:
+                        if (ImGui::Button("Add camera")) {
+                            selectedNode->addComponent(new CameraComponent(new Camera(ProjectionType::ORTHOGRAPHIC)));
+                        }
+                        break;
+                    case 1:
+                        ImGui::ColorEdit3("Diffuse light ", (float*)&diffuseColor);
+                        ImGui::SliderFloat3("Direction (for spot and directional lights only)", (float*)&lightDirection, -1.f, 1.f);
+                        ImGui::DragFloat("Spot light cutoff angle", &spotLightCutoff, 1.0f, 0.0f, 180.0f);
+                        ImGui::DragFloat("Spot light outer cutoff angle", &spotLightOuterCutoff, 1.0f, 0.0f, 180.0f);
+                        ImGui::Separator();
+
+                        if (ImGui::Button("Add Point Light")) {
+                            selectedNode->addComponent(
+                                    new PointLight(diffuseColor * glm::vec3(0.2f), diffuseColor, glm::vec3(1.0f),
+                                        selectedNode->getTransform()->getPos()));
+                        } ImGui:: SameLine();
+                        if (ImGui::Button("Add Spot Light")) {
+                            selectedNode->addComponent(
+                                    new SpotLight(diffuseColor * glm::vec3(0.2f), diffuseColor, glm::vec3(1.0f),
+                                        selectedNode->getTransform()->getPos(), lightDirection,
+                                        glm::cos(glm::radians(spotLightCutoff)), glm::cos(glm::radians(spotLightOuterCutoff))));
+
+                        } ImGui:: SameLine();
+                        if (ImGui::Button("Add Directional Light")) {
+                            selectedNode->addComponent(
+                                    new DirectionalLight(diffuseColor * glm::vec3(0.2f), diffuseColor, glm::vec3(1.0f),
+                                        lightDirection));
+                        } ImGui:: SameLine();
+
+                        break;
+                    case 2:
+                        // TODO:
+                        if (ImGui::Button("Add sphere mesh")) {
+                            MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 1.0f);
+                            selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        }
+                        if (ImGui::Button("Add Axis-Aligned Bounding Box mesh")) {
+                            MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
+                            selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        }
+                        break;
+                    case 3:
+                        // TODO: need a way to select model, possibly using C++'s filesystem header
+                        //selectedNode->addComponent(new ModelRenderer(""))
+                        break;
+                    default:
+                        printf("Option %s not implemented\n", componentList[selectedComponent]);
+                        break;
+                }
+
+        }
+
+        ImGui::End();
+    }
+
+    void ImGuiLayer::drawNodeProperties(SceneNode* node) {
+        ImGui::DragFloat("Scale", node->getTransform()->getScalePtr(), 1.0f, 0.0f, 10.0f);
+
+        ImGui::Text("Position"); ImGui::SameLine();
+        ImGui::PushItemWidth(40);
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
+        ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
+        ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
+        ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
+        ImGui::PopStyleColor(3);
+        ImGui::PopItemWidth();
+
+        ImGui::SliderFloat3("Rot", (float*)&node->getTransform()->getEulerRot(), -360.f, 360.f);
+    }
+
+    void ImGuiLayer::drawNodeComponents(SceneNode* node) {
+        if (!node->getComponents().empty()) {
+            int i = 0;
+            for (auto& compo: node->getComponents()) {
+                ImGui::PushID(i); // Solves issues with multiple elements sharing same names
+                // TODO: find optimal way of adding any components and possibly custom components without too
+                // many conditionals
+                if (compo->getID() == GetId<CameraComponent>()) {
+                    ImGui::Text("Camera");
+                    Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
+                    static int projectionType = (int)camera->getProjectionType();
+                    ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
+                    ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
+                    ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
+                    ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
+                    camera->setProjectionType((ProjectionType)projectionType);
+                }
+                auto light = dynamic_cast<BaseLight*>(compo);
+                if (light != nullptr) {
+                    ImGui::Text("%s light", light->type().c_str());
+                    ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
+                    ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor);
+                    // HACK: seems like I do this everywhere anyway, so maybe separate properties for specular and ambient colours of light sources
+                    // are not needed? yet to be decided
+                    light->AmbientColor = light->DiffuseColor * 0.2f;
+                }
+
+                auto meshN1UV = dynamic_cast<MeshRenderer<VertexP1N1UV>*>(compo);
+                if (meshN1UV != nullptr) {
+                    ImGui::Text("Basic Mesh");
+                    static int loadedMesh = 0;
+                    auto originalMesh = meshN1UV->getMesh();
+                    std::vector<VertexP1N1UV> vertices;
+                    std::vector<unsigned int> indices;
+
+                    ImGui::RadioButton("DEFAULT", &loadedMesh, 0); ImGui::SameLine();
+                    ImGui::RadioButton("SPHERE", &loadedMesh, 1); ImGui::SameLine();
+                    ImGui::RadioButton("AABB", &loadedMesh, 2);
+
+                    static float sphereRadius = 1.0f;
+                    static float aabbSize = 1.0f;;
+                    ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
+                    ImGui::DragFloat("AABB size", &aabbSize, 1.0f, 0.0f, 100.0f, "%.1f");
+
+                    if (loadedMesh == 0)
+                        meshN1UV->setMesh(originalMesh);
+                    else if (loadedMesh == 1) {
+                        MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, sphereRadius);
+                        meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
+                    } else if (loadedMesh == 2) {
+                        MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), glm::vec3(aabbSize/2));
+                        meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
+                    }
+                }
+
+                auto model = dynamic_cast<ModelRenderer*>(compo);
+                if (model != nullptr) {
+                    ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
+                    if (model->getCurrentAnimation()) {
+                        if (ImGui::BeginCombo("Active animation", model->getCurrentAnimation()->getName().c_str())) {
+                            for (const auto& anim: model->getModel()->getAnimations())  {
+                                bool isSelected = (anim.first == model->getCurrentAnimation()->getName());
+                                if (ImGui::Selectable(anim.first.c_str(), isSelected)) {
+                                    model->getAnimator()->playAnimation(anim.second);
+                                }
+
+                                if (isSelected) {
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+
+                            ImGui::EndCombo();
+                        }
+                        ImGui::DragFloat("Animation speed", model->getCurrentAnimation()->getSpeed(), 1.0f, 0.1f, 10000.0f, "%.1f");
+                        ImGui::DragFloat("Animation time", model->getAnimator()->getCurrentTime(), 1.0f, 0.0f, model->getCurrentAnimation()->getDuration(), "%.1f");
+                        ImGui::Checkbox("Bind Pose", model->getAnimator()->getBindPose());
+                        for(auto& boneInfo: model->getModel()->getBoneInfoMap()) {
+                            if (boneInfo.second.id == model->getModel()->getDisplayedBoneIndex()) {
+                                ImGui::Text("Displayed Bone: '%s'", boneInfo.first.c_str());
+                            }
+                        }
+                        if (ImGui::Button("Pause Animation")) {
+                            model->getAnimator()->toggleAnimation();
+                        }
+
+                    }
+                }
+
+                ImGui::Separator();
+                ImGui::PopID();
+                i++;
+            }
         }
     }
 
@@ -317,9 +561,33 @@ namespace Villain {
         ImGui::Text("Render frame time: %.1u ms", engine.getRenderTime());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
-        ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
-        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+
         ImGui::Separator();
+        ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
+        ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
+        ImGui::Checkbox("Visualise normals", engine.getRenderingEngine()->getVisualiseNormals());
+        ImGui::Checkbox("Visualise bone weights", engine.getRenderingEngine()->getVisualiseBoneWeights());
+        ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
+        ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());
+        ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());
+        ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
+
+        ImGui::Separator();
+        ImGui::ColorEdit3("Fog color: ", (float*)engine.getRenderingEngine()->getFogColor());
+        ImGui::Checkbox("Exponential fog enable d(defaults to layered fog)", engine.getRenderingEngine()->exponentialFogEnabled());
+        ImGui::DragFloat("Fog Density", (float*)engine.getRenderingEngine()->getFogDensity(), 0.0005f, 0.0f, 1.0f, "%.5f");
+        ImGui::DragFloat("Fog Gradient", (float*)engine.getRenderingEngine()->getFogGradient(), 0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("Layered Fog Top", (float*)engine.getRenderingEngine()->getLayeredFogTop(), 1.0f, 0.0f, 1000.0f, "%.1f");
+        ImGui::DragFloat("Fog end", (float*)engine.getRenderingEngine()->getLayeredFogEnd(), 1.0, 0.0f, 1000.0f, "%.1f");
+
+        ImGui::Separator();
+        ImGui::Text("Post-Processing Effects");
+        ImGui::Checkbox("Invert colors", engine.getRenderingEngine()->getInvertColors());
+        ImGui::Checkbox("Grayscale", engine.getRenderingEngine()->getGrayScale());
+        ImGui::Checkbox("Sharpen", engine.getRenderingEngine()->getSharpen());
+        ImGui::Checkbox("Blur", engine.getRenderingEngine()->getBlur());
+        ImGui::Checkbox("Edge outline", engine.getRenderingEngine()->getEdgeDetection());
+        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
 
         // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (showDemoWindow)

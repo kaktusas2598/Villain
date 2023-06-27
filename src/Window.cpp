@@ -35,6 +35,10 @@ namespace Villain {
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
+        // Enable MultiSample buffers for Multi Sample Anti-Aliasing (MSAA)
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // 4x Anti-Aliasing
+
         //if succeed, create the window
         m_pWindow = SDL_CreateWindow(title.c_str() , SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, flags);
         //m_pWindow = SDL_CreateWindow(title.c_str() , 0, 0, screenWidth, screenHeight, flags);

@@ -15,6 +15,8 @@ namespace Villain {
                 id = GetId<CameraComponent>();
             }
 
+            Camera* getCamera() const { return camera; }
+
             virtual void handleInput(float deltaTime) override;
             virtual void addToEngine(Engine* engine) override;
         private:
