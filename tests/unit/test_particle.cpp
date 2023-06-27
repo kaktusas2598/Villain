@@ -38,3 +38,35 @@ TEST_CASE("Particle integration", "[Particle]") {
     }
 }
 
+TEST_CASE("Particle lifetime", "[Particle]") {
+    SECTION("Particle with indefinite lifespan") {
+        Villain::Particle particle;
+        particle.setPosition(glm::vec3(0.0f));
+        particle.setVelocity(glm::vec3(1.0f));
+        particle.setAcceleration(glm::vec3(0.0f));
+        particle.setInverseMass(1.0f);
+        particle.setDamping(0.9f);
+
+        particle.integrate(0.1f);
+
+        // Expect the particle to still be alive after integration
+        REQUIRE(particle.isAlive());
+    }
+
+    SECTION("Particle with finite lifespan") {
+        Villain::Particle particle;
+        particle.setPosition(glm::vec3(0.0f));
+        particle.setVelocity(glm::vec3(1.0f));
+        particle.setAcceleration(glm::vec3(0.0f));
+        particle.setInverseMass(1.0f);
+        particle.setDamping(0.9f);
+        particle.setLifetime(0.5f);
+
+        particle.integrate(0.1f);
+        REQUIRE(particle.isAlive());
+
+        particle.integrate(0.4f);
+        REQUIRE(!particle.isAlive());
+    }
+}
+

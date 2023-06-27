@@ -23,6 +23,8 @@ namespace Villain {
             glm::vec3 getAcceleration() const { return acceleration; }
             float getInverseMass() const { return inverseMass; }
             float getDamping() const { return damping; }
+            float getLifetime() const { return lifetime; }
+            float getAge() const { return age; }
 
             void setPosition(const glm::vec3& pos) { position = pos; }
             void setVelocity(const glm::vec3& vel) { velocity = vel; }
@@ -30,6 +32,12 @@ namespace Villain {
             void setMass(float m) { inverseMass = 1/m; }
             void setInverseMass(float m) { inverseMass = m; }
             void setDamping(float d) { damping = d; }
+            void setLifetime(float l) { lifetime = l; }
+
+            bool isAlive() {
+                if (lifetime <= 0.0f) return true;
+                return age < lifetime;
+            }
 
         protected:
             glm::vec3 position; //<<< Linear position in world space
@@ -38,6 +46,10 @@ namespace Villain {
             float inverseMass; //<<< Inverse mass is more useful in numerical integration and for simulating infinite mass bodies
 
             float damping; //<<< Damping applied to linear motion to simulate real world drag
+
+            // NOTE: Not sure if we want to keep these here, or possibly inherit Particle
+            float lifetime = -1; //<<< By default particle will live forever;
+            float age = 0;
 
         private:
             void clearAccumulator() {
