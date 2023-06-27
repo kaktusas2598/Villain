@@ -175,7 +175,7 @@ namespace Villain {
             int sectors, int stacks) {
         float sectorCount = sectors; //<<< num of longitude divisions
         float stackCount = stacks; //<<< num of latitude divisions
-        float x, y, z, xy; // Position
+        float z, xy; // Position
         float nx, ny, nz, lengthInv = 1.0f / radius; // Normal
         float s, t; // UV coords
 
@@ -200,10 +200,12 @@ namespace Villain {
                 // shift sphere by center vector to transform it
                 (*vertices)[vertexIndex].Position += center;
 
-                nx = x * lengthInv;
-                ny = y * lengthInv;
+                nx = (*vertices)[vertexIndex].Position.x * lengthInv;
+                ny = (*vertices)[vertexIndex].Position.y * lengthInv;
                 nz = z * lengthInv;
                 (*vertices)[vertexIndex].Normal = {nx, ny, nz};
+                // Alternative way to calculate normal
+                //(*vertices)[vertexIndex].Normal = glm::normalize((*vertices)[vertexIndex].Position - center);
 
                 s = (float)j / sectorCount;
                 t = (float)i / stackCount;
