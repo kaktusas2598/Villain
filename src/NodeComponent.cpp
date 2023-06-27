@@ -2,5 +2,5 @@
 
 namespace Villain {
 
-    int componentCounter = 0;
+    int ComponentTypeRegistry::nextTypeID = 0;
 }

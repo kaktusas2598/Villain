@@ -4,6 +4,7 @@
 #include "Transform.hpp"
 #include <bitset>
 #include <string>
+#include <typeindex>
 #include <vector>
 
 namespace Villain {
@@ -48,6 +49,8 @@ namespace Villain {
                 }
                 return nullptr;
             }
+            template <typename T> T* getComponent();
+
             Transform* getTransform() { return &transform; }
             void setEngine(Engine* e);
             inline Engine* getEngine() { return engine; }

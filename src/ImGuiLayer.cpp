@@ -463,7 +463,7 @@ namespace Villain {
                 ImGui::PushID(i); // Solves issues with multiple elements sharing same names
                 // TODO: find optimal way of adding any components and possibly custom components without too
                 // many conditionals
-                if (compo->getID() == GetId<CameraComponent>()) {
+                if (compo->getID() == CameraComponent::getTypeID()) {
                     ImGui::Text("Camera");
                     Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
                     static int projectionType = (int)camera->getProjectionType();
@@ -473,8 +473,8 @@ namespace Villain {
                     ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
                     camera->setProjectionType((ProjectionType)projectionType);
                 }
-                auto light = dynamic_cast<BaseLight*>(compo);
-                if (light != nullptr) {
+                if (compo->getID() == BaseLight::getTypeID()) {
+                    auto light = dynamic_cast<BaseLight*>(compo);
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
                     ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor);

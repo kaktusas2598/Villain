@@ -3,18 +3,43 @@
 
 #include "SceneNode.hpp"
 #include "Camera.hpp"
+#include <unordered_map>
+#include <typeindex>
 
 namespace Villain {
+
+
+
+    // Responsible for generating and managing unique component type identifiers
+    class ComponentTypeRegistry {
+    public:
+        template <typename T>
+        static int getTypeID() {
+            static const int typeID = nextTypeID++;
+            return typeID;
+        }
+
+    private:
+        static int nextTypeID;
+    };
+
+
+    // Must be used once in each component class header to register unique id!
+#define DECLARE_COMPONENT_TYPE(componentClass) \
+    static int getTypeID() { \
+        static const int typeID = ComponentTypeRegistry::getTypeID<componentClass>(); \
+        return typeID; \
+    }
 
     // Component signature idea borrowed from ECS designs
     // Generate unique ID for every new component, eg:
     // int id = GetId<CameraComponent>();
     //
-    extern int componentCounter;
-    template <class T> int GetId() {
-        static int componentId = componentCounter++;
-        return componentId;
-    }
+    //extern int componentCounter;
+    //template <class T> int GetId() {
+        //static int componentId = componentCounter++;
+        //return componentId;
+    //}
 
     class RenderingEngine;
     class Shader;

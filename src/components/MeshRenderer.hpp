@@ -10,6 +10,8 @@ namespace Villain {
     template <class VertexType>
     class MeshRenderer : public NodeComponent {
         public:
+            DECLARE_COMPONENT_TYPE(MeshRenderer);
+
             MeshRenderer(Mesh<VertexType>* mesh, Material material);
             virtual void render(
                 Shader& shader,

@@ -9,6 +9,8 @@ namespace Villain {
 
     class ModelRenderer : public NodeComponent {
         public:
+            DECLARE_COMPONENT_TYPE(ModelRenderer);
+
             ModelRenderer(Model *m, float animationSpeed = 0.0f) : model(m) {
                 if (m->getAnimator()) {
                     if (animationSpeed > 0) m->getAnimator()->getCurrentAnimation()->setSpeed(animationSpeed);

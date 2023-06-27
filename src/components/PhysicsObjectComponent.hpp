@@ -9,6 +9,8 @@ namespace Villain {
     // NOTE: This class might be temporary?
     class PhysicsObjectComponent : public NodeComponent {
         public:
+            DECLARE_COMPONENT_TYPE(PhysicsObjectComponent);
+
             PhysicsObjectComponent(const PhysicsObject* object) :
                 physicsObject(object) {}
 

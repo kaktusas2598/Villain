@@ -40,6 +40,18 @@ namespace Villain {
         return this;
     }
 
+    template <typename T>
+    T* SceneNode::getComponent() {
+        std::type_index targetType = typeid(T);
+        for (NodeComponent* component : components) {
+            if (std::type_index(typeid(*component)) == targetType) {
+                return static_cast<T*>(component);
+            }
+        }
+        return nullptr;
+    }
+
+
     void SceneNode::removeChild(SceneNode* child) {
         children.erase(std::remove(children.begin(), children.end(), child), children.end());
     }

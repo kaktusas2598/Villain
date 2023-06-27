@@ -36,6 +36,8 @@ namespace Villain {
             glm::vec3 DiffuseColor;
             glm::vec3 SpecularColor;
 
+            DECLARE_COMPONENT_TYPE(BaseLight);
+
             BaseLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular) :
                 AmbientColor(ambient), DiffuseColor(diffuse), SpecularColor(specular), shader(nullptr), shadowInfo(nullptr) {}
             ~BaseLight();

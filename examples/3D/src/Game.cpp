@@ -149,9 +149,9 @@ void Game::init() {
     addToScene((new SceneNode("AABB2"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(3))));
     addToScene((new SceneNode("Floor"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(4))));
 
-    printf("CameraComponent ID: %i\n", GetId<CameraComponent>());
-    printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
-    printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
+    printf("BaseLight ID: %i\n", BaseLight::getTypeID());
+    printf("ModelRenderer ID: %i\n", ModelRenderer::getTypeID());
+    printf("Camera ID: %i\n", CameraComponent::getTypeID());
 
     // Skeletal Animation demo
     Model* animatedModel = new Model("assets/models/mudeater.dae");

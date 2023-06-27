@@ -8,6 +8,8 @@ namespace Villain {
 
     class MoveController: public NodeComponent {
         public:
+            DECLARE_COMPONENT_TYPE(MoveController);
+
             MoveController(float sp = 2.5f): speed(sp) {}
 
             virtual void handleInput(float deltaTime) override;
