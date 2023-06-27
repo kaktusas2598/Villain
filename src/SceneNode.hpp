@@ -9,6 +9,7 @@
 namespace Villain {
 
 
+    typedef unsigned long long EntityID;
     static EntityID EntityCount = 0;
 
     class Camera;
@@ -56,6 +57,7 @@ namespace Villain {
             std::vector<SceneNode*>& getChildren() { return children; }
             std::vector<NodeComponent*>& getComponents() { return components; }
         private:
+            EntityID id;
             std::string uid;
 
             Transform transform;
