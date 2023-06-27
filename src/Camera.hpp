@@ -104,6 +104,7 @@ namespace Villain {
             // Optional for 3rd person camera
             glm::vec3 target;
             float distanceToTarget;
+            float angleAroundTarget;
 
             // FROM 3D CAMERA --------------------------
             // Using Euler Angles

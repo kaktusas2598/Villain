@@ -199,6 +199,17 @@ namespace Villain {
     }
 
     void Camera::processMouseMovement(float xOffset, float yOffset, bool constrainPitch) {
+        if (projectionType == ProjectionType::THIRD_PERSON) {
+            // TODO: need to pass some additional args for this to enable pitch calc
+            pitch -= yOffset * mouseSensitivity;
+
+            // Calculate angle around target
+            // NOTE: Is this just yaw?
+            angleAroundTarget -= xOffset * mouseSensitivity;
+
+            return;
+        }
+
         xOffset *= mouseSensitivity;
         yOffset *= mouseSensitivity;
 
@@ -217,8 +228,11 @@ namespace Villain {
     }
 
     void Camera::processMouseScroll(float yOffset) {
+        if (projectionType == ProjectionType::THIRD_PERSON) {
+            distanceToTarget -= yOffset;
+        }
         // TODO: merge with ortho 2d zoom
-        zoom -= (float)yOffset;
+        zoom -= yOffset;
         if (zoom < 1.0f)
             zoom = 1.0f;
         if (zoom > 45.0f)
