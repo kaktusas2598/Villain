@@ -309,7 +309,7 @@ namespace Villain {
         {
             ImGui::SetNextItemOpen(true);
             ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
-            drawNode(engine.getApplication()->getRootNode());
+            drawNodeHierarchy(engine.getApplication()->getRootNode());
             ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 
             if (ImGui::Button("New Node")) {
@@ -320,7 +320,7 @@ namespace Villain {
         ImGui::End();
     }
 
-    void ImGuiLayer::drawNode(SceneNode* node) {
+    void ImGuiLayer::drawNodeHierarchy(SceneNode* node) {
         // Make sure tree nods fill all available width and disable single click to open behaviour
         ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_OpenOnDoubleClick;
         if (selectedNode == node) {
@@ -348,7 +348,7 @@ namespace Villain {
             }
             // Children
             for (auto& child: node->getChildren()) {
-                drawNode(child);
+                drawNodeHierarchy(child);
             }
 
             ImGui::TreePop();

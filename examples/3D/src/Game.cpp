@@ -14,7 +14,6 @@
 #include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
 
-#include "DebugConsole.hpp"
 #include "rendering/DebugRenderer.hpp"
 
 using namespace Villain;

@@ -44,7 +44,7 @@ namespace Villain {
         void drawAssetBrowser();
     private:
         void setupDockspace();
-        void drawNode(SceneNode* node); //<<< Render Scene Graph nodes and components recursively
+        void drawNodeHierarchy(SceneNode* node); //<<< Render Scene Graph nodes and components recursively
         void drawSelectedNode();
 
         void drawNodeProperties(SceneNode* node);

@@ -3,7 +3,7 @@
 
 #include "ErrorHandler.hpp"
 #include "LuaScript.hpp"
-#include "DebugConsole.hpp"
+#include "editor/DebugConsole.hpp"
 #include <fstream>
 
 /**
