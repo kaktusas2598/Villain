@@ -29,7 +29,7 @@ namespace Villain {
 
             // NOTE: rudimentary collision, temporary
             if (particleArray[i].getPosition().y < 0.0f) {
-                particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
+                setParticleType((ParticleType)particleType);
             }
         }
     }
@@ -38,48 +38,53 @@ namespace Villain {
         if (InputManager::Instance()->isKeyPressed(SDLK_p)) {
             particleType++;
             particleType = particleType % 4;
-            switch (particleType) {
-                case 0:
-                    // Pistol
-                    for (int i = 0; i < poolSize; i++) {
-                        particleArray[i].setMass(2.0f); // 2kg
-                        particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
-                        particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 35.0f)); // 35 m/s
-                        particleArray[i].setDamping(0.99f);
-                    }
-                    break;
-                case 1:
-                    // Artillery
-                    for (int i = 0; i < poolSize; i++) {
-                        particleArray[i].setMass(200.0f);
-                        particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
-                        particleArray[i].setVelocity(glm::vec3(0.0f, 30.0f, 40.0f));
-                        particleArray[i].setDamping(0.99f);
-                    }
-                    break;
-                case 2:
-                    // Fireball
-                    for (int i = 0; i < poolSize; i++) {
-                        particleArray[i].setMass(1.0f);
-                        particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
-                        particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 10.0f));
-                        particleArray[i].setDamping(0.9f);
-                    }
-                    break;
-                case 3:
-                    // Laser
-                    for (int i = 0; i < poolSize; i++) {
-                        particleArray[i].setMass(0.1f);
-                        particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
-                        particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 100.0f));
-                        particleArray[i].setDamping(0.99f);
-                    }
-                    break;
-                default:
-                    printf("Unsupported particle type\n");
-                    break;
-            }
+            setParticleType((ParticleType)particleType);
         }
+    }
+
+    void ParticleEmitter::setParticleType(ParticleType newType) {
+        switch (newType) {
+            case ParticleType::PISTOL:
+                // Pistol
+                for (int i = 0; i < poolSize; i++) {
+                    particleArray[i].setMass(2.0f); // 2kg
+                    particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
+                    particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 35.0f)); // 35 m/s
+                    particleArray[i].setDamping(0.99f);
+                }
+                break;
+            case ParticleType::ARTILLERY:
+                // Artillery
+                for (int i = 0; i < poolSize; i++) {
+                    particleArray[i].setMass(200.0f);
+                    particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
+                    particleArray[i].setVelocity(glm::vec3(0.0f, 30.0f, 40.0f));
+                    particleArray[i].setDamping(0.99f);
+                }
+                break;
+            case ParticleType::FIREBALL:
+                // Fireball
+                for (int i = 0; i < poolSize; i++) {
+                    particleArray[i].setMass(1.0f);
+                    particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
+                    particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 10.0f));
+                    particleArray[i].setDamping(0.9f);
+                }
+                break;
+            case ParticleType::LASER:
+                // Laser
+                for (int i = 0; i < poolSize; i++) {
+                    particleArray[i].setMass(0.1f);
+                    particleArray[i].setPosition(glm::vec3(0.0f, 4.0f, 0.0f));
+                    particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 100.0f));
+                    particleArray[i].setDamping(0.99f);
+                }
+                break;
+            default:
+                printf("Unsupported particle type\n");
+                break;
+        }
+
     }
 
 };
