@@ -42,6 +42,9 @@ namespace Villain {
                 return glm::mat4(1.0f);
             case ProjectionType::PERSPECTIVE:
                 return glm::lookAt(position, position + front, up);
+            case ProjectionType::THIRD_PERSON:
+                position = target - distanceToTarget * front;
+                return glm::lookAt(position, target, up);
             case ProjectionType::ORTHOGRAPHIC:
                 // TODO: test
                 return glm::lookAt(position, position + front, up);
@@ -68,6 +71,10 @@ namespace Villain {
             case ProjectionType::PERSPECTIVE:
                 projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);
                 break;
+            case ProjectionType::THIRD_PERSON:
+                projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);
+                break;
+
         }
         return projection;
     }

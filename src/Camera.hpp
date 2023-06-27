@@ -22,7 +22,8 @@ namespace Villain {
         NONE,
         ORTHOGRAPHIC,
         ORTHOGRAPHIC_2D,
-        PERSPECTIVE
+        PERSPECTIVE,
+        THIRD_PERSON
     };
 
     // Default values
@@ -85,6 +86,10 @@ namespace Villain {
             glm::vec3 getRotation() { return glm::vec3(pitch, yaw, roll); }
             void setRotation(const glm::vec3& rotation);
 
+            // 3RD Person Camera Specific
+            void setTarget(const glm::vec3& targetPos) { target = targetPos; }
+            void setDistanceToTarget(float distance) { distanceToTarget = distance; }
+
         protected:
             // TODO: integrate Transform
             Transform transform;
@@ -95,6 +100,10 @@ namespace Villain {
             glm::mat4 projection;
             float zNear = 0.1f;
             float zFar = 100.0f;
+
+            // Optional for 3rd person camera
+            glm::vec3 target;
+            float distanceToTarget;
 
             // FROM 3D CAMERA --------------------------
             // Using Euler Angles
