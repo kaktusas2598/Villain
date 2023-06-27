@@ -33,6 +33,41 @@ TEST_CASE("MeshUtils - Plane test", "[MeshUtils]") {
         MeshUtils<VertexP1N1UV>::addXYPlane(&vertices, &indices, center, halfSize, uvCoords, true);
         REQUIRE(vertices[0].Normal == glm::vec3(0.0f, 0.0f, 1.0f));
     }
+
+
+    // Cleanup
+    vertices.clear();
+    indices.clear();
+
+    SECTION("Generate XZ Plane") {
+        MeshUtils<VertexP1N1UV>::addXZPlane(&vertices, &indices, center, halfSize, uvCoords, false);
+
+        REQUIRE(vertices.size() == 4);
+        REQUIRE(indices.size() == 6);
+
+        REQUIRE(vertices[0].Normal == glm::vec3(0.0f, 1.0f, 0.0f));
+        REQUIRE(vertices[0].UV == glm::vec2(1.0f, 1.0f));
+        REQUIRE(vertices[1].UV == glm::vec2(0.0f, 1.0f));
+        REQUIRE(vertices[2].UV == glm::vec2(0.0f, 0.0f));
+        REQUIRE(vertices[3].UV == glm::vec2(1.0f, 0.0f));
+    }
+
+    // Cleanup
+    vertices.clear();
+    indices.clear();
+
+    SECTION("Generate YZ Plane") {
+        MeshUtils<VertexP1N1UV>::addYZPlane(&vertices, &indices, center, halfSize, uvCoords, false);
+
+        REQUIRE(vertices.size() == 4);
+        REQUIRE(indices.size() == 6);
+
+        REQUIRE(vertices[0].Normal == glm::vec3(-1.0f, 0.0f, 0.0f));
+        REQUIRE(vertices[0].UV == glm::vec2(1.0f, 1.0f));
+        REQUIRE(vertices[1].UV == glm::vec2(0.0f, 1.0f));
+        REQUIRE(vertices[2].UV == glm::vec2(0.0f, 0.0f));
+        REQUIRE(vertices[3].UV == glm::vec2(1.0f, 0.0f));
+    }
 }
 
 TEST_CASE("MeshUtils - Tangents and Bitangents", "[MeshUtils]") {
