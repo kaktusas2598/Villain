@@ -4,9 +4,10 @@
 namespace Villain {
 
     void CameraComponent::handleInput(float deltaTime) {
-        // TODO: Also would be useful to implement command pattern to abstract control keys and customize them
         if (camera->getProjectionType() == ProjectionType::THIRD_PERSON) {
-            camera->setTarget(GetTransform()->getPos());
+            camera->setTarget(GetTransform());
+            // TODO: rotation would be different if we want to rotate AROUND the target
+            camera->setRotation(GetTransform()->getEulerRot());
         } else {
             camera->setPosition(GetTransform()->getPos());
             camera->setRotation(GetTransform()->getEulerRot());

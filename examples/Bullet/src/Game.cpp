@@ -24,7 +24,7 @@ BulletEngine* Game::PhysicsWorld = nullptr;
 Villain::SceneNode* Game::WorldNode = nullptr;
 
 // Custom collision callback
-// NOTE: Will get segfault if we collide with bodies without user pointer set
+// FIXME: Will get segfault if we collide with bodies without user pointer set
 bool collisionCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* obj1, int id1, int index1,
         const btCollisionObjectWrapper* obj2, int id2, int index2) {
     // NOTE: Engine wrapper class could have a vector of BulletBodyComponent to help access them as well
@@ -51,8 +51,8 @@ void Game::init() {
     // Register custom collision callback
     gContactAddedCallback = collisionCallback;
 
-    camera = new Camera();
-    //camera = new Camera(ProjectionType::THIRD_PERSON);
+    //camera = new Camera();
+    camera = new Camera(ProjectionType::THIRD_PERSON);
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
@@ -223,11 +223,12 @@ void Game::addPlayer() {
 
     // Add camera/player node
     SceneNode* player = (new SceneNode("Player"))
-            //->addComponent(new ModelRenderer(new Model("assets/models/mudeater.dae")))
+            //->addComponent(new ModelRenderer(new Model("assets/models/mudeater2.dae")))
             ->addComponent(new CameraComponent(camera))
-            ->addComponent(new LookController()) // enable For 1st person camera
+            ->addComponent(new LookController())
             ->addComponent(new BulletCharacterComponent(playerController));
     //player->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
+    player->getTransform()->setScale(0.25);
     WorldNode->addChild(player);
 
     // FIXME: adding model here makes everything just dissapear??? no matter the type of camera we use
