@@ -4,25 +4,21 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "CameraController.hpp"
 #include "Frustum.hpp"
+#include "NodeComponent.hpp"
 #include "Transform.hpp"
+#include <memory>
 
 namespace Villain {
 
-    enum class CameraMovement {
-        FORWARD,
-        BACKWARD,
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
-    };
+    class Engine;
 
-    enum class ProjectionType {
+    enum class CameraType {
         NONE,
         ORTHOGRAPHIC,
         ORTHOGRAPHIC_2D,
-        PERSPECTIVE,
+        FIRST_PERSON, // Or just basic perspective
         THIRD_PERSON
     };
 
@@ -32,10 +28,13 @@ namespace Villain {
     const float SPEED = 2.5f;
     const float SENSITIVITY = 0.1f;
 
-    class Camera {
+    class Camera: public NodeComponent {
         public:
-            Camera(ProjectionType projType = ProjectionType::PERSPECTIVE);
+            Camera(CameraType cameraType = CameraType::FIRST_PERSON);
             ~Camera() {}
+
+            virtual void update(float deltaTime);
+            virtual void addToEngine(Engine* engine);
 
             // Call after creation and on window size change to change projection
             void rescale(int width, int height);
@@ -53,8 +52,8 @@ namespace Villain {
             float getPitch() const { return pitch; }
             float getRoll() const { return roll; }
 
-            ProjectionType getProjectionType() { return projectionType; }
-            void setProjectionType(ProjectionType type) { projectionType = type; }
+            CameraType getType() { return type; }
+            void setType(CameraType cameraType) { type = cameraType; switchCameraController(type); }
 
             void setPosition(const glm::vec3& newPos) { position = newPos; }
             void setZoom(float z);
@@ -68,17 +67,13 @@ namespace Villain {
             // ORTHOGRAPHIC_2D version
             glm::vec2 screenToWorld(glm::vec2 screenCoords);
 
-            // FROM 2D CAMERA -----------------------
-            // Checks if quad is in Camera's clip space
+            // Checks if quad is in Camera's clip space (2D camera only ATM)
             bool quadInView(const glm::vec2& pos, const glm::vec2& dimensions);
 
             void offsetPosition(const glm::vec2& offset);
             void offsetScale(float offset);
-
-            // FROM 3D CAMERA -----------------------
-            void processKeyboard(CameraMovement direction, float deltaTime);
-            void processMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
-            void processMouseScroll(float yOffset);
+            void setMovementSpeed(float speed) { movementSpeed = speed; }
+            void setSensitivity(float sens) { mouseSensitivity = sens; }
 
             glm::vec3 getFront() { return front; }
             glm::vec3 getRight() { return right; }
@@ -89,18 +84,20 @@ namespace Villain {
             // 3RD Person Camera Specific
             void setTarget(Transform* t) { target = t; }
             void setDistanceToTarget(float distance) { distanceToTarget = distance; }
+            float getDistanceToTarget() const { return distanceToTarget; }
             float getAngleAroundTarget() const { return angleAroundTarget; }
 
-        protected:
-            // TODO: integrate Transform
-            Transform transform;
+        private:
             int screenWidth, screenHeight;
             float zoom;
             glm::vec3 position;
-            ProjectionType projectionType;
+            CameraType type;
+            std::unique_ptr<CameraController> activeController;
             glm::mat4 projection;
             float zNear = 0.1f;
             float zFar = 100.0f;
+
+            void switchCameraController(CameraType t);
 
             // Optional for 3rd person camera
             Transform* target = nullptr;

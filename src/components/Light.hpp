@@ -2,7 +2,6 @@
 #define __LIGHT__
 
 #include <glm/glm.hpp>
-#include "Camera.hpp"
 #include "NodeComponent.hpp"
 
 namespace Villain {

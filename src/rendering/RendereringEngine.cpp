@@ -20,8 +20,8 @@ namespace Villain {
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
 
-        mainCamera = new Camera(ProjectionType::PERSPECTIVE);
-        altCamera = new Camera(ProjectionType::NONE);
+        mainCamera = new Camera(CameraType::FIRST_PERSON);
+        altCamera = new Camera(CameraType::NONE);
 
         samplerMap.emplace("diffuse", 0);
         samplerMap.emplace("specular", 1);
@@ -70,18 +70,20 @@ namespace Villain {
             mirrorBuffer->bind();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            Camera mirrorCamera = *mainCamera;
-            mirrorCamera.setPosition(mainCamera->getPosition());
+            //Camera& mirrorCamera = *mainCamera;
+            //mirrorCamera.setPosition(mainCamera->getPosition());
             // Rotates camera
-            glm::vec3 rot = mirrorCamera.getRotation();
+            glm::vec3 rot = mainCamera->getRotation();
             rot.y += 180.0f;
-            mirrorCamera.setRotation(rot);
+            mainCamera->setRotation(rot);
 
             defaultShader->bind();
             defaultShader->setUniformVec3("ambientLight", ambientLight);
-            defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), mirrorCamera);
+            defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *mainCamera);
             activeLight = nullptr;
-            node->render(defaultShader, this, &mirrorCamera);
+            node->render(defaultShader, this, mainCamera);
+            rot.y += 180.0f;
+            mainCamera->setRotation(rot);
         }
 
         // 2nd Rendering Pass: main pass

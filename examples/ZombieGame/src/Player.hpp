@@ -1,7 +1,7 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "Human.hpp"
 #include "Bullet.hpp"
 

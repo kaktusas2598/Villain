@@ -6,8 +6,7 @@
 
 #include "glm/glm.hpp"
 
-#include "Camera.hpp"
-#include "../components/Light.hpp"
+#include "components/Light.hpp"
 #include "Material.hpp"
 #include "Transform.hpp"
 
