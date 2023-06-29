@@ -7,10 +7,12 @@
 #include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
+#include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/MeshUtils.hpp"
+#include "rendering/Model.hpp"
 #include "BulletBodyComponent.hpp"
 #include "BulletCharacterController.hpp"
 #include "BulletCharacterComponent.hpp"
@@ -50,6 +52,7 @@ void Game::init() {
     gContactAddedCallback = collisionCallback;
 
     camera = new Camera();
+    //camera = new Camera(ProjectionType::THIRD_PERSON);
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
@@ -220,11 +223,15 @@ void Game::addPlayer() {
 
     // Add camera/player node
     SceneNode* player = (new SceneNode("Player"))
+            //->addComponent(new ModelRenderer(new Model("assets/models/mudeater.dae")))
             ->addComponent(new CameraComponent(camera))
-            //->addComponent(new MoveController())
-            ->addComponent(new LookController())
+            ->addComponent(new LookController()) // enable For 1st person camera
             ->addComponent(new BulletCharacterComponent(playerController));
+    //player->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
     WorldNode->addChild(player);
+
+    // FIXME: adding model here makes everything just dissapear??? no matter the type of camera we use
+    //WorldNode->addChild((new SceneNode("test"))->addComponent(new ModelRenderer(new Model("assets/models/mudeater.dae"))));
 }
 
 void Game::createGround() {
