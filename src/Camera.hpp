@@ -103,7 +103,7 @@ namespace Villain {
             float zFar = 100.0f;
 
             // Optional for 3rd person camera
-            Transform* target;
+            Transform* target = nullptr;
             float distanceToTarget = 10;
             float angleAroundTarget = 0;
 

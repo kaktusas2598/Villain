@@ -51,7 +51,10 @@ namespace Villain {
             case ProjectionType::PERSPECTIVE:
                 return glm::lookAt(position, position + front, up);
             case ProjectionType::THIRD_PERSON:
-                // ChatGPT line untested, trying ThinMatrix approach first
+                // NOTE: Due to the order of operations in the engine,
+                // it is very important to make sure target is even set to avoid segfault
+                if (!target)
+                    return glm::mat4(1.0f);
                 position = target->getPos() - distanceToTarget * front;
                 return glm::lookAt(position, target->getPos(), up);
             case ProjectionType::ORTHOGRAPHIC:
