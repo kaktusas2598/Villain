@@ -70,8 +70,6 @@ namespace Villain {
             mirrorBuffer->bind();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            //Camera& mirrorCamera = *mainCamera;
-            //mirrorCamera.setPosition(mainCamera->getPosition());
             // Rotates camera
             glm::vec3 rot = mainCamera->getRotation();
             rot.y += 180.0f;
@@ -82,6 +80,7 @@ namespace Villain {
             defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *mainCamera);
             activeLight = nullptr;
             node->render(defaultShader, this, mainCamera);
+            // Rotate back
             rot.y += 180.0f;
             mainCamera->setRotation(rot);
         }
