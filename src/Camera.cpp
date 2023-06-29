@@ -24,6 +24,14 @@ namespace Villain {
                 zoom = 45.0f;
                 updateCameraVectors();
                 break;
+            case ProjectionType::THIRD_PERSON:
+                // TODO: set proper values later on
+                yaw = 0.0f;
+                pitch = 20.0f;
+                movementSpeed = SPEED;
+                mouseSensitivity = SENSITIVITY;
+                zoom = 45.0f;
+                break;
             default:
                 break;
         }
@@ -43,8 +51,9 @@ namespace Villain {
             case ProjectionType::PERSPECTIVE:
                 return glm::lookAt(position, position + front, up);
             case ProjectionType::THIRD_PERSON:
-                position = target - distanceToTarget * front;
-                return glm::lookAt(position, target, up);
+                // ChatGPT line untested, trying ThinMatrix approach first
+                position = target->getPos() - distanceToTarget * front;
+                return glm::lookAt(position, target->getPos(), up);
             case ProjectionType::ORTHOGRAPHIC:
                 // TODO: test
                 return glm::lookAt(position, position + front, up);
@@ -199,32 +208,48 @@ namespace Villain {
     }
 
     void Camera::processMouseMovement(float xOffset, float yOffset, bool constrainPitch) {
-        if (projectionType == ProjectionType::THIRD_PERSON) {
-            // TODO: need to pass some additional args for this to enable pitch calc
-            pitch -= yOffset * mouseSensitivity;
+        // Mostly from ThinMatrix video, rotating around the target
+        //if (projectionType == ProjectionType::THIRD_PERSON) {
+            //// TODO: need to pass some additional args for this to enable pitch calc and rotation around player,
+            //// like maybe we only want to rotate if RMB is pressed
+            //pitch -= yOffset * mouseSensitivity;
+            //// Calculate angle around target
+            //angleAroundTarget -= xOffset * mouseSensitivity;
+            //yaw = 180 - (target->getEulerRot().y + angleAroundTarget);
+            ////yaw = 180 - angleAroundTarget;
 
-            // Calculate angle around target
-            // NOTE: Is this just yaw?
-            angleAroundTarget -= xOffset * mouseSensitivity;
+            //float horizontalDistance = distanceToTarget * cos(glm::radians(pitch));
+            //float verticalDistance = distanceToTarget * sin(glm::radians(pitch));
 
-            return;
-        }
+            ////float theta = target->getEulerRot().y + angleAroundTarget;
+            //float theta = angleAroundTarget;
+            //float offsetX = horizontalDistance * sin(glm::radians(theta));
+            //float offsetZ = horizontalDistance * cos(glm::radians(theta));
+            //position.x = target->getPos().x - offsetX;
+            //position.y = target->getPos().y + verticalDistance;
+            //position.z = target->getPos().z - offsetZ;
 
-        xOffset *= mouseSensitivity;
-        yOffset *= mouseSensitivity;
+            ////target->setEulerRot(pitch, angleAroundTarget, 0.0f);
 
-        yaw += xOffset;
-        pitch += yOffset;
+        //} else {
+            // Perspective 1st Person
+            xOffset *= mouseSensitivity;
+            yOffset *= mouseSensitivity;
 
-        // Prevent camera from flipping
-        if (constrainPitch) {
-            if (pitch > 89.0f)
-                pitch = 89.0f;
-            if (pitch < -89.0f)
-                pitch = -89.0f;
-        }
+            yaw += xOffset;
+            pitch += yOffset;
 
-        updateCameraVectors();
+            // Prevent camera from flipping
+            if (constrainPitch) {
+                if (pitch > 89.0f)
+                    pitch = 89.0f;
+                if (pitch < -89.0f)
+                    pitch = -89.0f;
+            }
+
+            updateCameraVectors();
+        //}
+
     }
 
     void Camera::processMouseScroll(float yOffset) {

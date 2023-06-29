@@ -6,8 +6,13 @@ namespace Villain {
     void CameraComponent::handleInput(float deltaTime) {
         if (camera->getProjectionType() == ProjectionType::THIRD_PERSON) {
             camera->setTarget(GetTransform());
+
+            // Make sure in 3rd person we don't go below the ground
+            glm::vec3 targetRotation = GetTransform()->getEulerRot();
+            if (targetRotation.x > 0.0f)
+                targetRotation.x = 0.0f;
             // TODO: rotation would be different if we want to rotate AROUND the target
-            camera->setRotation(GetTransform()->getEulerRot());
+            camera->setRotation(targetRotation);
         } else {
             camera->setPosition(GetTransform()->getPos());
             camera->setRotation(GetTransform()->getEulerRot());

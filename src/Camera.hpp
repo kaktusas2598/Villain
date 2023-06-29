@@ -87,8 +87,9 @@ namespace Villain {
             void setRotation(const glm::vec3& rotation);
 
             // 3RD Person Camera Specific
-            void setTarget(const glm::vec3& targetPos) { target = targetPos; }
+            void setTarget(Transform* t) { target = t; }
             void setDistanceToTarget(float distance) { distanceToTarget = distance; }
+            float getAngleAroundTarget() const { return angleAroundTarget; }
 
         protected:
             // TODO: integrate Transform
@@ -102,9 +103,9 @@ namespace Villain {
             float zFar = 100.0f;
 
             // Optional for 3rd person camera
-            glm::vec3 target;
-            float distanceToTarget;
-            float angleAroundTarget;
+            Transform* target;
+            float distanceToTarget = 10;
+            float angleAroundTarget = 0;
 
             // FROM 3D CAMERA --------------------------
             // Using Euler Angles
