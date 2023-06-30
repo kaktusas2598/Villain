@@ -222,12 +222,13 @@ void Game::addPlayer() {
 
     // Add camera/player node
     SceneNode* player = (new SceneNode("Player"))
-            //->addComponent(new ModelRenderer(new Model("assets/models/mudeater2.dae")))
-            //->addComponent(new ModelRenderer(new Model("assets/models/ThrillerPart1-ZombieGirl.dae")))
+            ->addComponent(new ModelRenderer(new Model("assets/models/skeleton.obj")))
+            //->addComponent(new ModelRenderer(new Model("assets/models/mudeater2.dae"))) does not work
+            //->addComponent(new ModelRenderer(new Model("assets/models/ThrillerPart1-ZombieGirl.dae"))) works
             ->addComponent(camera)
             ->addComponent(new BulletCharacterComponent(playerController));
     //player->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
-    player->getTransform()->setScale(0.25);
+    player->getTransform()->setScale(0.15);
     WorldNode->addChild(player);
 
     // FIXME: adding model here makes everything just dissapear??? no matter the type of camera we use
