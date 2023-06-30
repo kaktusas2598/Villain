@@ -29,6 +29,9 @@ namespace Villain {
                 pitch = -89.0f;
         }
 
+        // If camera belongs to a node, also set node rotation
+        if (camera->getParent())
+            camera->GetTransform()->setEulerRot(pitch, yaw, 0.0);
         camera->setRotation({pitch, yaw, 0.0f});
 
         camera->setZoom(camera->getZoom() + InputManager::Instance()->mousewheel);

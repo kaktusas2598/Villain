@@ -48,9 +48,13 @@ namespace Villain {
         // Not really working correctly though
         // Also: do we need to add initial transformation ability to Model class?
         // or ModelRenderer maybe?
-        camera->GetTransform()->setEulerRot(0.0f, yaw, 0.0f);
+        //camera->GetTransform()->setEulerRot(0.0f, yaw, 0.0f);
 
+        // If camera belongs to a node, also set node rotation
         camera->setRotation({pitch, yaw, 0.0f});
+        if (camera->getParent())
+            camera->GetTransform()->setEulerRot(0.0, yaw, 0.0);
+
 
         // Control distance to target with mouse wheel
         float mouseWheelOffset = InputManager::Instance()->mousewheel;
@@ -84,6 +88,7 @@ namespace Villain {
         glm::vec3 newCameraPos = targetPos + glm::vec3(offsetX, 0.0f, offsetZ);
 
         camera->setPosition(newCameraPos);
+        // Only set camera's rotation, not parent's node to make it look around
         camera->setRotation({camera->getPitch(), angleAroundTarget, 0.0f});
 
         // Control distance to target with mouse wheel

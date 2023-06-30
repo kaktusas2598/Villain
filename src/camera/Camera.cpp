@@ -228,9 +228,6 @@ namespace Villain {
     }
 
     void Camera::setRotation(const glm::vec3& rotation) {
-        if (parent)
-            parent->getTransform()->setEulerRot(rotation.x, rotation.y, rotation.z);
-
         pitch = rotation.x;
         yaw = rotation.y;
         roll = rotation.z;
