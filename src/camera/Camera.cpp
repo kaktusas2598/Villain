@@ -184,13 +184,15 @@ namespace Villain {
 
 
     Frustum Camera::getFrustum() {
-        if (type != CameraType::FIRST_PERSON) {
+        if (type != CameraType::FIRST_PERSON && type != CameraType::THIRD_PERSON) {
             Logger::Instance()->error("getFrustum(): Method not supported for this camera type\n");
             return Frustum();
         }
         Frustum     frustum;
+
         const float halfVSide = zFar * tanf(glm::radians(zoom) * .5f);
         const float halfHSide = halfVSide * getAspectRatio();
+
         const glm::vec3 frontMultFar = zFar * front;
 
         frustum.nearFace = { position + zNear * front, front };
