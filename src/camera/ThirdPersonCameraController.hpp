@@ -20,6 +20,15 @@ namespace Villain {
             void update(float deltaTime) override;
 
         private:
+            void updateFollowMode(float deltaTime);
+            void updateRotateMode(float deltaTime);
+
+            enum class CameraMode {
+                FOLLOW_MODE,
+                ROTATE_MODE
+            };
+
+            CameraMode mode = CameraMode::FOLLOW_MODE;
             float sensitivity = 0.1f;
             float defaultDistance = 10.0f;
     };
