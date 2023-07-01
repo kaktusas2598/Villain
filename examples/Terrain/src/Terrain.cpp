@@ -133,7 +133,6 @@ glm::vec3 Terrain::constrainPositionRelativeToTerrain(const glm::vec3& pos) {
     const float bodyHeight = 50.0f;
     newPos.y = getWorldHeight(pos.x, pos.z) + bodyHeight;
 
-
     // Optional: simulate walking (slighly shifting up and down)
     float f = sinf(pos.x * 4.0f) + cosf(pos.z * 4.0f);
     f /= 35.0f;

@@ -2,8 +2,6 @@
 
 #include "ResourceManager.hpp"
 #include "TextureGenerator.hpp"
-#include "components/CameraComponent.hpp"
-#include "components/LookController.hpp"
 #include "components/MoveController.hpp"
 #include "rendering/DebugRenderer.hpp"
 
@@ -17,11 +15,10 @@ void Game::init() {
     debugRenderer.init();
 
     // Add camera
-    SceneNode* cam = (new SceneNode("Free look camera", glm::vec3(0.0, 400.0, 10.0)))
-            ->addComponent(new CameraComponent(camera))
-            ->addComponent(new MoveController(20.0f))
-            ->addComponent(new LookController());
-    addToScene(cam);
+    cameraNode = (new SceneNode("Free look camera", glm::vec3(0.0, 400.0, 10.0)))
+            ->addComponent(camera)
+            ->addComponent(new MoveController(20.0f));
+    addToScene(cameraNode);
 
     lightNode = new SceneNode("Directional Terrain Light", glm::vec3(0.0, 400.0, 500.0));
     addToScene(lightNode);
@@ -98,8 +95,11 @@ void Game::onAppPreUpdate(float dt) {
     }
 
     // Restrict camera to terrain ground level for collision demonstration
-    glm::vec3 newCameraPos = midpointDisplacementTerrain.constrainPositionRelativeToTerrain(camera->getPosition());
-    camera->setPosition(newCameraPos);
+    // NOTE: Not sure why after refactoing camera system I have to take pos from transform, a bit weird, but it's fine
+    //glm::vec3 newCameraPos = midpointDisplacementTerrain.constrainPositionRelativeToTerrain(camera->getPosition());
+    //camera->setPosition(newCameraPos);
+    glm::vec3 newCameraPos = midpointDisplacementTerrain.constrainPositionRelativeToTerrain(camera->GetTransform()->getPos());
+    camera->GetTransform()->setPos(newCameraPos);
 }
 
 void Game::onAppRender(float dt) {

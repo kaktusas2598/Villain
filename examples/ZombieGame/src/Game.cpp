@@ -33,14 +33,19 @@ void Game::init() {
     SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
     //SoundManager::Instance()->playMusic("drive");
 
-    camera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
-    hudCamera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    camera = new Camera(CameraType::ORTHOGRAPHIC_2D);
+    hudCamera = new Camera(CameraType::ORTHOGRAPHIC_2D);
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     hudCamera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     glm::vec3 camPos = camera->getPosition();
     camPos.x = Engine::getScreenWidth()/2.0;
     camPos.y = Engine::getScreenHeight()/2.0;
+    camPos.z = 1.0f;
     camera->setPosition(camPos);
+
+    glm::vec3 hudPos = hudCamera->getPosition();
+    camPos.z = 1.0f;
+    hudCamera->setPosition(hudPos);
 
     bloodParticles = new ParticleBatch2D();
     bloodParticles->init(
@@ -363,15 +368,15 @@ void Game::onAppRender(float dt) {
         //spriteFont->draw(textBatch, "TESTING", hudCamera.screenToWorld(glm::vec2(10.0f, 150.0f)), glm::vec2(3.0f), 0.6f, color);
         std::stringstream ss;
         ss << "HP: " << (int)player->getHealth();
-        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 70.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 70.0f)), 2.0f, 0.5f, color);
         ss.str(""); // Empty string stream
 
         ss << "Humans: " << humans.size();
-        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 10.0f)), 2.0f, 0.5f, color);
         ss.str(""); // Empty string stream
 
         ss << "Zombies: " << zombies.size();
-        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.6f, color);
+        freeType->draw(textBatch, ss.str(), hudCamera->screenToWorld(glm::vec2(10.0f, 40.0f)), 2.0f, 0.5f, color);
 
         textBatch.end();
 

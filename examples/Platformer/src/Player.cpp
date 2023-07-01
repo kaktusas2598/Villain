@@ -112,7 +112,7 @@ void Player::draw(Villain::SpriteBatch& batch) {
     destRect.y = collisionShape.getBody()->GetPosition().y - collisionShape.getSize().y / 1.55f; // was 2.0f, probably because sprites are not centered in sheet
     destRect.z = drawSize.x;
     destRect.w = drawSize.y;
-    batch.draw(destRect, uvRect, spriteSheet.texture->getID(), 0.0f, color, collisionShape.getBody()->GetAngle());
+    batch.draw(destRect, uvRect, spriteSheet.texture->getID(), -0.5f, color, collisionShape.getBody()->GetAngle());
 }
 
 void Player::drawDebug(Villain::DebugRenderer& renderer) {

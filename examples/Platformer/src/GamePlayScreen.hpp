@@ -3,7 +3,7 @@
 
 #include "IGameScreen.hpp"
 #include "box2d/box2d.h"
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 #include "rendering/DebugRenderer.hpp"

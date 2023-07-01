@@ -4,9 +4,7 @@
 #include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
-#include "components/CameraComponent.hpp"
 #include "components/Light.hpp"
-#include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
@@ -58,23 +56,15 @@ void Game::init() {
     SceneNode* planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
 
     SceneNode* testHierarchy = (new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-
     SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f));
     testHierarchyChild->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-    //testHierarchy->addChild(testHierarchyChild);
-
     testHierarchy->getTransform()->setEulerRot(45.0f, 0.f, 0.f);
 
-    //planeNode->addChild(testHierarchy);
-
-    //addToScene(planeNode);
-
-    //SceneNode* cam = (new SceneNode("Free look camera"))->addComponentNew<CameraComponent>(camera);
     // Add camera
     SceneNode* cam = (new SceneNode("Free look camera"))
-            ->addComponent(new CameraComponent(camera))
-            ->addComponent(new MoveController())
-            ->addComponent(new LookController());
+            ->addComponent(camera)
+            ->addComponent(new MoveController());
+            //->addComponent(new LookController());
     addToScene(cam);
 
     // Model renderer test
@@ -148,7 +138,7 @@ void Game::init() {
     addToScene((new SceneNode("AABB2"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(3))));
     addToScene((new SceneNode("Floor"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(4))));
 
-    printf("CameraComponent ID: %i\n", GetId<CameraComponent>());
+    printf("Camera ID: %i\n", GetId<Camera>());
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 

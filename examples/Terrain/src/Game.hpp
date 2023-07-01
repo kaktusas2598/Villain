@@ -2,10 +2,10 @@
 #define __GAME__
 
 #include "Application.hpp"
-#include "Camera.hpp"
 #include "FaultFormationTerrain.hpp"
 #include "MidpointDisplacementTerrain.hpp"
 #include "Terrain.hpp"
+#include "camera/Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
 
 class Game : public Villain::Application {
@@ -20,6 +20,7 @@ class Game : public Villain::Application {
 
     private:
         Villain::Camera* camera;
+        Villain::SceneNode* cameraNode;
         Villain::DebugRenderer debugRenderer;
         Villain::SceneNode* lightNode;
 

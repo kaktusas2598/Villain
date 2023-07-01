@@ -1,31 +1,58 @@
 #include "Camera.hpp"
 
+#include "CameraController.hpp"
+#include "Engine.hpp"
 #include "Logger.hpp"
+#include "camera/FirstPersonCameraController.hpp"
+#include "camera/ThirdPersonCameraController.hpp"
 
 namespace Villain {
 
-    Camera::Camera(ProjectionType projType) : projectionType(projType) {
+    Camera::Camera(CameraType cameraType) : type(cameraType) {
+        // Generate unique type id for this component
+        id = GetId<Camera>();
 
-        position = glm::vec3(0.0f, 0.0f, 1.0f);
+        switchCameraController(type);
         up = glm::vec3(0.0, 1.0f, 0.0f);
         front = glm::vec3(0.0f, 0.0f, -1.0f);
         worldUp = up;
-        switch (projectionType) {
-            case ProjectionType::ORTHOGRAPHIC_2D:
+
+        // 2D Camera is simple maybe it doesn't even need camera controller?
+        switch (type) {
+            case CameraType::ORTHOGRAPHIC_2D:
                 screenWidth = 100.0f;
                 screenHeight = 100.0f;
                 zoom = 1.0f;
                 break;
-            case ProjectionType::PERSPECTIVE:
-                yaw = YAW;
-                pitch = PITCH;
-                movementSpeed = SPEED;
-                mouseSensitivity = SENSITIVITY;
-                zoom = 45.0f;
-                updateCameraVectors();
-                break;
             default:
                 break;
+        }
+    }
+
+    void Camera::update(float deltaTime) {
+        if (activeController) {
+            activeController->update(deltaTime);
+        }
+    }
+
+    void Camera::addToEngine(Engine* engine) {
+        engine->getRenderingEngine()->setMainCamera(*this);
+    }
+
+    void Camera::switchCameraController(CameraType t) {
+        // Deactivate the current controller (if any)
+        activeController.reset();
+
+        // Create a new instance of the desired controller type
+        switch (t) {
+            case CameraType::FIRST_PERSON:
+                activeController = std::make_unique<FirstPersonCameraController>(this);
+                break;
+            case CameraType::THIRD_PERSON:
+                activeController = std::make_unique<ThirdPersonCameraController>(this);
+                break;
+            default:
+                Logger::Instance()->warn("No CameraController found for this Camera type");
         }
     }
 
@@ -37,15 +64,22 @@ namespace Villain {
     }
 
     glm::mat4 Camera::getViewMatrix() {
-        switch (projectionType) {
-            case ProjectionType::NONE:
+        switch (type) {
+            case CameraType::NONE:
                 return glm::mat4(1.0f);
-            case ProjectionType::PERSPECTIVE:
+            case CameraType::FIRST_PERSON:
                 return glm::lookAt(position, position + front, up);
-            case ProjectionType::ORTHOGRAPHIC:
+            case CameraType::THIRD_PERSON:
+                // NOTE: Due to the order of operations in the engine,
+                // it is very important to make sure target is even set to avoid segfault
+                if (!target)
+                    return glm::mat4(1.0f);
+                position = target->getPos() - distanceToTarget * front;
+                return glm::lookAt(position, target->getPos(), up);
+            case CameraType::ORTHOGRAPHIC:
                 // TODO: test
                 return glm::lookAt(position, position + front, up);
-            case ProjectionType::ORTHOGRAPHIC_2D:
+            case CameraType::ORTHOGRAPHIC_2D:
                 // Center camera on the screen and apply zoom
                 glm::vec3 cameraTranslate(-position.x + screenWidth/2.0f, -position.y + screenHeight/2.0f, -position.z);
                 glm::mat4 cameraMatrix = glm::translate(glm::mat4(1.0f), cameraTranslate);
@@ -55,26 +89,30 @@ namespace Villain {
     }
 
     glm::mat4 Camera::getProjMatrix() {
-        switch (projectionType) {
-            case ProjectionType::NONE:
+        switch (type) {
+            case CameraType::NONE:
                 projection = glm::mat4(1.0f);
                 break;
-            case ProjectionType::ORTHOGRAPHIC:
+            case CameraType::ORTHOGRAPHIC:
                 projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
                 break;
-            case ProjectionType::ORTHOGRAPHIC_2D:
+            case CameraType::ORTHOGRAPHIC_2D:
                 projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
                 break;
-            case ProjectionType::PERSPECTIVE:
+            case CameraType::FIRST_PERSON:
                 projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);
                 break;
+            case CameraType::THIRD_PERSON:
+                projection = glm::perspective(glm::radians(zoom), (float)screenWidth/(float)screenHeight, zNear, zFar);
+                break;
+
         }
         return projection;
     }
 
 
     glm::vec2 Camera::screenToWorld(glm::vec2 screenCoords) {
-        if (projectionType != ProjectionType::ORTHOGRAPHIC_2D) {
+        if (type != CameraType::ORTHOGRAPHIC_2D) {
             Logger::Instance()->error("Method not supported for this camera type\n");
         }
         // Invert y
@@ -90,7 +128,7 @@ namespace Villain {
     }
 
     glm::vec3 Camera::mouseRayToWorld(const glm::vec2& pos) {
-        if (projectionType == ProjectionType::ORTHOGRAPHIC_2D) {
+        if (type == CameraType::ORTHOGRAPHIC_2D) {
             Logger::Instance()->error("Use Camera::screenToWorld() instead\n");
         }
         // Reference: https://antongerdelan.net/opengl/raycasting.html
@@ -109,7 +147,7 @@ namespace Villain {
 
     // AABB test to see if quad is in camera's view space and needs to be rendered
     bool Camera::quadInView(const glm::vec2& pos, const glm::vec2& dimensions) {
-        if (projectionType != ProjectionType::ORTHOGRAPHIC_2D) {
+        if (type != CameraType::ORTHOGRAPHIC_2D) {
             Logger::Instance()->error("Method not supported for this camera type\n");
         }
         glm::vec2 scaledScreen = glm::vec2(screenWidth, screenHeight) / zoom;
@@ -145,13 +183,15 @@ namespace Villain {
 
 
     Frustum Camera::getFrustum() {
-        if (projectionType != ProjectionType::PERSPECTIVE) {
+        if (type != CameraType::FIRST_PERSON && type != CameraType::THIRD_PERSON) {
             Logger::Instance()->error("getFrustum(): Method not supported for this camera type\n");
             return Frustum();
         }
         Frustum     frustum;
+
         const float halfVSide = zFar * tanf(glm::radians(zoom) * .5f);
         const float halfHSide = halfVSide * getAspectRatio();
+
         const glm::vec3 frontMultFar = zFar * front;
 
         frustum.nearFace = { position + zNear * front, front };
@@ -163,60 +203,6 @@ namespace Villain {
         return frustum;
     }
 
-    void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
-        // TODO: make projection-independant movement
-        float velocity = movementSpeed * deltaTime;
-        switch(direction) {
-            case CameraMovement::FORWARD:
-                position += front * velocity;
-                break;
-            case CameraMovement::BACKWARD:
-                position -= front * velocity;
-                break;
-            case CameraMovement::LEFT:
-                position -= right * velocity;
-                break;
-            case CameraMovement::RIGHT:
-                position += right * velocity;
-                break;
-            case CameraMovement::UP:
-                position.y += velocity;
-                break;
-            case CameraMovement::DOWN:
-                position.y -= velocity;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    void Camera::processMouseMovement(float xOffset, float yOffset, bool constrainPitch) {
-        xOffset *= mouseSensitivity;
-        yOffset *= mouseSensitivity;
-
-        yaw += xOffset;
-        pitch += yOffset;
-
-        // Prevent camera from flipping
-        if (constrainPitch) {
-            if (pitch > 89.0f)
-                pitch = 89.0f;
-            if (pitch < -89.0f)
-                pitch = -89.0f;
-        }
-
-        updateCameraVectors();
-    }
-
-    void Camera::processMouseScroll(float yOffset) {
-        // TODO: merge with ortho 2d zoom
-        zoom -= (float)yOffset;
-        if (zoom < 1.0f)
-            zoom = 1.0f;
-        if (zoom > 45.0f)
-            zoom = 45.0f;
-    }
 
     void Camera::setZoom(float z) {
         zoom = z;
@@ -246,6 +232,4 @@ namespace Villain {
         roll = rotation.z;
         updateCameraVectors();
     }
-
-
 }

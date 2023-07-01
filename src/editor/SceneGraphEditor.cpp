@@ -5,7 +5,6 @@
 
 #include "Application.hpp"
 #include "Engine.hpp"
-#include "components/CameraComponent.hpp"
 #include "components/Light.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
@@ -102,7 +101,8 @@ namespace Villain {
             switch (selectedComponent) {
                     case 0:
                         if (ImGui::Button("Add camera")) {
-                            selectedNode->addComponent(new CameraComponent(new Camera(ProjectionType::ORTHOGRAPHIC)));
+                            // TODO: need to be able to set main camera whenever we want to, not automatically
+                            selectedNode->addComponent(new Camera());
                         }
                         break;
                     case 1:
@@ -180,15 +180,29 @@ namespace Villain {
                 ImGui::PushID(i); // Solves issues with multiple elements sharing same names
                 // TODO: find optimal way of adding any components and possibly custom components without too
                 // many conditionals
-                if (compo->getID() == GetId<CameraComponent>()) {
+                if (compo->getID() == GetId<Camera>()) {
                     ImGui::Text("Camera");
-                    Camera* camera = static_cast<CameraComponent*>(compo)->getCamera();
-                    static int projectionType = (int)camera->getProjectionType();
-                    ImGui::RadioButton("NONE", &projectionType, 0); ImGui::SameLine();
-                    ImGui::RadioButton("ORHTOGRAPHIC", &projectionType, 1); ImGui::SameLine();
-                    ImGui::RadioButton("2D", &projectionType, 2); ImGui::SameLine();
-                    ImGui::RadioButton("PERSPECTIVE", &projectionType, 3);
-                    camera->setProjectionType((ProjectionType)projectionType);
+                    Camera* camera = static_cast<Camera*>(compo);
+
+                    std::map<CameraType, const char*> types;
+                    types[CameraType::NONE] = "None";
+                    types[CameraType::ORTHOGRAPHIC_2D] = "2D";
+                    types[CameraType::ORTHOGRAPHIC] = "Orthographic";
+                    types[CameraType::FIRST_PERSON] = "Perspective/First Person";
+                    types[CameraType::THIRD_PERSON] = "Third Person";
+                    if (ImGui::BeginCombo("Camera Type", types[camera->getType()])) {
+                        for (const auto& type: types)  {
+                            bool isSelected = (type.first == camera->getType());
+                            if (ImGui::Selectable(type.second, isSelected)) {
+                                camera->setType(type.first);
+                            }
+
+                            if (isSelected) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+                        }
+                        ImGui::EndCombo();
+                    }
                 }
                 auto light = dynamic_cast<BaseLight*>(compo);
                 if (light != nullptr) {

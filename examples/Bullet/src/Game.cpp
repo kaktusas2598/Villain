@@ -4,13 +4,12 @@
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
-#include "components/CameraComponent.hpp"
-#include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
-#include "components/MoveController.hpp"
+#include "components/ModelRenderer.hpp"
 
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/MeshUtils.hpp"
+#include "rendering/Model.hpp"
 #include "BulletBodyComponent.hpp"
 #include "BulletCharacterController.hpp"
 #include "BulletCharacterComponent.hpp"
@@ -22,9 +21,12 @@ BulletEngine* Game::PhysicsWorld = nullptr;
 Villain::SceneNode* Game::WorldNode = nullptr;
 
 // Custom collision callback
-// NOTE: Will get segfault if we collide with bodies without user pointer set
 bool collisionCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* obj1, int id1, int index1,
         const btCollisionObjectWrapper* obj2, int id2, int index2) {
+    // Not all objects might have user pointers set
+    if (!obj1->getCollisionObject()->getUserPointer() || !obj2->getCollisionObject()->getUserPointer()) {
+        return false;
+    }
     // NOTE: Engine wrapper class could have a vector of BulletBodyComponent to help access them as well
     BulletBodyComponent* graphComp = ((BulletBodyComponent*)obj1->getCollisionObject()->getUserPointer());
     ((BulletBodyComponent*)obj2->getCollisionObject()->getUserPointer())->Colliding = true;
@@ -49,7 +51,8 @@ void Game::init() {
     // Register custom collision callback
     gContactAddedCallback = collisionCallback;
 
-    camera = new Camera();
+    //camera = new Camera();
+    camera = new Camera(CameraType::THIRD_PERSON);
     camera->setZPlanes(0.1f, 1000.f); // for bigger render range
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
@@ -194,7 +197,6 @@ void Game::init() {
     vertices.clear();
     Material earthMat("smallBlueDot", ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot"), 8);
     MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
-    //FIXME: only half of sphere looks correct with tangents
     MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
     Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(2.5f), true, {0, 50, 0}, btScalar(500.), btScalar(.5), 0.);
@@ -220,11 +222,25 @@ void Game::addPlayer() {
 
     // Add camera/player node
     SceneNode* player = (new SceneNode("Player"))
-            ->addComponent(new CameraComponent(camera))
-            //->addComponent(new MoveController())
-            ->addComponent(new LookController())
+            //->addComponent(new ModelRenderer(new Model("assets/models/skeleton.obj")))
+            //->addComponent(new ModelRenderer(new Model("assets/models/mudeater2.dae"))) does not work
+            //->addComponent(new ModelRenderer(new Model("assets/models/ThrillerPart1-ZombieGirl.dae"))) works
+            ->addComponent(camera)
             ->addComponent(new BulletCharacterComponent(playerController));
+    SceneNode* playerModel = (new SceneNode("Player Model"))->addComponent(new ModelRenderer(new Model("assets/models/skeleton.obj")));
+    playerModel->getTransform()->setScale(0.1);
+    playerModel->getTransform()->setPos({0.0f, -1.6f, 0.0f});
+    playerModel->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
+    player->addChild(playerModel);
     WorldNode->addChild(player);
+
+    // FIXME: adding model here makes everything just dissapear??? no matter the type of camera we use
+    // UPDATE: Seems to only happen using animated models?????
+    // UPDATE2: Ok, looks like actually mudeater DAE model causes all meshes in this scene to dissapear, WTF?
+    //WorldNode->addChild((new SceneNode("test"))->addComponent(new ModelRenderer(new Model("assets/models/mudeater.dae"))));
+    //WorldNode->addChild((new SceneNode("test"))->addComponent(new ModelRenderer(new Model("assets/models/ThrillerPart1-ZombieGirl.dae"))));
+
+    //WorldNode->addChild((new SceneNode("test"))->addComponent(new ModelRenderer(new Model("assets/models/donut.obj"))));
 }
 
 void Game::createGround() {
@@ -329,6 +345,7 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::shootSphere() {
+    // TODO: THis only works in 3rd person, so instead of camera->position here, it should take camera' parent's pos
     glm::vec3 cameraPos = camera->getPosition();
     glm::vec3 cameraFront = camera->getFront();
     glm::vec3 startPos = cameraPos + camera->getFront() * 5.f;
