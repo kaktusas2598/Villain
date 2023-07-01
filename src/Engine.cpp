@@ -4,6 +4,10 @@
 #include "FrameLimiter.hpp"
 #include "ErrorHandler.hpp"
 
+// Events
+#include "events/KeyboardEvent.hpp"
+#include "events/MouseEvent.hpp"
+
 #include <string>
 #include <cstdio> // For sprintf
 #include "Logger.hpp"
@@ -295,6 +299,7 @@ namespace Villain {
      * @param event SDL_Event& structure
      * @sa GameState::update, InputManager
      */
+    // TODO: probably gradually we will want to phase out InputManager singleton with new Event system
     void Engine::handleEvents(SDL_Event& event) {
         static bool mouseFirst = true;
         //set the event type
@@ -305,39 +310,52 @@ namespace Villain {
                 break;
             case SDL_MOUSEMOTION:
                 mouseMotion = true;
-                // Set offsets if relative mouse mode is used for 3D camera
-                if (!mouseFirst) {
-                    TheInputManager::Instance()->setMouseOffsets((float)event.motion.xrel, (float)event.motion.yrel);
-                } else {
-                    mouseFirst = false;
-                    TheInputManager::Instance()->setMouseOffsets(0.0f, 0.0f);
+                {
+                    glm::vec2 offsets{0.0f};
+                    // Set offsets if relative mouse mode is used for 3D camera
+                    if (!mouseFirst) {
+                        offsets = {event.motion.xrel, event.motion.yrel};
+                    } else {
+                        mouseFirst = false;
+                    }
+                    TheInputManager::Instance()->setMouseOffsets(offsets.x, offsets.y);
+
+                    MouseEvent mouseEvent = MouseEvent(MouseEventType::MOVE, {event.motion.x, event.motion.y}, offsets);
+                    eventDispatcher->dispatchEvent(mouseEvent);
                 }
 
                 TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
                 application->onMouseMove(event.motion.x, event.motion.y);
                 break;
             case SDL_KEYDOWN:
+                {
+                    KeyboardEvent keyboardEvent = KeyboardEvent(KeyEventType::PRESS, static_cast<KeyCode>(event.key.keysym.sym));
+                    eventDispatcher->dispatchEvent(keyboardEvent);
+                }
                 TheInputManager::Instance()->pressKey(event.key.keysym.sym);
-                // Find player and send key code to Lua listener
-                // Really don't like how you have to loop through all entities to find player, on the other hand player will
-                // be one of the first entities defined in lua
-                //for (auto& e: EntityManager::Instance()->getEntities()) {
-                    //if (e->hasComponent<InputComponent>()) {
-                        //ScriptEngine::Instance()->dispatch(e->getListener("INPUT"), e->id->get(), event.key.keysym.sym);
-                        //break;
-                    //}
-                //}
                 if (event.key.keysym.sym == SDLK_BACKQUOTE)
                     editMode = !editMode;
                 break;
             case SDL_KEYUP:
+                {
+                    KeyboardEvent keyboardEvent = KeyboardEvent(KeyEventType::RELEASE, static_cast<KeyCode>(event.key.keysym.sym));
+                    eventDispatcher->dispatchEvent(keyboardEvent);
+                }
                 TheInputManager::Instance()->releaseKey(event.key.keysym.sym);
                 break;
             case SDL_MOUSEBUTTONDOWN:
+                {
+                    MouseEvent mouseEvent = MouseEvent(MouseEventType::CLICK, event.button.button);
+                    eventDispatcher->dispatchEvent(mouseEvent);
+                }
                 TheInputManager::Instance()->pressKey(event.button.button);
                 application->onMouseDown(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
+                {
+                    MouseEvent mouseEvent = MouseEvent(MouseEventType::RELEASE, event.button.button);
+                    eventDispatcher->dispatchEvent(mouseEvent);
+                }
                 TheInputManager::Instance()->releaseKey(event.button.button);
                 application->onMouseUp();
                 break;
@@ -345,6 +363,10 @@ namespace Villain {
                 TheInputManager::Instance()->addInputCharacters(event.text.text);
                 break;
             case SDL_MOUSEWHEEL:
+                {
+                    MouseEvent mouseEvent = MouseEvent(MouseEventType::SCROLL, event.wheel.y);
+                    eventDispatcher->dispatchEvent(mouseEvent);
+                }
                 if (event.wheel.y > 0)
                     TheInputManager::Instance()->setMouseWheel(1);
                 if (event.wheel.y < 0)

@@ -1,7 +1,7 @@
 #ifndef __KEY_CODE__
 #define __KEY_CODE__
 
-#include "SDL_keycode.h"
+#include <SDL2/SDL_keycode.h>
 
 namespace Villain {
 

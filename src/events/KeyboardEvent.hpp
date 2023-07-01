@@ -1,5 +1,5 @@
-#ifndef __MOUSE_EVENT__
-#define __MOUSE_EVENT__
+#ifndef __KEYBOARD_EVENT__
+#define __KEYBOARD_EVENT__
 
 #include "EventDispatcher.hpp"
 #include "KeyCode.hpp"
@@ -25,4 +25,4 @@ namespace Villain {
 
 };
 
-#endif // __MOUSE_EVENT__
+#endif // __KEYBOARD_EVENT__
