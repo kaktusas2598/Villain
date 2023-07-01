@@ -7,6 +7,7 @@
 // Events
 #include "events/KeyboardEvent.hpp"
 #include "events/MouseEvent.hpp"
+#include "events/WindowResizeEvent.hpp"
 
 #include <string>
 #include <cstdio> // For sprintf
@@ -384,6 +385,10 @@ namespace Villain {
                 screenHeight = event.window.data2;
                 sceneBuffer->rescale(screenWidth, screenHeight);
                 glViewport(0, 0, screenWidth, screenHeight);
+                {
+                    WindowResizeEvent resizeEvent = WindowResizeEvent(screenWidth, screenHeight);
+                    eventDispatcher->dispatchEvent(resizeEvent);
+                }
                 application->onAppWindowResize(screenWidth, screenHeight);
                 renderingEngine->resizeCameras(screenWidth, screenHeight);
                 break;

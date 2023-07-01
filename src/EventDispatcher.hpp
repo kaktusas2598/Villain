@@ -1,5 +1,4 @@
-#ifndef __EVENT_DISPATCHER__
-#define __EVENT_DISPATCHER__
+#pragma once
 
 #include <algorithm>
 #include <vector>
@@ -39,5 +38,3 @@ namespace Villain {
             std::vector<EventListener*> listeners;
     };
 }
-
-#endif // __EVENT_DISPATCHER__

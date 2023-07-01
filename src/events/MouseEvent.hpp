@@ -1,5 +1,4 @@
-#ifndef __MOUSE_EVENT__
-#define __MOUSE_EVENT__
+#pragma once
 
 #include "EventDispatcher.hpp"
 #include "glm/glm.hpp"
@@ -53,5 +52,3 @@ namespace Villain {
     };
 
 };
-
-#endif // __MOUSE_EVENT__

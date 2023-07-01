@@ -1,5 +1,4 @@
-#ifndef __KEYBOARD_EVENT__
-#define __KEYBOARD_EVENT__
+#pragma once
 
 #include "EventDispatcher.hpp"
 #include "KeyCode.hpp"
@@ -24,5 +23,3 @@ namespace Villain {
     };
 
 };
-
-#endif // __KEYBOARD_EVENT__

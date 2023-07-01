@@ -1,5 +1,4 @@
-#ifndef __Engine__
-#define __Engine__
+#pragma once
 
 #include "EventDispatcher.hpp"
 #include "InputManager.hpp"
@@ -97,5 +96,3 @@ namespace Villain {
             std::unique_ptr<EventDispatcher> eventDispatcher;
     };
 }
-
-#endif // __Engine__
