@@ -143,3 +143,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Read about Screen Space Ambient Occlusion (SSAO)
  * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
  * Move all usages of <random> header to new RandomUtils static class
+ * Change all old style ifndef/define include guards to #pragma once
