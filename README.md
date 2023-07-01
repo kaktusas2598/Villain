@@ -11,7 +11,7 @@
 * Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
 * Error logging to stdout, log file and editor console
 * Event Dispatcher system
-* Supported Camera projection types: Perspective, Orthographic, Orthographic 2D or no projection
+* Supported Camera projection types: Perspective(First Person), Third Person,  Orthographic, Orthographic 2D or no projection
 * Camera Frustum culling to increase performance
 * Finite State Machine
 
