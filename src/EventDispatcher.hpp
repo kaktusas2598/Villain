@@ -34,6 +34,8 @@ namespace Villain {
                 }
             }
 
+            std::vector<EventListener*>& getListeners() { return listeners; }
+
         private:
             std::vector<EventListener*> listeners;
     };
