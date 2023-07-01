@@ -86,6 +86,8 @@ namespace Villain {
         // NOTE: must be initialized before application
         renderingEngine = new RenderingEngine(this);
 
+        eventDispatcher = std::make_unique<EventDispatcher>();
+
         if (enableGammaCorrection)
             renderingEngine->setGammaCorrection(true);
 
