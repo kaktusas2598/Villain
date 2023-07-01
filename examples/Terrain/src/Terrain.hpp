@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "GeomipGrid.hpp"
 #include "rendering/RendereringEngine.hpp"
 #include "rendering/Shader.hpp"

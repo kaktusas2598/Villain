@@ -2,7 +2,7 @@
 #define __GAME__
 
 #include "Application.hpp"
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/SkyBox.hpp"
 

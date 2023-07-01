@@ -1,14 +1,15 @@
-#ifndef __Engine__
-#define __Engine__
+#pragma once
 
-#include "DebugConsole.hpp"
-#include "ImGuiLayer.hpp"
+#include "EventDispatcher.hpp"
 #include "InputManager.hpp"
 #include "Timer.hpp"
+#include "Window.hpp"
+
+#include "editor/DebugConsole.hpp"
+#include "editor/ImGuiLayer.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "rendering/FrameBuffer.hpp"
 #include "rendering/RendereringEngine.hpp"
-#include "Window.hpp"
 
 #include <functional>
 #include <stdio.h>
@@ -59,6 +60,8 @@ namespace Villain {
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine; }
             inline Application* getApplication() { return application; }
+            inline EventDispatcher* getEventDispatcher() { return eventDispatcher.get(); }
+
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             ImGuiLayer& getImGuiLayer() { return imGuiLayer; }
             Window getWindow() { return window; }
@@ -84,13 +87,12 @@ namespace Villain {
             Timer profiler;
             bool mouseMotion = false;
 
-            std::unique_ptr<FrameBuffer> sceneBuffer = nullptr;
-            struct nk_context* nuklearContext;
+            std::unique_ptr<FrameBuffer> sceneBuffer = nullptr; //< Render Application scene here for futher processing
+            struct nk_context* nuklearContext; //< Nuklear UI context
 
             std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;
             RenderingEngine* renderingEngine = nullptr;
-            Application* application = nullptr;
+            Application* application = nullptr; //< User engine application
+            std::unique_ptr<EventDispatcher> eventDispatcher;
     };
 }
-
-#endif // __Engine__

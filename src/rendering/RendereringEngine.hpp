@@ -1,7 +1,7 @@
 #ifndef __RENDERING_ENGINE__
 #define __RENDERING_ENGINE__
 
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "FrameBuffer.hpp"
 #include "../components/Light.hpp"
 #include "SceneNode.hpp"

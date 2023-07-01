@@ -1,7 +1,7 @@
 #ifndef __LAYER__
 #define __LAYER__
 
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "rendering/SpriteBatch.hpp"
 
 namespace Villain {

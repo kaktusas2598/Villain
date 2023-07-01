@@ -2,7 +2,6 @@
 #define __NODE_COMPONENT__
 
 #include "SceneNode.hpp"
-#include "Camera.hpp"
 
 namespace Villain {
 

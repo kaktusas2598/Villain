@@ -40,6 +40,6 @@ void Box::draw(Villain::SpriteBatch& batch) {
     destRect.y = body->GetPosition().y - size.y / 2.0f;
     destRect.z = size.x;
     destRect.w = size.y;
-    batch.draw(destRect, uvRect, textureID, 0.0f, color, body->GetAngle());
+    batch.draw(destRect, uvRect, textureID, -0.5f, color, body->GetAngle());
 
 }

@@ -8,7 +8,7 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 
-#include "DebugConsole.hpp"
+#include "editor/DebugConsole.hpp"
 #include <cmath>
 #include <cstdio>
 #include <memory>

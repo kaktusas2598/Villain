@@ -2,7 +2,6 @@
 #define __GAME__
 
 #include "Application.hpp"
-#include "Camera.hpp"
 #include "ResourceManager.hpp"
 #include "rendering/SpriteFont.hpp"
 #include "rendering/SpriteBatch.hpp"

@@ -5,7 +5,7 @@
 #include <vector>
 #include "CollisionLayer.hpp"
 #include "TileLayer.hpp"
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 
 namespace Villain {
 
