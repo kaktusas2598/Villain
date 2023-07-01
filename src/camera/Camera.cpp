@@ -52,8 +52,7 @@ namespace Villain {
                 activeController = std::make_unique<ThirdPersonCameraController>(this);
                 break;
             default:
-                // TODO: Add more cases for other camera controller types
-                printf("TODO! Add more camera controllers!\n");
+                Logger::Instance()->warn("No CameraController found for this Camera type");
         }
     }
 

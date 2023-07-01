@@ -44,16 +44,13 @@ namespace Villain {
         if (pitch < -89.0f)
             pitch = -89.0f;
 
-        // HACK: If models are attached make sure not to change their pitch
-        // Not really working correctly though
-        // Also: do we need to add initial transformation ability to Model class?
-        // or ModelRenderer maybe?
-        //camera->GetTransform()->setEulerRot(0.0f, yaw, 0.0f);
-
-        // If camera belongs to a node, also set node rotation
+        // If camera belongs to a node, also set node rotation and invert yaw, so camera is looking at parent's back
         camera->setRotation({pitch, yaw, 0.0f});
         if (camera->getParent())
             camera->GetTransform()->setEulerRot(0.0, yaw, 0.0);
+        // FIXME: to make model renderer rotat in same direction, need to set -yaw, but when model walks in opposide direction
+        // because of wrong front/right vectors probably, but we could fix this
+            //camera->GetTransform()->setEulerRot(0.0, -yaw, 0.0);
 
 
         // Control distance to target with mouse wheel
@@ -64,7 +61,7 @@ namespace Villain {
             camera->setDistanceToTarget(1.0f);
 
 
-        // TODO: movement logic
+        // TODO: movement logic WASD
         camera->setTarget(camera->GetTransform());
     }
 
