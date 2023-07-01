@@ -16,6 +16,19 @@
 
 using namespace Villain;
 
+#include "events/KeyboardEvent.hpp"
+class ExampleEventListener : public EventListener {
+    virtual void handleEvent(Event& event) override {
+        if (KeyboardEvent* myEvent = dynamic_cast<KeyboardEvent*>(&event)) {
+            if (myEvent->isPressed()) {
+                printf("KEY Pressed: %d!\n", myEvent->getKey());
+            } else {
+                printf("KEY Released!\n");
+            }
+        }
+    }
+};
+
 void Game::init() {
     GLint result;
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
@@ -178,6 +191,9 @@ void Game::init() {
     thrillerNode->getTransform()->setScale(0.05);
     thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(thrillerNode);
+
+    EventListener* testListener = new ExampleEventListener();
+    getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
 }
 
 void Game::handleEvents(float deltaTime) {
