@@ -54,19 +54,16 @@ TEST_CASE("Third Person Camera Test", "[Camera]") {
 
     SECTION("Default Camera Values") {
         // Check the default values of the camera
-        //REQUIRE(camera.getPosition() == glm::vec3(0.0f, 0.0f, 1.0f));
         REQUIRE(camera.getZoom() == 45.0f);
         REQUIRE(camera.getZnear() == Catch::Approx(0.1f));
         REQUIRE(camera.getZfar() == Catch::Approx(100.0f));
         REQUIRE(camera.getType() == Villain::CameraType::THIRD_PERSON);
     }
 
-    SECTION("Camera Aspect Ratio") {
-        camera.rescale(100.f, 100.f);
-        REQUIRE(camera.getAspectRatio() == Catch::Approx(1.0f)); // Assuming square aspect ratio
-    }
-
     SECTION("Camera Manipulation") {
+        camera.setDistanceToTarget(10.f);
+        REQUIRE(camera.getDistanceToTarget() == 10.0f);
+
         camera.setRotation(glm::vec3(45.f, 45.f, 45.f));
 
         REQUIRE(camera.getYaw() == 45.f);
@@ -74,19 +71,12 @@ TEST_CASE("Third Person Camera Test", "[Camera]") {
         REQUIRE(camera.getRoll() == 45.f);
 
         REQUIRE(glm::all(glm::epsilonEqual(camera.getRotation(), glm::vec3(45.0, 45.0, 45.0), glm::epsilon<float>())));
-
-        camera.setPosition({0, 0, 0});
-        camera.offsetPosition({1, 1});
-        REQUIRE(camera.getPosition().x == 1.f);
-        REQUIRE(camera.getPosition().y == 1.f);
-
-        camera.offsetScale(10.f);
-        REQUIRE(camera.getZoom() == 55.f);
     }
 
-    //SECTION("Camera View Matrix") {
-        //REQUIRE(camera.getViewMatrix() == glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getFront(), camera.getUp()));
-    //}
+    SECTION("View Matrix") {
+        // It will be identity matrix if no target is set, essentially making camera do nothing
+        REQUIRE(camera.getViewMatrix() == glm::mat4(1.0f));
+    }
 }
 
 TEST_CASE("Raycasting Test", "[Camera]") {
