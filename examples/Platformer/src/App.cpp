@@ -7,8 +7,6 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 
-#include "DebugConsole.hpp"
-
 using namespace Villain;
 
 void App::init() {

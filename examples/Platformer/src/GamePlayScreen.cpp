@@ -76,7 +76,7 @@ void GamePlayScreen::onEntry() {
     //spriteFont = new SpriteFont("assets/fonts/chintzy.ttf", 32);
     //freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
-    camera = new Villain::Camera(Villain::ProjectionType::ORTHOGRAPHIC_2D);
+    camera = new Villain::Camera(Villain::CameraType::ORTHOGRAPHIC_2D);
     camera->rescale(Villain::Engine::getScreenWidth(), Villain::Engine::getScreenHeight());
     // Zoom out because Box2D uses meters and not pixels
     camera->setZoom(32.0f);
@@ -147,7 +147,7 @@ void GamePlayScreen::draw() {
                 destRect.y = b.getBody()->GetPosition().y - b.getSize().y / 2.0f;
                 destRect.z = b.getSize().x;
                 destRect.w = b.getSize().y;
-                debugRenderer.drawBox(destRect, 0.0f, glm::vec4(1.0f), b.getBody()->GetAngle());
+                debugRenderer.drawBox(destRect, 0.0f, glm::vec4(-0.5f), b.getBody()->GetAngle());
             }
             // Render player's collision box
             player.drawDebug(debugRenderer);
@@ -179,7 +179,7 @@ void GamePlayScreen::draw() {
         glm::vec2 mouseCoords = camera->screenToWorld(Villain::InputManager::Instance()->getMouseCoords());
         //mouseCoords.x += 5.0f / 2;
         //mouseCoords.y += 5.0f / 2;
-        mouseLight.position = glm::vec3(mouseCoords.x, mouseCoords.y, 0.0f);
+        mouseLight.position = glm::vec3(mouseCoords.x, mouseCoords.y, -0.4f);
 
         //// Additive blending
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
