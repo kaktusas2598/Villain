@@ -1,12 +1,14 @@
 #include "catch2/catch_approx.hpp"
 #include "catch2/catch_test_macros.hpp"
-
-#include "physics/ParticleForceGenerator.hpp"
-#include "physics/generators/ParticleGravity.hpp"
 #include <glm/gtc/epsilon.hpp>
 
+#include "physics/generators/ParticleAnchoredSpring.hpp"
+#include "physics/generators/ParticleDrag.hpp"
+#include "physics/generators/ParticleGravity.hpp"
+#include "physics/generators/ParticleSpring.hpp"
+
 TEST_CASE("ParticleForceGenerator - Gravity", "[ParticleForceGenerator]") {
-    SECTION("ApplyForce") {
+    SECTION("Update Force") {
         Villain::Particle particle;
         particle.setInverseMass(2.0f);
         particle.setPosition(glm::vec3(1.0f, 2.0f, 3.0f));
@@ -18,6 +20,61 @@ TEST_CASE("ParticleForceGenerator - Gravity", "[ParticleForceGenerator]") {
 
         // Expect updated force accumulator based on gravity force
         REQUIRE(particle.getForce() == glm::vec3(0.0f, -4.9f, 0.0f));
+    }
+}
+
+TEST_CASE("ParticleForceGenerator - Drag", "[ParticleForceGenerator]") {
+    SECTION("Update Force") {
+        Villain::Particle particle;
+        particle.setInverseMass(2.0f);
+        particle.setPosition(glm::vec3(1.0f, 2.0f, 3.0f));
+        particle.setVelocity(glm::vec3(2.0f, 1.0f, 3.0f));
+        particle.setAcceleration(glm::vec3(0.0f));
+        particle.setDamping(0.9f);
+
+        Villain::ParticleDrag drag(0.5f, 0.2f);
+        drag.updateForce(&particle, 0.1f);
+
+        // Expect updated force accumulator based on drag force
+        REQUIRE(glm::all(glm::epsilonEqual(particle.getForce(), glm::vec3(-2.496663, -1.248332, -3.744994), 0.01f)));
+    }
+}
+
+TEST_CASE("ParticleForceGenerator - Spring", "[ParticleForceGenerator]") {
+    SECTION("Update Force") {
+        Villain::Particle particle;
+        particle.setInverseMass(1.0f);
+        particle.setPosition(glm::vec3(1.0f, 2.0f, 3.0f));
+        particle.setAcceleration(glm::vec3(0.0f));
+        particle.setDamping(0.9f);
+
+        Villain::Particle otherParticle;
+        otherParticle.setInverseMass(1.0f);
+        otherParticle.setPosition(glm::vec3(2.0f, 3.0f, 4.0f));
+        otherParticle.setAcceleration(glm::vec3(0.0f));
+        otherParticle.setDamping(0.9f);
+
+        Villain::ParticleSpring spring(&otherParticle, 2.0f, 1.5f);
+        spring.updateForce(&particle, 0.1f);
+
+        // Expect updated force accumulator based on spring force
+        REQUIRE(glm::all(glm::epsilonEqual(particle.getForce(), glm::vec3(0.267949, 0.267949, 0.267949), 0.01f)));
+    }
+}
+
+TEST_CASE("ParticleForceGenerator - AnchoredSpring", "[ParticleForceGenerator]") {
+    SECTION("Update Force") {
+        Villain::Particle particle;
+        particle.setInverseMass(1.0f);
+        particle.setPosition(glm::vec3(1.0f, 2.0f, 3.0f));
+        particle.setAcceleration(glm::vec3(0.0f));
+        particle.setDamping(0.9f);
+
+        Villain::ParticleAnchoredSpring anchoredSpring({0.0, 10.0f, 1.0f}, 2.0f, 1.5f);
+        anchoredSpring.updateForce(&particle, 0.1f);
+
+        // Expect updated force accumulator based on spring force
+        REQUIRE(glm::all(glm::epsilonEqual(particle.getForce(), glm::vec3(-1.638842, 13.110739, -3.277685), 0.01f)));
     }
 }
 

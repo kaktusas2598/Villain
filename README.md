@@ -36,13 +36,16 @@
 
 ### Physics
 * 2D Particle Engine
+* Simple 3D Particle system with force generators, springs
+* ...
 * More features TBA
 
 ## Planned Features
 
 * Engine editor with scene management
-* Assed management system
+* Asset management system, hot reloading, resource serach directories
 * Physics Engine:
+    * Data driven approach for particle types and emitters
     * Potential Box2D and Bullet physics integration
     * Built in collision detection: AABB, SAT, circle
     * Rigid Body implementation
