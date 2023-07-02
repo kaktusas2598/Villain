@@ -12,7 +12,8 @@ namespace Villain {
                 velocity(0.0f),
                 acceleration(0.0f),
                 inverseMass(1.0f), // Assuming unit mass by default
-                damping(0.98f) // A reasonable damping value between 0 and 1
+                damping(0.98f), // A reasonable damping value between 0 and 1
+                forceAccum(0.0f)
             {}
 
             void integrate(float duration);
@@ -22,6 +23,7 @@ namespace Villain {
                 forceAccum += force;
             }
 
+            glm::vec3 getForce() const { return forceAccum; }
             glm::vec3 getPosition() const { return position; }
             glm::vec3 getVelocity() const { return velocity; }
             glm::vec3 getAcceleration() const { return acceleration; }
@@ -59,8 +61,8 @@ namespace Villain {
 
         private:
             void clearAccumulator() {
+                acceleration = glm::vec3(0.0f);
                 forceAccum = glm::vec3(0.0f);
-                //acceleration = glm::vec3(0.0f);
             }
     };
 

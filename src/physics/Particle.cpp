@@ -15,13 +15,11 @@ namespace Villain {
         // D'Alembert's principle - resulting force is sum of all forces affecting particle
         glm::vec3 resultingAcc = acceleration;
         resultingAcc += forceAccum * inverseMass;
-        // Old way:
-        //glm::vec3 resultingAcc = acceleration * (1.0f / inverseMass);
 
         velocity += resultingAcc * duration;
         velocity *= powf(damping, duration);  // Impose drag
 
-        // Reset acceleration to zero for the next integration step
+        // Reset acceleration and force accumulator to zero for the next integration step
         clearAccumulator();
     }
 }

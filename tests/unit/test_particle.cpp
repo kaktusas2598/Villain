@@ -1,6 +1,7 @@
 #include "catch2/catch_approx.hpp"
 #include "catch2/catch_test_macros.hpp"
 
+#include "glm/gtx/string_cast.hpp"
 #include "physics/Particle.hpp"
 #include <glm/gtc/epsilon.hpp>
 
@@ -33,7 +34,7 @@ TEST_CASE("Particle integration", "[Particle]") {
 
         // Expect updated position, velocity, and acceleration based on integration formulas
         REQUIRE(particle.getPosition() == glm::vec3(1.2f, 2.0f, 3.1f));
-        REQUIRE(glm::all(glm::epsilonEqual(particle.getVelocity(), glm::vec3(1.979038, 0.197904, 0.989519), 0.001f)));
+        REQUIRE(glm::all(glm::epsilonEqual(particle.getVelocity(), glm::vec3(1.979038, 0.098952, 0.989519), 0.001f)));
         REQUIRE(particle.getAcceleration() == glm::vec3(0.0f, 0.0f, 0.0f));
     }
 }
