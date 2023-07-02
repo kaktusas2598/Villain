@@ -28,7 +28,7 @@ namespace Villain {
         }
     }
 
-    void Model::loadModel(std::string path) {
+    void Model::loadModel(const std::string& path) {
         // While loading scene, tell assimp to make sure uv coords are flipped along y axis
         // and all primitives are triangles
         // Other useful options:
@@ -36,15 +36,11 @@ namespace Villain {
         // aiProcess_CalcTangentSpace - won't calculate if there are no normals
         // aiProcess_OptimizeGraph - simplify aiNode graph, useful for complicated rigged models, but might not be useful for editor environments
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
+        Logger::Instance()->info("Loading model at: {}", path.c_str());
         scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
-        printf("------------------------\n");
-        printf("Loading model from %s\n", path.c_str());
-
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            std::stringstream ss;
-            ss << "ASSIMP ERROR: " << importer.GetErrorString();
-            Logger::Instance()->error(ss.str().c_str());
+            Logger::Instance()->error("Assimp import error: %s", *importer.GetErrorString());
             return;
         }
         directory = path.substr(0, path.find_last_of('/'));

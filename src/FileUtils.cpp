@@ -1,6 +1,7 @@
 #include "FileUtils.hpp"
 
 #include "Logger.hpp"
+#include <fstream>
 #include <sstream>
 
 #include <cmrc/cmrc.hpp>
