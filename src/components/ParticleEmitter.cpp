@@ -18,11 +18,23 @@ namespace Villain {
         shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
         particleQuadMesh->draw(shader, material);
 
+        // VERY UGLY! Temp render code for spring test
+        parent->getTransform()->setPos(springA.getPosition());
+        shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
+        springAMesh->draw(shader, material);
+
+        parent->getTransform()->setPos(springB.getPosition());
+        shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
+        springBMesh->draw(shader, material);
     }
 
     void ParticleEmitter::update(float deltaTime) {
         // Do not forget to update force generator registry!
         registry.updateForces(deltaTime);
+
+        // SPRING TEST
+        springA.integrate(deltaTime);
+        springB.integrate(deltaTime);
 
         for (size_t i = 0; i < poolSize; i++) {
             particleArray[i].integrate(deltaTime);

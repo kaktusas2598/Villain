@@ -6,6 +6,7 @@
 #include "physics/Particle.hpp"
 #include "physics/ParticleForceGenerator.hpp"
 #include "physics/generators/ParticleGravity.hpp"
+#include "physics/generators/ParticleSpring.hpp"
 #include "rendering/Mesh.hpp"
 #include "rendering/MeshUtils.hpp"
 
@@ -65,6 +66,20 @@ namespace Villain {
 
                 // quad Vertices and Indices gets passed to constructor of new Mesh here so we can pass instancing data to constructor
                 particleQuadMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices, numParticles, instanceMatrices);
+
+
+                // SPRING TEST
+                springA.setPosition({0.0, 10.0f, 0.0f});
+                springB.setPosition({0.0, 5.0f, 0.0f});
+
+                ParticleSpring* psA = new ParticleSpring(&springB, 1.0f, 2.0f);
+                registry.add(&springA, psA);
+
+                ParticleSpring* psB = new ParticleSpring(&springA, 1.0f, 2.0f);
+                registry.add(&springB, psB);
+
+                springAMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
+                springBMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
             }
 
             virtual void render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
@@ -83,6 +98,11 @@ namespace Villain {
             // TEMP for testing particle attributes for now
             int particleType = 0;
             void setParticleType(ParticleType newType);
+
+            // SPRING TEST
+            Particle springA, springB;
+            Mesh<VertexP1N1T1B1UV>* springAMesh;
+            Mesh<VertexP1N1T1B1UV>* springBMesh;
 
             // Inspired by Mesh Renderer
             Mesh<VertexP1N1T1B1UV>* particleQuadMesh;
