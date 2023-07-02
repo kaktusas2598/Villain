@@ -1,10 +1,11 @@
-#ifndef __PARTICLE_EMITTER__
-#define __PARTICLE_EMITTER__
+#pragma once
 
 #include "Logger.hpp"
 #include "NodeComponent.hpp"
 //#include "physics/ParticlePool.hpp"
 #include "physics/Particle.hpp"
+#include "physics/ParticleForceGenerator.hpp"
+#include "physics/generators/ParticleGravity.hpp"
 #include "rendering/Mesh.hpp"
 #include "rendering/MeshUtils.hpp"
 
@@ -46,8 +47,12 @@ namespace Villain {
                     Logger::Instance()->error("Particle shape not supported");
                 }
 
+                ParticleGravity* gravityGenerator = new ParticleGravity(glm::vec3(0.0f, -1.0f, 0.0f));
+
                 instanceMatrices.reserve(numParticles);
                 for (int i = 0; i < numParticles; i++) {
+                    // Attach gravity generator to each particle
+                    registry.add(&particleArray[i], gravityGenerator);
                     particleArray[i].setMass(2.0f); // 2kg
                     particleArray[i].setPosition(glm::vec3(0.0f, 2.0f, 0.0f));
                     particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 35.0f)); // 35 m/s
@@ -70,6 +75,7 @@ namespace Villain {
             Particle* particleArray = nullptr;
             std::vector<glm::mat4> instanceMatrices;
 
+            ParticleForceRegistry registry;
 
             // TEMP for testing particle attributes for now
             int particleType = 0;
@@ -81,5 +87,3 @@ namespace Villain {
 
     };
 }
-
-#endif // __PARTICLE_EMITTER__

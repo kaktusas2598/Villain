@@ -12,9 +12,12 @@ namespace Villain {
         // Update linear position, velocity, and acceleration Newton-Euler using numerical integration
         position += velocity * duration;
 
-        // TODO: implement general forces, force generators, D'Alembert's principle
+        // D'Alembert's principle - resulting force is sum of all forces affecting particle
+        glm::vec3 resultingAcc = acceleration;
+        resultingAcc += forceAccum * inverseMass;
+        // Old way:
+        //glm::vec3 resultingAcc = acceleration * (1.0f / inverseMass);
 
-        glm::vec3 resultingAcc = acceleration * (1.0f / inverseMass);
         velocity += resultingAcc * duration;
         velocity *= powf(damping, duration);  // Impose drag
 

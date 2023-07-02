@@ -20,14 +20,14 @@ namespace Villain {
 
     }
 
-    // NOTE: all code here apart from integration is temporary!!!
     void ParticleEmitter::update(float deltaTime) {
+        // Do not forget to update force generator registry!
+        registry.updateForces(deltaTime);
+
         for (size_t i = 0; i < poolSize; i++) {
-            // NOTE: temp add gravity for testing
-            particleArray[i].setAcceleration(glm::vec3(0.0, -1.0f, 0.0f));
             particleArray[i].integrate(deltaTime);
 
-            // NOTE: rudimentary collision, temporary
+            // NOTE: rudimentary collision, temporary!!!
             if (particleArray[i].getPosition().y < 0.0f) {
                 setParticleType((ParticleType)particleType);
             }
