@@ -25,10 +25,13 @@ namespace Villain {
         LASER
     };
 
+    // WARNING: This class is not in any way final representation of how particle system will be used, we need to pick
+    // data driven approach, possibly use object pool and add ability to use instanced colors
     // NOTE: Just blueprint/sandbox for now until I get something rendering on the screen for new particle system
     // TODO:
     // 1. Change to use particle memory pool
     // 2. Support multiple parameters, or maybe types of particle emitters
+    // 3. Data-driven approach, XML?
     class ParticleEmitter : public NodeComponent {
         public:
             ParticleEmitter(int numParticles, ParticleShape shape = ParticleShape::SPHERE) {
