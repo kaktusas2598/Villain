@@ -77,7 +77,9 @@
  * [FreeType](https://freetype.org/index.html) - freely available software library to render fonts
  * [tinyxml2](https://github.com/leethomason/tinyxml2) - Simple, small, efficient C++ XML parser
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
+ * [spdlog](https://github.com/gabime/spdlog)- Very fast, header-only C++ logging library
  * [lua](https://www.lua.org/) - For scripting, configuration
+ * [Catch2](https://github.com/catchorg/Catch2) - Modern C++ Test Framework
 
 
 ## Libraries and assets used by examples
