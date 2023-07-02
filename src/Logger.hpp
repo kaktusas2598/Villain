@@ -1,15 +1,16 @@
-#ifndef __Logger__
-#define __Logger__
+#pragma once
 
 #include "ErrorHandler.hpp"
 #include "LuaScript.hpp"
 #include "editor/DebugConsole.hpp"
-#include <fstream>
 
-/**
- * This class is only used for internal logging
-*/
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+
 namespace Villain {
+
+    // Main Villain Engine logging utility
     class Logger {
         public:
             static Logger* Instance() {
@@ -21,44 +22,37 @@ namespace Villain {
             }
 
             void info(const char* message) {
-                logFile << "[INFO]: " << message << std::endl;
-                std::string output = message;
-                output = "[info]: " + output;
-                std::cout << output << "\n";
-                DebugConsole::Instance()->addLog(output.c_str());
+                fileLogger->info(message);
+                consoleLogger->info(message);
+                DebugConsole::Instance()->addLog("[INFO]: %s", message);
             }
 
             void warn(const char* message) {
-                logFile << "[WARN]: " << message << std::endl;
-                std::string output = message;
-                output = "[warn]: " + output;
-                std::cout << output << "\n";
-                DebugConsole::Instance()->addLog(output.c_str());
+                fileLogger->warn(message);
+                consoleLogger->warn(message);
+                DebugConsole::Instance()->addLog("[WARN]: %s", message);
             }
 
             void error(const char* message) {
-                logFile << "[ERROR]: " << message << std::endl;
-                std::string output = message;
-                output = "[error]: " + output;
-                std::cout << output << "\n";
-                DebugConsole::Instance()->addLog(output.c_str());
+                fileLogger->error(message);
+                consoleLogger->error(message);
+                DebugConsole::Instance()->addLog("[ERROR]: %s", message);
             }
 
             void dumpStack (lua_State *L);
         private:
             Logger() {
-                logFile.open("debug.log");
-                if( !logFile ) { // file couldn't be opened
+                fileLogger = spdlog::basic_logger_mt("Villain Engine Log", "debug.log", true);
+                consoleLogger = spdlog::stdout_color_mt("console");
+                if (!fileLogger) {
                     exitWithError("Debug file couldn't be opened");
                 }
             }
-            ~Logger() {
-                logFile.close();
-            }
+            ~Logger() {}
+
             static Logger* s_pInstance;
 
-            std::ofstream logFile;
+            std::shared_ptr<spdlog::logger> fileLogger;
+            std::shared_ptr<spdlog::logger> consoleLogger;
     };
 }
-
-#endif // __Logger__

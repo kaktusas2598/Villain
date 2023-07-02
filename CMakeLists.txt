@@ -59,6 +59,7 @@ add_library(${PROJECT_NAME} STATIC ${sources} )
 # Specify extra directories with their own CMakeLists.txt for this build
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
+add_subdirectory(vendor/spdlog)
 set(tinyxml2_BUILD_TESTING 0)
 add_subdirectory(vendor/tinyxml2)
 
@@ -91,7 +92,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ShaderLibrary)
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm spdlog imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ShaderLibrary)
 
 if(VILLAIN_BUILD_TESTS)
     add_subdirectory(vendor/catch2 tests/out)
