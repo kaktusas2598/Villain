@@ -5,8 +5,6 @@
 //#include "physics/ParticlePool.hpp"
 #include "physics/Particle.hpp"
 #include "physics/ParticleForceGenerator.hpp"
-#include "physics/generators/ParticleGravity.hpp"
-#include "physics/generators/ParticleSpring.hpp"
 #include "rendering/Mesh.hpp"
 #include "rendering/MeshUtils.hpp"
 
@@ -51,12 +49,12 @@ namespace Villain {
                     Logger::Instance()->error("Particle shape not supported");
                 }
 
-                ParticleGravity* gravityGenerator = new ParticleGravity(glm::vec3(0.0f, -1.0f, 0.0f));
+                initialiseForceGenerators();
 
                 instanceMatrices.reserve(numParticles);
                 for (int i = 0; i < numParticles; i++) {
-                    // Attach gravity generator to each particle
-                    registry.add(&particleArray[i], gravityGenerator);
+                    if (i == springAParticleIndex || i == springBParticleIndex || i == anchoredParticleIndex)  continue;
+                    // initial projectile params
                     particleArray[i].setMass(2.0f); // 2kg
                     particleArray[i].setPosition(glm::vec3(0.0f, 2.0f, 0.0f));
                     particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 35.0f)); // 35 m/s
@@ -67,19 +65,6 @@ namespace Villain {
                 // quad Vertices and Indices gets passed to constructor of new Mesh here so we can pass instancing data to constructor
                 particleQuadMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices, numParticles, instanceMatrices);
 
-
-                // SPRING TEST
-                springA.setPosition({0.0, 10.0f, 0.0f});
-                springB.setPosition({0.0, 5.0f, 0.0f});
-
-                ParticleSpring* psA = new ParticleSpring(&springB, 1.0f, 2.0f);
-                registry.add(&springA, psA);
-
-                ParticleSpring* psB = new ParticleSpring(&springA, 1.0f, 2.0f);
-                registry.add(&springB, psB);
-
-                springAMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
-                springBMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
             }
 
             virtual void render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
@@ -95,18 +80,19 @@ namespace Villain {
 
             ParticleForceRegistry registry;
 
+            void initialiseForceGenerators();
+
             // TEMP for testing particle attributes for now
             int particleType = 0;
             void setParticleType(ParticleType newType);
 
-            // SPRING TEST
-            Particle springA, springB;
-            Mesh<VertexP1N1T1B1UV>* springAMesh;
-            Mesh<VertexP1N1T1B1UV>* springBMesh;
+            // Spring particle indices in "pool"
+            int springAParticleIndex = 0;
+            int springBParticleIndex = 1;
+            int anchoredParticleIndex = 2;
 
             // Inspired by Mesh Renderer
             Mesh<VertexP1N1T1B1UV>* particleQuadMesh;
             Material particleMaterial;
-
     };
 }
