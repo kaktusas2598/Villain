@@ -4,13 +4,14 @@
 #include "LuaScript.hpp"
 #include "editor/DebugConsole.hpp"
 
+#include <spdlog/fmt/fmt.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Villain {
 
-    // Main Villain Engine logging utility
+    // Main Villain Engine logging utility, using spdlog and variadic templates to log formatted messages
     class Logger {
         public:
             static Logger* Instance() {
@@ -21,22 +22,25 @@ namespace Villain {
                 return s_pInstance;
             }
 
-            void info(const char* message) {
-                fileLogger->info(message);
-                consoleLogger->info(message);
-                DebugConsole::Instance()->addLog("[INFO]: %s", message);
+            template<typename... Args>
+            void info(const char* fmt, const Args&... args) {
+                fileLogger->info(fmt, args...);
+                consoleLogger->info(fmt, args...);
+                DebugConsole::Instance()->addLog("[INFO]: %s", fmt::format(fmt, args...));
             }
 
-            void warn(const char* message) {
-                fileLogger->warn(message);
-                consoleLogger->warn(message);
-                DebugConsole::Instance()->addLog("[WARN]: %s", message);
+            template<typename... Args>
+            void warn(const char* fmt, Args&... args) {
+                fileLogger->warn(fmt, args...);
+                consoleLogger->warn(fmt, args...);
+                DebugConsole::Instance()->addLog("[WARN]: %s", fmt::format(fmt, args...));
             }
 
-            void error(const char* message) {
-                fileLogger->error(message);
-                consoleLogger->error(message);
-                DebugConsole::Instance()->addLog("[ERROR]: %s", message);
+            template<typename... Args>
+            void error(const char* fmt, Args&... args) {
+                fileLogger->error(fmt, args...);
+                consoleLogger->error(fmt, args...);
+                DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...));
             }
 
             void dumpStack (lua_State *L);
