@@ -77,7 +77,9 @@
  * [FreeType](https://freetype.org/index.html) - freely available software library to render fonts
  * [tinyxml2](https://github.com/leethomason/tinyxml2) - Simple, small, efficient C++ XML parser
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
+ * [spdlog](https://github.com/gabime/spdlog)- Very fast, header-only C++ logging library
  * [lua](https://www.lua.org/) - For scripting, configuration
+ * [Catch2](https://github.com/catchorg/Catch2) - Modern C++ Test Framework
 
 
 ## Libraries and assets used by examples
@@ -125,7 +127,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
      in a single texture before drawing
  * Finish refactoring/porting StateParser class from Vigilant engine!
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
- * Possibly refactor Logger class to be a wrapper for spdlog
  * Fix Engine on Windows:
    - NuklearUI sometimes not compiling
    - C++ filesystem module not compiling
