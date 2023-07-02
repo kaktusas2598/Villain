@@ -76,6 +76,12 @@ TEST_CASE("Third Person Camera Test", "[Camera]") {
     SECTION("View Matrix") {
         // It will be identity matrix if no target is set, essentially making camera do nothing
         REQUIRE(camera.getViewMatrix() == glm::mat4(1.0f));
+
+    }
+
+    SECTION("View Matrix") {
+        camera.rescale(100, 100);
+        REQUIRE(camera.getProjMatrix() == glm::perspective(glm::radians(camera.getZoom()), (float)100/100, 0.1f, 100.0f));
     }
 }
 
@@ -148,9 +154,8 @@ TEST_CASE("2D Camera Test", "[Camera]") {
         glm::vec2 quadPosition(0.0f, 0.0f);
         glm::vec2 quadDimensions(100.0f, 100.0f);
 
-        bool result = camera.quadInView(quadPosition, quadDimensions);
-
-        REQUIRE(result == true);
+        REQUIRE(camera.quadInView(quadPosition, quadDimensions) == true);
+        REQUIRE_FALSE(camera.quadInView({-900.f, -200.0f}, quadDimensions) == true);
     }
 
     SECTION("Screen to World Coordinate conversion") {
@@ -161,4 +166,11 @@ TEST_CASE("2D Camera Test", "[Camera]") {
 
         REQUIRE(result == expectedWorldCoords);
     }
+}
+
+TEST_CASE("Identity Camera Test", "[Camera]") {
+    Villain::Camera camera(Villain::CameraType::NONE);
+
+    REQUIRE(camera.getProjMatrix() == glm::mat4(1.0f));
+    REQUIRE(camera.getViewMatrix() == glm::mat4(1.0f));
 }

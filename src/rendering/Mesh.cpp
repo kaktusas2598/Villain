@@ -3,6 +3,7 @@
 #include "Renderer.hpp"
 #include "ErrorHandler.hpp"
 #include "VertexBufferLayout.hpp"
+#include <cstring>
 
 namespace Villain {
 
@@ -84,6 +85,34 @@ namespace Villain {
         ibo = std::make_unique<IndexBuffer>(Indices.data(), Indices.size());
     }
 
+    template <class VertexType>
+    void Mesh<VertexType>::updateInstances(std::vector<glm::mat4>& instances) {
+        // Assuming mesh is already instanced
+        if (numInstances > 1) {
+            instanceVbo->bind();
+
+            // Check if the size needs to be changed
+            if (instances.size() != numInstances) {
+                // Resize the buffer object
+                instanceVbo->fill(instances.data(), sizeof(glm::mat4) * instances.size());
+
+                numInstances = instances.size();
+            } else {
+                // Map the buffer data for writing
+                GLvoid* instanceData = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+                if (instanceData != nullptr) {
+                    // Copy the updated instance matrices to the mapped memory
+                    std::memcpy(instanceData, instances.data(), sizeof(glm::mat4) * instances.size());
+
+                    // Unmap the buffer
+                    GLCall(glUnmapBuffer(GL_ARRAY_BUFFER));
+                }
+            }
+
+            instanceVbo->unbind();
+        }
+    }
+
     // Explicit instantiation of template specialisations to avoid linker errors, alternativaly and even better
     // template should be defined in header file only
     template Mesh<VertexP1>::Mesh(std::vector<VertexP1> vertices, std::vector<unsigned int> indices, unsigned instances, std::vector<glm::mat4> instanceTransforms);
@@ -109,4 +138,13 @@ namespace Villain {
     template void Mesh<VertexP1C1UV>::draw(Shader &shader, Material& material);
     template void Mesh<VertexP1N1C1UV>::draw(Shader &shader, Material& material);
     template void Mesh<VertexP1N1T1B1UV>::draw(Shader &shader, Material& material);
+
+    template void Mesh<VertexP1>::updateInstances(std::vector<glm::mat4>&);
+    template void Mesh<VertexP1UV>::updateInstances(std::vector<glm::mat4>&);
+    template void Mesh<VertexP1N1>::updateInstances(std::vector<glm::mat4>&);
+    template void Mesh<VertexP1N1UV>::updateInstances(std::vector<glm::mat4>&);
+    template void Mesh<VertexP1C1UV>::updateInstances(std::vector<glm::mat4>&);
+    template void Mesh<VertexP1N1C1UV>::updateInstances(std::vector<glm::mat4>&);
+    template void Mesh<VertexP1N1T1B1UV>::updateInstances(std::vector<glm::mat4>&);
+
 }

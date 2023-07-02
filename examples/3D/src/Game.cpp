@@ -8,6 +8,7 @@
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
+#include "components/ParticleEmitter.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
@@ -138,6 +139,9 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-142.0, -20.0, -50.0), glm::vec3(-140.0, 50.0, 50.0)), 0.0f));
     // FIXME: adding floor causes spheres to dissapear?
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
+
+    // New Particle Engine tests
+    addToScene((new SceneNode("Particles"))->addComponent(new ParticleEmitter(100)));
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
     Model* sphereModel = new Model("assets/models/sphere.obj");

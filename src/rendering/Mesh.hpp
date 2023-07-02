@@ -37,6 +37,7 @@ namespace Villain {
             Sphere* getBoundingVolume() { return boundingVolume.get(); }
             const std::string& getMaterialName() const { return materialName; }
 
+            void updateInstances(std::vector<glm::mat4>& instances);
             bool isInstanced() const { return numInstances > 1; }
         private:
             std::string materialName = std::string();
