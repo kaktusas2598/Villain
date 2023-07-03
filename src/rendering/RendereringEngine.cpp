@@ -19,6 +19,7 @@ namespace Villain {
         normalDebugShader = Shader::createFromResource("normal-debug");
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
+        skyboxShader = Shader::createFromResource("cubemap");
 
         mainCamera = new Camera(CameraType::FIRST_PERSON);
         altCamera = new Camera(CameraType::NONE);
@@ -247,6 +248,12 @@ namespace Villain {
             normalDebugShader->bind();
             node->render(normalDebugShader, this, mainCamera);
         }
+
+        // Always last - render the skybox, if any
+        if (currentSkybox) {
+            skyboxShader->bind();
+            currentSkybox->render(mainCamera->getProjMatrix(), mainCamera->getViewMatrix());
+        }
     }
 
     void RenderingEngine::postRender() {
@@ -298,6 +305,11 @@ namespace Villain {
         node->render(pickingShader, this, mainCamera);
 
         pickingTexture->disableWriting();
+    }
+
+    void RenderingEngine::setSkybox(const std::vector<std::string>& faces) {
+        // TODO: handle changing skyboxes, manage memory
+        currentSkybox = new SkyBox(faces, skyboxShader);
     }
 
     void RenderingEngine::bindMainTarget() {

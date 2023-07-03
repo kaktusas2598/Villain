@@ -45,16 +45,15 @@ void Game::init() {
 
     debugRenderer.init();
 
-    std::vector<std::string> faces{
+    // Letting engine take care of the skybox
+    getRootNode()->getEngine()->getRenderingEngine()->setSkybox(std::vector<std::string>{
         "assets/textures/skybox/right.jpg",
         "assets/textures/skybox/left.jpg",
         "assets/textures/skybox/top.jpg",
         "assets/textures/skybox/bottom.jpg",
         "assets/textures/skybox/front.jpg",
         "assets/textures/skybox/back.jpg"
-    };
-
-    skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
+    });
 
     //ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
     std::vector<VertexP1N1UV> vertices;
@@ -228,6 +227,4 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.end();
     debugRenderer.render(projection * view, 1.0f);
-
-    skybox->render(projection, view);
 }

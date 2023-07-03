@@ -5,7 +5,6 @@
 #include "camera/Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/Model.hpp"
-#include "rendering/SkyBox.hpp"
 
 class Game : public Villain::Application {
     public:
@@ -20,7 +19,6 @@ class Game : public Villain::Application {
 
     private:
         Villain::Camera* camera;
-        std::unique_ptr<Villain::SkyBox> skybox;
         Villain::DebugRenderer debugRenderer;
 
         // TEMP: For debugging shadow mapping for directional lights
