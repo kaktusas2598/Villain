@@ -59,7 +59,7 @@ namespace Villain {
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine.get(); }
-            inline Application* getApplication() { return application.get(); }
+            inline Application* getApplication() { return application; }
             inline EventDispatcher* getEventDispatcher() { return eventDispatcher.get(); }
 
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
@@ -92,7 +92,7 @@ namespace Villain {
 
             std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;
             std::unique_ptr<RenderingEngine> renderingEngine = nullptr;
-            std::shared_ptr<Application> application = nullptr; //< User engine application
+            Application* application = nullptr; //< User engine application
             std::unique_ptr<EventDispatcher> eventDispatcher;
     };
 }

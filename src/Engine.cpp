@@ -97,7 +97,7 @@ namespace Villain {
             renderingEngine->setGammaCorrection(true);
 
         //initialize the current game
-        application = std::shared_ptr<Application>(app);
+        application = app;
         application->setEngine(this);
         application->setNulkearContext(nuklearContext);
         application->init();
