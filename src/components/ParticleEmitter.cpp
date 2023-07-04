@@ -5,6 +5,7 @@
 #include "physics/generators/ParticleAnchoredSpring.hpp"
 #include "physics/generators/ParticleBungee.hpp"
 #include "physics/generators/ParticleBuoyancy.hpp"
+#include "physics/generators/ParticleFakeSpring.hpp"
 #include "physics/generators/ParticleGravity.hpp"
 #include "physics/generators/ParticleSpring.hpp"
 
@@ -58,6 +59,11 @@ namespace Villain {
 
             registry.add(&particleArray[i], gravityGenerator);
         }
+
+        // Fake stiff spring force test
+        particleArray[fakeStiffSpringParticleIndex].setPosition({25.0f, 10.0f, 0.0f});
+        ParticleFakeSpring* fakeStiffSpring = new ParticleFakeSpring({25.0f, 15.0f, 0.0f}, 2000.f, 0.1f);
+        registry.add(&particleArray[fakeStiffSpringParticleIndex], fakeStiffSpring);
     }
 
     void ParticleEmitter::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera) {

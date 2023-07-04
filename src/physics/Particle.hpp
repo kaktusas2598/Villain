@@ -23,11 +23,13 @@ namespace Villain {
                 forceAccum += force;
             }
 
+            bool hasFiniteMass() const { return inverseMass >= 0.0f; }
             glm::vec3 getForce() const { return forceAccum; }
             glm::vec3 getPosition() const { return position; }
             glm::vec3 getVelocity() const { return velocity; }
             glm::vec3 getAcceleration() const { return acceleration; }
             float getInverseMass() const { return inverseMass; }
+            float getMass() const { return (inverseMass == 0.0f) ? FLT_MAX : 1.0f / inverseMass; }
             float getDamping() const { return damping; }
             float getLifetime() const { return lifetime; }
             float getAge() const { return age; }

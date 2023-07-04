@@ -88,7 +88,8 @@ namespace Villain {
             int bungeeBParticleIndex = 4;
             int anchoredBungeeParticleIndex = 5;
             int buoyancyParticleIndex = 6;
-            int projectileParticleStart = 7;
+            int fakeStiffSpringParticleIndex = 7;
+            int projectileParticleStart = 8;
 
             // Inspired by Mesh Renderer
             Mesh<VertexP1N1T1B1UV>* particleQuadMesh;
