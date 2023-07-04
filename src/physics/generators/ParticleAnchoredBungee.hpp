@@ -21,7 +21,7 @@ namespace Villain {
                 if (magnitude <= restLength) return;
 
                 // Calculate magnitude of the force
-                magnitude = springConstant * (restLength - magnitude);
+                magnitude = springConstant * (magnitude - restLength);
 
                 // Calculate final force and apply it
                 force = glm::normalize(force);
