@@ -6,6 +6,8 @@ namespace Villain {
 
     // Applied byoyancy force for a plane of liquid parallel to XZ plane
     // This is approximation of buoyancy force using spring-like calculations
+    // NOTE: This doesn't seem to work fine without gravity generator attached - particle shoots
+    // out upwards rapidly
     class ParticleBuoyancy: public ParticleForceGenerator {
         public:
             // Density 1000 for pure water
@@ -30,7 +32,7 @@ namespace Villain {
 
                 // Otherwise we are partially submerged
                 force.y = liquidDensity * objectVolume *
-                    (depth - maxDepth - liquidHeight) / 2 * maxDepth;
+                    (depth - maxDepth - liquidHeight) / (2 * maxDepth);
                 particle->addForce(force);
             }
 

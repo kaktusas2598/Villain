@@ -53,12 +53,6 @@ namespace Villain {
 
                 instanceMatrices.reserve(numParticles);
                 for (int i = 0; i < numParticles; i++) {
-                    if (i == springAParticleIndex || i == springBParticleIndex || i == anchoredParticleIndex)  continue;
-                    // initial projectile params
-                    particleArray[i].setMass(2.0f); // 2kg
-                    particleArray[i].setPosition(glm::vec3(0.0f, 2.0f, 0.0f));
-                    particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 35.0f)); // 35 m/s
-                    particleArray[i].setDamping(0.99f);
                     instanceMatrices.push_back(glm::mat4(1.0f));
                 }
 
@@ -86,10 +80,15 @@ namespace Villain {
             int particleType = 0;
             void setParticleType(ParticleType newType);
 
-            // Spring particle indices in "pool"
+            // Different indices represent which forces will be applied to which particles for testing force generators
             int springAParticleIndex = 0;
             int springBParticleIndex = 1;
             int anchoredParticleIndex = 2;
+            int bungeeAParticleIndex = 3;
+            int bungeeBParticleIndex = 4;
+            int anchoredBungeeParticleIndex = 5;
+            int buoyancyParticleIndex = 6;
+            int projectileParticleStart = 7;
 
             // Inspired by Mesh Renderer
             Mesh<VertexP1N1T1B1UV>* particleQuadMesh;
