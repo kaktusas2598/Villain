@@ -11,12 +11,12 @@ namespace Villain {
     Shader::Shader(): rendererID(0) {}
 
     Shader::Shader(const std::string& fileName): rendererID(0) {
-        std::cout << "Loading shader: " << fileName << std::endl;
+        Logger::Instance()->info("Loading shader: {}", fileName);
         createFromSource(FileUtils::loadFile(fileName));
     }
 
     Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string geometryFile): rendererID(0) {
-        std::cout << "Loading shaders: " << vertexFile << " and " << fragmentFile << std::endl;
+        Logger::Instance()->info("Loading shaders: {}, {}", vertexFile, fragmentFile);
         std::string vertexShader = FileUtils::loadFile(vertexFile);
         std::string fragmentShader = FileUtils::loadFile(fragmentFile);
 

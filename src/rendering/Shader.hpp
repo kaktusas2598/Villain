@@ -1,5 +1,4 @@
-#ifndef __Shader__
-#define __Shader__
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -73,5 +72,3 @@ namespace Villain {
             int getUniformLocation(const std::string& name);
     };
 }
-
-#endif // __Shader__

@@ -1,5 +1,6 @@
 #include "Window.hpp"
 #include "ErrorHandler.hpp"
+#include "Logger.hpp"
 
 namespace Villain {
 
@@ -61,7 +62,7 @@ namespace Villain {
         }
 
         //check the OpenGL version
-        printf("*** OpenGL Version: %s ***\n", glGetString(GL_VERSION));
+        Logger::Instance()->info("OpenGL Version: {}", (char*)glGetString(GL_VERSION));
 
         // set background color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

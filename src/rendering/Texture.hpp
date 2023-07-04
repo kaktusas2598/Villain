@@ -1,5 +1,4 @@
-#ifndef __Texture__
-#define __Texture__
+#pragma once
 
 #include "ErrorHandler.hpp"
 #include <vector>
@@ -81,5 +80,3 @@ namespace Villain  {
             GLenum target; ///< GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
     };
 }
-
-#endif // __Texture__

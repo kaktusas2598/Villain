@@ -36,7 +36,7 @@ namespace Villain {
         // aiProcess_CalcTangentSpace - won't calculate if there are no normals
         // aiProcess_OptimizeGraph - simplify aiNode graph, useful for complicated rigged models, but might not be useful for editor environments
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
-        Logger::Instance()->info("Loading model at: {}", path.c_str());
+        Logger::Instance()->info("Loading model: {}", path.c_str());
         scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
