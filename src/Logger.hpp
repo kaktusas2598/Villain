@@ -46,6 +46,7 @@ namespace Villain {
             void dumpStack (lua_State *L);
         private:
             Logger() {
+                spdlog::set_pattern("%^[%H:%M:%S.%e %l] : %v%$");
                 fileLogger = spdlog::basic_logger_mt("Villain Engine Log", "debug.log", true);
                 consoleLogger = spdlog::stdout_color_mt("console");
                 if (!fileLogger) {
