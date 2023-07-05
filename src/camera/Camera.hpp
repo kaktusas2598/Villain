@@ -58,6 +58,8 @@ namespace Villain {
             void setPosition(const glm::vec3& newPos) { position = newPos; }
             void setZoom(float z);
             void setZPlanes(float near, float far) { zNear = near, zFar = far; }
+            void setZNear(float near) { zNear = near; }
+            void setZFar(float far) { zFar = far; }
 
             // TODO: need more testing, maybe try implementing for other projection types
             Frustum getFrustum();

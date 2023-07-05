@@ -19,12 +19,8 @@ class Game : public Villain::Application {
         void onAppRender(float deltaTime);
 
     private:
-        Villain::Camera* camera;
         std::unique_ptr<Villain::SkyBox> skybox;
         Villain::DebugRenderer debugRenderer;
-
-        // TEMP: For debugging shadow mapping for directional lights
-        Villain::SceneNode* directionalLight;
 };
 
 #endif // __GAME__

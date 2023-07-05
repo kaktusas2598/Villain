@@ -31,6 +31,7 @@ namespace Villain {
 
             StateMachine* getStateMachine() { return stateMachine.get(); }
             SceneNode* getRootNode() { return &rootNode; }
+            void loadScene(const std::string& fileName);
 
             struct nk_context * getNuklearContext() { return nuklearContext; }
             void setNulkearContext(struct nk_context* nctx) { nuklearContext = nctx; }

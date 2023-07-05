@@ -30,14 +30,14 @@ namespace Villain {
             }
 
             template<typename... Args>
-            void warn(const char* fmt, Args&... args) {
+            void warn(const char* fmt, const Args&... args) {
                 fileLogger->warn(fmt, args...);
                 consoleLogger->warn(fmt, args...);
                 DebugConsole::Instance()->addLog("[WARN]: %s", fmt::format(fmt, args...));
             }
 
             template<typename... Args>
-            void error(const char* fmt, Args&... args) {
+            void error(const char* fmt, const Args&... args) {
                 fileLogger->error(fmt, args...);
                 consoleLogger->error(fmt, args...);
                 DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...));

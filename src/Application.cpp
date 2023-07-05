@@ -1,14 +1,12 @@
 #include "Application.hpp"
 
 #include "IGameScreen.hpp"
+#include "SceneParser.hpp"
 #include "StateParser.hpp"
 
 namespace Villain {
 
-    Application::Application(): rootNode("rootNode") {
-        // Initialize State Machine
-        stateMachine = std::make_unique<StateMachine>(this);
-    }
+    Application::Application(): rootNode("rootNode"), stateMachine(std::make_unique<StateMachine>(this)) {}
 
     void Application::addStates() {
         Logger::Instance()->info("Adding states.");
@@ -115,6 +113,11 @@ namespace Villain {
             stateMachine->destroy();
             stateMachine.reset();
         }
+    }
+
+    void Application::loadScene(const std::string& fileName) {
+        SceneParser sceneParser;
+        sceneParser.loadSceneGraph(fileName, &rootNode);
     }
 
 }
