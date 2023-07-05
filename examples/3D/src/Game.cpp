@@ -159,6 +159,7 @@ void Game::init() {
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
+    /*
     // Skeletal Animation demo
     Model* animatedModel = new Model("assets/models/mudeater.dae");
     SceneNode* animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel));
@@ -195,6 +196,7 @@ void Game::init() {
     thrillerNode->getTransform()->setScale(0.05);
     thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(thrillerNode);
+    */
 
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
