@@ -26,21 +26,21 @@ namespace Villain {
             void info(const char* fmt, const Args&... args) {
                 fileLogger->info(fmt, args...);
                 consoleLogger->info(fmt, args...);
-                DebugConsole::Instance()->addLog("[INFO]: %s", fmt::format(fmt, args...));
+                DebugConsole::Instance()->addLog("[INFO]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void warn(const char* fmt, const Args&... args) {
                 fileLogger->warn(fmt, args...);
                 consoleLogger->warn(fmt, args...);
-                DebugConsole::Instance()->addLog("[WARN]: %s", fmt::format(fmt, args...));
+                DebugConsole::Instance()->addLog("[WARN]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void error(const char* fmt, const Args&... args) {
                 fileLogger->error(fmt, args...);
                 consoleLogger->error(fmt, args...);
-                DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...));
+                DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...).c_str());
             }
 
             void dumpStack (lua_State *L);
