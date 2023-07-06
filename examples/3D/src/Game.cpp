@@ -17,6 +17,7 @@
 
 using namespace Villain;
 
+// Event Dispatcher Test
 #include "events/KeyboardEvent.hpp"
 class ExampleEventListener : public EventListener {
     virtual void handleEvent(Event& event) override {
@@ -31,19 +32,15 @@ class ExampleEventListener : public EventListener {
 };
 
 void Game::init() {
-    GLint result;
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
-    printf("Max vertex shader attrib count is %d\n", result);
-
-    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
-    printf("Max uniform location count is %d\n", result);
-
-
-    camera = new Camera();
-    camera->setZPlanes(0.1f, 1000.f); // for bigger render range
-    camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
+    loadScene("scene.xml");
 
     debugRenderer.init();
+    GLint result;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
+    VILLAIN_INFO("Max vertex shader attrib count is {}", result);
+
+    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
+    VILLAIN_INFO("Max uniform location count is {}", result);
 
     // Letting engine take care of the skybox
     getRootNode()->getEngine()->getRenderingEngine()->setSkybox(std::vector<std::string>{
@@ -54,47 +51,6 @@ void Game::init() {
         "assets/textures/skybox/front.jpg",
         "assets/textures/skybox/back.jpg"
     });
-
-    //ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate");
-    std::vector<VertexP1N1UV> vertices;
-    // nomals here are wrong cause im lazy, just wanted to get uv working cause it's 2nd vertex attrib, so need normals
-    vertices.push_back({glm::vec3(0.0f,  1.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.5f, 1.0f)});
-    vertices.push_back({glm::vec3(1.0f,  0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f)});
-    vertices.push_back({glm::vec3(-1.0f, 0.0f, -5.0f),glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
-    std::vector<unsigned int> indices = {0, 1, 2};
-    //std::vector<Texture*> textures = {ResourceManager::Instance()->getTexture("crate")};
-    Material mat("wood", ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate"), 8);
-    Mesh<VertexP1N1UV>* mesh = new Mesh<VertexP1N1UV>(vertices, indices);
-
-    SceneNode* planeNode = (new SceneNode("Mesh"))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-
-    SceneNode* testHierarchy = (new SceneNode("Mesh Child", glm::vec3(0.0f, 3.0f, 0.0f)))->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-    SceneNode* testHierarchyChild = new SceneNode("Mesh grandchild", glm::vec3(2.0f, 0.0f, 0.0f));
-    testHierarchyChild->addComponent(new MeshRenderer<VertexP1N1UV>(mesh, mat));
-    testHierarchy->getTransform()->setEulerRot(45.0f, 0.f, 0.f);
-
-    // Add camera
-    SceneNode* cam = (new SceneNode("Free look camera"))
-            ->addComponent(camera)
-            ->addComponent(new MoveController());
-            //->addComponent(new LookController());
-    addToScene(cam);
-
-    // Model renderer test
-    // 2023-04-04 - Currently ~12FPS with 3 light sources
-    // WIth frustum culling seeing increases from ~3 to ~10FPS, still not enough
-    Model* sponzaPalace = new Model("assets/models/sponza.obj");
-    SceneNode* modelNode = (new SceneNode("Sponza palace"))->addComponent(new ModelRenderer(sponzaPalace));
-    modelNode->getTransform()->setScale(0.1f);
-    // 2023-04-04 - Currently ~38FPS with 3 light sources
-    // Temporary using donut to fix issues
-    //modelNode->getTransform()->setScale(4.0f);
-    addToScene(modelNode);
-
-    Model* rockModel = new Model("assets/models/rock.obj");
-    SceneNode* rockNode = (new SceneNode("Rock", glm::vec3(2.f, 1.f, 0.f)))->addComponent(new ModelRenderer(rockModel));
-    rockNode->getTransform()->setScale(0.01f);
-    addToScene(rockNode);
 
     const unsigned NUM_INSTANCES = 1000;
     std::vector<glm::mat4> instanceTransforms;
@@ -111,7 +67,7 @@ void Game::init() {
 
     // TODO: Lights TEMP disabled
     // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
-    directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
+    SceneNode* directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
                 ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
     addToScene(directionalLight);
 
@@ -158,6 +114,7 @@ void Game::init() {
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
+    /*
     // Skeletal Animation demo
     Model* animatedModel = new Model("assets/models/mudeater.dae");
     SceneNode* animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel));
@@ -194,6 +151,7 @@ void Game::init() {
     thrillerNode->getTransform()->setScale(0.05);
     thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
     addToScene(thrillerNode);
+    */
 
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
@@ -213,18 +171,15 @@ void Game::onAppPostUpdate(float dt) {
 }
 
 void Game::onAppRender(float dt) {
-    glm::mat4 view = camera->getViewMatrix();
-    glm::mat4 projection = camera->getProjMatrix();
-
     // Draw coordinate gizmo
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-    // Directional light has no position, but we need to set some sort of position for shadow map! So this
-    // is just a representation os such position
-    //debugRenderer.drawSphere(directionalLight->getTransform()->getPos(), 1.0f, glm::vec4(0.8f, 1.0f, 0.0f, 1.0f));
-
     debugRenderer.end();
+    Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
+    glm::mat4 view = mainCamera->getViewMatrix();
+    glm::mat4 projection = mainCamera->getProjMatrix();
+
     debugRenderer.render(projection * view, 1.0f);
 }

@@ -5,9 +5,12 @@
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
+#include <filesystem>
 
-// Custom baked fonts for ImGui
+// Custom baked fonts for ImGui;
 #include "imgui/Roboto-Regular.h"
+
+namespace fs = std::filesystem;
 
 namespace Villain {
 
@@ -180,13 +183,10 @@ namespace Villain {
         DebugConsole::Instance()->render();
         drawScene(engine);
         sceneEditor.render(engine);
+        assetBrowser.render();
         drawSettings(engine);
-        drawAssetBrowser();
+        drawFileBrowser();
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-
-        //TODO: file browser to load assets
-        // some kind of scene manager or ECS manager
-        // some kind of tool to render stuff with DebugRenderer
     }
 
     void ImGuiLayer::end() {
@@ -328,67 +328,59 @@ namespace Villain {
             ImGui::ShowDemoWindow(&showDemoWindow);
     }
 
-    void ImGuiLayer::drawAssetBrowser() {
-        ImGui::Begin("Asset Browser");
+    void ImGuiLayer::drawFileBrowser() {
+        ImGui::Begin("File Browser");
         {
-            if (ImGui::TreeNode("Assets")) {
-                if (ImGui::TreeNode("Music")) {
-                    for (auto const& t: SoundManager::Instance()->getMusicMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            SoundManager::Instance()->playMusic(t.first);
+            // Get the current working directory
+            const fs::path& currentPath = fs::current_path();
 
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                if (ImGui::TreeNode("Shaders")) {
-                    for (auto const& t: ResourceManager::Instance()->getShaderMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                if (ImGui::TreeNode("Sound FX")) {
-                    for (auto const& t: SoundManager::Instance()->getSoundFXMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            SoundManager::Instance()->playSound(t.first);
-
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                if (ImGui::TreeNode("Textures")) {
-                    for (auto const& t: ResourceManager::Instance()->getTextureMap()) {
-                        if (ImGui::TreeNode(t.first.c_str())) {
-                            float width = ImGui::GetContentRegionAvail().x;
-                            float height = ImGui::GetContentRegionAvail().y;
-
-                            ImGui::Image(
-                                    (ImTextureID)t.second->getID(),
-                                    //ImGui::GetWindowSize(), // will respect aspect ratio of image
-                                    ImGui::GetContentRegionAvail(), // will squish image to fit it in
-                                    ImVec2(0, 1),
-                                    ImVec2(1, 0)
-                                    );
-
-                            ImGui::TreePop();
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-                // TODO: fonts, levels
-
-                ImGui::TreePop();
+            // Display the parent directory as a selectable button
+            if (ImGui::Button(".."))
+            {
+                // Navigate to the parent directory
+                const fs::path parentPath = currentPath.parent_path();
+                if (fs::exists(parentPath))
+                    fs::current_path(parentPath);
             }
+
+            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
+                drawFileBrowserPath(currentPath);
+
+                ImGui::EndPopup();
+            }
+
+            if (ImGui::Button("Open File Browser")) {
+                ImGui::OpenPopup("FileBrowserPopup");
+            }
+
+            drawFileBrowserPath(currentPath);
         }
         ImGui::End();
     }
+
+    void ImGuiLayer::drawFileBrowserPath(const fs::path& currentPath) {
+        for (const auto& entry : fs::directory_iterator(currentPath)) {
+            const auto& path = entry.path();
+
+            // Skip hidden files
+            if (entry.is_regular_file() && path.filename().string()[0] == '.')
+                continue;
+
+            if (entry.is_directory()) {
+                bool expanded = ImGui::TreeNode(path.filename().string().c_str());
+
+                if (expanded)
+                {
+                    drawFileBrowserPath(path);
+                    ImGui::TreePop();
+                }
+            }
+            else if (entry.is_regular_file())
+            {
+                ImGui::Text("%s", path.filename().string().c_str());
+            }
+        }
+    }
+
 }
 

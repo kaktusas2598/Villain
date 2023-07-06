@@ -1,5 +1,4 @@
-#ifndef __Model__
-#define __Model__
+#pragma once
 
 #include "Material.hpp"
 #include "Mesh.hpp"
@@ -82,5 +81,3 @@ namespace Villain {
             void processAnimations(const aiScene* scene);
     };
 }
-
-#endif // __Model__

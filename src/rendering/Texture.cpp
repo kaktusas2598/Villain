@@ -1,8 +1,7 @@
 #include "Texture.hpp"
 
+#include "Logger.hpp"
 #include "stb_image.h"
-
-#include <iostream>
 
 namespace Villain {
 
@@ -20,12 +19,12 @@ namespace Villain {
         if (!filePath.empty()) {
             // NOTE: Pass nullptr instead of &BPP and set desired channels to 4 to ensure consistency
             // Alternatively 3rd argument can be &BPP and 4th argument null, so that we actually set same BPP as in file
-            std::cout << "Loading texture: " << filePath.c_str() << ". Gamma corrected: " << texInfo.SRGB << "\n";
+            Logger::Instance()->info("Loading texture: {} Gamma corrected: {}", filePath, texInfo.SRGB);
             localBuffer = stbi_load(filePath.c_str(), &width, &height, nullptr, 4);
             BPP = 4;
 
             if (!localBuffer) {
-                std::cout << "Failed loading texture : " << filePath << std::endl;
+                Logger::Instance()->error("Failed loading texture: {}", filePath);
                 stbi_image_free(localBuffer);
                 return;
             }
@@ -150,7 +149,7 @@ namespace Villain {
         else if (BPP == 4)
             format = GL_RGBA;
         else
-            std::cout << "Unrecognized color format" << std::endl;
+            Logger::Instance()->error("Unrecognized colour format: {}", format);
 
         GLCall(glGenTextures(1, &rendererID));
         GLCall(glBindTexture(target, rendererID));
@@ -199,7 +198,7 @@ namespace Villain {
                             GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer));
                 stbi_image_free(localBuffer);
             } else {
-                std::cout << "Failed loading cubemap texture : " << faces[i] << std::endl;
+                Logger::Instance()->error("Failed loading cubemap texture : {}", faces[i]);
             }
         }
 
@@ -215,7 +214,8 @@ namespace Villain {
     }
 
     Texture::~Texture() {
-        std::cout << "Deleting texture: " << filePath << std::endl;
+        // TODO: add trace and debug methods to Logger
+        Logger::Instance()->info("Deleting texture: {}", filePath);
         GLCall(glDeleteTextures(1, &rendererID));
         if (localBuffer)
             stbi_image_free(localBuffer);

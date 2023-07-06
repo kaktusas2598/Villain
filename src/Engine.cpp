@@ -89,7 +89,7 @@ namespace Villain {
         // TODO: will need some configs here, gravity vector for example
         physicsEngine = std::make_unique<PhysicsEngine>(this);
         // NOTE: must be initialized before application
-        renderingEngine = new RenderingEngine(this);
+        renderingEngine = std::make_unique<RenderingEngine>(this);
 
         eventDispatcher = std::make_unique<EventDispatcher>();
 
@@ -255,7 +255,7 @@ namespace Villain {
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
         // let rendering engine take care of all things?
-        application->render(renderingEngine);
+        application->render(renderingEngine.get());
 
         application->onAppRender(deltaTime);
         physicsEngine->render();
@@ -264,7 +264,7 @@ namespace Villain {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         // Render additional fbos, apply post-processing fx
-        application->postRenderPass(renderingEngine);
+        application->postRenderPass(renderingEngine.get());
 
         // If in editor mode make sure to unbind fbos, so that we can render scene buffer in editor's viewport
         if (editMode)

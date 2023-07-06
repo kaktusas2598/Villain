@@ -5,7 +5,6 @@
 //#include "physics/ParticlePool.hpp"
 #include "physics/Particle.hpp"
 #include "physics/ParticleForceGenerator.hpp"
-#include "physics/generators/ParticleGravity.hpp"
 #include "rendering/Mesh.hpp"
 #include "rendering/MeshUtils.hpp"
 
@@ -50,21 +49,16 @@ namespace Villain {
                     Logger::Instance()->error("Particle shape not supported");
                 }
 
-                ParticleGravity* gravityGenerator = new ParticleGravity(glm::vec3(0.0f, -1.0f, 0.0f));
+                initialiseForceGenerators();
 
                 instanceMatrices.reserve(numParticles);
                 for (int i = 0; i < numParticles; i++) {
-                    // Attach gravity generator to each particle
-                    registry.add(&particleArray[i], gravityGenerator);
-                    particleArray[i].setMass(2.0f); // 2kg
-                    particleArray[i].setPosition(glm::vec3(0.0f, 2.0f, 0.0f));
-                    particleArray[i].setVelocity(glm::vec3(0.0f, 0.0f, 35.0f)); // 35 m/s
-                    particleArray[i].setDamping(0.99f);
                     instanceMatrices.push_back(glm::mat4(1.0f));
                 }
 
                 // quad Vertices and Indices gets passed to constructor of new Mesh here so we can pass instancing data to constructor
                 particleQuadMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices, numParticles, instanceMatrices);
+
             }
 
             virtual void render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
@@ -80,13 +74,25 @@ namespace Villain {
 
             ParticleForceRegistry registry;
 
+            void initialiseForceGenerators();
+
             // TEMP for testing particle attributes for now
             int particleType = 0;
             void setParticleType(ParticleType newType);
 
+            // Different indices represent which forces will be applied to which particles for testing force generators
+            int springAParticleIndex = 0;
+            int springBParticleIndex = 1;
+            int anchoredParticleIndex = 2;
+            int bungeeAParticleIndex = 3;
+            int bungeeBParticleIndex = 4;
+            int anchoredBungeeParticleIndex = 5;
+            int buoyancyParticleIndex = 6;
+            int fakeStiffSpringParticleIndex = 7;
+            int projectileParticleStart = 8;
+
             // Inspired by Mesh Renderer
             Mesh<VertexP1N1T1B1UV>* particleQuadMesh;
             Material particleMaterial;
-
     };
 }

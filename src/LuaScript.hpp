@@ -1,5 +1,4 @@
-#ifndef __LuaScript__
-#define __LuaScript__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -206,5 +205,3 @@ namespace Villain {
         return v;
     }
 }
-
-#endif // __LuaScript__

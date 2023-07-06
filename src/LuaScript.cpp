@@ -10,7 +10,7 @@ namespace Villain {
     }
 
     LuaScript::~LuaScript() {
-        Logger::Instance()->info("Closing Lua state.");
+        Logger::Instance()->info("Closing Lua state. Script: {}", fileName);
         if (L) {
             lua_close(L);
         }
