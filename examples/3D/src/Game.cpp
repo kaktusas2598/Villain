@@ -42,16 +42,15 @@ void Game::init() {
     glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
     VILLAIN_INFO("Max uniform location count is {}", result);
 
-    std::vector<std::string> faces{
+    // Letting engine take care of the skybox
+    getRootNode()->getEngine()->getRenderingEngine()->setSkybox(std::vector<std::string>{
         "assets/textures/skybox/right.jpg",
         "assets/textures/skybox/left.jpg",
         "assets/textures/skybox/top.jpg",
         "assets/textures/skybox/bottom.jpg",
         "assets/textures/skybox/front.jpg",
         "assets/textures/skybox/back.jpg"
-    };
-
-    skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
+    });
 
     const unsigned NUM_INSTANCES = 1000;
     std::vector<glm::mat4> instanceTransforms;
@@ -183,6 +182,4 @@ void Game::onAppRender(float dt) {
     glm::mat4 projection = mainCamera->getProjMatrix();
 
     debugRenderer.render(projection * view, 1.0f);
-
-    skybox->render(projection, view);
 }

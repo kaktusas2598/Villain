@@ -7,6 +7,7 @@
 #include "SceneNode.hpp"
 #include "Vertex.hpp"
 #include "rendering/PickingTexture.hpp"
+#include "rendering/SkyBox.hpp"
 
 namespace Villain {
 
@@ -35,6 +36,7 @@ namespace Villain {
             static bool gammaCorrectionEnabled() { return gammaCorrection; }
             int getSelectedNodeID() const { return selectedNodeID; }
             void setSelectedNodeID(int id) { selectedNodeID = id; }
+            void setSkybox(const std::vector<std::string>& faces);
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }
@@ -72,8 +74,13 @@ namespace Villain {
             FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
 
+            // Mouse picking attributes
             PickingTexture* pickingTexture = nullptr;
             Shader* pickingShader = nullptr;
+
+            // Optional Skybox attrivutes
+            SkyBox* currentSkybox = nullptr;
+            Shader* skyboxShader = nullptr;
 
             Shader* defaultShader = nullptr;
             Shader* postFXShader = nullptr;

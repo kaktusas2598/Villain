@@ -5,7 +5,6 @@
 #include "camera/Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/Model.hpp"
-#include "rendering/SkyBox.hpp"
 
 class Game : public Villain::Application {
     public:
@@ -20,6 +19,7 @@ class Game : public Villain::Application {
 
     private:
         std::unique_ptr<Villain::SkyBox> skybox;
+        Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
 };
 
