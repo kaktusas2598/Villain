@@ -47,15 +47,17 @@ namespace Villain {
         if (nameAttr)
             nodeName = nameAttr;
 
-
         // Optional Attribs for node
-        float scale = 1.0f, positionX = 0.0f, positionY = 0.0f, positionZ = 0.0f;
+        float scale = 1.0f, positionX = 0.0f, positionY = 0.0f, positionZ = 0.0f, rotX = 0.0f, rotY = 0.0f, rotZ = 0.0f;
         nodeRoot->QueryFloatAttribute("scale", &scale);
         nodeRoot->QueryFloatAttribute("positionX", &positionX);
         nodeRoot->QueryFloatAttribute("positionY", &positionY);
         nodeRoot->QueryFloatAttribute("positionZ", &positionZ);
+        nodeRoot->QueryFloatAttribute("rotX", &rotX);
+        nodeRoot->QueryFloatAttribute("rotY", &rotY);
+        nodeRoot->QueryFloatAttribute("rotZ", &rotZ);
 
-        SceneNode* currentNode = new SceneNode(nodeName, {positionX, positionY, positionZ}, {}, scale);
+        SceneNode* currentNode = new SceneNode(nodeName, {positionX, positionY, positionZ}, {rotX, rotY, rotZ}, scale);
 
         for (tinyxml2::XMLElement *e = nodeRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             // Parse components
@@ -80,6 +82,8 @@ namespace Villain {
                             camera->setZFar(zFar);
                         }
 
+                        // NOTE: ATM every Camera as a NodeComponent is made main engine camera in addToEngine() method
+                        // but probably this will change in the future and this flag will be needed
                         //if (component->QueryBoolAttribute("main", &isMain) == tinyxml2::XML_SUCCESS) {
                             //parentNode->getEngine()->getRenderingEngine()->setMainCamera(*camera);
                         //}
