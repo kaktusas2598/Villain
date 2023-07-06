@@ -12,6 +12,7 @@ namespace Villain {
             void saveSceneGraph(const std::string& fileName, SceneNode* rootNode);
         private:
             void parseSceneNode(tinyxml2::XMLElement* nodeRoot, SceneNode* parentNode);
+            void parseProperties(tinyxml2::XMLElement* e, SceneNode* rootNode);
 
     };
 }

@@ -32,9 +32,8 @@ namespace Villain {
             if (e->Value() == std::string("Node"))
                     parseSceneNode(e, rootNode);
 
-            // TODO:
-            //if (e->Value() == std::string("Properties"))
-                    //parseProperties(e, rootNode);
+            if (e->Value() == std::string("Properties"))
+                    parseProperties(e, rootNode);
         }
     }
 
@@ -105,4 +104,30 @@ namespace Villain {
         }
         parentNode->addChild(currentNode);
     }
+
+    void SceneParser::parseProperties(tinyxml2::XMLElement* e, SceneNode* rootNode) {
+
+        for (tinyxml2::XMLElement *property = e->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
+            if (property->Value() == std::string("Skybox")) {
+                std::vector<std::string> faces;
+                faces.resize(6);
+                for (tinyxml2::XMLElement *face = property->FirstChildElement(); face != NULL; face = face->NextSiblingElement()) {
+                    if (face->Value() == std::string("Right"))
+                        faces[0] = face->GetText();
+                    if (face->Value() == std::string("Left"))
+                        faces[1] = face->GetText();
+                    if (face->Value() == std::string("Top"))
+                        faces[2] = face->GetText();
+                    if (face->Value() == std::string("Bottom"))
+                        faces[3] = face->GetText();
+                    if (face->Value() == std::string("Front"))
+                        faces[4] = face->GetText();
+                    if (face->Value() == std::string("Back"))
+                        faces[5] = face->GetText();
+                }
+                rootNode->getEngine()->getRenderingEngine()->setSkybox(faces);
+            }
+        }
+    }
+
 }

@@ -1,12 +1,12 @@
 <Root>
     <Properties>
         <Skybox>
-            <!--"assets/textures/skybox/right.jpg"-->
-            <!--"assets/textures/skybox/left.jpg"-->
-            <!--"assets/textures/skybox/top.jpg"-->
-            <!--"assets/textures/skybox/bottom.jpg"-->
-            <!--"assets/textures/skybox/front.jpg"-->
-            <!--"assets/textures/skybox/back.jpg"-->
+            <Right>assets/textures/skybox/right.jpg</Right>
+            <Left>assets/textures/skybox/left.jpg</Left>
+            <Top>assets/textures/skybox/top.jpg</Top>
+            <Bottom>assets/textures/skybox/bottom.jpg</Bottom>
+            <Front>assets/textures/skybox/front.jpg</Front>
+            <Back>assets/textures/skybox/back.jpg</Back>
         </Skybox>
     </Properties>
     <Node name="Sponza Palace" scale='0.1'>
