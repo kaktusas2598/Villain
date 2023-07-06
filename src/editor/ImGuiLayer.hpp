@@ -1,5 +1,4 @@
-#ifndef __IMGUI_LAYER__
-#define __IMGUI_LAYER__
+#pragma once
 
 #include "glm/glm.hpp"
 #include "imgui/imgui.h"
@@ -7,6 +6,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include <filesystem>
 
+#include "AssetBrowser.hpp"
 #include "SceneGraphEditor.hpp"
 namespace fs = std::filesystem;
 
@@ -42,9 +42,9 @@ namespace Villain {
         void drawMenu();
         void drawScene(Engine& engine);
         void drawSettings(Engine& engine);
-        // TODO: move assets and file to new class
-        void drawAssetBrowser();
-        void drawFileBrowser(const fs::path& currentPath);
+        // TODO: refactor into new class
+        void drawFileBrowser();
+        void drawFileBrowserPath(const fs::path& currentPath);
     private:
         void setupDockspace();
 
@@ -56,7 +56,6 @@ namespace Villain {
         glm::vec2 mousePosRelativeToSceneViewport{0.0f};
 
         SceneGraphEditor sceneEditor;
+        AssetBrowser assetBrowser;
     };
 }
-
-#endif // __IMGUI_LAYER__
