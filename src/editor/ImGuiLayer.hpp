@@ -45,6 +45,9 @@ namespace Villain {
         // TODO: refactor into new class
         void drawFileBrowser();
         void drawFileBrowserPath(const fs::path& currentPath);
+
+        // Render font awesome 6 icon, code point example - "\uf07c" for folder open icon
+        void renderIcon(const std::string& codePoint, float scale = 1.0f);
     private:
         void setupDockspace();
 
@@ -57,5 +60,8 @@ namespace Villain {
 
         SceneGraphEditor sceneEditor;
         AssetBrowser assetBrowser;
+
+        ImFont* fontAwesome6;
+        ImFont* robotoFont;
     };
 }

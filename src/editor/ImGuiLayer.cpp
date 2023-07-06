@@ -8,6 +8,7 @@
 #include <filesystem>
 
 // Custom baked fonts for ImGui;
+#include "imgui/fontawesome6.h"
 #include "imgui/Roboto-Regular.h"
 
 namespace fs = std::filesystem;
@@ -36,7 +37,9 @@ namespace Villain {
         // Add custom fonts built by ImGui's binary_to_compressed_c script!
         ImFontConfig config;
         config.PixelSnapH = true;
-        io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        ImWchar rangesFontAwesome[] = { 0xF000, 0xF8FF, 0 };
+        fontAwesome6 = io.Fonts->AddFontFromMemoryCompressedTTF(fontawesome6_compressed_data, fontawesome6_compressed_size, 16.0f, &config, rangesFontAwesome);
         io.Fonts->Build();
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
@@ -207,6 +210,15 @@ namespace Villain {
         ImGui::EndFrame();
     }
 
+    void ImGuiLayer::renderIcon(const std::string& codePoint, float scale) {
+        // Icon test
+        fontAwesome6->Scale = scale;
+        ImGui::PushFont(fontAwesome6);
+        ImGui::Text("%s", codePoint.c_str());
+        ImGui::PopFont();
+        fontAwesome6->Scale = 1.0f;
+    }
+
     void ImGuiLayer::drawMenu() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
@@ -352,6 +364,7 @@ namespace Villain {
             if (ImGui::Button("Open File Browser")) {
                 ImGui::OpenPopup("FileBrowserPopup");
             }
+            ImGui::SameLine(); renderIcon("\uf07c");
 
             drawFileBrowserPath(currentPath);
         }
