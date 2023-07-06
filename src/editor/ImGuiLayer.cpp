@@ -5,9 +5,12 @@
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
+#include <filesystem>
 
-// Custom baked fonts for ImGui
+// Custom baked fonts for ImGui;
 #include "imgui/Roboto-Regular.h"
+
+namespace fs = std::filesystem;
 
 namespace Villain {
 
@@ -329,8 +332,52 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawAssetBrowser() {
+        ImGui::Begin("File Browser");
+        {
+            // Get the current working directory
+            const fs::path& currentPath = fs::current_path();
+
+            // Display the parent directory as a selectable button
+            if (ImGui::Button(".."))
+            {
+                // Navigate to the parent directory
+                const fs::path parentPath = currentPath.parent_path();
+                if (fs::exists(parentPath))
+                    fs::current_path(parentPath);
+            }
+
+            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
+                drawFileBrowser(currentPath);
+
+                ImGui::EndPopup();
+            }
+
+            if (ImGui::Button("Open File Browser")) {
+                ImGui::OpenPopup("FileBrowserPopup");
+            }
+
+            drawFileBrowser(currentPath);
+        }
+        ImGui::End();
+
         ImGui::Begin("Asset Browser");
         {
+            for (const auto& entry: fs::directory_iterator(fs::current_path())) {
+                const auto& path = entry.path();
+
+                // Skip hidden files
+                if (entry.is_regular_file() && path.filename().string()[0] == '.') {
+                    continue;
+                }
+
+                if (entry.is_directory()) {
+                    bool expanded = ImGui::TreeNode(path.filename().c_str());
+
+                    if (expanded) {
+
+                    }
+                }
+            }
             if (ImGui::TreeNode("Assets")) {
                 if (ImGui::TreeNode("Music")) {
                     for (auto const& t: SoundManager::Instance()->getMusicMap()) {
@@ -390,5 +437,30 @@ namespace Villain {
         }
         ImGui::End();
     }
+
+    void ImGuiLayer::drawFileBrowser(const fs::path& currentPath) {
+        for (const auto& entry : fs::directory_iterator(currentPath)) {
+            const auto& path = entry.path();
+
+            // Skip hidden files
+            if (entry.is_regular_file() && path.filename().string()[0] == '.')
+                continue;
+
+            if (entry.is_directory()) {
+                bool expanded = ImGui::TreeNode(path.filename().string().c_str());
+
+                if (expanded)
+                {
+                    drawFileBrowser(path);
+                    ImGui::TreePop();
+                }
+            }
+            else if (entry.is_regular_file())
+            {
+                ImGui::Text("%s", path.filename().string().c_str());
+            }
+        }
+    }
+
 }
 

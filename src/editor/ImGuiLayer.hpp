@@ -5,8 +5,10 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include <filesystem>
 
 #include "SceneGraphEditor.hpp"
+namespace fs = std::filesystem;
 
 namespace Villain {
 
@@ -40,7 +42,9 @@ namespace Villain {
         void drawMenu();
         void drawScene(Engine& engine);
         void drawSettings(Engine& engine);
+        // TODO: move assets and file to new class
         void drawAssetBrowser();
+        void drawFileBrowser(const fs::path& currentPath);
     private:
         void setupDockspace();
 
