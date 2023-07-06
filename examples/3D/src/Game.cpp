@@ -35,12 +35,12 @@ void Game::init() {
     loadScene("scene.xml");
 
     debugRenderer.init();
-    //GLint result;
-    //glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
-    //printf("Max vertex shader attrib count is %d\n", result);
+    GLint result;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
+    VILLAIN_INFO("Max vertex shader attrib count is {}", result);
 
-    //glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
-    //printf("Max uniform location count is %d\n", result);
+    glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
+    VILLAIN_INFO("Max uniform location count is {}", result);
 
     std::vector<std::string> faces{
         "assets/textures/skybox/right.jpg",

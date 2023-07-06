@@ -9,6 +9,11 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+// Logging macros to simplify logging in the engine
+#define VILLAIN_INFO(fmt, ...) Villain::Logger::Instance()->info(fmt, __VA_ARGS__)
+#define VILLAIN_WARN(fmt, ...) Villain::Logger::Instance()->warn(fmt, __VA_ARGS__)
+#define VILLAIN_ERROR(fmt, ...) Villain::Logger::Instance()->error(fmt, __VA_ARGS__)
+
 namespace Villain {
 
     // Main Villain Engine logging utility, using spdlog and variadic templates to log formatted messages
