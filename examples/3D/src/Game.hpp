@@ -18,8 +18,6 @@ class Game : public Villain::Application {
         void onAppRender(float deltaTime);
 
     private:
-        std::unique_ptr<Villain::SkyBox> skybox;
-        Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
 };
 

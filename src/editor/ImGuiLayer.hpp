@@ -52,6 +52,7 @@ namespace Villain {
         void setupDockspace();
 
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
+        static bool openScenePopup;
         static ImVec4 clearColor;
 
         float sceneViewportWidth = 0, sceneViewportHeight = 0;

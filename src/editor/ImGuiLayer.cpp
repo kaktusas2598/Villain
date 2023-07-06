@@ -16,6 +16,7 @@ namespace fs = std::filesystem;
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
+    bool ImGuiLayer::openScenePopup = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     void ImGuiLayer::exit() {
@@ -222,6 +223,11 @@ namespace Villain {
     void ImGuiLayer::drawMenu() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Open")) {
+                    openScenePopup = true;
+                }
+                ImGui::SameLine(); renderIcon("\uf07c");
+
                 if (ImGui::MenuItem("Quit")) {
                     Engine::setRunning(false);
                 }
@@ -341,30 +347,37 @@ namespace Villain {
     }
 
     void ImGuiLayer::drawFileBrowser() {
+        // Get the current working directory
+        const fs::path& currentPath = fs::current_path();
+
         ImGui::Begin("File Browser");
         {
-            // Get the current working directory
-            const fs::path& currentPath = fs::current_path();
+            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
+                // Display the parent directory as a selectable button
+                if (ImGui::Button("..")) {
+                    // Navigate to the parent directory
+                    const fs::path parentPath = currentPath.parent_path();
+                    if (fs::exists(parentPath))
+                        fs::current_path(parentPath);
+                }
 
+                drawFileBrowserPath(currentPath);
+
+                ImGui::EndPopup();
+
+            }
+            if (openScenePopup || ImGui::Button("Open File Browser")) {
+                ImGui::OpenPopup("FileBrowserPopup");
+                openScenePopup = false;
+            }
             // Display the parent directory as a selectable button
-            if (ImGui::Button(".."))
-            {
+            if (ImGui::Button("..")) {
                 // Navigate to the parent directory
                 const fs::path parentPath = currentPath.parent_path();
                 if (fs::exists(parentPath))
                     fs::current_path(parentPath);
             }
 
-            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
-                drawFileBrowserPath(currentPath);
-
-                ImGui::EndPopup();
-            }
-
-            if (ImGui::Button("Open File Browser")) {
-                ImGui::OpenPopup("FileBrowserPopup");
-            }
-            ImGui::SameLine(); renderIcon("\uf07c");
 
             drawFileBrowserPath(currentPath);
         }
