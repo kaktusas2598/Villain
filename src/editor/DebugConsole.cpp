@@ -128,12 +128,13 @@ namespace Villain {
 
                 // Normally you would store more information in your item than just a string.
                 // (e.g. make Items[] an array of structure, store color/type etc.)
-                ImVec4 color;
+                ImVec4 color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
                 bool has_color = false;
-                if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
+                if (strstr(item, "[ERROR]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
                 else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
-                else if (strstr(item, "[lua]") == 0) { color = ImVec4(0.4f, 1.0f, 0.4f, 1.0f); has_color = true; }
-                else if (strstr(item, "[info]") == 0) { color = ImVec4(0.44f, 0.7f, 0.09f, 1.0f); has_color = true; }
+                else if (strstr(item, "[LUA]")) { color = ImVec4(0.4f, 1.0f, 0.4f, 1.0f); has_color = true; }
+                else if (strstr(item, "[INFO]")) { color = ImVec4(0.44f, 0.7f, 0.09f, 1.0f); has_color = true; }
+                else if (strstr(item, "[WARN]")) { color = ImVec4(1.0f, 1.0f, 0.23f, 1.0f); has_color = true; }
                 if (has_color)
                     ImGui::PushStyleColor(ImGuiCol_Text, color);
                 ImGui::TextUnformatted(item);
