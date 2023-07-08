@@ -69,7 +69,7 @@ namespace Villain {
 
     template <class VertexType>
     void Mesh<VertexType>::setupInstancedAttributes() {
-        vbo->bind();
+        vao->bind();
         unsigned attributeLocation = VertexType::getVertexLayout().getNumOfElements();
         instanceVbo = std::make_unique<VertexBuffer>(instanceMatrix.data(), sizeof(glm::mat4) * instanceMatrix.size());
 
