@@ -15,7 +15,7 @@ namespace Villain {
             virtual unsigned addContact(ParticleContact* contact, unsigned limit) const = 0;
 
         protected:
-            float currentLenght() const {
+            float getCurrentLenght() const {
                 glm::vec3 relativePos = particle[0]->getPosition() - particle[1]->getPosition();
                 return glm::length(relativePos);
             }

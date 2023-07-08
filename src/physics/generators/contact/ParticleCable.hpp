@@ -9,12 +9,10 @@ namespace Villain {
         public:
             // Fill in given contact pointer with contact needed to prevent the cable from overextending
             virtual unsigned addContact(ParticleContact* contact, unsigned limit) const override {
-                float lenght = currentLenght();
+                float lenght = getCurrentLenght();
 
                 // Check if the cable is overextended
-                if (lenght < maxLenght) {
-                    return 0;
-                }
+                if (lenght < maxLenght) return 0;
 
                 // Otherwise, get the contact
                 contact->particle[0] = particle[0];
