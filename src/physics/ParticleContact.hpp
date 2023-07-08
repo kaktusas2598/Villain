@@ -50,6 +50,6 @@ namespace Villain {
             // Fills givent contact structure with generated contact. Contact pointer should point to
             // the first available contact in contact array, where limit is the maximum number of contacts that
             // can be written to. Returns number of contacts written to
-            virtual unsigned addContact(ParticleContact* contact, unsigned limit) = 0;
+            virtual unsigned addContact(ParticleContact* contact, unsigned limit) const = 0;
     };
 }
