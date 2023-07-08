@@ -13,7 +13,6 @@ namespace fs = std::filesystem;
 namespace Villain {
 
     class Engine;
-    class SceneNode;
     class Window;
 
     class ImGuiLayer {
@@ -35,7 +34,6 @@ namespace Villain {
         float getSceneViewportWidth() const { return sceneViewportWidth; }
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
-        //void setSelectedNode(SceneNode* node) { selectedNode = node; }
         SceneGraphEditor& getSceneEditor() { return sceneEditor; }
 
         // Draw different tools, can potentially be refactored to new classes
