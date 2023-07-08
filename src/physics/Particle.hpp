@@ -47,6 +47,11 @@ namespace Villain {
                 return age < lifetime;
             }
 
+            void clearAccumulator() {
+                acceleration = glm::vec3(0.0f);
+                forceAccum = glm::vec3(0.0f);
+            }
+
         protected:
             glm::vec3 position; //< Linear position in world space
             glm::vec3 velocity; //< Linear velocity in world space
@@ -60,12 +65,6 @@ namespace Villain {
             // NOTE: Not sure if we want to keep these here, or possibly inherit Particle
             float lifetime = -1; //<<< By default particle will live forever;
             float age = 0;
-
-        private:
-            void clearAccumulator() {
-                acceleration = glm::vec3(0.0f);
-                forceAccum = glm::vec3(0.0f);
-            }
     };
 
 };
