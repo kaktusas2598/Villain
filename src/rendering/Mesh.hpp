@@ -54,6 +54,7 @@ namespace Villain {
             std::unique_ptr<VertexBuffer> instanceVbo;
 
             void setupMesh();
+            void setupInstancedAttributes();
     };
 
     // Helper method to generate Sphere shaped bounding volume to fit mesh in
