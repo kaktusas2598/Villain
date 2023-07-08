@@ -3,6 +3,8 @@
 namespace Villain {
 
     void ParticleContact::resolve(float deltaTime) {
+        // Possible to investigate time-division engine approach which is more time consuming but requires
+        // no resolving intepenetration, that way we have multiple updates per frame handling collisions
         resolveVelocity(deltaTime);
         resolveInterpenetration(deltaTime);
     }
