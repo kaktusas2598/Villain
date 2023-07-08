@@ -7,6 +7,7 @@
 
 #include "editor/DebugConsole.hpp"
 #include "editor/ImGuiLayer.hpp"
+#include "physics/ParticleWorld.hpp"
 #include "physics/PhysicsEngine.hpp"
 #include "rendering/FrameBuffer.hpp"
 #include "rendering/RendereringEngine.hpp"
@@ -58,6 +59,7 @@ namespace Villain {
             bool* wireFrameModeActive() { return &wireFrameMode; }
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
+            inline ParticleWorld* getParticleWorld() { return particleWorld.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine.get(); }
             inline Application* getApplication() { return application; }
             inline EventDispatcher* getEventDispatcher() { return eventDispatcher.get(); }
@@ -91,6 +93,7 @@ namespace Villain {
             struct nk_context* nuklearContext; //< Nuklear UI context
 
             std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;
+            std::unique_ptr<ParticleWorld> particleWorld = nullptr;
             std::unique_ptr<RenderingEngine> renderingEngine = nullptr;
             Application* application = nullptr; //< User engine application
             std::unique_ptr<EventDispatcher> eventDispatcher;

@@ -88,6 +88,8 @@ namespace Villain {
 
         // TODO: will need some configs here, gravity vector for example
         physicsEngine = std::make_unique<PhysicsEngine>(this);
+        // TODO: ability to set custom number of contacts
+        particleWorld = std::make_unique<ParticleWorld>(200);
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
@@ -384,6 +386,9 @@ namespace Villain {
                 screenWidth = event.window.data1;
                 screenHeight = event.window.data2;
                 sceneBuffer->rescale(screenWidth, screenHeight);
+                //ImGuiIO& io = ImGui::GetIO();
+                //io.DisplaySize = ImVec2(screenWidth, screenHeight);
+                //io.DisplayFramebufferScale = ImVec2(1.0, 1.0);
                 glViewport(0, 0, screenWidth, screenHeight);
                 {
                     WindowResizeEvent resizeEvent = WindowResizeEvent(screenWidth, screenHeight);

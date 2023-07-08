@@ -1,13 +1,13 @@
 #include "ParticleEmitter.hpp"
 #include "InputManager.hpp"
 
-#include "physics/generators/ParticleAnchoredBungee.hpp"
-#include "physics/generators/ParticleAnchoredSpring.hpp"
-#include "physics/generators/ParticleBungee.hpp"
-#include "physics/generators/ParticleBuoyancy.hpp"
-#include "physics/generators/ParticleFakeSpring.hpp"
-#include "physics/generators/ParticleGravity.hpp"
-#include "physics/generators/ParticleSpring.hpp"
+#include "physics/generators/force/ParticleAnchoredBungee.hpp"
+#include "physics/generators/force/ParticleAnchoredSpring.hpp"
+#include "physics/generators/force/ParticleBungee.hpp"
+#include "physics/generators/force/ParticleBuoyancy.hpp"
+#include "physics/generators/force/ParticleFakeSpring.hpp"
+#include "physics/generators/force/ParticleGravity.hpp"
+#include "physics/generators/force/ParticleSpring.hpp"
 
 #include <glm/gtx/string_cast.hpp>
 
