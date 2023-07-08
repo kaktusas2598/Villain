@@ -10,6 +10,7 @@
 // Custom baked fonts for ImGui;
 #include "imgui/fontawesome6.h"
 #include "imgui/Roboto-Regular.h"
+#include "imgui/source_sans_pro_regular.h"
 
 namespace fs = std::filesystem;
 
@@ -38,7 +39,10 @@ namespace Villain {
         // Add custom fonts built by ImGui's binary_to_compressed_c script!
         ImFontConfig config;
         config.PixelSnapH = true;
-        robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        //robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        ImFontGlyphRangesBuilder glyphRangeBuilder;
+        glyphRangeBuilder.AddRanges(io.Fonts->GetGlyphRangesDefault());
+        robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(source_sans_pro_regular_compressed_data, source_sans_pro_regular_compressed_size, 21.0f, &config, io.Fonts->GetGlyphRangesDefault());
         ImWchar rangesFontAwesome[] = { 0xF000, 0xF8FF, 0 };
         fontAwesome6 = io.Fonts->AddFontFromMemoryCompressedTTF(fontawesome6_compressed_data, fontawesome6_compressed_size, 16.0f, &config, rangesFontAwesome);
         io.Fonts->Build();
