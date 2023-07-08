@@ -8,6 +8,8 @@ namespace Villain {
     // generating max 2 contacts if they stray too far apart or are too close
     class ParticleRod : public ParticleLink {
         public:
+            ParticleRod(float rodLenght, Particle* p0, Particle* p1): ParticleLink(p0, p1), lenght(rodLenght) {}
+
             // Fill in given contact pointer with contact needed to prevent the rod from overextending or compressing
             virtual unsigned addContact(ParticleContact* contact, unsigned limit) const override {
                 float currentLength = getCurrentLenght();

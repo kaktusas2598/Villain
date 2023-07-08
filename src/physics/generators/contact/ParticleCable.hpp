@@ -7,6 +7,9 @@ namespace Villain {
     // Cables link a pair of particles generating a contact if they stray too far apart
     class ParticleCable : public ParticleLink {
         public:
+            ParticleCable(float maxCableLength, float rest, Particle* p0, Particle* p1)
+                : ParticleLink(p0, p1), maxLenght(maxCableLength), restitution(rest) {}
+
             // Fill in given contact pointer with contact needed to prevent the cable from overextending
             virtual unsigned addContact(ParticleContact* contact, unsigned limit) const override {
                 float lenght = getCurrentLenght();

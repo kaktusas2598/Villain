@@ -29,6 +29,11 @@ namespace Villain {
             // Calls every registered contact generator and returns total number of generated contacts
             unsigned generateContacts();
 
+            // Getters
+            Particles& getParticles() { return particles; }
+            ContactGenerators& getContactGenerators() { return contactGenerators; }
+            ParticleForceRegistry& getForceRegistry() { return registry; }
+
         protected:
             Particles particles; //< All particles in this world
             ParticleForceRegistry registry; //< All force generators in this world
