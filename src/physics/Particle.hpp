@@ -48,7 +48,6 @@ namespace Villain {
             }
 
             void clearAccumulator() {
-                acceleration = glm::vec3(0.0f);
                 forceAccum = glm::vec3(0.0f);
             }
 
