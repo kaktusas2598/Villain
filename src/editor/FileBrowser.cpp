@@ -59,7 +59,9 @@ namespace Villain {
 
             if (entry.is_directory()) {
                 bool expanded = ImGui::TreeNode(path.filename().string().c_str());
-                ImGui::SameLine(); editor->renderIcon("\uf07c");
+                // Position the icon at the rightmost side of the tree node
+                ImGui::SameLine(ImGui::GetContentRegionAvail().x - ImGui::GetTextLineHeightWithSpacing());
+                editor->renderIcon("\uf07c");
 
                 if (expanded) {
                     drawFileBrowserPath(path);
@@ -77,7 +79,10 @@ namespace Villain {
                     // Select file
                     selectedFile = path.string();
                 }
-                ImGui::SameLine(); editor->renderIcon("\uf15b");
+
+                // Position the icon at the rightmost side of the selectable item
+                ImGui::SameLine(ImGui::GetContentRegionAvail().x - ImGui::GetTextLineHeightWithSpacing());
+                editor->renderIcon("\uf15b");
             }
         }
     }
