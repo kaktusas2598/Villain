@@ -34,6 +34,31 @@ namespace Villain {
         return color;
     }
 
+    glm::vec3 parseColorAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attributeName) {
+        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
+        if (childElement) {
+            const char* color = nullptr;
+            if (childElement->QueryStringAttribute(attributeName, &color) == tinyxml2::XML_SUCCESS) {
+                return hexToVec3(color);
+            }
+        }
+        return glm::vec3(0.0f);
+    }
+
+    glm::vec3 parseVec3Element(tinyxml2::XMLElement* element, const std::string& elementName,
+            const std::string& x = "x", const std::string& y = "y", const std::string& z = "z") {
+        glm::vec3 vec3Value;
+
+        tinyxml2::XMLElement* vec3Element = element->FirstChildElement(elementName.c_str());
+        if (vec3Element) {
+            vec3Value.x = vec3Element->FloatAttribute(x.c_str());
+            vec3Value.y = vec3Element->FloatAttribute(y.c_str());
+            vec3Value.z = vec3Element->FloatAttribute(z.c_str());
+        }
+
+        return vec3Value;
+    }
+
     void SceneParser::loadSceneGraph(const std::string& fileName, SceneNode* rootNode) {
         tinyxml2::XMLDocument xmlDoc;
 
@@ -126,32 +151,31 @@ namespace Villain {
                     }
 
                     if (component->Attribute("type") == std::string("DirectionalLight")) {
-                        glm::vec3 ambient, diffuse, specular;
-                        float x, y, z;
-                        for (tinyxml2::XMLElement *lightAttrib = component->FirstChildElement();
-                                lightAttrib != NULL; lightAttrib = lightAttrib->NextSiblingElement()) {
-                            const char* color = nullptr;
-                            if (lightAttrib->Value() == std::string("Ambient")) {
-                                lightAttrib->QueryStringAttribute("color", &color);
-                                ambient = hexToVec3(color);
-                            }
-                            if (lightAttrib->Value() == std::string("Diffuse")) {
-                                lightAttrib->QueryStringAttribute("color", &color);
-                                diffuse = hexToVec3(color);
-                            }
-                            if (lightAttrib->Value() == std::string("Specular")) {
-                                lightAttrib->QueryStringAttribute("color", &color);
-                                specular = hexToVec3(color);
-                            }
-                            if (lightAttrib->Value() == std::string("Direction")) {
-                                x = lightAttrib->FloatAttribute("x");
-                                y = lightAttrib->FloatAttribute("y");
-                                z = lightAttrib->FloatAttribute("z");
-                            }
-                        }
+                        glm::vec3 ambient, diffuse, specular, direction;
+                        ambient = parseColorAttribute(component, "Ambient", "color");
+                        diffuse = parseColorAttribute(component, "Diffuse", "color");
+                        specular = parseColorAttribute(component, "Specular", "color");
+                        direction = parseVec3Element(component, "Direction");
 
-                        DirectionalLight* light = new DirectionalLight(ambient, diffuse, specular, {x, y, z});
+                        DirectionalLight* light = new DirectionalLight(ambient, diffuse, specular, direction);
                         currentNode->addComponent(light);
+                    }
+
+                    if (component->Attribute("type") == std::string("PointLight")) {
+                        glm::vec3 ambient, diffuse, specular, attenuation;
+                        ambient = parseColorAttribute(component, "Ambient", "color");
+                        diffuse = parseColorAttribute(component, "Diffuse", "color");
+                        specular = parseColorAttribute(component, "Specular", "color");
+                        attenuation = parseVec3Element(component, "Attenuation", "constant", "linear", "quadratic");
+
+                        PointLight* light = new PointLight(ambient, diffuse, specular, {}, attenuation);
+                        currentNode->addComponent(light);
+                    }
+
+                    if (component->Attribute("type") == std::string("SpotLight")) {
+                        //TODO:
+                        //SpotLight* light = new SpotLight(ambient, diffuse, specular, pos, dir, curOff, outerCurOff, attenuation, cam);
+                        //currentNode->addComponent(light);
                     }
 
 
@@ -193,6 +217,11 @@ namespace Villain {
                         faces[5] = face->GetText();
                 }
                 rootNode->getEngine()->getRenderingEngine()->setSkybox(faces);
+            }
+
+            if (property->Value() == std::string("Ambient")) {
+                glm::vec3 ambientColor = parseColorAttribute(e, "Ambient", "color");
+                rootNode->getEngine()->getRenderingEngine()->setAmbientLightColor(ambientColor);
             }
         }
     }
