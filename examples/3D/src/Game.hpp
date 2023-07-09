@@ -19,6 +19,8 @@ class Game : public Villain::Application {
 
     private:
         Villain::DebugRenderer debugRenderer;
+        Villain::Particle* playerBody = nullptr;
+
 };
 
 #endif // __GAME__

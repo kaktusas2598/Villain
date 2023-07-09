@@ -9,11 +9,18 @@
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 #include "components/ParticleEmitter.hpp"
+#include "components/ParticlePhysicsComponent.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
 
+#include "physics/generators/contact/GroundContacts.hpp"
+#include "physics/generators/contact/ParticleCable.hpp"
+#include "physics/generators/contact/ParticleRod.hpp"
+#include "physics/generators/force/ParticleGravity.hpp"
+#include "physics/generators/force/ParticleSpring.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include <glm/gtx/string_cast.hpp>
 
 using namespace Villain;
 
@@ -86,7 +93,50 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
 
     // New Particle Engine tests
-    addToScene((new SceneNode("Particles"))->addComponent(new ParticleEmitter(100)));
+    //addToScene((new SceneNode("Particles"))->addComponent(new ParticleEmitter(100)));
+
+    // V2 - Mass Aggregate particle physics engine tests
+    Particle* springA = new Particle();
+    Particle* springB = new Particle();
+    springA->setPosition({0.0f, 15.0f, 0.0f});
+    springB->setPosition({0.0f, 5.0f, 0.0f});
+
+    ParticlePhysicsComponent* particlePhysics = new ParticlePhysicsComponent();
+    // ATM component must be added to scene to get pointer to engine so we can setup particles
+    addToScene((new SceneNode("Spring test"))->addComponent(particlePhysics));
+
+    // 2 particles connected with spring
+    particlePhysics->addParticle(springA);
+    particlePhysics->addParticle(springB);
+    particlePhysics->addForceGenerator(new ParticleSpring(springB, 1.0f, 2.0f), {0});
+    particlePhysics->addForceGenerator(new ParticleSpring(springA, 1.0f, 2.0f), {1});
+
+    Particle* rodA = new Particle();
+    Particle* rodB = new Particle();
+    rodA->setVelocity({0.0, 0.0, -1.0});
+    rodA->setPosition({5.0f, 15.0f, 0.0f});
+    rodB->setPosition({5.0f, 5.0f, 0.0f});
+    particlePhysics->addParticle(rodA);
+    particlePhysics->addParticle(rodB);
+    particlePhysics->addContactGenerator(new ParticleRod(9.0f, rodA, rodB));
+    //particlePhysics->addContactGenerator(new ParticleCable(8.0f, 1.0f,  rodA, rodB));
+
+    // Generate ground contacts for all particles in component
+    particlePhysics->addContactGenerator(new GroundContacts(particlePhysics->getParticles()));
+
+    particlePhysics->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {3, 2});
+
+    if (getRootNode()->findByID(3)) {
+        playerBody = new Particle();
+        SceneNode* player = getRootNode()->findByID(3);
+        playerBody->setPosition(player->getTransform()->getPos());
+        playerBody->setMass(10.0);
+        ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
+        player->addComponent(playerParticleCompo);
+        playerParticleCompo->addParticle(playerBody);
+        playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
+        //playerParticleCompo->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {0});
+    }
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
     Model* sphereModel = new Model("assets/models/sphere.obj");
@@ -158,6 +208,7 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
+    //VILLAIN_INFO("Player particle pos {}", glm::to_string(playerBody->getPosition()));
 }
 
 void Game::onAppRender(float dt) {

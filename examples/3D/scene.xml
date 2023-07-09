@@ -13,7 +13,6 @@
         <Components>
             <Component type="Model" fileName="assets/models/sponza.obj" />
         </Components>
-        <!--<Children></Children>-->
     </Node>
     <Node name="Rock" scale='0.01' positionX='2.0' positionY='1.0' positionZ='0.0'>
         <Components>
@@ -22,10 +21,20 @@
     </Node>
     <Node name="Free look camera">
         <Components>
-            <Component type="Camera" main='true' zNear='0.1' zFar='1000'/>
-            <Component type="MoveController"/>
+            <Component type="Camera" main='true' zNear='0.1' zFar='1000' cameraType='THIRD_PERSON'/>
+            <!--<Component type="MoveController"/>-->
         </Components>
     </Node>
+    <Node name="Directional Light" positionX='10.0' positionY='10.0' positionZ='10.0'>
+        <Components>
+            <Component type="Light"/>
+        </Components>
+        <!--<Children></Children>-->
+    </Node>
+
+<!--SceneNode* directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))-->
+                <!--->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));-->
+
     <Node>
     </Node>
 </Root>
