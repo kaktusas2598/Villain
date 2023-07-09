@@ -13,6 +13,25 @@ namespace Villain {
         ImGui::Begin("File Browser");
         {
             if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
+                // Customize the style
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.0f);
+                ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+                // Draw a background
+                ImDrawList* drawList = ImGui::GetWindowDrawList();
+                ImVec2 windowPos = ImGui::GetWindowPos();
+                ImVec2 windowSize = ImGui::GetWindowSize();
+                ImVec4 backgroundColor = ImVec4(0.2f, 0.2f, 0.2f, 0.8f);
+                drawList->AddRectFilled(windowPos, ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y), ImGui::ColorConvertFloat4ToU32(backgroundColor));
+
+                // Add borders
+                ImVec2 minBound = windowPos;
+                ImVec2 maxBound = ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y);
+                ImU32 borderColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                float borderThickness = 1.0f;
+                drawList->AddRect(minBound, maxBound, borderColor, 0.0f, ImDrawCornerFlags_All, borderThickness);
+
+
                 // Display the parent directory as a selectable button
                 if (ImGui::Button("..")) {
                     // Navigate to the parent directory
@@ -25,6 +44,8 @@ namespace Villain {
                 filter = ".xml";
                 drawFileBrowserPath(currentPath);
 
+                ImGui::PopStyleColor();
+                ImGui::PopStyleVar();
                 ImGui::EndPopup();
 
             }
