@@ -71,13 +71,13 @@ Game::~Game() {
 }
 
 void Game::handleEvents() {
-    if(TheInputManager::Instance()->isKeyDown(SDLK_q))
+    if(InputManager::Instance()->isKeyDown(SDLK_q))
         camera->setZoom(camera->getZoom() + 0.01f);
-    if(TheInputManager::Instance()->isKeyDown(SDLK_e))
+    if(InputManager::Instance()->isKeyDown(SDLK_e))
         camera->setZoom(camera->getZoom() - 0.01f);
 
     // Get SDL window mouse coords and convert to camera woorld coords
-    glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
+    glm::vec2 mouseCoords = InputManager::Instance()->getMouseCoords();
     mouseCoords = camera->screenToWorld(mouseCoords);
 
     // Format message and add it in debug console

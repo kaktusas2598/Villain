@@ -92,6 +92,4 @@ namespace Villain {
 
             char inChars[1];
     };
-
-    typedef InputManager TheInputManager;
 }

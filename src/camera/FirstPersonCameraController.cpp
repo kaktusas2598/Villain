@@ -11,7 +11,7 @@ namespace Villain {
         SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), Engine::getScreenWidth()/2, Engine::getScreenHeight()/2);
 
         // Also disable mouse in edit mode for now
-        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
+        glm::vec2 mouseOffsets = InputManager::Instance()->getMouseOffsets();
 
         mouseOffsets.x *= sensitivity;
         mouseOffsets.y *= sensitivity;

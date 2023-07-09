@@ -134,13 +134,13 @@ Game::~Game() {
 }
 
 void Game::handleEvents() {
-    if(TheInputManager::Instance()->isKeyDown(SDLK_q))
+    if(InputManager::Instance()->isKeyDown(SDLK_q))
         camera->setZoom(camera->getZoom() + 0.01f);
-    if(TheInputManager::Instance()->isKeyDown(SDLK_e))
+    if(InputManager::Instance()->isKeyDown(SDLK_e))
         camera->setZoom(camera->getZoom() - 0.01f);
 
     // Get SDL window mouse coords and convert to camera woorld coords
-    glm::vec2 mouseCoords = TheInputManager::Instance()->getMouseCoords();
+    glm::vec2 mouseCoords = InputManager::Instance()->getMouseCoords();
     mouseCoords = camera->screenToWorld(mouseCoords);
 
     // Format message and add it in debug console
@@ -149,7 +149,7 @@ void Game::handleEvents() {
     DebugConsole::Instance()->setInfo("mouse", ss.str());
 
     // On mouse click fire a bullet
-    //if (TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+    //if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
         ////glm::vec2 playerPos(0.0f); // for now assume player is always in the center
         //glm::vec2 playerPos = glm::vec2(player->getPosition().x, player->getPosition().y);
         //glm::vec2 direction = mouseCoords - playerPos;
@@ -158,7 +158,7 @@ void Game::handleEvents() {
         //bullets.emplace_back(playerPos, direction, 1.0f, 500);
     //}
 
-    if(TheInputManager::Instance()->isKeyDown(SDLK_ESCAPE))
+    if(InputManager::Instance()->isKeyDown(SDLK_ESCAPE))
         Engine::setRunning(false);
         //isRunning = false;
 }

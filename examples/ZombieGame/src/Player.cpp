@@ -36,24 +36,24 @@ void Player::update(
                 std::vector<Human*>& humans,
                 std::vector<Zombie*>& zombies) {
 
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_w))
+    if(Villain::InputManager::Instance()->isKeyDown(SDLK_w))
         position.y += speed * deltaTime;
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_a))
+    if(Villain::InputManager::Instance()->isKeyDown(SDLK_a))
         position.x -= speed * deltaTime;
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_s))
+    if(Villain::InputManager::Instance()->isKeyDown(SDLK_s))
         position.y -= speed * deltaTime;
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_d))
+    if(Villain::InputManager::Instance()->isKeyDown(SDLK_d))
         position.x += speed * deltaTime;
 
-    if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_1) && guns.size() >= 0) {
+    if(Villain::InputManager::Instance()->isKeyPressed(SDLK_1) && guns.size() >= 0) {
         std::cout << "Gun 0 selected\n";
         currentGunIndex = 0;
     }
-    if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_2) && guns.size() >= 1) {
+    if(Villain::InputManager::Instance()->isKeyPressed(SDLK_2) && guns.size() >= 1) {
         std::cout << "Gun 1 selected\n";
         currentGunIndex = 1;
     }
-    if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_3) && guns.size() >= 2) {
+    if(Villain::InputManager::Instance()->isKeyPressed(SDLK_3) && guns.size() >= 2) {
         std::cout << "Gun 2 selected\n";
         currentGunIndex = 2;
     }
@@ -68,7 +68,7 @@ void Player::update(
 
         guns[currentGunIndex]->update(
                 deltaTime,
-                Villain::TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT),
+                Villain::InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT),
                 centerPosition,
                 direction,
                 *bullets);

@@ -30,7 +30,7 @@ namespace Villain {
     }
 
     void ThirdPersonCameraController::updateFollowMode(float deltaTime) {
-        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
+        glm::vec2 mouseOffsets = InputManager::Instance()->getMouseOffsets();
         mouseOffsets *= sensitivity;
 
         float yaw = camera->getYaw();
@@ -71,7 +71,7 @@ namespace Villain {
         glm::vec3 cameraPos = camera->getPosition();
         glm::vec3 targetPos = camera->GetTransform()->getPos();
 
-        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
+        glm::vec2 mouseOffsets = InputManager::Instance()->getMouseOffsets();
         mouseOffsets *= sensitivity;
 
         float angleAroundTarget = camera->getYaw() + mouseOffsets.x;
