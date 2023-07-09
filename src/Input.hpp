@@ -15,19 +15,19 @@ namespace Villain {
         RIGHT = 2
     };
 
-    /*! \brief InputManager
-     *         Keyboard and Mouse input manager.
+    /*
+     *  Keyboard and Mouse input manager.
      *
      *  Manages unordered map currently and previously pressed keys and also holds mouse coordinates.
      *  Can be used to set pressed keys and mouse coords, and also to query for presse keys or coordinates.
      *  @sa Engine::handleEvents
      *
      */
-    class InputManager {
+    class Input {
         public:
-            static InputManager* Instance() {
+            static Input* Get() {
                 if (s_pInstance == 0) {
-                    s_pInstance = new InputManager();
+                    s_pInstance = new Input();
                 }
                 return s_pInstance;
             }
@@ -72,11 +72,11 @@ namespace Villain {
             const char* getInChars() { return inChars; }
 
         private:
-            InputManager();
-            ~InputManager() {};
+            Input();
+            ~Input() {};
 
             //singleton instance
-            static InputManager* s_pInstance;
+            static Input* s_pInstance;
 
             /// Identical to isKeyDown but searches the previous key map
             bool wasKeyDown(unsigned int keyID);

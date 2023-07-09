@@ -198,7 +198,7 @@ void Game::init() {
 }
 
 void Game::handleEvents(float deltaTime) {
-    if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
+    if (Input::Get()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
 }

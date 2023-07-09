@@ -32,7 +32,7 @@ void MenuScreen::onExit() {
 }
 
 void MenuScreen::update(float deltaTime) {
-if (Villain::InputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
+if (Villain::Input::Get()->isKeyPressed(SDLK_ESCAPE)) {
         setScreenState(Villain::ScreenState::EXIT_APPLICATION);
     }
 }

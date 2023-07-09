@@ -1,6 +1,6 @@
 #include "ModelRenderer.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "rendering/Material.hpp"
 #include "rendering/RendereringEngine.hpp"
 #include "ResourceManager.hpp"
@@ -69,7 +69,7 @@ namespace Villain {
         if (model->getAnimator()) {
             model->getAnimator()->updateAnimation(deltaTime);
             // Bone weight debug - switch to next bone using 'b'
-            if (InputManager::Instance()->isKeyDown(SDLK_b)) {
+            if (Input::Get()->isKeyDown(SDLK_b)) {
                 model->setDisplayedBoneIndex(model->getDisplayedBoneIndex() + 1);
                 // Make sure we don't try to display non existant bones
                 model->setDisplayedBoneIndex(model->getDisplayedBoneIndex() % model->getBoneCount());

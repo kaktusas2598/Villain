@@ -90,7 +90,7 @@ void Game::init() {
 }
 
 void Game::onAppPreUpdate(float dt) {
-    if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
+    if (Input::Get()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
 

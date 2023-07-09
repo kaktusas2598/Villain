@@ -11,7 +11,7 @@ namespace Villain {
         SDL_WarpMouseInWindow(SDL_GL_GetCurrentWindow(), Engine::getScreenWidth()/2, Engine::getScreenHeight()/2);
 
         // Also disable mouse in edit mode for now
-        glm::vec2 mouseOffsets = InputManager::Instance()->getMouseOffsets();
+        glm::vec2 mouseOffsets = Input::Get()->getMouseOffsets();
 
         mouseOffsets.x *= sensitivity;
         mouseOffsets.y *= sensitivity;
@@ -34,7 +34,7 @@ namespace Villain {
             camera->GetTransform()->setEulerRot(pitch, yaw, 0.0);
         camera->setRotation({pitch, yaw, 0.0f});
 
-        camera->setZoom(camera->getZoom() + InputManager::Instance()->mousewheel);
+        camera->setZoom(camera->getZoom() + Input::Get()->mousewheel);
 
         // TODO: movement logic
         camera->setPosition(camera->GetTransform()->getPos());

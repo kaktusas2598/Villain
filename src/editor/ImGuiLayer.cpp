@@ -285,7 +285,7 @@ namespace Villain {
 
             mousePosRelativeToSceneViewport = glm::vec2(imGuiMousePosition.x, imGuiMousePosition.y) - sceneViewportPosition;
 
-            //printf("Engine Mouse Coords X: %f Y: %f\n", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+            //printf("Engine Mouse Coords X: %f Y: %f\n", Input::Get()->getMouseCoords().x, Input::Get()->getMouseCoords().y);
             //printf("ImGui GetCursorScreenPos() X: %f Y: %f\n", sceneViewportPosition.x, sceneViewportPosition.y);
             //printf("ImGui::GetMousePos() X: %f Y: %f\n", imGuiMousePosition.x, imGuiMousePosition.y);
             //printf("Scene image Coords X: %f Y: %f\n", mousePosRelativeToSceneViewport.x, mousePosRelativeToSceneViewport.y);
@@ -314,7 +314,7 @@ namespace Villain {
         ImGui::Text("Update frame time: %.1u ms ", engine.getUpdateTime());
         ImGui::Text("Render frame time: %.1u ms", engine.getRenderTime());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+        ImGui::Text("Mouse coords(Window): %.1f, %.1f", Input::Get()->getMouseCoords().x, Input::Get()->getMouseCoords().y);
 
         ImGui::Separator();
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);

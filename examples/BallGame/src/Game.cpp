@@ -71,13 +71,13 @@ Game::~Game() {
 }
 
 void Game::handleEvents() {
-    if(InputManager::Instance()->isKeyDown(SDLK_q))
+    if(Input::Get()->isKeyDown(SDLK_q))
         camera->setZoom(camera->getZoom() + 0.01f);
-    if(InputManager::Instance()->isKeyDown(SDLK_e))
+    if(Input::Get()->isKeyDown(SDLK_e))
         camera->setZoom(camera->getZoom() - 0.01f);
 
     // Get SDL window mouse coords and convert to camera woorld coords
-    glm::vec2 mouseCoords = InputManager::Instance()->getMouseCoords();
+    glm::vec2 mouseCoords = Input::Get()->getMouseCoords();
     mouseCoords = camera->screenToWorld(mouseCoords);
 
     // Format message and add it in debug console
@@ -85,18 +85,18 @@ void Game::handleEvents() {
     ss << "Mouse world position: " << mouseCoords.x << ", " << mouseCoords.y;
     DebugConsole::Instance()->setInfo("mouse", ss.str());
 
-    if (InputManager::Instance()->isKeyPressed(SDLK_LEFT)) {
+    if (Input::Get()->isKeyPressed(SDLK_LEFT)) {
         ballController.setGravityDirection(GravityDirection::LEFT);
-    } else if (InputManager::Instance()->isKeyPressed(SDLK_RIGHT)) {
+    } else if (Input::Get()->isKeyPressed(SDLK_RIGHT)) {
         ballController.setGravityDirection(GravityDirection::RIGHT);
-    } else if (InputManager::Instance()->isKeyPressed(SDLK_UP)) {
+    } else if (Input::Get()->isKeyPressed(SDLK_UP)) {
         ballController.setGravityDirection(GravityDirection::UP);
-    } else if (InputManager::Instance()->isKeyPressed(SDLK_DOWN)) {
+    } else if (Input::Get()->isKeyPressed(SDLK_DOWN)) {
         ballController.setGravityDirection(GravityDirection::DOWN);
     }
 
     // Cycle through different ball renderers
-    if (InputManager::Instance()->isKeyPressed(SDLK_1)) {
+    if (Input::Get()->isKeyPressed(SDLK_1)) {
         currentRenderer++;
         if (currentRenderer >= ballRenderers.size()) {
             currentRenderer = 0;

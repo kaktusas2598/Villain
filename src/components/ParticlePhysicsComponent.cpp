@@ -24,22 +24,22 @@ namespace Villain {
         if (isKinematic) {
             GetTransform()->setPos(particles[0]->getPosition());
 
-            if (InputManager::Instance()->isKeyDown(SDLK_w)) {
+            if (Input::Get()->isKeyDown(SDLK_w)) {
                 particles[0]->addForce(GetTransform()->getForward() * particles[0]->getMass());
             }
-            if (InputManager::Instance()->isKeyDown(SDLK_s)) {
+            if (Input::Get()->isKeyDown(SDLK_s)) {
                 particles[0]->addForce(GetTransform()->getForward() * -particles[0]->getMass());
             }
-            if (InputManager::Instance()->isKeyDown(SDLK_a)) {
+            if (Input::Get()->isKeyDown(SDLK_a)) {
                 particles[0]->addForce(GetTransform()->getRight() * -particles[0]->getMass());
             }
-            if (InputManager::Instance()->isKeyDown(SDLK_d)) {
+            if (Input::Get()->isKeyDown(SDLK_d)) {
                 particles[0]->addForce(GetTransform()->getRight() * particles[0]->getMass());
             }
-            if (InputManager::Instance()->isKeyDown(SDLK_SPACE)) {
+            if (Input::Get()->isKeyDown(SDLK_SPACE)) {
                 particles[0]->addForce(GetTransform()->getUp() * particles[0]->getMass());
             }
-            if (InputManager::Instance()->isKeyDown(SDLK_LSHIFT)) {
+            if (Input::Get()->isKeyDown(SDLK_LSHIFT)) {
                 particles[0]->addForce(GetTransform()->getUp() * -particles[0]->getMass());
             }
         }

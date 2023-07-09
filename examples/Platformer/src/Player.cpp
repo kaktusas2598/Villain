@@ -120,7 +120,7 @@ void Player::drawDebug(Villain::DebugRenderer& renderer) {
 }
 
 void Player::update() {
-    Villain::InputManager* input = Villain::InputManager::Instance();
+    Villain::InputManager* input = Villain::Input::Get();
     b2Body* body = collisionShape.getBody();
 
     if (input->isKeyPressed(SDLK_f)) {

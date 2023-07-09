@@ -73,7 +73,7 @@ namespace Villain {
         //if (level != nullptr)
         //level->update();
 
-        if (InputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
+        if (Input::Get()->isKeyPressed(SDLK_ESCAPE)) {
             mainApplication->getStateMachine()->getCurrentScreen()->setScreenState(ScreenState::CHANGE_NEXT);
         }
 

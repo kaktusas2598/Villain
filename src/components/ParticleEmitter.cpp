@@ -1,6 +1,6 @@
 #include "ParticleEmitter.hpp"
-#include "InputManager.hpp"
 
+#include "Input.hpp"
 #include "physics/generators/force/ParticleAnchoredBungee.hpp"
 #include "physics/generators/force/ParticleAnchoredSpring.hpp"
 #include "physics/generators/force/ParticleBungee.hpp"
@@ -98,7 +98,7 @@ namespace Villain {
     }
 
     void ParticleEmitter::handleInput(float deltaTime) {
-        if (InputManager::Instance()->isKeyPressed(SDLK_p)) {
+        if (Input::Get()->isKeyPressed(SDLK_p)) {
             particleType++;
             particleType = particleType % 4;
             setParticleType((ParticleType)particleType);

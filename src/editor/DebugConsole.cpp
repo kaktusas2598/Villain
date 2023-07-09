@@ -1,7 +1,7 @@
 #include "DebugConsole.hpp"
 
 #include "Engine.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "ScriptEngine.hpp"
 #include "imgui/imgui.h"
 

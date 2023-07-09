@@ -1,7 +1,7 @@
 #pragma once
 
 #include "EventDispatcher.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "Timer.hpp"
 #include "Window.hpp"
 

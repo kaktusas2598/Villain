@@ -1,7 +1,7 @@
 #include "RendereringEngine.hpp"
 
 #include "Engine.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "Mesh.hpp"
 #include "MeshUtils.hpp"
 #include "ResourceManager.hpp"
@@ -64,7 +64,7 @@ namespace Villain {
 
     void RenderingEngine::render(SceneNode* node) {
         // Generate picking texture only if mouse is clicked so we can start selecting objects
-        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+        if (Input::Get()->isKeyDown(SDL_BUTTON_LEFT)) {
             pickPass(node);
         }
         // 1st Optional Rendering Pass: Render to ambient scene to mirror buffer for rear view mirror effect
@@ -93,9 +93,9 @@ namespace Villain {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Check if any nodes are selected and use picking texture to get correct node
-        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT)) {
+        if (Input::Get()->isKeyDown(SDL_BUTTON_LEFT)) {
             bool selectableArea = true;
-            glm::vec2 clickPosition = InputManager::Instance()->getMouseCoords();
+            glm::vec2 clickPosition = Input::Get()->getMouseCoords();
 
             if (engine->editModeActive()) {
                 glm::vec2 sceneImageViewportSize{engine->getImGuiLayer().getSceneViewportWidth(), engine->getImGuiLayer().getSceneViewportHeight()};

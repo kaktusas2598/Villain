@@ -182,7 +182,7 @@ namespace Villain {
                 // NOTE: Probably not correct to have input handling in here, but if we move this outside semi-fixed step
                 // loop, events are not being caught in example application's update() methods
                 //update input manager
-                InputManager::Instance()->update();
+                Input::Get()->update();
                 SDL_Event event;
                 while (SDL_PollEvent(&event)) {
                     ImGui_ImplSDL2_ProcessEvent(&event);
@@ -308,7 +308,7 @@ namespace Villain {
     void Engine::handleEvents(SDL_Event& event) {
         static bool mouseFirst = true;
         //set the event type
-        InputManager::Instance()->setEventType(event.type);
+        Input::Get()->setEventType(event.type);
         switch (event.type) {
             case SDL_QUIT:
                 exit();
@@ -323,13 +323,13 @@ namespace Villain {
                     } else {
                         mouseFirst = false;
                     }
-                    InputManager::Instance()->setMouseOffsets(offsets.x, offsets.y);
+                    Input::Get()->setMouseOffsets(offsets.x, offsets.y);
 
                     MouseEvent mouseEvent = MouseEvent(MouseEventType::MOVE, {event.motion.x, event.motion.y}, offsets);
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
 
-                InputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
+                Input::Get()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
                 application->onMouseMove(event.motion.x, event.motion.y);
                 break;
             case SDL_KEYDOWN:
@@ -337,7 +337,7 @@ namespace Villain {
                     KeyboardEvent keyboardEvent = KeyboardEvent(KeyEventType::PRESS, static_cast<KeyCode>(event.key.keysym.sym));
                     eventDispatcher->dispatchEvent(keyboardEvent);
                 }
-                InputManager::Instance()->pressKey(event.key.keysym.sym);
+                Input::Get()->pressKey(event.key.keysym.sym);
                 if (event.key.keysym.sym == SDLK_BACKQUOTE)
                     editMode = !editMode;
                 break;
@@ -346,14 +346,14 @@ namespace Villain {
                     KeyboardEvent keyboardEvent = KeyboardEvent(KeyEventType::RELEASE, static_cast<KeyCode>(event.key.keysym.sym));
                     eventDispatcher->dispatchEvent(keyboardEvent);
                 }
-                InputManager::Instance()->releaseKey(event.key.keysym.sym);
+                Input::Get()->releaseKey(event.key.keysym.sym);
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 {
                     MouseEvent mouseEvent = MouseEvent(MouseEventType::CLICK, event.button.button);
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
-                InputManager::Instance()->pressKey(event.button.button);
+                Input::Get()->pressKey(event.button.button);
                 application->onMouseDown(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
@@ -361,11 +361,11 @@ namespace Villain {
                     MouseEvent mouseEvent = MouseEvent(MouseEventType::RELEASE, event.button.button);
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
-                InputManager::Instance()->releaseKey(event.button.button);
+                Input::Get()->releaseKey(event.button.button);
                 application->onMouseUp();
                 break;
             case SDL_TEXTINPUT:
-                InputManager::Instance()->addInputCharacters(event.text.text);
+                Input::Get()->addInputCharacters(event.text.text);
                 break;
             case SDL_MOUSEWHEEL:
                 {
@@ -373,9 +373,9 @@ namespace Villain {
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
                 if (event.wheel.y > 0)
-                    InputManager::Instance()->setMouseWheel(1);
+                    Input::Get()->setMouseWheel(1);
                 if (event.wheel.y < 0)
-                    InputManager::Instance()->setMouseWheel(-1);
+                    Input::Get()->setMouseWheel(-1);
                 break;
             case (SDLK_ESCAPE):
                 isRunning = false;
