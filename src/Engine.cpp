@@ -98,6 +98,11 @@ namespace Villain {
         if (enableGammaCorrection)
             renderingEngine->setGammaCorrection(true);
 
+        // TODO: Will render loading screen here
+        // At least screen quad with texture mapped required
+        glClear(GL_COLOR_BUFFER_BIT);
+        window.swapBuffer();
+
         //initialize the current game
         application = app;
         application->setEngine(this);
