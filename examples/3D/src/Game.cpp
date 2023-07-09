@@ -154,45 +154,6 @@ void Game::init() {
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
-    /*
-    // Skeletal Animation demo
-    Model* animatedModel = new Model("assets/models/mudeater.dae");
-    SceneNode* animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel));
-    animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
-    addToScene(animatedNode);
-
-    //Model* catModel = new Model("assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx");
-    //SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel));
-    //catNode->getTransform()->setScale(0.02);
-    //catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
-    //addToScene(catNode);
-
-    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/Eagle.fbx";
-    Model* eagleModel = new Model(eaglePath.c_str());
-    SceneNode* eagleNode = (new SceneNode("Eagle", {12, 20, 0}))->addComponent(new ModelRenderer(eagleModel));
-    eagleNode->getTransform()->setScale(0.02);
-    eagleNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
-    addToScene(eagleNode);
-
-    //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
-    std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";
-    Model* vampireModel = new Model(vampirePath.c_str());
-    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, 420));
-    vampireNode->getTransform()->setScale(0.05);
-    vampireNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
-    addToScene(vampireNode);
-
-    // This is part 4, also works, but fbx binary file has wrong texture paths
-    //std::string thrillerPath = "assets/models/Thriller.fbx";
-    //std::string thrillerPath = "assets/models/Angry.fbx";
-    std::string thrillerPath = "assets/models/ThrillerPart1-ZombieGirl.dae";
-    Model* thrillerModel = new Model(thrillerPath.c_str());
-    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, 420));
-    thrillerNode->getTransform()->setScale(0.05);
-    thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
-    addToScene(thrillerNode);
-    */
-
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
 }

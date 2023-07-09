@@ -31,6 +31,30 @@
         </Components>
         <!--<Children></Children>-->
     </Node>
+    <!-- Skeletal Animation Examples -->
+    <!--<Node name="Mudeater" positionX='12.0' positionY='0.0' positionZ='0.0' rotX='-90.0' rotY='-90.0'>-->
+        <!--<Components>-->
+            <!--<Component type="Model" fileName="assets/models/mudeater.dae" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+    <!--<Node name="Eagle" scale='0.02' positionX='12.0' positionY='20.0' positionZ='0.0' rotY='90.0'>-->
+        <!--<Components>-->
+            <!--<Component type="Model" fileName="assets/models/AnimalPackVol2Quaternius/Eagle.fbx" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+    <!--<Node name="Vampire Thriller Part 1" scale='0.05' positionX='12.0' positionY='0.0' positionZ='6.0' rotY='-90.0'>-->
+        <!--<Components>-->
+            <!--[>//std::string vampirePath = "assets/models/Rumba Dancing.fbx";<]-->
+            <!--<Component type="Model" fileName="assets/models/ThrillerPart1-Vampire.dae" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+
+    <!-- This is part 4, also works, but fbx binary file has wrong texture paths -->
+    <!--<Node name="Zombie Thriller Part 1" scale='0.05' positionX='12.0' positionY='0.0' positionZ='-6.0' rotY='-90.0'>-->
+        <!--<Components>-->
+            <!--<Component type="Model" fileName="assets/models/ThrillerPart1-ZombieGirl.dae" />-->
+        <!--</Components>-->
+    <!--</Node>-->
 
 <!--SceneNode* directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))-->
                 <!--->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));-->
