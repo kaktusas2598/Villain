@@ -200,6 +200,8 @@ namespace Villain {
                 physicsEngine->simulate(deltaTime);
                 physicsEngine->handleCollisions();
 
+                particleWorld->runPhysics(deltaTime);
+
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);
                 application->onAppPostUpdate(deltaTime);
