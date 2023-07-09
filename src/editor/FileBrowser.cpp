@@ -1,5 +1,7 @@
 #include "FileBrowser.hpp"
 
+#include "ImGuiLayer.hpp"
+
 namespace Villain {
 
     bool FileBrowser::popup = false;
@@ -55,6 +57,7 @@ namespace Villain {
 
             if (entry.is_directory()) {
                 bool expanded = ImGui::TreeNode(path.filename().string().c_str());
+                ImGui::SameLine(); editor->renderIcon("\uf07c");
 
                 if (expanded)
                 {
@@ -65,6 +68,7 @@ namespace Villain {
             else if (entry.is_regular_file())
             {
                 ImGui::Text("%s", path.filename().string().c_str());
+                ImGui::SameLine(); editor->renderIcon("\uf15b");
             }
         }
     }

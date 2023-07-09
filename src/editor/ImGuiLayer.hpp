@@ -16,6 +16,8 @@ namespace Villain {
 
     class ImGuiLayer {
     public:
+        ImGuiLayer();
+
         // Sets up ImGui context and backends
         void init(Window& window);
         // Shutdown ImGui
