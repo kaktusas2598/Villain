@@ -20,9 +20,9 @@ namespace Villain {
     void SceneParser::loadSceneGraph(const std::string& fileName, SceneNode* rootNode) {
         tinyxml2::XMLDocument xmlDoc;
 
-        Logger::Instance()->warn("Loading scene graph: {}", fileName);
+        VILLAIN_INFO("Loading scene graph: {}", fileName);
         if (xmlDoc.LoadFile(fileName.c_str()) != tinyxml2::XML_SUCCESS) {
-            Logger::Instance()->error("Could not open scene graph XML file {} Error: {}", fileName, xmlDoc.ErrorName());
+            VILLAIN_ERROR("Could not open scene graph XML file {} Error: {}", fileName, xmlDoc.ErrorName());
             return;
         }
 
@@ -74,12 +74,28 @@ namespace Villain {
                         // Optional camera values
                         float zNear, zFar;
                         bool isMain = false;
+                        const char* type = nullptr;
 
                         if (component->QueryFloatAttribute("zNear", &zNear) == tinyxml2::XML_SUCCESS) {
                             camera->setZNear(zNear);
                         }
                         if (component->QueryFloatAttribute("zFar", &zFar) == tinyxml2::XML_SUCCESS) {
                             camera->setZFar(zFar);
+                        }
+
+                        if (component->QueryStringAttribute("cameraType", &type) == tinyxml2::XML_SUCCESS) {
+                            std::string cameraType = type;
+                            if (cameraType == "FIRST_PERSON") {
+                                camera->setType(CameraType::FIRST_PERSON);
+                            } else if (cameraType == "THIRD_PERSON") {
+                                camera->setType(CameraType::THIRD_PERSON);
+                            } else if (cameraType == "ORTHOGRAPHIC") {
+                                camera->setType(CameraType::ORTHOGRAPHIC);
+                            } else if (cameraType == "ORTHOGRAPHIC_2D") {
+                                camera->setType(CameraType::ORTHOGRAPHIC_2D);
+                            } else {
+                                VILLAIN_ERROR("Camera type {} not found", cameraType);
+                            }
                         }
 
                         // NOTE: ATM every Camera as a NodeComponent is made main engine camera in addToEngine() method
