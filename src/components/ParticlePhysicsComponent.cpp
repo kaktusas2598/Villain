@@ -57,11 +57,11 @@ namespace Villain {
             particleQuadMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
             // Check if this system is kinematic, which means it can be controlled via events with keyboard etc.
-            if (isKinematic) {
-                KinematicBodyListener* listener = new KinematicBodyListener();
-                listener->body = particles[0];
-                getParent()->getEngine()->getEventDispatcher()->registerListener(listener);
-            }
+            //if (isKinematic) {
+                //KinematicBodyListener* listener = new KinematicBodyListener();
+                //listener->body = particles[0];
+                //getParent()->getEngine()->getEventDispatcher()->registerListener(listener);
+            //}
 
         }
 
