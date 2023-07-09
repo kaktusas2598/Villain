@@ -30,7 +30,7 @@ class ExampleEventListener : public EventListener {
     virtual void handleEvent(Event& event) override {
         if (KeyboardEvent* myEvent = dynamic_cast<KeyboardEvent*>(&event)) {
             if (myEvent->isPressed()) {
-                printf("KEY Pressed: %d!\n", myEvent->getKey());
+                printf("KEY Pressed: %c!\n", (char)myEvent->getKey());
             } else {
                 printf("KEY Released!\n");
             }
