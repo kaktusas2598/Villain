@@ -4,11 +4,10 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include <filesystem>
 
 #include "AssetBrowser.hpp"
+#include "FileBrowser.hpp"
 #include "SceneGraphEditor.hpp"
-namespace fs = std::filesystem;
 
 namespace Villain {
 
@@ -40,9 +39,6 @@ namespace Villain {
         void drawMenu();
         void drawScene(Engine& engine);
         void drawSettings(Engine& engine);
-        // TODO: refactor into new class
-        void drawFileBrowser();
-        void drawFileBrowserPath(const fs::path& currentPath);
 
         // Render font awesome 6 icon, code point example - "\uf07c" for folder open icon
         void renderIcon(const std::string& codePoint, float scale = 1.0f);
@@ -50,7 +46,6 @@ namespace Villain {
         void setupDockspace();
 
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
-        static bool openScenePopup;
         static ImVec4 clearColor;
 
         float sceneViewportWidth = 0, sceneViewportHeight = 0;
@@ -59,6 +54,7 @@ namespace Villain {
 
         SceneGraphEditor sceneEditor;
         AssetBrowser assetBrowser;
+        FileBrowser fileBrowser;
 
         ImFont* fontAwesome6;
         ImFont* robotoFont;

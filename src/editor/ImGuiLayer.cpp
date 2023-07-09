@@ -5,19 +5,15 @@
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
-#include <filesystem>
 
 // Custom baked fonts for ImGui;
 #include "imgui/fontawesome6.h"
 #include "imgui/Roboto-Regular.h"
 #include "imgui/source_sans_pro_regular.h"
 
-namespace fs = std::filesystem;
-
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
-    bool ImGuiLayer::openScenePopup = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     void ImGuiLayer::exit() {
@@ -192,8 +188,8 @@ namespace Villain {
         drawScene(engine);
         sceneEditor.render(engine);
         assetBrowser.render();
+        fileBrowser.render();
         drawSettings(engine);
-        drawFileBrowser();
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     }
 
@@ -228,7 +224,7 @@ namespace Villain {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("Open")) {
-                    openScenePopup = true;
+                    fileBrowser.openPopup();
                 }
                 ImGui::SameLine(); renderIcon("\uf07c");
 
@@ -349,68 +345,5 @@ namespace Villain {
         if (showDemoWindow)
             ImGui::ShowDemoWindow(&showDemoWindow);
     }
-
-    void ImGuiLayer::drawFileBrowser() {
-        // Get the current working directory
-        const fs::path& currentPath = fs::current_path();
-
-        ImGui::Begin("File Browser");
-        {
-            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
-                // Display the parent directory as a selectable button
-                if (ImGui::Button("..")) {
-                    // Navigate to the parent directory
-                    const fs::path parentPath = currentPath.parent_path();
-                    if (fs::exists(parentPath))
-                        fs::current_path(parentPath);
-                }
-
-                drawFileBrowserPath(currentPath);
-
-                ImGui::EndPopup();
-
-            }
-            if (openScenePopup || ImGui::Button("Open File Browser")) {
-                ImGui::OpenPopup("FileBrowserPopup");
-                openScenePopup = false;
-            }
-            // Display the parent directory as a selectable button
-            if (ImGui::Button("..")) {
-                // Navigate to the parent directory
-                const fs::path parentPath = currentPath.parent_path();
-                if (fs::exists(parentPath))
-                    fs::current_path(parentPath);
-            }
-
-
-            drawFileBrowserPath(currentPath);
-        }
-        ImGui::End();
-    }
-
-    void ImGuiLayer::drawFileBrowserPath(const fs::path& currentPath) {
-        for (const auto& entry : fs::directory_iterator(currentPath)) {
-            const auto& path = entry.path();
-
-            // Skip hidden files
-            if (entry.is_regular_file() && path.filename().string()[0] == '.')
-                continue;
-
-            if (entry.is_directory()) {
-                bool expanded = ImGui::TreeNode(path.filename().string().c_str());
-
-                if (expanded)
-                {
-                    drawFileBrowserPath(path);
-                    ImGui::TreePop();
-                }
-            }
-            else if (entry.is_regular_file())
-            {
-                ImGui::Text("%s", path.filename().string().c_str());
-            }
-        }
-    }
-
 }
 
