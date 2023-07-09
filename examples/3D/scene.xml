@@ -25,12 +25,41 @@
             <!--<Component type="MoveController"/>-->
         </Components>
     </Node>
+    <!-- Light Demo -->
+    <!-- Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source) -->
     <Node name="Directional Light" positionX='10.0' positionY='10.0' positionZ='10.0'>
         <Components>
-            <Component type="Light"/>
+            <Component type="DirectionalLight">
+                <Ambient color="#2F2F2F" intensity="0.2" />
+                <Diffuse color="#4F4F4F" intensity="1.0" />
+                <Specular color="#FFFFFF" intensity="1.0" />
+                <Direction x="-0.2" y="-0.8" z="-0.5" />
+            </Component>
         </Components>
-        <!--<Children></Children>-->
     </Node>
+    <!--<Node name="Spot Light" positionX='2.0' positionY='3.0' positionZ='1.0'>-->
+        <!--<Components>-->
+            <!--<Component type="SpotLight">-->
+                <!--<Ambient color="#FFFFFF" intensity="0.2" />-->
+                <!--<Diffuse color="#FFFFFF" intensity="1.0" />-->
+                <!--<Specular color="#FFFFFF" intensity="1.0" />-->
+                <!--<Direction x="-0.2" y="-0.8" z="-0.5" />-->
+                <!--<Cutoff angle="30.0" />-->
+                <!--<OuterCutoff angle="45.0" />-->
+            <!--</Component>-->
+        <!--</Components>-->
+    <!--</Node>-->
+    <!--<Node name="Point Light" positionX='2.0' positionY='3.0' positionZ='1.0'>-->
+        <!--<Components>-->
+            <!--<Component type="PointLight">-->
+                <!--<Ambient color="#FFFFFF" intensity="0.2" />-->
+                <!--<Diffuse color="#FFFFFF" intensity="1.0" />-->
+                <!--<Specular color="#FFFFFF" intensity="1.0" />-->
+                <!--<Attenuation constant="1.0" linear="0.09" quadratic="0.032" />-->
+            <!--</Component>-->
+        <!--</Components>-->
+    <!--</Node>-->
+
     <!-- Skeletal Animation Examples -->
     <!--<Node name="Mudeater" positionX='12.0' positionY='0.0' positionZ='0.0' rotX='-90.0' rotY='-90.0'>-->
         <!--<Components>-->
@@ -55,9 +84,6 @@
             <!--<Component type="Model" fileName="assets/models/ThrillerPart1-ZombieGirl.dae" />-->
         <!--</Components>-->
     <!--</Node>-->
-
-<!--SceneNode* directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))-->
-                <!--->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));-->
 
     <Node>
     </Node>

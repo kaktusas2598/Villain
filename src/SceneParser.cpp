@@ -4,6 +4,7 @@
 #include "camera/Camera.hpp"
 #include "Logger.hpp"
 #include "SceneNode.hpp"
+#include "components/Light.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 #include <sstream>
@@ -15,6 +16,22 @@ namespace Villain {
        std::ostringstream os;
        os << n++;
        return os.str();
+    }
+
+    glm::vec3 hexToVec3(const std::string& hexColor) {
+        // Remove the '#' character from the hex color string
+        std::string colorString = hexColor.substr(1);
+
+        // Parse the individual color components from the hex string
+        int r, g, b;
+        std::istringstream(colorString.substr(0, 2)) >> std::hex >> r;
+        std::istringstream(colorString.substr(2, 2)) >> std::hex >> g;
+        std::istringstream(colorString.substr(4, 2)) >> std::hex >> b;
+
+        // Normalize the color values to the range [0, 1]
+        glm::vec3 color(r / 255.0f, g / 255.0f, b / 255.0f);
+
+        return color;
     }
 
     void SceneParser::loadSceneGraph(const std::string& fileName, SceneNode* rootNode) {
@@ -107,6 +124,36 @@ namespace Villain {
                         camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
                         currentNode->addComponent(camera);
                     }
+
+                    if (component->Attribute("type") == std::string("DirectionalLight")) {
+                        glm::vec3 ambient, diffuse, specular;
+                        float x, y, z;
+                        for (tinyxml2::XMLElement *lightAttrib = component->FirstChildElement();
+                                lightAttrib != NULL; lightAttrib = lightAttrib->NextSiblingElement()) {
+                            const char* color = nullptr;
+                            if (lightAttrib->Value() == std::string("Ambient")) {
+                                lightAttrib->QueryStringAttribute("color", &color);
+                                ambient = hexToVec3(color);
+                            }
+                            if (lightAttrib->Value() == std::string("Diffuse")) {
+                                lightAttrib->QueryStringAttribute("color", &color);
+                                diffuse = hexToVec3(color);
+                            }
+                            if (lightAttrib->Value() == std::string("Specular")) {
+                                lightAttrib->QueryStringAttribute("color", &color);
+                                specular = hexToVec3(color);
+                            }
+                            if (lightAttrib->Value() == std::string("Direction")) {
+                                x = lightAttrib->FloatAttribute("x");
+                                y = lightAttrib->FloatAttribute("y");
+                                z = lightAttrib->FloatAttribute("z");
+                            }
+                        }
+
+                        DirectionalLight* light = new DirectionalLight(ambient, diffuse, specular, {x, y, z});
+                        currentNode->addComponent(light);
+                    }
+
 
                     if (component->Attribute("type") == std::string("MoveController")) {
                         currentNode->addComponent(new MoveController());

@@ -62,12 +62,8 @@ void Game::init() {
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
-    // TODO: Lights TEMP disabled
-    // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
-    SceneNode* directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
-                ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
-    addToScene(directionalLight);
 
+    // TODO: Move to XML
     //glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     //SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
                 //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), glm::vec3(1.0f, 0.022f, 0.0019f))));
