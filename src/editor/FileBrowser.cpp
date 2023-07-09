@@ -21,6 +21,8 @@ namespace Villain {
                         fs::current_path(parentPath);
                 }
 
+                // Temporary set xml filter for popup which will be used to load scene XMLs
+                filter = ".xml";
                 drawFileBrowserPath(currentPath);
 
                 ImGui::EndPopup();
@@ -40,7 +42,7 @@ namespace Villain {
                     fs::current_path(parentPath);
             }
 
-
+            filter.clear();
             drawFileBrowserPath(currentPath);
         }
         ImGui::End();
@@ -59,15 +61,22 @@ namespace Villain {
                 bool expanded = ImGui::TreeNode(path.filename().string().c_str());
                 ImGui::SameLine(); editor->renderIcon("\uf07c");
 
-                if (expanded)
-                {
+                if (expanded) {
                     drawFileBrowserPath(path);
                     ImGui::TreePop();
                 }
-            }
-            else if (entry.is_regular_file())
-            {
-                ImGui::Text("%s", path.filename().string().c_str());
+            } else if (entry.is_regular_file()) {
+                // Outputs '.xml', '.txt' etc
+                std::string extension = path.extension().string();
+                std::string filename = path.filename().string();
+
+                if (!filter.empty() && extension != filter)
+                    continue;
+
+                if (ImGui::Selectable(filename.c_str())) {
+                    // Select file
+                    selectedFile = path.string();
+                }
                 ImGui::SameLine(); editor->renderIcon("\uf15b");
             }
         }

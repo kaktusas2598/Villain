@@ -21,5 +21,7 @@ namespace Villain {
 
             static bool popup; // Toggles file browser as a popup
             ImGuiLayer* editor = nullptr;
+            std::string selectedFile{};
+            std::string filter{};
     };
 }
