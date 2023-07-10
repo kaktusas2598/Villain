@@ -1,5 +1,4 @@
-#ifndef __ResourceManager__
-#define __ResourceManager__
+#pragma once
 
 #include <string>
 #include <map>
@@ -9,41 +8,26 @@
 namespace Villain {
 
     /*
-     * Global Resource Manager
+     * Global Resource Management system
      */
     class ResourceManager {
         public:
 
-            Texture* loadTexture(std::string fileName, std::string id, GLint wrappingMode = GL_CLAMP_TO_EDGE, bool gammaCorrected = true) {
-                if (textureMap.find(id) != textureMap.end())
-                    return textureMap[id];
-                TextureConstructionInfo texInfo = TextureConstructionInfo();
-                texInfo.WrappingMode = wrappingMode;
-                texInfo.SRGB = gammaCorrected;
-                Texture* texture = new Texture(fileName, texInfo);
-                //Texture* texture = new Texture(fileName, wrappingMode, gammaCorrected);
-                textureMap[id] = texture;
-                return textureMap[id];
-            }
+            Texture* loadTexture(
+                    std::string fileName,
+                    std::string id,
+                    GLint wrappingMode = GL_CLAMP_TO_EDGE,
+                    bool gammaCorrected = true);
 
-            Shader* loadShader(const std::string& fileName, std::string id) {
-                if (shaderMap.find(id) != shaderMap.end())
-                    return shaderMap[id];
-                Shader* shader = new Shader(fileName);
-                shaderMap[id] = shader;
-                return shaderMap[id];
-
-            }
-
-            Shader* loadShader(const std::string& vertPath, const std::string& fragPath, std::string id) {
-                if (shaderMap.find(id) != shaderMap.end())
-                    return shaderMap[id];
-                Shader* shader = new Shader(vertPath, fragPath);
-                shaderMap[id] = shader;
-                return shaderMap[id];
-            }
-
+            Shader* loadShader(const std::string& fileName, std::string id);
+            Shader* loadShader(const std::string& vertPath, const std::string& fragPath, std::string id);
             //Shader* loadShader(const std::string& vertPath, const std::string& fragPath, const std::string& geoPath, std::string id) {}
+            //TODO: Models, audio, fonts
+            //TODO: Hot reloading
+            //TODO: Search for embedded resources as well
+
+            void setSearchDirectories(const std::vector<std::string>& directories) { searchDirectories = directories; }
+            void addSearchDirectory(const std::string& directory) { searchDirectories.push_back(directory); }
 
             Texture* getTexture(std::string id) {
                 if (textureMap.find(id) != textureMap.end())
@@ -81,8 +65,18 @@ namespace Villain {
             std::map<std::string, Texture*> textureMap;
             std::map<std::string, Shader*> shaderMap;
 
+            // Resource search directories
+            std::vector<std::string> searchDirectories = {
+                "./",
+                "../",
+                "assets",
+                "assets/shaders/",
+                "assets/textures/",
+                "resources",
+                "resources/shaders/",
+                "resources/textures/",
+            };
+
             static ResourceManager* sInstance;
     };
 }
-
-#endif // __ResourceManager__
