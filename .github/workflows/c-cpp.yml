@@ -24,7 +24,10 @@ jobs:
           libassimp-dev \
           lcov
     - name: Run unit tests
-      run: ./runTests.sh
+      run: |
+        ./configure.sh
+        ./build.sh
+        ./runTests.sh
     - name: Build Sponza example
       run: |
         cd examples/3D
