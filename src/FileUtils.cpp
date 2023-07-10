@@ -1,6 +1,7 @@
 #include "FileUtils.hpp"
 
 #include "Logger.hpp"
+#include <filesystem> // C++17
 #include <fstream>
 #include <sstream>
 
@@ -59,5 +60,15 @@ namespace Villain {
 
         VILLAIN_ERROR("Resource {} file not found", filePath);
         return cmrc::file();
+    }
+
+    bool FileUtils::fileExists(const std::string& filePath) {
+        namespace fs = std::filesystem;
+        return fs::exists(filePath) && fs::is_regular_file(filePath);
+    }
+
+    bool FileUtils::resourceExists(const std::string& filePath) {
+        auto resourceFs = cmrc::Villain::get_filesystem();
+        return resourceFs.exists(filePath);
     }
 }
