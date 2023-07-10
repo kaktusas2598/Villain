@@ -159,7 +159,7 @@ namespace Villain {
 
         Shader* shader = Shader::createFromResource("spriteBatch");
 
-        cmrc::file resourceFile = FileUtils::loadResource("res/textures/logo.jpg");
+        cmrc::file resourceFile = FileUtils::loadResource("res/textures/logo.jpeg");
         Texture* loadingLogo = new Texture(resourceFile.size(), const_cast<char*>(&(*resourceFile.begin())), false);
         Material material{"loadingScreen", loadingLogo, 1};
 
