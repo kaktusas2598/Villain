@@ -7,6 +7,7 @@
 ### Core Engine
 * Builds as a library
 * 2D Tiled map parsing/loading from TMX/XML files
+* 3D Scene loading from XML files
 * Debug/Edit mode UI
 * Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
 * Error logging to stdout, log file and editor console
@@ -36,8 +37,11 @@
 
 ### Physics
 * 2D Particle Engine
-* Simple 3D Particle system with force generators, springs
-* ...
+* 3D Particle mass aggregate engine:
+  * Particle integration using forces
+  * Force generators: gravity, drag, springs, anchored springs, bungees, buoyancy, fake stiff springs
+  * Contact generators: cables, rods, constraints
+  *
 * More features TBA
 
 ## Planned Features
