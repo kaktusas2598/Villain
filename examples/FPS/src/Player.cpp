@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 
 using namespace Villain;
 

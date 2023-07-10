@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "Gun.hpp"
 
 Player::Player() : currentGunIndex(-1)

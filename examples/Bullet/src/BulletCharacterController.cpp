@@ -1,6 +1,6 @@
 #include "BulletCharacterController.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include <algorithm>
 using namespace Villain;
 

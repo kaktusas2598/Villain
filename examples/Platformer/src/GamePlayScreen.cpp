@@ -1,5 +1,5 @@
 #include "GamePlayScreen.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "glm/fwd.hpp"
 
 #include "Light2D.hpp"

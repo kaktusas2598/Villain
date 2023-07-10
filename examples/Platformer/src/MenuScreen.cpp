@@ -1,6 +1,6 @@
 #include "MenuScreen.hpp"
 #include "Engine.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "glm/glm.hpp"
 #include "nuklear.h"
 
