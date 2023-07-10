@@ -84,20 +84,23 @@ namespace Villain {
     }
 
     Texture::Texture(uint32_t bufferSize, void* buffer, bool sRGB): target(GL_TEXTURE_2D) {
+        stbi_set_flip_vertically_on_load(1);
         void * imageData = stbi_load_from_memory((const stbi_uc*)buffer, bufferSize, &width, &height, &BPP, 0);
 
         GLCall(glGenTextures(1, &rendererID));
         GLCall(glBindTexture(target, rendererID));
 
-        // Recalibrate for gamma correction
-        //GLenum internalFormat;
-        //if (sRGB) {
-            //if (BPP == 4)
-                //internalFormat = GL_SRGB_ALPHA;
-            //else
-                //internalFormat= GL_SRGB;
-        //}
-        GLCall(glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData));
+        GLint internalFormat;
+        GLenum format;
+        if (BPP == 4) {
+            internalFormat = sRGB ? GL_SRGB_ALPHA : GL_RGBA;
+            format = GL_RGBA;
+        } else {
+            internalFormat = sRGB ? GL_SRGB : GL_RGB;
+            format = GL_RGB;
+        }
+
+        GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, imageData));
 
         GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
         GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
@@ -111,7 +114,6 @@ namespace Villain {
 
 
         stbi_image_free(imageData);
-
     }
 
     void Texture::init(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format, bool clamp) {

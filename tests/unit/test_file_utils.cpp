@@ -59,9 +59,9 @@ TEST_CASE("FileUtils Tests") {
 
     SECTION("Load non existant resource") {
         // Load the resource file using FileUtils
-        std::string loadedContent = Villain::FileUtils::loadResource("test");
+        cmrc::file loadedContent = Villain::FileUtils::loadResource("test");
 
         // Check if the loaded content matches the expected content
-        REQUIRE(loadedContent == std::string());
+        REQUIRE(loadedContent.size() == 0);
     }
 }

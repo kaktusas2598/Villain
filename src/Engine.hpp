@@ -57,6 +57,7 @@ namespace Villain {
             static uint32_t getRenderTime() { return renderTime; }
             static bool editModeActive() { return editMode; }
             bool* wireFrameModeActive() { return &wireFrameMode; }
+            void renderLoadingScreen();
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline ParticleWorld* getParticleWorld() { return particleWorld.get(); }

@@ -75,7 +75,7 @@ namespace Villain {
     void Shader::includeHeader(std::stringstream* ss, ShaderType shaderType, const std::string& line) {
         // process include directive
         std::string file = line.substr(line.find(' ') + 1, line.length());
-        std::string incSource = FileUtils::loadResource("res/shaders/" + file);
+        std::string incSource = std::string(FileUtils::loadResource("res/shaders/" + file).begin());
         std::istringstream inceIss(incSource);
         std::string incLine;
 
@@ -91,7 +91,7 @@ namespace Villain {
     }
 
     Shader* Shader::createFromResource(const std::string& source) {
-        std::string src = FileUtils::loadResource("res/shaders/" + source + ".glsl");
+        std::string src = std::string(FileUtils::loadResource("res/shaders/" + source + ".glsl").begin());
         Shader* shader = new Shader();
         shader->createFromSource(src);
         return shader;

@@ -18,6 +18,10 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+// For loading screen
+#include "rendering/Mesh.hpp"
+#include "FileUtils.hpp"
+
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -98,10 +102,7 @@ namespace Villain {
         if (enableGammaCorrection)
             renderingEngine->setGammaCorrection(true);
 
-        // TODO: Will render loading screen here
-        // At least screen quad with texture mapped required
-        glClear(GL_COLOR_BUFFER_BIT);
-        window.swapBuffer();
+        renderLoadingScreen();
 
         //initialize the current game
         application = app;
@@ -139,6 +140,39 @@ namespace Villain {
             flags,
             configScript.get<bool>("rendering.gammaCorrection")
         );
+    }
+
+    // Special one-time render pass, displayed while user application is loading
+    void Engine::renderLoadingScreen() {
+        // TODO: Handle Resize, embed loading screen texture
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
+
+        // Setting up screen quad
+        std::vector<VertexP1C1UV> vertices;
+        vertices.push_back({{-1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 1.0}, {0.0, 0.0}});
+        vertices.push_back({{-1.0, 1.0, 0.0}, {1.0, 1.0, 1.0, 1.0}, {0.0, 1.0}});
+        vertices.push_back({{1.0, 1.0, 0.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 1.0}});
+        vertices.push_back({{1.0, -1.0, 0.0}, {1.0, 1.0, 1.0, 1.0}, {1.0, 0.0}});
+        std::vector<unsigned int> indices = {0, 1, 2, 2, 3, 0};
+        Mesh<VertexP1C1UV> quad(vertices, indices);
+
+        Shader* shader = Shader::createFromResource("spriteBatch");
+
+        cmrc::file resourceFile = FileUtils::loadResource("res/textures/logo.jpg");
+        Texture* loadingLogo = new Texture(resourceFile.size(), const_cast<char*>(&(*resourceFile.begin())), false);
+        Material material{"loadingScreen", loadingLogo, 1};
+
+        loadingLogo->bind();
+        shader->bind();
+        shader->setUniform1i("spriteTexture", 0);
+        shader->setUniformMat4f("model", glm::mat4(1.0f));
+        shader->setUniformMat4f("view", glm::mat4(1.0f));
+        shader->setUniformMat4f("projection", glm::mat4(1.0f));
+        // TODO: there should be no need to set material as well, for sprite we can only use diffuse texture and avoid non-existant uniform warnings
+        quad.draw(*shader, material);
+
+        window.swapBuffer();
     }
 
     void Engine::run() {

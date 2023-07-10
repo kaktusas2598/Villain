@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <cmrc/cmrc.hpp>
 CMRC_DECLARE(Villain);
 
 // For stat() to get file size, not tested on Windows
@@ -52,17 +51,13 @@ namespace Villain {
         return buffer;
     }
 
-    std::string FileUtils::loadResource(const std::string& filePath) {
+    cmrc::file FileUtils::loadResource(const std::string& filePath) {
         auto resourceFs = cmrc::Villain::get_filesystem();
         if (resourceFs.exists(filePath)) {
-            auto resourceFile = resourceFs.open(filePath);
-            std::string source(resourceFile.begin());
-            return source;
-        } else {
-            std::stringstream ss;
-            ss << "Resource at " << filePath << " not found";
-            Logger::Instance()->error(ss.str().c_str());
+            return resourceFs.open(filePath);
         }
-        return std::string();
+
+        VILLAIN_ERROR("Resource {} file not found", filePath);
+        return cmrc::file();
     }
 }

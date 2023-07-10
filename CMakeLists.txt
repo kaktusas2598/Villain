@@ -27,9 +27,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 # Include Cmake Resource Compiler, https://github.com/vector-of-bool/cmrc
 include(CMakeRC)
-# Create resource library for shaders
+# Create resource library for shaders, textures and other embedded resources
 file(GLOB shaders res/shaders/*)
-cmrc_add_resource_library(VillainShaderLibrary ALIAS Villain::ShaderLibrary NAMESPACE Villain ${shaders})
+file(GLOB textures res/textures/*)
+cmrc_add_resource_library(VillainResourceLibrary ALIAS Villain::ResourceLibrary NAMESPACE Villain ${shaders} ${textures})
 
 find_package(Lua REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -92,7 +93,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm spdlog imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ShaderLibrary)
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm spdlog imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ResourceLibrary)
 
 if(VILLAIN_BUILD_TESTS)
     add_subdirectory(vendor/catch2 tests/out)
