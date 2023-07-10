@@ -5,17 +5,18 @@
 #include "Engine.hpp"
 #include "ResourceManager.hpp"
 #include "SoundManager.hpp"
-#include <filesystem>
 
 // Custom baked fonts for ImGui;
+#include "imgui/fontawesome6.h"
 #include "imgui/Roboto-Regular.h"
-
-namespace fs = std::filesystem;
+#include "imgui/source_sans_pro_regular.h"
 
 namespace Villain {
 
     bool ImGuiLayer::showDemoWindow = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+    ImGuiLayer::ImGuiLayer(): fileBrowser(this) {}
 
     void ImGuiLayer::exit() {
         ImGui_ImplOpenGL3_Shutdown();
@@ -36,7 +37,12 @@ namespace Villain {
         // Add custom fonts built by ImGui's binary_to_compressed_c script!
         ImFontConfig config;
         config.PixelSnapH = true;
-        io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        //robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_Regular_compressed_data, Roboto_Regular_compressed_size, 16.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        ImFontGlyphRangesBuilder glyphRangeBuilder;
+        glyphRangeBuilder.AddRanges(io.Fonts->GetGlyphRangesDefault());
+        robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(source_sans_pro_regular_compressed_data, source_sans_pro_regular_compressed_size, 21.0f, &config, io.Fonts->GetGlyphRangesDefault());
+        ImWchar rangesFontAwesome[] = { 0xF000, 0xF8FF, 0 };
+        fontAwesome6 = io.Fonts->AddFontFromMemoryCompressedTTF(fontawesome6_compressed_data, fontawesome6_compressed_size, 16.0f, &config, rangesFontAwesome);
         io.Fonts->Build();
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
@@ -184,8 +190,8 @@ namespace Villain {
         drawScene(engine);
         sceneEditor.render(engine);
         assetBrowser.render();
+        fileBrowser.render();
         drawSettings(engine);
-        drawFileBrowser();
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     }
 
@@ -207,9 +213,23 @@ namespace Villain {
         ImGui::EndFrame();
     }
 
+    void ImGuiLayer::renderIcon(const std::string& codePoint, float scale) {
+        // Icon test
+        fontAwesome6->Scale = scale;
+        ImGui::PushFont(fontAwesome6);
+        ImGui::Text("%s", codePoint.c_str());
+        ImGui::PopFont();
+        fontAwesome6->Scale = 1.0f;
+    }
+
     void ImGuiLayer::drawMenu() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Open")) {
+                    fileBrowser.openPopup();
+                }
+                ImGui::SameLine(); renderIcon("\uf07c");
+
                 if (ImGui::MenuItem("Quit")) {
                     Engine::setRunning(false);
                 }
@@ -265,7 +285,7 @@ namespace Villain {
 
             mousePosRelativeToSceneViewport = glm::vec2(imGuiMousePosition.x, imGuiMousePosition.y) - sceneViewportPosition;
 
-            //printf("Engine Mouse Coords X: %f Y: %f\n", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+            //printf("Engine Mouse Coords X: %f Y: %f\n", Input::Get()->getMouseCoords().x, Input::Get()->getMouseCoords().y);
             //printf("ImGui GetCursorScreenPos() X: %f Y: %f\n", sceneViewportPosition.x, sceneViewportPosition.y);
             //printf("ImGui::GetMousePos() X: %f Y: %f\n", imGuiMousePosition.x, imGuiMousePosition.y);
             //printf("Scene image Coords X: %f Y: %f\n", mousePosRelativeToSceneViewport.x, mousePosRelativeToSceneViewport.y);
@@ -294,7 +314,7 @@ namespace Villain {
         ImGui::Text("Update frame time: %.1u ms ", engine.getUpdateTime());
         ImGui::Text("Render frame time: %.1u ms", engine.getRenderTime());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::Text("Mouse coords(Window): %.1f, %.1f", InputManager::Instance()->getMouseCoords().x, InputManager::Instance()->getMouseCoords().y);
+        ImGui::Text("Mouse coords(Window): %.1f, %.1f", Input::Get()->getMouseCoords().x, Input::Get()->getMouseCoords().y);
 
         ImGui::Separator();
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
@@ -327,60 +347,5 @@ namespace Villain {
         if (showDemoWindow)
             ImGui::ShowDemoWindow(&showDemoWindow);
     }
-
-    void ImGuiLayer::drawFileBrowser() {
-        ImGui::Begin("File Browser");
-        {
-            // Get the current working directory
-            const fs::path& currentPath = fs::current_path();
-
-            // Display the parent directory as a selectable button
-            if (ImGui::Button(".."))
-            {
-                // Navigate to the parent directory
-                const fs::path parentPath = currentPath.parent_path();
-                if (fs::exists(parentPath))
-                    fs::current_path(parentPath);
-            }
-
-            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
-                drawFileBrowserPath(currentPath);
-
-                ImGui::EndPopup();
-            }
-
-            if (ImGui::Button("Open File Browser")) {
-                ImGui::OpenPopup("FileBrowserPopup");
-            }
-
-            drawFileBrowserPath(currentPath);
-        }
-        ImGui::End();
-    }
-
-    void ImGuiLayer::drawFileBrowserPath(const fs::path& currentPath) {
-        for (const auto& entry : fs::directory_iterator(currentPath)) {
-            const auto& path = entry.path();
-
-            // Skip hidden files
-            if (entry.is_regular_file() && path.filename().string()[0] == '.')
-                continue;
-
-            if (entry.is_directory()) {
-                bool expanded = ImGui::TreeNode(path.filename().string().c_str());
-
-                if (expanded)
-                {
-                    drawFileBrowserPath(path);
-                    ImGui::TreePop();
-                }
-            }
-            else if (entry.is_regular_file())
-            {
-                ImGui::Text("%s", path.filename().string().c_str());
-            }
-        }
-    }
-
 }
 

@@ -1,5 +1,5 @@
 #include "GamePlayScreen.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "glm/fwd.hpp"
 
 #include "Light2D.hpp"
@@ -110,10 +110,10 @@ void GamePlayScreen::update(float deltaTime) {
     // Update physics
     world->Step(deltaTime, 6, 2);
 
-    if (Villain::InputManager::Instance()->isKeyPressed(SDLK_1)) {
+    if (Villain::Input::Get()->isKeyPressed(SDLK_1)) {
         debugRenderMode = !debugRenderMode;
     }
-    if (Villain::InputManager::Instance()->isKeyPressed(SDLK_ESCAPE)) {
+    if (Villain::Input::Get()->isKeyPressed(SDLK_ESCAPE)) {
         setScreenState(Villain::ScreenState::CHANGE_PREVIOUS);
     }
 }
@@ -176,7 +176,7 @@ void GamePlayScreen::draw() {
         Light2D mouseLight;
         mouseLight.color = glm::vec4(0.1f, 1.0f, 0.1f, 1.0f);
         mouseLight.size = 10.0f;
-        glm::vec2 mouseCoords = camera->screenToWorld(Villain::InputManager::Instance()->getMouseCoords());
+        glm::vec2 mouseCoords = camera->screenToWorld(Villain::Input::Get()->getMouseCoords());
         //mouseCoords.x += 5.0f / 2;
         //mouseCoords.y += 5.0f / 2;
         mouseLight.position = glm::vec3(mouseCoords.x, mouseCoords.y, -0.4f);

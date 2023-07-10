@@ -27,6 +27,7 @@ namespace Villain {
             inline BaseLight* getActiveLight() { return activeLight; }
             static unsigned int getSamplerSlot(const std::string& samplerType) { return samplerMap.find(samplerType)->second; }
             glm::vec3* getAmbientLightColor() { return &ambientLight; }
+            void setAmbientLightColor(const glm::vec3& color) { ambientLight = color; }
             inline glm::mat4 getLightMatrix() const { return lightMatrix; }
             void setMainCamera(Camera& camera) { mainCamera = &camera; }
             inline Camera* getMainCamera() { return mainCamera; }

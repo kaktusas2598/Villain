@@ -31,6 +31,9 @@ namespace Villain {
     // 1. Change to use particle memory pool
     // 2. Support multiple parameters, or maybe types of particle emitters
     // 3. Data-driven approach, XML?
+    //
+    // UPDATE: This class will become ParticleEmitterComponent and will be used for visual effects
+    // creating emitter from xml description and using memory pool
     class ParticleEmitter : public NodeComponent {
         public:
             ParticleEmitter(int numParticles, ParticleShape shape = ParticleShape::SPHERE) {

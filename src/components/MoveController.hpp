@@ -1,11 +1,11 @@
-#ifndef __MOVE_CONTROLLER__
-#define __MOVE_CONTROLLER__
+#pragma once
 
 #include "../Engine.hpp"
 #include "../NodeComponent.hpp"
 
 namespace Villain {
 
+    // Can be attached to any Graph node in scene to control it via keyboard
     class MoveController: public NodeComponent {
         public:
             MoveController(float sp = 2.5f): speed(sp) {}
@@ -15,5 +15,3 @@ namespace Villain {
             float speed;
     };
 }
-
-#endif // __MOVE_CONTROLLER__

@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 
 using namespace Villain;
 
@@ -13,25 +13,25 @@ void Player::handleInput(float deltaTime) {
     // generic Look and Move controllers, but the problem is that MoveController reacts to space/lshift, need
     // ability to override that, so using our move logix for now
     movement = glm::vec3(0.0f);
-    if (InputManager::Instance()->isKeyDown(SDLK_w)) {
+    if (Input::Get()->isKeyDown(SDLK_w)) {
         movement += GetTransform()->getForward();
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_s)) {
+    if (Input::Get()->isKeyDown(SDLK_s)) {
         movement -= GetTransform()->getForward();
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_a)) {
+    if (Input::Get()->isKeyDown(SDLK_a)) {
         movement -= GetTransform()->getRight();
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_d)) {
+    if (Input::Get()->isKeyDown(SDLK_d)) {
         movement += GetTransform()->getRight();
     }
 
-    if (InputManager::Instance()->isKeyDown(SDLK_e)) {
+    if (Input::Get()->isKeyDown(SDLK_e)) {
         // TODO: only pass true when all monsters are killed
         currentLevel->openDoors(GetTransform()->getPos(), true);
     }
 
-    if (InputManager::Instance()->isKeyPressed(SDL_BUTTON_LEFT)) {
+    if (Input::Get()->isKeyPressed(SDL_BUTTON_LEFT)) {
         glm::vec2 lineStart = glm::vec2(GetTransform()->getPos().x, GetTransform()->getPos().z);
         // Needed camera's front vector here, but playuer's should be the same
         glm::vec2 castDirection = glm::normalize(glm::vec2(GetTransform()->getForward().x, GetTransform()->getForward().z));

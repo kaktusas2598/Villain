@@ -88,6 +88,8 @@ namespace Villain {
 
         // TODO: will need some configs here, gravity vector for example
         physicsEngine = std::make_unique<PhysicsEngine>(this);
+        // TODO: ability to set custom number of contacts
+        particleWorld = std::make_unique<ParticleWorld>(200);
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
@@ -95,6 +97,11 @@ namespace Villain {
 
         if (enableGammaCorrection)
             renderingEngine->setGammaCorrection(true);
+
+        // TODO: Will render loading screen here
+        // At least screen quad with texture mapped required
+        glClear(GL_COLOR_BUFFER_BIT);
+        window.swapBuffer();
 
         //initialize the current game
         application = app;
@@ -180,7 +187,7 @@ namespace Villain {
                 // NOTE: Probably not correct to have input handling in here, but if we move this outside semi-fixed step
                 // loop, events are not being caught in example application's update() methods
                 //update input manager
-                TheInputManager::Instance()->update();
+                Input::Get()->update();
                 SDL_Event event;
                 while (SDL_PollEvent(&event)) {
                     ImGui_ImplSDL2_ProcessEvent(&event);
@@ -197,6 +204,8 @@ namespace Villain {
 
                 physicsEngine->simulate(deltaTime);
                 physicsEngine->handleCollisions();
+
+                particleWorld->runPhysics(deltaTime);
 
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);
@@ -304,7 +313,7 @@ namespace Villain {
     void Engine::handleEvents(SDL_Event& event) {
         static bool mouseFirst = true;
         //set the event type
-        TheInputManager::Instance()->setEventType(event.type);
+        Input::Get()->setEventType(event.type);
         switch (event.type) {
             case SDL_QUIT:
                 exit();
@@ -319,13 +328,13 @@ namespace Villain {
                     } else {
                         mouseFirst = false;
                     }
-                    TheInputManager::Instance()->setMouseOffsets(offsets.x, offsets.y);
+                    Input::Get()->setMouseOffsets(offsets.x, offsets.y);
 
                     MouseEvent mouseEvent = MouseEvent(MouseEventType::MOVE, {event.motion.x, event.motion.y}, offsets);
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
 
-                TheInputManager::Instance()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
+                Input::Get()->setMouseCoords((float)event.motion.x, (float)event.motion.y);
                 application->onMouseMove(event.motion.x, event.motion.y);
                 break;
             case SDL_KEYDOWN:
@@ -333,7 +342,7 @@ namespace Villain {
                     KeyboardEvent keyboardEvent = KeyboardEvent(KeyEventType::PRESS, static_cast<KeyCode>(event.key.keysym.sym));
                     eventDispatcher->dispatchEvent(keyboardEvent);
                 }
-                TheInputManager::Instance()->pressKey(event.key.keysym.sym);
+                Input::Get()->pressKey(event.key.keysym.sym);
                 if (event.key.keysym.sym == SDLK_BACKQUOTE)
                     editMode = !editMode;
                 break;
@@ -342,14 +351,14 @@ namespace Villain {
                     KeyboardEvent keyboardEvent = KeyboardEvent(KeyEventType::RELEASE, static_cast<KeyCode>(event.key.keysym.sym));
                     eventDispatcher->dispatchEvent(keyboardEvent);
                 }
-                TheInputManager::Instance()->releaseKey(event.key.keysym.sym);
+                Input::Get()->releaseKey(event.key.keysym.sym);
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 {
                     MouseEvent mouseEvent = MouseEvent(MouseEventType::CLICK, event.button.button);
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
-                TheInputManager::Instance()->pressKey(event.button.button);
+                Input::Get()->pressKey(event.button.button);
                 application->onMouseDown(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
@@ -357,11 +366,11 @@ namespace Villain {
                     MouseEvent mouseEvent = MouseEvent(MouseEventType::RELEASE, event.button.button);
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
-                TheInputManager::Instance()->releaseKey(event.button.button);
+                Input::Get()->releaseKey(event.button.button);
                 application->onMouseUp();
                 break;
             case SDL_TEXTINPUT:
-                TheInputManager::Instance()->addInputCharacters(event.text.text);
+                Input::Get()->addInputCharacters(event.text.text);
                 break;
             case SDL_MOUSEWHEEL:
                 {
@@ -369,9 +378,9 @@ namespace Villain {
                     eventDispatcher->dispatchEvent(mouseEvent);
                 }
                 if (event.wheel.y > 0)
-                    TheInputManager::Instance()->setMouseWheel(1);
+                    Input::Get()->setMouseWheel(1);
                 if (event.wheel.y < 0)
-                    TheInputManager::Instance()->setMouseWheel(-1);
+                    Input::Get()->setMouseWheel(-1);
                 break;
             case (SDLK_ESCAPE):
                 isRunning = false;
@@ -384,6 +393,9 @@ namespace Villain {
                 screenWidth = event.window.data1;
                 screenHeight = event.window.data2;
                 sceneBuffer->rescale(screenWidth, screenHeight);
+                //ImGuiIO& io = ImGui::GetIO();
+                //io.DisplaySize = ImVec2(screenWidth, screenHeight);
+                //io.DisplayFramebufferScale = ImVec2(1.0, 1.0);
                 glViewport(0, 0, screenWidth, screenHeight);
                 {
                     WindowResizeEvent resizeEvent = WindowResizeEvent(screenWidth, screenHeight);

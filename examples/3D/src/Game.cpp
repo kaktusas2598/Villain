@@ -9,11 +9,18 @@
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
 #include "components/ParticleEmitter.hpp"
+#include "components/ParticlePhysicsComponent.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
 
+#include "physics/generators/contact/GroundContacts.hpp"
+#include "physics/generators/contact/ParticleCable.hpp"
+#include "physics/generators/contact/ParticleRod.hpp"
+#include "physics/generators/force/ParticleGravity.hpp"
+#include "physics/generators/force/ParticleSpring.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include <glm/gtx/string_cast.hpp>
 
 using namespace Villain;
 
@@ -23,7 +30,7 @@ class ExampleEventListener : public EventListener {
     virtual void handleEvent(Event& event) override {
         if (KeyboardEvent* myEvent = dynamic_cast<KeyboardEvent*>(&event)) {
             if (myEvent->isPressed()) {
-                printf("KEY Pressed: %d!\n", myEvent->getKey());
+                printf("KEY Pressed: %c!\n", (char)myEvent->getKey());
             } else {
                 printf("KEY Released!\n");
             }
@@ -42,16 +49,6 @@ void Game::init() {
     glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &result);
     VILLAIN_INFO("Max uniform location count is {}", result);
 
-    // Letting engine take care of the skybox
-    getRootNode()->getEngine()->getRenderingEngine()->setSkybox(std::vector<std::string>{
-        "assets/textures/skybox/right.jpg",
-        "assets/textures/skybox/left.jpg",
-        "assets/textures/skybox/top.jpg",
-        "assets/textures/skybox/bottom.jpg",
-        "assets/textures/skybox/front.jpg",
-        "assets/textures/skybox/back.jpg"
-    });
-
     const unsigned NUM_INSTANCES = 1000;
     std::vector<glm::mat4> instanceTransforms;
     float radius = 5.0f, offset = 0.25f;
@@ -65,12 +62,8 @@ void Game::init() {
     wall->getTransform()->setEulerRot(0.0f, 0.f, 90.f);
     addToScene(wall);
 
-    // TODO: Lights TEMP disabled
-    // Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source)
-    SceneNode* directionalLight = ((new SceneNode("Directional Light 1", glm::vec3(10, 10, 10)))
-                ->addComponent(new DirectionalLight(glm::vec3(0.5f), glm::vec3(0.2f), glm::vec3(1.0f),glm::vec3(-0.2f, -0.8f, -0.5f))));
-    addToScene(directionalLight);
 
+    // TODO: Move to XML
     //glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);
     //SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))
                 //->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), glm::vec3(1.0f, 0.022f, 0.0019f))));
@@ -96,7 +89,50 @@ void Game::init() {
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
 
     // New Particle Engine tests
-    addToScene((new SceneNode("Particles"))->addComponent(new ParticleEmitter(100)));
+    //addToScene((new SceneNode("Particles"))->addComponent(new ParticleEmitter(100)));
+
+    // V2 - Mass Aggregate particle physics engine tests
+    Particle* springA = new Particle();
+    Particle* springB = new Particle();
+    springA->setPosition({0.0f, 15.0f, 0.0f});
+    springB->setPosition({0.0f, 5.0f, 0.0f});
+
+    ParticlePhysicsComponent* particlePhysics = new ParticlePhysicsComponent();
+    // ATM component must be added to scene to get pointer to engine so we can setup particles
+    addToScene((new SceneNode("Spring test"))->addComponent(particlePhysics));
+
+    // 2 particles connected with spring
+    particlePhysics->addParticle(springA);
+    particlePhysics->addParticle(springB);
+    particlePhysics->addForceGenerator(new ParticleSpring(springB, 1.0f, 2.0f), {0});
+    particlePhysics->addForceGenerator(new ParticleSpring(springA, 1.0f, 2.0f), {1});
+
+    Particle* rodA = new Particle();
+    Particle* rodB = new Particle();
+    rodA->setVelocity({0.0, 0.0, -1.0});
+    rodA->setPosition({5.0f, 15.0f, 0.0f});
+    rodB->setPosition({5.0f, 5.0f, 0.0f});
+    particlePhysics->addParticle(rodA);
+    particlePhysics->addParticle(rodB);
+    particlePhysics->addContactGenerator(new ParticleRod(9.0f, rodA, rodB));
+    //particlePhysics->addContactGenerator(new ParticleCable(8.0f, 1.0f,  rodA, rodB));
+
+    // Generate ground contacts for all particles in component
+    particlePhysics->addContactGenerator(new GroundContacts(particlePhysics->getParticles()));
+
+    particlePhysics->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {3, 2});
+
+    if (getRootNode()->findByID(3)) {
+        playerBody = new Particle();
+        SceneNode* player = getRootNode()->findByID(3);
+        playerBody->setPosition(player->getTransform()->getPos());
+        playerBody->setMass(10.0);
+        ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
+        player->addComponent(playerParticleCompo);
+        playerParticleCompo->addParticle(playerBody);
+        playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
+        //playerParticleCompo->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {0});
+    }
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
     Model* sphereModel = new Model("assets/models/sphere.obj");
@@ -114,51 +150,12 @@ void Game::init() {
     printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
     printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
-    /*
-    // Skeletal Animation demo
-    Model* animatedModel = new Model("assets/models/mudeater.dae");
-    SceneNode* animatedNode = (new SceneNode("Animated Model", glm::vec3(12, 0, 0)))->addComponent(new ModelRenderer(animatedModel));
-    animatedNode->getTransform()->setEulerRot(-90.0f, -90.0f, 0.0f);
-    addToScene(animatedNode);
-
-    //Model* catModel = new Model("assets/models/AnimalPackVol2Quaternius/FBX/Cat.fbx");
-    //SceneNode* catNode = (new SceneNode("Cat", {0, 0, 6}))->addComponent(new ModelRenderer(catModel));
-    //catNode->getTransform()->setScale(0.02);
-    //catNode->getTransform()->setEulerRot(0.0f, -180.0f, 0.0f);
-    //addToScene(catNode);
-
-    std::string eaglePath = "assets/models/AnimalPackVol2Quaternius/Eagle.fbx";
-    Model* eagleModel = new Model(eaglePath.c_str());
-    SceneNode* eagleNode = (new SceneNode("Eagle", {12, 20, 0}))->addComponent(new ModelRenderer(eagleModel));
-    eagleNode->getTransform()->setScale(0.02);
-    eagleNode->getTransform()->setEulerRot(0.0f, 90.0f, 0.0f);
-    addToScene(eagleNode);
-
-    //std::string vampirePath = "assets/models/Rumba Dancing.fbx";
-    std::string vampirePath = "assets/models/ThrillerPart1-Vampire.dae";
-    Model* vampireModel = new Model(vampirePath.c_str());
-    SceneNode* vampireNode = (new SceneNode("Dancing Vampire", glm::vec3(12, 0, 6)))->addComponent(new ModelRenderer(vampireModel, 420));
-    vampireNode->getTransform()->setScale(0.05);
-    vampireNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
-    addToScene(vampireNode);
-
-    // This is part 4, also works, but fbx binary file has wrong texture paths
-    //std::string thrillerPath = "assets/models/Thriller.fbx";
-    //std::string thrillerPath = "assets/models/Angry.fbx";
-    std::string thrillerPath = "assets/models/ThrillerPart1-ZombieGirl.dae";
-    Model* thrillerModel = new Model(thrillerPath.c_str());
-    SceneNode* thrillerNode = (new SceneNode("thriller", {12, 0, -6}))->addComponent(new ModelRenderer(thrillerModel, 420));
-    thrillerNode->getTransform()->setScale(0.05);
-    thrillerNode->getTransform()->setEulerRot(0.0f, -90.0f, 0.0f);
-    addToScene(thrillerNode);
-    */
-
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
 }
 
 void Game::handleEvents(float deltaTime) {
-    if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
+    if (Input::Get()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
 }
@@ -168,6 +165,7 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
+    //VILLAIN_INFO("Player particle pos {}", glm::to_string(playerBody->getPosition()));
 }
 
 void Game::onAppRender(float dt) {

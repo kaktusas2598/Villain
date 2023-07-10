@@ -315,25 +315,25 @@ void Game::addRigidBoxes() {
 }
 
 void Game::handleEvents(float deltaTime) {
-    if (InputManager::Instance()->isKeyDown(SDLK_ESCAPE)) {
+    if (Input::Get()->isKeyDown(SDLK_ESCAPE)) {
         Engine::setRunning(false);
     }
 
-    if (InputManager::Instance()->isKeyPressed(SDLK_f)) {
+    if (Input::Get()->isKeyPressed(SDLK_f)) {
         shootSphere();
     }
 
     // Bullet debug modes
-    if (InputManager::Instance()->isKeyDown(SDLK_1)) {
+    if (Input::Get()->isKeyDown(SDLK_1)) {
         PhysicsWorld->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_2)) {
+    if (Input::Get()->isKeyDown(SDLK_2)) {
         PhysicsWorld->setDebugMode(btIDebugDraw::DBG_DrawAabb);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_3)) {
+    if (Input::Get()->isKeyDown(SDLK_3)) {
         PhysicsWorld->setDebugMode(btIDebugDraw::DBG_DrawWireframe + btIDebugDraw::DBG_DrawAabb);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_0)) {
+    if (Input::Get()->isKeyDown(SDLK_0)) {
         PhysicsWorld->setDebugMode(btIDebugDraw::DBG_NoDebug);
     }
 }
@@ -406,7 +406,7 @@ void Game::onAppRender(float dt) {
     glm::vec3 cameraPos = camera->getPosition();
     glm::vec3 cameraFront = camera->getFront();
 
-    glm::vec2 mouseCoords = InputManager::Instance()->getMouseCoords();
+    glm::vec2 mouseCoords = Input::Get()->getMouseCoords();
     glm::vec3 mouseWorld = camera->mouseRayToWorld(mouseCoords);
     //printf("Mouse screen coords: %f.3, %f.3\n", mouseCoords.x, mouseCoords.y);
     //printf("Mouse World Coords: %f.3, %f.3, %f.3\n", mouseWorld.x, mouseWorld.y, mouseWorld.z);

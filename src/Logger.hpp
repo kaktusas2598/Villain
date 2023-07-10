@@ -3,6 +3,7 @@
 #include "ErrorHandler.hpp"
 #include "LuaScript.hpp"
 #include "editor/DebugConsole.hpp"
+#include "spdlog/common.h"
 
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/spdlog.h>
@@ -10,9 +11,12 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 // Logging macros to simplify logging in the engine
-#define VILLAIN_INFO(fmt, ...) Villain::Logger::Instance()->info(fmt, __VA_ARGS__)
-#define VILLAIN_WARN(fmt, ...) Villain::Logger::Instance()->warn(fmt, __VA_ARGS__)
-#define VILLAIN_ERROR(fmt, ...) Villain::Logger::Instance()->error(fmt, __VA_ARGS__)
+#define VILLAIN_TRACE(...) Villain::Logger::Instance()->trace(__VA_ARGS__)
+#define VILLAIN_DEBUG(...) Villain::Logger::Instance()->debug(__VA_ARGS__)
+#define VILLAIN_INFO(...) Villain::Logger::Instance()->info(__VA_ARGS__)
+#define VILLAIN_WARN(...) Villain::Logger::Instance()->warn(__VA_ARGS__)
+#define VILLAIN_ERROR(...) Villain::Logger::Instance()->error(__VA_ARGS__)
+#define VILLAIN_CRIT(...) Villain::Logger::Instance()->critical(__VA_ARGS__)
 
 namespace Villain {
 
@@ -25,6 +29,20 @@ namespace Villain {
                     return s_pInstance;
                 }
                 return s_pInstance;
+            }
+
+            template<typename... Args>
+            void trace(const char* fmt, const Args&... args) {
+                fileLogger->trace(fmt, args...);
+                consoleLogger->trace(fmt, args...);
+                DebugConsole::Instance()->addLog("[TRACE]: %s", fmt::format(fmt, args...).c_str());
+            }
+
+            template<typename... Args>
+            void debug(const char* fmt, const Args&... args) {
+                fileLogger->debug(fmt, args...);
+                consoleLogger->debug(fmt, args...);
+                DebugConsole::Instance()->addLog("[DEBUG]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
@@ -48,10 +66,19 @@ namespace Villain {
                 DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...).c_str());
             }
 
+            template<typename... Args>
+            void critical(const char* fmt, const Args&... args) {
+                fileLogger->critical(fmt, args...);
+                consoleLogger->critical(fmt, args...);
+                DebugConsole::Instance()->addLog("[CRIT]: %s", fmt::format(fmt, args...).c_str());
+            }
+
             void dumpStack (lua_State *L);
         private:
             Logger() {
                 spdlog::set_pattern("%^[%H:%M:%S.%e %l] : %v%$");
+                // TODO: Set different level for release builds
+                spdlog::set_level(spdlog::level::trace);
                 fileLogger = spdlog::basic_logger_mt("Villain Engine Log", "debug.log", true);
                 consoleLogger = spdlog::stdout_color_mt("console");
                 if (!fileLogger) {

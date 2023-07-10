@@ -4,20 +4,20 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include <filesystem>
 
 #include "AssetBrowser.hpp"
+#include "FileBrowser.hpp"
 #include "SceneGraphEditor.hpp"
-namespace fs = std::filesystem;
 
 namespace Villain {
 
     class Engine;
-    class SceneNode;
     class Window;
 
     class ImGuiLayer {
     public:
+        ImGuiLayer();
+
         // Sets up ImGui context and backends
         void init(Window& window);
         // Shutdown ImGui
@@ -35,16 +35,15 @@ namespace Villain {
         float getSceneViewportWidth() const { return sceneViewportWidth; }
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
-        //void setSelectedNode(SceneNode* node) { selectedNode = node; }
         SceneGraphEditor& getSceneEditor() { return sceneEditor; }
 
         // Draw different tools, can potentially be refactored to new classes
         void drawMenu();
         void drawScene(Engine& engine);
         void drawSettings(Engine& engine);
-        // TODO: refactor into new class
-        void drawFileBrowser();
-        void drawFileBrowserPath(const fs::path& currentPath);
+
+        // Render font awesome 6 icon, code point example - "\uf07c" for folder open icon
+        void renderIcon(const std::string& codePoint, float scale = 1.0f);
     private:
         void setupDockspace();
 
@@ -57,5 +56,9 @@ namespace Villain {
 
         SceneGraphEditor sceneEditor;
         AssetBrowser assetBrowser;
+        FileBrowser fileBrowser;
+
+        ImFont* fontAwesome6;
+        ImFont* robotoFont;
     };
 }

@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "Gun.hpp"
 
 Player::Player() : currentGunIndex(-1)
@@ -36,29 +36,29 @@ void Player::update(
                 std::vector<Human*>& humans,
                 std::vector<Zombie*>& zombies) {
 
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_w))
+    if(Villain::Input::Get()->isKeyDown(SDLK_w))
         position.y += speed * deltaTime;
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_a))
+    if(Villain::Input::Get()->isKeyDown(SDLK_a))
         position.x -= speed * deltaTime;
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_s))
+    if(Villain::Input::Get()->isKeyDown(SDLK_s))
         position.y -= speed * deltaTime;
-    if(Villain::TheInputManager::Instance()->isKeyDown(SDLK_d))
+    if(Villain::Input::Get()->isKeyDown(SDLK_d))
         position.x += speed * deltaTime;
 
-    if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_1) && guns.size() >= 0) {
+    if(Villain::Input::Get()->isKeyPressed(SDLK_1) && guns.size() >= 0) {
         std::cout << "Gun 0 selected\n";
         currentGunIndex = 0;
     }
-    if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_2) && guns.size() >= 1) {
+    if(Villain::Input::Get()->isKeyPressed(SDLK_2) && guns.size() >= 1) {
         std::cout << "Gun 1 selected\n";
         currentGunIndex = 1;
     }
-    if(Villain::TheInputManager::Instance()->isKeyPressed(SDLK_3) && guns.size() >= 2) {
+    if(Villain::Input::Get()->isKeyPressed(SDLK_3) && guns.size() >= 2) {
         std::cout << "Gun 2 selected\n";
         currentGunIndex = 2;
     }
 
-    glm::vec2 mouseCoords = Villain::InputManager::Instance()->getMouseCoords();
+    glm::vec2 mouseCoords = Villain::Input::Get()->getMouseCoords();
     mouseCoords = camera->screenToWorld(mouseCoords);
 
     glm::vec2 centerPosition = glm::vec2(position) + glm::vec2(scale * frameSize / 2);
@@ -68,7 +68,7 @@ void Player::update(
 
         guns[currentGunIndex]->update(
                 deltaTime,
-                Villain::TheInputManager::Instance()->isKeyDown(SDL_BUTTON_LEFT),
+                Villain::Input::Get()->isKeyDown(SDL_BUTTON_LEFT),
                 centerPosition,
                 direction,
                 *bullets);

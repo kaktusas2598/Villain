@@ -1,19 +1,19 @@
 <Root>
     <Properties>
         <Skybox>
-            <!--"assets/textures/skybox/right.jpg"-->
-            <!--"assets/textures/skybox/left.jpg"-->
-            <!--"assets/textures/skybox/top.jpg"-->
-            <!--"assets/textures/skybox/bottom.jpg"-->
-            <!--"assets/textures/skybox/front.jpg"-->
-            <!--"assets/textures/skybox/back.jpg"-->
+            <Right>assets/textures/skybox/right.jpg</Right>
+            <Left>assets/textures/skybox/left.jpg</Left>
+            <Top>assets/textures/skybox/top.jpg</Top>
+            <Bottom>assets/textures/skybox/bottom.jpg</Bottom>
+            <Front>assets/textures/skybox/front.jpg</Front>
+            <Back>assets/textures/skybox/back.jpg</Back>
         </Skybox>
+        <!--<Ambient color="#000000"/>-->
     </Properties>
     <Node name="Sponza Palace" scale='0.1'>
         <Components>
             <Component type="Model" fileName="assets/models/sponza.obj" />
         </Components>
-        <!--<Children></Children>-->
     </Node>
     <Node name="Rock" scale='0.01' positionX='2.0' positionY='1.0' positionZ='0.0'>
         <Components>
@@ -22,10 +22,80 @@
     </Node>
     <Node name="Free look camera">
         <Components>
-            <Component type="Camera" main='true' zNear='0.1' zFar='1000'/>
-            <Component type="MoveController"/>
+            <Component type="Camera" main='true' zNear='0.1' zFar='1000' cameraType='THIRD_PERSON'/>
+            <!--<Component type="MoveController"/>-->
         </Components>
     </Node>
+    <!-- Light Demo -->
+    <!-- Light test - Cause of the biggest FPS drop in the Engine! (Especially when using more than 1 light source) -->
+    <Node name="Directional Light" positionX='10.0' positionY='10.0' positionZ='10.0'>
+        <Components>
+            <Component type="DirectionalLight">
+                <Ambient color="#2F2F2F" intensity="0.2" />
+                <Diffuse color="#4F4F4F" intensity="1.0" />
+                <Specular color="#FFFFFF" intensity="1.0" />
+                <Direction x="-0.2" y="-0.8" z="-0.5" />
+            </Component>
+        </Components>
+    </Node>
+    <!--<Node name="Point Light" positionX='4.0' positionY='2.0' positionZ='3.0'>-->
+        <!--<Components>-->
+            <!--<Component type="PointLight">-->
+                <!--<Ambient color="#1F1F1F" intensity="0.2" />-->
+                <!--<Diffuse color="#FF0000" intensity="1.0" />-->
+                <!--<Specular color="#FFFFFF" intensity="1.0" />-->
+                <!--<Attenuation constant="1.0" linear="0.022" quadratic="0.0019" />-->
+            <!--</Component>-->
+        <!--</Components>-->
+    <!--</Node>-->
+    <!--<Node name="Spot Light" positionX='2.0' positionY='3.0' positionZ='1.0'>-->
+        <!--<Components>-->
+            <!--<Component type="SpotLight">-->
+                <!--<Ambient color="#FFFFFF" intensity="0.2" />-->
+                <!--<Diffuse color="#FFFFFF" intensity="1.0" />-->
+                <!--<Specular color="#FFFFFF" intensity="1.0" />-->
+                <!--<Direction x="-0.2" y="-0.8" z="-0.5" />-->
+                <!--<Cutoff angle="30.0" />-->
+                <!--<OuterCutoff angle="45.0" />-->
+            <!--</Component>-->
+        <!--</Components>-->
+    <!--</Node>-->
+<!--//glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);-->
+    <!--//SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))-->
+                <!--//->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), glm::vec3(1.0f, 0.022f, 0.0019f))));-->
+    <!--//pointLight->addChild(planeNode);-->
+    <!--//addToScene(pointLight);-->
+
+    <!--//PointLight* pointLight2 = new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(1.0f, 0.022f, 0.0019f));-->
+    <!--//SceneNode* point2 = ((new SceneNode("Point Light 2"))->addComponent(pointLight2));-->
+    <!--//addToScene(point2);-->
+
+
+    <!-- Skeletal Animation Examples -->
+    <!--<Node name="Mudeater" positionX='12.0' positionY='0.0' positionZ='0.0' rotX='-90.0' rotY='-90.0'>-->
+        <!--<Components>-->
+            <!--<Component type="Model" fileName="assets/models/mudeater.dae" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+    <!--<Node name="Eagle" scale='0.02' positionX='12.0' positionY='20.0' positionZ='0.0' rotY='90.0'>-->
+        <!--<Components>-->
+            <!--<Component type="Model" fileName="assets/models/AnimalPackVol2Quaternius/Eagle.fbx" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+    <!--<Node name="Vampire Thriller Part 1" scale='0.05' positionX='12.0' positionY='0.0' positionZ='6.0' rotY='-90.0'>-->
+        <!--<Components>-->
+            <!--[>//std::string vampirePath = "assets/models/Rumba Dancing.fbx";<]-->
+            <!--<Component type="Model" fileName="assets/models/ThrillerPart1-Vampire.dae" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+
+    <!-- This is part 4, also works, but fbx binary file has wrong texture paths -->
+    <!--<Node name="Zombie Thriller Part 1" scale='0.05' positionX='12.0' positionY='0.0' positionZ='-6.0' rotY='-90.0'>-->
+        <!--<Components>-->
+            <!--<Component type="Model" fileName="assets/models/ThrillerPart1-ZombieGirl.dae" />-->
+        <!--</Components>-->
+    <!--</Node>-->
+
     <Node>
     </Node>
 </Root>

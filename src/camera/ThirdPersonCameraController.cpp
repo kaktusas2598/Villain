@@ -13,7 +13,7 @@ namespace Villain {
 
 
         // If RMB is held, rotate around target, else follow the target
-        if (InputManager::Instance()->isKeyDown(SDL_BUTTON_RIGHT)) {
+        if (Input::Get()->isKeyDown(SDL_BUTTON_RIGHT)) {
             mode = CameraMode::ROTATE_MODE;
         } else {
             mode = CameraMode::FOLLOW_MODE;
@@ -30,7 +30,7 @@ namespace Villain {
     }
 
     void ThirdPersonCameraController::updateFollowMode(float deltaTime) {
-        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
+        glm::vec2 mouseOffsets = Input::Get()->getMouseOffsets();
         mouseOffsets *= sensitivity;
 
         float yaw = camera->getYaw();
@@ -54,7 +54,7 @@ namespace Villain {
 
 
         // Control distance to target with mouse wheel
-        float mouseWheelOffset = InputManager::Instance()->mousewheel;
+        float mouseWheelOffset = Input::Get()->mousewheel;
         float newDistanceToTarget = camera->getDistanceToTarget() - mouseWheelOffset;
         camera->setDistanceToTarget(newDistanceToTarget);
         if (newDistanceToTarget < 1.0f)
@@ -71,7 +71,7 @@ namespace Villain {
         glm::vec3 cameraPos = camera->getPosition();
         glm::vec3 targetPos = camera->GetTransform()->getPos();
 
-        glm::vec2 mouseOffsets = TheInputManager::Instance()->getMouseOffsets();
+        glm::vec2 mouseOffsets = Input::Get()->getMouseOffsets();
         mouseOffsets *= sensitivity;
 
         float angleAroundTarget = camera->getYaw() + mouseOffsets.x;
@@ -89,7 +89,7 @@ namespace Villain {
         camera->setRotation({camera->getPitch(), angleAroundTarget, 0.0f});
 
         // Control distance to target with mouse wheel
-        float mouseWheelOffset = InputManager::Instance()->mousewheel;
+        float mouseWheelOffset = Input::Get()->mousewheel;
         float newDistanceToTarget = camera->getDistanceToTarget() - mouseWheelOffset;
         camera->setDistanceToTarget(newDistanceToTarget);
         if (newDistanceToTarget < 1.0f)

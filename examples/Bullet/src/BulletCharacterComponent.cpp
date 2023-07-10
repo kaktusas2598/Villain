@@ -1,6 +1,6 @@
 #include "BulletCharacterComponent.hpp"
 
-#include "InputManager.hpp"
+#include "Input.hpp"
 using namespace Villain;
 
 void BulletCharacterComponent::handleInput(float deltaTime) {
@@ -10,19 +10,19 @@ void BulletCharacterComponent::handleInput(float deltaTime) {
 
     controller->setMovementDirection(btVector3(0.0, 0.0, 0.0));
 
-    if (InputManager::Instance()->isKeyDown(SDLK_w)) {
+    if (Input::Get()->isKeyDown(SDLK_w)) {
         controller->setMovementDirection(front);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_s)) {
+    if (Input::Get()->isKeyDown(SDLK_s)) {
         controller->setMovementDirection(-front);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_a)) {
+    if (Input::Get()->isKeyDown(SDLK_a)) {
         controller->setMovementDirection(-right);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_d)) {
+    if (Input::Get()->isKeyDown(SDLK_d)) {
         controller->setMovementDirection(right);
     }
-    if (InputManager::Instance()->isKeyDown(SDLK_SPACE)) {
+    if (Input::Get()->isKeyDown(SDLK_SPACE)) {
         controller->jump(btVector3(0.0, 1.0, 0.0));
     }
     btVector3 origin = controller->getBody()->getWorldTransform().getOrigin();

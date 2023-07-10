@@ -1,15 +1,15 @@
-#include "InputManager.hpp"
+#include "Input.hpp"
 
 #include "imgui/imgui.h"
 #include <iostream>
 
 namespace Villain {
 
-    InputManager* InputManager::s_pInstance = 0;
+    Input* Input::s_pInstance = 0;
 
-    InputManager::InputManager(): mouseCoords(0.0f, 0.0f) { }
+    Input::Input(): mouseCoords(0.0f, 0.0f) { }
 
-    void InputManager::update() {
+    void Input::update() {
         //iterate through current key map and copy it to the previous keymap
         for (auto& it : keyMap)
         {
@@ -20,25 +20,25 @@ namespace Villain {
         mousewheel = 0;
     }
 
-    void InputManager::pressKey(unsigned int keyID) {
+    void Input::pressKey(unsigned int keyID) {
         keyMap[keyID] = true;
     }
 
-    void InputManager::releaseKey(unsigned int keyID) {
+    void Input::releaseKey(unsigned int keyID) {
         keyMap[keyID] = false;
     }
 
-    void InputManager::setMouseCoords(float x, float y) {
+    void Input::setMouseCoords(float x, float y) {
         mouseCoords.x = x;
         mouseCoords.y = y;
     }
 
-    void InputManager::setMouseOffsets(float x, float y) {
+    void Input::setMouseOffsets(float x, float y) {
         mouseOffsets.x = x;
         mouseOffsets.y = y;
     }
 
-    bool InputManager::isKeyDown(unsigned int keyID) {
+    bool Input::isKeyDown(unsigned int keyID) {
         //search for key
         auto it = keyMap.find(keyID);
         if (it != keyMap.end())
@@ -49,7 +49,7 @@ namespace Villain {
         else { return false; }
     }
 
-    bool InputManager::isKeyPressed(unsigned int keyID) {
+    bool Input::isKeyPressed(unsigned int keyID) {
         //check if key was pressed on the current frame and
         //not on the previous frame
         if (isKeyDown(keyID) == true && wasKeyDown(keyID) == false) {
@@ -59,7 +59,7 @@ namespace Villain {
         return false;
     }
 
-    bool InputManager::wasKeyDown(unsigned int keyID) {
+    bool Input::wasKeyDown(unsigned int keyID) {
         //search for key in previous key map
         auto it = prevKeyMap.find(keyID);
         if (it != prevKeyMap.end()) {
@@ -69,7 +69,7 @@ namespace Villain {
         else { return false; }
     }
 
-    void InputManager::setMouseWheel(int m) {
+    void Input::setMouseWheel(int m) {
         if (m == 1)
         {
             mousewheel = 1;
@@ -159,7 +159,7 @@ namespace Villain {
         return (int)(buf_out - buf);
     }
 
-    void InputManager::addInputCharacter(char c) {
+    void Input::addInputCharacter(char c) {
         //get string length
         int x = 0;
         while(inChars[x++]);
@@ -173,7 +173,7 @@ namespace Villain {
         }
     }
 
-    void InputManager::addInputCharacters(const char* chars) {
+    void Input::addInputCharacters(const char* chars) {
         for (int i = 0; i < sizeof(chars)/sizeof(const char*); i++)
         {
             inChars[i] = chars[i];

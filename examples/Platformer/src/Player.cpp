@@ -1,5 +1,5 @@
 #include "Player.hpp"
-#include "InputManager.hpp"
+#include "Input.hpp"
 #include "ResourceManager.hpp"
 #include <SDL2/SDL_keycode.h>
 
@@ -120,7 +120,7 @@ void Player::drawDebug(Villain::DebugRenderer& renderer) {
 }
 
 void Player::update() {
-    Villain::InputManager* input = Villain::InputManager::Instance();
+    Villain::Input* input = Villain::Input::Get();
     b2Body* body = collisionShape.getBody();
 
     if (input->isKeyPressed(SDLK_f)) {
