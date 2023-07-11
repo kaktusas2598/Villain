@@ -28,6 +28,19 @@ namespace Villain {
         }
     }
 
+    std::vector<SceneNode*> SceneNode::getAllAttached() {
+        // Add itself
+        std::vector<SceneNode*> attachedNodes;
+        attachedNodes.push_back(this);
+
+        for (auto& child : children) {
+            std::vector<SceneNode*> childAttachedNodes = child->getAllAttached();
+            attachedNodes.insert(attachedNodes.end(), childAttachedNodes.begin(), childAttachedNodes.end());
+        }
+
+        return attachedNodes;
+    }
+
     SceneNode* SceneNode::addChild(SceneNode* child) {
         children.push_back(child);
         child->getTransform()->setParent(&transform);

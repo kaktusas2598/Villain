@@ -1,5 +1,4 @@
-#ifndef __SCENE_NODE__
-#define __SCENE_NODE__
+#pragma once
 
 #include "Transform.hpp"
 #include <bitset>
@@ -58,6 +57,8 @@ namespace Villain {
             const std::string& getName() const { return uid; }
             void setName(const std::string& name) { uid = name; }
 
+            // Returns all nodes attached to this traversing through hierachy, useful for rendering and sorting
+            std::vector<SceneNode*> getAllAttached();
             std::vector<SceneNode*>& getChildren() { return children; }
             std::vector<NodeComponent*>& getComponents() { return components; }
         private:
@@ -79,5 +80,3 @@ namespace Villain {
             void operator=(const SceneNode& other) {}
     };
 };
-
-#endif // __SCENE_NODE__
