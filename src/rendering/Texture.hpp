@@ -69,6 +69,10 @@ namespace Villain  {
 
             unsigned int getID() { return rendererID; }
         private:
+            // Only called when setting up textures, otherwise make sure to bind texture first when calling these:
+            void setFiltering(GLenum minFilter, GLenum magFilter, bool anisotropy = false);
+            void setWrapping(GLenum wrappingMode);
+
             unsigned int rendererID;
             std::string filePath;
             unsigned char* localBuffer;

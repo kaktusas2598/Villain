@@ -9,14 +9,11 @@ namespace Villain {
         rendererID(0), filePath(fileName), localBuffer(texInfo.DataBuffer),
         width(texInfo.Width), height(texInfo.Height), BPP(texInfo.BPP), target(texInfo.Target)
     {
-        stbi_set_flip_vertically_on_load(1);
-
-        if (rendererID == 0) {
-            GLCall(glGenTextures(1, &rendererID));
-        }
+        GLCall(glGenTextures(1, &rendererID));
 
         // First handle loading file texture into buffer if filename was set
         if (!filePath.empty()) {
+            stbi_set_flip_vertically_on_load(1);
             // NOTE: Pass nullptr instead of &BPP and set desired channels to 4 to ensure consistency
             // Alternatively 3rd argument can be &BPP and 4th argument null, so that we actually set same BPP as in file
             Logger::Instance()->info("Loading texture: {} Gamma corrected: {}", filePath, texInfo.SRGB);
@@ -42,26 +39,13 @@ namespace Villain {
         GLCall(glTexImage2D(target, 0, texInfo.InternalFormat, width, height, 0, texInfo.Format, texInfo.DataType, localBuffer));
 
         if (texInfo.GenerateMipmap) {
-            // TODO: support more mipmap types
-            //GL_NEAREST_MIPMAP_NEAREST | GL_NEAREST_MIPMAP_LINEAR | GL_LINEAR_MIPMAP_NEAREST | GL_LINEAR_MIPMAP_LINEAR
-            GLCall(glGenerateMipmap(target));
-            // Setting anisotropy filter, best used with GL_LINEAR_MIPMAP_LINEAR, extension, but became core in OpenGL 4.6
-            GLfloat maxAnisotropy;
-            GLCall(glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy)); // Query GPU for max available anisotropy
-            GLCall(glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy));
-
-            // Tell open GL how to filter texture when minifying or magnifying
-            // how to wrap texture on x(s) and y(t) axis
-            GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-            GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR)); // Mipmaping on magnification makes no sense
+            setFiltering(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
         } else {
-            GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, texInfo.Filter));
-            GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, texInfo.Filter));
+            setFiltering(texInfo.Filter, texInfo.Filter);
         }
 
         if (texInfo.Clamp) {
-            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, texInfo.WrappingMode));
-            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, texInfo.WrappingMode));
+            setWrapping(texInfo.WrappingMode);
         }
 
         GLCall(glBindTexture(target, 0));
@@ -86,13 +70,8 @@ namespace Villain {
 
         GLCall(glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, imageData));
 
-        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexParameterf(target, GL_TEXTURE_BASE_LEVEL, 0));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT));
-
-        GLCall(glGenerateMipmap(target));
+        setFiltering(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+        setWrapping(GL_REPEAT);
 
         GLCall(glBindTexture(target, 0));
 
@@ -108,12 +87,10 @@ namespace Villain {
             GLCall(glGenTextures(1, &rendererID));
         }
         GLCall(glBindTexture(target, rendererID));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filter));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, filter));
+        setFiltering(filter, filter);
 
         if (clamp) {
-            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
-            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
+            setWrapping(GL_CLAMP_TO_BORDER);
             // Set border color for shadow mapping as white so we don't get duplicate shadows
             float borderColour[] = {1.0, 1.0, 1.0, 1.0};
             GLCall(glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, borderColour));
@@ -141,11 +118,8 @@ namespace Villain {
         GLCall(glBindTexture(target, rendererID));
         GLCall(glTexImage2D(target, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureData));
 
-        GLCall(glGenerateMipmap(GL_TEXTURE_2D));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT));
+        setFiltering(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+        setWrapping(GL_REPEAT);
     }
 
     void Texture::initCubeMap(int w, int h, unsigned int id, GLfloat filter, GLint internalFormat, GLenum format) {
@@ -160,12 +134,8 @@ namespace Villain {
             GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, width, height, 0, format, GL_FLOAT, NULL));
         }
 
-        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filter));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, filter));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
-
+        setFiltering(filter, filter);
+        setWrapping(GL_CLAMP_TO_EDGE);
     }
 
     Texture::Texture(std::vector<std::string> faces)
@@ -187,11 +157,8 @@ namespace Villain {
             }
         }
 
-        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+        setFiltering(GL_LINEAR, GL_LINEAR);
+        setWrapping(GL_CLAMP_TO_EDGE);
 
         GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
@@ -226,5 +193,30 @@ namespace Villain {
         color.b = (float)pixelPointer[2];
 
         return color;
+    }
+
+    void Texture::setFiltering(GLenum minFilter, GLenum magFilter, bool anisotropy) {
+        // Texture must be bound before calling this! But binding is expensive so no call included here
+        GLCall(glTexParameteri(target, GL_TEXTURE_MIN_FILTER, minFilter));
+        GLCall(glTexParameteri(target, GL_TEXTURE_MAG_FILTER, magFilter));
+
+        if (minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST ||
+                minFilter == GL_NEAREST_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST) {
+            glGenerateMipmap(target);
+            if (anisotropy) {
+                GLfloat maxAnisotropy;
+                GLCall(glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy)); // Query GPU for max available anisotropy
+                GLCall(glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy));
+            }
+
+        }
+    }
+
+    void Texture::setWrapping(GLenum wrappingMode) {
+        // Texture must be bound before calling this! But binding is expensive so no call included here
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_S, wrappingMode));
+        GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_T, wrappingMode));
+        if (target == GL_TEXTURE_CUBE_MAP)
+            GLCall(glTexParameteri(target, GL_TEXTURE_WRAP_R, wrappingMode));
     }
 }
