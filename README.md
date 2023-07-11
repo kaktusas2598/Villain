@@ -16,6 +16,7 @@
 * Supported Camera projection types: Perspective(First Person), Third Person,  Orthographic, Orthographic 2D or no projection
 * Camera Frustum culling to increase performance
 * Finite State Machine
+* Resource manager with ability to set custom search directories
 
 ### Rendering
 * Multi-pass forward rendering system using scene graph for 3D applications
@@ -48,7 +49,7 @@
 ## Planned Features
 
 * Engine editor with scene management
-* Asset management system, hot reloading, resource serach directories
+* Hot reloading resources
 * Physics Engine:
     * Data driven approach for particle types and emitters
     * Potential Box2D and Bullet physics integration
@@ -144,7 +145,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
    sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
  * Read about Deferred shading and decide if it's feasible to introduce it
- * Loading scene graph from file: XML, Lua, something else? Contain in state machine?
  * Investigate alternative Anti-Aliasing methods like FXAA
  * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
  * Investigate volumetric lighting and fog techniques
