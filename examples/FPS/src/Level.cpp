@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "components/CameraComponent.hpp"
 #include "components/LookController.hpp"
 #include "rendering/MeshUtils.hpp"
 #include "Game.hpp"
@@ -132,7 +131,7 @@ void Level::addSpecialObject(int blueValue, int x, int y) {
         camera->setZPlanes(0.1f, 1000.f); // for bigger render range
         player = new Player(this);
         Villain::SceneNode* playerNode = (new Villain::SceneNode("Player", glm::vec3((x + 0.5f) * ROOM_WIDTH, 1.f, (y + 0.5f) * ROOM_LENGTH)))
-            ->addComponent(new Villain::CameraComponent(camera));
+            ->addComponent(camera);
         playerNode->addComponent(player);
         playerNode->addComponent(new Villain::LookController());
         levelNode->addChild(playerNode);

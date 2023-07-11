@@ -29,13 +29,13 @@ namespace Villain {
 
             void handleInput(float deltaTime);
             void update(float deltaTime);
+            // Must be called from the root node only to handle render order properly for transparency!
             void render(Shader* shader, RenderingEngine* renderingEngine, Camera* camera);
 
             SceneNode* addChild(SceneNode* child);
             SceneNode* addComponent(NodeComponent* component);
 
             void removeChild(SceneNode* child);
-            //std::vector<SceneNode*>& getAllAttached();
 
             bool isSelected() const { return selected; }
             void setSelected(bool select) { selected = select; }
@@ -62,6 +62,9 @@ namespace Villain {
             std::vector<SceneNode*>& getChildren() { return children; }
             std::vector<NodeComponent*>& getComponents() { return components; }
         private:
+            // Calculate distance from camera to node for every attached node
+            void collectNodeDistances(Camera* camera, std::vector<std::pair<SceneNode*, float>>& nodeDistances);
+
             // ECS TODO: component mask can be used if we template addComponent method, but when we
             // want to change it completely, it can't take NodeComponent* anymore
             EntityID id;

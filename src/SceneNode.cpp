@@ -1,8 +1,9 @@
 #include "SceneNode.hpp"
 
 #include "NodeComponent.hpp"
+#include "camera/Camera.hpp"
 
-#include <algorithm> // For std::remove
+#include <algorithm> // For std::remove and std::sort
 
 namespace Villain {
 
@@ -26,19 +27,6 @@ namespace Villain {
                 children[i] = nullptr;
             }
         }
-    }
-
-    std::vector<SceneNode*> SceneNode::getAllAttached() {
-        // Add itself
-        std::vector<SceneNode*> attachedNodes;
-        attachedNodes.push_back(this);
-
-        for (auto& child : children) {
-            std::vector<SceneNode*> childAttachedNodes = child->getAllAttached();
-            attachedNodes.insert(attachedNodes.end(), childAttachedNodes.begin(), childAttachedNodes.end());
-        }
-
-        return attachedNodes;
     }
 
     SceneNode* SceneNode::addChild(SceneNode* child) {
@@ -75,12 +63,21 @@ namespace Villain {
     }
 
     void SceneNode::render(Shader* shader, RenderingEngine* renderingEngine, Camera* camera) {
-        for (auto& c: components) {
-            c->render(*shader, *renderingEngine, *camera);
-        }
+        std::vector<std::pair<SceneNode*, float>> nodeDistances;
+        collectNodeDistances(camera, nodeDistances);
 
-        for (auto& c: children) {
-            c->render(shader, renderingEngine, camera);
+        // Sort from farthest to nearest relative to camera for correct tranparency
+        // We assume this will only be called from the root node!
+        std::sort(nodeDistances.begin(), nodeDistances.end(),
+                [](const std::pair<SceneNode*, float>& a, const std::pair<SceneNode*, float>& b) {
+                return a.second > b.second;
+                });
+
+        for (const auto& nodeDistance : nodeDistances) {
+            SceneNode* node = nodeDistance.first;
+            for (auto& component : node->getComponents()) {
+                component->render(*shader, *renderingEngine, *camera);
+            }
         }
     }
 
@@ -97,4 +94,16 @@ namespace Villain {
         }
     }
 
+    void SceneNode::collectNodeDistances(Camera* camera, std::vector<std::pair<SceneNode*, float>>& nodeDistances) {
+        // Calculate the distance from this node to the camera
+        float distance = glm::distance(camera->getPosition(), transform.getPos());
+
+        // Add the node and its distance to the vector
+        nodeDistances.push_back(std::make_pair(this, distance));
+
+        // Recursively traverse the children nodes
+        for (auto& child : children) {
+            child->collectNodeDistances(camera, nodeDistances);
+        }
+    }
 }

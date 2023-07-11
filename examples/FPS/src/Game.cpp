@@ -46,7 +46,7 @@ void Game::init() {
                 //->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))[>, &camera<])));
     //addToScene(spotLight);
 
-    hudCamera = new Camera(ProjectionType::ORTHOGRAPHIC_2D);
+    hudCamera = new Camera(CameraType::ORTHOGRAPHIC_2D);
     hudCamera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     glm::vec3 camPos = hudCamera->getPosition();
     camPos.y = Engine::getScreenHeight()/2.0;

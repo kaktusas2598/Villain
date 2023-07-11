@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application.hpp"
-#include "Camera.hpp"
+#include "camera/Camera.hpp"
 #include "FreeType.hpp"
 #include "Level.hpp"
 #include "rendering/SpriteBatch.hpp"
