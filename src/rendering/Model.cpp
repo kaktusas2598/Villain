@@ -57,7 +57,6 @@ namespace Villain {
         // process any meshes
         for (unsigned int i = 0; i < node->mNumMeshes; i ++) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            //printf("Processing Mesh %s, Vertices: %d Indices: %d Bones: %d\n", mesh->mName.C_Str(), mesh->mNumVertices, mesh->mNumFaces * 3, mesh->mNumBones);
             meshes.push_back(processMesh(mesh, scene));
         }
         // process children nodes
@@ -149,14 +148,13 @@ namespace Villain {
 
             //float specularFactor = 32.0f;
             //aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &specularFactor);
-            //printf("Specular factor: %f\n", specularFactor);
 
             // Set up material textures
-            std::vector<Texture*>* diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+            std::vector<Texture*>* diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureMapType::DIFFUSE);
             textures.insert(textures.end(), diffuseMaps->begin(), diffuseMaps->end());
-            std::vector<Texture*>* specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+            std::vector<Texture*>* specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureMapType::SPECULAR);
             textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
-            std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+            std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureMapType::NORMAL);
             textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
 
             matName = std::string(material->GetName().C_Str());
@@ -183,7 +181,7 @@ namespace Villain {
         return Mesh<VertexP1N1T1B1UV>(vertices, indices, numInstances, instanceMatrix);
     }
 
-    std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
+    std::vector<Texture*>* Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureMapType typeName) {
         // Maps used for light calculations (normal, speculars) will be in linear space and don't need to be gamma gamma corrected
         // or the lighting will look off
         bool gammaCorrected = (type == aiTextureType_DIFFUSE) && RenderingEngine::gammaCorrectionEnabled();

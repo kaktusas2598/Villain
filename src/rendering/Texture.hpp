@@ -38,6 +38,7 @@ namespace Villain  {
         };
     };
 
+    // TODO: Refactor this mess of a class
     class Texture {
         public:
             Texture(const std::string& fileName = std::string(), TextureConstructionInfo texInfo = TextureConstructionInfo());
@@ -51,9 +52,6 @@ namespace Villain  {
             // Created specifically to init depth cubemap used for omnidirectional shadow mapping
             void initCubeMap(int w, int h, unsigned int id = 0, GLfloat filter = GL_NEAREST, GLint internalFormat = GL_DEPTH_COMPONENT16, GLenum format = GL_DEPTH_COMPONENT);
 
-            // 2D Texture
-            //Texture(const std::string& fileName, GLint wrappingMode = GL_CLAMP_TO_EDGE, bool gammaCorrected = true);
-
             // Cubemap Texture
             Texture(std::vector<std::string> faces);
 
@@ -66,8 +64,8 @@ namespace Villain  {
             inline int getHeight() const { return height; }
             glm::vec3 getColor(int x, int y);
 
-            void setType(std::string& t) { type = t; }
-            inline std::string getType() const { return type; }
+            void setType(TextureMapType t) { type = t; }
+            inline TextureMapType getType() const { return type; }
 
             unsigned int getID() { return rendererID; }
         private:
@@ -75,8 +73,7 @@ namespace Villain  {
             std::string filePath;
             unsigned char* localBuffer;
             int width, height, BPP; // Bits per picture
-            // Available types: texture_diffuse, texture_specular, texture_normal
-            std::string type;
+            TextureMapType type;
             GLenum target; ///< GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
     };
 }

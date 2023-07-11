@@ -58,7 +58,7 @@ namespace Villain {
             void loadModel(const std::string& path);
             void processNode(aiNode* node, const aiScene* scene);
             Mesh<VertexP1N1T1B1UV> processMesh(aiMesh* mesh, const aiScene* scene);
-            std::vector<Texture*>* loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+            std::vector<Texture*>* loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureMapType typeName);
 
 
             // Skeletal animation properties

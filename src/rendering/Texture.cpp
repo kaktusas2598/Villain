@@ -38,22 +38,6 @@ namespace Villain {
                 texInfo.InternalFormat = GL_SRGB;
         }
 
-        // NOTE: Not neccessary for now, as stb loaded textures are hardcoded to 4 BPP,
-        // otherwise we will set our own formats using TextureConstructionInfo struct
-        //GLenum format;
-        //if (BPP == 1) {
-            //texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RED;
-            //texInfo.Format = GL_RED;
-        //} else if (BPP == 3) {
-            //texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RGB;
-            //texInfo.Format = GL_RGB;
-        //} else if (BPP == 4) {
-            //texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB_ALPHA : GL_RGBA;
-            //texInfo.Format = GL_RGBA;
-        //} else
-            //std::cout << "Unrecognized color format" << std::endl;
-
-
         GLCall(glBindTexture(target, rendererID));
         GLCall(glTexImage2D(target, 0, texInfo.InternalFormat, width, height, 0, texInfo.Format, texInfo.DataType, localBuffer));
 
@@ -216,8 +200,7 @@ namespace Villain {
     }
 
     Texture::~Texture() {
-        // TODO: add trace and debug methods to Logger
-        Logger::Instance()->info("Deleting texture: {}", filePath);
+        VILLAIN_TRACE("Deleting texture: {}", filePath);
         GLCall(glDeleteTextures(1, &rendererID));
         if (localBuffer)
             stbi_image_free(localBuffer);
