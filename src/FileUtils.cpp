@@ -26,15 +26,14 @@ namespace Villain {
         FILE* file = fopen(filePath.c_str(), "rb");
 
         if (!file) {
-            std::stringstream ss;
-            ss << "Error opening " << filePath;
-            Logger::Instance()->error(ss.str().c_str());
+            VILLAIN_ERROR("Error opening {}", filePath);
             return nullptr;
         }
 
         struct stat fileData;
         if (stat(filePath.c_str(), &fileData) != 0) {
-            Logger::Instance()->error("Error occured trying to stat binary file.");
+            VILLAIN_ERROR("Error occured trying to stat binary file {}", filePath);
+            fclose(file);
             return nullptr;
         }
 
@@ -44,7 +43,9 @@ namespace Villain {
         size_t bytesRead = fread(buffer, 1, size, file);
 
         if (bytesRead != size) {
-            Logger::Instance()->error("Error occured trying to read binary file.");
+            VILLAIN_ERROR("Error occured trying to read binary file {}", filePath);
+            free(buffer);
+            fclose(file);
             return nullptr;
         }
 

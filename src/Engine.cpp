@@ -208,7 +208,7 @@ namespace Villain {
             float totalDeltaTime = frameTime / DESIRED_FRAMETIME;
 
             int updateCount = 0;
-            float deltaTime;
+            float deltaTime = 0;
 
             nk_input_begin(nuklearContext);
 
