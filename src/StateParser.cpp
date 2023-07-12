@@ -45,29 +45,33 @@ namespace Villain {
         tinyxml2::XMLElement *root = xmlDoc.RootElement();
 
         // Find state
-        tinyxml2::XMLElement *stateRoot = 0;
+        tinyxml2::XMLElement *stateRoot = nullptr;
         for (tinyxml2::XMLElement *e = root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == stateID) {
                 stateRoot = e;
             }
         }
 
-        tinyxml2::XMLElement *textureRoot = 0;
+        if (!stateRoot) {
+            VILLAIN_ERROR("State XML root not found in {}", stateFile);
+            return false;
+        }
+
+        tinyxml2::XMLElement *textureRoot = nullptr;
         for (tinyxml2::XMLElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("TEXTURES")) {
                 textureRoot = e;
             }
         }
-        parseTextures(textureRoot, pTextureIDs);
+        if (textureRoot) parseTextures(textureRoot, pTextureIDs);
 
-        tinyxml2::XMLElement *fontRoot = 0;
+        tinyxml2::XMLElement *fontRoot = nullptr;
         for (tinyxml2::XMLElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if (e->Value() == std::string("FONTS")) {
                 fontRoot = e;
             }
         }
-        if (fontRoot != 0)
-            parseFonts(fontRoot);
+        if (fontRoot) parseFonts(fontRoot);
 
         tinyxml2::XMLElement *soundRoot = 0;
         for (tinyxml2::XMLElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
@@ -76,8 +80,7 @@ namespace Villain {
             }
         }
 
-        if (soundRoot != 0)
-            parseSounds(soundRoot, pSoundsIDs);
+        if (soundRoot) parseSounds(soundRoot, pSoundsIDs);
 
         tinyxml2::XMLElement *scriptRoot = 0;
         for (tinyxml2::XMLElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
@@ -86,8 +89,7 @@ namespace Villain {
             }
         }
 
-        if (scriptRoot != 0)
-            parseScripts(scriptRoot);
+        if (scriptRoot) parseScripts(scriptRoot);
 
         // tinyxml2::XMLElement *mapRoot = 0;
         // for (tinyxml2::XMLElement *e = stateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {

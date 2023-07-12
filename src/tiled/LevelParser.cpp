@@ -114,7 +114,7 @@ namespace Villain {
 
         std::vector<std::vector<int>> data; // tile data
         // std::string decodedIDs;
-        tinyxml2::XMLElement *dataNode;
+        tinyxml2::XMLElement *dataNode = nullptr;
         for(tinyxml2::XMLElement* e = tileElement->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
             if(e->Value() == std::string("properties")) {
                 for(tinyxml2::XMLElement* property = e->FirstChildElement(); property != NULL; property = property->NextSiblingElement()) {
@@ -131,6 +131,10 @@ namespace Villain {
             if(e->Value() == std::string("data")) {
                 dataNode = e;
             }
+        }
+
+        if (!dataNode) {
+            exitWithError("Tile map data node not found");
         }
 
         std::string t; // mine

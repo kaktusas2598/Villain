@@ -139,6 +139,8 @@ namespace Villain {
                     exitWithError(errorMessage);
                     return false;
                 }
+
+                return true;
             }
 
             lua_State* L;

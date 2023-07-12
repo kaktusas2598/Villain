@@ -17,7 +17,7 @@ namespace Villain {
         for (auto it = animationMap.begin(); it != animationMap.end(); ++it) {
             Animation* ptr = it->second;
             delete ptr;
-            animationMap.erase(it);
+            it = animationMap.erase(it);
         }
     }
 
