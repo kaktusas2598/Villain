@@ -22,7 +22,10 @@ jobs:
           libsdl2-ttf-dev \
           liblua5.4-dev \
           libassimp-dev \
-          lcov
+          lcov \
+          cppcheck
+    - name: Perform static analysis
+      run: cppcheck --error-exitcode=1 src/
     - name: Run unit tests
       run: |
         ./configure.sh
