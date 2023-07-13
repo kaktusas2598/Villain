@@ -71,6 +71,12 @@ namespace Villain {
                 return glm::inverse(transformMatrix) * glm::vec4(point, 1.0);
             }
 
+            // Called automatically after each integration step
+            void clearAccumulators() {
+                forceAccum = glm::vec3(0.0f);
+                torqueAccum = glm::vec3(0.0f);
+            }
+
         protected:
             // --- Characteristic attributes
             // Inverse mass is more useful in numerical integration and for simulating infinite mass bodies
@@ -100,10 +106,5 @@ namespace Villain {
 
         private:
             void calculateTransformMatrix();
-            // Called automatically after each integration step
-            void clearAccumulators() {
-                forceAccum = glm::vec3(0.0f);
-                torqueAccum = glm::vec3(0.0f);
-            }
     };
 }
