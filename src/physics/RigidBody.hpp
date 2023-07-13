@@ -43,6 +43,7 @@ namespace Villain {
             glm::mat3 getInverseInertiaTensor() const { return inverseInertiaTensor; }
             float getMass() const { return (inverseMass == 0.0f) ? FLT_MAX : 1.0f / inverseMass; }
             float getLinearDamping() const { return linearDamping; }
+            float getAngularDamping() const { return angularDamping; }
             glm::vec3 getPosition() const { return position; }
             glm::quat getOrientation() const { return orientation; }
             glm::vec3 getLinearVelocity() const { return velocity; }
@@ -54,6 +55,7 @@ namespace Villain {
             void setInverseMass(float value) { inverseMass = value; }
             void setInertiaTensor(const glm::mat3& inertiaTensor) { inverseInertiaTensor = glm::inverse(inertiaTensor); }
             void setLinearDamping(float value) { linearDamping = value; }
+            void setAngularDamping(float value) { angularDamping = value; }
             void setPosition(const glm::vec3& value) { position = value; }
             void setOrientation(const glm::quat& value) { orientation = value; }
             void setLinearVelocity(const glm::vec3& value) { velocity = value; }
@@ -70,21 +72,30 @@ namespace Villain {
             }
 
         protected:
-            bool isAwake; //< Body can be put to sleep to avoid being integrated or affected by collisions
+            // --- Characteristic attributes
             // Inverse mass is more useful in numerical integration and for simulating infinite mass bodies
             float inverseMass;
             // Inverse of body's inertia tensor. Given in body space unlike the other variables
+            // Damping applied to linear motion, required to remove energy added due to numerical instability in the integrator
             // Provided inertia tensor must not degenerate (meaning body had zero inertia for spinning along one axis)
             glm::mat3 inverseInertiaTensor;
-            // Damping applied to linear motion, required to remove energy added due to numerical instability in the integrator
             float linearDamping;
+            // Damping applied to angular motion, required to remove energy added due to numerical instability in the integrator
+            float angularDamping;
             glm::vec3 position; //< Linear position of the rigid body in world space
             glm::quat orientation; //< Angular orientation of the rigid body in world space
             glm::vec3 velocity; //< Linear velocity of the rigid body in the world space
             glm::vec3 rotation; //< Angular velocity (here referred as rotation) of the rigid body in world space
+
+            // --- Derived attributes
+            bool isAwake; //< Body can be put to sleep to avoid being integrated or affected by collisions
             glm::mat4 transformMatrix; //< Converts body space to world space, useful for rendering
+
+            // --- Force, Torque accumulator attributes
             glm::vec3 forceAccum; //< Accumulated force applied at next integration only and cleared after
             glm::vec3 torqueAccum; //< Accumulated torque applied at next integration only and cleared after
+            glm::vec3 acceleration; //< Used to set gravity or any other constant gravitation
+            glm::vec3 lastFrameAcceleration; //< Linear acceleration for the previous frame
 
         private:
             void calculateTransformMatrix();
