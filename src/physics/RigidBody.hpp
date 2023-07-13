@@ -89,6 +89,7 @@ namespace Villain {
 
             // --- Derived attributes
             bool isAwake; //< Body can be put to sleep to avoid being integrated or affected by collisions
+            glm::mat3 inverseInertiaTensorWorld;
             glm::mat4 transformMatrix; //< Converts body space to world space, useful for rendering
 
             // --- Force, Torque accumulator attributes
