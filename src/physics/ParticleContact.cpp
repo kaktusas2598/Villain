@@ -115,6 +115,25 @@ namespace Villain {
             // Resolve this contact
             contactArray[maxIndex].resolve(deltaTime);
 
+            //////////////////////
+            // Update interpenetration for all particles
+            glm::vec3* move = contactArray[maxIndex].particleMovement;
+            for (i = 0; i < numContacts; i++) {
+                if (contactArray[i].particle[0] == contactArray[maxIndex].particle[0]) {
+                    contactArray[i].penetration -= glm::dot(move[0], contactArray[i].contactNormal);
+                } else if (contactArray[i].particle[0] == contactArray[maxIndex].particle[1]) {
+                    contactArray[i].penetration -= glm::dot(move[1], contactArray[i].contactNormal);
+                }
+                if (contactArray[i].particle[1]) {
+                    if (contactArray[i].particle[1] == contactArray[maxIndex].particle[0]) {
+                        contactArray[i].penetration += glm::dot(move[0], contactArray[i].contactNormal);
+                    } else if (contactArray[i].particle[1] == contactArray[maxIndex].particle[1]) {
+                        contactArray[i].penetration += glm::dot(move[1], contactArray[i].contactNormal);
+                    }
+                }
+            }
+            //////////////////////
+
             iterationsUsed++;
         }
     }

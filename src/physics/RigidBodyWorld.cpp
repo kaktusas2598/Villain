@@ -2,15 +2,15 @@
 
 namespace Villain {
     void RigidBodyWorld::startFrame() {
-        for (RigidBodies::iterator b = bodies.begin(); b != bodies.end(); b++) {
-            (*b)->clearAccumulators();
-            (*b)->calculateDerivedData();
+        for (RigidBody* body : bodies) {
+            body->clearAccumulators();
+            body->calculateDerivedData();
         }
     }
 
     void RigidBodyWorld::integrate(float deltaTime) {
-        for (RigidBodies::iterator b = bodies.begin(); b != bodies.end(); b++) {
-            (*b)->integrate(deltaTime);
+        for (RigidBody* body: bodies) {
+            body->integrate(deltaTime);
         }
     }
 

@@ -34,7 +34,9 @@ namespace Villain {
         position += velocity * deltaTime;
         //orientation += rotation * deltaTime;
         // TODO: ChatGPT line, test this well!
-        orientation = glm::normalize(orientation * glm::quat(0.0f, rotation.x, rotation.y, rotation.z) * deltaTime);
+        glm::quat angularVelocityQuaternion(0.0f, rotation.x, rotation.y, rotation.z);
+        glm::quat deltaOrientation = 0.5f * angularVelocityQuaternion * orientation * deltaTime;
+        orientation = orientation + deltaOrientation;
 
         // Normalize orientation and update matrices with new position and orientation
         calculateDerivedData();

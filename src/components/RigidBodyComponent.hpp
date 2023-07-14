@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NodeComponent.hpp"
-#include "physics/RigidBody.hpp"
+#include "physics/ForceGenerator.hpp"
 
 namespace Villain {
 
@@ -11,6 +11,8 @@ namespace Villain {
 
             virtual void update(float deltaTime);
             virtual void addToEngine(Engine* engine);
+
+            void addForceGenerator(ForceGenerator* generator);
         private:
             RigidBody* body;
     };

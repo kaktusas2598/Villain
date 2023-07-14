@@ -94,6 +94,7 @@ namespace Villain {
         physicsEngine = std::make_unique<PhysicsEngine>(this);
         // TODO: ability to set custom number of contacts
         particleWorld = std::make_unique<ParticleWorld>(200);
+        rigidBodyWorld = std::make_unique<RigidBodyWorld>();
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
@@ -241,9 +242,13 @@ namespace Villain {
 
                 particleWorld->runPhysics(deltaTime);
 
+                rigidBodyWorld->startFrame();
+
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);
                 application->onAppPostUpdate(deltaTime);
+
+                rigidBodyWorld->runPhysics(deltaTime);
 
                 totalDeltaTime -= deltaTime;
 

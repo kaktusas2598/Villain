@@ -17,4 +17,10 @@ namespace Villain {
         // Rigid body will be automatically added to physics world once it has a parent
         engine->getRigidBodyWorld()->getBodies().push_back(body);
     }
+
+    void RigidBodyComponent::addForceGenerator(ForceGenerator* generator) {
+                parent->getEngine()
+                    ->getRigidBodyWorld()->getForceRegistry().add(body, generator);
+            }
+
 }
