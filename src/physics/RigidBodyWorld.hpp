@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ForceGenerator.hpp"
+#include "rendering/DebugRenderer.hpp"
 #include <vector>
 
 namespace Villain {
@@ -10,6 +11,8 @@ namespace Villain {
     class RigidBodyWorld {
         public:
             typedef std::vector<RigidBody*> RigidBodies;
+
+            RigidBodyWorld();
 
             // Main method for processing physics in rigid body world
             void runPhysics(float deltaTime);
@@ -21,6 +24,9 @@ namespace Villain {
             // Integrate all bodies in this world forward in given delta time
             void integrate(float deltaTime);
 
+            void debugDraw(Camera* camera);
+            void setDebugDraw(bool debug) { debugDrawEnabled = debug; }
+
             // Getters
             RigidBodies& getBodies() { return bodies; }
             ForceRegistry& getForceRegistry() { return registry; }
@@ -28,5 +34,8 @@ namespace Villain {
         protected:
             RigidBodies bodies; //< All bodies in this world
             ForceRegistry registry; //< All force generators in this world
+
+            bool debugDrawEnabled = false;
+            DebugRenderer debugRenderer;
     };
 }
