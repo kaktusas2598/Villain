@@ -30,12 +30,10 @@ namespace Villain {
         velocity *= powf(linearDamping, deltaTime);
         rotation *= powf(angularDamping, deltaTime);
 
-        // Adjust positions
+        // Integrate position
         position += velocity * deltaTime;
-        //orientation += rotation * deltaTime;
-        // TODO: ChatGPT line, test this well!
-        glm::quat angularVelocityQuaternion(0.0f, rotation.x, rotation.y, rotation.z);
-        glm::quat deltaOrientation = 0.5f * angularVelocityQuaternion * orientation * deltaTime;
+        // Integrate orientation by converting angular velocity scaled vector to quaternion
+        glm::quat deltaOrientation = 0.5f * deltaTime * glm::quat(0.0f, rotation.x, rotation.y, rotation.z) * orientation;
         orientation = orientation + deltaOrientation;
 
         // Normalize orientation and update matrices with new position and orientation
@@ -51,7 +49,6 @@ namespace Villain {
         calculateTransformMatrix();
 
         // calculate inertia tensor in world space
-        // TODO: ChatGPT line, test this well!
         inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor;
     }
 
