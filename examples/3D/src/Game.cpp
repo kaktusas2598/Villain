@@ -165,7 +165,7 @@ void Game::init() {
     rigidBody1->setInertiaTensor(glm::make_mat3(sphereInertiaTensor));
 
     // Setting cuboid's inertia tensor
-    float cuboidMass = 1.0f;
+    float cuboidMass = 10.0f;
     float cuboidDepth = 1.0f;
     float cuboidWidth = 1.0f;
     float cuboidHeight = 1.0f;
