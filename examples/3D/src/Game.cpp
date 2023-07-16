@@ -4,6 +4,7 @@
 #include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
+#include "components/KinematicController.hpp"
 #include "components/Light.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
@@ -125,16 +126,23 @@ void Game::init() {
 
     particlePhysics->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {3, 2});
 
+    glm::vec3* windSpeed = new glm::vec3(0, 0, 0);
     if (getRootNode()->findByID(3)) {
-        playerBody = new Particle();
+        //playerBody = new Particle();
         SceneNode* player = getRootNode()->findByID(3);
-        playerBody->setPosition(player->getTransform()->getPos());
-        playerBody->setMass(10.0);
-        ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
-        player->addComponent(playerParticleCompo);
-        playerParticleCompo->addParticle(playerBody);
-        playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
-        //playerParticleCompo->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {0});
+        //playerBody->setPosition(player->getTransform()->getPos());
+        //playerBody->setMass(10.0);
+        //ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
+        //player->addComponent(playerParticleCompo);
+        //playerParticleCompo->addParticle(playerBody);
+        //playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
+
+        aircraft = new FlightController(new RigidBody(), windSpeed);
+        player->addComponent(aircraft);
+
+        //KinematicController* playerControl = new KinematicController(new RigidBody());
+        //player->addComponent(playerControl);
+        player->addComponent(new ModelRenderer(new Model("assets/models/toyplane.obj")));
     }
 
     // Setting up meshes for rigid bodies test
