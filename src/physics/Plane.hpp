@@ -1,10 +1,11 @@
-#ifndef __PLANE__
-#define __PLANE__
+#pragma once
 
-#include "glm/glm.hpp"
-#include "BoundingSphere.hpp"
+#include "IntersectData.hpp"
+#include <glm/glm.hpp>
 
 namespace Villain {
+
+    class BoundingSphere;
 
     class Plane {
         public:
@@ -32,5 +33,3 @@ namespace Villain {
     };
 
 }
-
-#endif // __PLANE__

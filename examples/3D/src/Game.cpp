@@ -13,8 +13,7 @@
 #include "components/ParticlePhysicsComponent.hpp"
 #include "components/PhysicsObjectComponent.hpp"
 #include "components/RigidBodyComponent.hpp"
-#include "physics/BoundingAABB.hpp"
-#include "physics/BoundingSphere.hpp"
+#include "physics/BoundingVolume.hpp"
 
 #include "physics/generators/contact/GroundContacts.hpp"
 #include "physics/generators/contact/ParticleCable.hpp"
@@ -137,11 +136,11 @@ void Game::init() {
         //playerParticleCompo->addParticle(playerBody);
         //playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
 
-        aircraft = new FlightController(new RigidBody(), windSpeed);
-        player->addComponent(aircraft);
+        //aircraft = new FlightController(new RigidBody(), windSpeed);
+        //player->addComponent(aircraft);
 
-        //KinematicController* playerControl = new KinematicController(new RigidBody());
-        //player->addComponent(playerControl);
+        KinematicController* playerControl = new KinematicController(new RigidBody());
+        player->addComponent(playerControl);
         player->addComponent(new ModelRenderer(new Model("assets/models/toyplane.obj")));
     }
 

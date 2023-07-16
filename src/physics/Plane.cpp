@@ -1,5 +1,7 @@
 #include "Plane.hpp"
 
+#include "BoundingVolume.hpp"
+
 namespace Villain {
 
     Plane Plane::normalized() const {

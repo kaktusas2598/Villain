@@ -51,7 +51,7 @@ namespace Villain {
             Camera* cam = engine->getRenderingEngine()->getMainCamera();
 
             for (unsigned int i = 0; i < objects.size(); i++) {
-                const_cast<Collider&>(objects[i]->getCollider()).render(debugRenderer);
+                const_cast<BoundingVolume&>(objects[i]->getCollider()).render(debugRenderer);
             }
 
             debugRenderer->end();

@@ -1,7 +1,6 @@
-#ifndef __PHYSICS_OBJECT__
-#define __PHYSICS_OBJECT__
+#pragma once
 
-#include "Collider.hpp"
+#include "BoundingVolume.hpp"
 #include "glm/gtx/quaternion.hpp"
 
 namespace Villain {
@@ -11,7 +10,7 @@ namespace Villain {
     // Rigid Bodies, Static obstacles, Triggers
     class PhysicsObject {
         public:
-            PhysicsObject(Collider* col, float m = 1.0f, const glm::vec3& vel = glm::vec3(0.0f)) :
+            PhysicsObject(BoundingVolume* col, float m = 1.0f, const glm::vec3& vel = glm::vec3(0.0f)) :
                 position(col->getCentre()), oldPosition(position), linearVelocity(vel), mass(m), collider(col),
                 force(0.0f) {
                     // ? Is this correct ?
@@ -26,7 +25,7 @@ namespace Villain {
             inline const glm::vec3 getPosition() const { return position; }
             inline const glm::vec3 getVelocity() const { return linearVelocity; }
 
-            inline const Collider& getCollider() {
+            inline const BoundingVolume& getCollider() {
                 glm::vec3 translation = position - oldPosition;
                 oldPosition = position;
                 collider->transform(translation);
@@ -51,7 +50,7 @@ namespace Villain {
             // secondary
             glm::vec3 linearVelocity{0.f, 0.f, 0.f};
 
-            Collider* collider = nullptr;
+            BoundingVolume* collider = nullptr;
 
             // TODO: Implement all of this, possibly refactor into new RigidBody class extending this one
             // Rigid Body specific
@@ -76,5 +75,3 @@ namespace Villain {
             float restitution; //<<< Elasticity
     };
 }
-
-#endif // __PHYSICS_OBJECT__

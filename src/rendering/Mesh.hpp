@@ -9,7 +9,7 @@
 #include "Material.hpp"
 #include "Shader.hpp"
 
-#include "Frustum.hpp"
+#include "physics/BoundingVolume.hpp"
 
 namespace Villain {
 
@@ -34,7 +34,7 @@ namespace Villain {
             void draw(Shader &shader);
             void draw(Shader &shader, Material& material);
 
-            Sphere* getBoundingVolume() { return boundingVolume.get(); }
+            BoundingSphere* getBoundingVolume() { return boundingVolume.get(); }
             const std::string& getMaterialName() const { return materialName; }
 
             void updateInstances(std::vector<glm::mat4>& instances);
@@ -46,7 +46,7 @@ namespace Villain {
             std::unique_ptr<VertexBuffer> vbo;
             std::unique_ptr<IndexBuffer> ibo;
 
-            std::unique_ptr<Sphere> boundingVolume;
+            std::unique_ptr<BoundingSphere> boundingVolume;
 
             // Instanced rendering properties
             unsigned int numInstances = 1; //<<< Set to more than 1 instance for instanced rendering
@@ -59,7 +59,7 @@ namespace Villain {
 
     // Helper method to generate Sphere shaped bounding volume to fit mesh in
     template <class VertexType>
-    Sphere generateSphereBV(const Mesh<VertexType>& mesh) {
+    BoundingSphere generateSphereBV(const Mesh<VertexType>& mesh) {
         glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
         glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
         for (auto&& vertex : mesh.Vertices) {
@@ -74,12 +74,12 @@ namespace Villain {
 
         //std::cout << "maxAABB: " << maxAABB.x << ", " << maxAABB.y << ", " << maxAABB.z << "\n";
         //std::cout << "minAABB: " << minAABB.x << ", " << minAABB.y << ", " << minAABB.z << "\n";
-        return Sphere((maxAABB + minAABB) * 0.5f, glm::length(minAABB - maxAABB));
+        return BoundingSphere((maxAABB + minAABB) * 0.5f, glm::length(minAABB - maxAABB));
     }
 
     // Helper method to generate AABB shaped bounding volume to fit mesh in
     template <class VertexType>
-    AABB generateAABoxBV(const Mesh<VertexType>& mesh) {
+    BoundingAABB generateAABoxBV(const Mesh<VertexType>& mesh) {
         glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
         glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
         for (auto&& vertex : mesh.Vertices) {
@@ -92,7 +92,7 @@ namespace Villain {
             maxAABB.z = std::max(maxAABB.z, vertex.Position.z);
         }
 
-        return AABB(minAABB, maxAABB);
+        return BoundingAABB(minAABB, maxAABB);
     }
 
 }
