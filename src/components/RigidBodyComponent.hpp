@@ -13,7 +13,7 @@ namespace Villain {
             virtual void addToEngine(Engine* engine);
 
             void addForceGenerator(ForceGenerator* generator);
-        private:
+        protected:
             RigidBody* body;
     };
 }
