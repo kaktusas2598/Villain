@@ -49,7 +49,7 @@ namespace Villain {
                             float height = ImGui::GetContentRegionAvail().y;
 
                             ImGui::Image(
-                                    (ImTextureID)t.second->getID(),
+                                    reinterpret_cast<ImTextureID>(t.second->getID()),
                                     //ImGui::GetWindowSize(), // will respect aspect ratio of image
                                     ImGui::GetContentRegionAvail(), // will squish image to fit it in
                                     ImVec2(0, 1),

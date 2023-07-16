@@ -75,7 +75,7 @@ namespace Villain {
         ImGui::Begin("Active Node");
 
         if (selectedNode != nullptr) {
-            ImGui::Text(selectedNode->getName().c_str());
+            ImGui::Text("%s", selectedNode->getName().c_str());
 
             drawNodeProperties(selectedNode);
 

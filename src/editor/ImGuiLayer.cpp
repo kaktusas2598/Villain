@@ -291,7 +291,7 @@ namespace Villain {
             //printf("Scene image Coords X: %f Y: %f\n", mousePosRelativeToSceneViewport.x, mousePosRelativeToSceneViewport.y);
 
             ImGui::Image(
-                    (ImTextureID)engine.getSceneBuffer()->getTextureID(),
+                    reinterpret_cast<ImTextureID>(engine.getSceneBuffer()->getTextureID()),
                     //ImGui::GetContentRegionAvail(), // Fill in full available size (scews aspect ratio)
                     ImVec2(sceneViewportWidth, sceneViewportHeight), // Use new scaled viewport size to
                     //ImGui::GetWindowSize(),
