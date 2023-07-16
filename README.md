@@ -54,10 +54,9 @@
 * Hot reloading resources
 * Physics Engine:
     * Data driven approach for particle types and emitters
-    * Potential Box2D and Bullet physics integration
-    * Built in collision detection: AABB, SAT, circle
-    * Rigid Body implementation
-    * Spatial Partitioning models
+    * Built in collision detection algorithms: AABB, SAT, circle
+    * Rigid body collision resolution
+    * Spatial Partitioning models for broad phase
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System
