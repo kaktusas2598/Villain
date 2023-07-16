@@ -25,7 +25,7 @@ namespace Villain {
                 oldEulerRot = eulerRot; eulerRot.x = x; eulerRot.y = y; eulerRot.z = z; needsUpdate = true;
             }
             inline void setPos(const glm::vec3& pos) { position = pos; needsUpdate = true; }
-            inline void setRot(const glm::quat& rot) { orientation = rot; }
+            inline void setRot(const glm::quat& rot) { orientation = rot; needsUpdate = true; }
             inline void setScale(float sc) { scale = sc; needsUpdate = true; }
             inline void setParent(Transform* p) { parent = p; }
 

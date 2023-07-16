@@ -9,6 +9,7 @@
 #include "editor/ImGuiLayer.hpp"
 #include "physics/ParticleWorld.hpp"
 #include "physics/PhysicsEngine.hpp"
+#include "physics/RigidBodyWorld.hpp"
 #include "rendering/FrameBuffer.hpp"
 #include "rendering/RendereringEngine.hpp"
 
@@ -61,6 +62,7 @@ namespace Villain {
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
             inline ParticleWorld* getParticleWorld() { return particleWorld.get(); }
+            inline RigidBodyWorld* getRigidBodyWorld() { return rigidBodyWorld.get(); }
             inline RenderingEngine* getRenderingEngine() { return renderingEngine.get(); }
             inline Application* getApplication() { return application; }
             inline EventDispatcher* getEventDispatcher() { return eventDispatcher.get(); }
@@ -95,6 +97,7 @@ namespace Villain {
 
             std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;
             std::unique_ptr<ParticleWorld> particleWorld = nullptr;
+            std::unique_ptr<RigidBodyWorld> rigidBodyWorld = nullptr;
             std::unique_ptr<RenderingEngine> renderingEngine = nullptr;
             Application* application = nullptr; //< User engine application
             std::unique_ptr<EventDispatcher> eventDispatcher;

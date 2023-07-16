@@ -4,6 +4,7 @@
 #include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
+#include "components/KinematicController.hpp"
 #include "components/Light.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
@@ -11,6 +12,7 @@
 #include "components/ParticleEmitter.hpp"
 #include "components/ParticlePhysicsComponent.hpp"
 #include "components/PhysicsObjectComponent.hpp"
+#include "components/RigidBodyComponent.hpp"
 #include "physics/BoundingAABB.hpp"
 #include "physics/BoundingSphere.hpp"
 
@@ -19,8 +21,10 @@
 #include "physics/generators/contact/ParticleRod.hpp"
 #include "physics/generators/force/ParticleGravity.hpp"
 #include "physics/generators/force/ParticleSpring.hpp"
+#include "physics/generators/force/Spring.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace Villain;
 
@@ -122,17 +126,76 @@ void Game::init() {
 
     particlePhysics->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {3, 2});
 
+    glm::vec3* windSpeed = new glm::vec3(0, 0, 0);
     if (getRootNode()->findByID(3)) {
-        playerBody = new Particle();
+        //playerBody = new Particle();
         SceneNode* player = getRootNode()->findByID(3);
-        playerBody->setPosition(player->getTransform()->getPos());
-        playerBody->setMass(10.0);
-        ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
-        player->addComponent(playerParticleCompo);
-        playerParticleCompo->addParticle(playerBody);
-        playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
-        //playerParticleCompo->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {0});
+        //playerBody->setPosition(player->getTransform()->getPos());
+        //playerBody->setMass(10.0);
+        //ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
+        //player->addComponent(playerParticleCompo);
+        //playerParticleCompo->addParticle(playerBody);
+        //playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
+
+        aircraft = new FlightController(new RigidBody(), windSpeed);
+        player->addComponent(aircraft);
+
+        //KinematicController* playerControl = new KinematicController(new RigidBody());
+        //player->addComponent(playerControl);
+        player->addComponent(new ModelRenderer(new Model("assets/models/toyplane.obj")));
     }
+
+    // Setting up meshes for rigid bodies test
+    std::vector<VertexP1N1T1B1UV> vertices;
+    std::vector<unsigned int> indices;
+    MeshUtils<VertexP1N1T1B1UV>::addAABB(&vertices, &indices); // 1x1x1 cube centered on 0,0,0
+    Mesh<VertexP1N1T1B1UV>* cubeMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
+    vertices.clear(); indices.clear();
+    MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 1.0f); // Sphere with radius of 1
+    Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
+
+    // Rigid Body test
+    RigidBody* rigidBody1 = new RigidBody();
+    RigidBody* rigidBody2 = new RigidBody();
+    rigidBody1->setPosition({2.0, 5.0, 2.0});
+
+    rigidBody2->setPosition({2.0, 0.0, 2.0});
+
+    // Setting sphere's inertia tensor
+    float sphereMass = 1.0f;
+    float sphereRadius = 1.0f;
+    float sphereInertia = (2.0f / 5.0f) * sphereMass * sphereRadius * sphereRadius;
+    float sphereInertiaTensor[9] = {
+        sphereInertia, 0, 0,
+        0, sphereInertia, 0,
+        0, 0, sphereInertia
+    };
+    rigidBody1->setInertiaTensor(glm::make_mat3(sphereInertiaTensor));
+
+    // Setting cuboid's inertia tensor
+    float cuboidMass = 10.0f;
+    float cuboidDepth = 1.0f;
+    float cuboidWidth = 1.0f;
+    float cuboidHeight = 1.0f;
+    float cuboidInertiaX = (1.0f / 12.0f) * cuboidMass * (cuboidHeight * cuboidHeight + cuboidDepth * cuboidDepth);
+    float cuboidInertiaY = (1.0f / 12.0f) * cuboidMass * (cuboidWidth * cuboidWidth + cuboidDepth * cuboidDepth);
+    float cuboidInertiaZ = (1.0f / 12.0f) * cuboidMass * (cuboidWidth * cuboidWidth + cuboidHeight * cuboidHeight);
+    float cuboidInertiaTensor[9] = {
+        cuboidInertiaX, 0, 0,
+        0, cuboidInertiaY, 0,
+        0, 0, cuboidInertiaZ
+    };
+    rigidBody2->setInertiaTensor(glm::make_mat3(cuboidInertiaTensor));
+
+    RigidBodyComponent* rigidBodyCompo1 = new RigidBodyComponent(rigidBody1);
+    RigidBodyComponent* rigidBodyCompo2 = new RigidBodyComponent(rigidBody2);
+    addToScene((new SceneNode("Rigid Body 1"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, Material()))->addComponent(rigidBodyCompo1));
+    addToScene((new SceneNode("Rigid Body 2"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(cubeMesh, Material()))->addComponent(rigidBodyCompo2));
+
+    // Attach 2 bodies with a spring
+    rigidBodyCompo1->addForceGenerator(new Spring({0, 0, 0}, rigidBody2, {0.2, 0, 0}, 1.0f, 2.0f));
+    rigidBodyCompo2->addForceGenerator(new Spring({0.2, 0, 0}, rigidBody1, {0, 0, 0}, 1.0f, 2.0f));
+
 
     // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
     Model* sphereModel = new Model("assets/models/sphere.obj");

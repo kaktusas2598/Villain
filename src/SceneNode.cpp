@@ -38,6 +38,8 @@ namespace Villain {
     SceneNode* SceneNode::addComponent(NodeComponent* component) {
         components.push_back(component);
         component->setParent(this);
+        // Used in case component was added to Node, after that Node was added to Scene Graph!
+        if (engine) component->addToEngine(engine);
         return this;
     }
 

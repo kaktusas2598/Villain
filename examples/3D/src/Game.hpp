@@ -1,8 +1,8 @@
-#ifndef __GAME__
-#define __GAME__
+#pragma once
 
 #include "Application.hpp"
 #include "camera/Camera.hpp"
+#include "components/FlightController.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/Model.hpp"
 
@@ -20,7 +20,5 @@ class Game : public Villain::Application {
     private:
         Villain::DebugRenderer debugRenderer;
         Villain::Particle* playerBody = nullptr;
-
+        Villain::FlightController* aircraft = nullptr;
 };
-
-#endif // __GAME__
