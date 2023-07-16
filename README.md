@@ -43,8 +43,10 @@
   * Particle integration using forces
   * Force generators: gravity, drag, springs, anchored springs, bungees, buoyancy, fake stiff springs
   * Contact generators: cables, rods, constraints
-  *
-* More features TBA
+* 3D Rigid Body engine:
+  * Rigid body Euler numerical integration
+  * Force generators: gravity, spring
+  * No collision detection/resultion systems at the moment!
 
 ## Planned Features
 
@@ -155,3 +157,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Move all usages of <random> header to new RandomUtils static class
  * Change all old style ifndef/define include guards to #pragma once
  * Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)
+  * Aerodynamical force generators broken or something, struggling to create flight simulator demo
