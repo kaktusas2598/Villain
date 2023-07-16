@@ -80,15 +80,7 @@ namespace Villain {
 
         IntersectData intersectAABB(const BoundingAABB& other);
         virtual void transform(const glm::vec3& translation);
-        virtual const glm::vec3& getCentre() const {
-            return Center;
-            //glm::vec3 minExtents = getMinExtents();
-            //glm::vec3 maxExtents = getMaxExtents();
-            //glm::vec3 halfSize = (maxExtents - minExtents) / 2.f;
-            //// Basically tell compiler that even though this is const method, we know that we're doing
-            //((BoundingAABB&)(*this)).centre = minExtents + halfSize;;
-            //return centre;
-        }
+        virtual const glm::vec3& getCentre() const { return Center; }
 
         virtual void render(DebugRenderer* renderer);
 

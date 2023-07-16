@@ -34,7 +34,6 @@ namespace Villain {
         }
     }
 
-
     bool BoundingSphere::isOnFrustum(const Frustum& camFrustum, Transform& transform) const {
         const glm::vec3 globalScale = transform.getGlobalScale();
 
@@ -91,7 +90,6 @@ namespace Villain {
         renderer->drawSphere(Center, Radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     }
 
-
     bool BoundingAABB::isOnFrustum(const Frustum& camFrustum, Transform& transform) const {
         const glm::vec3 globalCenter{ transform.getTransformMatrix() * glm::vec4(Center, 1.f) };
 
@@ -142,15 +140,9 @@ namespace Villain {
 
     void BoundingAABB::transform(const glm::vec3& translation) {
         Center += translation;
-        //minExtents += translation;
-        //maxExtents += translation;
-        //centre += translation;
     }
 
     void BoundingAABB::render(DebugRenderer* renderer) {
-        glm::vec3 size = (getMaxExtents() - getMinExtents()) / 2.f;
-        glm::vec3 centre = getMinExtents() + size;
-        renderer->drawBox3D(centre, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), size);
+        renderer->drawBox3D(Center, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), Extents);
     }
-
 }
