@@ -61,8 +61,10 @@ namespace Villain {
             exitWithError("Failed to initialise GLEW");
         }
 
-        //check the OpenGL version
-        Logger::Instance()->info("OpenGL Version: {}", (char*)glGetString(GL_VERSION));
+        // Log OpenGL info
+        VILLAIN_INFO("OpenGL Version: {}", (char*)glGetString(GL_VERSION));
+        VILLAIN_INFO("GPU Vendor: {}", (char*)glGetString(GL_VENDOR));
+        VILLAIN_INFO("GPU Renderer: {}", (char*)glGetString(GL_RENDERER));
 
         // set background color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
