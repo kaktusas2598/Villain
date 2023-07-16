@@ -235,6 +235,8 @@ namespace Villain {
 
                 deltaTime = deltaTime / DESIRED_FPS;
 
+                rigidBodyWorld->startFrame();
+
                 application->handleEvents(deltaTime);
 
                 physicsEngine->simulate(deltaTime);
@@ -242,7 +244,6 @@ namespace Villain {
 
                 particleWorld->runPhysics(deltaTime);
 
-                rigidBodyWorld->startFrame();
 
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);
