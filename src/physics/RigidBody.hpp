@@ -61,6 +61,7 @@ namespace Villain {
             void setLinearVelocity(const glm::vec3& value) { velocity = value; }
             void setAngularVelocity(const glm::vec3& value) { rotation = value; }
             void setTransform(const glm::mat4& value) { transformMatrix = value; }
+            void setDamping(float linear, float angular) { linearDamping = linear; angularDamping = angular; }
 
             // Helpers
             // TODO: Make sure these methods are correct
