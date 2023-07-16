@@ -1,18 +1,21 @@
 #include "catch2/catch_approx.hpp"
 #include "catch2/catch_test_macros.hpp"
 
-#include "physics/BoundingSphere.hpp"
-#include "physics/BoundingAABB.hpp"
+#include "physics/BoundingVolume.hpp"
 
 using namespace Villain;
 
 // Mock Collider type to test unsupported collider/bounding volume types
-class FakeCollider : public Collider {
+class FakeCollider : public BoundingVolume {
     public:
-        FakeCollider() : Collider((ColliderType)100000) {}
+        FakeCollider() : BoundingVolume((BoundingVolumeType)100000) {}
 
         virtual const glm::vec3& getCentre() const { return centre; }
         virtual void render(DebugRenderer* renderer) {}
+
+        virtual bool isOnFrustum(const Frustum& camFrustum, Transform& transform) const { return false; };
+        virtual bool isOnOrForwardPlane(const Plane& plane) const { return false; }
+
     private:
         glm::vec3 centre;
 };
