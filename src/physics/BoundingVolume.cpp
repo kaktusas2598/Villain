@@ -90,6 +90,45 @@ namespace Villain {
         renderer->drawSphere(Center, Radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     }
 
+    BoundingSphere::BoundingSphere(const BoundingSphere& one, const BoundingSphere& two): BoundingVolume(BoundingVolumeType::SPHERE) {
+        glm::vec3 centreOffset = two.Center - one.Center;
+        float distance = glm::length2(centreOffset);
+        float radiusDiff = two.Radius - one.Radius;
+
+        // Check if the larger sphere encloses the small one
+        if (radiusDiff * radiusDiff >= distance) {
+            if (one.Radius > two.Radius) {
+                Center = one.Center;
+                Radius = one.Radius;
+            } else {
+                Center = two.Center;
+                Radius = two.Radius;
+            }
+        } else {
+            // Otherwise work with partially overlapping spheres
+            distance = sqrtf(distance);
+            Radius = (distance + one.Radius + two.Radius) * 0.5f;
+
+            // The new centre is based on one's centre moved towards two's centre
+            // by the amount proportional to two spheres' radii
+            Center = one.Center;
+            if (distance > 0)
+                Center += centreOffset * ((Radius - one.Radius) / distance);
+        }
+    }
+
+    bool BoundingSphere::overlaps(const BoundingSphere* other) const {
+        float distanceSquared = glm::length2(Center - other->Center);
+        return distanceSquared < (Radius + other->Radius) * (Radius + other->Radius);
+    }
+
+    float BoundingSphere::getGrowth(const BoundingSphere& other) {
+        BoundingSphere newSphere(*this, other);
+
+        // Return value proportional to the change in surface area of a sphere
+        return newSphere.Radius * newSphere.Radius - Radius * Radius;
+    }
+
     bool BoundingAABB::isOnFrustum(const Frustum& camFrustum, Transform& transform) const {
         const glm::vec3 globalCenter{ transform.getTransformMatrix() * glm::vec4(Center, 1.f) };
 
