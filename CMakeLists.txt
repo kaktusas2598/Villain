@@ -81,7 +81,6 @@ endif()
 
 # Fix Nuklear UI issues on Windows OS
 if (WIN32)
-    #target_compile_options(${PROJECT_NAME} PRIVATE -Wno-narrowing)
     add_compile_definitions(NK_INCLUDE_FIXED_TYPES)
 endif()
 
