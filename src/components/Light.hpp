@@ -11,7 +11,7 @@ namespace Villain {
             ShadowInfo(const glm::mat4& proj, float bias = 4.f, bool flipCullFaces = true)
                 : projection(proj), shadowBias(bias), flipFaces(flipCullFaces) {}
 
-            void setFarPlane(float far) { farPlane = far; }
+            void setFarPlane(float newFar) { farPlane = newFar; }
 
             inline glm::mat4 getProjection() const { return projection; }
             inline float getBias() const { return shadowBias; }
