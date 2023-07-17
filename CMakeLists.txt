@@ -79,6 +79,11 @@ endif()
 #message(STATUS "Copying resources...")
 #file(COPY res DESTINATION "${CMAKE_BINARY_DIR}")
 
+# Fix Nuklear UI issues on Windows OS
+if (WIN32)
+    add_compile_definitions(NK_INCLUDE_FIXED_TYPES)
+endif()
+
 # Build Header only libs
 add_library(stb_image "vendor/stb_image.cpp")
 add_library(nuklear "vendor/nuklear.cpp")
