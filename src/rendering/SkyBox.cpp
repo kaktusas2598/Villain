@@ -29,7 +29,7 @@ namespace Villain {
     // takes place and when reverting it back to how it was before, this would be more flexible
     // 2. Do we need to introduce back face culling during rendering? (See OGLDev video on skybox) It works without it most of the time
     // 3. Needs to be integrated within RenderingEngine, so user does not need to pass his own shader and it's rendered automatically!
-    void SkyBox::render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix) {
+    void SkyBox::render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, float deltaTime) {
         Renderer renderer;
         cubemapTexture->bind();
         // Render skybox
@@ -41,6 +41,13 @@ namespace Villain {
         cubemapShader->setUniformMat4f("projection", projectionMatrix);
         glm::mat4 skyboxViewMat = glm::mat4(glm::mat3(viewMatrix));
         cubemapShader->setUniformMat4f("view", skyboxViewMat);
+
+        // Optional ability to rotate around Y axis
+        if (animated) angleY += rotationSpeed * deltaTime;
+        else angleY = 0.0f;
+        glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angleY, glm::vec3(0.0f, 1.0f, 0.0f));
+        cubemapShader->setUniformMat4f("rotation", rotationMatrix);
+
         cubemapTexture->bind();
         renderer.draw(*skyboxVao, *skyboxIbo, *cubemapShader);
         glDepthFunc(GL_LESS); // Back to default

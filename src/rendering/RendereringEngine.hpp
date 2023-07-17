@@ -1,5 +1,4 @@
-#ifndef __RENDERING_ENGINE__
-#define __RENDERING_ENGINE__
+#pragma once
 
 #include "camera/Camera.hpp"
 #include "FrameBuffer.hpp"
@@ -20,7 +19,7 @@ namespace Villain {
             RenderingEngine(Engine* e);
             ~RenderingEngine();
             void pickPass(SceneNode* node);
-            void render(SceneNode* node);
+            void render(SceneNode* node, float deltaTime);
             void postRender();
 
             inline void addLight(BaseLight* light) { lights.push_back(light); }
@@ -119,5 +118,3 @@ namespace Villain {
             int selectedNodeID = 0;
     };
 }
-
-#endif // __RENDERING_ENGINE__

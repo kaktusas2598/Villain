@@ -57,16 +57,14 @@ void Game::init() {
     camera->rescale(Engine::getScreenWidth(), Engine::getScreenHeight());
     debugRenderer.init();
 
-    std::vector<std::string> faces{
+    getRootNode()->getEngine()->getRenderingEngine()->setSkybox({
         "assets/textures/skybox/posx.jpg",
         "assets/textures/skybox/negx.jpg",
         "assets/textures/skybox/posy.jpg",
         "assets/textures/skybox/negy.jpg",
         "assets/textures/skybox/posz.jpg",
         "assets/textures/skybox/negz.jpg"
-    };
-
-    skybox = std::make_unique<Villain::SkyBox>(faces, "assets/shaders/cubemap.glsl");
+    });
 
     // LIGHTING
     glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -459,6 +457,4 @@ void Game::onAppRender(float dt) {
 
     // Draw bullet physics
     PhysicsWorld->render(projection * view);
-
-    skybox->render(projection, view);
 }

@@ -62,7 +62,7 @@ namespace Villain {
         delete mirrorBuffer;
     }
 
-    void RenderingEngine::render(SceneNode* node) {
+    void RenderingEngine::render(SceneNode* node, float deltaTime) {
         // Generate picking texture only if mouse is clicked so we can start selecting objects
         if (Input::Get()->isKeyDown(SDL_BUTTON_LEFT)) {
             pickPass(node);
@@ -253,7 +253,7 @@ namespace Villain {
         // Always last - render the skybox, if any
         if (currentSkybox) {
             skyboxShader->bind();
-            currentSkybox->render(mainCamera->getProjMatrix(), mainCamera->getViewMatrix());
+            currentSkybox->render(mainCamera->getProjMatrix(), mainCamera->getViewMatrix(), deltaTime);
         }
     }
 

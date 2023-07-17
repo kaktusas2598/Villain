@@ -304,7 +304,7 @@ namespace Villain {
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
         // let rendering engine take care of all things?
-        application->render(renderingEngine.get());
+        application->render(renderingEngine.get(), deltaTime);
 
         application->onAppRender(deltaTime);
         physicsEngine->render();

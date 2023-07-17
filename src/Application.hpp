@@ -1,5 +1,4 @@
-#ifndef __APPLICATION__
-#define __APPLICATION__
+#pragma once
 
 #include "Engine.hpp"
 #include "SceneNode.hpp"
@@ -24,7 +23,7 @@ namespace Villain {
 
             void handleEvents(float deltaTime);
             void update(float deltaTime);
-            void render(RenderingEngine* RenderingEngine);
+            void render(RenderingEngine* RenderingEngine, float deltaTime);
             // HACK: used for now to make sure stuff not handled by RenderingEngine gets drawn to custom framebuffer
             void postRenderPass(RenderingEngine* RenderingEngine);
             inline void setEngine(Engine* engine) { rootNode.setEngine(engine); }
@@ -66,5 +65,3 @@ namespace Villain {
             struct nk_context* nuklearContext;
     };
 }
-
-#endif // __APPLICATION__

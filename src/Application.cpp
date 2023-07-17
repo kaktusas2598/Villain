@@ -87,9 +87,9 @@ namespace Villain {
 
     }
 
-    void Application::render(RenderingEngine* renderingEngine) {
+    void Application::render(RenderingEngine* renderingEngine, float deltaTime) {
         //Render scene
-        renderingEngine->render(&rootNode);
+        renderingEngine->render(&rootNode, deltaTime);
 
         // Render current state
         if (currentState && currentState->getScreenState() == ScreenState::RUNNING) {
