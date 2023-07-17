@@ -13,7 +13,15 @@ namespace Villain {
     template <class BoundingVolumeClass>
     class BVHNode {
         public:
-            // TODO: provide means for initialisation
+            BVHNode(BVHNode* parent, const BoundingVolumeClass& volume, RigidBody* body = nullptr)
+                : volume(volume), body(body), parent(parent) {
+                    children[0] = children[1] = nullptr;
+                }
+
+            // Delete node, removing it first from the hierarchy along with associated rigid bodies and child nodes.
+            // Deletes node and all its children (but not rigid bodies!) Also deletes a sibling node and changes the parent so
+            // that it contains the data currently in the system. Finally the hierarchy above this node is reconsidered
+            ~BVHNode();
 
             // Checks whether this node is at the bottom of the hierarchy
             bool isLeaf() const { return (body != nullptr); }
@@ -22,6 +30,10 @@ namespace Villain {
             // (up to a given limit) and returning number of potential contacts it found
             unsigned getPotentialContacts(PotentialContact* contacts, unsigned limit) const;
 
+            // Insert the given rigid body with given bounding volume into the hierarchy, this may create
+            // further bounding volume nodes
+            void insert(RigidBody* body, const BoundingVolumeClass& volume);
+
         protected:
             // Checks for overlapping nodes in the hierarchy
             bool overlaps(const BVHNode<BoundingVolumeClass>* other) const;
@@ -29,15 +41,57 @@ namespace Villain {
             // Checks the potential contacts between this node and other given node
             unsigned getPotentialContactsWith(const BVHNode<BoundingVolumeClass>* other, PotentialContact* contacts, unsigned limit) const;
 
+            // For non-leaf nodes will recalculate the bounding volume based on the bounding volumes of its children
+            void recalculateBoundingVolume(bool recurse = true);
+
         private:
             BVHNode* children[2]; //< Children nodes of this node
             BoundingVolumeClass volume; //< Single bounding volume encompassing all the descendants of this node
             RigidBody* body = nullptr; //< Body at this node of the hierarchy, only leaf nodes can have rigid body defined
+            BVHNode* parent = nullptr; //< Node immediate above this one
     };
 
     template <class BoundingVolumeClass>
     bool BVHNode<BoundingVolumeClass>::overlaps(const BVHNode<BoundingVolumeClass>* other) const {
         return volume->overlaps(other->volume);
+    }
+
+    template <class BoundingVolumeClass>
+    BVHNode<BoundingVolumeClass>::~BVHNode() {
+        // Ignore sibling processing if node doesn't have a parent
+        if (parent) {
+            // Find sibling
+            BVHNode<BoundingVolumeClass>* sibling;
+            if (parent->children[0] == this) sibling = parent->children[1];
+            else sibling = parent->children[0];
+
+            // And write it's data to our parent
+            parent->volume = sibling->volume;
+            parent->body = sibling->body;
+            parent->children[0] = sibling->children[0];
+            parent->children[1] = sibling->children[1];
+
+            // Delete the sibling
+            sibling->parent = nullptr;
+            sibling->body = nullptr;
+            sibling->children[0] = nullptr;
+            sibling->children[1] = nullptr;
+            delete sibling;
+
+            // Recalculate bounding volume for the parent
+            parent->recalculateBoundingVolume();
+        }
+
+        // Delete children
+        if (children[0]) {
+            children[0]->parent = nullptr;
+            delete children[0];
+        }
+
+        if (children[1]) {
+            children[1]->parent = nullptr;
+            delete children[1];
+        }
     }
 
     template <class BoundingVolumeClass>
@@ -83,5 +137,41 @@ namespace Villain {
                 return count;
             }
         }
+    }
+
+    template <class BoundingVolumeClass>
+    void BVHNode<BoundingVolumeClass>::insert(RigidBody* newBody, const BoundingVolumeClass& newVolume) {
+        // if this node is a leaf, then the only option is to create two new children and place the body in one
+        if (isLeaf()) {
+            // Child one is copy of this node
+            children[0] = new BVHNode<BoundingVolumeClass>(this, volume, body);
+
+            // Child two will hold the new node
+            children[0] = new BVHNode<BoundingVolumeClass>(this, newVolume, newBody);
+
+            // Make sure this node is not a leaf anymore
+            this->body = nullptr;
+
+            recalculateBoundingVolume();
+        } else {
+            // Otherwise work out which child gets to keep the inserted body, give it to whoever would grow
+            // the least to incorporate this new body
+
+            if (children[0]->volume.getGrowth(newVolume) < children[1]->volume.getGrowth(newVolume)) {
+                children[0]->insert(newBody, newVolume);
+            } else {
+                children[1]->insert(newBody, newVolume);
+            }
+        }
+    }
+
+    template <class BoundingVolumeClass>
+    void BVHNode<BoundingVolumeClass>::recalculateBoundingVolume(bool recurse) {
+        if (isLeaf()) return;
+
+        volume = BoundingVolumeClass(children[0]->volume, children[1]->volume);
+
+        // Recurse up the tree
+        if (recurse && parent) parent->recalculateBoundingVolume();
     }
 }
