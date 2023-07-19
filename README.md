@@ -46,17 +46,17 @@
 * 3D Rigid Body engine:
   * Rigid body Euler numerical integration
   * Force generators: gravity, spring
-  * No collision detection/resultion systems at the moment!
+  * Broad-Phase Collision Detection using Bounding Volume Hiearchy
+  * No narrow-phase collision detection/resultion systems at the moment! (IN PROGRESS)
 
 ## Planned Features
 
-* Engine editor with scene management
+* Engine editor with scene management (add target for executable with custom Application implementation)
 * Hot reloading resources
 * Physics Engine:
     * Data driven approach for particle types and emitters
     * Built in collision detection algorithms: AABB, SAT, circle
     * Rigid body collision resolution
-    * Spatial Partitioning models for broad phase
 * Data Oriented Models
 * LUA (Again!)
 * Entity Component System

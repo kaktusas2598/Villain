@@ -174,4 +174,118 @@ namespace Villain {
         // Recurse up the tree
         if (recurse && parent) parent->recalculateBoundingVolume();
     }
+
+
+    // NOTE: Following structures and classes are mainly kept here for a note
+    // in the future we might support multiple ways for defining hierarchy in BroadPhase,
+    // using BSP or Oct/Quad Trees might be more suitable for some scenarios compared to BVH
+    namespace SpatialPartitioning {
+
+        struct Plane {
+            glm::vec3 Position; //< Could be any location on the plane
+            glm::vec3 Direction; //< Points out at right angles to the plane
+        };
+
+        // Binary Space Partitioning
+        // -------------------------
+        // BVH Could also be incorporated to represent a set of objects, also polymorphism does not
+        // have to be used, this is just an example of BSP implementation
+        // BSP Is good approach for level geometry
+        struct BSPElement {};
+
+        struct BSPObjectSet : public BSPElement {
+            // Only commented out because I don't want to include vector here only for testing code!
+            //std::vector<RigidBody*> objects;
+        };
+
+        struct BSPNode : public BSPElement {
+            Plane plane;
+            BSPElement front;
+            BSPElement back;
+        };
+
+        // Quad-Trees and Oct-Trees
+        // -------------------------
+        enum class QuadTreeSelector {
+            BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT
+        };
+
+        class QuadTreeNode {
+            // Position could be calculated on flight saving memory if for quad and oct trees they halve the space
+            glm::vec3 position;
+            QuadTreeNode* children[4];
+
+            // ...
+
+            // Check which quadrant object is in, using X as left->right and z axis as bottom->top
+            // so would need to change for actual implenmentation with right-handed coord system!?
+            unsigned getChildIndex(const glm::vec3& objectCentre) {
+                unsigned index = 0;
+                if (objectCentre.x > position.x) index +=1;
+                if (objectCentre.z > position.z) index +=2;
+                return index;
+            }
+        };
+
+        enum class OctTreeSelector {
+            LOWER_BOTTOM_LEFT, LOWER_BOTTOM_RIGHT,
+            HIGHER_BOTTOM_LEFT, HIGHER_BOTTOM_RIGHT,
+            LOWER_TOP_LEFT, LOWER_TOP_RIGHT,
+            HIGHER_TOP_LEFT, HIGHER_TOP_RIGHT
+        };
+
+        class OctTreeNode {
+            glm::vec3 position;
+            OctTreeNode* children[8];
+
+            // ...
+
+            unsigned getChildIndex(const glm::vec3& objectCentre) {
+                unsigned index = 0;
+                if (objectCentre.x > position.x) index += 1;
+                if (objectCentre.y > position.y) index += 2;
+                if (objectCentre.z > position.z) index += 4;
+                return index;
+            }
+        };
+
+        // Grid
+        // Not a tree structure like oct/quad trees or BSP, but rather a regular grid
+        // That makes it faster to find where an object is located compared to recusing down a tree
+        // -------------------------
+        // Hybrid data structure can be used for multiple grids of different sizes called multiresolution map.
+        class Grid {
+            // Num of cells in each direction
+            unsigned xExtent;
+            unsigned yExtent;
+
+            // ObjectSet* locations; // An array of size (xExtent * yExtent)
+            // Or:
+            // std::set<ObjectSet*> activeSets;
+            glm::vec2 origin;
+            glm::vec2 inverseCellSize;
+
+            // ...
+
+            unsigned getLocationIndex(const glm::vec2& objectCentre) {
+                glm::vec2 square = objectCentre * inverseCellSize;
+                return (unsigned)square.x + xExtent * (unsigned)square.y;
+            }
+
+            //void add(Object* object) {
+                //unsigned location = getLocationIndex(object->centre);
+                //ObjectSet* set = locations + location;
+                //if (set.size() == 1) activeSets.insert(set);
+                //set.add(object);
+            //}
+
+            //void remove(Object* object) {
+                //unsigned location = getLocationIndex(object->centre);
+                //ObjectSet* set = locations + location;
+                //if (set.size() == 1) activeSets.erase(set);
+                //set.remove(object);
+            //}
+
+        };
+    }
 }
