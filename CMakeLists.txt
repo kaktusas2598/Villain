@@ -49,6 +49,8 @@ message(STATUS "Glew include dir: ${GLEW_INCLUDE_DIRS}")
 message(STATUS "Freetype include dir: ${FREETYPE_INCLUDE_DIRS}")
 
 file(GLOB_RECURSE sources src/*.cpp)
+# Remove code used for Villain Editor!
+list(REMOVE_ITEM sources "${CMAKE_CURRENT_SOURCE_DIR}/src/EditorApplication.cpp")
 
 # Uncoment to build executable, but make sure to comment add_library() line
 #add_executable(${PROJECT_NAME} main.cpp ${sources})
@@ -128,6 +130,10 @@ if(VILLAIN_BUILD_TESTS)
         setup_target_for_coverage(coverage unit_tests coverage)
     endif()
 endif()
+
+# Editor Target
+add_executable(VillainEditor WIN32 src/EditorApplication.cpp)
+target_link_libraries(VillainEditor LINK_PUBLIC VILLAIN)
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"
