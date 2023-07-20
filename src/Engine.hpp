@@ -25,9 +25,8 @@ namespace Villain {
     class Application;
     class Entity;
 
-    /*! \brief Engine
-     * Main Application Class, entrypoint class will need to extend this one
-     *
+    /*!
+     * Main game loop class responsible for setting Window, Rendering Context and main engine subsystems
      */
     class Engine {
         public:
@@ -43,10 +42,12 @@ namespace Villain {
              * @sa WindowFlags
              */
             void init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection = false);
-            // Or initialise using Lua config script
+            /// Initialise engine using Lua config script
             void init(Application* app, const std::string& luaConfigPath);
-            void run(); ///< runs main application's loop
-            void exit(); //< clean resources and exit application
+            /// Main application/game loop with semi fixed time step
+            void run();
+            /// Cleanup resources and exit engine application
+            void exit();
 
             void handleEvents(SDL_Event& event);
 
@@ -80,7 +81,7 @@ namespace Villain {
             static bool editMode; ///< enables IMGui Overlay
             Window window; ///< main window instance
             ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
-            bool wireFrameMode = false;
+            bool wireFrameMode = false; ///< Optional wireframe rendering mode
 
             // Screen dimensions will be static so they can be accessed from anywhere in the Engine
             static int screenWidth;
@@ -92,14 +93,14 @@ namespace Villain {
             Timer profiler;
             bool mouseMotion = false;
 
-            std::unique_ptr<FrameBuffer> sceneBuffer = nullptr; //< Render Application scene here for futher processing
-            struct nk_context* nuklearContext; //< Nuklear UI context
+            std::unique_ptr<FrameBuffer> sceneBuffer = nullptr; ///< Render Application scene here for futher processing
+            struct nk_context* nuklearContext; ///< Nuklear UI context
 
             std::unique_ptr<PhysicsEngine> physicsEngine = nullptr;
             std::unique_ptr<ParticleWorld> particleWorld = nullptr;
             std::unique_ptr<RigidBodyWorld> rigidBodyWorld = nullptr;
             std::unique_ptr<RenderingEngine> renderingEngine = nullptr;
-            Application* application = nullptr; //< User engine application
+            Application* application = nullptr; ///< User engine application
             std::unique_ptr<EventDispatcher> eventDispatcher;
     };
 }
