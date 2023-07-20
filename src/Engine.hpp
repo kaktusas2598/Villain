@@ -26,7 +26,9 @@ namespace Villain {
     class Entity;
 
     /*!
-     * Main game loop class responsible for setting Window, Rendering Context and main engine subsystems
+     * Main engine class with game loop. Responsible for managing game loop with semi-fixed time step. Initialises most
+     * of the engine's subsystems including Window, RenderingEngine, RigidBodyWorld, EventDispatcher and client Application.
+     * Also handles input events and allows using Lua config script to setup startup settings.
      */
     class Engine {
         public:
