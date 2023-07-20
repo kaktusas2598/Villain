@@ -1,0 +1,5 @@
+<map id="Villain::CameraController" name="Villain::CameraController">
+<area shape="rect" id="node1" title=" " alt="" coords="120,5,307,32"/>
+<area shape="rect" id="node2" href="$classVillain_1_1FirstPersonCameraController.html" title=" " alt="" coords="5,80,200,121"/>
+<area shape="rect" id="node3" href="$classVillain_1_1ThirdPersonCameraController.html" title=" " alt="" coords="225,80,423,121"/>
+</map>
