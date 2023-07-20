@@ -26,6 +26,7 @@ var hierarchy =
     [ "Villain::Character", "structVillain_1_1Character.html", null ],
     [ "Villain::CharGlyph", "structVillain_1_1CharGlyph.html", null ],
     [ "Villain::Contact", "classVillain_1_1Contact.html", null ],
+    [ "Villain::ContactResolver", "classVillain_1_1ContactResolver.html", null ],
     [ "Villain::DebugConsole", "structVillain_1_1DebugConsole.html", null ],
     [ "Villain::DebugRenderer", "classVillain_1_1DebugRenderer.html", null ],
     [ "Villain::DebugRenderer::DebugVertex", "structVillain_1_1DebugRenderer_1_1DebugVertex.html", null ],
