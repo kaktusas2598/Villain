@@ -48,6 +48,15 @@ namespace Villain {
 
     Engine::~Engine() {}
 
+    /**
+     *
+     * Init subsystems, client application, create window and setup GL context
+     * @param title Title to be displayed on window title bar
+     * @param height Screen height in pixels
+     * @param width Screen width in pixels
+     * @param windowFlags window flags
+     * @sa WindowFlags
+     */
     void Engine::init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection) {
         screenHeight = height;
         screenWidth = width;
@@ -143,7 +152,6 @@ namespace Villain {
         );
     }
 
-    // Special one-time render pass, displayed while user application is loading
     void Engine::renderLoadingScreen() {
         // TODO: Handle Resize, embed loading screen texture
         glClear(GL_COLOR_BUFFER_BIT);

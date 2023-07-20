@@ -25,9 +25,10 @@ namespace Villain {
     class Application;
     class Entity;
 
-    /*!
-     * Main engine class with game loop. Responsible for managing game loop with semi-fixed time step. Initialises most
-     * of the engine's subsystems including Window, RenderingEngine, RigidBodyWorld, EventDispatcher and client Application.
+    /*! \brief Main engine class containing game loop.
+     *
+     * Responsible for managing game loop with semi-fixed time step. Initialises most of the engine's subsystems,
+     * including but not limited to Window, RenderingEngine, RigidBodyWorld, EventDispatcher and client Application.
      * Also handles input events and allows using Lua config script to setup startup settings.
      */
     class Engine {
@@ -35,22 +36,15 @@ namespace Villain {
             Engine();
             virtual ~Engine();
 
-            /**
-             * init systems, create window and GL context
-             * @param title Title to be displayed on window title bar
-             * @param height Screen height in pixels
-             * @param width Screen width in pixels
-             * @param windowFlags window flags
-             * @sa WindowFlags
-             */
+            /// Initialise engine using explicit params.
             void init(Application* app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection = false);
             /// Initialise engine using Lua config script
             void init(Application* app, const std::string& luaConfigPath);
-            /// Main application/game loop with semi fixed time step
+            /// Start running main application/game loop with semi fixed time step
             void run();
             /// Cleanup resources and exit engine application
             void exit();
-
+            /// Handle input events and dispatch them using EventDispatcher and update InputManager
             void handleEvents(SDL_Event& event);
 
             bool running(){ return isRunning; }
@@ -61,6 +55,8 @@ namespace Villain {
             static uint32_t getRenderTime() { return renderTime; }
             static bool editModeActive() { return editMode; }
             bool* wireFrameModeActive() { return &wireFrameMode; }
+
+            /// Special one-time render pass used for displaying loading screen image while the user application is loading
             void renderLoadingScreen();
 
             inline PhysicsEngine* getPhysicsEngine() { return physicsEngine.get(); }
