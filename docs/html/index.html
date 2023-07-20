@@ -138,21 +138,20 @@ Physics</h2>
 <li>3D Rigid Body engine:<ul>
 <li>Rigid body Euler numerical integration</li>
 <li>Force generators: gravity, spring</li>
-<li>No collision detection/resultion systems at the moment!</li>
+<li>Broad-Phase Collision Detection using Bounding Volume Hiearchy</li>
+<li>No narrow-phase collision detection/resultion systems at the moment! (IN PROGRESS)</li>
 </ul>
 </li>
 </ul>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Planned Features</h1>
 <ul>
-<li>Engine editor with scene management</li>
+<li>Engine editor with scene management (add target for executable with custom Application implementation)</li>
 <li>Hot reloading resources</li>
 <li>Physics Engine:<ul>
 <li>Data driven approach for particle types and emitters</li>
-<li>Potential Box2D and Bullet physics integration</li>
-<li>Built in collision detection: AABB, SAT, circle</li>
-<li>Rigid Body implementation</li>
-<li>Spatial Partitioning models</li>
+<li>Built in collision detection algorithms: AABB, SAT, circle</li>
+<li>Rigid body collision resolution</li>
 </ul>
 </li>
 <li>Data Oriented Models</li>

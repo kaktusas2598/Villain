@@ -91,9 +91,13 @@ $(document).ready(function(){initNavTree('EditorApplication_8hpp_source.html',''
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>Villain::Editor {</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classVillain_1_1Editor_1_1EditorApplication.html">    7</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1Editor_1_1EditorApplication.html">EditorApplication</a> : <span class="keyword">public</span> <a class="code" href="classVillain_1_1Application.html">Villain::Application</a> {};</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;}</div>
-<div class="ttc" id="aclassVillain_1_1Application_html"><div class="ttname"><a href="classVillain_1_1Application.html">Villain::Application</a></div><div class="ttdef"><b>Definition:</b> Application.hpp:15</div></div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classVillain_1_1Editor_1_1EditorApplication.html">    7</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1Editor_1_1EditorApplication.html">EditorApplication</a> : <span class="keyword">public</span> <a class="code" href="classVillain_1_1Application.html">Villain::Application</a> {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;            <span class="comment">// Ovverride to disable automatically trying to load state.xml, not the best approach</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> addStates()<span class="keyword"> override </span>{}</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    };</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
+<div class="ttc" id="aclassVillain_1_1Application_html"><div class="ttname"><a href="classVillain_1_1Application.html">Villain::Application</a></div><div class="ttdef"><b>Definition:</b> Application.hpp:14</div></div>
 <div class="ttc" id="aclassVillain_1_1Editor_1_1EditorApplication_html"><div class="ttname"><a href="classVillain_1_1Editor_1_1EditorApplication.html">Villain::Editor::EditorApplication</a></div><div class="ttdef"><b>Definition:</b> EditorApplication.hpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

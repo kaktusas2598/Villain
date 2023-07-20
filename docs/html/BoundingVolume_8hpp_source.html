@@ -143,44 +143,59 @@ $(document).ready(function(){initNavTree('BoundingVolume_8hpp_source.html',''); 
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> glm::vec3&amp; getCentre()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center; }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">float</span> getRadius()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Radius; }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    };</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="structVillain_1_1BoundingAABB.html">   61</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a> : <span class="keyword">public</span> <a class="code" href="structVillain_1_1BoundingVolume.html">BoundingVolume</a> {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        glm::vec3 Center{0.f, 0.f, 0.f};</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        glm::vec3 Extents{0.f, 0.f, 0.f};</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a>(<span class="keyword">const</span> glm::vec3&amp; min, <span class="keyword">const</span> glm::vec3&amp; max) :</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <a class="code" href="structVillain_1_1BoundingVolume.html">BoundingVolume</a>(BoundingVolumeType::AABB), Center((max + min) * 0.5f), Extents(max.x - Center.x, max.y - Center.y, max.z - Center.z) {}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a>(<span class="keyword">const</span> glm::vec3&amp; center, <span class="keywordtype">float</span> iI, <span class="keywordtype">float</span> iJ, <span class="keywordtype">float</span> iK) :</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <a class="code" href="structVillain_1_1BoundingVolume.html">BoundingVolume</a>(BoundingVolumeType::AABB), Center(center), Extents(iI, iJ, iK) {}</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isOnOrForwardPlane(<span class="keyword">const</span> <a class="code" href="classVillain_1_1Plane.html">Plane</a>&amp; plane)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="comment">// Compute the projection interval radius of b onto L(t) = b.c + t * p.n</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keyword">const</span> <span class="keywordtype">float</span> r = Extents.x * std::abs(plane.getNormal().x) +</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                Extents.y * std::abs(plane.getNormal().y) + Extents.z * std::abs(plane.getNormal().z);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="comment">// For broad phase collision detection system</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">// ------------------</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="comment">// Create a bounding sphere enclosing the two given bounding spheres</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="structVillain_1_1BoundingSphere.html">BoundingSphere</a>(<span class="keyword">const</span> <a class="code" href="structVillain_1_1BoundingSphere.html">BoundingSphere</a>&amp; one, <span class="keyword">const</span> <a class="code" href="structVillain_1_1BoundingSphere.html">BoundingSphere</a>&amp; two);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="comment">// Checks whether this bounding sphere overlaps the given one</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">bool</span> overlaps(<span class="keyword">const</span> <a class="code" href="structVillain_1_1BoundingSphere.html">BoundingSphere</a>* other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="comment">// Calculate amount this sphere would have to grow to incorporate the given bounding sphere.</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="comment">// Value is not returned in any particular units. Better implementation would take into account</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="comment">// the growth in surface area (as in Goldsmith-Salmon algorithm for tree construction)</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">float</span> getGrowth(<span class="keyword">const</span> <a class="code" href="structVillain_1_1BoundingSphere.html">BoundingSphere</a>&amp; other);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">// Calculate volume of this bounding volume</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">float</span> getSize() {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> ((<span class="keywordtype">float</span>)1.333333) * M_PI * Radius * Radius * Radius;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    };</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="keywordflow">return</span> -r &lt;= plane.getSignedDistanceToPlane(Center);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isOnFrustum(<span class="keyword">const</span> <a class="code" href="structVillain_1_1Frustum.html">Frustum</a>&amp; camFrustum, <a class="code" href="classVillain_1_1Transform.html">Transform</a>&amp; transform) <span class="keyword">const</span> <span class="keyword">final</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="code" href="classVillain_1_1IntersectData.html">IntersectData</a> intersectAABB(<span class="keyword">const</span> <a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a>&amp; other);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> transform(<span class="keyword">const</span> glm::vec3&amp; translation);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> glm::vec3&amp; getCentre()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center; }</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> render(<a class="code" href="classVillain_1_1DebugRenderer.html">DebugRenderer</a>* renderer);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        glm::vec3 getMinExtents()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center - Extents; }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        glm::vec3 getMaxExtents()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center + Extents; }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    };</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="structVillain_1_1BoundingAABB.html">   76</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a> : <span class="keyword">public</span> <a class="code" href="structVillain_1_1BoundingVolume.html">BoundingVolume</a> {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        glm::vec3 Center{0.f, 0.f, 0.f};</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        glm::vec3 Extents{0.f, 0.f, 0.f};</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a>(<span class="keyword">const</span> glm::vec3&amp; min, <span class="keyword">const</span> glm::vec3&amp; max) :</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <a class="code" href="structVillain_1_1BoundingVolume.html">BoundingVolume</a>(BoundingVolumeType::AABB), Center((max + min) * 0.5f), Extents(max.x - Center.x, max.y - Center.y, max.z - Center.z) {}</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a>(<span class="keyword">const</span> glm::vec3&amp; center, <span class="keywordtype">float</span> iI, <span class="keywordtype">float</span> iJ, <span class="keywordtype">float</span> iK) :</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <a class="code" href="structVillain_1_1BoundingVolume.html">BoundingVolume</a>(BoundingVolumeType::AABB), Center(center), Extents(iI, iJ, iK) {}</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isOnOrForwardPlane(<span class="keyword">const</span> <a class="code" href="classVillain_1_1Plane.html">Plane</a>&amp; plane)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="comment">// Compute the projection interval radius of b onto L(t) = b.c + t * p.n</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keyword">const</span> <span class="keywordtype">float</span> r = Extents.x * std::abs(plane.getNormal().x) +</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                Extents.y * std::abs(plane.getNormal().y) + Extents.z * std::abs(plane.getNormal().z);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">return</span> -r &lt;= plane.getSignedDistanceToPlane(Center);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isOnFrustum(<span class="keyword">const</span> <a class="code" href="structVillain_1_1Frustum.html">Frustum</a>&amp; camFrustum, <a class="code" href="classVillain_1_1Transform.html">Transform</a>&amp; transform) <span class="keyword">const</span> <span class="keyword">final</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="code" href="classVillain_1_1IntersectData.html">IntersectData</a> intersectAABB(<span class="keyword">const</span> <a class="code" href="structVillain_1_1BoundingAABB.html">BoundingAABB</a>&amp; other);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> transform(<span class="keyword">const</span> glm::vec3&amp; translation);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> glm::vec3&amp; getCentre()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center; }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> render(<a class="code" href="classVillain_1_1DebugRenderer.html">DebugRenderer</a>* renderer);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        glm::vec3 getMinExtents()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center - Extents; }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        glm::vec3 getMaxExtents()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Center + Extents; }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    };</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
 <div class="ttc" id="aclassVillain_1_1DebugRenderer_html"><div class="ttname"><a href="classVillain_1_1DebugRenderer.html">Villain::DebugRenderer</a></div><div class="ttdef"><b>Definition:</b> DebugRenderer.hpp:11</div></div>
 <div class="ttc" id="aclassVillain_1_1IntersectData_html"><div class="ttname"><a href="classVillain_1_1IntersectData.html">Villain::IntersectData</a></div><div class="ttdef"><b>Definition:</b> IntersectData.hpp:9</div></div>
 <div class="ttc" id="aclassVillain_1_1Plane_html"><div class="ttname"><a href="classVillain_1_1Plane.html">Villain::Plane</a></div><div class="ttdef"><b>Definition:</b> Plane.hpp:10</div></div>
 <div class="ttc" id="aclassVillain_1_1Transform_html"><div class="ttname"><a href="classVillain_1_1Transform.html">Villain::Transform</a></div><div class="ttdef"><b>Definition:</b> Transform.hpp:9</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
-<div class="ttc" id="astructVillain_1_1BoundingAABB_html"><div class="ttname"><a href="structVillain_1_1BoundingAABB.html">Villain::BoundingAABB</a></div><div class="ttdef"><b>Definition:</b> BoundingVolume.hpp:61</div></div>
+<div class="ttc" id="astructVillain_1_1BoundingAABB_html"><div class="ttname"><a href="structVillain_1_1BoundingAABB.html">Villain::BoundingAABB</a></div><div class="ttdef"><b>Definition:</b> BoundingVolume.hpp:76</div></div>
 <div class="ttc" id="astructVillain_1_1BoundingSphere_html"><div class="ttname"><a href="structVillain_1_1BoundingSphere.html">Villain::BoundingSphere</a></div><div class="ttdef"><b>Definition:</b> BoundingVolume.hpp:38</div></div>
 <div class="ttc" id="astructVillain_1_1BoundingVolume_html"><div class="ttname"><a href="structVillain_1_1BoundingVolume.html">Villain::BoundingVolume</a></div><div class="ttdef"><b>Definition:</b> BoundingVolume.hpp:19</div></div>
 <div class="ttc" id="astructVillain_1_1Frustum_html"><div class="ttname"><a href="structVillain_1_1Frustum.html">Villain::Frustum</a></div><div class="ttdef"><b>Definition:</b> Frustum.hpp:7</div></div>

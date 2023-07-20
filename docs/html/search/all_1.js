@@ -7,5 +7,9 @@ var searchData=
   ['boundingaabb_16',['BoundingAABB',['../structVillain_1_1BoundingAABB.html',1,'Villain']]],
   ['boundingsphere_17',['BoundingSphere',['../structVillain_1_1BoundingSphere.html',1,'Villain']]],
   ['boundingvolume_18',['BoundingVolume',['../structVillain_1_1BoundingVolume.html',1,'Villain']]],
-  ['buoyancy_19',['Buoyancy',['../classVillain_1_1Buoyancy.html',1,'Villain']]]
+  ['bspelement_19',['BSPElement',['../structVillain_1_1SpatialPartitioning_1_1BSPElement.html',1,'Villain::SpatialPartitioning']]],
+  ['bspnode_20',['BSPNode',['../structVillain_1_1SpatialPartitioning_1_1BSPNode.html',1,'Villain::SpatialPartitioning']]],
+  ['bspobjectset_21',['BSPObjectSet',['../structVillain_1_1SpatialPartitioning_1_1BSPObjectSet.html',1,'Villain::SpatialPartitioning']]],
+  ['buoyancy_22',['Buoyancy',['../classVillain_1_1Buoyancy.html',1,'Villain']]],
+  ['bvhnode_23',['BVHNode',['../classVillain_1_1BVHNode.html',1,'Villain']]]
 ];

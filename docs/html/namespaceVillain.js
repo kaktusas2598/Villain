@@ -1,7 +1,32 @@
 var namespaceVillain =
 [
     [ "Editor", null, [
-      [ "EditorApplication", "classVillain_1_1Editor_1_1EditorApplication.html", null ]
+      [ "EditorApplication", "classVillain_1_1Editor_1_1EditorApplication.html", "classVillain_1_1Editor_1_1EditorApplication" ]
+    ] ],
+    [ "SpatialPartitioning", null, [
+      [ "Plane", "structVillain_1_1SpatialPartitioning_1_1Plane.html", "structVillain_1_1SpatialPartitioning_1_1Plane" ],
+      [ "BSPElement", "structVillain_1_1SpatialPartitioning_1_1BSPElement.html", null ],
+      [ "BSPObjectSet", "structVillain_1_1SpatialPartitioning_1_1BSPObjectSet.html", null ],
+      [ "BSPNode", "structVillain_1_1SpatialPartitioning_1_1BSPNode.html", "structVillain_1_1SpatialPartitioning_1_1BSPNode" ],
+      [ "QuadTreeNode", "classVillain_1_1SpatialPartitioning_1_1QuadTreeNode.html", null ],
+      [ "OctTreeNode", "classVillain_1_1SpatialPartitioning_1_1OctTreeNode.html", null ],
+      [ "Grid", "classVillain_1_1SpatialPartitioning_1_1Grid.html", null ],
+      [ "OctTreeSelector", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75", [
+        [ "LOWER_BOTTOM_LEFT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75a3f23e20134fb3ae2315e04787667d528", null ],
+        [ "LOWER_BOTTOM_RIGHT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75af6982aa4e0f3ad202f9f18b5c1c42821", null ],
+        [ "HIGHER_BOTTOM_LEFT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75ada81de21a0e5ccd38f693f06fd637bde", null ],
+        [ "HIGHER_BOTTOM_RIGHT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75a476e729f23ddd967afe5dafb38f32070", null ],
+        [ "LOWER_TOP_LEFT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75aeff199041d6b36a1f37241c82ef303de", null ],
+        [ "LOWER_TOP_RIGHT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75a4ba0529b9983d01fbb083f41e45ca0e2", null ],
+        [ "HIGHER_TOP_LEFT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75a4300413d107190aea4aa2fa56e3d31f0", null ],
+        [ "HIGHER_TOP_RIGHT", "BroadPhase_8hpp.html#a6f2dae79c79fe24c4585401cc1be1b75aeba3e0bdf17ec7aefab7850c288ae734", null ]
+      ] ],
+      [ "QuadTreeSelector", "BroadPhase_8hpp.html#a4832496d9e3e96582f552118a6d36798", [
+        [ "BOTTOM_LEFT", "BroadPhase_8hpp.html#a4832496d9e3e96582f552118a6d36798a8d81ac82421d1b03da58fccb9174892e", null ],
+        [ "BOTTOM_RIGHT", "BroadPhase_8hpp.html#a4832496d9e3e96582f552118a6d36798a341b72aaab1308a3e6667af1e52f5def", null ],
+        [ "TOP_LEFT", "BroadPhase_8hpp.html#a4832496d9e3e96582f552118a6d36798a747385047b85ae751f83adb36435a3c1", null ],
+        [ "TOP_RIGHT", "BroadPhase_8hpp.html#a4832496d9e3e96582f552118a6d36798a901d87dedda8db733f5e6d34c4eb5fe0", null ]
+      ] ]
     ] ],
     [ "Application", "classVillain_1_1Application.html", "classVillain_1_1Application" ],
     [ "Camera", "classVillain_1_1Camera.html", "classVillain_1_1Camera" ],
@@ -52,6 +77,8 @@ var namespaceVillain =
     [ "BoundingVolume", "structVillain_1_1BoundingVolume.html", "structVillain_1_1BoundingVolume" ],
     [ "BoundingSphere", "structVillain_1_1BoundingSphere.html", "structVillain_1_1BoundingSphere" ],
     [ "BoundingAABB", "structVillain_1_1BoundingAABB.html", "structVillain_1_1BoundingAABB" ],
+    [ "PotentialContact", "structVillain_1_1PotentialContact.html", "structVillain_1_1PotentialContact" ],
+    [ "BVHNode", "classVillain_1_1BVHNode.html", "classVillain_1_1BVHNode" ],
     [ "Contact", "classVillain_1_1Contact.html", null ],
     [ "ForceGenerator", "classVillain_1_1ForceGenerator.html", "classVillain_1_1ForceGenerator" ],
     [ "ForceRegistry", "classVillain_1_1ForceRegistry.html", "classVillain_1_1ForceRegistry" ],

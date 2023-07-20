@@ -14,6 +14,11 @@ var hierarchy =
       [ "Villain::BoundingAABB", "structVillain_1_1BoundingAABB.html", null ],
       [ "Villain::BoundingSphere", "structVillain_1_1BoundingSphere.html", null ]
     ] ],
+    [ "Villain::SpatialPartitioning::BSPElement", "structVillain_1_1SpatialPartitioning_1_1BSPElement.html", [
+      [ "Villain::SpatialPartitioning::BSPNode", "structVillain_1_1SpatialPartitioning_1_1BSPNode.html", null ],
+      [ "Villain::SpatialPartitioning::BSPObjectSet", "structVillain_1_1SpatialPartitioning_1_1BSPObjectSet.html", null ]
+    ] ],
+    [ "Villain::BVHNode< BoundingVolumeClass >", "classVillain_1_1BVHNode.html", null ],
     [ "Villain::CameraController", "classVillain_1_1CameraController.html", [
       [ "Villain::FirstPersonCameraController", "classVillain_1_1FirstPersonCameraController.html", null ],
       [ "Villain::ThirdPersonCameraController", "classVillain_1_1ThirdPersonCameraController.html", null ]
@@ -50,6 +55,7 @@ var hierarchy =
     [ "Villain::FreeType", "classVillain_1_1FreeType.html", null ],
     [ "Villain::Frustum", "structVillain_1_1Frustum.html", null ],
     [ "Villain::Glyph", "classVillain_1_1Glyph.html", null ],
+    [ "Villain::SpatialPartitioning::Grid", "classVillain_1_1SpatialPartitioning_1_1Grid.html", null ],
     [ "Villain::IGameScreen", "classVillain_1_1IGameScreen.html", [
       [ "Villain::CustomXMLScreen", "classVillain_1_1CustomXMLScreen.html", null ]
     ] ],
@@ -93,6 +99,7 @@ var hierarchy =
         [ "Villain::KinematicController", "classVillain_1_1KinematicController.html", null ]
       ] ]
     ] ],
+    [ "Villain::SpatialPartitioning::OctTreeNode", "classVillain_1_1SpatialPartitioning_1_1OctTreeNode.html", null ],
     [ "Villain::Particle", "classVillain_1_1Particle.html", null ],
     [ "Villain::Particle2D", "classVillain_1_1Particle2D.html", null ],
     [ "Villain::ParticleBatch2D", "classVillain_1_1ParticleBatch2D.html", null ],
@@ -128,6 +135,9 @@ var hierarchy =
     [ "Villain::PickingTexture", "classVillain_1_1PickingTexture.html", null ],
     [ "Villain::PickingTexture::PixelInfo", "structVillain_1_1PickingTexture_1_1PixelInfo.html", null ],
     [ "Villain::Plane", "classVillain_1_1Plane.html", null ],
+    [ "Villain::SpatialPartitioning::Plane", "structVillain_1_1SpatialPartitioning_1_1Plane.html", null ],
+    [ "Villain::PotentialContact", "structVillain_1_1PotentialContact.html", null ],
+    [ "Villain::SpatialPartitioning::QuadTreeNode", "classVillain_1_1SpatialPartitioning_1_1QuadTreeNode.html", null ],
     [ "Random", "classRandom.html", null ],
     [ "Villain::RenderBatch", "classVillain_1_1RenderBatch.html", null ],
     [ "Villain::Renderer", "classVillain_1_1Renderer.html", null ],
