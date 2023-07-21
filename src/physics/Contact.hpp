@@ -20,7 +20,7 @@ namespace Villain {
             glm::vec3 contactNormal; ///< Direction of the contact in world coordinates.
             float penetration; ///< Depth of penetration at the contact point.
 
-            /// Set properties that doesn't normally depend on collision point (bodies and material properties)
+            /// Set properties that don't normally depend on collision point (bodies and material properties)
             void setBodyData(RigidBody* one, RigidBody* two, float frictionCoef, float restCoef);
 
         protected:
