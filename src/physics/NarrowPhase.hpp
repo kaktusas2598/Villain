@@ -15,6 +15,11 @@ namespace Villain {
             friend class CollisionDetector;
             friend class IntersectionTests;
 
+            CollisionPrimitive(RigidBody* body, glm::mat4 offset = glm::mat4(1.0f))
+                : body(body), offset(offset) {
+                    if (body) calculateTransform();
+                }
+
             RigidBody* body; ///< Rigid body represented by this primitive
             glm::mat4 offset; ///< Offset matrix for this primitive from the give rigid body
 
@@ -38,12 +43,18 @@ namespace Villain {
     /// Represents a rigid body that can be treated as a sphere for collision detection
     class CollisionSphere : public CollisionPrimitive {
         public:
+            CollisionSphere(float radius, RigidBody* body, glm::mat4 offset = glm::mat4(1.0f))
+                : radius(radius), CollisionPrimitive(body, offset) {}
+
             float radius; ///< Radius of the sphere
     };
 
     /// Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with world geometry
     class CollisionPlane : public CollisionPrimitive {
         public:
+            CollisionPlane(glm::vec3 normal, float distance, glm::mat4 offset = glm::mat4(1.0f))
+                : direction(normal), offset(distance), CollisionPrimitive(nullptr, offset) {}
+
             glm::vec3 direction; ///< Plane normal
             float offset; ///< Distance of the plane from the origin
     };
@@ -51,6 +62,9 @@ namespace Villain {
     /// Represents a rigid body that can be treated as an axis-aligned box for collision detection
     class CollisionBox : public CollisionPrimitive {
         public:
+            CollisionBox(glm::vec3 half, RigidBody* body, glm::mat4 offset = glm::mat4(1.0f))
+                : halfSize(half), CollisionPrimitive(body, offset) {}
+
             glm::vec3 halfSize; ///< Half sizes of the box along its local axes
     };
 

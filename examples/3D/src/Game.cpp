@@ -244,16 +244,10 @@ void Game::onAppRender(float dt) {
 
     ////////////////////////////////////////
     /// Collision narrow phase tests
-    CollisionBox box;
-    box.halfSize = {10.0f, 2.0f, 8.0f};
-    box.offset = glm::mat4(1.0f);
-    box.body = playerBody;
-    box.calculateTransform();
+    CollisionBox box({10.0, 2.0, 8.0}, playerBody);
 
     // Define the CollisionPlane for the ground (Y level = 0)
-    CollisionPlane groundPlane;
-    groundPlane.direction = glm::vec3(0.0f, 1.0f, 0.0f); // Pointing upwards along the Y-axis
-    groundPlane.offset = 0.0f; // Y level = 0
+    CollisionPlane groundPlane({0.0, 1.0, 0.0}, 0.0);
 
     // Perform collision detection between the camera's bounding box and the ground plane
     CollisionData collisionData;
@@ -277,17 +271,9 @@ void Game::onAppRender(float dt) {
         //debugRenderer.drawSphere(playerBody->getPosition(), sphere.radius, {0.4, 0.7, 0.2, 1.0});
     }
 
-    CollisionSphere one;
-    one.offset = glm::mat4(1.0f);
-    one.body = sphere1;
-    one.radius = 2.0f;
-    one.calculateTransform();
+    CollisionSphere one{2.0f, sphere1};
     one.body->calculateDerivedData();
-    CollisionSphere two;
-    two.offset = glm::mat4(1.0f);
-    two.body = sphere2;
-    two.radius = 1.0f;
-    two.calculateTransform();
+    CollisionSphere two{1.0f, sphere2};
     two.body->calculateDerivedData();
 
     if (CollisionDetector::sphereAndSphere(one, two, &collisionData)) {
