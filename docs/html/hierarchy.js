@@ -25,6 +25,13 @@ var hierarchy =
     ] ],
     [ "Villain::Character", "structVillain_1_1Character.html", null ],
     [ "Villain::CharGlyph", "structVillain_1_1CharGlyph.html", null ],
+    [ "Villain::CollisionData", "structVillain_1_1CollisionData.html", null ],
+    [ "Villain::CollisionDetector", "classVillain_1_1CollisionDetector.html", null ],
+    [ "Villain::CollisionPrimitive", "classVillain_1_1CollisionPrimitive.html", [
+      [ "Villain::CollisionBox", "classVillain_1_1CollisionBox.html", null ],
+      [ "Villain::CollisionPlane", "classVillain_1_1CollisionPlane.html", null ],
+      [ "Villain::CollisionSphere", "classVillain_1_1CollisionSphere.html", null ]
+    ] ],
     [ "Villain::Contact", "classVillain_1_1Contact.html", null ],
     [ "Villain::ContactResolver", "classVillain_1_1ContactResolver.html", null ],
     [ "Villain::DebugConsole", "structVillain_1_1DebugConsole.html", null ],
@@ -64,6 +71,7 @@ var hierarchy =
     [ "IndexBuffer", "classIndexBuffer.html", null ],
     [ "Villain::Input", "classVillain_1_1Input.html", null ],
     [ "Villain::IntersectData", "classVillain_1_1IntersectData.html", null ],
+    [ "Villain::IntersectionTests", "classVillain_1_1IntersectionTests.html", null ],
     [ "Villain::KeyPosition", "structVillain_1_1KeyPosition.html", null ],
     [ "Villain::KeyRotation", "structVillain_1_1KeyRotation.html", null ],
     [ "Villain::KeyScale", "structVillain_1_1KeyScale.html", null ],

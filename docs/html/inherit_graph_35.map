@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classVillain_1_1FileBrowser.html" title=" " alt="" coords="5,5,152,32"/>
+<area shape="rect" id="node1" href="$classVillain_1_1Event.html" title=" " alt="" coords="5,56,113,83"/>
+<area shape="rect" id="node2" href="$classVillain_1_1KeyboardEvent.html" title=" " alt="" coords="178,5,347,32"/>
+<area shape="rect" id="node3" href="$classVillain_1_1MouseEvent.html" title=" " alt="" coords="187,56,338,83"/>
+<area shape="rect" id="node4" href="$classVillain_1_1WindowResizeEvent.html" title=" " alt="" coords="161,107,364,133"/>
 </map>

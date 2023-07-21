@@ -1,0 +1,4 @@
+<map id="Villain::CollisionPlane" name="Villain::CollisionPlane">
+<area shape="rect" id="node1" title="Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with worl..." alt="" coords="17,80,180,107"/>
+<area shape="rect" id="node2" href="$classVillain_1_1CollisionPrimitive.html" title="Represents primitive to detect collision against." alt="" coords="5,5,192,32"/>
+</map>

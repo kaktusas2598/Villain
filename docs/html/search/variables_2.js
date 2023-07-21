@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['friction_411',['friction',['../classVillain_1_1Contact.html#af63012eeeb7780202cb56ebee167c661',1,'Villain::Contact']]]
+  ['direction_443',['direction',['../classVillain_1_1CollisionPlane.html#a50a368faaae234f3fa35f46074640cde',1,'Villain::CollisionPlane']]]
 ];

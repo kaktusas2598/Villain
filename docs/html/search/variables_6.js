@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['statemachine_415',['stateMachine',['../classVillain_1_1Application.html#abb0bd24a055d29afc46505bcbad8ee26',1,'Villain::Application']]]
+  ['offset_447',['offset',['../classVillain_1_1CollisionPrimitive.html#a02baad4176b1e84392b4af19276ec2bd',1,'Villain::CollisionPrimitive::offset()'],['../classVillain_1_1CollisionPlane.html#a7f09319bcddbba34928160fac6852174',1,'Villain::CollisionPlane::offset()']]]
 ];

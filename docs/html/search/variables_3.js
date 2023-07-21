@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mousewheel_412',['mousewheel',['../classVillain_1_1Input.html#a450cec2741c0f3fb2a63ab80f474316e',1,'Villain::Input']]]
+  ['friction_444',['friction',['../classVillain_1_1Contact.html#af63012eeeb7780202cb56ebee167c661',1,'Villain::Contact::friction()'],['../structVillain_1_1CollisionData.html#a0c2e0681ccbcfed086e576596d41c761',1,'Villain::CollisionData::friction()']]]
 ];

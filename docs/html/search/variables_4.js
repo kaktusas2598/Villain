@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['penetration_413',['penetration',['../classVillain_1_1Contact.html#ab691e5f7ba5750dbb57185ba9657045a',1,'Villain::Contact']]]
+  ['halfsize_445',['halfSize',['../classVillain_1_1CollisionBox.html#a9f56eafe6119cffa57817733f7b7b67d',1,'Villain::CollisionBox']]]
 ];

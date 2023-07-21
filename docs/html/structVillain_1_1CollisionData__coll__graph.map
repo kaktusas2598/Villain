@@ -1,0 +1,5 @@
+<map id="Villain::CollisionData" name="Villain::CollisionData">
+<area shape="rect" id="node1" title="Helper structure that contains information for the detector to be used when building contacts." alt="" coords="5,184,164,211"/>
+<area shape="rect" id="node2" href="$classVillain_1_1Contact.html" title="Represent contact of 2 colliding bodies." alt="" coords="24,95,145,121"/>
+<area shape="rect" id="node3" href="$classVillain_1_1RigidBody.html" title=" " alt="" coords="16,5,153,32"/>
+</map>

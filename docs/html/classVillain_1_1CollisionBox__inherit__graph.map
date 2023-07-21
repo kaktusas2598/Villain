@@ -1,0 +1,4 @@
+<map id="Villain::CollisionBox" name="Villain::CollisionBox">
+<area shape="rect" id="node1" title="Represents a rigid body that can be treated as an axis&#45;aligned box for collision detection." alt="" coords="23,80,175,107"/>
+<area shape="rect" id="node2" href="$classVillain_1_1CollisionPrimitive.html" title="Represents primitive to detect collision against." alt="" coords="5,5,192,32"/>
+</map>

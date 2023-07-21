@@ -21,7 +21,12 @@ namespace Villain {
             float penetration; ///< Depth of penetration at the contact point.
 
             /// Set properties that don't normally depend on collision point (bodies and material properties)
-            void setBodyData(RigidBody* one, RigidBody* two, float frictionCoef, float restCoef);
+            void setBodyData(RigidBody* one, RigidBody* two, float frictionCoef, float restCoef) {
+                bodies[0] = one;
+                bodies[1] = two;
+                friction = frictionCoef;
+                restituion = restCoef;
+            }
 
         protected:
         private:
