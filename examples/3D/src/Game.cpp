@@ -219,7 +219,9 @@ void Game::init() {
 
     sphere1 = new RigidBody();
     sphere2 = new RigidBody();
+    boxBody = new RigidBody();
     sphere2->setPosition({2.0f, 1.0f, 0.0f});
+    boxBody->setOrientation(glm::quat(glm::vec3(0.0, 45.0, 0.0)));
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -257,6 +259,7 @@ void Game::onAppRender(float dt) {
     collisionData.friction = 0.9f; // Set friction coefficient (adjust as needed)
     collisionData.restitution = 0.5f; // Set restitution coefficient (adjust as needed)
 
+    // Box-plane test
     // Check if any contacts were found
     if (CollisionDetector::boxAndHalfSpace(box, groundPlane, &collisionData)) {
     //if (CollisionDetector::sphereAndHalfSpace(sphere, groundPlane, &collisionData)) {
@@ -276,6 +279,7 @@ void Game::onAppRender(float dt) {
     CollisionSphere two{1.0f, sphere2};
     two.body->calculateDerivedData();
 
+    // Sphere-sphere and box-sphere tests
     if (CollisionDetector::boxAndSphere(box, one, &collisionData)) {
         debugRenderer.drawSphere(one.body->getPosition(), one.radius, {1.0, 0.0, 0.0, 1.0});
     } else {
@@ -286,6 +290,18 @@ void Game::onAppRender(float dt) {
             debugRenderer.drawSphere(one.body->getPosition(), one.radius);
             debugRenderer.drawSphere(two.body->getPosition(), two.radius);
         }
+    }
+
+
+    // Box-box SAT tests
+    CollisionBox staticBox({3.0, 2.0, 5.0}, boxBody);
+    boxBody->calculateDerivedData();
+    if (CollisionDetector::boxAndBox(box, staticBox, &collisionData)) {
+        //debugRenderer.drawBox3D(boxBody->getPosition(), {1.0, 0.0, 0.0, 1.0}, staticBox.halfSize * 2.0f);
+        debugRenderer.drawBox3DRotated(boxBody->getPosition(), staticBox.halfSize * 2.0f, glm::mat4(boxBody->getOrientation()), {1.0, 0.0, 0.0, 1.0});
+    } else {
+        //debugRenderer.drawBox3D(boxBody->getPosition(), {0.4, 0.7, 0.2, 1.0}, staticBox.halfSize * 2.0f);
+        debugRenderer.drawBox3DRotated(boxBody->getPosition(), staticBox.halfSize * 2.0f, glm::mat4(boxBody->getOrientation()), {0.4, 0.7, 0.2, 1.0});
     }
 
     // Don't forget to clean up the allocated memory for contacts

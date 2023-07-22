@@ -25,4 +25,5 @@ class Game : public Villain::Application {
 
         Villain::RigidBody* sphere1 = nullptr;
         Villain::RigidBody* sphere2 = nullptr;
+        Villain::RigidBody* boxBody = nullptr;
 };
