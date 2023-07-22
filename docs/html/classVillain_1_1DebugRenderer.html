@@ -89,6 +89,8 @@ $(document).ready(function(){initNavTree('classVillain_1_1DebugRenderer.html',''
 <div class="title">Villain::DebugRenderer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="DebugRenderer_8hpp_source.html">DebugRenderer.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -98,37 +100,51 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a68dcadd23af582265d3bab7c2237cc8f"><td class="memItemLeft" align="right" valign="top"><a id="a68dcadd23af582265d3bab7c2237cc8f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a68dcadd23af582265d3bab7c2237cc8f">init</a> ()</td></tr>
+<tr class="memdesc:a68dcadd23af582265d3bab7c2237cc8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call in app initialisation method, must be called before doing anything else. <br /></td></tr>
 <tr class="separator:a68dcadd23af582265d3bab7c2237cc8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03361133db833b09ba6c59fc64fbd10f"><td class="memItemLeft" align="right" valign="top"><a id="a03361133db833b09ba6c59fc64fbd10f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
 <tr class="separator:a03361133db833b09ba6c59fc64fbd10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34fce44e776952bae1fac85273ac0f2f"><td class="memItemLeft" align="right" valign="top"><a id="a34fce44e776952bae1fac85273ac0f2f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (const glm::mat4 &amp;mvpMatrix, float lineWidth)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a34fce44e776952bae1fac85273ac0f2f">render</a> (const glm::mat4 &amp;mvpMatrix, float lineWidth)</td></tr>
+<tr class="memdesc:a34fce44e776952bae1fac85273ac0f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders all primitives using single batch. <br /></td></tr>
 <tr class="separator:a34fce44e776952bae1fac85273ac0f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e229ec97b4b5cacd780db33321385e9"><td class="memItemLeft" align="right" valign="top"><a id="a6e229ec97b4b5cacd780db33321385e9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawBox</b> (const glm::vec4 &amp;destRect, float depth, const glm::vec4 &amp;color, float angle)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a6e229ec97b4b5cacd780db33321385e9">drawBox</a> (const glm::vec4 &amp;destRect, float depth, const glm::vec4 &amp;color, float angle)</td></tr>
+<tr class="memdesc:a6e229ec97b4b5cacd780db33321385e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add 2D Box (on XY plane) to draw batch. <br /></td></tr>
 <tr class="separator:a6e229ec97b4b5cacd780db33321385e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a295a0a8eeeac62a61828c497fbed8285"><td class="memItemLeft" align="right" valign="top"><a id="a295a0a8eeeac62a61828c497fbed8285"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawCircle</b> (const glm::vec2 &amp;center, float depth, const glm::vec4 &amp;color, float radius)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a295a0a8eeeac62a61828c497fbed8285">drawCircle</a> (const glm::vec2 &amp;center, float depth, const glm::vec4 &amp;color, float radius)</td></tr>
+<tr class="memdesc:a295a0a8eeeac62a61828c497fbed8285"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add Circle (on XY plane) to draw batch. <br /></td></tr>
 <tr class="separator:a295a0a8eeeac62a61828c497fbed8285"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1348eab859f6d66c30fd39b5f77f0087"><td class="memItemLeft" align="right" valign="top"><a id="a1348eab859f6d66c30fd39b5f77f0087"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawLine</b> (const glm::vec3 &amp;start, const glm::vec3 &amp;end, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a1348eab859f6d66c30fd39b5f77f0087">drawLine</a> (const glm::vec3 &amp;start, const glm::vec3 &amp;end, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:a1348eab859f6d66c30fd39b5f77f0087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add line segment to draw batch. <br /></td></tr>
 <tr class="separator:a1348eab859f6d66c30fd39b5f77f0087"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e11d7660736bf8fcef49786d6ed59f3"><td class="memItemLeft" align="right" valign="top"><a id="a3e11d7660736bf8fcef49786d6ed59f3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawQuad</b> (const glm::vec3 &amp;center, glm::vec2 &amp;size, bool x, bool y, bool z, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a3e11d7660736bf8fcef49786d6ed59f3">drawQuad</a> (const glm::vec3 &amp;center, glm::vec2 &amp;size, bool x, bool y, bool z, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:a3e11d7660736bf8fcef49786d6ed59f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add axis-aligned quad to draw batch. <br /></td></tr>
 <tr class="separator:a3e11d7660736bf8fcef49786d6ed59f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a946303fa2551635cc791570530b19cb9"><td class="memItemLeft" align="right" valign="top"><a id="a946303fa2551635cc791570530b19cb9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawBox3D</b> (const glm::vec3 &amp;position, const glm::vec4 &amp;color, const glm::vec3 &amp;size)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a946303fa2551635cc791570530b19cb9">drawBox3D</a> (const glm::vec3 &amp;position, const glm::vec4 &amp;color, const glm::vec3 &amp;size)</td></tr>
+<tr class="memdesc:a946303fa2551635cc791570530b19cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add axis-aligned box (AABB) to draw batch. <br /></td></tr>
 <tr class="separator:a946303fa2551635cc791570530b19cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7ecf9b6d981ce23da8f4cb99a039e65"><td class="memItemLeft" align="right" valign="top"><a id="ad7ecf9b6d981ce23da8f4cb99a039e65"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawBox3DRotated</b> (const glm::vec3 &amp;position, const glm::vec3 &amp;size, const glm::mat4 &amp;rotation, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#ad7ecf9b6d981ce23da8f4cb99a039e65">drawBox3DRotated</a> (const glm::vec3 &amp;position, const glm::vec3 &amp;size, const glm::mat4 &amp;rotation, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:ad7ecf9b6d981ce23da8f4cb99a039e65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add rotated box (OBB) to draw batch. <br /></td></tr>
 <tr class="separator:ad7ecf9b6d981ce23da8f4cb99a039e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64e496a15313c80fade8edaad7b4197c"><td class="memItemLeft" align="right" valign="top"><a id="a64e496a15313c80fade8edaad7b4197c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>drawSphere</b> (const glm::vec3 &amp;center, float radius, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a64e496a15313c80fade8edaad7b4197c">drawSphere</a> (const glm::vec3 &amp;center, float radius, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:a64e496a15313c80fade8edaad7b4197c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add sphere to draw batch. <br /></td></tr>
 <tr class="separator:a64e496a15313c80fade8edaad7b4197c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Render primitives for debug purposes using lines </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000062">Todo:</a></b></dt><dd><p class="startdd"><a class="el" href="classVillain_1_1Plane.html">Plane</a> grid (from plane normal and distance to origin) </p>
+<p class="interdd">Other 3D primitives (cylinders, different ways to calculate sphere?) </p>
+<p class="enddd"><a class="el" href="classVillain_1_1Mesh.html">Mesh</a> generation could be refactored to new helper class? </p>
+</dd></dl>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/rendering/<a class="el" href="DebugRenderer_8hpp_source.html">DebugRenderer.hpp</a></li>
 <li>src/rendering/DebugRenderer.cpp</li>
 </ul>

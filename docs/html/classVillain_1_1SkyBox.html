@@ -97,8 +97,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0db6382eb37a80c12ba3715a3060f90"><td class="memItemLeft" align="right" valign="top"><a id="aa0db6382eb37a80c12ba3715a3060f90"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SkyBox</b> (const std::vector&lt; std::string &gt; &amp;faces, <a class="el" href="classVillain_1_1Shader.html">Shader</a> *shader)</td></tr>
 <tr class="separator:aa0db6382eb37a80c12ba3715a3060f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a72f5ff88fd3231afe766464f1b60c9"><td class="memItemLeft" align="right" valign="top"><a id="a1a72f5ff88fd3231afe766464f1b60c9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (const glm::mat4 &amp;projectionMatrix, const glm::mat4 &amp;viewMatrix, float deltaTime)</td></tr>
+<tr class="memitem:a1a72f5ff88fd3231afe766464f1b60c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1SkyBox.html#a1a72f5ff88fd3231afe766464f1b60c9">render</a> (const glm::mat4 &amp;projectionMatrix, const glm::mat4 &amp;viewMatrix, float deltaTime)</td></tr>
 <tr class="separator:a1a72f5ff88fd3231afe766464f1b60c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa05d0420953c560c3bac6ac1816d1cdf"><td class="memItemLeft" align="right" valign="top"><a id="aa05d0420953c560c3bac6ac1816d1cdf"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAnimated</b> (bool anim=false)</td></tr>
@@ -107,6 +106,45 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setAnimated</b> (bool
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRotationSpeed</b> (float speed)</td></tr>
 <tr class="separator:a430697f762a5ef9800c3dcae735eca24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1a72f5ff88fd3231afe766464f1b60c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a72f5ff88fd3231afe766464f1b60c9">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::SkyBox::render </td>
+          <td>(</td>
+          <td class="paramtype">const glm::mat4 &amp;&#160;</td>
+          <td class="paramname"><em>projectionMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::mat4 &amp;&#160;</td>
+          <td class="paramname"><em>viewMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>deltaTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000072">Todo:</a></b></dt><dd><ol type="1">
+<li>we could use glGetIntegerv(GL_DEPTH_FUNC, int&amp;) to get current depth func before rendering </li>
+</ol>
+</dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/rendering/<a class="el" href="SkyBox_8hpp_source.html">SkyBox.hpp</a></li>
 <li>src/rendering/SkyBox.cpp</li>

@@ -113,8 +113,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af4410918e4abd3b7615a4848c4e28efb"><td class="memItemLeft" align="right" valign="top"><a id="af4410918e4abd3b7615a4848c4e28efb"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ModelRenderer</b> (<a class="el" href="classVillain_1_1Model.html">Model</a> *m, float animationSpeed=0.0f)</td></tr>
 <tr class="separator:af4410918e4abd3b7615a4848c4e28efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ead0c720435ddc9e86cadceac0579b"><td class="memItemLeft" align="right" valign="top"><a id="ac8ead0c720435ddc9e86cadceac0579b"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (<a class="el" href="classVillain_1_1Shader.html">Shader</a> &amp;shader, <a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a> &amp;renderingEngine, <a class="el" href="classVillain_1_1Camera.html">Camera</a> &amp;camera) override</td></tr>
+<tr class="memitem:ac8ead0c720435ddc9e86cadceac0579b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1ModelRenderer.html#ac8ead0c720435ddc9e86cadceac0579b">render</a> (<a class="el" href="classVillain_1_1Shader.html">Shader</a> &amp;shader, <a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a> &amp;renderingEngine, <a class="el" href="classVillain_1_1Camera.html">Camera</a> &amp;camera) override</td></tr>
 <tr class="separator:ac8ead0c720435ddc9e86cadceac0579b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab703e7b9bd0af17252fba8cd52919bea"><td class="memItemLeft" align="right" valign="top"><a id="ab703e7b9bd0af17252fba8cd52919bea"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (float deltaTime) override</td></tr>
@@ -161,6 +160,52 @@ Additional Inherited Members</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> = -1</td></tr>
 <tr class="separator:a2a2bc604145a4ed714c968cfe1e54db8 inherit pro_attribs_classVillain_1_1NodeComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac8ead0c720435ddc9e86cadceac0579b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8ead0c720435ddc9e86cadceac0579b">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::ModelRenderer::render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Shader.html">Shader</a> &amp;&#160;</td>
+          <td class="paramname"><em>shader</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a> &amp;&#160;</td>
+          <td class="paramname"><em>renderingEngine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Camera.html">Camera</a> &amp;&#160;</td>
+          <td class="paramname"><em>camera</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000015">Todo:</a></b></dt><dd>need different method to update uniforms, stuff like matrixes can be updated the same for all meshes </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classVillain_1_1NodeComponent.html">Villain::NodeComponent</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/components/<a class="el" href="ModelRenderer_8hpp_source.html">ModelRenderer.hpp</a></li>
 <li>src/components/ModelRenderer.cpp</li>

@@ -90,6 +90,8 @@ $(document).ready(function(){initNavTree('classVillain_1_1RigidBodyWorld.html','
 <div class="title">Villain::RigidBodyWorld Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="RigidBodyWorld_8hpp_source.html">RigidBodyWorld.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Villain::RigidBodyWorld:</div>
 <div class="dyncontent">
@@ -109,8 +111,7 @@ typedef std::vector&lt; <a class="el" href="classVillain_1_1RigidBody.html">Rigi
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a73d90b280426e0200f866824e6938a31"><td class="memItemLeft" align="right" valign="top"><a id="a73d90b280426e0200f866824e6938a31"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>runPhysics</b> (float deltaTime)</td></tr>
+<tr class="memitem:a73d90b280426e0200f866824e6938a31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a73d90b280426e0200f866824e6938a31">runPhysics</a> (float deltaTime)</td></tr>
 <tr class="separator:a73d90b280426e0200f866824e6938a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59fcf8aa6626407fb0c4b98a19712a39"><td class="memItemLeft" align="right" valign="top"><a id="a59fcf8aa6626407fb0c4b98a19712a39"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>startFrame</b> ()</td></tr>
@@ -118,8 +119,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>startFrame</b> ()</td
 <tr class="memitem:a35ecd215d85eb4c67e667f3d1033201a"><td class="memItemLeft" align="right" valign="top"><a id="a35ecd215d85eb4c67e667f3d1033201a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>integrate</b> (float deltaTime)</td></tr>
 <tr class="separator:a35ecd215d85eb4c67e667f3d1033201a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29d5873ea5321e615e7875e4e5c37630"><td class="memItemLeft" align="right" valign="top"><a id="a29d5873ea5321e615e7875e4e5c37630"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>debugDraw</b> (<a class="el" href="classVillain_1_1Camera.html">Camera</a> *camera)</td></tr>
+<tr class="memitem:a29d5873ea5321e615e7875e4e5c37630"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a29d5873ea5321e615e7875e4e5c37630">debugDraw</a> (<a class="el" href="classVillain_1_1Camera.html">Camera</a> *camera)</td></tr>
 <tr class="separator:a29d5873ea5321e615e7875e4e5c37630"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92adb1d6bb4e30190e481b4a3c455f2d"><td class="memItemLeft" align="right" valign="top"><a id="a92adb1d6bb4e30190e481b4a3c455f2d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setDebugDraw</b> (bool debug)</td></tr>
@@ -146,6 +146,47 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
 <a class="el" href="classVillain_1_1DebugRenderer.html">DebugRenderer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>debugRenderer</b></td></tr>
 <tr class="separator:ac742995839dcad2f7fcebe3c97ea5771"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000061">Todo:</a></b></dt><dd>Collision detection and responses </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a29d5873ea5321e615e7875e4e5c37630"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29d5873ea5321e615e7875e4e5c37630">&#9670;&nbsp;</a></span>debugDraw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::RigidBodyWorld::debugDraw </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>camera</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000060">Todo:</a></b></dt><dd>Implement debug draw methods for rigid body colliders, contacts and force generators </dd></dl>
+
+</div>
+</div>
+<a id="a73d90b280426e0200f866824e6938a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73d90b280426e0200f866824e6938a31">&#9670;&nbsp;</a></span>runPhysics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::RigidBodyWorld::runPhysics </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>deltaTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000059">Todo:</a></b></dt><dd>contacts, constraints, collision detection, response, etc. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/physics/<a class="el" href="RigidBodyWorld_8hpp_source.html">RigidBodyWorld.hpp</a></li>
 <li>src/physics/RigidBodyWorld.cpp</li>

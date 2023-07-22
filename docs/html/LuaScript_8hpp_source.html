@@ -118,8 +118,8 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="comment">// Closes script</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordtype">void</span> close();</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keywordtype">void</span> printError(<span class="keyword">const</span> std::string&amp; variableName, <span class="keyword">const</span> std::string&amp; reason);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            std::vector&lt;int&gt; getIntVector(<span class="keyword">const</span> std::string&amp; name);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(<span class="keyword">const</span> std::string&amp; variableName, <span class="keyword">const</span> std::string&amp; reason);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            std::vector&lt;int&gt; <a class="code" href="classVillain_1_1LuaScript.html#a97889b5f33c401db4ea2a4376ceff191">getIntVector</a>(<span class="keyword">const</span> std::string&amp; name);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            std::vector&lt;std::string&gt; getTableKeys(<span class="keyword">const</span> std::string&amp; name);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="comment">// Clean Lua stack</span></div>
@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            T get(<span class="keyword">const</span> std::string&amp; variableName) {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                <span class="keywordflow">if</span> (!L) {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                    printError(variableName, <span class="stringliteral">&quot;Script was not loaded&quot;</span>);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                    <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(variableName, <span class="stringliteral">&quot;Script was not loaded&quot;</span>);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                    <span class="keywordflow">return</span> lua_getdefault&lt;T&gt;();</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                }</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
@@ -161,7 +161,7 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                        }</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                        <span class="keywordflow">if</span> (lua_isnil(L, -1)) {</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                            printError(variableName, var + <span class="stringliteral">&quot; is not defined&quot;</span>);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                            <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(variableName, var + <span class="stringliteral">&quot; is not defined&quot;</span>);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                            var = <span class="stringliteral">&quot;&quot;</span>;</div>
@@ -178,7 +178,7 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                    lua_getfield(L, -1, var.c_str());</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                }</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keywordflow">if</span> (lua_isnil(L, -1)) {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                    printError(variableName, var + <span class="stringliteral">&quot; is not defined&quot;</span>);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                    <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(variableName, var + <span class="stringliteral">&quot; is not defined&quot;</span>);</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                }</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
@@ -245,7 +245,7 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">template</span> &lt;&gt;</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">float</span> LuaScript::lua_get(<span class="keyword">const</span> std::string&amp; variableName) {</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordflow">if</span> (!lua_isnumber(L, -1)) {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            printError(variableName, <span class="stringliteral">&quot;Lua: not a float&quot;</span>);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(variableName, <span class="stringliteral">&quot;Lua: not a float&quot;</span>);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        }</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordflow">return</span> (<span class="keywordtype">float</span>) lua_tonumber(L, -1);</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
@@ -253,7 +253,7 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keyword">template</span> &lt;&gt;</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">int</span> LuaScript::lua_get(<span class="keyword">const</span> std::string&amp; variableName) {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordflow">if</span> (!lua_isnumber(L, -1)) {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            printError(variableName, <span class="stringliteral">&quot;Lua: not an integer&quot;</span>);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(variableName, <span class="stringliteral">&quot;Lua: not an integer&quot;</span>);</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        }</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">return</span> (<span class="keywordtype">int</span>) lua_tonumber(L, -1);</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    }</div>
@@ -264,7 +264,7 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordflow">if</span> (lua_isstring(L, -1)) {</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            s = std::string(lua_tostring(L, -1));</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            printError(variableName, <span class="stringliteral">&quot;Lua: not a string&quot;</span>);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            <a class="code" href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">printError</a>(variableName, <span class="stringliteral">&quot;Lua: not a string&quot;</span>);</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        }</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">return</span> s;</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
@@ -295,6 +295,8 @@ $(document).ready(function(){initNavTree('LuaScript_8hpp_source.html',''); initR
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
 <div class="ttc" id="aclassVillain_1_1LuaScript_html"><div class="ttname"><a href="classVillain_1_1LuaScript.html">Villain::LuaScript</a></div><div class="ttdef"><b>Definition:</b> LuaScript.hpp:24</div></div>
+<div class="ttc" id="aclassVillain_1_1LuaScript_html_a84ea7703de3c25b75aaec51a6b8d5d9b"><div class="ttname"><a href="classVillain_1_1LuaScript.html#a84ea7703de3c25b75aaec51a6b8d5d9b">Villain::LuaScript::printError</a></div><div class="ttdeci">void printError(const std::string &amp;variableName, const std::string &amp;reason)</div><div class="ttdef"><b>Definition:</b> LuaScript.cpp:35</div></div>
+<div class="ttc" id="aclassVillain_1_1LuaScript_html_a97889b5f33c401db4ea2a4376ceff191"><div class="ttname"><a href="classVillain_1_1LuaScript.html#a97889b5f33c401db4ea2a4376ceff191">Villain::LuaScript::getIntVector</a></div><div class="ttdeci">std::vector&lt; int &gt; getIntVector(const std::string &amp;name)</div><div class="ttdef"><b>Definition:</b> LuaScript.cpp:42</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

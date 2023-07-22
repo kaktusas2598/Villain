@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('RigidBody_8hpp_source.html',''); initR
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="comment">// Adds given force to the given point on the rigid body, force is in world space, but point is in body/local space</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="comment">// Useful for spring forces or other forces fixed to the body</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordtype">void</span> addForceAtBodyPoint(<span class="keyword">const</span> glm::vec3&amp; force, <span class="keyword">const</span> glm::vec3&amp; point) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                addForceAtPoint(force, getPointInWorldSpace(point));</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                addForceAtPoint(force, <a class="code" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">getPointInWorldSpace</a>(point));</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            }</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordtype">bool</span> hasFiniteMass()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> inverseMass &gt;= 0.0f; }</div>
@@ -152,7 +152,7 @@ $(document).ready(function(){initNavTree('RigidBody_8hpp_source.html',''); initR
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="comment">// Helpers</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="comment">// TODO: Make sure these methods are correct</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            glm::vec3 getPointInWorldSpace(<span class="keyword">const</span> glm::vec3&amp; point) {</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">   68</a></span>&#160;            glm::vec3 <a class="code" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">getPointInWorldSpace</a>(<span class="keyword">const</span> glm::vec3&amp; point) {</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                <span class="keywordflow">return</span> transformMatrix * glm::vec4(point, 1.0);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            glm::vec3 getPointInLocalSpace(<span class="keyword">const</span> glm::vec3&amp; point) {</div>
@@ -197,6 +197,7 @@ $(document).ready(function(){initNavTree('RigidBody_8hpp_source.html',''); initR
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    };</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;}</div>
 <div class="ttc" id="aclassVillain_1_1RigidBody_html"><div class="ttname"><a href="classVillain_1_1RigidBody.html">Villain::RigidBody</a></div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:8</div></div>
+<div class="ttc" id="aclassVillain_1_1RigidBody_html_abc436b2c53b376db0b248cfc5d3601a0"><div class="ttname"><a href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">Villain::RigidBody::getPointInWorldSpace</a></div><div class="ttdeci">glm::vec3 getPointInWorldSpace(const glm::vec3 &amp;point)</div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:68</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

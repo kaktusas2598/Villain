@@ -104,9 +104,8 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#a65826b1a1976b034fa4cf582f374a879">init</a> (<a class="el" href="classVillain_1_1Application.html">Application</a> *app, const std::string &amp;luaConfigPath)</td></tr>
 <tr class="memdesc:a65826b1a1976b034fa4cf582f374a879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise engine using Lua config script. <br /></td></tr>
 <tr class="separator:a65826b1a1976b034fa4cf582f374a879"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc5730e6bac51c27b9622c1f6f5008c7"><td class="memItemLeft" align="right" valign="top"><a id="abc5730e6bac51c27b9622c1f6f5008c7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#abc5730e6bac51c27b9622c1f6f5008c7">run</a> ()</td></tr>
-<tr class="memdesc:abc5730e6bac51c27b9622c1f6f5008c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start running main application/game loop with semi fixed time step. <br /></td></tr>
+<tr class="memitem:abc5730e6bac51c27b9622c1f6f5008c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#abc5730e6bac51c27b9622c1f6f5008c7">run</a> ()</td></tr>
+<tr class="memdesc:abc5730e6bac51c27b9622c1f6f5008c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start running main application/game loop with semi fixed time step.  <a href="classVillain_1_1Engine.html#abc5730e6bac51c27b9622c1f6f5008c7">More...</a><br /></td></tr>
 <tr class="separator:abc5730e6bac51c27b9622c1f6f5008c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5535eca65f4017d1e27747f0573bfd0"><td class="memItemLeft" align="right" valign="top"><a id="ad5535eca65f4017d1e27747f0573bfd0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#ad5535eca65f4017d1e27747f0573bfd0">exit</a> ()</td></tr>
@@ -121,9 +120,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> ()</td></
 <tr class="memitem:ad1c4dbc01a171c6ff1e6c2699ac41454"><td class="memItemLeft" align="right" valign="top"><a id="ad1c4dbc01a171c6ff1e6c2699ac41454"></a>
 bool *&#160;</td><td class="memItemRight" valign="bottom"><b>wireFrameModeActive</b> ()</td></tr>
 <tr class="separator:ad1c4dbc01a171c6ff1e6c2699ac41454"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adac2012a41166e7520eb41c51671112c"><td class="memItemLeft" align="right" valign="top"><a id="adac2012a41166e7520eb41c51671112c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#adac2012a41166e7520eb41c51671112c">renderLoadingScreen</a> ()</td></tr>
-<tr class="memdesc:adac2012a41166e7520eb41c51671112c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special one-time render pass used for displaying loading screen image while the user application is loading. <br /></td></tr>
+<tr class="memitem:adac2012a41166e7520eb41c51671112c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#adac2012a41166e7520eb41c51671112c">renderLoadingScreen</a> ()</td></tr>
+<tr class="memdesc:adac2012a41166e7520eb41c51671112c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special one-time render pass used for displaying loading screen image while the user application is loading.  <a href="classVillain_1_1Engine.html#adac2012a41166e7520eb41c51671112c">More...</a><br /></td></tr>
 <tr class="separator:adac2012a41166e7520eb41c51671112c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5c75c7cf0f87e10180625f240766dae"><td class="memItemLeft" align="right" valign="top"><a id="ad5c75c7cf0f87e10180625f240766dae"></a>
 <a class="el" href="classVillain_1_1PhysicsEngine.html">PhysicsEngine</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getPhysicsEngine</b> ()</td></tr>
@@ -205,6 +203,7 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd>GameState::update, InputManager </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000030">Todo:</a></b></dt><dd>probably gradually we will want to phase out InputManager singleton with new <a class="el" href="classVillain_1_1Event.html">Event</a> system </dd></dl>
 
 </div>
 </div>
@@ -269,6 +268,49 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceVillain.html#ac33d24de651dd6dad5de39728fa4dfe2">WindowFlags</a> </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000025">Todo:</a></b></dt><dd>will need some configs here, gravity vector for example </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000026">Todo:</a></b></dt><dd>ability to set custom number of contacts </dd></dl>
+
+</div>
+</div>
+<a id="adac2012a41166e7520eb41c51671112c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adac2012a41166e7520eb41c51671112c">&#9670;&nbsp;</a></span>renderLoadingScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::Engine::renderLoadingScreen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Special one-time render pass used for displaying loading screen image while the user application is loading. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000027">Todo:</a></b></dt><dd>Handle Resize, embed loading screen texture </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000028">Todo:</a></b></dt><dd>there should be no need to set material as well, for sprite we can only use diffuse texture and avoid non-existant uniform warnings </dd></dl>
+
+</div>
+</div>
+<a id="abc5730e6bac51c27b9622c1f6f5008c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc5730e6bac51c27b9622c1f6f5008c7">&#9670;&nbsp;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::Engine::run </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start running main application/game loop with semi fixed time step. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000029">Todo:</a></b></dt><dd>window title is currently isolated in <a class="el" href="classVillain_1_1Engine.html#a78079021966b921676b9a96e2f798782" title="Initialise engine using explicit params.">init()</a> method, we can drop that and load </dd></dl>
 
 </div>
 </div>

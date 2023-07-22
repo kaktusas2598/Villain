@@ -478,7 +478,7 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a9dc45eeadefbd0a9f3c3c13de67d87c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac45aa7d321f068f01742f1a92062e48f"><td class="memItemLeft" align="right" valign="top"><a id="ac45aa7d321f068f01742f1a92062e48f"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>KeyCode</b> { <br />
+<tr class="memitem:ac45aa7d321f068f01742f1a92062e48f"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48f">KeyCode</a> { <br />
 &#160;&#160;<b>UKNOWN</b> = SDLK_UNKNOWN
 , <b>RETURN</b> = SDLK_RETURN
 , <b>ESCAPE</b> = SDLK_ESCAPE
@@ -526,7 +526,7 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<b>QUESTION</b> = SDLK_QUESTION
 , <b>AT</b> = SDLK_AT
-, <b>w</b> = SDLK_w
+, <a class="el" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68">w</a> = SDLK_w
 , <b>a</b> = SDLK_a
 , <br />
 &#160;&#160;<b>s</b> = SDLK_s
@@ -568,7 +568,7 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a46d56940ad893cf38dca4db5694b5f51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d70007109c56f67389eaad12ede4589"><td class="memItemLeft" align="right" valign="top"><a id="a6d70007109c56f67389eaad12ede4589"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>ScriptType</b> { <b>SCRIPT_CONFIG</b> = 0
+<tr class="memitem:a6d70007109c56f67389eaad12ede4589"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVillain.html#a6d70007109c56f67389eaad12ede4589">ScriptType</a> { <b>SCRIPT_CONFIG</b> = 0
 , <b>SCRIPT_GLOBALS</b> = 1
 , <b>SCRIPT_ENTITIES</b> = 2
  }</td></tr>
@@ -602,6 +602,10 @@ template&lt;class T &gt; </td></tr>
 <tr class="memitem:a1ace588735eb75920c5984058c0b7010"><td class="memItemLeft" align="right" valign="top"><a id="a1ace588735eb75920c5984058c0b7010"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>defaultParticleUpdate</b> (<a class="el" href="classVillain_1_1Particle2D.html">Particle2D</a> &amp;particle, float deltaTime)</td></tr>
 <tr class="separator:a1ace588735eb75920c5984058c0b7010"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a749c1ded87b7013f97c950cc97be3a1a"><td class="memItemLeft" align="right" valign="top"><a id="a749c1ded87b7013f97c950cc97be3a1a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVillain.html#a749c1ded87b7013f97c950cc97be3a1a">fillPointFaceBoxBox</a> (const <a class="el" href="classVillain_1_1CollisionBox.html">CollisionBox</a> &amp;one, const <a class="el" href="classVillain_1_1CollisionBox.html">CollisionBox</a> &amp;two, const glm::vec3 &amp;toCentre, <a class="el" href="structVillain_1_1CollisionData.html">CollisionData</a> *data, unsigned best, float penetration)</td></tr>
+<tr class="memdesc:a749c1ded87b7013f97c950cc97be3a1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when there is a contact between vertex from box two and box one. <br /></td></tr>
+<tr class="separator:a749c1ded87b7013f97c950cc97be3a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a1dcd4029f505951350478a82970cb7"><td class="memItemLeft" align="right" valign="top"><a id="a2a1dcd4029f505951350478a82970cb7"></a>
 glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><b>rotatePoint</b> (glm::vec2 position, float angle)</td></tr>
 <tr class="separator:a2a1dcd4029f505951350478a82970cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -653,7 +657,34 @@ const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_COMPONENTS</
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main Namespace. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000043">Todo:</a></b></dt><dd>implement </dd></dl>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ac45aa7d321f068f01742f1a92062e48f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac45aa7d321f068f01742f1a92062e48f">&#9670;&nbsp;</a></span>KeyCode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48f">Villain::KeyCode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68"></a>w&#160;</td><td class="fielddoc"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000039">Todo:</a></b></dt><dd>add rest of letters, modifiers, function keys and mouse keys </dd></dl>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="abd8a047d953082f3b404bb9123a2feb2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd8a047d953082f3b404bb9123a2feb2">&#9670;&nbsp;</a></span>ScreenState</h2>
 
@@ -681,6 +712,21 @@ const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_COMPONENTS</
 <tr><td class="fieldname"><a id="abd8a047d953082f3b404bb9123a2feb2a5fb4e243d95edb2c192649730c0c1d60"></a>CHANGE_PREVIOUS&#160;</td><td class="fielddoc"><p>change to previous screen </p>
 </td></tr>
 </table>
+
+</div>
+</div>
+<a id="a6d70007109c56f67389eaad12ede4589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d70007109c56f67389eaad12ede4589">&#9670;&nbsp;</a></span>ScriptType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceVillain.html#a6d70007109c56f67389eaad12ede4589">Villain::ScriptType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000082">Todo:</a></b></dt><dd></dd></dl>
 
 </div>
 </div>
