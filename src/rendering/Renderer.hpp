@@ -1,5 +1,4 @@
-#ifndef __Renderer__
-#define __Renderer__
+#pragma once
 
 #include "VertexArray.hpp"
 #include "IndexBuffer.hpp"
@@ -10,6 +9,7 @@ namespace Villain {
     class Renderer {
         public:
             void clear() const;
+            void setClearColor(const glm::vec4& color);
             void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, unsigned instances = 1) const;
 
             static Renderer *Instance() {
@@ -24,7 +24,4 @@ namespace Villain {
         private:
             static Renderer* sInstance;
     };
-
 }
-
-#endif // __Renderer__
