@@ -122,8 +122,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>addToEngine</
 <tr class="memitem:a5fe3605b1577480e4479107394a5d4be"><td class="memItemLeft" align="right" valign="top"><a id="a5fe3605b1577480e4479107394a5d4be"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>rescale</b> (int width, int height)</td></tr>
 <tr class="separator:a5fe3605b1577480e4479107394a5d4be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e77255fd862393ef420a25dc8649252"><td class="memItemLeft" align="right" valign="top"><a id="a0e77255fd862393ef420a25dc8649252"></a>
-glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getViewMatrix</b> ()</td></tr>
+<tr class="memitem:a0e77255fd862393ef420a25dc8649252"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Camera.html#a0e77255fd862393ef420a25dc8649252">getViewMatrix</a> ()</td></tr>
 <tr class="separator:a0e77255fd862393ef420a25dc8649252"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7b8f97767aa80b2f05aec1f8df07365"><td class="memItemLeft" align="right" valign="top"><a id="ae7b8f97767aa80b2f05aec1f8df07365"></a>
 glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getProjMatrix</b> ()</td></tr>
@@ -173,11 +172,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setZNear</b> (float n
 <tr class="memitem:a8470e8682e62efbdf73f77e713db7d89"><td class="memItemLeft" align="right" valign="top"><a id="a8470e8682e62efbdf73f77e713db7d89"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setZFar</b> (float newFar)</td></tr>
 <tr class="separator:a8470e8682e62efbdf73f77e713db7d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70d74fb77529999557244f7b8d24b332"><td class="memItemLeft" align="right" valign="top"><a id="a70d74fb77529999557244f7b8d24b332"></a>
-<a class="el" href="structVillain_1_1Frustum.html">Frustum</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getFrustum</b> ()</td></tr>
+<tr class="memitem:a70d74fb77529999557244f7b8d24b332"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structVillain_1_1Frustum.html">Frustum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Camera.html#a70d74fb77529999557244f7b8d24b332">getFrustum</a> ()</td></tr>
 <tr class="separator:a70d74fb77529999557244f7b8d24b332"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d892a2240e23ef97c4521627d386cc9"><td class="memItemLeft" align="right" valign="top"><a id="a8d892a2240e23ef97c4521627d386cc9"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>mouseRayToWorld</b> (const glm::vec2 &amp;pos)</td></tr>
+<tr class="memitem:a8d892a2240e23ef97c4521627d386cc9"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Camera.html#a8d892a2240e23ef97c4521627d386cc9">mouseRayToWorld</a> (const glm::vec2 &amp;pos)</td></tr>
 <tr class="separator:a8d892a2240e23ef97c4521627d386cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf904dd8ede229df481a288faf41bdfd"><td class="memItemLeft" align="right" valign="top"><a id="adf904dd8ede229df481a288faf41bdfd"></a>
 glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><b>screenToWorld</b> (glm::vec2 screenCoords)</td></tr>
@@ -257,6 +254,62 @@ Additional Inherited Members</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> = -1</td></tr>
 <tr class="separator:a2a2bc604145a4ed714c968cfe1e54db8 inherit pro_attribs_classVillain_1_1NodeComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a70d74fb77529999557244f7b8d24b332"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70d74fb77529999557244f7b8d24b332">&#9670;&nbsp;</a></span>getFrustum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structVillain_1_1Frustum.html">Frustum</a> Villain::Camera::getFrustum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>need more testing, maybe try implementing for other projection types </dd></dl>
+
+</div>
+</div>
+<a id="a0e77255fd862393ef420a25dc8649252"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e77255fd862393ef420a25dc8649252">&#9670;&nbsp;</a></span>getViewMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::mat4 Villain::Camera::getViewMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>test </dd></dl>
+
+</div>
+</div>
+<a id="a8d892a2240e23ef97c4521627d386cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d892a2240e23ef97c4521627d386cc9">&#9670;&nbsp;</a></span>mouseRayToWorld()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec3 Villain::Camera::mouseRayToWorld </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec2 &amp;&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>TEST </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/camera/<a class="el" href="Camera_8hpp_source.html">Camera.hpp</a></li>
 <li>src/camera/Camera.cpp</li>

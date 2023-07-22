@@ -19,6 +19,11 @@ class Game : public Villain::Application {
 
     private:
         Villain::DebugRenderer debugRenderer;
-        Villain::Particle* playerBody = nullptr;
+        //Villain::Particle* playerBody = nullptr;
+        Villain::RigidBody* playerBody = nullptr;
         Villain::FlightController* aircraft = nullptr;
+
+        Villain::RigidBody* sphere1 = nullptr;
+        Villain::RigidBody* sphere2 = nullptr;
+        Villain::RigidBody* boxBody = nullptr;
 };

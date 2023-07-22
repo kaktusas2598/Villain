@@ -56,6 +56,21 @@ namespace Villain {
 
         virtual const glm::vec3& getCentre() const { return Center; }
         inline float getRadius() const { return Radius; }
+
+        // For broad phase collision detection system
+        // ------------------
+        // Create a bounding sphere enclosing the two given bounding spheres
+        BoundingSphere(const BoundingSphere& one, const BoundingSphere& two);
+        // Checks whether this bounding sphere overlaps the given one
+        bool overlaps(const BoundingSphere* other) const;
+        // Calculate amount this sphere would have to grow to incorporate the given bounding sphere.
+        // Value is not returned in any particular units. Better implementation would take into account
+        // the growth in surface area (as in Goldsmith-Salmon algorithm for tree construction)
+        float getGrowth(const BoundingSphere& other);
+        // Calculate volume of this bounding volume
+        float getSize() {
+            return ((float)1.333333) * M_PI * Radius * Radius * Radius;
+        }
     };
 
     struct BoundingAABB : public BoundingVolume {

@@ -35,8 +35,6 @@ namespace Villain {
     }
     )";
 
-    DebugRenderer ::DebugRenderer () { }
-
     DebugRenderer ::~DebugRenderer () {
         if (vao) {
             glDeleteVertexArrays(1, &vao);

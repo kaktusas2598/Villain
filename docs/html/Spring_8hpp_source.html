@@ -108,8 +108,8 @@ $(document).ready(function(){initNavTree('Spring_8hpp_source.html',''); initResi
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> updateForce(<a class="code" href="classVillain_1_1RigidBody.html">RigidBody</a>* body, <span class="keywordtype">float</span> deltaTime) {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="comment">// Calculate two spring ends in world space</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                glm::vec3 lws = body-&gt;getPointInWorldSpace(connectionPoint);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                glm::vec3 ows = other-&gt;getPointInWorldSpace(otherConnectionPoint);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                glm::vec3 lws = body-&gt;<a class="code" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">getPointInWorldSpace</a>(connectionPoint);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                glm::vec3 ows = other-&gt;<a class="code" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">getPointInWorldSpace</a>(otherConnectionPoint);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <span class="comment">// Calculate vector of the spring</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                glm::vec3 force = lws - ows;</div>
@@ -135,6 +135,7 @@ $(document).ready(function(){initNavTree('Spring_8hpp_source.html',''); initResi
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
 <div class="ttc" id="aclassVillain_1_1ForceGenerator_html"><div class="ttname"><a href="classVillain_1_1ForceGenerator.html">Villain::ForceGenerator</a></div><div class="ttdef"><b>Definition:</b> ForceGenerator.hpp:9</div></div>
 <div class="ttc" id="aclassVillain_1_1RigidBody_html"><div class="ttname"><a href="classVillain_1_1RigidBody.html">Villain::RigidBody</a></div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:8</div></div>
+<div class="ttc" id="aclassVillain_1_1RigidBody_html_abc436b2c53b376db0b248cfc5d3601a0"><div class="ttname"><a href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">Villain::RigidBody::getPointInWorldSpace</a></div><div class="ttdeci">glm::vec3 getPointInWorldSpace(const glm::vec3 &amp;point)</div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:68</div></div>
 <div class="ttc" id="aclassVillain_1_1Spring_html"><div class="ttname"><a href="classVillain_1_1Spring.html">Villain::Spring</a></div><div class="ttdef"><b>Definition:</b> Spring.hpp:8</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->

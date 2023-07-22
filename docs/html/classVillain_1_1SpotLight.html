@@ -115,8 +115,7 @@ Collaboration diagram for Villain::SpotLight:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0dda8756dd356c399d75daf0e5a4ecec"><td class="memItemLeft" align="right" valign="top"><a id="a0dda8756dd356c399d75daf0e5a4ecec"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SpotLight</b> (const glm::vec3 &amp;ambient, const glm::vec3 &amp;diffuse, const glm::vec3 &amp;specular, const glm::vec3 &amp;pos, const glm::vec3 &amp;dir, float cutOff, float outerCutOff, const glm::vec3 &amp;attenuation={1.0f, 0.022f, 0.0019f}, <a class="el" href="classVillain_1_1Camera.html">Camera</a> *cam=nullptr)</td></tr>
+<tr class="memitem:a0dda8756dd356c399d75daf0e5a4ecec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1SpotLight.html#a0dda8756dd356c399d75daf0e5a4ecec">SpotLight</a> (const glm::vec3 &amp;ambient, const glm::vec3 &amp;diffuse, const glm::vec3 &amp;specular, const glm::vec3 &amp;pos, const glm::vec3 &amp;dir, float cutOff, float outerCutOff, const glm::vec3 &amp;attenuation={1.0f, 0.022f, 0.0019f}, <a class="el" href="classVillain_1_1Camera.html">Camera</a> *cam=nullptr)</td></tr>
 <tr class="separator:a0dda8756dd356c399d75daf0e5a4ecec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d7d7e4b7c43a09316a37295dbf66070"><td class="memItemLeft" align="right" valign="top"><a id="a9d7d7e4b7c43a09316a37295dbf66070"></a>
 virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> ()</td></tr>
@@ -209,6 +208,78 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setShadowInfo</b> (<a
 int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> = -1</td></tr>
 <tr class="separator:a2a2bc604145a4ed714c968cfe1e54db8 inherit pro_attribs_classVillain_1_1NodeComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0dda8756dd356c399d75daf0e5a4ecec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dda8756dd356c399d75daf0e5a4ecec">&#9670;&nbsp;</a></span>SpotLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Villain::SpotLight::SpotLight </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>ambient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>diffuse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>specular</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>dir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>cutOff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>outerCutOff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>attenuation</em> = <code>{1.0f,&#160;0.022f,&#160;0.0019f}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>cam</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Zfar plane should probably be same as camera range(use attenuation to calculate) </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/components/<a class="el" href="Light_8hpp_source.html">Light.hpp</a></li>
 <li>src/components/Light.cpp</li>

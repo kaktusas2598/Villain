@@ -1,5 +1,4 @@
-#ifndef __SKYBOX__
-#define __SKYBOX__
+#pragma once
 
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -18,7 +17,10 @@ namespace Villain {
             ~SkyBox() {}
 
             // Must be rendered LAST every frame
-            void render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix);
+            void render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, float deltaTime);
+
+            void setAnimated(bool anim = false) { animated = anim; }
+            void setRotationSpeed(float speed) { rotationSpeed = speed; }
         private:
             std::unique_ptr<VertexArray> skyboxVao;
             std::unique_ptr<VertexBuffer> skyboxVbo;
@@ -29,10 +31,13 @@ namespace Villain {
             Shader* cubemapShader;
             Texture* cubemapTexture;
 
+            // Optional ability to rotate around y axis
+            bool animated = false;
+            float angleY = 0.0f;
+            float rotationSpeed = 0.01f;
+
             // TODO: Environmental mapping support for reflections and refractions
             bool reflect = false;
             bool refract = false;
     };
 }
-
-#endif // __SKYBOX__

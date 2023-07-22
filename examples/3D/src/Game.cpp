@@ -15,6 +15,7 @@
 #include "components/RigidBodyComponent.hpp"
 #include "physics/BoundingVolume.hpp"
 
+#include "physics/NarrowPhase.hpp"
 #include "physics/generators/contact/GroundContacts.hpp"
 #include "physics/generators/contact/ParticleCable.hpp"
 #include "physics/generators/contact/ParticleRod.hpp"
@@ -33,9 +34,9 @@ class ExampleEventListener : public EventListener {
     virtual void handleEvent(Event& event) override {
         if (KeyboardEvent* myEvent = dynamic_cast<KeyboardEvent*>(&event)) {
             if (myEvent->isPressed()) {
-                printf("KEY Pressed: %c!\n", (char)myEvent->getKey());
+                //printf("KEY Pressed: %c!\n", (char)myEvent->getKey());
             } else {
-                printf("KEY Released!\n");
+                //printf("KEY Released!\n");
             }
         }
     }
@@ -139,7 +140,8 @@ void Game::init() {
         //aircraft = new FlightController(new RigidBody(), windSpeed);
         //player->addComponent(aircraft);
 
-        KinematicController* playerControl = new KinematicController(new RigidBody());
+        playerBody = new RigidBody();
+        KinematicController* playerControl = new KinematicController(playerBody);
         player->addComponent(playerControl);
         player->addComponent(new ModelRenderer(new Model("assets/models/toyplane.obj")));
     }
@@ -214,6 +216,12 @@ void Game::init() {
 
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
+
+    sphere1 = new RigidBody();
+    sphere2 = new RigidBody();
+    boxBody = new RigidBody();
+    sphere2->setPosition({2.0f, 1.0f, 0.0f});
+    boxBody->setOrientation(glm::quat(glm::vec3(0.0, 45.0, 0.0)));
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -236,8 +244,73 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
+    ////////////////////////////////////////
+    /// Collision narrow phase tests
+    CollisionBox box({10.0, 2.0, 8.0}, playerBody);
+
+    // Define the CollisionPlane for the ground (Y level = 0)
+    CollisionPlane groundPlane({0.0, 1.0, 0.0}, 0.0);
+
+    // Perform collision detection between the camera's bounding box and the ground plane
+    CollisionData collisionData;
+    collisionData.contacts = new Contact[24];
+    collisionData.contactsLeft = 24;
+    collisionData.contactCount = 0;
+    collisionData.friction = 0.9f; // Set friction coefficient (adjust as needed)
+    collisionData.restitution = 0.5f; // Set restitution coefficient (adjust as needed)
+
+    // Box-plane test
+    // Check if any contacts were found
+    if (CollisionDetector::boxAndHalfSpace(box, groundPlane, &collisionData)) {
+    //if (CollisionDetector::sphereAndHalfSpace(sphere, groundPlane, &collisionData)) {
+        // Collision occurred, change the color of the box to indicate the collision
+        // (You may need to implement this logic in your rendering system)
+        //VILLAIN_DEBUG("Collision Detected!!");
+        debugRenderer.drawBox3D(playerBody->getPosition(), {1.0, 0.2, 0.2, 1.0}, box.halfSize * 2.0f);
+        //debugRenderer.drawSphere(playerBody->getPosition(), sphere.radius, {1.0, 0.2, 0.2, 1.0});
+    } else {
+        // No collision, render the box with the default color
+        debugRenderer.drawBox3D(playerBody->getPosition(), {0.4, 0.7, 0.2, 1.0}, box.halfSize * 2.0f);
+        //debugRenderer.drawSphere(playerBody->getPosition(), sphere.radius, {0.4, 0.7, 0.2, 1.0});
+    }
+
+    CollisionSphere one{2.0f, sphere1};
+    one.body->calculateDerivedData();
+    CollisionSphere two{1.0f, sphere2};
+    two.body->calculateDerivedData();
+
+    // Sphere-sphere and box-sphere tests
+    if (CollisionDetector::boxAndSphere(box, one, &collisionData)) {
+        debugRenderer.drawSphere(one.body->getPosition(), one.radius, {1.0, 0.0, 0.0, 1.0});
+    } else {
+        if (CollisionDetector::sphereAndSphere(one, two, &collisionData)) {
+            debugRenderer.drawSphere(one.body->getPosition(), one.radius, {0.4, 0.7, 0.2, 1.0});
+            debugRenderer.drawSphere(two.body->getPosition(), two.radius, {1.0, 0.1, 0.6, 1.0});
+        } else {
+            debugRenderer.drawSphere(one.body->getPosition(), one.radius);
+            debugRenderer.drawSphere(two.body->getPosition(), two.radius);
+        }
+    }
+
+
+    // Box-box SAT tests
+    CollisionBox staticBox({3.0, 2.0, 5.0}, boxBody);
+    boxBody->calculateDerivedData();
+    if (CollisionDetector::boxAndBox(box, staticBox, &collisionData)) {
+        //debugRenderer.drawBox3D(boxBody->getPosition(), {1.0, 0.0, 0.0, 1.0}, staticBox.halfSize * 2.0f);
+        debugRenderer.drawBox3DRotated(boxBody->getPosition(), staticBox.halfSize * 2.0f, glm::mat4(boxBody->getOrientation()), {1.0, 0.0, 0.0, 1.0});
+    } else {
+        //debugRenderer.drawBox3D(boxBody->getPosition(), {0.4, 0.7, 0.2, 1.0}, staticBox.halfSize * 2.0f);
+        debugRenderer.drawBox3DRotated(boxBody->getPosition(), staticBox.halfSize * 2.0f, glm::mat4(boxBody->getOrientation()), {0.4, 0.7, 0.2, 1.0});
+    }
+
+    // Don't forget to clean up the allocated memory for contacts
+    //delete[] collisionData.contacts;
+    ////////////////////////////////////////
+
     debugRenderer.end();
     Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
+
     glm::mat4 view = mainCamera->getViewMatrix();
     glm::mat4 projection = mainCamera->getProjMatrix();
 

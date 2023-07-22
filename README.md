@@ -6,7 +6,7 @@
 ## Supported Features
 
 ### Core Engine
-* Builds as a library
+* Builds as a library to be used as framework or as engine editor executable
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
 * Debug/Edit mode UI
@@ -31,6 +31,7 @@
 * 3D Model loading using assimp
 * Normal and Parallax mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
+* Set optional skybox (with optional animation)
 * Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation
@@ -46,7 +47,10 @@
 * 3D Rigid Body engine:
   * Rigid body Euler numerical integration
   * Force generators: gravity, spring
-  * No collision detection/resultion systems at the moment!
+  * Collision Detection System:
+      * Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)
+      * Narrow-Phase: planes, spheres, OBBs (Separate from rigid engine ATM)
+  * Collision resolution system in progress!!
 
 ## Planned Features
 
@@ -54,12 +58,10 @@
 * Hot reloading resources
 * Physics Engine:
     * Data driven approach for particle types and emitters
-    * Potential Box2D and Bullet physics integration
-    * Built in collision detection: AABB, SAT, circle
-    * Rigid Body implementation
-    * Spatial Partitioning models
+    * Rigid body collision resolution
+    * Rigid body/collision geometry integration
+* Lua Scripting
 * Data Oriented Models
-* LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Mesh batch rendering
@@ -158,3 +160,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Change all old style ifndef/define include guards to #pragma once
  * Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)
   * Aerodynamical force generators broken or something, struggling to create flight simulator demo
+  * Rework namespace system: create Villain::Physics, Villain::Rendering, etc..

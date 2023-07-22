@@ -2,7 +2,16 @@ var annotated_dup =
 [
     [ "Villain", "namespaceVillain.html", [
       [ "Editor", null, [
-        [ "EditorApplication", "classVillain_1_1Editor_1_1EditorApplication.html", null ]
+        [ "EditorApplication", "classVillain_1_1Editor_1_1EditorApplication.html", "classVillain_1_1Editor_1_1EditorApplication" ]
+      ] ],
+      [ "SpatialPartitioning", null, [
+        [ "Plane", "structVillain_1_1SpatialPartitioning_1_1Plane.html", "structVillain_1_1SpatialPartitioning_1_1Plane" ],
+        [ "BSPElement", "structVillain_1_1SpatialPartitioning_1_1BSPElement.html", null ],
+        [ "BSPObjectSet", "structVillain_1_1SpatialPartitioning_1_1BSPObjectSet.html", null ],
+        [ "BSPNode", "structVillain_1_1SpatialPartitioning_1_1BSPNode.html", "structVillain_1_1SpatialPartitioning_1_1BSPNode" ],
+        [ "QuadTreeNode", "classVillain_1_1SpatialPartitioning_1_1QuadTreeNode.html", null ],
+        [ "OctTreeNode", "classVillain_1_1SpatialPartitioning_1_1OctTreeNode.html", null ],
+        [ "Grid", "classVillain_1_1SpatialPartitioning_1_1Grid.html", null ]
       ] ],
       [ "Application", "classVillain_1_1Application.html", "classVillain_1_1Application" ],
       [ "Camera", "classVillain_1_1Camera.html", "classVillain_1_1Camera" ],
@@ -53,7 +62,10 @@ var annotated_dup =
       [ "BoundingVolume", "structVillain_1_1BoundingVolume.html", "structVillain_1_1BoundingVolume" ],
       [ "BoundingSphere", "structVillain_1_1BoundingSphere.html", "structVillain_1_1BoundingSphere" ],
       [ "BoundingAABB", "structVillain_1_1BoundingAABB.html", "structVillain_1_1BoundingAABB" ],
-      [ "Contact", "classVillain_1_1Contact.html", null ],
+      [ "PotentialContact", "structVillain_1_1PotentialContact.html", "structVillain_1_1PotentialContact" ],
+      [ "BVHNode", "classVillain_1_1BVHNode.html", "classVillain_1_1BVHNode" ],
+      [ "Contact", "classVillain_1_1Contact.html", "classVillain_1_1Contact" ],
+      [ "ContactResolver", "classVillain_1_1ContactResolver.html", null ],
       [ "ForceGenerator", "classVillain_1_1ForceGenerator.html", "classVillain_1_1ForceGenerator" ],
       [ "ForceRegistry", "classVillain_1_1ForceRegistry.html", "classVillain_1_1ForceRegistry" ],
       [ "GroundContacts", "classVillain_1_1GroundContacts.html", "classVillain_1_1GroundContacts" ],
@@ -78,6 +90,13 @@ var annotated_dup =
       [ "ParticleSpring", "classVillain_1_1ParticleSpring.html", "classVillain_1_1ParticleSpring" ],
       [ "Spring", "classVillain_1_1Spring.html", "classVillain_1_1Spring" ],
       [ "IntersectData", "classVillain_1_1IntersectData.html", "classVillain_1_1IntersectData" ],
+      [ "CollisionPrimitive", "classVillain_1_1CollisionPrimitive.html", "classVillain_1_1CollisionPrimitive" ],
+      [ "CollisionSphere", "classVillain_1_1CollisionSphere.html", "classVillain_1_1CollisionSphere" ],
+      [ "CollisionPlane", "classVillain_1_1CollisionPlane.html", "classVillain_1_1CollisionPlane" ],
+      [ "CollisionBox", "classVillain_1_1CollisionBox.html", "classVillain_1_1CollisionBox" ],
+      [ "IntersectionTests", "classVillain_1_1IntersectionTests.html", null ],
+      [ "CollisionData", "structVillain_1_1CollisionData.html", "structVillain_1_1CollisionData" ],
+      [ "CollisionDetector", "classVillain_1_1CollisionDetector.html", null ],
       [ "Particle", "classVillain_1_1Particle.html", "classVillain_1_1Particle" ],
       [ "ParticleContact", "classVillain_1_1ParticleContact.html", "classVillain_1_1ParticleContact" ],
       [ "ParticleContactResolver", "classVillain_1_1ParticleContactResolver.html", "classVillain_1_1ParticleContactResolver" ],

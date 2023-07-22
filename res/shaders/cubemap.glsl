@@ -7,10 +7,11 @@ out vec3 v_texCoords;
 
 uniform mat4 projection;
 uniform mat4 view;
+uniform mat4 rotation;
 
 void main() {
     v_texCoords = position;
-    vec4 pos = projection * view * vec4(position, 1.0);
+    vec4 pos = projection * view * rotation * vec4(position, 1.0);
     gl_Position = pos.xyww;
 }
 

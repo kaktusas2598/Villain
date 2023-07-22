@@ -88,6 +88,8 @@ $(document).ready(function(){initNavTree('classVillain_1_1PhysicsObject.html',''
 <div class="title">Villain::PhysicsObject Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="PhysicsObject_8hpp_source.html">PhysicsObject.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -97,8 +99,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8114a3dc02d5e29ef95d7d0f9df4993"><td class="memItemLeft" align="right" valign="top"><a id="ad8114a3dc02d5e29ef95d7d0f9df4993"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>PhysicsObject</b> (const <a class="el" href="classVillain_1_1PhysicsObject.html">PhysicsObject</a> &amp;other)</td></tr>
 <tr class="separator:ad8114a3dc02d5e29ef95d7d0f9df4993"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e6ff14075827260ac7213295529ad90"><td class="memItemLeft" align="right" valign="top"><a id="a1e6ff14075827260ac7213295529ad90"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>integrate</b> (float deltaTime)</td></tr>
+<tr class="memitem:a1e6ff14075827260ac7213295529ad90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1PhysicsObject.html#a1e6ff14075827260ac7213295529ad90">integrate</a> (float deltaTime)</td></tr>
 <tr class="separator:a1e6ff14075827260ac7213295529ad90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8866cb2327315090bf3a92220d7458d4"><td class="memItemLeft" align="right" valign="top"><a id="a8866cb2327315090bf3a92220d7458d4"></a>
 const glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> () const</td></tr>
@@ -122,6 +123,29 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>applyForce</b> (const
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clearForces</b> ()</td></tr>
 <tr class="separator:a49ba01fb48b545359ce457a4da6d276b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000056">Todo:</a></b></dt><dd>Might want to make this abstract class and implement a few different types of physics objects: </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1e6ff14075827260ac7213295529ad90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e6ff14075827260ac7213295529ad90">&#9670;&nbsp;</a></span>integrate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::PhysicsObject::integrate </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>deltaTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000054">Todo:</a></b></dt><dd>compute forces and torque here </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000055">Todo:</a></b></dt><dd>for angular calculations we might need a quaternion in here </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/physics/<a class="el" href="PhysicsObject_8hpp_source.html">PhysicsObject.hpp</a></li>
 <li>src/physics/PhysicsObject.cpp</li>

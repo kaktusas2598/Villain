@@ -1,0 +1,5 @@
+<map id="Villain::SpatialPartitioning::BSPNode" name="Villain::SpatialPartitioning::BSPNode">
+<area shape="rect" id="node1" title=" " alt="" coords="49,124,240,165"/>
+<area shape="rect" id="node2" href="$structVillain_1_1SpatialPartitioning_1_1BSPElement.html" title=" " alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node3" href="$structVillain_1_1SpatialPartitioning_1_1Plane.html" title=" " alt="" coords="220,5,411,47"/>
+</map>

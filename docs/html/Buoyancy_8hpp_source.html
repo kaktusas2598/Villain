@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('Buoyancy_8hpp_source.html',''); initRe
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> updateForce(<a class="code" href="classVillain_1_1RigidBody.html">RigidBody</a>* body, <span class="keywordtype">float</span> deltaTime) {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="comment">// Calculate the submersion depth</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keywordtype">float</span> depth = body-&gt;getPointInWorldSpace(centreOfBuoyancy).y;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keywordtype">float</span> depth = body-&gt;<a class="code" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">getPointInWorldSpace</a>(centreOfBuoyancy).y;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                <span class="comment">// Check if body is out of the water</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                <span class="keywordflow">if</span> (depth &gt;= waterHeight + maximumDepth) <span class="keywordflow">return</span>;</div>
@@ -130,6 +130,7 @@ $(document).ready(function(){initNavTree('Buoyancy_8hpp_source.html',''); initRe
 <div class="ttc" id="aclassVillain_1_1Buoyancy_html"><div class="ttname"><a href="classVillain_1_1Buoyancy.html">Villain::Buoyancy</a></div><div class="ttdef"><b>Definition:</b> Buoyancy.hpp:9</div></div>
 <div class="ttc" id="aclassVillain_1_1ForceGenerator_html"><div class="ttname"><a href="classVillain_1_1ForceGenerator.html">Villain::ForceGenerator</a></div><div class="ttdef"><b>Definition:</b> ForceGenerator.hpp:9</div></div>
 <div class="ttc" id="aclassVillain_1_1RigidBody_html"><div class="ttname"><a href="classVillain_1_1RigidBody.html">Villain::RigidBody</a></div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:8</div></div>
+<div class="ttc" id="aclassVillain_1_1RigidBody_html_abc436b2c53b376db0b248cfc5d3601a0"><div class="ttname"><a href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">Villain::RigidBody::getPointInWorldSpace</a></div><div class="ttdeci">glm::vec3 getPointInWorldSpace(const glm::vec3 &amp;point)</div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:68</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

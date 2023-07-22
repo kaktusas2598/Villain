@@ -118,8 +118,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
 <tr class="memitem:a5dc5a5ac63a96b46ff2b94476e468b62"><td class="memItemLeft" align="right" valign="top"><a id="a5dc5a5ac63a96b46ff2b94476e468b62"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
 <tr class="separator:a5dc5a5ac63a96b46ff2b94476e468b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18757b0789582f4e523bcf79693e93bf"><td class="memItemLeft" align="right" valign="top"><a id="a18757b0789582f4e523bcf79693e93bf"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (<a class="el" href="classVillain_1_1SpriteBatch.html">SpriteBatch</a> *batch, <a class="el" href="classVillain_1_1Camera.html">Camera</a> *cam)</td></tr>
+<tr class="memitem:a18757b0789582f4e523bcf79693e93bf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1TileLayer.html#a18757b0789582f4e523bcf79693e93bf">render</a> (<a class="el" href="classVillain_1_1SpriteBatch.html">SpriteBatch</a> *batch, <a class="el" href="classVillain_1_1Camera.html">Camera</a> *cam)</td></tr>
 <tr class="separator:a18757b0789582f4e523bcf79693e93bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18c992d20c807cbf38cb5762733d9f75"><td class="memItemLeft" align="right" valign="top"><a id="a18c992d20c807cbf38cb5762733d9f75"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTileIDs</b> (const std::vector&lt; std::vector&lt; int &gt;&gt; &amp;data)</td></tr>
@@ -164,6 +163,47 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setDepth</b> (float z
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getDepth</b> () const</td></tr>
 <tr class="separator:ae2115283fbf5b8ad6dcc05bb17e81cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a18757b0789582f4e523bcf79693e93bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18757b0789582f4e523bcf79693e93bf">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::TileLayer::render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1SpriteBatch.html">SpriteBatch</a> *&#160;</td>
+          <td class="paramname"><em>batch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>cam</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000090">Todo:</a></b></dt><dd>not sure if <a class="el" href="classVillain_1_1Engine.html" title="Main engine class containing game loop.">Engine</a> class should store camera anymore, maybe level should store active camera used? </dd></dl>
+<p>\todoUtilise color, spacing and margin can be implemented if needed</p>
+
+<p>Implements <a class="el" href="classVillain_1_1Layer.html">Villain::Layer</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/tiled/<a class="el" href="TileLayer_8hpp_source.html">TileLayer.hpp</a></li>
 <li>src/tiled/TileLayer.cpp</li>

@@ -1,0 +1,6 @@
+<map id="Villain::CollisionPrimitive" name="Villain::CollisionPrimitive">
+<area shape="rect" id="node1" title="Represents primitive to detect collision against." alt="" coords="169,5,356,32"/>
+<area shape="rect" id="node2" href="$classVillain_1_1CollisionBox.html" title="Represents a rigid body that can be treated as an axis&#45;aligned box for collision detection." alt="" coords="5,80,157,107"/>
+<area shape="rect" id="node3" href="$classVillain_1_1CollisionPlane.html" title="Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with worl..." alt="" coords="181,80,344,107"/>
+<area shape="rect" id="node4" href="$classVillain_1_1CollisionSphere.html" title="Represents a rigid body that can be treated as a sphere for collision detection." alt="" coords="369,80,541,107"/>
+</map>

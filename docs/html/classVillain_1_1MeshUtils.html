@@ -103,8 +103,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>addTangents</b
 <tr class="memitem:a51189939e533dc6cd8226e7b90cc445a"><td class="memItemLeft" align="right" valign="top"><a id="a51189939e533dc6cd8226e7b90cc445a"></a>
 static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getNormal</b> (const ::glm::vec3 &amp;i1, const ::glm::vec3 &amp;i2, const ::glm::vec3 &amp;i3)</td></tr>
 <tr class="separator:a51189939e533dc6cd8226e7b90cc445a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff1fe439d4724729f4f8612a36349379"><td class="memItemLeft" align="right" valign="top"><a id="aff1fe439d4724729f4f8612a36349379"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>addXZPlane</b> (std::vector&lt; VertexType &gt; *vertices, std::vector&lt; unsigned int &gt; *indices, const glm::vec3 &amp;center=glm::vec3(0.0f), const glm::vec2 &amp;halfSize=glm::vec3(0.5f), float *uvCoords=defaultUVMap, bool direction=false)</td></tr>
+<tr class="memitem:aff1fe439d4724729f4f8612a36349379"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1MeshUtils.html#aff1fe439d4724729f4f8612a36349379">addXZPlane</a> (std::vector&lt; VertexType &gt; *vertices, std::vector&lt; unsigned int &gt; *indices, const glm::vec3 &amp;center=glm::vec3(0.0f), const glm::vec2 &amp;halfSize=glm::vec3(0.5f), float *uvCoords=defaultUVMap, bool direction=false)</td></tr>
 <tr class="separator:aff1fe439d4724729f4f8612a36349379"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeb3ba21f6e890bab0d50bee6995a8ea"><td class="memItemLeft" align="right" valign="top"><a id="afeb3ba21f6e890bab0d50bee6995a8ea"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>addXYPlane</b> (std::vector&lt; VertexType &gt; *vertices, std::vector&lt; unsigned int &gt; *indices, const glm::vec3 &amp;center=glm::vec3(0.0f), const glm::vec2 &amp;halfSize=glm::vec3(0.5f), float *uvCoords=defaultUVMap, bool direction=false)</td></tr>
@@ -119,6 +118,70 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>addAABB</b> (s
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>addSphere</b> (std::vector&lt; VertexType &gt; *vertices, std::vector&lt; unsigned int &gt; *indices, float radius, const glm::vec3 &amp;center=glm::vec3(0.0f), int sectors=36, int stacks=18)</td></tr>
 <tr class="separator:ac767d92c75689f4c5103b986b10d42b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aff1fe439d4724729f4f8612a36349379"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff1fe439d4724729f4f8612a36349379">&#9670;&nbsp;</a></span>addXZPlane()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class VertexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="classVillain_1_1MeshUtils.html">Villain::MeshUtils</a>&lt; VertexType &gt;::addXZPlane </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; VertexType &gt; *&#160;</td>
+          <td class="paramname"><em>vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; unsigned int &gt; *&#160;</td>
+          <td class="paramname"><em>indices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>center</em> = <code>glm::vec3(0.0f)</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec2 &amp;&#160;</td>
+          <td class="paramname"><em>halfSize</em> = <code>glm::vec3(0.5f)</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>uvCoords</em> = <code>defaultUVMap</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>direction</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000064">Todo:</a></b></dt><dd>need ability to specify different orientations in easier way, </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/rendering/<a class="el" href="MeshUtils_8hpp_source.html">MeshUtils.hpp</a></li>
 <li>src/rendering/MeshUtils.cpp</li>

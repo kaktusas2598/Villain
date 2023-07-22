@@ -115,8 +115,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af6f85974496e400e2d4abf86218de328"><td class="memItemLeft" align="right" valign="top"><a id="af6f85974496e400e2d4abf86218de328"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MeshRenderer</b> (<a class="el" href="classVillain_1_1Mesh.html">Mesh</a>&lt; VertexType &gt; *mesh, <a class="el" href="classVillain_1_1Material.html">Material</a> material)</td></tr>
 <tr class="separator:af6f85974496e400e2d4abf86218de328"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af865d56736830a518493a1f14cd94f43"><td class="memItemLeft" align="right" valign="top"><a id="af865d56736830a518493a1f14cd94f43"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (<a class="el" href="classVillain_1_1Shader.html">Shader</a> &amp;shader, <a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a> &amp;renderingEngine, <a class="el" href="classVillain_1_1Camera.html">Camera</a> &amp;camera) override</td></tr>
+<tr class="memitem:af865d56736830a518493a1f14cd94f43"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1MeshRenderer.html#af865d56736830a518493a1f14cd94f43">render</a> (<a class="el" href="classVillain_1_1Shader.html">Shader</a> &amp;shader, <a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a> &amp;renderingEngine, <a class="el" href="classVillain_1_1Camera.html">Camera</a> &amp;camera) override</td></tr>
 <tr class="separator:af865d56736830a518493a1f14cd94f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa86344e81299086d4bde3bb820ad65f"><td class="memItemLeft" align="right" valign="top"><a id="afa86344e81299086d4bde3bb820ad65f"></a>
 <a class="el" href="classVillain_1_1Mesh.html">Mesh</a>&lt; VertexType &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getMesh</b> () const</td></tr>
@@ -169,6 +168,54 @@ Protected Attributes</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> = -1</td></tr>
 <tr class="separator:a2a2bc604145a4ed714c968cfe1e54db8 inherit pro_attribs_classVillain_1_1NodeComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af865d56736830a518493a1f14cd94f43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af865d56736830a518493a1f14cd94f43">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class VertexType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="classVillain_1_1MeshRenderer.html">Villain::MeshRenderer</a>&lt; VertexType &gt;::render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Shader.html">Shader</a> &amp;&#160;</td>
+          <td class="paramname"><em>shader</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a> &amp;&#160;</td>
+          <td class="paramname"><em>renderingEngine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVillain_1_1Camera.html">Camera</a> &amp;&#160;</td>
+          <td class="paramname"><em>camera</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>Add new updateUniforms() method without a matierla, because meshes set their own materials for each mesh </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classVillain_1_1NodeComponent.html">Villain::NodeComponent</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/components/<a class="el" href="MeshRenderer_8hpp_source.html">MeshRenderer.hpp</a></li>
 <li>src/components/MeshRenderer.cpp</li>

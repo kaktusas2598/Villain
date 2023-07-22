@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('FrameBuffer_8hpp_source.html',''); ini
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classVillain_1_1FrameBuffer.html">    9</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1FrameBuffer.html">FrameBuffer</a> {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;            <span class="comment">// @param cubeMap - if true, generate and attach cubemap directly to a framebuffer, else use GL_TEXTURE_2D as attachments</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            <a class="code" href="classVillain_1_1FrameBuffer.html">FrameBuffer</a>(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> textureCount = 1, GLenum* attachments = <span class="keyword">new</span> GLenum[1]{GL_COLOR_ATTACHMENT0}, <span class="keywordtype">bool</span> cubeMap = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            <a class="code" href="classVillain_1_1FrameBuffer.html">FrameBuffer</a>(<span class="keywordtype">int</span> <a class="code" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68">w</a>, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> textureCount = 1, GLenum* attachments = <span class="keyword">new</span> GLenum[1]{GL_COLOR_ATTACHMENT0}, <span class="keywordtype">bool</span> cubeMap = <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            ~<a class="code" href="classVillain_1_1FrameBuffer.html">FrameBuffer</a>();</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="comment">// NOTE: These are not great, in the future might need ability to get multiple textures</span></div>
@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('FrameBuffer_8hpp_source.html',''); ini
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keywordtype">int</span> getWidth()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> width; }</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keywordtype">int</span> getHeight()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> height; }</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordtype">void</span> rescale(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1FrameBuffer.html#ac84d6b838a0ddea7a34c35b76f2cf6bd">rescale</a>(<span class="keywordtype">int</span> <a class="code" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68">w</a>, <span class="keywordtype">int</span> h);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordtype">void</span> initTextures(GLenum* attachments, GLenum target);</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordtype">void</span> initRenderTargets(GLenum* attachments);</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
@@ -124,8 +124,10 @@ $(document).ready(function(){initNavTree('FrameBuffer_8hpp_source.html',''); ini
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// __FRAMEBUFFER__</span></div>
 <div class="ttc" id="aclassVillain_1_1FrameBuffer_html"><div class="ttname"><a href="classVillain_1_1FrameBuffer.html">Villain::FrameBuffer</a></div><div class="ttdef"><b>Definition:</b> FrameBuffer.hpp:9</div></div>
+<div class="ttc" id="aclassVillain_1_1FrameBuffer_html_ac84d6b838a0ddea7a34c35b76f2cf6bd"><div class="ttname"><a href="classVillain_1_1FrameBuffer.html#ac84d6b838a0ddea7a34c35b76f2cf6bd">Villain::FrameBuffer::rescale</a></div><div class="ttdeci">void rescale(int w, int h)</div><div class="ttdef"><b>Definition:</b> FrameBuffer.cpp:96</div></div>
 <div class="ttc" id="aclassVillain_1_1Texture_html"><div class="ttname"><a href="classVillain_1_1Texture.html">Villain::Texture</a></div><div class="ttdef"><b>Definition:</b> Texture.hpp:42</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
+<div class="ttc" id="anamespaceVillain_html_ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68"><div class="ttname"><a href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68">Villain::KeyCode::w</a></div><div class="ttdeci">@ w</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

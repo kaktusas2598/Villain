@@ -126,7 +126,7 @@ $(document).ready(function(){initNavTree('Camera_8hpp_source.html',''); initResi
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="comment">// Call after creation and on window size change to change projection</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordtype">void</span> rescale(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            glm::mat4 getViewMatrix();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            glm::mat4 <a class="code" href="classVillain_1_1Camera.html#a0e77255fd862393ef420a25dc8649252">getViewMatrix</a>();</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            glm::mat4 getProjMatrix();</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            glm::vec3&amp; getPosition() { <span class="keywordflow">return</span> position; }</div>
@@ -149,10 +149,10 @@ $(document).ready(function(){initNavTree('Camera_8hpp_source.html',''); initResi
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordtype">void</span> setZFar(<span class="keywordtype">float</span> newFar) { zFar = newFar; }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="comment">// TODO: need more testing, maybe try implementing for other projection types</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="structVillain_1_1Frustum.html">Frustum</a> getFrustum();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="structVillain_1_1Frustum.html">Frustum</a> <a class="code" href="classVillain_1_1Camera.html#a70d74fb77529999557244f7b8d24b332">getFrustum</a>();</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="comment">// TODO: TEST</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            glm::vec3 mouseRayToWorld(<span class="keyword">const</span> glm::vec2&amp; pos);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            glm::vec3 <a class="code" href="classVillain_1_1Camera.html#a8d892a2240e23ef97c4521627d386cc9">mouseRayToWorld</a>(<span class="keyword">const</span> glm::vec2&amp; pos);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="comment">// ORTHOGRAPHIC_2D version</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            glm::vec2 screenToWorld(glm::vec2 screenCoords);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
@@ -214,6 +214,9 @@ $(document).ready(function(){initNavTree('Camera_8hpp_source.html',''); initResi
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// __Camera__</span></div>
 <div class="ttc" id="aclassVillain_1_1Camera_html"><div class="ttname"><a href="classVillain_1_1Camera.html">Villain::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.hpp:31</div></div>
+<div class="ttc" id="aclassVillain_1_1Camera_html_a0e77255fd862393ef420a25dc8649252"><div class="ttname"><a href="classVillain_1_1Camera.html#a0e77255fd862393ef420a25dc8649252">Villain::Camera::getViewMatrix</a></div><div class="ttdeci">glm::mat4 getViewMatrix()</div><div class="ttdef"><b>Definition:</b> Camera.cpp:66</div></div>
+<div class="ttc" id="aclassVillain_1_1Camera_html_a70d74fb77529999557244f7b8d24b332"><div class="ttname"><a href="classVillain_1_1Camera.html#a70d74fb77529999557244f7b8d24b332">Villain::Camera::getFrustum</a></div><div class="ttdeci">Frustum getFrustum()</div><div class="ttdef"><b>Definition:</b> Camera.cpp:185</div></div>
+<div class="ttc" id="aclassVillain_1_1Camera_html_a8d892a2240e23ef97c4521627d386cc9"><div class="ttname"><a href="classVillain_1_1Camera.html#a8d892a2240e23ef97c4521627d386cc9">Villain::Camera::mouseRayToWorld</a></div><div class="ttdeci">glm::vec3 mouseRayToWorld(const glm::vec2 &amp;pos)</div><div class="ttdef"><b>Definition:</b> Camera.cpp:130</div></div>
 <div class="ttc" id="aclassVillain_1_1Engine_html"><div class="ttname"><a href="classVillain_1_1Engine.html">Villain::Engine</a></div><div class="ttdoc">Main engine class containing game loop.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:34</div></div>
 <div class="ttc" id="aclassVillain_1_1NodeComponent_html"><div class="ttname"><a href="classVillain_1_1NodeComponent.html">Villain::NodeComponent</a></div><div class="ttdef"><b>Definition:</b> NodeComponent.hpp:24</div></div>
 <div class="ttc" id="aclassVillain_1_1Transform_html"><div class="ttname"><a href="classVillain_1_1Transform.html">Villain::Transform</a></div><div class="ttdef"><b>Definition:</b> Transform.hpp:9</div></div>

@@ -1,10 +1,8 @@
-#ifndef __GAME__
-#define __GAME__
+#pragma once
 
 #include "Application.hpp"
 #include "camera/Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
-#include "rendering/SkyBox.hpp"
 
 #include "BulletEngine.hpp"
 
@@ -25,7 +23,6 @@ class Game : public Villain::Application {
     private:
         Villain::Camera* camera;
         Villain::DebugRenderer debugRenderer;
-        std::unique_ptr<Villain::SkyBox> skybox;
 
         void createGround();
         void createRigidBody();
@@ -41,5 +38,3 @@ class Game : public Villain::Application {
         Villain::PointLight* pointLight2;
         Villain::PointLight* pointLight3;
 };
-
-#endif // __GAME__
