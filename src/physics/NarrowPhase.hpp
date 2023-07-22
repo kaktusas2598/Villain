@@ -103,8 +103,8 @@ namespace Villain {
             static unsigned sphereAndHalfSpace(const CollisionSphere& sphere, const CollisionPlane& plane, CollisionData* data);
             static unsigned sphereAndTruePlane(const CollisionSphere& sphere, const CollisionPlane& plane, CollisionData* data);
 
-            // TODO: Implement and test boxAndBox using SAT!
             static unsigned boxAndHalfSpace(const CollisionBox& box, const CollisionPlane& plane, CollisionData* data);
             static unsigned boxAndSphere(const CollisionBox& box, const CollisionSphere& sphere, CollisionData* data);
+            static unsigned boxAndBox(const CollisionBox& one, const CollisionBox& two, CollisionData* data);
     };
 }
