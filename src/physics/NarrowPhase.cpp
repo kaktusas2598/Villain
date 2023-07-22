@@ -368,7 +368,6 @@ namespace Villain {
             // Face-Vertex contact
             fillPointFaceBoxBox(one, two, toCentre, data, best, pen);
             data->addContacts(1);
-            VILLAIN_TRACE("Face-Vertex contact");
             return 1;
         } else if (best < 6) {
             // Vertex-Face contact
