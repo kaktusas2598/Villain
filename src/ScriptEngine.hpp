@@ -1,5 +1,4 @@
-#ifndef __ScriptEngine__
-#define __ScriptEngine__
+#pragma once
 
 #include "LuaScript.hpp"
 
@@ -191,5 +190,3 @@ namespace Villain {
             std::string id;
     };
 }
-
-#endif // __ScriptEngine__

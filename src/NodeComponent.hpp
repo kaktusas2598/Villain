@@ -1,5 +1,4 @@
-#ifndef __NODE_COMPONENT__
-#define __NODE_COMPONENT__
+#pragma once
 
 #include "SceneNode.hpp"
 
@@ -47,5 +46,3 @@ namespace Villain {
             void operator=(const NodeComponent& other) {}
     };
 }
-
-#endif // __NODE_COMPONENT__

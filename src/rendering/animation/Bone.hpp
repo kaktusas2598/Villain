@@ -1,5 +1,4 @@
-#ifndef __BONE__
-#define __BONE__
+#pragma once
 
 #include <assimp/scene.h>
 #include <glm/glm.hpp>
@@ -56,5 +55,3 @@ namespace Villain {
     };
 
 }
-
-#endif // __BONE__

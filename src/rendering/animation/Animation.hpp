@@ -1,6 +1,4 @@
-#ifndef __ANIMATION__
-#define __ANIMATION__
-
+#pragma once
 
 #include <assimp/Importer.hpp>
 #include "Bone.hpp"
@@ -50,5 +48,3 @@ namespace Villain {
             aiMatrix4x4 globalInverseTransform;
     };
 }
-
-#endif // __ANIMATION__

@@ -1,20 +1,20 @@
-#ifndef __VertexBuffer__
-#define __VertexBuffer__
+#pragma once
 
 #include "ErrorHandler.hpp"
 
-class VertexBuffer {
-    public:
-        // If data is nullptr, then use fill() to call glBufferSubData()
-        VertexBuffer(const void* data, unsigned int size, GLenum usage = GL_STATIC_DRAW);
-        ~VertexBuffer();
+namespace Villain {
 
-        void bind() const;
-        void unbind() const;
+    class VertexBuffer {
+        public:
+            // If data is nullptr, then use fill() to call glBufferSubData()
+            VertexBuffer(const void* data, unsigned int size, GLenum usage = GL_STATIC_DRAW);
+            ~VertexBuffer();
 
-        void fill(const void* data, unsigned int size, GLenum usage = GL_STATIC_DRAW);
-    private:
-        unsigned int rendererID;
-};
+            void bind() const;
+            void unbind() const;
 
-#endif // __VertexBuffer__
+            void fill(const void* data, unsigned int size, GLenum usage = GL_STATIC_DRAW);
+        private:
+            unsigned int rendererID;
+    };
+}

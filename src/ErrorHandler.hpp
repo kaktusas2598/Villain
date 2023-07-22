@@ -1,5 +1,4 @@
-#ifndef __ErrorHandler__
-#define __ErrorHandler__
+#pragma once
 
 #include <string>
 #include <GL/glew.h>
@@ -27,5 +26,3 @@ void GLClearError();
 bool GLLogCall(const char *func, const char *file, int line);
 
 extern void exitWithError(std::string error);
-
-#endif // __ErrorHandler__

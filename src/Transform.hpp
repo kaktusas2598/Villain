@@ -1,5 +1,4 @@
-#ifndef __TRANSFORM__
-#define __TRANSFORM__
+#pragma once
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -54,5 +53,3 @@ namespace Villain {
             bool needsUpdate = true;
     };
 }
-
-#endif // __TRANSFORM__

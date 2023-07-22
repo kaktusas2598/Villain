@@ -1,5 +1,4 @@
-#ifndef __INTERSECT_DATA__
-#define __INTERSECT_DATA__
+#pragma once
 
 #include "glm/glm.hpp"
 
@@ -27,5 +26,3 @@ namespace Villain {
             const glm::vec3 direction;
     };
 }
-
-#endif // __INTERSECT_DATA__

@@ -1,5 +1,4 @@
-#ifndef __SpriteBatch__
-#define __SpriteBatch__
+#pragma once
 
 #include <GL/glew.h>
 #include "Vertex.hpp"
@@ -106,5 +105,3 @@ namespace Villain {
 
     };
 }
-
-#endif // __SpriteBatch__

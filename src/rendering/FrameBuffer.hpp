@@ -1,5 +1,4 @@
-#ifndef __FRAMEBUFFER__
-#define __FRAMEBUFFER__
+#pragma once
 
 #include "Logger.hpp"
 #include "Texture.hpp"
@@ -34,5 +33,3 @@ namespace Villain {
             Texture** textures;// <<< texture objects used in Rendering Engine
     };
 }
-
-#endif // __FRAMEBUFFER__

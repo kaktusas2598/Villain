@@ -1,5 +1,4 @@
-#ifndef __PARTICLE_BATCH_2D__
-#define __PARTICLE_BATCH_2D__
+#pragma once
 
 #include "rendering/SpriteBatch.hpp"
 #include <functional>
@@ -67,5 +66,3 @@ namespace Villain {
             Texture* texture;
     };
 }
-
-#endif // __PARTICLE_BATCH_2D__

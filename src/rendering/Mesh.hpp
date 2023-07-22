@@ -1,5 +1,4 @@
-#ifndef __Mesh__
-#define __Mesh__
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -96,5 +95,3 @@ namespace Villain {
     }
 
 }
-
-#endif // __Mesh__

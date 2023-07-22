@@ -1,5 +1,4 @@
-#ifndef __IGAMESCREEN__
-#define __IGAMESCREEN__
+#pragma once
 
 #include "Application.hpp"
 
@@ -89,4 +88,3 @@ namespace Villain {
     };
 
 }
-#endif // __IGAMESCREEN__

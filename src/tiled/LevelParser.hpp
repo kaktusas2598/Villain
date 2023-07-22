@@ -1,5 +1,4 @@
-#ifndef __LevelParser__
-#define __LevelParser__
+#pragma once;
 
 #include "tinyxml2/tinyxml2.h"
 #include <vector>
@@ -35,5 +34,3 @@ namespace Villain {
     };
 
 }
-
-#endif // __LevelParser__

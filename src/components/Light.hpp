@@ -1,5 +1,4 @@
-#ifndef __LIGHT__
-#define __LIGHT__
+#pragma once
 
 #include <glm/glm.hpp>
 #include "NodeComponent.hpp"
@@ -83,5 +82,3 @@ namespace Villain {
             virtual void update(float deltaTime);
     };
 }
-
-#endif // __LIGHT__

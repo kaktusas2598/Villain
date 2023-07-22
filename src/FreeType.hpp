@@ -1,5 +1,4 @@
-#ifndef __FREETYPE__
-#define __FREETYPE__
+#pragma once
 
 #include "glm/glm.hpp"
 #include <map>
@@ -30,5 +29,3 @@ namespace Villain {
             std::map<char, Character> characters;
     };
 }
-
-#endif // __FREETYPE__

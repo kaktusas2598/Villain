@@ -1,5 +1,4 @@
-#ifndef __BONE_INFO__
-#define __BONE_INFO__
+#pragma once
 
 #include "glm/glm.hpp"
 
@@ -13,5 +12,3 @@ namespace Villain {
         glm::mat4 offset;
     };
 };
-
-#endif // __BONE_INFO__

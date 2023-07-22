@@ -23,8 +23,7 @@ Event before modifying this it wasn't working, atm I am using my own font render
 based on FreeType library, need to fix this one!
 */
 
-#ifndef __SPRITEFONT__
-#define __SPRITEFONT__
+#pragma once
 
 #include "SDL2/SDL_ttf.h"
 #include "glm/glm.hpp"
@@ -84,5 +83,3 @@ namespace Villain {
             unsigned int textureID;
     };
 }
-
-#endif // __SPRITEFONT__

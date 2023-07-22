@@ -1,5 +1,4 @@
-#ifndef __SCENE_GRAPH_EDITOR__
-#define __SCENE_GRAPH_EDITOR__
+#pragma once
 
 #include "SceneNode.hpp"
 
@@ -21,5 +20,3 @@ namespace Villain {
             SceneNode* selectedNode = nullptr;
     };
 }
-
-#endif // __SCENE_GRAPH_EDITOR__

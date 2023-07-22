@@ -1,23 +1,23 @@
-#ifndef __VertexArray__
-#define __VertexArray__
+#pragma once
 
 #include "VertexBuffer.hpp"
 
-class VertexBufferLayout;
+namespace Villain {
 
-class VertexArray {
-    public:
-        VertexArray();
-        ~VertexArray();
+    class VertexBufferLayout;
 
-        void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+    class VertexArray {
+        public:
+            VertexArray();
+            ~VertexArray();
 
-        void bind() const;
-        void unbind() const;
+            void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
-    private:
-        unsigned int rendererID;
+            void bind() const;
+            void unbind() const;
 
-};
+        private:
+            unsigned int rendererID;
 
-#endif // __VertexArray__
+    };
+}

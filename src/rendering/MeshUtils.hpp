@@ -1,12 +1,10 @@
-#ifndef __MESH_UTILS__
-#define __MESH_UTILS__
+#pragma once
 
 #include "Mesh.hpp"
 #include "Vertex.hpp"
 #include <vector>
 
 namespace Villain {
-
 
     // Various utility methods to generate vertex data, primitives
     // NOTE:Not all Vertex types can be used, like it wouldn;t make sense to generate tangents
@@ -91,5 +89,3 @@ namespace Villain {
         static float defaultUVMap[4];
     };
 }
-
-#endif // __MESH_UTILS__

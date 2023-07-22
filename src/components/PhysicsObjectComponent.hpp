@@ -1,5 +1,4 @@
-#ifndef __PHYSICS_OBJECT_COMPONENT__
-#define __PHYSICS_OBJECT_COMPONENT__
+#pragma once
 
 #include "../NodeComponent.hpp"
 #include "../physics/PhysicsObject.hpp"
@@ -17,5 +16,3 @@ namespace Villain {
             const PhysicsObject* physicsObject;
     };
 }
-
-#endif // __PHYSICS_OBJECT_COMPONENT__

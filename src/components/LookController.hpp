@@ -1,5 +1,4 @@
-#ifndef __LOOK_CONTROLLER__
-#define __LOOK_CONTROLLER__
+#pragma once
 
 #include "../Engine.hpp"
 #include "../NodeComponent.hpp"
@@ -17,5 +16,3 @@ namespace Villain {
             bool constrainPitch;
     };
 }
-
-#endif // __LOOK_CONTROLLER__

@@ -1,21 +1,21 @@
-#ifndef __IndexBuffer__
-#define __IndexBuffer__
+#pragma once
 
 #include "ErrorHandler.hpp"
 
-class IndexBuffer {
-    public:
-        IndexBuffer(const unsigned int* data, unsigned int cnt);
-        ~IndexBuffer();
+namespace Villain {
 
-        void bind() const;
-        void unbind() const;
+    class IndexBuffer {
+        public:
+            IndexBuffer(const unsigned int* data, unsigned int cnt);
+            ~IndexBuffer();
 
-        inline unsigned int getCount() const { return count; }
-        void fill(const void* data, unsigned int size, GLenum usage = GL_STATIC_DRAW);
-    private:
-        unsigned int rendererID;
-        unsigned int count; //<<< Numner of indices
-};
+            void bind() const;
+            void unbind() const;
 
-#endif // __IndexBuffer__
+            inline unsigned int getCount() const { return count; }
+            void fill(const void* data, unsigned int size, GLenum usage = GL_STATIC_DRAW);
+        private:
+            unsigned int rendererID;
+            unsigned int count; //<<< Numner of indices
+    };
+}

@@ -1,5 +1,4 @@
-#ifndef __THIRD_PERSON_CAMERA_CONTROLLER__
-#define __THIRD_PERSON_CAMERA_CONTROLLER__
+#pragma once
 
 #include "CameraController.hpp"
 
@@ -34,5 +33,3 @@ namespace Villain {
     };
 
 }
-
-#endif // !__THIRD_PERSON_CAMERA_CONTROLLER__

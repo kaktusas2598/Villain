@@ -1,5 +1,4 @@
-#ifndef __SCREEN_LIST__
-#define __SCREEN_LIST__
+#pragma once
 
 #define STATE_NONE -1
 
@@ -45,5 +44,3 @@ namespace Villain {
             int currentScreenID = STATE_NONE; ///< Indicates current state in states collection, -1 indicates none
     };
 }
-
-#endif // __SCREEN_LIST__

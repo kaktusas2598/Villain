@@ -1,5 +1,4 @@
-#ifndef __PICKING_TEXTURE__
-#define __PICKING_TEXTURE__
+#pragma once
 
 #include "ErrorHandler.hpp"
 
@@ -29,5 +28,3 @@ namespace Villain {
             GLuint depthTextureID;
     };
 };
-
-#endif // __PICKING_TEXTURE__DEBUG

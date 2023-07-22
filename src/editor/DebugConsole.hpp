@@ -1,5 +1,4 @@
-#ifndef __DebugConsole__
-#define __DebugConsole__
+#pragma once
 
 #include "imgui/imgui.h"
 
@@ -48,5 +47,3 @@ namespace Villain {
             static DebugConsole* s_pInstance;
     };
 }
-
-#endif // __DebugConsole__

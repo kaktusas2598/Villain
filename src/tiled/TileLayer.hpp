@@ -1,5 +1,4 @@
-#ifndef __TileLayer__
-#define __TileLayer__
+#pragma once
 
 #include <vector>
 #include "Layer.hpp"
@@ -63,5 +62,3 @@ namespace Villain {
             TileSet getTilesetByID(int tileID);
     };
 }
-
-#endif // __TileLayer__

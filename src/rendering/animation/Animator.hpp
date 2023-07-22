@@ -1,5 +1,4 @@
-#ifndef __ANIMATOR__
-#define __ANIMATOR__
+#pragma once
 
 #include "Animation.hpp"
 
@@ -31,5 +30,3 @@ namespace Villain {
             bool bindPoseOnly = false;
     };
 }
-
-#endif // __ANIMATOR__

@@ -1,5 +1,4 @@
-#ifndef __Camera__
-#define __Camera__
+#pragma once
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -124,5 +123,3 @@ namespace Villain {
             float mouseSensitivity;
     };
 }
-
-#endif // __Camera__

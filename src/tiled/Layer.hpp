@@ -1,5 +1,4 @@
-#ifndef __LAYER__
-#define __LAYER__
+#pragma once
 
 #include "camera/Camera.hpp"
 #include "rendering/SpriteBatch.hpp"
@@ -16,5 +15,3 @@ namespace Villain {
             virtual ~Layer() {}
     };
 }
-
-#endif // __LAYER__

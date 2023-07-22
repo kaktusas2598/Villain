@@ -1,5 +1,4 @@
-#ifndef __TILE_ATLAS__
-#define __TILE_ATLAS__
+#pragma once
 
 #include "Texture.hpp"
 #include "glm/glm.hpp"
@@ -46,5 +45,3 @@ namespace Villain {
             glm::ivec2 dims;
     };
 }
-
-#endif // __TILE_ATLAS__

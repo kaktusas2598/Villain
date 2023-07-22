@@ -1,5 +1,4 @@
-#ifndef __CollisionLayer__
-#define __CollisionLayer__
+#pragma once
 
 #include "Layer.hpp"
 #include <SDL2/SDL.h>
@@ -18,5 +17,3 @@ namespace Villain {
             bool collisionRenderingEnabled;
     };
 }
-
-#endif // __CollisionLayer__

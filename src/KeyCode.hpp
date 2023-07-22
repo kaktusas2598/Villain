@@ -1,5 +1,4 @@
-#ifndef __KEY_CODE__
-#define __KEY_CODE__
+#pragma once
 
 #include <SDL2/SDL_keycode.h>
 
@@ -55,5 +54,3 @@ namespace Villain {
         LSHIFT = SDLK_LSHIFT
     };
 }
-
-#endif // !__KEY_CODE__

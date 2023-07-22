@@ -1,120 +1,118 @@
-#ifndef __Vertex__
-#define __Vertex__
-
-// TODO: move to namespace
-
-// Maximum number of bones influencing single vertex
-constexpr int MAX_BONE_INFLUENCE = 4;
-
-// Maximum number of bones per model
-constexpr int MAX_BONES = 100;
-
-/*
- * Defines different kind of Vertex types and each type of Vertex
- * implements getVertexLayout() method which setups vertex attribute pointers
- * essentially these structs can be used as template argument for template class
- */
+#pragma once
 
 #include "VertexBufferLayout.hpp"
 #include "glm/glm.hpp"
 
-struct VertexP1 {
-    glm::vec3 Position;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        return layout;
-    }
-};
+namespace Villain {
 
-struct VertexP1UV {
-    glm::vec3 Position;
-    glm::vec2 UV;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(2);
-        return layout;
-    }
-};
+    // Maximum number of bones influencing single vertex
+    constexpr int MAX_BONE_INFLUENCE = 4;
 
-struct VertexP1N1 {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(3);
-        return layout;
-    }
-};
+    // Maximum number of bones per model
+    constexpr int MAX_BONES = 100;
 
-struct VertexP1N1UV {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec2 UV;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(3);
-        layout.push<float>(2);
-        return layout;
-    }
-};
+    /*
+     * Defines different kind of Vertex types and each type of Vertex
+     * implements getVertexLayout() method which setups vertex attribute pointers
+     * essentially these structs can be used as template argument for template class
+     */
 
-struct VertexP1N1T1B1UV {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    // Texture coordinates
-    glm::vec2 UV;
-    // Tangent and BiTangent used to calculate tangent space and realistic lighting
-    glm::vec3 Tangent;
-    glm::vec3 BiTangent;
-    // Bones which will influence this vertex
-    int32_t BoneIDs[MAX_BONE_INFLUENCE];
-    // Weights from each bone
-    float Weights[MAX_BONE_INFLUENCE];
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(3);
-        layout.push<float>(2);
+    struct VertexP1 {
+        glm::vec3 Position;
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            return layout;
+        }
+    };
 
-        layout.push<float>(3);
-        layout.push<float>(3);
+    struct VertexP1UV {
+        glm::vec3 Position;
+        glm::vec2 UV;
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            layout.push<float>(2);
+            return layout;
+        }
+    };
 
-        layout.push<int>(4);
-        layout.push<float>(4);
-        return layout;
-    }
-};
+    struct VertexP1N1 {
+        glm::vec3 Position;
+        glm::vec3 Normal;
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            layout.push<float>(3);
+            return layout;
+        }
+    };
 
-struct VertexP1N1C1UV {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec4 Color;
-    glm::vec2 UV;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(3);
-        layout.push<float>(4);
-        layout.push<float>(2);
-        return layout;
-    }
-};
+    struct VertexP1N1UV {
+        glm::vec3 Position;
+        glm::vec3 Normal;
+        glm::vec2 UV;
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            layout.push<float>(3);
+            layout.push<float>(2);
+            return layout;
+        }
+    };
 
-struct VertexP1C1UV {
-    glm::vec3 Position;
-    glm::vec4 Color;
-    glm::vec2 UV;
-    static VertexBufferLayout getVertexLayout() {
-        VertexBufferLayout layout;
-        layout.push<float>(3);
-        layout.push<float>(4);
-        layout.push<float>(2);
-        return layout;
-    }
-};
+    struct VertexP1N1T1B1UV {
+        glm::vec3 Position;
+        glm::vec3 Normal;
+        // Texture coordinates
+        glm::vec2 UV;
+        // Tangent and BiTangent used to calculate tangent space and realistic lighting
+        glm::vec3 Tangent;
+        glm::vec3 BiTangent;
+        // Bones which will influence this vertex
+        int32_t BoneIDs[MAX_BONE_INFLUENCE];
+        // Weights from each bone
+        float Weights[MAX_BONE_INFLUENCE];
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            layout.push<float>(3);
+            layout.push<float>(2);
 
-#endif // __Vertex__
+            layout.push<float>(3);
+            layout.push<float>(3);
+
+            layout.push<int>(4);
+            layout.push<float>(4);
+            return layout;
+        }
+    };
+
+    struct VertexP1N1C1UV {
+        glm::vec3 Position;
+        glm::vec3 Normal;
+        glm::vec4 Color;
+        glm::vec2 UV;
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            layout.push<float>(3);
+            layout.push<float>(4);
+            layout.push<float>(2);
+            return layout;
+        }
+    };
+
+    struct VertexP1C1UV {
+        glm::vec3 Position;
+        glm::vec4 Color;
+        glm::vec2 UV;
+        static VertexBufferLayout getVertexLayout() {
+            VertexBufferLayout layout;
+            layout.push<float>(3);
+            layout.push<float>(4);
+            layout.push<float>(2);
+            return layout;
+        }
+    };
+}

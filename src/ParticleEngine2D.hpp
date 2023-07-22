@@ -1,5 +1,4 @@
-#ifndef __PARTICLE_ENGINE_2D__
-#define __PARTICLE_ENGINE_2D__
+#pragma once
 
 #include <vector>
 
@@ -24,5 +23,3 @@ namespace Villain {
 
     };
 }
-
-#endif // __PARTICLE_ENGINE_2D__

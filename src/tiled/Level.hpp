@@ -1,5 +1,4 @@
-#ifndef __LEVEL__
-#define __LEVEL__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -75,5 +74,3 @@ namespace Villain {
             SpriteBatch* batch;
     };
 }
-
-#endif // __LEVEL__

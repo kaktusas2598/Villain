@@ -1,5 +1,4 @@
-#ifndef __MATERIAL__
-#define __MATERIAL__
+#pragma once
 
 #include "Texture.hpp"
 #include "glm/glm.hpp"
@@ -63,5 +62,3 @@ namespace Villain {
             float dispMapBias = 0.0f; //<<< Displacement map offset/bias
     };
 }
-
-#endif // __MATERIAL__

@@ -1,5 +1,4 @@
-#ifndef __CAMERA__CONTROLLER__
-#define __CAMERA__CONTROLLER__
+#pragma once
 
 namespace Villain {
 
@@ -57,5 +56,3 @@ namespace Villain {
     //}
 
 }
-
-#endif // __CAMERA__CONTROLLER__

@@ -1,5 +1,4 @@
-#ifndef __Sprite__
-#define __Sprite__
+#pragma once
 
 #include <memory>
 #include "Vertex.hpp"
@@ -37,5 +36,3 @@ namespace Villain {
             void setup();
     };
 }
-
-#endif // __Sprite__

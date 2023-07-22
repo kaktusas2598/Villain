@@ -1,5 +1,4 @@
-#ifndef __MESH_RENDERER__
-#define __MESH_RENDERER__
+#pragma once
 
 #include "../rendering/Material.hpp"
 #include "../rendering/Mesh.hpp"
@@ -26,5 +25,3 @@ namespace Villain {
             Material material;
     };
 }
-
-#endif // __MESH_RENDERER__

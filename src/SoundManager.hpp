@@ -1,5 +1,4 @@
-#ifndef __SoundManager__
-#define __SoundManager__
+#pragma once
 
 #include <SDL2/SDL_mixer.h>
 #include <string>
@@ -49,5 +48,3 @@ namespace Villain {
             SoundManager &operator= (const SoundManager&);
     };
 }
-
-#endif // __SoundManager__

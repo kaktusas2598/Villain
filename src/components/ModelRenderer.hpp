@@ -1,5 +1,4 @@
-#ifndef __MODEL_RENDERER__
-#define __MODEL_RENDERER__
+#pragma once
 
 #include "NodeComponent.hpp"
 #include "rendering/animation/Animator.hpp"
@@ -30,5 +29,3 @@ namespace Villain {
             Model* model;
     };
 }
-
-#endif // __MODEL_RENDERER__

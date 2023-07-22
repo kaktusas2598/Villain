@@ -1,5 +1,4 @@
-#ifndef __PHYSICS_ENGINE__
-#define __PHYSICS_ENGINE__
+#pragma once
 
 #include "PhysicsObject.hpp"
 #include "rendering/DebugRenderer.hpp"
@@ -45,5 +44,3 @@ namespace Villain {
             bool debugMode = true;
     };
 }
-
-#endif // __PHYSICS_ENGINE__

@@ -1,5 +1,4 @@
-#ifndef __Timer__
-#define __Timer__
+#pragma once
 
 #include <SDL2/SDL.h>
 
@@ -18,5 +17,3 @@ namespace Villain {
 			Uint32 startTicks;
     };
 }
-
-#endif // __Timer__
