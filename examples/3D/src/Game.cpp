@@ -262,7 +262,7 @@ void Game::onAppRender(float dt) {
     //if (CollisionDetector::sphereAndHalfSpace(sphere, groundPlane, &collisionData)) {
         // Collision occurred, change the color of the box to indicate the collision
         // (You may need to implement this logic in your rendering system)
-        VILLAIN_DEBUG("Collision Detected!!");
+        //VILLAIN_DEBUG("Collision Detected!!");
         debugRenderer.drawBox3D(playerBody->getPosition(), {1.0, 0.2, 0.2, 1.0}, box.halfSize * 2.0f);
         //debugRenderer.drawSphere(playerBody->getPosition(), sphere.radius, {1.0, 0.2, 0.2, 1.0});
     } else {
@@ -276,12 +276,16 @@ void Game::onAppRender(float dt) {
     CollisionSphere two{1.0f, sphere2};
     two.body->calculateDerivedData();
 
-    if (CollisionDetector::sphereAndSphere(one, two, &collisionData)) {
-        debugRenderer.drawSphere(one.body->getPosition(), one.radius, {0.4, 0.7, 0.2, 1.0});
-        debugRenderer.drawSphere(two.body->getPosition(), two.radius, {1.0, 0.1, 0.6, 1.0});
+    if (CollisionDetector::boxAndSphere(box, one, &collisionData)) {
+        debugRenderer.drawSphere(one.body->getPosition(), one.radius, {1.0, 0.0, 0.0, 1.0});
     } else {
-        debugRenderer.drawSphere(one.body->getPosition(), one.radius);
-        debugRenderer.drawSphere(two.body->getPosition(), two.radius);
+        if (CollisionDetector::sphereAndSphere(one, two, &collisionData)) {
+            debugRenderer.drawSphere(one.body->getPosition(), one.radius, {0.4, 0.7, 0.2, 1.0});
+            debugRenderer.drawSphere(two.body->getPosition(), two.radius, {1.0, 0.1, 0.6, 1.0});
+        } else {
+            debugRenderer.drawSphere(one.body->getPosition(), one.radius);
+            debugRenderer.drawSphere(two.body->getPosition(), two.radius);
+        }
     }
 
     // Don't forget to clean up the allocated memory for contacts

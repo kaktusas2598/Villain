@@ -1,5 +1,7 @@
 #include "NarrowPhase.hpp"
 
+#include <glm/gtx/norm.hpp>
+
 namespace Villain {
 
     static inline float transformToAxis(const CollisionBox &box, const glm::vec3 &axis) {
@@ -164,5 +166,53 @@ namespace Villain {
 
         data->addContacts(contactsUsed);
         return contactsUsed;
+    }
+
+    unsigned CollisionDetector::boxAndSphere(const CollisionBox& box, const CollisionSphere& sphere, CollisionData* data) {
+        // Transform the centre of the sphere into box coordinates
+        glm::vec3 centre = sphere.getAxis(3);
+        glm::vec3 realCentre = glm::inverse(box.transform) * glm::vec4(centre, 1.0);
+
+        // Early exit intersection check
+        if (fabs(realCentre.x) - sphere.radius > box.halfSize.x ||
+                fabs(realCentre.y) - sphere.radius > box.halfSize.y ||
+                fabs(realCentre.z) - sphere.radius > box.halfSize.z) {
+            return 0;
+        }
+
+        glm::vec3 closestPt;
+        float dist;
+
+        // Clamp each coordinate to the box
+        dist = realCentre.x;
+        if (dist > box.halfSize.x) dist = box.halfSize.x;
+        if (dist < -box.halfSize.x) dist = -box.halfSize.x;
+        closestPt.x = dist;
+
+        dist = realCentre.y;
+        if (dist > box.halfSize.y) dist = box.halfSize.y;
+        if (dist < -box.halfSize.y) dist = -box.halfSize.y;
+        closestPt.y = dist;
+
+        dist = realCentre.z;
+        if (dist > box.halfSize.z) dist = box.halfSize.z;
+        if (dist < -box.halfSize.z) dist = -box.halfSize.z;
+        closestPt.z = dist;
+
+        // Check if we're in contact
+        dist = glm::length2(closestPt - realCentre);
+        if (dist > sphere.radius * sphere.radius) return 0;
+
+        // Compile the contact
+        glm::vec3 closestPtWorld = box.transform * glm::vec4(closestPt, 1.0);
+
+        Contact* contact = data->contacts;
+        contact->contactNormal = glm::normalize(closestPtWorld - centre);
+        contact->contactPoint = closestPtWorld;
+        contact->penetration = sphere.radius - sqrtf(dist);
+        contact->setBodyData(box.body, sphere.body, data->friction, data->restitution);
+
+        data->addContacts(1);
+        return 1;
     }
 }
