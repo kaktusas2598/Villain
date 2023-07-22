@@ -6,7 +6,7 @@
 ## Supported Features
 
 ### Core Engine
-* Builds as a library
+* Builds as a library to be used as framework or as engine editor executable
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
 * Debug/Edit mode UI
@@ -31,6 +31,7 @@
 * 3D Model loading using assimp
 * Normal and Parallax mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
+* Set optional skybox (with optional animation)
 * Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation
@@ -46,19 +47,21 @@
 * 3D Rigid Body engine:
   * Rigid body Euler numerical integration
   * Force generators: gravity, spring
-  * Broad-Phase Collision Detection using Bounding Volume Hiearchy
-  * No narrow-phase collision detection/resultion systems at the moment! (IN PROGRESS)
+  * Collision Detection System:
+      * Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)
+      * Narrow-Phase: planes, spheres, OBBs (Separate from rigid engine ATM)
+  * Collision resolution system in progress!!
 
 ## Planned Features
 
-* Engine editor with scene management (add target for executable with custom Application implementation)
+* Engine editor with scene management
 * Hot reloading resources
 * Physics Engine:
     * Data driven approach for particle types and emitters
-    * Built in collision detection algorithms: AABB, SAT, circle
     * Rigid body collision resolution
+    * Rigid body/collision geometry integration
+* Lua Scripting
 * Data Oriented Models
-* LUA (Again!)
 * Entity Component System
 * Environmental mapping(reflections and refractions)
 * Mesh batch rendering

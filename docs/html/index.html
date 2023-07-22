@@ -92,7 +92,7 @@ Supported Features</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Core Engine</h2>
 <ul>
-<li>Builds as a library</li>
+<li>Builds as a library to be used as framework or as engine editor executable</li>
 <li>2D Tiled map parsing/loading from TMX/XML files</li>
 <li>3D Scene loading from XML files</li>
 <li>Debug/Edit mode UI</li>
@@ -119,6 +119,7 @@ Rendering</h2>
 <li>3D Model loading using assimp</li>
 <li>Normal and Parallax mapping support</li>
 <li>Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)</li>
+<li>Set optional skybox (with optional animation)</li>
 <li>Exponential and Layered Fog</li>
 <li>TrueType font rendering (Only ASCII encoding ATM)</li>
 <li>Sprite animation</li>
@@ -138,24 +139,28 @@ Physics</h2>
 <li>3D Rigid Body engine:<ul>
 <li>Rigid body Euler numerical integration</li>
 <li>Force generators: gravity, spring</li>
-<li>Broad-Phase Collision Detection using Bounding Volume Hiearchy</li>
-<li>No narrow-phase collision detection/resultion systems at the moment! (IN PROGRESS)</li>
+<li>Collision Detection System:<ul>
+<li>Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)</li>
+<li>Narrow-Phase: planes, spheres, OBBs (Separate from rigid engine ATM)</li>
+</ul>
+</li>
+<li>Collision resolution system in progress!!</li>
 </ul>
 </li>
 </ul>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Planned Features</h1>
 <ul>
-<li>Engine editor with scene management (add target for executable with custom Application implementation)</li>
+<li>Engine editor with scene management</li>
 <li>Hot reloading resources</li>
 <li>Physics Engine:<ul>
 <li>Data driven approach for particle types and emitters</li>
-<li>Built in collision detection algorithms: AABB, SAT, circle</li>
 <li>Rigid body collision resolution</li>
+<li>Rigid body/collision geometry integration</li>
 </ul>
 </li>
+<li>Lua Scripting</li>
 <li>Data Oriented Models</li>
-<li>LUA (Again!)</li>
 <li>Entity Component System</li>
 <li>Environmental mapping(reflections and refractions)</li>
 <li>Mesh batch rendering</li>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"classVillain_1_1BaseLight.html#a6c4882a1f81b3abe162a16e430b70fce":[3,0,0,10,7],
+"classVillain_1_1BaseLight.html#a82f31b4df332bf829e25a76e618e8b99":[3,0,0,10,5],
 "classVillain_1_1BaseLight.html#a94c91dd27582fdb0f4c692ce29f72e6c":[3,0,0,10,1],
 "classVillain_1_1BaseLight.html#aab0c1554acc522cf277e75dc991e506a":[3,0,0,10,10],
 "classVillain_1_1BaseLight.html#ab374329a0bbab7d57dfa1fe9769ba3d0":[3,0,0,10,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "classVillain_1_1ImGuiLayer.html#a65ae9b12b0759b8a871016a30cf71c7a":[3,0,0,25,7],
 "classVillain_1_1ImGuiLayer.html#a7f2044978b18d4bba47530de9b778db6":[3,0,0,25,12],
 "classVillain_1_1ImGuiLayer.html#a860099bf819e7166ddef101440be9050":[3,0,0,25,14],
-"classVillain_1_1ImGuiLayer.html#aa5f3f99b9811acbf73ac800c86620d18":[3,0,0,25,0],
-"classVillain_1_1ImGuiLayer.html#ab050369d8574faae0ef7fc49a7e57165":[3,0,0,25,8],
-"classVillain_1_1ImGuiLayer.html#aba755c6c11cf16c979c53fddb64fe653":[3,0,0,25,1]
+"classVillain_1_1ImGuiLayer.html#aa5f3f99b9811acbf73ac800c86620d18":[3,0,0,25,0]
 };

@@ -90,6 +90,8 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dd><a class="anchor" id="_todo000043"></a>implement  </dd>
 <dt>Class <a class="el" href="classVillain_1_1Aero.html">Villain::Aero</a>  </dt>
 <dd><a class="anchor" id="_todo000046"></a>Properly test this  </dd>
+<dt>Member <a class="el" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68">Villain::w</a>  </dt>
+<dd><a class="anchor" id="_todo000039"></a>add rest of letters, modifiers, function keys and mouse keys  </dd>
 <dt>Class <a class="el" href="classVillain_1_1AeroControl.html">Villain::AeroControl</a>  </dt>
 <dd><a class="anchor" id="_todo000047"></a>Properly test this  </dd>
 <dt>Class <a class="el" href="classVillain_1_1AngledAero.html">Villain::AngledAero</a>  </dt>
@@ -136,12 +138,12 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="classVillain_1_1Engine.html#a7eac3d5129294c719f4bcafbc7497088">Villain::Engine::handleEvents</a>  (SDL_Event &amp;event)</dt>
 <dd><a class="anchor" id="_todo000030"></a>probably gradually we will want to phase out InputManager singleton with new <a class="el" href="classVillain_1_1Event.html">Event</a> system  </dd>
 <dt>Member <a class="el" href="classVillain_1_1Engine.html#a78079021966b921676b9a96e2f798782">Villain::Engine::init</a>  (<a class="el" href="classVillain_1_1Application.html">Application</a> *app, std::string title, int height, int width, unsigned int windowFlags, bool enableGammaCorrection=false)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000025"></a>will need some configs here, gravity vector for example </p>
-<p class="enddd"><a class="anchor" id="_todo000026"></a>ability to set custom number of contacts  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000026"></a>ability to set custom number of contacts </p>
+<p class="enddd"><a class="anchor" id="_todo000025"></a>will need some configs here, gravity vector for example  </p>
 </dd>
 <dt>Member <a class="el" href="classVillain_1_1Engine.html#adac2012a41166e7520eb41c51671112c">Villain::Engine::renderLoadingScreen</a>  ()</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000027"></a>Handle Resize, embed loading screen texture </p>
-<p class="enddd"><a class="anchor" id="_todo000028"></a>there should be no need to set material as well, for sprite we can only use diffuse texture and avoid non-existant uniform warnings  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000028"></a>there should be no need to set material as well, for sprite we can only use diffuse texture and avoid non-existant uniform warnings </p>
+<p class="enddd"><a class="anchor" id="_todo000027"></a>Handle Resize, embed loading screen texture  </p>
 </dd>
 <dt>Member <a class="el" href="classVillain_1_1Engine.html#abc5730e6bac51c27b9622c1f6f5008c7">Villain::Engine::run</a>  ()</dt>
 <dd><a class="anchor" id="_todo000029"></a>window title is currently isolated in <a class="el" href="classVillain_1_1Engine.html#a78079021966b921676b9a96e2f798782" title="Initialise engine using explicit params.">init()</a> method, we can drop that and load  </dd>
@@ -170,8 +172,8 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="classVillain_1_1ParticlePhysicsComponent.html#a2567189261ae81d3c34e03c53d2b3f25">Villain::ParticlePhysicsComponent::handleInput</a>  (float deltaTime)</dt>
 <dd><a class="anchor" id="_todo000017"></a>move to new KinematicParticleController class  </dd>
 <dt>Member <a class="el" href="classVillain_1_1PhysicsEngine.html#ac7c727d4e37124990e1fbcb748295b65">Villain::PhysicsEngine::handleCollisions</a>  ()</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000052"></a>will need to implement proper conservation of momentum here, impulses </p>
-<p class="enddd"><a class="anchor" id="_todo000051"></a>will need to implement come kind of spatial partitioning system in physics module and use it here  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000051"></a>will need to implement come kind of spatial partitioning system in physics module and use it here </p>
+<p class="enddd"><a class="anchor" id="_todo000052"></a>will need to implement proper conservation of momentum here, impulses  </p>
 </dd>
 <dt>Class <a class="el" href="classVillain_1_1PhysicsObject.html">Villain::PhysicsObject</a>  </dt>
 <dd><a class="anchor" id="_todo000056"></a>Might want to make this abstract class and implement a few different types of physics objects:  </dd>
@@ -217,9 +219,7 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Class <a class="el" href="classVillain_1_1Texture.html">Villain::Texture</a>  </dt>
 <dd><a class="anchor" id="_todo000075"></a>Refactor this mess of a class  </dd>
 <dt>Member <a class="el" href="classVillain_1_1TileLayer.html#a18757b0789582f4e523bcf79693e93bf">Villain::TileLayer::render</a>  (<a class="el" href="classVillain_1_1SpriteBatch.html">SpriteBatch</a> *batch, <a class="el" href="classVillain_1_1Camera.html">Camera</a> *cam)</dt>
-<dd><a class="anchor" id="_todo000090"></a>not sure if <a class="el" href="classVillain_1_1Engine.html" title="Main engine class containing game loop.">Engine</a> class should store camera anymore, maybe level should store active camera used?  </dd>
-<dt>Member <a class="el" href="namespaceVillain.html#ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68">Villain::w</a>  </dt>
-<dd><a class="anchor" id="_todo000039"></a>add rest of letters, modifiers, function keys and mouse keys </dd>
+<dd><a class="anchor" id="_todo000090"></a>not sure if <a class="el" href="classVillain_1_1Engine.html" title="Main engine class containing game loop.">Engine</a> class should store camera anymore, maybe level should store active camera used? </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

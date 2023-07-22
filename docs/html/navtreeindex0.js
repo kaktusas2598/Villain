@@ -1,5 +1,7 @@
 var NAVTREEINDEX0 =
 {
+"":[2,0,0,0],
+"":[2,0,0,1],
 "AeroControl_8hpp_source.html":[4,0,0,4,0,1,1],
 "Aero_8hpp_source.html":[4,0,0,4,0,1,0],
 "AngledAero_8hpp_source.html":[4,0,0,4,0,1,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX0 =
 "classVillain_1_1BVHNode.html#aef169f0ab8ffcd993d2546a286d9f128":[3,0,0,52,7],
 "classVillain_1_1BaseLight.html":[3,0,0,10],
 "classVillain_1_1BaseLight.html#a23140930c43958cf0beaba3cbc2c245f":[3,0,0,10,4],
-"classVillain_1_1BaseLight.html#a6683ac070a275cea56a6067a65cf85d3":[3,0,0,10,3],
-"classVillain_1_1BaseLight.html#a6c4882a1f81b3abe162a16e430b70fce":[3,0,0,10,7],
-"classVillain_1_1BaseLight.html#a82f31b4df332bf829e25a76e618e8b99":[3,0,0,10,5]
+"classVillain_1_1BaseLight.html#a6683ac070a275cea56a6067a65cf85d3":[3,0,0,10,3]
 };

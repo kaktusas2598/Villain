@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"structVillain_1_1BoundingSphere.html#a6b38bfd2ff5ae164e759f511ebab07de":[3,0,0,49,1],
+"structVillain_1_1BoundingSphere.html#a7585bbbe5c0d03ad6471ad8f9751e17e":[3,0,0,49,4],
 "structVillain_1_1BoundingSphere.html#a7a145babacae7a71989281ef1b68ba21":[3,0,0,49,11],
 "structVillain_1_1BoundingSphere.html#a9ac1a169ed7bb913c93e9df319c5c30f":[3,0,0,49,9],
 "structVillain_1_1BoundingSphere.html#a9e767f9b76f218d02306bf9afc472a8b":[3,0,0,49,13],
@@ -115,7 +117,5 @@ var NAVTREEINDEX6 =
 "structVillain_1_1TileSet.html#ac12cfe296cea7f47d7895e595164ea9f":[3,0,0,136,0],
 "structVillain_1_1TileSet.html#ad91a44c9cc439cd9aced6bf4f6160955":[3,0,0,136,3],
 "structVillain_1_1TileSet.html#af24ba9e4ef1e2c306ea2474b24753384":[3,0,0,136,7],
-"todo.html":[1],
-"":[2,0,0,0],
-"":[2,0,0,1]
+"todo.html":[1]
 };
