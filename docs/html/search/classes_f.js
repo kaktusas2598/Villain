@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['random_392',['Random',['../classRandom.html',1,'']]],
+  ['random_392',['Random',['../classVillain_1_1Random.html',1,'Villain']]],
   ['renderbatch_393',['RenderBatch',['../classVillain_1_1RenderBatch.html',1,'Villain']]],
   ['renderer_394',['Renderer',['../classVillain_1_1Renderer.html',1,'Villain']]],
   ['renderingengine_395',['RenderingEngine',['../classVillain_1_1RenderingEngine.html',1,'Villain']]],

@@ -7,5 +7,5 @@ rm -rf out/*
 # Can specify option with cmake -DOPTION_NAME=VALUE
 #cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo
 #cmake -DCMAKE_BUILD_TYPE=Debug
-cmake -S . -B out/ -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake -S . -B out/ -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DVILLAIN_BUILD_DOCS=ON
 #-G"Visual Studio 15 2017"

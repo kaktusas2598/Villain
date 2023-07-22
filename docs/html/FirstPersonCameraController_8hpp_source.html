@@ -85,37 +85,34 @@ $(document).ready(function(){initNavTree('FirstPersonCameraController_8hpp_sourc
 <div class="title">FirstPersonCameraController.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __FIRST_PERSON_CAMERA_CONTROLLER__</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define __FIRST_PERSON_CAMERA_CONTROLLER__</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;Engine.hpp&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;CameraController.hpp&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceVillain.html">Villain</a> {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classVillain_1_1FirstPersonCameraController.html">    9</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1FirstPersonCameraController.html">FirstPersonCameraController</a> : <span class="keyword">public</span> <a class="code" href="classVillain_1_1CameraController.html">CameraController</a> {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;            <a class="code" href="classVillain_1_1FirstPersonCameraController.html">FirstPersonCameraController</a>(<a class="code" href="classVillain_1_1Camera.html">Camera</a>* cam): <a class="code" href="classVillain_1_1CameraController.html">CameraController</a>(cam) {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                cam-&gt;setRotation({0.0f, -90.0f, 0.0f});</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                cam-&gt;setMovementSpeed(2.5f);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                cam-&gt;setSensitivity(sensitivity);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                cam-&gt;setZoom(45.0f);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            }</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1FirstPersonCameraController.html#ad0ce80b76f03d06aecaa0ec986aa8aed">update</a>(<span class="keywordtype">float</span> deltaTime) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordtype">float</span> sensitivity = 0.1f;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordtype">bool</span> constrainPitch = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    };</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// !__FIRST_PERSON_CAMERA_CONTROLLER__</span></div>
-<div class="ttc" id="aclassVillain_1_1CameraController_html"><div class="ttname"><a href="classVillain_1_1CameraController.html">Villain::CameraController</a></div><div class="ttdef"><b>Definition:</b> CameraController.hpp:18</div></div>
-<div class="ttc" id="aclassVillain_1_1Camera_html"><div class="ttname"><a href="classVillain_1_1Camera.html">Villain::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.hpp:31</div></div>
-<div class="ttc" id="aclassVillain_1_1FirstPersonCameraController_html"><div class="ttname"><a href="classVillain_1_1FirstPersonCameraController.html">Villain::FirstPersonCameraController</a></div><div class="ttdef"><b>Definition:</b> FirstPersonCameraController.hpp:9</div></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;Engine.hpp&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;CameraController.hpp&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceVillain.html">Villain</a> {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classVillain_1_1FirstPersonCameraController.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1FirstPersonCameraController.html">FirstPersonCameraController</a> : <span class="keyword">public</span> <a class="code" href="classVillain_1_1CameraController.html">CameraController</a> {</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;            <a class="code" href="classVillain_1_1FirstPersonCameraController.html">FirstPersonCameraController</a>(<a class="code" href="classVillain_1_1Camera.html">Camera</a>* cam): <a class="code" href="classVillain_1_1CameraController.html">CameraController</a>(cam) {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                cam-&gt;setRotation({0.0f, -90.0f, 0.0f});</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                cam-&gt;setMovementSpeed(2.5f);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                cam-&gt;setSensitivity(sensitivity);</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                cam-&gt;setZoom(45.0f);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            }</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1FirstPersonCameraController.html#ad0ce80b76f03d06aecaa0ec986aa8aed">update</a>(<span class="keywordtype">float</span> deltaTime) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keywordtype">float</span> sensitivity = 0.1f;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordtype">bool</span> constrainPitch = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    };</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
+<div class="ttc" id="aclassVillain_1_1CameraController_html"><div class="ttname"><a href="classVillain_1_1CameraController.html">Villain::CameraController</a></div><div class="ttdef"><b>Definition:</b> CameraController.hpp:17</div></div>
+<div class="ttc" id="aclassVillain_1_1Camera_html"><div class="ttname"><a href="classVillain_1_1Camera.html">Villain::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.hpp:30</div></div>
+<div class="ttc" id="aclassVillain_1_1FirstPersonCameraController_html"><div class="ttname"><a href="classVillain_1_1FirstPersonCameraController.html">Villain::FirstPersonCameraController</a></div><div class="ttdef"><b>Definition:</b> FirstPersonCameraController.hpp:8</div></div>
 <div class="ttc" id="aclassVillain_1_1FirstPersonCameraController_html_ad0ce80b76f03d06aecaa0ec986aa8aed"><div class="ttname"><a href="classVillain_1_1FirstPersonCameraController.html#ad0ce80b76f03d06aecaa0ec986aa8aed">Villain::FirstPersonCameraController::update</a></div><div class="ttdeci">void update(float deltaTime) override</div><div class="ttdef"><b>Definition:</b> FirstPersonCameraController.cpp:5</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->

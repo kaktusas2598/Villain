@@ -6,6 +6,7 @@ project(VILLAIN)
 # Custom Engine Build Options
 option(VILLAIN_ENABLE_BOX2D "Enable Box2D Physics Engine" OFF)
 option(VILLAIN_BUILD_TESTS "Build tests" OFF)
+option(VILLAIN_BUILD_DOCS "Build documentation using Doxygen" OFF)
 option(VILLAIN_CODE_COVERAGE "Generate code coverage" OFF)
 
 # Set C++ Standard
@@ -134,6 +135,11 @@ endif()
 # Editor Target
 add_executable(VillainEditor WIN32 src/EditorApplication.cpp)
 target_link_libraries(VillainEditor LINK_PUBLIC VILLAIN)
+
+# Optionally build docs
+if(VILLAIN_BUILD_DOCS)
+    execute_process(COMMAND doxygen Doxyfile)
+endif()
 
 # Optional for linux to install binary
 # To actually install use "sudo make install"
