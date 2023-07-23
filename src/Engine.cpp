@@ -357,7 +357,6 @@ namespace Villain {
      * @param event SDL_Event& structure
      * @sa GameState::update, InputManager
      */
-    // TODO: probably gradually we will want to phase out InputManager singleton with new Event system
     void Engine::handleEvents(SDL_Event& event) {
         static bool mouseFirst = true;
         //set the event type

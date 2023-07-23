@@ -59,6 +59,26 @@ namespace Villain {
         return vec3Value;
     }
 
+    float parseFloatAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attribName) {
+        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
+        float value = 0.0f;
+        if (childElement) {
+            childElement->QueryFloatAttribute(attribName, &value);
+        }
+
+        return value;
+    }
+
+    bool parseBoolAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attribName) {
+        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
+        bool value = false;
+        if (childElement) {
+            childElement->QueryBoolAttribute(attribName, &value);
+        }
+
+        return value;
+    }
+
     void SceneParser::loadSceneGraph(const std::string& fileName, SceneNode* rootNode) {
         tinyxml2::XMLDocument xmlDoc;
 
@@ -173,9 +193,24 @@ namespace Villain {
                     }
 
                     if (component->Attribute("type") == std::string("SpotLight")) {
-                        //TODO:
-                        //SpotLight* light = new SpotLight(ambient, diffuse, specular, pos, dir, curOff, outerCurOff, attenuation, cam);
-                        //currentNode->addComponent(light);
+                        glm::vec3 ambient, diffuse, specular, attenuation, direction;
+                        float cutOff, outerCutoff;
+                        Camera* cam = nullptr;
+                        ambient = parseColorAttribute(component, "Ambient", "color");
+                        diffuse = parseColorAttribute(component, "Diffuse", "color");
+                        specular = parseColorAttribute(component, "Specular", "color");
+                        direction = parseVec3Element(component, "Direction");
+                        attenuation = parseVec3Element(component, "Attenuation", "constant", "linear", "quadratic");
+                        cutOff = parseFloatAttribute(component, "Cutoff", "angle");
+                        outerCutoff = parseFloatAttribute(component, "OuterCutoff", "angle");
+
+                        if (parseBoolAttribute(component, "Camera", "main")) {
+                            // NOTE: Engine must have camera set at this point for xml to work!
+                            cam = parentNode->getEngine()->getRenderingEngine()->getMainCamera();
+                        }
+                        SpotLight* light = new SpotLight(ambient, diffuse, specular,
+                                currentNode->getTransform()->getPos(), direction, cutOff, outerCutoff, attenuation, cam);
+                        currentNode->addComponent(light);
                     }
 
 

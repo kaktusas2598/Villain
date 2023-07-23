@@ -15,13 +15,11 @@ namespace Villain {
         RIGHT = 2
     };
 
-    /*
-     *  Keyboard and Mouse input manager.
+    /*! \brief Keyboard and Mouse input manager.
      *
      *  Manages unordered map currently and previously pressed keys and also holds mouse coordinates.
      *  Can be used to set pressed keys and mouse coords, and also to query for presse keys or coordinates.
-     *  @sa Engine::handleEvents
-     *
+     *  @sa Engine::handleEvents, EventDispatcher
      */
     class Input {
         public:

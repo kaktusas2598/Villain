@@ -67,13 +67,6 @@ void Game::init() {
     addToScene(wall);
 
 
-    // TODO: Move to XML
-    //glm::vec3 lightColor = glm::vec3(0.5f, 0.7f, 0.4f);
-    //SceneNode* spotLight = ((new SceneNode("Spot Light"))
-                //->addComponent(new SpotLight(lightColor * glm::vec3(0.2f), lightColor, glm::vec3(1.0f), glm::vec3(20.f, 20.f, 10.f), glm::vec3(0.0f, -5.f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f)), glm::vec3(1.0f, 0.022f, 0.0019f), &camera)));
-    //addToScene(spotLight);
-
-
     // Physics demo
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), 1.0f, glm::vec3(6.0f, 0.f, 0.f)));
     getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), 1.0f, glm::vec3(-6.0f, 0.f, 0.f)));
@@ -119,7 +112,7 @@ void Game::init() {
     glm::vec3* windSpeed = new glm::vec3(0, 0, 0);
     if (getRootNode()->findByID(1)) {
         //playerBody = new Particle();
-        SceneNode* player = getRootNode()->findByID(3);
+        SceneNode* player = getRootNode()->findByID(1);
         //playerBody->setPosition(player->getTransform()->getPos());
         //playerBody->setMass(10.0);
         //ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);

@@ -58,29 +58,20 @@
             <!--</Component>-->
         <!--</Components>-->
     <!--</Node>-->
-
     <!--<Node name="Spot Light" positionX='2.0' positionY='3.0' positionZ='1.0'>-->
         <!--<Components>-->
             <!--<Component type="SpotLight">-->
                 <!--<Ambient color="#FFFFFF" intensity="0.2" />-->
                 <!--<Diffuse color="#FFFFFF" intensity="1.0" />-->
                 <!--<Specular color="#FFFFFF" intensity="1.0" />-->
-                <!--<Direction x="-0.2" y="-0.8" z="-0.5" />-->
-                <!--<Cutoff angle="30.0" />-->
-                <!--<OuterCutoff angle="45.0" />-->
+                <!--<Attenuation constant="1.0" linear="0.022" quadratic="0.0019" />-->
+                <!--<Direction x="0.0" y="-1.0" z="-0.0" />-->
+                <!--<Cutoff angle="12.5" />-->
+                <!--<OuterCutoff angle="17.5" />-->
+                <!--<Camera main="true" />-->
             <!--</Component>-->
         <!--</Components>-->
     <!--</Node>-->
-<!--//glm::vec3 redLight = glm::vec3(1.0f, 0.0f, 0.f);-->
-    <!--//SceneNode* pointLight = ((new SceneNode("Point Light 1", glm::vec3(4.f, 2.f, 3.f)))-->
-                <!--//->addComponent(new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f),glm::vec3(100.0f, 2.0f, -10.0f), glm::vec3(1.0f, 0.022f, 0.0019f))));-->
-    <!--//pointLight->addChild(planeNode);-->
-    <!--//addToScene(pointLight);-->
-
-    <!--//PointLight* pointLight2 = new PointLight(redLight * glm::vec3(0.2f), redLight, glm::vec3(1.0f), glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(1.0f, 0.022f, 0.0019f));-->
-    <!--//SceneNode* point2 = ((new SceneNode("Point Light 2"))->addComponent(pointLight2));-->
-    <!--//addToScene(point2);-->
-
 
     <!-- Skeletal Animation Examples -->
     <!--<Node name="Mudeater" positionX='12.0' positionY='0.0' positionZ='0.0' rotX='-90.0' rotY='-90.0'>-->
