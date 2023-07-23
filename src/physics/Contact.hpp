@@ -2,7 +2,6 @@
 
 #include "RigidBody.hpp"
 
-// TODO: implement
 namespace Villain {
 
     /*! \brief Represent contact of 2 colliding bodies.
@@ -21,14 +20,16 @@ namespace Villain {
             float penetration; ///< Depth of penetration at the contact point.
 
             /// Set properties that don't normally depend on collision point (bodies and material properties)
-            void setBodyData(RigidBody* one, RigidBody* two, float frictionCoef, float restCoef) {
-                bodies[0] = one;
-                bodies[1] = two;
-                friction = frictionCoef;
-                restituion = restCoef;
-            }
+            void setBodyData(RigidBody* one, RigidBody* two, float frictionCoef, float restCoef);
+
+            /// Calculates an orthonormal basis 3x3 matrix for the contact point, based on the primary
+            /// friction direction (for anisotropic friction) or a random direction(for isotropic friction)
+            void calculateContactBasis();
 
         protected:
+            /// Converts local contact space coordinates to world space. Columns of this matrix form
+            /// an orthonormal set of vectors
+            glm::mat3 contactToWorld;
         private:
     };
 
