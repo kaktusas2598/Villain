@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"structVillain_1_1Character.html#ac0068305467a220c7a0fc90c76511b69":[3,0,0,36,0],
+"structVillain_1_1CollisionData.html":[3,0,0,84],
 "structVillain_1_1CollisionData.html#a0c2e0681ccbcfed086e576596d41c761":[3,0,0,84,4],
 "structVillain_1_1CollisionData.html#a14757c8cdd69418742a072a6da9ecfc2":[3,0,0,84,3],
 "structVillain_1_1CollisionData.html#a3c3f0e2f8deb70df4312f04b72aa4168":[3,0,0,84,5],
@@ -120,6 +122,6 @@ var NAVTREEINDEX6 =
 "structVillain_1_1VertexP1UV.html#a4b40fabce69c365577996a21c56e89e8":[3,0,0,130,0],
 "structVillain_1_1VertexP1UV.html#a64145ad23e0ca12fd923c6acdff737a3":[3,0,0,130,1],
 "todo.html":[1],
-"":[2,0,0,0],
-"":[2,0,0,1]
+"":[2,0,0,1],
+"":[2,0,0,0]
 };

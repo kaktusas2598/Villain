@@ -75,7 +75,7 @@ var NAVTREEINDEX =
 "classVillain_1_1ParticleEmitter.html#a134eb90bc8d9fb07616af6845ad70825",
 "classVillain_1_1SceneNode.html#a2698fb0d67291ee3c8d216183c02d099",
 "dir_0fb538ab118b04b5937a8d62e49be495.html",
-"structVillain_1_1CollisionData.html#a0c2e0681ccbcfed086e576596d41c761"
+"structVillain_1_1Character.html#ac0068305467a220c7a0fc90c76511b69"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
