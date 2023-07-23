@@ -14,7 +14,7 @@ namespace Villain {
         public:
             FileBrowser(ImGuiLayer* editor): editor(editor) {}
             void render();
-            void openPopup() { popup = true; }
+            void openPopup(const std::string& ext={}) { filter = ext; popup = true; }
 
         private:
             void drawFileBrowserPath(const fs::path& currentPath);

@@ -226,7 +226,7 @@ namespace Villain {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("Open")) {
-                    fileBrowser.openPopup();
+                    fileBrowser.openPopup(".xml");
                 }
                 ImGui::SameLine(); renderIcon("\uf07c");
 

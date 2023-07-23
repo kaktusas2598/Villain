@@ -1,6 +1,7 @@
 #include "FileBrowser.hpp"
 
 #include "ImGuiLayer.hpp"
+#include "Logger.hpp"
 
 namespace Villain {
 
@@ -40,8 +41,6 @@ namespace Villain {
                         fs::current_path(parentPath);
                 }
 
-                // Temporary set xml filter for popup which will be used to load scene XMLs
-                filter = ".xml";
                 drawFileBrowserPath(currentPath);
 
                 ImGui::PopStyleColor();
@@ -99,6 +98,7 @@ namespace Villain {
                 if (ImGui::Selectable(filename.c_str())) {
                     // Select file
                     selectedFile = path.string();
+                    VILLAIN_TRACE("Selected file {}", selectedFile);
                 }
 
                 // Position the icon at the rightmost side of the selectable item

@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('FileBrowser_8hpp_source.html',''); ini
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <a class="code" href="classVillain_1_1FileBrowser.html">FileBrowser</a>(<a class="code" href="classVillain_1_1ImGuiLayer.html">ImGuiLayer</a>* editor): editor(editor) {}</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keywordtype">void</span> render();</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keywordtype">void</span> openPopup() { popup = <span class="keyword">true</span>; }</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keywordtype">void</span> openPopup(<span class="keyword">const</span> std::string&amp; ext={}) { filter = ext; popup = <span class="keyword">true</span>; }</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keywordtype">void</span> drawFileBrowserPath(<span class="keyword">const</span> fs::path&amp; currentPath);</div>

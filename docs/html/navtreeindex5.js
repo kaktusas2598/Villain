@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"classVillain_1_1WindowResizeEvent.html#a5b0592192d8784045c8b88980e5f6e4b":[3,0,0,33,1],
+"classes.html":[3,1],
 "dir_0fb538ab118b04b5937a8d62e49be495.html":[4,0,0,5,0],
 "dir_105368622fa8085a3be06a60333f9d2b.html":[4,0,0,4,0],
 "dir_1243271318b2b38807a3b1d2ca08dd72.html":[4,0,0,5],
@@ -103,17 +105,17 @@ var NAVTREEINDEX5 =
 "namespaceVillain.html#a97154aaf9a9b8296fcd1826a1d8cba79af7f93635f8e193a924ae4a691bb66b8f":[2,0,0,167,0],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1":[2,0,0,166],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a0212e92ab9acff3235b2a85d386a371b":[2,0,0,166,0],
-"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a21507b40c80068eda19865706fdc2403":[2,0,0,159,3],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a21507b40c80068eda19865706fdc2403":[2,0,0,166,6],
-"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a21507b40c80068eda19865706fdc2403":[2,0,0,166,7],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a21507b40c80068eda19865706fdc2403":[2,0,0,165,2],
+"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a21507b40c80068eda19865706fdc2403":[2,0,0,166,7],
+"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a21507b40c80068eda19865706fdc2403":[2,0,0,159,3],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a43eedd8685eb86592022f8da962e3474":[2,0,0,165,1],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a43eedd8685eb86592022f8da962e3474":[2,0,0,166,4],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a4b07c1b0cf1f20cb8d63cb826abf35ed":[2,0,0,166,5],
-"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,166,1],
-"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,159,2],
-"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,165,0],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,166,2],
+"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,159,2],
+"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,166,1],
+"namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1a684d325a7303f52e64011467ff5c5758":[2,0,0,165,0],
 "namespaceVillain.html#a9dc45eeadefbd0a9f3c3c13de67d87c1af1c6900e1409df9191f31bc6eae3a01d":[2,0,0,166,3],
 "namespaceVillain.html#abb130f707c81d005c462e92522688a2e":[2,0,0,200],
 "namespaceVillain.html#abbf22cf3977d74a7cc840f0f10b83fc4":[2,0,0,162],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "structVillain_1_1CharGlyph.html#a81fae511b1f8474899500e9fb5907ab9":[3,0,0,124,2],
 "structVillain_1_1CharGlyph.html#ad7ab0ff72553c63e845f6afc33b0455b":[3,0,0,124,0],
 "structVillain_1_1Character.html":[3,0,0,36],
-"structVillain_1_1Character.html#a38eaee7e2b484ce1a230eb418cd8f347":[3,0,0,36,1],
-"structVillain_1_1Character.html#a690ec24270f5e36a4c68e7fdf4751b08":[3,0,0,36,2],
-"structVillain_1_1Character.html#a93874bcd298eaf26c64756c0d1066393":[3,0,0,36,3]
+"structVillain_1_1Character.html#a38eaee7e2b484ce1a230eb418cd8f347":[3,0,0,36,1]
 };

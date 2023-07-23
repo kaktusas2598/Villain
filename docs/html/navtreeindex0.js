@@ -1,5 +1,7 @@
 var NAVTREEINDEX0 =
 {
+"":[2,0,0,0],
+"":[2,0,0,1],
 "AeroControl_8hpp_source.html":[4,0,0,4,0,1,1],
 "Aero_8hpp_source.html":[4,0,0,4,0,1,0],
 "AngledAero_8hpp_source.html":[4,0,0,4,0,1,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX0 =
 "classVillain_1_1Camera.html#a1c20f45f8977fbe5b79cfbe01d407ada":[3,0,0,3,1],
 "classVillain_1_1Camera.html#a1d9ea85e9d2a2929b5c848e80264bb7c":[3,0,0,3,30],
 "classVillain_1_1Camera.html#a2f1e76ec7b16c419c402abd13eb8d585":[3,0,0,3,24],
-"classVillain_1_1Camera.html#a36cdd70012ae97edc371866bcd9cd445":[3,0,0,3,2],
-"classVillain_1_1Camera.html#a3bf88add4131ad544561b220540f33f6":[3,0,0,3,5],
-"classVillain_1_1Camera.html#a4bbafb9e515d2ff21958464a54e85754":[3,0,0,3,0]
+"classVillain_1_1Camera.html#a36cdd70012ae97edc371866bcd9cd445":[3,0,0,3,2]
 };

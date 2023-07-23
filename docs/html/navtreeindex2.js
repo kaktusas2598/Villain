@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"classVillain_1_1IntersectData.html#a2011633d5ded0b110ab33b8950f3a98e":[3,0,0,78,3],
+"classVillain_1_1IntersectData.html#a624a7506185f5c76c5076ba6222409e6":[3,0,0,78,1],
 "classVillain_1_1IntersectData.html#a7cfbcd7471989ef31e7bebc0a387b6d6":[3,0,0,78,0],
 "classVillain_1_1IntersectionTests.html":[3,0,0,83],
 "classVillain_1_1KeyboardEvent.html":[3,0,0,31],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classVillain_1_1ParticleContactResolver.html#a7b77d36ab31a94bebb5f4ca675f1ec19":[3,0,0,88,2],
 "classVillain_1_1ParticleContactResolver.html#a7e791739ca2e4eb715a0e5e1f6c45303":[3,0,0,88,1],
 "classVillain_1_1ParticleDrag.html":[3,0,0,73],
-"classVillain_1_1ParticleDrag.html#a40dbb05088b44baa9035c75fee670b84":[3,0,0,73,1],
-"classVillain_1_1ParticleDrag.html#ab9eb8c075ddcc5b5901c77bb42fe0958":[3,0,0,73,0],
-"classVillain_1_1ParticleEmitter.html":[3,0,0,18]
+"classVillain_1_1ParticleDrag.html#a40dbb05088b44baa9035c75fee670b84":[3,0,0,73,1]
 };
