@@ -39,8 +39,10 @@ namespace Villain {
             bool hasFiniteMass() const { return inverseMass >= 0.0f; }
 
             // Getters
+            bool getAwake() const { return isAwake; }
             float getInverseMass() const { return inverseMass; }
             glm::mat3 getInverseInertiaTensor() const { return inverseInertiaTensor; }
+            glm::mat3 getInverseInertiaTensorWorld() const { return inverseInertiaTensorWorld; }
             float getMass() const { return (inverseMass == 0.0f) ? FLT_MAX : 1.0f / inverseMass; }
             float getLinearDamping() const { return linearDamping; }
             float getAngularDamping() const { return angularDamping; }
@@ -48,9 +50,11 @@ namespace Villain {
             glm::quat getOrientation() const { return orientation; }
             glm::vec3 getLinearVelocity() const { return velocity; }
             glm::vec3 getAngularVelocity() const { return rotation; }
+            glm::vec3 getLastFrameAcceleration() const { return lastFrameAcceleration; }
             glm::mat4 getTransform() const { return transformMatrix; }
 
             // Setters
+            void setAwake(const bool awake = true) { isAwake = awake; }
             void setMass(float m) { inverseMass = 1/m; }
             void setInverseMass(float value) { inverseMass = value; }
             void setInertiaTensor(const glm::mat3& inertiaTensor) { inverseInertiaTensor = glm::inverse(inertiaTensor); }
@@ -62,6 +66,9 @@ namespace Villain {
             void setAngularVelocity(const glm::vec3& value) { rotation = value; }
             void setTransform(const glm::mat4& value) { transformMatrix = value; }
             void setDamping(float linear, float angular) { linearDamping = linear; angularDamping = angular; }
+
+            void addLinearVelocity(const glm::vec3& deltaVel) { velocity += deltaVel; }
+            void addAngularVelocity(const glm::vec3& deltaVel) { rotation += deltaVel; }
 
             // Helpers
             // TODO: Make sure these methods are correct
