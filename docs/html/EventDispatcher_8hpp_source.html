@@ -92,44 +92,46 @@ $(document).ready(function(){initNavTree('EventDispatcher_8hpp_source.html','');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceVillain.html">Villain</a> {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="comment">// Event interface</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classVillain_1_1Event.html">    9</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1Event.html">Event</a> {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;            <span class="keyword">virtual</span> ~<a class="code" href="classVillain_1_1Event.html">Event</a>() {}</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    };</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="comment">// Event listener interface</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classVillain_1_1EventListener.html">   15</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1EventListener.html">EventListener</a> {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keyword">virtual</span> ~<a class="code" href="classVillain_1_1EventListener.html">EventListener</a>() {}</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> handleEvent(<a class="code" href="classVillain_1_1Event.html">Event</a>&amp; event) = 0;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    };</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">// Responsible for keeping track of different event listeners and dispatches events to those listeners</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classVillain_1_1EventDispatcher.html">   22</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1EventDispatcher.html">EventDispatcher</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keywordtype">void</span> registerListener(<a class="code" href="classVillain_1_1EventListener.html">EventListener</a>* listener) {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                listeners.push_back(listener);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keywordtype">void</span> unregisterListener(<a class="code" href="classVillain_1_1EventListener.html">EventListener</a>* listener) {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                listeners.erase(std::remove(listeners.begin(), listeners.end(), listener), listeners.end());</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordtype">void</span> dispatchEvent(<a class="code" href="classVillain_1_1Event.html">Event</a>&amp; event) {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span> listener : listeners) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                    listener-&gt;handleEvent(event);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            std::vector&lt;EventListener*&gt;&amp; getListeners() { <span class="keywordflow">return</span> listeners; }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            std::vector&lt;EventListener*&gt; listeners;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    };</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
-<div class="ttc" id="aclassVillain_1_1EventDispatcher_html"><div class="ttname"><a href="classVillain_1_1EventDispatcher.html">Villain::EventDispatcher</a></div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:22</div></div>
-<div class="ttc" id="aclassVillain_1_1EventListener_html"><div class="ttname"><a href="classVillain_1_1EventListener.html">Villain::EventListener</a></div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:15</div></div>
-<div class="ttc" id="aclassVillain_1_1Event_html"><div class="ttname"><a href="classVillain_1_1Event.html">Villain::Event</a></div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:9</div></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classVillain_1_1EventListener.html#aef5666698d5f15fc951dd23103400cde">   19</a></span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1EventListener.html#aef5666698d5f15fc951dd23103400cde">handleEvent</a>(<a class="code" href="classVillain_1_1Event.html">Event</a>&amp; event) = 0;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    };</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classVillain_1_1EventDispatcher.html">   23</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1EventDispatcher.html">EventDispatcher</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classVillain_1_1EventDispatcher.html#a6a4caed0a68c9cfb66efbf081ee6a6ef">   26</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1EventDispatcher.html#a6a4caed0a68c9cfb66efbf081ee6a6ef">registerListener</a>(<a class="code" href="classVillain_1_1EventListener.html">EventListener</a>* listener) {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                listeners.push_back(listener);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            }</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classVillain_1_1EventDispatcher.html#ab084808aa0b3e3e2b810e825012dfd90">   30</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1EventDispatcher.html#ab084808aa0b3e3e2b810e825012dfd90">unregisterListener</a>(<a class="code" href="classVillain_1_1EventListener.html">EventListener</a>* listener) {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                listeners.erase(std::remove(listeners.begin(), listeners.end(), listener), listeners.end());</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classVillain_1_1EventDispatcher.html#afca6971b593c371fa4b64323b72f0618">   35</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1EventDispatcher.html#afca6971b593c371fa4b64323b72f0618">dispatchEvent</a>(<a class="code" href="classVillain_1_1Event.html">Event</a>&amp; event) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span> listener : listeners) {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                    listener-&gt;handleEvent(event);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            }</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classVillain_1_1EventDispatcher.html#a039a15ce7574889c7688bd6af205f085">   42</a></span>&#160;            std::vector&lt;EventListener*&gt;&amp; <a class="code" href="classVillain_1_1EventDispatcher.html#a039a15ce7574889c7688bd6af205f085">getListeners</a>() { <span class="keywordflow">return</span> listeners; }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            std::vector&lt;EventListener*&gt; listeners;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
+<div class="ttc" id="aclassVillain_1_1EventDispatcher_html"><div class="ttname"><a href="classVillain_1_1EventDispatcher.html">Villain::EventDispatcher</a></div><div class="ttdoc">Responsible for keeping track of different event listeners and dispatches events to those listeners.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:23</div></div>
+<div class="ttc" id="aclassVillain_1_1EventDispatcher_html_a039a15ce7574889c7688bd6af205f085"><div class="ttname"><a href="classVillain_1_1EventDispatcher.html#a039a15ce7574889c7688bd6af205f085">Villain::EventDispatcher::getListeners</a></div><div class="ttdeci">std::vector&lt; EventListener * &gt; &amp; getListeners()</div><div class="ttdoc">Get all registered listeners.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:42</div></div>
+<div class="ttc" id="aclassVillain_1_1EventDispatcher_html_a6a4caed0a68c9cfb66efbf081ee6a6ef"><div class="ttname"><a href="classVillain_1_1EventDispatcher.html#a6a4caed0a68c9cfb66efbf081ee6a6ef">Villain::EventDispatcher::registerListener</a></div><div class="ttdeci">void registerListener(EventListener *listener)</div><div class="ttdoc">Call once for every new listener we want to subscribe.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:26</div></div>
+<div class="ttc" id="aclassVillain_1_1EventDispatcher_html_ab084808aa0b3e3e2b810e825012dfd90"><div class="ttname"><a href="classVillain_1_1EventDispatcher.html#ab084808aa0b3e3e2b810e825012dfd90">Villain::EventDispatcher::unregisterListener</a></div><div class="ttdeci">void unregisterListener(EventListener *listener)</div><div class="ttdoc">Stop listening for events.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:30</div></div>
+<div class="ttc" id="aclassVillain_1_1EventDispatcher_html_afca6971b593c371fa4b64323b72f0618"><div class="ttname"><a href="classVillain_1_1EventDispatcher.html#afca6971b593c371fa4b64323b72f0618">Villain::EventDispatcher::dispatchEvent</a></div><div class="ttdeci">void dispatchEvent(Event &amp;event)</div><div class="ttdoc">Must be called every time we want to dispatch an event.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:35</div></div>
+<div class="ttc" id="aclassVillain_1_1EventListener_html"><div class="ttname"><a href="classVillain_1_1EventListener.html">Villain::EventListener</a></div><div class="ttdoc">Event listener interface. Implement custom listeners and register them using dispatcher.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:15</div></div>
+<div class="ttc" id="aclassVillain_1_1EventListener_html_aef5666698d5f15fc951dd23103400cde"><div class="ttname"><a href="classVillain_1_1EventListener.html#aef5666698d5f15fc951dd23103400cde">Villain::EventListener::handleEvent</a></div><div class="ttdeci">virtual void handleEvent(Event &amp;event)=0</div><div class="ttdoc">All types of events handled here as long as listener is registered by dispatcher.</div></div>
+<div class="ttc" id="aclassVillain_1_1Event_html"><div class="ttname"><a href="classVillain_1_1Event.html">Villain::Event</a></div><div class="ttdoc">Base Event interface.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:9</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

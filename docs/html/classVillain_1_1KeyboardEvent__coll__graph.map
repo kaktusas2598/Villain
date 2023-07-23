@@ -1,4 +1,4 @@
 <map id="Villain::KeyboardEvent" name="Villain::KeyboardEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,175,107"/>
-<area shape="rect" id="node2" href="$classVillain_1_1Event.html" title=" " alt="" coords="36,5,144,32"/>
+<area shape="rect" id="node1" title="Dispatched upon pressed or released key." alt="" coords="5,80,175,107"/>
+<area shape="rect" id="node2" href="$classVillain_1_1Event.html" title="Base Event interface." alt="" coords="36,5,144,32"/>
 </map>

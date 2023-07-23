@@ -1,4 +1,4 @@
 <map id="Villain::MouseEvent" name="Villain::MouseEvent">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,156,107"/>
-<area shape="rect" id="node2" href="$classVillain_1_1Event.html" title=" " alt="" coords="27,5,135,32"/>
+<area shape="rect" id="node1" title="Dispatched on mouse move, button click/release or wheel scroll events." alt="" coords="5,80,156,107"/>
+<area shape="rect" id="node2" href="$classVillain_1_1Event.html" title="Base Event interface." alt="" coords="27,5,135,32"/>
 </map>

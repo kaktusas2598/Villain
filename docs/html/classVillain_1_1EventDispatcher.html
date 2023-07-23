@@ -88,23 +88,34 @@ $(document).ready(function(){initNavTree('classVillain_1_1EventDispatcher.html',
 <div class="title">Villain::EventDispatcher Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Responsible for keeping track of different event listeners and dispatches events to those listeners.  
+ <a href="classVillain_1_1EventDispatcher.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="EventDispatcher_8hpp_source.html">EventDispatcher.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6a4caed0a68c9cfb66efbf081ee6a6ef"><td class="memItemLeft" align="right" valign="top"><a id="a6a4caed0a68c9cfb66efbf081ee6a6ef"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>registerListener</b> (<a class="el" href="classVillain_1_1EventListener.html">EventListener</a> *listener)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#a6a4caed0a68c9cfb66efbf081ee6a6ef">registerListener</a> (<a class="el" href="classVillain_1_1EventListener.html">EventListener</a> *listener)</td></tr>
+<tr class="memdesc:a6a4caed0a68c9cfb66efbf081ee6a6ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call once for every new listener we want to subscribe. <br /></td></tr>
 <tr class="separator:a6a4caed0a68c9cfb66efbf081ee6a6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab084808aa0b3e3e2b810e825012dfd90"><td class="memItemLeft" align="right" valign="top"><a id="ab084808aa0b3e3e2b810e825012dfd90"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>unregisterListener</b> (<a class="el" href="classVillain_1_1EventListener.html">EventListener</a> *listener)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#ab084808aa0b3e3e2b810e825012dfd90">unregisterListener</a> (<a class="el" href="classVillain_1_1EventListener.html">EventListener</a> *listener)</td></tr>
+<tr class="memdesc:ab084808aa0b3e3e2b810e825012dfd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop listening for events. <br /></td></tr>
 <tr class="separator:ab084808aa0b3e3e2b810e825012dfd90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afca6971b593c371fa4b64323b72f0618"><td class="memItemLeft" align="right" valign="top"><a id="afca6971b593c371fa4b64323b72f0618"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>dispatchEvent</b> (<a class="el" href="classVillain_1_1Event.html">Event</a> &amp;event)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#afca6971b593c371fa4b64323b72f0618">dispatchEvent</a> (<a class="el" href="classVillain_1_1Event.html">Event</a> &amp;event)</td></tr>
+<tr class="memdesc:afca6971b593c371fa4b64323b72f0618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called every time we want to dispatch an event. <br /></td></tr>
 <tr class="separator:afca6971b593c371fa4b64323b72f0618"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a039a15ce7574889c7688bd6af205f085"><td class="memItemLeft" align="right" valign="top"><a id="a039a15ce7574889c7688bd6af205f085"></a>
-std::vector&lt; <a class="el" href="classVillain_1_1EventListener.html">EventListener</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getListeners</b> ()</td></tr>
+std::vector&lt; <a class="el" href="classVillain_1_1EventListener.html">EventListener</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#a039a15ce7574889c7688bd6af205f085">getListeners</a> ()</td></tr>
+<tr class="memdesc:a039a15ce7574889c7688bd6af205f085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all registered listeners. <br /></td></tr>
 <tr class="separator:a039a15ce7574889c7688bd6af205f085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Responsible for keeping track of different event listeners and dispatches events to those listeners. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/<a class="el" href="EventDispatcher_8hpp_source.html">EventDispatcher.hpp</a></li>
 </ul>
 </div><!-- contents -->
