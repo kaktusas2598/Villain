@@ -5,11 +5,11 @@
 
 TEST_CASE("VertexBufferLayout", "[VertexBufferLayout]") {
     SECTION("Pushing float elements") {
-        VertexBufferLayout layout;
+        Villain::VertexBufferLayout layout;
         layout.push<float>(3);
         layout.push<float>(2);
 
-        const std::vector<VertexBufferElement>& elements = layout.getElements();
+        const std::vector<Villain::VertexBufferElement>& elements = layout.getElements();
 
         REQUIRE(layout.getNumOfElements() == 2);
         REQUIRE(layout.getStride() == 20);
@@ -24,11 +24,11 @@ TEST_CASE("VertexBufferLayout", "[VertexBufferLayout]") {
     }
 
     SECTION("Pushing unsigned int elements") {
-        VertexBufferLayout layout;
+        Villain::VertexBufferLayout layout;
         layout.push<unsigned int>(1);
         layout.push<unsigned int>(4);
 
-        const std::vector<VertexBufferElement>& elements = layout.getElements();
+        const std::vector<Villain::VertexBufferElement>& elements = layout.getElements();
 
         REQUIRE(layout.getNumOfElements() == 2);
         REQUIRE(layout.getStride() == 20);
@@ -43,11 +43,11 @@ TEST_CASE("VertexBufferLayout", "[VertexBufferLayout]") {
     }
 
     SECTION("Pushing int elements") {
-        VertexBufferLayout layout;
+        Villain::VertexBufferLayout layout;
         layout.push<int>(2);
         layout.push<int>(3);
 
-        const std::vector<VertexBufferElement>& elements = layout.getElements();
+        const std::vector<Villain::VertexBufferElement>& elements = layout.getElements();
 
         REQUIRE(layout.getNumOfElements() == 2);
         REQUIRE(layout.getStride() == 20);
@@ -62,11 +62,11 @@ TEST_CASE("VertexBufferLayout", "[VertexBufferLayout]") {
     }
 
     SECTION("Pushing unsigned char elements") {
-        VertexBufferLayout layout;
+        Villain::VertexBufferLayout layout;
         layout.push<unsigned char>(3);
         layout.push<unsigned char>(1);
 
-        const std::vector<VertexBufferElement>& elements = layout.getElements();
+        const std::vector<Villain::VertexBufferElement>& elements = layout.getElements();
 
         REQUIRE(layout.getNumOfElements() == 2);
         REQUIRE(layout.getStride() == 4);
