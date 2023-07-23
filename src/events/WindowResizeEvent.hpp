@@ -4,6 +4,7 @@
 
 namespace Villain {
 
+    /// Dispatched every time engine window is resized
     class WindowResizeEvent : public Event {
         public:
             WindowResizeEvent(int w, int h) : width(w), height(h) {}

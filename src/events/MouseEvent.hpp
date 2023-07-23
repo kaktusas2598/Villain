@@ -18,6 +18,7 @@ namespace Villain {
         SCROLL
     };
 
+    /// Dispatched on mouse move, button click/release or wheel scroll events
     class MouseEvent : public Event {
         public:
             // Mouse move event constructor
