@@ -13,6 +13,7 @@ namespace Villain {
     // TODO: Mesh generation could be refactored to new helper class?
     class DebugRenderer {
         public:
+            DebugRenderer() {}
             ~DebugRenderer();
 
             /// Call in app initialisation method, must be called before doing anything else

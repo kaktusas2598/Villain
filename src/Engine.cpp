@@ -103,7 +103,7 @@ namespace Villain {
         physicsEngine = std::make_unique<PhysicsEngine>(this);
         // TODO: ability to set custom number of contacts
         particleWorld = std::make_unique<ParticleWorld>(200);
-        rigidBodyWorld = std::make_unique<RigidBodyWorld>();
+        rigidBodyWorld = std::make_unique<RigidBodyWorld>(200);
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
@@ -316,6 +316,7 @@ namespace Villain {
 
         application->onAppRender(deltaTime);
         physicsEngine->render();
+        rigidBodyWorld->debugDraw(renderingEngine->getMainCamera());
 
         // Make sure we disable wireframe mode before post processing pass
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

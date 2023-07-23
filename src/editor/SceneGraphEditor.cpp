@@ -184,6 +184,8 @@ namespace Villain {
                     ImGui::Text("Camera");
                     Camera* camera = static_cast<Camera*>(compo);
 
+                    ImGui::Text("Zoom: %.1f", camera->getZoom());
+
                     std::map<CameraType, const char*> types;
                     types[CameraType::NONE] = "None";
                     types[CameraType::ORTHOGRAPHIC_2D] = "2D";
