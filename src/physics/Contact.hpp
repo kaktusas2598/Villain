@@ -71,6 +71,11 @@ namespace Villain {
                 : velocityIterations(iterations), positionIterations(iterations),
                 velocityEpsilon(velEpsilon), positionEpsilon(posEpsilon) {}
 
+            void setIterations(unsigned iterations) {
+                velocityIterations = iterations;
+                positionIterations = iterations;
+            }
+
             /// Resolves set of contacts for both velocity and penetration. Contacts that cannot intersect
             /// with each other, should be pased to separate calls of resolveContacts, better to do many calls
             /// with smaller sets.

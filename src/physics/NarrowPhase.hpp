@@ -2,6 +2,7 @@
 
 #include "Contact.hpp"
 #include "RigidBody.hpp"
+#include "rendering/DebugRenderer.hpp"
 #include <glm/gtc/matrix_access.hpp>
 
 namespace Villain {
@@ -19,6 +20,7 @@ namespace Villain {
                 : body(body), offset(offset) {
                     if (body) calculateTransform();
                 }
+            virtual ~CollisionPrimitive() {}
 
             RigidBody* body; ///< Rigid body represented by this primitive
             glm::mat4 offset; ///< Offset matrix for this primitive from the give rigid body
@@ -34,6 +36,8 @@ namespace Villain {
 
             const glm::mat4 getTransform() const { return transform; }
 
+            virtual void debugDraw(DebugRenderer* renderer) const = 0;
+
         protected:
             /// Resultant transform of the primitive, calculated by combining offset of the primitive
             /// by the transform of the rigid body
@@ -47,6 +51,10 @@ namespace Villain {
                 : radius(radius), CollisionPrimitive(body, offset) {}
 
             float radius; ///< Radius of the sphere
+
+            virtual void debugDraw(DebugRenderer* renderer) const override {
+                renderer->drawSphere(body->getPosition(), radius);
+            };
     };
 
     /// Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with world geometry
@@ -57,6 +65,11 @@ namespace Villain {
 
             glm::vec3 direction; ///< Plane normal
             float offset; ///< Distance of the plane from the origin
+
+            virtual void debugDraw(DebugRenderer* renderer) const override {
+                // TODO:
+            };
+
     };
 
     /// Represents a rigid body that can be treated as an axis-aligned box for collision detection
@@ -66,6 +79,11 @@ namespace Villain {
                 : halfSize(half), CollisionPrimitive(body, offset) {}
 
             glm::vec3 halfSize; ///< Half sizes of the box along its local axes
+
+            virtual void debugDraw(DebugRenderer* renderer) const override {
+                renderer->drawBox3DRotated(body->getPosition(), halfSize * 2.0f, glm::mat4_cast(body->getOrientation()));
+            };
+
     };
 
     /// Fast intersection tests to use as an early exit in narrow phase collision detection
@@ -76,6 +94,9 @@ namespace Villain {
 
     /// Helper structure that contains information for the detector to be used when building contacts
     struct CollisionData {
+
+        CollisionData(Contact* contactArray, int contactsRem, unsigned contactCnt, float rest, float frict = 0.0f)
+            : contacts(contactArray), contactsLeft(contactsRem), contactCount(contactCnt), friction(frict), restitution(rest) {}
 
         Contact* contacts; ///< Contact array to write to
         int contactsLeft; ///< Maximum number of contacts the array can take
