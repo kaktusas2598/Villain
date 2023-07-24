@@ -1,4 +1,7 @@
 #include "Contact.hpp"
+#include "Logger.hpp"
+
+#include <glm/gtx/string_cast.hpp>
 
 namespace Villain {
 
@@ -158,8 +161,7 @@ namespace Villain {
         // Split impulse into linear and angular/rotational components
         glm::vec3 impulsiveTorque = glm::cross(relativeContactPos[0], impulse);
         angularVelChange[0] = inverseInertiaTensor[0] * impulsiveTorque;
-        linearVelChange[0] = glm::vec3(0.0);
-        linearVelChange[0] += impulse * bodies[0]->getInverseMass();
+        linearVelChange[0] = impulse * bodies[0]->getInverseMass();
 
         // Apply the changes to rigid body
         bodies[0]->addLinearVelocity(linearVelChange[0]);
@@ -169,9 +171,11 @@ namespace Villain {
             // Split impulse into linear and angular/rotational components
             impulsiveTorque = glm::cross(relativeContactPos[1], impulse);
             angularVelChange[1] = inverseInertiaTensor[1] * impulsiveTorque;
-            linearVelChange[1] = glm::vec3(0.0);
-            linearVelChange[1] += impulse * bodies[1]->getInverseMass();
+            // Important!! 2nd body's impulse will be slower
+            linearVelChange[1] = impulse * -bodies[1]->getInverseMass();
 
+            VILLAIN_DEBUG("Linear Vel 1 {}", glm::to_string(linearVelChange[1]));
+            VILLAIN_DEBUG("Angular Vel 1 {}", glm::to_string(angularVelChange[1]));
             // Apply the changes to rigid body
             bodies[1]->addLinearVelocity(linearVelChange[1]);
             bodies[1]->addAngularVelocity(angularVelChange[1]);
@@ -207,6 +211,7 @@ namespace Villain {
         impulseContact.x = desiredDeltaVelocity / deltaVelocity;
         impulseContact.y = 0;
         impulseContact.z = 0;
+        VILLAIN_DEBUG("Frictionless impulse {}", glm::to_string(impulseContact));
         return impulseContact;
     }
 
@@ -289,10 +294,11 @@ namespace Villain {
                 pos += linearChange[i];
                 bodies[i]->setPosition(pos);
 
-                // Apply the orientation
+                // Apply the orientatio);
                 glm::quat q = bodies[i]->getOrientation();
                 // NOTE: is this correct?
-                q += glm::quat(angularChange[i]);
+                glm::quat deltaOrientation = 0.5f * glm::quat(0.0f, angularChange[i].x, angularChange[i].y, angularChange[i].z) * q;
+                q = glm::normalize(q + deltaOrientation);
                 bodies[i]->setOrientation(q);
 
                 // Finally need to calculate derived data for any body that is asleep, to reflect
@@ -309,6 +315,8 @@ namespace Villain {
 
         // Prepare the contacts for processing
         prepareContacts(contactArray, numContacts, deltaTime);
+
+        //FIXME: not sure if problem is here but resolution isn't working
 
         // Resolve the interpenetration problems with the contacts
         adjustPositions(contactArray, numContacts, deltaTime);
