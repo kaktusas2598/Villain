@@ -4,6 +4,8 @@ namespace Villain {
 
     RigidBody::RigidBody()
         : inverseMass(1.0f), // Assuming unit mass by default
+        inverseInertiaTensor(glm::mat3(1.0f)),
+        inverseInertiaTensorWorld(glm::mat3(1.0f)),
         linearDamping(0.98f), // A reasonable damping value between 0 and 1
         angularDamping(0.98f),
         position(glm::vec3(0.0f)),
@@ -11,10 +13,13 @@ namespace Villain {
         velocity(glm::vec3(0.0f)),
         acceleration(glm::vec3(0.0f)),
         rotation(glm::vec3(0.0f)),
-        transformMatrix(glm::mat4(1.0f))
+        transformMatrix(glm::mat4(1.0f)),
+        isAwake(true)
     {}
 
     void RigidBody::integrate(float deltaTime) {
+        if (!isAwake) return;
+
         // Calculate linear acceleration from force inputs
         lastFrameAcceleration = acceleration;
         lastFrameAcceleration += forceAccum * inverseMass;
@@ -33,8 +38,10 @@ namespace Villain {
         // Integrate position
         position += velocity * deltaTime;
         // Integrate orientation by converting angular velocity scaled vector to quaternion
-        glm::quat deltaOrientation = 0.5f * deltaTime * glm::quat(0.0f, rotation.x, rotation.y, rotation.z) * orientation;
+        // TODO: Investigate if this is really correct, check page 202 in Ian Millington book
+        glm::quat deltaOrientation = 0.5f * ((deltaTime * glm::quat(0.0f, rotation.x, rotation.y, rotation.z)) * orientation);
         orientation = orientation + deltaOrientation;
+        orientation = glm::normalize(orientation);
 
         // Normalize orientation and update matrices with new position and orientation
         calculateDerivedData();
@@ -44,11 +51,11 @@ namespace Villain {
     }
 
     void RigidBody::calculateDerivedData() {
-        orientation = glm::normalize(orientation);
-
         calculateTransformMatrix();
 
         // calculate inertia tensor in world space
+        // TODO: Investigate if these calculations are correct
+        //inverseInertiaTensorWorld = glm::transpose(glm::inverse(glm::mat3(transformMatrix))) * inverseInertiaTensor * glm::inverse(glm::mat3(transformMatrix));
         inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor;
     }
 
