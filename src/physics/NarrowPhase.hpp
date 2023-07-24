@@ -26,7 +26,10 @@ namespace Villain {
             glm::mat4 offset; ///< Offset matrix for this primitive from the give rigid body
 
             void calculateTransform() {
-                transform = body->getTransform() * offset;
+                if (body)
+                    transform = body->getTransform() * offset;
+                else
+                    transform = offset;
             }
 
             /// Allow access to the axis vectors in the transform of this primitive
