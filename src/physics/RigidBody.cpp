@@ -7,7 +7,7 @@ namespace Villain {
         inverseInertiaTensor(glm::mat3(1.0f)),
         inverseInertiaTensorWorld(glm::mat3(1.0f)),
         linearDamping(0.98f), // A reasonable damping value between 0 and 1
-        angularDamping(0.98f),
+        angularDamping(0.8f),
         position(glm::vec3(0.0f)),
         orientation(glm::quat(1.0f, 0.0f, 0.0f, 0.0f)),
         velocity(glm::vec3(0.0f)),

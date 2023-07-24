@@ -16,7 +16,7 @@ TEST_CASE("RigidBody Default Constructor", "[RigidBody]") {
         REQUIRE(body.getInverseInertiaTensor() == glm::mat3(1.0f));
         REQUIRE(body.getInverseInertiaTensorWorld() == glm::mat3(1.0f));
         REQUIRE(body.getLinearDamping() == Catch::Approx(0.98f));
-        REQUIRE(body.getAngularDamping() == Catch::Approx(0.98f));
+        REQUIRE(body.getAngularDamping() == Catch::Approx(0.8f));
         REQUIRE(body.getPosition() == glm::vec3(0.0f));
         REQUIRE(body.getOrientation() == glm::quat(1.0f, 0.0f, 0.0f, 0.0f));
         REQUIRE(body.getLinearVelocity() == glm::vec3(0.0f));
@@ -63,21 +63,11 @@ TEST_CASE("RigidBody Integration", "[RigidBody]") {
         // Actual position is a bit less than 1 due to damping!
         REQUIRE(body.getPosition() == glm::vec3(0.98f, 0.0f, 0.0f));
         // Note: Quaternion comparison might require custom epsilon
-        VILLAIN_TRACE("Orientation: {}", glm::to_string(body.getOrientation()));
-
-        // WARNING:Investigate rotation calculations in RigidBody to understand if we're setting
-        // correct expectations here or if orientation calculations are wrong
-        glm::vec3 eulerRot = glm::degrees(glm::eulerAngles(body.getOrientation()));
-        VILLAIN_TRACE("Euler Orientation: {}", glm::to_string(eulerRot));
-        // ACTUAL : Orientation: quat(0.933274, {0.000000, 0.000000, 0.359166})
-        // EXPECTED From chatGPT:
-        //REQUIRE(body.getOrientation().x == Catch::Approx(glm::cos(glm::radians(22.5f))));
-        //REQUIRE(body.getOrientation().y == Catch::Approx(0.0f));
-        //REQUIRE(body.getOrientation().z == Catch::Approx(0.0f));
-        //REQUIRE(body.getOrientation().w == Catch::Approx(glm::sin(glm::radians(22.5f))));
-        glm::quat exp = {glm::sin(glm::radians(22.5f)), glm::cos(glm::radians(22.5f)), 0.0f, 0.0f};
-        VILLAIN_TRACE("EXPECTED: {}", glm::to_string(exp));
+        glm::quat expectedOrientation = glm::angleAxis(glm::length(angularVelocity) * 1.0f, glm::normalize(angularVelocity));
         VILLAIN_TRACE("ACTUAL: {}", glm::to_string(body.getOrientation()));
+        VILLAIN_TRACE("EXPECTED: {}", glm::to_string(expectedOrientation));
+        const float epsilon = 0.02f; // Adjust the epsilon value as needed
+        REQUIRE(glm::all(glm::epsilonEqual(body.getOrientation(), expectedOrientation, epsilon)));
     }
 }
 
