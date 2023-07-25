@@ -56,6 +56,8 @@ namespace Villain {
         // calculate inertia tensor in world space
         // TODO: Investigate if these calculations are correct
         //inverseInertiaTensorWorld = glm::transpose(glm::inverse(glm::mat3(transformMatrix))) * inverseInertiaTensor * glm::inverse(glm::mat3(transformMatrix));
+        // Or this???
+        //inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor * glm::transpose(glm::mat3(transformMatrix));
         inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor;
     }
 
