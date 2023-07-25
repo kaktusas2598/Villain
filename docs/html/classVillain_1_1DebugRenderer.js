@@ -1,6 +1,7 @@
 var classVillain_1_1DebugRenderer =
 [
     [ "DebugVertex", "structVillain_1_1DebugRenderer_1_1DebugVertex.html", "structVillain_1_1DebugRenderer_1_1DebugVertex" ],
+    [ "DebugRenderer", "classVillain_1_1DebugRenderer.html#a2da9c669a665835a137dc5e6c8afa656", null ],
     [ "~DebugRenderer", "classVillain_1_1DebugRenderer.html#a7c4e60bdc282681492d427f521904460", null ],
     [ "drawBox", "classVillain_1_1DebugRenderer.html#a6e229ec97b4b5cacd780db33321385e9", null ],
     [ "drawBox3D", "classVillain_1_1DebugRenderer.html#a946303fa2551635cc791570530b19cb9", null ],

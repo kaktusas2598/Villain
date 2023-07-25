@@ -167,6 +167,7 @@ var hierarchy =
     [ "Villain::SpriteFont", "classVillain_1_1SpriteFont.html", null ],
     [ "Villain::StateMachine", "classVillain_1_1StateMachine.html", null ],
     [ "Villain::StateParser", "classVillain_1_1StateParser.html", null ],
+    [ "Villain::TensorUtils", "classVillain_1_1TensorUtils.html", null ],
     [ "Villain::Texture", "classVillain_1_1Texture.html", null ],
     [ "Villain::TextureConstructionInfo", "structVillain_1_1TextureConstructionInfo.html", null ],
     [ "Villain::TileAtlas", "classVillain_1_1TileAtlas.html", null ],

@@ -103,19 +103,20 @@ Collaboration diagram for Villain::KinematicController:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVillain_1_1KinematicController__coll__graph.png" border="0" usemap="#aVillain_1_1KinematicController_coll__map" alt="Collaboration graph"/></div>
 <map name="aVillain_1_1KinematicController_coll__map" id="aVillain_1_1KinematicController_coll__map">
-<area shape="rect" title=" " alt="" coords="131,260,332,287"/>
-<area shape="rect" href="classVillain_1_1RigidBodyComponent.html" title=" " alt="" coords="125,184,337,211"/>
+<area shape="rect" title=" " alt="" coords="133,260,335,287"/>
+<area shape="rect" href="classVillain_1_1RigidBodyComponent.html" title=" " alt="" coords="128,184,340,211"/>
 <area shape="rect" href="classVillain_1_1NodeComponent.html" title=" " alt="" coords="5,95,185,121"/>
 <area shape="rect" href="classVillain_1_1SceneNode.html" title=" " alt="" coords="23,5,167,32"/>
-<area shape="rect" href="classVillain_1_1RigidBody.html" title=" " alt="" coords="209,95,347,121"/>
+<area shape="rect" href="classVillain_1_1RigidBody.html" title=" " alt="" coords="228,5,365,32"/>
+<area shape="rect" href="classVillain_1_1CollisionPrimitive.html" title="Represents primitive to detect collision against." alt="" coords="295,95,482,121"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4401334b6f796cdc1dbd62801f8b1861"><td class="memItemLeft" align="right" valign="top"><a id="a4401334b6f796cdc1dbd62801f8b1861"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>KinematicController</b> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *planeBody)</td></tr>
-<tr class="separator:a4401334b6f796cdc1dbd62801f8b1861"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec5680348dfc2578ec7bcc22a0ecc1c5"><td class="memItemLeft" align="right" valign="top"><a id="aec5680348dfc2578ec7bcc22a0ecc1c5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>KinematicController</b> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *planeBody, <a class="el" href="classVillain_1_1CollisionPrimitive.html">CollisionPrimitive</a> *colShape=nullptr)</td></tr>
+<tr class="separator:aec5680348dfc2578ec7bcc22a0ecc1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a6f97508cb1520ccc2d1dc999188723"><td class="memItemLeft" align="right" valign="top"><a id="a2a6f97508cb1520ccc2d1dc999188723"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>addToEngine</b> (<a class="el" href="classVillain_1_1Engine.html">Engine</a> *engine)</td></tr>
 <tr class="separator:a2a6f97508cb1520ccc2d1dc999188723"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,9 +127,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (f
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleInput</b> (float deltaTime)</td></tr>
 <tr class="separator:a25b372d766a25b37725ecaefad924417"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classVillain_1_1RigidBodyComponent"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVillain_1_1RigidBodyComponent')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVillain_1_1RigidBodyComponent.html">Villain::RigidBodyComponent</a></td></tr>
-<tr class="memitem:ac3e4766a94570e66b2653902acb692fc inherit pub_methods_classVillain_1_1RigidBodyComponent"><td class="memItemLeft" align="right" valign="top"><a id="ac3e4766a94570e66b2653902acb692fc"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>RigidBodyComponent</b> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *rigidBody)</td></tr>
-<tr class="separator:ac3e4766a94570e66b2653902acb692fc inherit pub_methods_classVillain_1_1RigidBodyComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36843b705f92db069fd83483bee50d97 inherit pub_methods_classVillain_1_1RigidBodyComponent"><td class="memItemLeft" align="right" valign="top"><a id="a36843b705f92db069fd83483bee50d97"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RigidBodyComponent</b> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *rigidBody, <a class="el" href="classVillain_1_1CollisionPrimitive.html">CollisionPrimitive</a> *colShape=nullptr)</td></tr>
+<tr class="separator:a36843b705f92db069fd83483bee50d97 inherit pub_methods_classVillain_1_1RigidBodyComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96e79d1aaa1e4661efc09469bff2c4fe inherit pub_methods_classVillain_1_1RigidBodyComponent"><td class="memItemLeft" align="right" valign="top"><a id="a96e79d1aaa1e4661efc09469bff2c4fe"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addForceGenerator</b> (<a class="el" href="classVillain_1_1ForceGenerator.html">ForceGenerator</a> *generator)</td></tr>
 <tr class="separator:a96e79d1aaa1e4661efc09469bff2c4fe inherit pub_methods_classVillain_1_1RigidBodyComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +159,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a5baf4ff38f6e6b1c3c418c8a510aa557 inherit pro_attribs_classVillain_1_1RigidBodyComponent"><td class="memItemLeft" align="right" valign="top"><a id="a5baf4ff38f6e6b1c3c418c8a510aa557"></a>
 <a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>body</b></td></tr>
 <tr class="separator:a5baf4ff38f6e6b1c3c418c8a510aa557 inherit pro_attribs_classVillain_1_1RigidBodyComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39a4f3ae6ec71e60ef95a95643fc10cc inherit pro_attribs_classVillain_1_1RigidBodyComponent"><td class="memItemLeft" align="right" valign="top"><a id="a39a4f3ae6ec71e60ef95a95643fc10cc"></a>
+<a class="el" href="classVillain_1_1CollisionPrimitive.html">CollisionPrimitive</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>collider</b></td></tr>
+<tr class="separator:a39a4f3ae6ec71e60ef95a95643fc10cc inherit pro_attribs_classVillain_1_1RigidBodyComponent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classVillain_1_1NodeComponent"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classVillain_1_1NodeComponent')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classVillain_1_1NodeComponent.html">Villain::NodeComponent</a></td></tr>
 <tr class="memitem:a7393a14e2701ec3347ea63d70271b99d inherit pro_attribs_classVillain_1_1NodeComponent"><td class="memItemLeft" align="right" valign="top"><a id="a7393a14e2701ec3347ea63d70271b99d"></a>
 <a class="el" href="classVillain_1_1SceneNode.html">SceneNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parent</b></td></tr>

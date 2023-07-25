@@ -1,5 +1,6 @@
 var classVillain_1_1CollisionSphere =
 [
     [ "CollisionSphere", "classVillain_1_1CollisionSphere.html#ac24490e66ee9abc59c6890dec025ed4c", null ],
+    [ "debugDraw", "classVillain_1_1CollisionSphere.html#a1cf12f357152343cb261959ee8246517", null ],
     [ "radius", "classVillain_1_1CollisionSphere.html#a2991e7fec60e7609fd5a943d58a375dd", null ]
 ];
