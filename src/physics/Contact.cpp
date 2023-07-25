@@ -93,6 +93,10 @@ namespace Villain {
 
         // Calculate the amount of velocity that is due to forces without reactions
         glm::vec3 accVelocity = thisBody->getLastFrameAcceleration() * deltaTime;
+
+        // Ignore any component of acceleration in the contact normal direction, only interested in planar acceleration
+        accVelocity.x = 0;
+
         contactVelocity += accVelocity;
 
         return contactVelocity;
@@ -133,10 +137,6 @@ namespace Villain {
         contactToWorld = glm::mat3(contactNormal, contactTangent[0], contactTangent[1]);
     }
 
-    void Contact::applyImpulse(const glm::vec3& impulse, RigidBody* body, glm::vec3* linearVelChange, glm::vec3* angularVelChange) {
-        // TODO:
-    }
-
     void Contact::applyVelocityChange(glm::vec3 linearVelChange[2], glm::vec3 angularVelChange[2]) {
         // Get inverse mass and inverse inertia tensor in world coords
         glm::mat3 inverseInertiaTensor[2];
@@ -151,7 +151,7 @@ namespace Villain {
             // Calculate short format for frictionless impulse
             impulseContact = calculateFrictionlessImpulse(inverseInertiaTensor);
         } else {
-            // TODO:friction impulse
+            // TODO: implement friction impulse
             assert(false);
         }
 
@@ -163,13 +163,15 @@ namespace Villain {
         angularVelChange[0] = inverseInertiaTensor[0] * impulsiveTorque;
         linearVelChange[0] = impulse * bodies[0]->getInverseMass();
 
+        VILLAIN_DEBUG("Linear Vel 0 {}", glm::to_string(linearVelChange[0]));
+        VILLAIN_DEBUG("Angular Vel 0 {}", glm::to_string(angularVelChange[0]));
         // Apply the changes to rigid body
         bodies[0]->addLinearVelocity(linearVelChange[0]);
         bodies[0]->addAngularVelocity(angularVelChange[0]);
 
         if (bodies[1]) {
             // Split impulse into linear and angular/rotational components
-            impulsiveTorque = glm::cross(relativeContactPos[1], impulse);
+            impulsiveTorque = glm::cross(impulse, relativeContactPos[1]);
             angularVelChange[1] = inverseInertiaTensor[1] * impulsiveTorque;
             // Important!! 2nd body's impulse will be slower
             linearVelChange[1] = impulse * -bodies[1]->getInverseMass();
@@ -189,7 +191,7 @@ namespace Villain {
         // in the direction of the contact normal
         glm::vec3 deltaVelWorld = glm::cross(relativeContactPos[0], contactNormal);
         deltaVelWorld = inverseInertiaTensor[0] * deltaVelWorld;
-        deltaVelWorld = glm::cross(deltaVelWorld, contactNormal);
+        deltaVelWorld = glm::cross(deltaVelWorld, relativeContactPos[0]);
 
         // Find change in velocity in contact coords
         float deltaVelocity = glm::dot(deltaVelWorld, contactNormal);
@@ -201,9 +203,9 @@ namespace Villain {
             // Same transform sequence again
             deltaVelWorld = glm::cross(relativeContactPos[1], contactNormal);
             deltaVelWorld = inverseInertiaTensor[1] * deltaVelWorld;
-            deltaVelWorld = glm::cross(deltaVelWorld, contactNormal);
+            deltaVelWorld = glm::cross(deltaVelWorld, relativeContactPos[1]);
 
-            deltaVelocity = glm::dot(deltaVelWorld, contactNormal);
+            deltaVelocity += glm::dot(deltaVelWorld, contactNormal);
             deltaVelocity += bodies[1]->getInverseMass();
         }
 
@@ -231,6 +233,7 @@ namespace Villain {
 
                 glm::vec3 angularInertiaWorld = glm::cross(relativeContactPos[i], contactNormal);
                 angularInertiaWorld = inverseInertiaTensor * angularInertiaWorld;
+                angularInertiaWorld = glm::cross(angularInertiaWorld, relativeContactPos[i]);
                 angularInertia[i] = glm::dot(angularInertiaWorld, contactNormal);
 
                 // Linear component is just inverse mass
@@ -371,7 +374,7 @@ namespace Villain {
                                 // The sign of change is positive if dealing with second body in a contact, and
                                 // negative otherwise
                                 contactArray[i].contactVelocity +=
-                                    glm::transpose(contactArray[i].contactToWorld) * deltaVel * (b ? 1.0f: -1.0f);
+                                    glm::transpose(contactArray[i].contactToWorld) * deltaVel * (b ? -1.0f: 1.0f);
                                 contactArray[i].calculateDesiredDeltaVelocity(deltaTime);
                             }
                         }

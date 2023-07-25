@@ -41,8 +41,6 @@ namespace Villain {
             /// friction direction (for anisotropic friction) or a random direction(for isotropic friction)
             void calculateContactBasis();
 
-            /// Applies impulse to the given body return changes in velocities
-            void applyImpulse(const glm::vec3& impulse, RigidBody* body, glm::vec3* linearVelChange, glm::vec3* angularVelChange);
             /// Perform inertia-weighted impule based resolution of this contact alone
             void applyVelocityChange(glm::vec3 linearVelChange[2], glm::vec3 angularVelChange[2]);
             /// Perform inertia-weighted penetration resolution of this contact alone
