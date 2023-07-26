@@ -161,17 +161,19 @@ void Game::init() {
 
     one = new CollisionSphere({2.0f, sphere1});
     two = new CollisionSphere({1.0f, sphere2});
+    three = new CollisionBox({5.0, 4.0, 3.0}, boxBody);
 
     sphere1->setPosition({10.0f, 5.0f, -20.0f});
-    sphere1->setLinearVelocity({0.0, 0.0, 2.0});
+    sphere1->setLinearVelocity({0.0, 0.0, 4.0});
     sphere2->setPosition({10.0f, 5.0f, 20.0f});
-    sphere2->setLinearVelocity({0.0, 0.0, -2.0});
+    sphere2->setLinearVelocity({0.0, 0.0, -4.0});
+    boxBody->setPosition({8.0, 7.0, 0.0});
     boxBody->setOrientation(glm::quat(glm::vec3(0.0, 45.0, 0.0)));
 
-    RigidBodyComponent* rigidBodyCompo3 = new RigidBodyComponent(sphere1, one);
-    RigidBodyComponent* rigidBodyCompo4 = new RigidBodyComponent(sphere2, two);
-    addToScene((new SceneNode("Rigid Body 3"))->addComponent(rigidBodyCompo3));
-    addToScene((new SceneNode("Rigid Body 4"))->addComponent(rigidBodyCompo4));
+    addToScene((new SceneNode("Rigid Body 3"))->addComponent(new RigidBodyComponent(sphere1, one)));
+    addToScene((new SceneNode("Rigid Body 4"))->addComponent(new RigidBodyComponent(sphere2, two)));
+    // WARNING: Looks like adding 5th body here decreased fps, possibly because broad phase is not integrated?
+    addToScene((new SceneNode("Rigid Body 5"))->addComponent(new RigidBodyComponent(boxBody, three)));
 
     // Define Ground
     CollisionPlane* groundPlane = new CollisionPlane({0.0, 1.0, 0.0}, 0.0);

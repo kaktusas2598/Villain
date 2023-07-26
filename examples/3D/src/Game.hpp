@@ -25,6 +25,7 @@ class Game : public Villain::Application {
 
         Villain::CollisionSphere* one = nullptr;
         Villain::CollisionSphere* two = nullptr;
+        Villain::CollisionBox* three = nullptr;
         Villain::CollisionBox* box = nullptr;
         Villain::RigidBody* sphere1 = nullptr;
         Villain::RigidBody* sphere2 = nullptr;
