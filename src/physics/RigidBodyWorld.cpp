@@ -43,8 +43,7 @@ namespace Villain {
         unsigned limit = maxContacts;
         Contact* nextContact = contacts;
 
-        // TODO: Integrate BVH broad phase here
-
+        // TODO: Integrate BVH broad phase here!
 
         // Narrow phase collision-detection/contact generation
         for (unsigned int i = 0; i < colliders.size(); i++) {
@@ -97,7 +96,6 @@ namespace Villain {
 
         // And process them
         if (calculateIterations) resolver.setIterations(usedContacts * 4);
-        //  NOTE: temp commented out
         resolver.resolveContacts(contacts, usedContacts, deltaTime);
     }
 
