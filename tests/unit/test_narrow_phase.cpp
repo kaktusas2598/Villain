@@ -148,6 +148,7 @@ TEST_CASE("CollisionDetector - Box and Sphere", "[CollisionDetector]") {
         box.calculateTransform();
 
         REQUIRE(Villain::CollisionDetector::boxAndSphere(box, sphere, &data) == 1);
+        // TODO: assertions
     }
     // TODO: More test cases
 }
@@ -168,12 +169,14 @@ TEST_CASE("CollisionDetector - Box and Box", "[CollisionDetector]") {
         REQUIRE(Villain::CollisionDetector::boxAndBox(box, box2, &data) == 0);
     }
 
-    // TODO: test
-    //SECTION("Box and Sphere are intersecting") {
-        //body1.setPosition({1.0, 0.0, 0.0});
-        //body1.calculateDerivedData();
-        //box.calculateTransform();
+    SECTION("Box and Sphere are intersecting producing face-vertex contact or vertex-face contact") {
+        body1.setPosition({1.0, 0.0, 0.0});
+        body1.calculateDerivedData();
+        box.calculateTransform();
 
-        //REQUIRE(Villain::CollisionDetector::boxAndBox(box, box2, &data) == 1);
-    //}
+        REQUIRE(Villain::CollisionDetector::boxAndBox(box, box2, &data) == 1);
+        // TODO: assertions
+    }
+
+    // TODO: vertex-face and edge-edge contacts
 }
