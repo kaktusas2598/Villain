@@ -8,6 +8,7 @@ namespace Villain {
 
     // TODO: Possibly add beginScene() and addScene() methods and allow setting camera in the beginning
     // draw calls could probably take materials as well
+    // Transform could be set in draw call itself
     /*! \brief OpenGL rendering API abstraction
      *
      * Abstracts renderer drawing and clearing screen commands to avoid raw OpenGL calls
