@@ -70,7 +70,8 @@ namespace Villain {
             float offset; ///< Distance of the plane from the origin
 
             virtual void debugDraw(DebugRenderer* renderer) const override {
-                // TODO:
+                // NOTE:What size to use here? Possibly need to draw 'infinite' grid here
+                renderer->drawPlane(direction, offset, {5.0f, 5.0f});
             };
 
     };
