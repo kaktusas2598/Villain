@@ -217,18 +217,6 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
-    //VILLAIN_INFO("Player particle pos {}", glm::to_string(playerBody->getPosition()));
-
-
-    // NOTE: Running simulation for specified number of frames for debugging reasons
-    ////////////////////////////
-    //const unsigned maxFrames = 680;
-    //static unsigned counter = 0;
-    //if (counter > maxFrames) {
-        //Engine::setRunning(false);
-    //}
-    //counter++;
-    ////////////////////////////
 }
 
 void Game::onAppRender(float dt) {
@@ -237,83 +225,15 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-    // Mock up grid, just a demonstration, we need
-    /*debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
+    // Render ground plane
+    debugRenderer.drawGrid(glm::vec3(0.f, 1.f, 0.f), 0.0f, 100, 100, 1.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
 
-    debugRenderer.drawQuad(glm::vec3(0.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(0.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(0.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
-
-    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);*/
-
-    // Testing plane draw
-    debugRenderer.drawPlane(glm::vec3(0.f, 1.f, 0.f), 0.0f, glm::vec2(10.0, 10.0));
-
-    debugRenderer.drawPlane(glm::vec3(0.f, 0.f, 1.f), 5.0f, glm::vec2(5.0, 5.0), glm::vec4(1.0, 0.0, 0.0, 1.0));
-
-    ////////////////////////////////////////
-    /// Collision narrow phase tests
-    //CollisionBox box({10.0, 2.0, 8.0}, playerBody);
-
-    // Define the CollisionPlane for the ground (Y level = 0)
-    //CollisionPlane groundPlane({0.0, 1.0, 0.0}, 0.0);
-
-    // Perform collision detection between the camera's bounding box and the ground plane
-    //Contact* contactArray = new Contact[24];
-    //CollisionData collisionData(contactArray, 24, 0, 0.5f, 0.0f);
-
-    // Box-plane test
-    // Check if any contacts were found
-    //if (CollisionDetector::boxAndHalfSpace(*box, groundPlane, &collisionData)) {
-    //if (CollisionDetector::sphereAndHalfSpace(sphere, groundPlane, &collisionData)) {
-        // Collision occurred, change the color of the box to indicate the collision
-        // (You may need to implement this logic in your rendering system)
-        //VILLAIN_DEBUG("Collision Detected!!");
-        //debugRenderer.drawBox3D(playerBody->getPosition(), {1.0, 0.2, 0.2, 1.0}, box->halfSize * 2.0f);
-        //debugRenderer.drawSphere(playerBody->getPosition(), sphere.radius, {1.0, 0.2, 0.2, 1.0});
-    //} else {
-        // No collision, render the box with the default color
-        //debugRenderer.drawBox3D(playerBody->getPosition(), {0.4, 0.7, 0.2, 1.0}, box->halfSize * 2.0f);
-        //debugRenderer.drawSphere(playerBody->getPosition(), sphere.radius, {0.4, 0.7, 0.2, 1.0});
-    //}
-
-    //CollisionSphere one{2.0f, sphere1};
-    //one.body->calculateDerivedData();
-    //CollisionSphere two{1.0f, sphere2};
-    //two.body->calculateDerivedData();
-
-    // Sphere-sphere and box-sphere tests
-    //if (CollisionDetector::boxAndSphere(*box, *one, &collisionData)) {
-        //debugRenderer.drawSphere(one->body->getPosition(), one->radius, {1.0, 0.0, 0.0, 1.0});
-    //} else {
-        //if (CollisionDetector::sphereAndSphere(*one, *two, &collisionData)) {
-            //debugRenderer.drawSphere(one->body->getPosition(), one->radius, {0.4, 0.7, 0.2, 1.0});
-            //debugRenderer.drawSphere(two->body->getPosition(), two->radius, {1.0, 0.1, 0.6, 1.0});
-        //} else {
-            //debugRenderer.drawSphere(one->body->getPosition(), one->radius);
-            //debugRenderer.drawSphere(two->body->getPosition(), two->radius);
-        //}
-    //}
-
-
-    //// Box-box SAT tests
-    //CollisionBox staticBox({3.0, 2.0, 5.0}, boxBody);
-    //boxBody->calculateDerivedData();
-    //if (CollisionDetector::boxAndBox(*box, staticBox, &collisionData)) {
-        ////debugRenderer.drawBox3D(boxBody->getPosition(), {1.0, 0.0, 0.0, 1.0}, staticBox.halfSize * 2.0f);
-        //debugRenderer.drawBox3DRotated(boxBody->getPosition(), staticBox.halfSize * 2.0f, glm::mat4(boxBody->getOrientation()), {1.0, 0.0, 0.0, 1.0});
-    //} else {
-        ////debugRenderer.drawBox3D(boxBody->getPosition(), {0.4, 0.7, 0.2, 1.0}, staticBox.halfSize * 2.0f);
-        //debugRenderer.drawBox3DRotated(boxBody->getPosition(), staticBox.halfSize * 2.0f, glm::mat4(boxBody->getOrientation()), {0.4, 0.7, 0.2, 1.0});
-    //}
-
-    // Don't forget to clean up the allocated memory for contacts
-    //delete[] collisionData.contacts;
-    ////////////////////////////////////////
+    // Bezier curve demo
+    glm::vec3 origin(0.0f, 8.0f, 0.0f);
+    glm::vec3 control(2.0f, 6.0f, 0.0f);
+    glm::vec3 end(14.0f, 2.0f, 0.0f);
+    int numSegments = 50; // You can adjust this value to control the smoothness of the curve
+    debugRenderer.drawQuadraticBezierCurve(origin, control, end, numSegments, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
     debugRenderer.end();
     Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();

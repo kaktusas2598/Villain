@@ -262,6 +262,71 @@ namespace Villain {
         indices.push_back(i);
     }
 
+    void DebugRenderer::drawGrid(const glm::vec3& normal, float distance, int numColumns, int numRows, float gridSize, const glm::vec4& color) {
+        glm::vec3 right, up;
+        calculateBasisVectors(normal, &up, &right);
+
+        int numVertices = (numColumns + numRows + 2) * 2; // Total number of vertices for the grid lines
+        int numIndices = numVertices * 2; // Total number of indices for the grid lines
+
+        vertices.reserve(vertices.size() + numVertices);
+        indices.reserve(indices.size() + numIndices);
+
+        float totalWidth = numColumns * gridSize;
+        float totalHeight = numRows * gridSize;
+
+        glm::vec3 center = distance * normal;
+        glm::vec3 start = center - (totalWidth * 0.5f) * right - (totalHeight * 0.5f) * up;
+
+        for (int i = 0; i <= numColumns; ++i) {
+            glm::vec3 offset = i * gridSize * right;
+            drawLine(start + offset, start + offset + totalHeight * up, color);
+        }
+
+        for (int i = 0; i <= numRows; ++i) {
+            glm::vec3 offset = i * gridSize * up;
+            drawLine(start + offset, start + offset + totalWidth * right, color);
+        }
+    }
+
+    void DebugRenderer::calculateBasisVectors(const glm::vec3& normal, glm::vec3* up, glm::vec3* right) {
+        // Find an arbitrary vector that is not parallel to the normal
+        glm::vec3 arbitraryVec;
+        if (std::abs(normal.x) < std::abs(normal.y) && std::abs(normal.x) < std::abs(normal.z)) {
+            arbitraryVec = glm::vec3(1.0f, 0.0f, 0.0f);
+        } else if (std::abs(normal.y) < std::abs(normal.z)) {
+            arbitraryVec = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            arbitraryVec = glm::vec3(0.0f, 0.0f, 1.0f);
+        }
+
+        // Project the arbitrary vector onto the plane defined by the normal
+        *up = glm::normalize(arbitraryVec - glm::dot(arbitraryVec, normal) * normal);
+
+        // Compute the right vector as the cross product between the normal and the up vector
+        *right = glm::cross(normal, *up);
+    }
+
+    void DebugRenderer::drawQuadraticBezierCurve(const glm::vec3& start, const glm::vec3& control, const glm::vec3& end, int numSegments, const glm::vec4& color) {
+        if (numSegments < 2) {
+            return;
+        }
+
+        float dt = 1.0f / static_cast<float>(numSegments);
+
+        glm::vec3 previousPoint = start;
+
+        for (int i = 1; i <= numSegments; ++i) {
+            float t = dt * static_cast<float>(i);
+            glm::vec3 point = glm::mix(glm::mix(start, control, t), glm::mix(control, end, t), t);
+
+            // Draw line segment from previous point to the current point
+            drawLine(previousPoint, point, color);
+
+            previousPoint = point;
+        }
+    }
+
     void DebugRenderer::drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size) {
         int i = vertices.size(); // Index for 1st new vertex added
         vertices.resize(vertices.size() + 8);
