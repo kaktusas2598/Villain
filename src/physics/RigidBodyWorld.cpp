@@ -15,6 +15,12 @@ namespace Villain {
 
     RigidBodyWorld::~RigidBodyWorld() {
         delete[] contacts;
+
+        for (unsigned int i = 0; i < bodies.size(); i++) {
+            delete bodies[i];
+            bodies[i] = nullptr;
+        }
+        bodies.clear();
     }
 
     void RigidBodyWorld::startFrame() {

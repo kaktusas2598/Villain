@@ -1,7 +1,6 @@
 #include "Game.hpp"
 
 #include "Engine.hpp"
-#include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 #include "components/KinematicController.hpp"
@@ -11,9 +10,7 @@
 #include "components/MoveController.hpp"
 #include "components/ParticleEmitter.hpp"
 #include "components/ParticlePhysicsComponent.hpp"
-#include "components/PhysicsObjectComponent.hpp"
 #include "components/RigidBodyComponent.hpp"
-#include "physics/BoundingVolume.hpp"
 
 #include "physics/NarrowPhase.hpp"
 #include "physics/generators/contact/GroundContacts.hpp"
@@ -47,7 +44,9 @@ void Game::init() {
     loadScene("scene.xml");
     debugRenderer.init();
 
+    ///////////////////////////////////////////////////////
     // Instancing test
+    ///////////////////////////////////////////////////////
     //const unsigned NUM_INSTANCES = 1000;
     //std::vector<glm::mat4> instanceTransforms;
     //float radius = 5.0f, offset = 0.25f;
@@ -62,15 +61,9 @@ void Game::init() {
     //addToScene(wall);
 
 
-    // Physics demo
-    //getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingSphere(glm::vec3(-50.0f, 4.5f, 0.f), 1.0f), 1.0f, glm::vec3(6.0f, 0.f, 0.f)));
-    //getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingSphere(glm::vec3(50.0f, 5.0f, 0.f), 1.0f), 1.0f, glm::vec3(-6.0f, 0.f, 0.f)));
-    //getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(120.0, -20.0, -50.0), glm::vec3(122.0, 50.0, 50.0)), 0.0f));
-    //getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-142.0, -20.0, -50.0), glm::vec3(-140.0, 50.0, 50.0)), 0.0f));
-    //// FIXME: adding floor causes spheres to dissapear?
-    //getRootNode()->getEngine()->getPhysicsEngine()->addObject(new PhysicsObject(new BoundingAABB(glm::vec3(-240.0, 0.0, -50.0), glm::vec3(240.0, -1.0, 50.0)), 0.0f));
-
+    ///////////////////////////////////////////////////////
     // New Particle Engine tests
+    ///////////////////////////////////////////////////////
     //addToScene((new SceneNode("Particles"))->addComponent(new ParticleEmitter(100)));
 
     // V2 - Mass Aggregate particle physics engine tests
@@ -136,7 +129,9 @@ void Game::init() {
     MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 1.0f); // Sphere with radius of 1
     Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
+    ///////////////////////////////////////////////////////
     // Rigid Body test
+    ///////////////////////////////////////////////////////
     RigidBody* rigidBody1 = new RigidBody();
     RigidBody* rigidBody2 = new RigidBody();
     rigidBody1->setPosition({2.0, 5.0, 2.0});
@@ -154,22 +149,8 @@ void Game::init() {
     rigidBodyCompo1->addForceGenerator(new Spring({0, 0, 0}, rigidBody2, {0.2, 0, 0}, 1.0f, 2.0f));
     rigidBodyCompo2->addForceGenerator(new Spring({0.2, 0, 0}, rigidBody1, {0, 0, 0}, 1.0f, 2.0f));
 
-
-    // TODO: need to make it easier to add physics object to physics engine and then to scene graph, easier way to find a particular object
-    //Model* sphereModel = new Model("assets/models/sphere.obj");
-    //addToScene((new SceneNode("physics object 0"))
-        //->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(0)))
-        //->addComponent(new ModelRenderer(sphereModel)));
-    //addToScene((new SceneNode("physics object 1"))
-        //->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(1)))
-        //->addComponent(new ModelRenderer(sphereModel)));
-    //addToScene((new SceneNode("AABB"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(2))));
-    //addToScene((new SceneNode("AABB2"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(3))));
-    //addToScene((new SceneNode("Floor"))->addComponent(new PhysicsObjectComponent(getRootNode()->getEngine()->getPhysicsEngine()->getObject(4))));
-
     //printf("Camera ID: %i\n", GetId<Camera>());
     //printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
-    //printf("PhysicsObjectComponent ID: %i\n", GetId<PhysicsObjectComponent>());
 
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
@@ -228,7 +209,9 @@ void Game::onAppRender(float dt) {
     // Render ground plane
     debugRenderer.drawGrid(glm::vec3(0.f, 1.f, 0.f), 0.0f, 100, 100, 1.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
 
+    ///////////////////////////////////////////////////////
     // Bezier curve demo
+    ///////////////////////////////////////////////////////
     glm::vec3 origin(0.0f, 8.0f, 0.0f);
     glm::vec3 control(2.0f, 6.0f, 0.0f);
     glm::vec3 end(14.0f, 2.0f, 0.0f);

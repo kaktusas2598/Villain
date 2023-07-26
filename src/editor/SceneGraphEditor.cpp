@@ -5,12 +5,12 @@
 
 #include "Application.hpp"
 #include "Engine.hpp"
+#include "components/KinematicController.hpp"
 #include "components/Light.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
-#include "components/PhysicsObjectComponent.hpp"
 #include "rendering/MeshUtils.hpp"
 
 namespace Villain {
