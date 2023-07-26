@@ -5,12 +5,12 @@
 
 #include "Application.hpp"
 #include "Engine.hpp"
+#include "components/KinematicController.hpp"
 #include "components/Light.hpp"
 #include "components/LookController.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
-#include "components/PhysicsObjectComponent.hpp"
 #include "rendering/MeshUtils.hpp"
 
 namespace Villain {
@@ -183,6 +183,8 @@ namespace Villain {
                 if (compo->getID() == GetId<Camera>()) {
                     ImGui::Text("Camera");
                     Camera* camera = static_cast<Camera*>(compo);
+
+                    ImGui::Text("Zoom: %.1f", camera->getZoom());
 
                     std::map<CameraType, const char*> types;
                     types[CameraType::NONE] = "None";

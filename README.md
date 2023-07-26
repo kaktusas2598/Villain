@@ -10,7 +10,7 @@
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
 * Debug/Edit mode UI
-* Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes
+* Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes
 * Error logging to stdout, log file and editor console
 * Event Dispatcher system
 * Supported Camera projection types: Perspective(First Person), Third Person,  Orthographic, Orthographic 2D or no projection
@@ -47,19 +47,24 @@
 * 3D Rigid Body engine:
   * Rigid body Euler numerical integration
   * Force generators: gravity, spring
-  * Collision Detection System:
+  * Collision Detection system:
       * Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)
-      * Narrow-Phase: planes, spheres, OBBs (Separate from rigid engine ATM)
-  * Collision resolution system in progress!!
+      * Narrow-Phase: planes, spheres, OBBs
+  * Collision Resolution using iterative contact resolver
 
 ## Planned Features
 
-* Engine editor with scene management
-* Hot reloading resources
-* Physics Engine:
+* Editor planned features:
+    * Scene management, node deletion, etc
+    * Hot reloading resources
+    * Loading models, textures, scene, etc.
+    * Scene camera?
+* Physics Engine planned additions:
+    * Friction
+    * Stability improvements, optimizations
+    * Constraints: rods, cables, hinges, joints
+    * Collision events, triggers
     * Data driven approach for particle types and emitters
-    * Rigid body collision resolution
-    * Rigid body/collision geometry integration
 * Lua Scripting
 * Data Oriented Models
 * Entity Component System
@@ -70,6 +75,7 @@
 * HDR and Bloom
 * Blending skeletal animations
 * Embedded texture support
+* Integrate terrain rendering features from 'Terrain' example
 
 ## Screenshots
 

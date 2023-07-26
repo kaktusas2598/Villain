@@ -1,5 +1,8 @@
 <map id="Villain::RigidBodyWorld" name="Villain::RigidBodyWorld">
-<area shape="rect" id="node1" title=" " alt="" coords="93,95,267,121"/>
-<area shape="rect" id="node2" href="$classVillain_1_1ForceRegistry.html" title=" " alt="" coords="5,5,165,32"/>
-<area shape="rect" id="node3" href="$classVillain_1_1DebugRenderer.html" title=" " alt="" coords="190,5,362,32"/>
+<area shape="rect" id="node1" title="Dynamic world of Rigid Bodies with collision." alt="" coords="569,79,744,105"/>
+<area shape="rect" id="node2" href="$classVillain_1_1ContactResolver.html" title="Contact resolution routine." alt="" coords="239,5,417,32"/>
+<area shape="rect" id="node3" href="$classVillain_1_1ForceRegistry.html" title=" " alt="" coords="248,56,408,83"/>
+<area shape="rect" id="node4" href="$classVillain_1_1Contact.html" title="Represent contact of 2 colliding bodies." alt="" coords="267,107,389,133"/>
+<area shape="rect" id="node5" href="$classVillain_1_1RigidBody.html" title=" " alt="" coords="5,107,143,133"/>
+<area shape="rect" id="node6" href="$classVillain_1_1DebugRenderer.html" title="2D and 3D line batch renderer" alt="" coords="242,157,414,184"/>
 </map>

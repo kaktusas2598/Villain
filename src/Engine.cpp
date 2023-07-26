@@ -99,11 +99,10 @@ namespace Villain {
 
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
-        // TODO: will need some configs here, gravity vector for example
-        physicsEngine = std::make_unique<PhysicsEngine>(this);
         // TODO: ability to set custom number of contacts
         particleWorld = std::make_unique<ParticleWorld>(200);
-        rigidBodyWorld = std::make_unique<RigidBodyWorld>();
+        // FIXME: Seems like works best with only 1 iteration
+        rigidBodyWorld = std::make_unique<RigidBodyWorld>(200, 1);
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
@@ -247,11 +246,7 @@ namespace Villain {
 
                 application->handleEvents(deltaTime);
 
-                physicsEngine->simulate(deltaTime);
-                physicsEngine->handleCollisions();
-
                 particleWorld->runPhysics(deltaTime);
-
 
                 application->onAppPreUpdate(deltaTime);
                 application->update(deltaTime);
@@ -315,7 +310,7 @@ namespace Villain {
         application->render(renderingEngine.get(), deltaTime);
 
         application->onAppRender(deltaTime);
-        physicsEngine->render();
+        rigidBodyWorld->debugDraw(renderingEngine->getMainCamera());
 
         // Make sure we disable wireframe mode before post processing pass
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

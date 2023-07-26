@@ -92,11 +92,9 @@ $(document).ready(function(){initNavTree('classVillain_1_1RigidBody.html',''); i
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afb7eb9c54d41c68fbcd37dd51585851d"><td class="memItemLeft" align="right" valign="top"><a id="afb7eb9c54d41c68fbcd37dd51585851d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>integrate</b> (float deltaTime)</td></tr>
+<tr class="memitem:afb7eb9c54d41c68fbcd37dd51585851d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBody.html#afb7eb9c54d41c68fbcd37dd51585851d">integrate</a> (float deltaTime)</td></tr>
 <tr class="separator:afb7eb9c54d41c68fbcd37dd51585851d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3a8abcd683c8943027487d04d1b5aa3"><td class="memItemLeft" align="right" valign="top"><a id="ac3a8abcd683c8943027487d04d1b5aa3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>calculateDerivedData</b> ()</td></tr>
+<tr class="memitem:ac3a8abcd683c8943027487d04d1b5aa3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBody.html#ac3a8abcd683c8943027487d04d1b5aa3">calculateDerivedData</a> ()</td></tr>
 <tr class="separator:ac3a8abcd683c8943027487d04d1b5aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0660796ca60e827faeca05b21b85f22"><td class="memItemLeft" align="right" valign="top"><a id="ab0660796ca60e827faeca05b21b85f22"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addForce</b> (const glm::vec3 &amp;force)</td></tr>
@@ -110,12 +108,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addForceAtBodyPoint</
 <tr class="memitem:a9816204ddc6a91839b1f7c83ae59e42f"><td class="memItemLeft" align="right" valign="top"><a id="a9816204ddc6a91839b1f7c83ae59e42f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasFiniteMass</b> () const</td></tr>
 <tr class="separator:a9816204ddc6a91839b1f7c83ae59e42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf26c3551b22c08bfb944067dd032950"><td class="memItemLeft" align="right" valign="top"><a id="abf26c3551b22c08bfb944067dd032950"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getAwake</b> () const</td></tr>
+<tr class="separator:abf26c3551b22c08bfb944067dd032950"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a760e591113fe2899fffbdecc851d3500"><td class="memItemLeft" align="right" valign="top"><a id="a760e591113fe2899fffbdecc851d3500"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getInverseMass</b> () const</td></tr>
 <tr class="separator:a760e591113fe2899fffbdecc851d3500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeb8f766e96e7e30c8d4049a65b4a11d"><td class="memItemLeft" align="right" valign="top"><a id="aeeb8f766e96e7e30c8d4049a65b4a11d"></a>
 glm::mat3&#160;</td><td class="memItemRight" valign="bottom"><b>getInverseInertiaTensor</b> () const</td></tr>
 <tr class="separator:aeeb8f766e96e7e30c8d4049a65b4a11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27e6efb73a3d2a316295eefd36463468"><td class="memItemLeft" align="right" valign="top"><a id="a27e6efb73a3d2a316295eefd36463468"></a>
+glm::mat3&#160;</td><td class="memItemRight" valign="bottom"><b>getInverseInertiaTensorWorld</b> () const</td></tr>
+<tr class="separator:a27e6efb73a3d2a316295eefd36463468"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a029f065c6c682817c0d4b0b3b2e2a537"><td class="memItemLeft" align="right" valign="top"><a id="a029f065c6c682817c0d4b0b3b2e2a537"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getMass</b> () const</td></tr>
 <tr class="separator:a029f065c6c682817c0d4b0b3b2e2a537"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,9 +141,15 @@ glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getLinearVelocit
 <tr class="memitem:aa0e5580abb4dd3c6703075a1ac085f30"><td class="memItemLeft" align="right" valign="top"><a id="aa0e5580abb4dd3c6703075a1ac085f30"></a>
 glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getAngularVelocity</b> () const</td></tr>
 <tr class="separator:aa0e5580abb4dd3c6703075a1ac085f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9964cff2047b3225c73a71cfff84bbb"><td class="memItemLeft" align="right" valign="top"><a id="af9964cff2047b3225c73a71cfff84bbb"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getLastFrameAcceleration</b> () const</td></tr>
+<tr class="separator:af9964cff2047b3225c73a71cfff84bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6371a6c385b8c0aacab73ab1766f7091"><td class="memItemLeft" align="right" valign="top"><a id="a6371a6c385b8c0aacab73ab1766f7091"></a>
 glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getTransform</b> () const</td></tr>
 <tr class="separator:a6371a6c385b8c0aacab73ab1766f7091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e0a089ac6139f2991c421526545dcd3"><td class="memItemLeft" align="right" valign="top"><a id="a6e0a089ac6139f2991c421526545dcd3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAwake</b> (const bool awake=true)</td></tr>
+<tr class="separator:a6e0a089ac6139f2991c421526545dcd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28a1b80bef22051645cbf4cec3030d16"><td class="memItemLeft" align="right" valign="top"><a id="a28a1b80bef22051645cbf4cec3030d16"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setMass</b> (float m)</td></tr>
 <tr class="separator:a28a1b80bef22051645cbf4cec3030d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,6 +183,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransform</b> (con
 <tr class="memitem:ab53781f635692de6a680bdc21600f69b"><td class="memItemLeft" align="right" valign="top"><a id="ab53781f635692de6a680bdc21600f69b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setDamping</b> (float linear, float angular)</td></tr>
 <tr class="separator:ab53781f635692de6a680bdc21600f69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6a0f006bec2bd459e8fed325988f718"><td class="memItemLeft" align="right" valign="top"><a id="aa6a0f006bec2bd459e8fed325988f718"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addLinearVelocity</b> (const glm::vec3 &amp;deltaVel)</td></tr>
+<tr class="separator:aa6a0f006bec2bd459e8fed325988f718"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47c31469447c0bd2e675ee36c5df8500"><td class="memItemLeft" align="right" valign="top"><a id="a47c31469447c0bd2e675ee36c5df8500"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addAngularVelocity</b> (const glm::vec3 &amp;deltaVel)</td></tr>
+<tr class="separator:a47c31469447c0bd2e675ee36c5df8500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc436b2c53b376db0b248cfc5d3601a0"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">getPointInWorldSpace</a> (const glm::vec3 &amp;point)</td></tr>
 <tr class="separator:abc436b2c53b376db0b248cfc5d3601a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02381285c0bba8f2521447355592938a"><td class="memItemLeft" align="right" valign="top"><a id="a02381285c0bba8f2521447355592938a"></a>
@@ -231,6 +247,24 @@ glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>lastFrameAcceler
 <tr class="separator:a770324409c4e6265482f088861ec8db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac3a8abcd683c8943027487d04d1b5aa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3a8abcd683c8943027487d04d1b5aa3">&#9670;&nbsp;</a></span>calculateDerivedData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::RigidBody::calculateDerivedData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000049">Todo:</a></b></dt><dd>Investigate if these calculations are correct </dd></dl>
+
+</div>
+</div>
 <a id="abc436b2c53b376db0b248cfc5d3601a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abc436b2c53b376db0b248cfc5d3601a0">&#9670;&nbsp;</a></span>getPointInWorldSpace()</h2>
 
@@ -254,7 +288,26 @@ glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>lastFrameAcceler
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000057">Todo:</a></b></dt><dd>Make sure these methods are correct </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000050">Todo:</a></b></dt><dd>Make sure these methods are correct </dd></dl>
+
+</div>
+</div>
+<a id="afb7eb9c54d41c68fbcd37dd51585851d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb7eb9c54d41c68fbcd37dd51585851d">&#9670;&nbsp;</a></span>integrate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::RigidBody::integrate </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>deltaTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000048">Todo:</a></b></dt><dd>Investigate if this is really correct, check page 202 in Ian Millington book </dd></dl>
 
 </div>
 </div>

@@ -7,7 +7,6 @@ var classVillain_1_1Engine =
     [ "getEventDispatcher", "classVillain_1_1Engine.html#a63d5343a365f52cafe0f9fb40b7d5357", null ],
     [ "getImGuiLayer", "classVillain_1_1Engine.html#ac0ab3f3352f96d9eb47b3d444cceffab", null ],
     [ "getParticleWorld", "classVillain_1_1Engine.html#a23676e034d0f6052fbf5a3ca9616bf8c", null ],
-    [ "getPhysicsEngine", "classVillain_1_1Engine.html#ad5c75c7cf0f87e10180625f240766dae", null ],
     [ "getRenderingEngine", "classVillain_1_1Engine.html#a83a49ef1bc9c5f0d7c8248c43af7d486", null ],
     [ "getRigidBodyWorld", "classVillain_1_1Engine.html#a7ea7e5d4ff7de839dce9752b8b8a9868", null ],
     [ "getSceneBuffer", "classVillain_1_1Engine.html#af494d866f8c92222611197edd0753ca2", null ],

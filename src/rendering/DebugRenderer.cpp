@@ -176,9 +176,9 @@ namespace Villain {
         indices.push_back(i + 1);
     }
 
-    // NOTE: This method is not final yet, might be removed in the near future, not tested
-    void DebugRenderer::drawQuad(const glm::vec3& center, glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color) {
+    void DebugRenderer::drawQuad(const glm::vec3& center, const glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color) {
         int i = vertices.size();
+        vertices.resize(vertices.size() + 4);
         if (x && z) { // floor on xz plane
             vertices[i + 0].position = glm::vec3(center.x - size.x/2, center.y, center.z + size.y/2);
             vertices[i + 1].position = glm::vec3(center.x + size.x/2, center.y, center.z + size.y/2);
@@ -197,6 +197,12 @@ namespace Villain {
         } else {
             //std::cerr << "Impossible plane combo!\n";
         }
+
+        // Set all vertex colors at once
+        for (int j = i; j < i + 4; j++) {
+            vertices[j].color = color;
+        }
+
         indices.reserve(indices.size() + 8);
 
         indices.push_back(i);
@@ -210,6 +216,115 @@ namespace Villain {
 
         indices.push_back(i + 3);
         indices.push_back(i);
+    }
+
+    void DebugRenderer::drawPlane(const glm::vec3& normal, float distance, const glm::vec2& size, const glm::vec4& color) {
+        glm::vec3 up, right;
+        int i = vertices.size();
+        vertices.resize(vertices.size() + 4);
+
+        // Find the two basis vectors (up and right) for the plane
+        if (std::abs(normal.x) < 0.9f) {
+            up = glm::vec3(1.0f, 0.0f, 0.0f);
+        } else {
+            up = glm::vec3(0.0f, 1.0f, 0.0f);
+        }
+
+        right = glm::normalize(glm::cross(normal, up));
+        up = glm::normalize(glm::cross(right, normal));
+
+        glm::vec3 centre = normal * distance;
+        glm::vec3 rightOffset = right * (size.x * 0.5f);
+        glm::vec3 upOffset = up * (size.y * 0.5f);
+
+        vertices[i + 0].position = centre + rightOffset + upOffset;
+        vertices[i + 1].position = centre + rightOffset - upOffset;
+        vertices[i + 2].position = centre - rightOffset - upOffset;
+        vertices[i + 3].position = centre - rightOffset + upOffset;
+
+        // Set all vertex colors at once
+        for (int j = i; j < i + 4; j++) {
+            vertices[j].color = color;
+        }
+
+        indices.reserve(indices.size() + 8);
+
+        indices.push_back(i);
+        indices.push_back(i + 1);
+
+        indices.push_back(i + 1);
+        indices.push_back(i + 2);
+
+        indices.push_back(i + 2);
+        indices.push_back(i + 3);
+
+        indices.push_back(i + 3);
+        indices.push_back(i);
+    }
+
+    void DebugRenderer::drawGrid(const glm::vec3& normal, float distance, int numColumns, int numRows, float gridSize, const glm::vec4& color) {
+        glm::vec3 right, up;
+        calculateBasisVectors(normal, &up, &right);
+
+        int numVertices = (numColumns + numRows + 2) * 2; // Total number of vertices for the grid lines
+        int numIndices = numVertices * 2; // Total number of indices for the grid lines
+
+        vertices.reserve(vertices.size() + numVertices);
+        indices.reserve(indices.size() + numIndices);
+
+        float totalWidth = numColumns * gridSize;
+        float totalHeight = numRows * gridSize;
+
+        glm::vec3 center = distance * normal;
+        glm::vec3 start = center - (totalWidth * 0.5f) * right - (totalHeight * 0.5f) * up;
+
+        for (int i = 0; i <= numColumns; ++i) {
+            glm::vec3 offset = i * gridSize * right;
+            drawLine(start + offset, start + offset + totalHeight * up, color);
+        }
+
+        for (int i = 0; i <= numRows; ++i) {
+            glm::vec3 offset = i * gridSize * up;
+            drawLine(start + offset, start + offset + totalWidth * right, color);
+        }
+    }
+
+    void DebugRenderer::calculateBasisVectors(const glm::vec3& normal, glm::vec3* up, glm::vec3* right) {
+        // Find an arbitrary vector that is not parallel to the normal
+        glm::vec3 arbitraryVec;
+        if (std::abs(normal.x) < std::abs(normal.y) && std::abs(normal.x) < std::abs(normal.z)) {
+            arbitraryVec = glm::vec3(1.0f, 0.0f, 0.0f);
+        } else if (std::abs(normal.y) < std::abs(normal.z)) {
+            arbitraryVec = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            arbitraryVec = glm::vec3(0.0f, 0.0f, 1.0f);
+        }
+
+        // Project the arbitrary vector onto the plane defined by the normal
+        *up = glm::normalize(arbitraryVec - glm::dot(arbitraryVec, normal) * normal);
+
+        // Compute the right vector as the cross product between the normal and the up vector
+        *right = glm::cross(normal, *up);
+    }
+
+    void DebugRenderer::drawQuadraticBezierCurve(const glm::vec3& start, const glm::vec3& control, const glm::vec3& end, int numSegments, const glm::vec4& color) {
+        if (numSegments < 2) {
+            return;
+        }
+
+        float dt = 1.0f / static_cast<float>(numSegments);
+
+        glm::vec3 previousPoint = start;
+
+        for (int i = 1; i <= numSegments; ++i) {
+            float t = dt * static_cast<float>(i);
+            glm::vec3 point = glm::mix(glm::mix(start, control, t), glm::mix(control, end, t), t);
+
+            // Draw line segment from previous point to the current point
+            drawLine(previousPoint, point, color);
+
+            previousPoint = point;
+        }
     }
 
     void DebugRenderer::drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size) {

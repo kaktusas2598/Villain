@@ -4,6 +4,7 @@
 #include "camera/Camera.hpp"
 #include "Logger.hpp"
 #include "SceneNode.hpp"
+#include "components/KinematicController.hpp"
 #include "components/Light.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
@@ -134,7 +135,7 @@ namespace Villain {
                     if (component->Attribute("type") == std::string("Camera")) {
                         Camera* camera = new Camera();
                         // Optional camera values
-                        float zNear, zFar;
+                        float zNear, zFar, zoom;
                         bool isMain = false;
                         const char* type = nullptr;
 
@@ -144,6 +145,11 @@ namespace Villain {
                         if (component->QueryFloatAttribute("zFar", &zFar) == tinyxml2::XML_SUCCESS) {
                             camera->setZFar(zFar);
                         }
+                        if (component->QueryFloatAttribute("zoom", &zoom) == tinyxml2::XML_SUCCESS) {
+                            camera->setZoom(zoom);
+                        }
+
+                        camera->setPosition(parseVec3Element(component, "Position"));
 
                         if (component->QueryStringAttribute("cameraType", &type) == tinyxml2::XML_SUCCESS) {
                             std::string cameraType = type;
@@ -216,6 +222,37 @@ namespace Villain {
 
                     if (component->Attribute("type") == std::string("MoveController")) {
                         currentNode->addComponent(new MoveController());
+                    }
+
+                    // TODO: finish
+                    if (component->Attribute("type") == std::string("RigidBody")) {
+                        RigidBody* rigidBody = new RigidBody();
+                        CollisionPrimitive* colShape = nullptr;
+                        bool kinematic = false;
+
+                        component->QueryBoolAttribute("kinematic", &kinematic);
+
+                        for (tinyxml2::XMLElement* e = component->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+                            if (e->Value() == std::string("RigidBody")) {
+                                float mass = 1.0f;
+                                e->QueryFloatAttribute("mass", &mass);
+                                rigidBody->setMass(10.0f);
+                                rigidBody->setPosition(parseVec3Element(component, "Position"));
+                            }
+                            if (e->Value() == std::string("CollisionSphere")) {
+                                //TODO
+                            }
+                            if (e->Value() == std::string("CollisionBox")) {
+                                VILLAIN_ERROR("CollisionBox found!");
+                                colShape = new CollisionBox(parseVec3Element(e, "HalfSize"), rigidBody);
+                            }
+                        }
+
+                        if (kinematic) {
+                            currentNode->addComponent(new KinematicController(rigidBody, colShape));
+                        } else {
+                            currentNode->addComponent(new RigidBodyComponent(rigidBody, colShape));
+                        }
                     }
 
                     // TODO: Rest of components

@@ -1,7 +1,8 @@
 <map id="Villain::KinematicController" name="Villain::KinematicController">
-<area shape="rect" id="node1" title=" " alt="" coords="131,260,332,287"/>
-<area shape="rect" id="node2" href="$classVillain_1_1RigidBodyComponent.html" title=" " alt="" coords="125,184,337,211"/>
+<area shape="rect" id="node1" title=" " alt="" coords="133,260,335,287"/>
+<area shape="rect" id="node2" href="$classVillain_1_1RigidBodyComponent.html" title=" " alt="" coords="128,184,340,211"/>
 <area shape="rect" id="node3" href="$classVillain_1_1NodeComponent.html" title=" " alt="" coords="5,95,185,121"/>
 <area shape="rect" id="node4" href="$classVillain_1_1SceneNode.html" title=" " alt="" coords="23,5,167,32"/>
-<area shape="rect" id="node5" href="$classVillain_1_1RigidBody.html" title=" " alt="" coords="209,95,347,121"/>
+<area shape="rect" id="node5" href="$classVillain_1_1RigidBody.html" title=" " alt="" coords="228,5,365,32"/>
+<area shape="rect" id="node6" href="$classVillain_1_1CollisionPrimitive.html" title="Represents primitive to detect collision against." alt="" coords="295,95,482,121"/>
 </map>

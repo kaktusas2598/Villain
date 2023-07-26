@@ -7,12 +7,17 @@
 
 namespace Villain {
 
-    /// Render primitives for debug purposes using lines
-    // TODO: Plane grid (from plane normal and distance to origin)
-    // TODO: Other 3D primitives (cylinders, different ways to calculate sphere?)
+    // TODO: Other 3D primitives (cylinders, capsules, cones, frustums, hemispheres)
+    // TODO: Bezier curves, splines
+    // TODO: Draw coordinate gizmos, arrows
     // TODO: Mesh generation could be refactored to new helper class?
+    /*! \brief 2D and 3D line batch renderer
+     *
+     * Lets drawing 2D and 3D primitives using lines and batching for debug purposes.
+     */
     class DebugRenderer {
         public:
+            DebugRenderer() {}
             ~DebugRenderer();
 
             /// Call in app initialisation method, must be called before doing anything else
@@ -30,7 +35,13 @@ namespace Villain {
             /// Add line segment to draw batch
             void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color = glm::vec4(1.0f));
             /// Add axis-aligned quad to draw batch
-            void drawQuad(const glm::vec3& center, glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color = glm::vec4(1.0f));
+            void drawQuad(const glm::vec3& center, const glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color = glm::vec4(1.0f));
+            /// Add a plane with specified size to draw batch
+            void drawPlane(const glm::vec3& normal, float distance, const glm::vec2& size, const glm::vec4& color = glm::vec4(1.0f));
+            /// Add a grid of specified number of columns, rows, specified size and using plane parameters
+            void drawGrid(const glm::vec3& normal, float distance, int numColumns, int numRows, float gridSize, const glm::vec4& color = glm::vec4(1.0f));
+            /// Add a quadrating bezier curve with specified control params, start end and how many line segments to use
+            void drawQuadraticBezierCurve(const glm::vec3& start, const glm::vec3& control, const glm::vec3& end, int numSegments, const glm::vec4& color = glm::vec4(1.0f));
             /// Add axis-aligned box (AABB) to draw batch
             void drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size);
             /// Add rotated box (OBB) to draw batch
@@ -48,5 +59,8 @@ namespace Villain {
             std::vector<GLuint> indices;
             int numElements = 0;
             GLuint vbo = 0, vao = 0, ibo = 0;
+
+            // NOTE: Should probably go to some utils class instead!?
+            void calculateBasisVectors(const glm::vec3& normal, glm::vec3* up, glm::vec3* right);
     };
 }

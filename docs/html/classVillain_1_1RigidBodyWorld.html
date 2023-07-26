@@ -91,15 +91,21 @@ $(document).ready(function(){initNavTree('classVillain_1_1RigidBodyWorld.html','
 </div><!--header-->
 <div class="contents">
 
+<p>Dynamic world of Rigid Bodies with collision.  
+ <a href="classVillain_1_1RigidBodyWorld.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="RigidBodyWorld_8hpp_source.html">RigidBodyWorld.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Villain::RigidBodyWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVillain_1_1RigidBodyWorld__coll__graph.png" border="0" usemap="#aVillain_1_1RigidBodyWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aVillain_1_1RigidBodyWorld_coll__map" id="aVillain_1_1RigidBodyWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="93,95,267,121"/>
-<area shape="rect" href="classVillain_1_1ForceRegistry.html" title=" " alt="" coords="5,5,165,32"/>
-<area shape="rect" href="classVillain_1_1DebugRenderer.html" title=" " alt="" coords="190,5,362,32"/>
+<area shape="rect" title="Dynamic world of Rigid Bodies with collision." alt="" coords="569,79,744,105"/>
+<area shape="rect" href="classVillain_1_1ContactResolver.html" title="Contact resolution routine." alt="" coords="239,5,417,32"/>
+<area shape="rect" href="classVillain_1_1ForceRegistry.html" title=" " alt="" coords="248,56,408,83"/>
+<area shape="rect" href="classVillain_1_1Contact.html" title="Represent contact of 2 colliding bodies." alt="" coords="267,107,389,133"/>
+<area shape="rect" href="classVillain_1_1RigidBody.html" title=" " alt="" coords="5,107,143,133"/>
+<area shape="rect" href="classVillain_1_1DebugRenderer.html" title="2D and 3D line batch renderer" alt="" coords="242,157,414,184"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -108,16 +114,28 @@ Public Types</h2></td></tr>
 <tr class="memitem:af1bd1ab1f8ac6bb4070157a169fdaf16"><td class="memItemLeft" align="right" valign="top"><a id="af1bd1ab1f8ac6bb4070157a169fdaf16"></a>
 typedef std::vector&lt; <a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>RigidBodies</b></td></tr>
 <tr class="separator:af1bd1ab1f8ac6bb4070157a169fdaf16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a092284c1c911828a32d5a082bb812092"><td class="memItemLeft" align="right" valign="top"><a id="a092284c1c911828a32d5a082bb812092"></a>
+typedef std::vector&lt; <a class="el" href="classVillain_1_1CollisionPrimitive.html">CollisionPrimitive</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Colliders</b></td></tr>
+<tr class="separator:a092284c1c911828a32d5a082bb812092"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a73d90b280426e0200f866824e6938a31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a73d90b280426e0200f866824e6938a31">runPhysics</a> (float deltaTime)</td></tr>
+<tr class="memitem:a126bf3d432d2f6db0bd2d5c043056fb3"><td class="memItemLeft" align="right" valign="top"><a id="a126bf3d432d2f6db0bd2d5c043056fb3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a126bf3d432d2f6db0bd2d5c043056fb3">RigidBodyWorld</a> (unsigned <a class="el" href="classVillain_1_1RigidBodyWorld.html#adce3ee7252c256ffe364e3586fe501f6">maxContacts</a>, unsigned iterations=0)</td></tr>
+<tr class="memdesc:a126bf3d432d2f6db0bd2d5c043056fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">If not iterations are provided, when it will be four times the number of contacts used. <br /></td></tr>
+<tr class="separator:a126bf3d432d2f6db0bd2d5c043056fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215">generateContacts</a> ()</td></tr>
+<tr class="memdesc:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls all contact generators to report any contacts and returns numbers of generated contacts.  <a href="classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215">More...</a><br /></td></tr>
+<tr class="separator:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73d90b280426e0200f866824e6938a31"><td class="memItemLeft" align="right" valign="top"><a id="a73d90b280426e0200f866824e6938a31"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a73d90b280426e0200f866824e6938a31">runPhysics</a> (float deltaTime)</td></tr>
+<tr class="memdesc:a73d90b280426e0200f866824e6938a31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main method for processing physics in rigid body world. <br /></td></tr>
 <tr class="separator:a73d90b280426e0200f866824e6938a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59fcf8aa6626407fb0c4b98a19712a39"><td class="memItemLeft" align="right" valign="top"><a id="a59fcf8aa6626407fb0c4b98a19712a39"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>startFrame</b> ()</td></tr>
+<tr class="memitem:a59fcf8aa6626407fb0c4b98a19712a39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a59fcf8aa6626407fb0c4b98a19712a39">startFrame</a> ()</td></tr>
 <tr class="separator:a59fcf8aa6626407fb0c4b98a19712a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35ecd215d85eb4c67e667f3d1033201a"><td class="memItemLeft" align="right" valign="top"><a id="a35ecd215d85eb4c67e667f3d1033201a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>integrate</b> (float deltaTime)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a35ecd215d85eb4c67e667f3d1033201a">integrate</a> (float deltaTime)</td></tr>
+<tr class="memdesc:a35ecd215d85eb4c67e667f3d1033201a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integrate all bodies in this world forward in given delta time. <br /></td></tr>
 <tr class="separator:a35ecd215d85eb4c67e667f3d1033201a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29d5873ea5321e615e7875e4e5c37630"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a29d5873ea5321e615e7875e4e5c37630">debugDraw</a> (<a class="el" href="classVillain_1_1Camera.html">Camera</a> *camera)</td></tr>
 <tr class="separator:a29d5873ea5321e615e7875e4e5c37630"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,15 +148,40 @@ RigidBodies &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getBodie
 <tr class="memitem:af88fa4739f45d77f46b23897767dc946"><td class="memItemLeft" align="right" valign="top"><a id="af88fa4739f45d77f46b23897767dc946"></a>
 <a class="el" href="classVillain_1_1ForceRegistry.html">ForceRegistry</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getForceRegistry</b> ()</td></tr>
 <tr class="separator:af88fa4739f45d77f46b23897767dc946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a432fa6b007d5d9c30e562170c6a20e28"><td class="memItemLeft" align="right" valign="top"><a id="a432fa6b007d5d9c30e562170c6a20e28"></a>
+Colliders &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getColliders</b> ()</td></tr>
+<tr class="separator:a432fa6b007d5d9c30e562170c6a20e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a60f6496d2f4d4b568a7fecb4e01d1423"><td class="memItemLeft" align="right" valign="top"><a id="a60f6496d2f4d4b568a7fecb4e01d1423"></a>
-RigidBodies&#160;</td><td class="memItemRight" valign="bottom"><b>bodies</b></td></tr>
+RigidBodies&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a60f6496d2f4d4b568a7fecb4e01d1423">bodies</a></td></tr>
+<tr class="memdesc:a60f6496d2f4d4b568a7fecb4e01d1423"><td class="mdescLeft">&#160;</td><td class="mdescRight">All bodies in this world. <br /></td></tr>
 <tr class="separator:a60f6496d2f4d4b568a7fecb4e01d1423"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a234bd9038236628b245613bae08141fe"><td class="memItemLeft" align="right" valign="top"><a id="a234bd9038236628b245613bae08141fe"></a>
-<a class="el" href="classVillain_1_1ForceRegistry.html">ForceRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><b>registry</b></td></tr>
+<a class="el" href="classVillain_1_1ForceRegistry.html">ForceRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a234bd9038236628b245613bae08141fe">registry</a></td></tr>
+<tr class="memdesc:a234bd9038236628b245613bae08141fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">All force generators in this world. <br /></td></tr>
 <tr class="separator:a234bd9038236628b245613bae08141fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a981871eb7dc704fe6369fcd00464eb"><td class="memItemLeft" align="right" valign="top"><a id="a0a981871eb7dc704fe6369fcd00464eb"></a>
+Colliders&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a0a981871eb7dc704fe6369fcd00464eb">colliders</a></td></tr>
+<tr class="memdesc:a0a981871eb7dc704fe6369fcd00464eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collision shapes attached to rigid bodies or immovable objects. <br /></td></tr>
+<tr class="separator:a0a981871eb7dc704fe6369fcd00464eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74c25ee6a6e327f00c629973f568719a"><td class="memItemLeft" align="right" valign="top"><a id="a74c25ee6a6e327f00c629973f568719a"></a>
+<a class="el" href="classVillain_1_1ContactResolver.html">ContactResolver</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a74c25ee6a6e327f00c629973f568719a">resolver</a></td></tr>
+<tr class="memdesc:a74c25ee6a6e327f00c629973f568719a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collision resolution routine for all contacts in this world. <br /></td></tr>
+<tr class="separator:a74c25ee6a6e327f00c629973f568719a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c5368fa45f327afb5378a655b6d6cdd"><td class="memItemLeft" align="right" valign="top"><a id="a1c5368fa45f327afb5378a655b6d6cdd"></a>
+<a class="el" href="classVillain_1_1Contact.html">Contact</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#a1c5368fa45f327afb5378a655b6d6cdd">contacts</a></td></tr>
+<tr class="memdesc:a1c5368fa45f327afb5378a655b6d6cdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of contacts, for filling by the contact generators. <br /></td></tr>
+<tr class="separator:a1c5368fa45f327afb5378a655b6d6cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adce3ee7252c256ffe364e3586fe501f6"><td class="memItemLeft" align="right" valign="top"><a id="adce3ee7252c256ffe364e3586fe501f6"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#adce3ee7252c256ffe364e3586fe501f6">maxContacts</a></td></tr>
+<tr class="memdesc:adce3ee7252c256ffe364e3586fe501f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of contacts allowed in this world. <br /></td></tr>
+<tr class="separator:adce3ee7252c256ffe364e3586fe501f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8c954f4fd2219144d9aa6325f01aff3"><td class="memItemLeft" align="right" valign="top"><a id="af8c954f4fd2219144d9aa6325f01aff3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#af8c954f4fd2219144d9aa6325f01aff3">calculateIterations</a></td></tr>
+<tr class="memdesc:af8c954f4fd2219144d9aa6325f01aff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if should calculate number of iterations to give to contact resolver. <br /></td></tr>
+<tr class="separator:af8c954f4fd2219144d9aa6325f01aff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e2501d15bbf45450b6acfd7556f9a41"><td class="memItemLeft" align="right" valign="top"><a id="a5e2501d15bbf45450b6acfd7556f9a41"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> = false</td></tr>
 <tr class="separator:a5e2501d15bbf45450b6acfd7556f9a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +190,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
 <tr class="separator:ac742995839dcad2f7fcebe3c97ea5771"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000060">Todo:</a></b></dt><dd>Collision detection and responses </dd></dl>
+<div class="textblock"><p>Dynamic world of Rigid Bodies with collision. </p>
+<p>Keeps track of rigid bodies and their collision shapes and provice means to simulate world </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a29d5873ea5321e615e7875e4e5c37630"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29d5873ea5321e615e7875e4e5c37630">&#9670;&nbsp;</a></span>debugDraw()</h2>
@@ -164,26 +208,45 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000059">Todo:</a></b></dt><dd>Implement debug draw methods for rigid body colliders, contacts and force generators </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000052">Todo:</a></b></dt><dd>Render debug information for force and contact generators /for (ForceGenerator* forceGenerator : registry.generators()) { /forceGenerator-&gt;render(debugRenderer); /} </dd></dl>
 
 </div>
 </div>
-<a id="a73d90b280426e0200f866824e6938a31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73d90b280426e0200f866824e6938a31">&#9670;&nbsp;</a></span>runPhysics()</h2>
+<a id="ae1c5dcb5341fe15e26e87d743ce5c215"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1c5dcb5341fe15e26e87d743ce5c215">&#9670;&nbsp;</a></span>generateContacts()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Villain::RigidBodyWorld::runPhysics </td>
+          <td class="memname">unsigned Villain::RigidBodyWorld::generateContacts </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>deltaTime</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000058">Todo:</a></b></dt><dd>contacts, constraints, collision detection, response, etc. </dd></dl>
+
+<p>Calls all contact generators to report any contacts and returns numbers of generated contacts. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000051">Todo:</a></b></dt><dd>Integrate BVH broad phase here! </dd></dl>
+
+</div>
+</div>
+<a id="a59fcf8aa6626407fb0c4b98a19712a39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59fcf8aa6626407fb0c4b98a19712a39">&#9670;&nbsp;</a></span>startFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::RigidBodyWorld::startFrame </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initialises world for a simulation frame which clears all force accumulators for particles in this world, after calling this methods, forces can be added </p>
 
 </div>
 </div>

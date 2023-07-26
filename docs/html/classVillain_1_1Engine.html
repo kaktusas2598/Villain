@@ -123,9 +123,6 @@ bool *&#160;</td><td class="memItemRight" valign="bottom"><b>wireFrameModeActive
 <tr class="memitem:adac2012a41166e7520eb41c51671112c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Engine.html#adac2012a41166e7520eb41c51671112c">renderLoadingScreen</a> ()</td></tr>
 <tr class="memdesc:adac2012a41166e7520eb41c51671112c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special one-time render pass used for displaying loading screen image while the user application is loading.  <a href="classVillain_1_1Engine.html#adac2012a41166e7520eb41c51671112c">More...</a><br /></td></tr>
 <tr class="separator:adac2012a41166e7520eb41c51671112c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5c75c7cf0f87e10180625f240766dae"><td class="memItemLeft" align="right" valign="top"><a id="ad5c75c7cf0f87e10180625f240766dae"></a>
-<a class="el" href="classVillain_1_1PhysicsEngine.html">PhysicsEngine</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getPhysicsEngine</b> ()</td></tr>
-<tr class="separator:ad5c75c7cf0f87e10180625f240766dae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23676e034d0f6052fbf5a3ca9616bf8c"><td class="memItemLeft" align="right" valign="top"><a id="a23676e034d0f6052fbf5a3ca9616bf8c"></a>
 <a class="el" href="classVillain_1_1ParticleWorld.html">ParticleWorld</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getParticleWorld</b> ()</td></tr>
 <tr class="separator:a23676e034d0f6052fbf5a3ca9616bf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,7 +174,7 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main engine class containing game loop. </p>
-<p>Responsible for managing game loop with semi-fixed time step. Initialises most of the engine's subsystems, including but not limited to <a class="el" href="classVillain_1_1Window.html" title="Window Main Window Class.">Window</a>, <a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a>, <a class="el" href="classVillain_1_1RigidBodyWorld.html">RigidBodyWorld</a>, <a class="el" href="classVillain_1_1EventDispatcher.html" title="Responsible for keeping track of different event listeners and dispatches events to those listeners.">EventDispatcher</a> and client <a class="el" href="classVillain_1_1Application.html">Application</a>. Also handles input events and allows using Lua config script to setup startup settings. </p>
+<p>Responsible for managing game loop with semi-fixed time step. Initialises most of the engine's subsystems, including but not limited to <a class="el" href="classVillain_1_1Window.html" title="Window Main Window Class.">Window</a>, <a class="el" href="classVillain_1_1RenderingEngine.html">RenderingEngine</a>, <a class="el" href="classVillain_1_1RigidBodyWorld.html" title="Dynamic world of Rigid Bodies with collision.">RigidBodyWorld</a>, <a class="el" href="classVillain_1_1EventDispatcher.html" title="Responsible for keeping track of different event listeners and dispatches events to those listeners.">EventDispatcher</a> and client <a class="el" href="classVillain_1_1Application.html">Application</a>. Also handles input events and allows using Lua config script to setup startup settings. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7eac3d5129294c719f4bcafbc7497088"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7eac3d5129294c719f4bcafbc7497088">&#9670;&nbsp;</a></span>handleEvents()</h2>
@@ -267,8 +264,7 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceVillain.html#ac33d24de651dd6dad5de39728fa4dfe2">WindowFlags</a> </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000025">Todo:</a></b></dt><dd>will need some configs here, gravity vector for example </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000026">Todo:</a></b></dt><dd>ability to set custom number of contacts </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000025">Todo:</a></b></dt><dd>ability to set custom number of contacts </dd></dl>
 
 </div>
 </div>
@@ -288,8 +284,8 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight
 </div><div class="memdoc">
 
 <p>Special one-time render pass used for displaying loading screen image while the user application is loading. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000027">Todo:</a></b></dt><dd>Handle Resize, embed loading screen texture </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000028">Todo:</a></b></dt><dd>there should be no need to set material as well, for sprite we can only use diffuse texture and avoid non-existant uniform warnings </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000026">Todo:</a></b></dt><dd>Handle Resize, embed loading screen texture </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000027">Todo:</a></b></dt><dd>there should be no need to set material as well, for sprite we can only use diffuse texture and avoid non-existant uniform warnings </dd></dl>
 
 </div>
 </div>
@@ -309,7 +305,7 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>getScreenHeight
 </div><div class="memdoc">
 
 <p>Start running main application/game loop with semi fixed time step. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000029">Todo:</a></b></dt><dd>window title is currently isolated in <a class="el" href="classVillain_1_1Engine.html#a78079021966b921676b9a96e2f798782" title="Initialise engine using explicit params.">init()</a> method, we can drop that and load </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000028">Todo:</a></b></dt><dd>window title is currently isolated in <a class="el" href="classVillain_1_1Engine.html#a78079021966b921676b9a96e2f798782" title="Initialise engine using explicit params.">init()</a> method, we can drop that and load </dd></dl>
 
 </div>
 </div>
