@@ -12,10 +12,35 @@
     </Properties>
     <Node name="Free look camera">
         <Components>
-            <Component type="Camera" main='true' zNear='0.1' zFar='1000' cameraType='THIRD_PERSON'/>
-            <!--<Component type="MoveController"/>-->
+            <Component type="Camera" main='true' zNear='0.1' zFar='1000' cameraType='THIRD_PERSON' zoom='12.5'>
+                <Position x="-20.0" y="5.0" z="0.0" />
+            </Component>
+            <Component type="Model" fileName="assets/models/toyplane.obj"/>
+            <!--<Component type="RigidBody" kinematic="true">-->
+                <!--<RigidBody mass="1000.0" restitution="0.5" linearDamping="0.1" angularDamping="0.1">-->
+                    <!--<Position x="-20.0" y="5.0" z="0.0" />-->
+                    <!--[><Orientation x="0.0" y="0.0" z="0.0" w="1.0" /><]-->
+                <!--</RigidBody>-->
+                <!--<CollisionBox>-->
+                    <!--<HalfSize x="10.0" y="2.0" z="8.0"/>-->
+                <!--</CollisionBox>-->
+            <!--</Component>-->
         </Components>
     </Node>
+    <!--<Node name="Test Body">-->
+        <!--<Components>-->
+            <!--<Component type="RigidBody">-->
+                <!--<RigidBody mass="1.0" restitution="0.5" linearDamping="0.1" angularDamping="0.1">-->
+                    <!--<Position x="200.0" y="5.0" z="0.0" />-->
+                    <!--[><Orientation x="0.0" y="0.0" z="0.0" w="1.0" /><]-->
+                <!--</RigidBody>-->
+                <!--[><CollisionBox><]-->
+                    <!--[><HalfSize x="10.0" y="10.0" z="10.0"/><]-->
+                <!--[></CollisionBox><]-->
+            <!--</Component>-->
+        <!--</Components>-->
+    <!--</Node>-->
+
     <Node name="Sponza Palace" scale='0.1'>
         <Components>
             <Component type="Model" fileName="assets/models/sponza.obj" />
