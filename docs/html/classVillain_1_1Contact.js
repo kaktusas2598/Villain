@@ -1,6 +1,5 @@
 var classVillain_1_1Contact =
 [
-    [ "applyImpulse", "classVillain_1_1Contact.html#ac071b2ecf8a6d8de733362e5ac6a2be5", null ],
     [ "applyPositionChange", "classVillain_1_1Contact.html#a5f3b735a361e05323da34fbe05e5e219", null ],
     [ "applyVelocityChange", "classVillain_1_1Contact.html#a605d8b09081b32d38deb7cd15136f356", null ],
     [ "calculateContactBasis", "classVillain_1_1Contact.html#a77875c4c4e2bcdaff02fa1779a05a726", null ],

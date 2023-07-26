@@ -102,7 +102,6 @@ var hierarchy =
       [ "Villain::MoveController", "classVillain_1_1MoveController.html", null ],
       [ "Villain::ParticleEmitter", "classVillain_1_1ParticleEmitter.html", null ],
       [ "Villain::ParticlePhysicsComponent", "classVillain_1_1ParticlePhysicsComponent.html", null ],
-      [ "Villain::PhysicsObjectComponent", "classVillain_1_1PhysicsObjectComponent.html", null ],
       [ "Villain::RigidBodyComponent", "classVillain_1_1RigidBodyComponent.html", [
         [ "Villain::FlightController", "classVillain_1_1FlightController.html", null ],
         [ "Villain::KinematicController", "classVillain_1_1KinematicController.html", null ]
@@ -139,8 +138,6 @@ var hierarchy =
     [ "Villain::ParticleForceRegistry::ParticleForceRegistration", "structVillain_1_1ParticleForceRegistry_1_1ParticleForceRegistration.html", null ],
     [ "Villain::ParticleForceRegistry", "classVillain_1_1ParticleForceRegistry.html", null ],
     [ "Villain::ParticleWorld", "classVillain_1_1ParticleWorld.html", null ],
-    [ "Villain::PhysicsEngine", "classVillain_1_1PhysicsEngine.html", null ],
-    [ "Villain::PhysicsObject", "classVillain_1_1PhysicsObject.html", null ],
     [ "Villain::PickingTexture", "classVillain_1_1PickingTexture.html", null ],
     [ "Villain::PickingTexture::PixelInfo", "structVillain_1_1PickingTexture_1_1PixelInfo.html", null ],
     [ "Villain::Plane", "classVillain_1_1Plane.html", null ],

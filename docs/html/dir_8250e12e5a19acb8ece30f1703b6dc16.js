@@ -11,8 +11,6 @@ var dir_8250e12e5a19acb8ece30f1703b6dc16 =
     [ "ParticleContact.hpp", "ParticleContact_8hpp_source.html", null ],
     [ "ParticleForceGenerator.hpp", "ParticleForceGenerator_8hpp_source.html", null ],
     [ "ParticleWorld.hpp", "ParticleWorld_8hpp_source.html", null ],
-    [ "PhysicsEngine.hpp", "PhysicsEngine_8hpp_source.html", null ],
-    [ "PhysicsObject.hpp", "PhysicsObject_8hpp_source.html", null ],
     [ "Plane.hpp", "Plane_8hpp_source.html", null ],
     [ "RigidBody.hpp", "RigidBody_8hpp_source.html", null ],
     [ "RigidBodyWorld.hpp", "RigidBodyWorld_8hpp_source.html", null ],

@@ -165,9 +165,6 @@ glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 <tr class="separator:aa6d4e4f0a1296312da1851ad3891359f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77875c4c4e2bcdaff02fa1779a05a726"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#a77875c4c4e2bcdaff02fa1779a05a726">calculateContactBasis</a> ()</td></tr>
 <tr class="separator:a77875c4c4e2bcdaff02fa1779a05a726"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac071b2ecf8a6d8de733362e5ac6a2be5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#ac071b2ecf8a6d8de733362e5ac6a2be5">applyImpulse</a> (const glm::vec3 &amp;impulse, <a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *body, glm::vec3 *linearVelChange, glm::vec3 *angularVelChange)</td></tr>
-<tr class="memdesc:ac071b2ecf8a6d8de733362e5ac6a2be5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies impulse to the given body return changes in velocities.  <a href="classVillain_1_1Contact.html#ac071b2ecf8a6d8de733362e5ac6a2be5">More...</a><br /></td></tr>
-<tr class="separator:ac071b2ecf8a6d8de733362e5ac6a2be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a605d8b09081b32d38deb7cd15136f356"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#a605d8b09081b32d38deb7cd15136f356">applyVelocityChange</a> (glm::vec3 linearVelChange[2], glm::vec3 angularVelChange[2])</td></tr>
 <tr class="memdesc:a605d8b09081b32d38deb7cd15136f356"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform inertia-weighted impule based resolution of this contact alone.  <a href="classVillain_1_1Contact.html#a605d8b09081b32d38deb7cd15136f356">More...</a><br /></td></tr>
 <tr class="separator:a605d8b09081b32d38deb7cd15136f356"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,57 +204,6 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ContactResolver</b><
 <div class="textblock"><p>Represent contact of 2 colliding bodies. </p>
 <p>Only represent contact data between 2 colliding rigid bodies, use <a class="el" href="classVillain_1_1ContactResolver.html" title="Contact resolution routine.">ContactResolver</a> to resolve set of contacts. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac071b2ecf8a6d8de733362e5ac6a2be5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac071b2ecf8a6d8de733362e5ac6a2be5">&#9670;&nbsp;</a></span>applyImpulse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Villain::Contact::applyImpulse </td>
-          <td>(</td>
-          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
-          <td class="paramname"><em>impulse</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *&#160;</td>
-          <td class="paramname"><em>body</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">glm::vec3 *&#160;</td>
-          <td class="paramname"><em>linearVelChange</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">glm::vec3 *&#160;</td>
-          <td class="paramname"><em>angularVelChange</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Applies impulse to the given body return changes in velocities. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000042">Todo:</a></b></dt><dd></dd></dl>
-
-</div>
-</div>
 <a id="a605d8b09081b32d38deb7cd15136f356"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a605d8b09081b32d38deb7cd15136f356">&#9670;&nbsp;</a></span>applyVelocityChange()</h2>
 
@@ -293,7 +239,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ContactResolver</b><
 </div><div class="memdoc">
 
 <p>Perform inertia-weighted impule based resolution of this contact alone. </p>
-<p>\todofriction impulse</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000041">Todo:</a></b></dt><dd>implement friction impulse </dd></dl>
 
 </div>
 </div>

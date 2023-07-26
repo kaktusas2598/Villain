@@ -96,7 +96,7 @@ Core Engine</h2>
 <li>2D Tiled map parsing/loading from TMX/XML files</li>
 <li>3D Scene loading from XML files</li>
 <li>Debug/Edit mode UI</li>
-<li>Debug Rendering 2D rectangles, lines, circles, spheres and rotated 3D boxes</li>
+<li>Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes</li>
 <li>Error logging to stdout, log file and editor console</li>
 <li>Event Dispatcher system</li>
 <li>Supported Camera projection types: Perspective(First Person), Third Person, Orthographic, Orthographic 2D or no projection</li>
@@ -139,24 +139,31 @@ Physics</h2>
 <li>3D Rigid Body engine:<ul>
 <li>Rigid body Euler numerical integration</li>
 <li>Force generators: gravity, spring</li>
-<li>Collision Detection System:<ul>
+<li>Collision Detection system:<ul>
 <li>Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)</li>
-<li>Narrow-Phase: planes, spheres, OBBs (Separate from rigid engine ATM)</li>
+<li>Narrow-Phase: planes, spheres, OBBs</li>
 </ul>
 </li>
-<li>Collision resolution system in progress!!</li>
+<li>Collision Resolution using iterative contact resolver</li>
 </ul>
 </li>
 </ul>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Planned Features</h1>
 <ul>
-<li>Engine editor with scene management</li>
+<li>Editor planned features:<ul>
+<li>Scene management, node deletion, etc</li>
 <li>Hot reloading resources</li>
-<li>Physics Engine:<ul>
+<li>Loading models, textures, scene, etc.</li>
+<li>Scene camera?</li>
+</ul>
+</li>
+<li>Physics Engine planned additions:<ul>
+<li>Friction</li>
+<li>Stability improvements, optimizations</li>
+<li>Constraints: rods, cables, hinges, joints</li>
+<li>Collision events, triggers</li>
 <li>Data driven approach for particle types and emitters</li>
-<li>Rigid body collision resolution</li>
-<li>Rigid body/collision geometry integration</li>
 </ul>
 </li>
 <li>Lua Scripting</li>
@@ -169,6 +176,7 @@ Planned Features</h1>
 <li>HDR and Bloom</li>
 <li>Blending skeletal animations</li>
 <li>Embedded texture support</li>
+<li>Integrate terrain rendering features from 'Terrain' example</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Screenshots</h1>

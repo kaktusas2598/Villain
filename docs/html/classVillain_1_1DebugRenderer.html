@@ -90,6 +90,9 @@ $(document).ready(function(){initNavTree('classVillain_1_1DebugRenderer.html',''
 </div><!--header-->
 <div class="contents">
 
+<p>2D and 3D line batch renderer  
+ <a href="classVillain_1_1DebugRenderer.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="DebugRenderer_8hpp_source.html">DebugRenderer.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -122,10 +125,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a1348eab859f6d66c30fd39b5f77f0087">drawLine</a> (const glm::vec3 &amp;start, const glm::vec3 &amp;end, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
 <tr class="memdesc:a1348eab859f6d66c30fd39b5f77f0087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add line segment to draw batch. <br /></td></tr>
 <tr class="separator:a1348eab859f6d66c30fd39b5f77f0087"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e11d7660736bf8fcef49786d6ed59f3"><td class="memItemLeft" align="right" valign="top"><a id="a3e11d7660736bf8fcef49786d6ed59f3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a3e11d7660736bf8fcef49786d6ed59f3">drawQuad</a> (const glm::vec3 &amp;center, glm::vec2 &amp;size, bool x, bool y, bool z, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
-<tr class="memdesc:a3e11d7660736bf8fcef49786d6ed59f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add axis-aligned quad to draw batch. <br /></td></tr>
-<tr class="separator:a3e11d7660736bf8fcef49786d6ed59f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084083f432ead4c4c27054888609c31f"><td class="memItemLeft" align="right" valign="top"><a id="a084083f432ead4c4c27054888609c31f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a084083f432ead4c4c27054888609c31f">drawQuad</a> (const glm::vec3 &amp;center, const glm::vec2 &amp;size, bool x, bool y, bool z, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:a084083f432ead4c4c27054888609c31f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add axis-aligned quad to draw batch. <br /></td></tr>
+<tr class="separator:a084083f432ead4c4c27054888609c31f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1825d39927da7ae1ba083ea182edb341"><td class="memItemLeft" align="right" valign="top"><a id="a1825d39927da7ae1ba083ea182edb341"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a1825d39927da7ae1ba083ea182edb341">drawPlane</a> (const glm::vec3 &amp;normal, float distance, const glm::vec2 &amp;size, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:a1825d39927da7ae1ba083ea182edb341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a plane with specified size to draw batch. <br /></td></tr>
+<tr class="separator:a1825d39927da7ae1ba083ea182edb341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cd708beb1b6eea3327a76e75f793675"><td class="memItemLeft" align="right" valign="top"><a id="a1cd708beb1b6eea3327a76e75f793675"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a1cd708beb1b6eea3327a76e75f793675">drawGrid</a> (const glm::vec3 &amp;normal, float distance, int numColumns, int numRows, float gridSize, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:a1cd708beb1b6eea3327a76e75f793675"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a grid of specified number of columns, rows, specified size and using plane parameters. <br /></td></tr>
+<tr class="separator:a1cd708beb1b6eea3327a76e75f793675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf551f74c5e24163e876c2d8637b5217"><td class="memItemLeft" align="right" valign="top"><a id="adf551f74c5e24163e876c2d8637b5217"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#adf551f74c5e24163e876c2d8637b5217">drawQuadraticBezierCurve</a> (const glm::vec3 &amp;start, const glm::vec3 &amp;control, const glm::vec3 &amp;end, int numSegments, const glm::vec4 &amp;color=glm::vec4(1.0f))</td></tr>
+<tr class="memdesc:adf551f74c5e24163e876c2d8637b5217"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a quadrating bezier curve with specified control params, start end and how many line segments to use. <br /></td></tr>
+<tr class="separator:adf551f74c5e24163e876c2d8637b5217"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a946303fa2551635cc791570530b19cb9"><td class="memItemLeft" align="right" valign="top"><a id="a946303fa2551635cc791570530b19cb9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1DebugRenderer.html#a946303fa2551635cc791570530b19cb9">drawBox3D</a> (const glm::vec3 &amp;position, const glm::vec4 &amp;color, const glm::vec3 &amp;size)</td></tr>
 <tr class="memdesc:a946303fa2551635cc791570530b19cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add axis-aligned box (AABB) to draw batch. <br /></td></tr>
@@ -140,10 +155,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a64e496a15313c80fade8edaad7b4197c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Render primitives for debug purposes using lines </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000062">Todo:</a></b></dt><dd><p class="startdd"><a class="el" href="classVillain_1_1Plane.html">Plane</a> grid (from plane normal and distance to origin) </p>
-<p class="interdd">Other 3D primitives (cylinders, different ways to calculate sphere?) </p>
+<div class="textblock"><p>2D and 3D line batch renderer </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000053">Todo:</a></b></dt><dd><p class="startdd">Other 3D primitives (cylinders, capsules, cones, frustums, hemispheres) </p>
+<p class="interdd">Bezier curves, splines </p>
+<p class="interdd">Draw coordinate gizmos, arrows </p>
 <p class="enddd"><a class="el" href="classVillain_1_1Mesh.html">Mesh</a> generation could be refactored to new helper class? </p>
 </dd></dl>
+<p>Lets drawing 2D and 3D primitives using lines and batching for debug purposes. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/rendering/<a class="el" href="DebugRenderer_8hpp_source.html">DebugRenderer.hpp</a></li>
 <li>src/rendering/DebugRenderer.cpp</li>
