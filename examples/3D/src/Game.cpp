@@ -230,9 +230,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-    // FIXME:
-    //glm::vec2 size{2.0, 3.0};
-    debugRenderer.drawQuad(glm::vec3(0.f, 5.f, 0.f), glm::vec2(2.0, 3.0), false, true, true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    debugRenderer.drawQuad(glm::vec3(0.f, 5.f, 0.f), glm::vec2(2.0, 3.0), true, false, true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
     ////////////////////////////////////////
     /// Collision narrow phase tests

@@ -176,10 +176,9 @@ namespace Villain {
         indices.push_back(i + 1);
     }
 
-    // NOTE: This method is not final yet, might be removed in the near future, not tested
-    // FIXME: Update: not working
     void DebugRenderer::drawQuad(const glm::vec3& center, const glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color) {
         int i = vertices.size();
+        vertices.resize(vertices.size() + 4);
         if (x && z) { // floor on xz plane
             vertices[i + 0].position = glm::vec3(center.x - size.x/2, center.y, center.z + size.y/2);
             vertices[i + 1].position = glm::vec3(center.x + size.x/2, center.y, center.z + size.y/2);
@@ -198,6 +197,12 @@ namespace Villain {
         } else {
             //std::cerr << "Impossible plane combo!\n";
         }
+
+        // Set all vertex colors at once
+        for (int j = i; j < i + 4; j++) {
+            vertices[j].color = color;
+        }
+
         indices.reserve(indices.size() + 8);
 
         indices.push_back(i);
