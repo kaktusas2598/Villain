@@ -209,7 +209,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
     // Render ground plane
-    debugRenderer.drawGrid(glm::vec3(0.f, 1.f, 0.f), 0.0f, 100, 100, 1.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
+    debugRenderer.drawGrid(glm::vec3(0.f, 1.f, 0.f), 0.0f, 500, 500, 10.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
 
     ///////////////////////////////////////////////////////
     // Bezier curve demo
