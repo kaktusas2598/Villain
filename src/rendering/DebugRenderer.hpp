@@ -31,7 +31,7 @@ namespace Villain {
             /// Add line segment to draw batch
             void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color = glm::vec4(1.0f));
             /// Add axis-aligned quad to draw batch
-            void drawQuad(const glm::vec3& center, glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color = glm::vec4(1.0f));
+            void drawQuad(const glm::vec3& center, const glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color = glm::vec4(1.0f));
             /// Add axis-aligned box (AABB) to draw batch
             void drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size);
             /// Add rotated box (OBB) to draw batch

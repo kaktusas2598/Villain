@@ -252,7 +252,7 @@ namespace Villain {
         for (unsigned i = 0; i < 8; i++) {
             // Calculate the position of each vertex
             glm::vec3 vertexPos(mults[i][0], mults[i][1], mults[i][2]);
-            vertexPos = vertexPos * box.halfSize;
+            vertexPos = vertexPos * box.halfSize; // Component product update
             vertexPos = box.transform * glm::vec4(vertexPos, 1.0);
 
             // Calculate the distance from the plane
@@ -265,15 +265,21 @@ namespace Villain {
                 // by half the separating distance and add vertex location
                 contact->contactPoint = plane.direction;
                 contact->contactPoint *= (vertexDistance - plane.offset);
+                // FIXME: was in the book's source code, but seems to causing problem in col. response!?
+                contact->contactPoint += vertexPos;
                 contact->contactNormal = plane.direction;
                 contact->penetration = plane.offset - vertexDistance;
                 contact->setBodyData(box.body, nullptr, data->friction, data->restitution);
 
+                //VILLAIN_DEBUG("BoxVsPlane vertex position {}", glm::to_string(vertexPos));
                 VILLAIN_DEBUG("BoxVsPlane contact normal {}", glm::to_string(contact->contactNormal));
                 // Move to the next contact
                 contact++;
                 contactsUsed++;
-                if (contactsUsed == data->contactsLeft) return contactsUsed;
+                if (contactsUsed == (unsigned)data->contactsLeft) {
+                    data->addContacts(contactsUsed);
+                    return contactsUsed;
+                }
             }
         }
 

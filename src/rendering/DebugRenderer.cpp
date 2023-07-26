@@ -177,7 +177,8 @@ namespace Villain {
     }
 
     // NOTE: This method is not final yet, might be removed in the near future, not tested
-    void DebugRenderer::drawQuad(const glm::vec3& center, glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color) {
+    // FIXME: Update: not working
+    void DebugRenderer::drawQuad(const glm::vec3& center, const glm::vec2& size, bool x, bool y, bool z, const glm::vec4& color) {
         int i = vertices.size();
         if (x && z) { // floor on xz plane
             vertices[i + 0].position = glm::vec3(center.x - size.x/2, center.y, center.z + size.y/2);
