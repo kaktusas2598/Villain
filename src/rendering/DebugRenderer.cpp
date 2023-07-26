@@ -218,6 +218,50 @@ namespace Villain {
         indices.push_back(i);
     }
 
+    void DebugRenderer::drawPlane(const glm::vec3& normal, float distance, const glm::vec2& size, const glm::vec4& color) {
+        glm::vec3 up, right;
+        int i = vertices.size();
+        vertices.resize(vertices.size() + 4);
+
+        // Find the two basis vectors (up and right) for the plane
+        if (std::abs(normal.x) < 0.9f) {
+            up = glm::vec3(1.0f, 0.0f, 0.0f);
+        } else {
+            up = glm::vec3(0.0f, 1.0f, 0.0f);
+        }
+
+        right = glm::normalize(glm::cross(normal, up));
+        up = glm::normalize(glm::cross(right, normal));
+
+        glm::vec3 centre = normal * distance;
+        glm::vec3 rightOffset = right * (size.x * 0.5f);
+        glm::vec3 upOffset = up * (size.y * 0.5f);
+
+        vertices[i + 0].position = centre + rightOffset + upOffset;
+        vertices[i + 1].position = centre + rightOffset - upOffset;
+        vertices[i + 2].position = centre - rightOffset - upOffset;
+        vertices[i + 3].position = centre - rightOffset + upOffset;
+
+        // Set all vertex colors at once
+        for (int j = i; j < i + 4; j++) {
+            vertices[j].color = color;
+        }
+
+        indices.reserve(indices.size() + 8);
+
+        indices.push_back(i);
+        indices.push_back(i + 1);
+
+        indices.push_back(i + 1);
+        indices.push_back(i + 2);
+
+        indices.push_back(i + 2);
+        indices.push_back(i + 3);
+
+        indices.push_back(i + 3);
+        indices.push_back(i);
+    }
+
     void DebugRenderer::drawBox3D(const glm::vec3& position, const glm::vec4& color, const glm::vec3& size) {
         int i = vertices.size(); // Index for 1st new vertex added
         vertices.resize(vertices.size() + 8);

@@ -238,7 +238,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
     // Mock up grid, just a demonstration, we need
-    debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
+    /*debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
     debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
     debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
 
@@ -248,7 +248,12 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.drawQuad(glm::vec3(3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
     debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
-    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);*/
+
+    // Testing plane draw
+    debugRenderer.drawPlane(glm::vec3(0.f, 1.f, 0.f), 0.0f, glm::vec2(10.0, 10.0));
+
+    debugRenderer.drawPlane(glm::vec3(0.f, 0.f, 1.f), 5.0f, glm::vec2(5.0, 5.0), glm::vec4(1.0, 0.0, 0.0, 1.0));
 
     ////////////////////////////////////////
     /// Collision narrow phase tests
