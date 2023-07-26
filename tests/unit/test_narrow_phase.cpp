@@ -59,7 +59,7 @@ TEST_CASE("CollisionDetector - Sphere and HalfSpace", "[CollisionDetector]") {
 }
 
 TEST_CASE("CollisionDetector - Box and HalfSpace", "[CollisionDetector]") {
-    Villain::CollisionData data(new Villain::Contact[16], 4, 0, 0.0f, 0.0f);
+    Villain::CollisionData data(new Villain::Contact[16], 16, 0, 0.0f, 0.0f);
     Villain::RigidBody body1;
     // XZ/Ground plane at y=0
     Villain::CollisionPlane plane(glm::vec3(0.0f, 1.0f, 0.0f), 0.0f);
@@ -83,25 +83,22 @@ TEST_CASE("CollisionDetector - Box and HalfSpace", "[CollisionDetector]") {
 
         data.contacts -= 4; // Decrease contact pointer because collision data owns it
         // 1st contact
-        VILLAIN_TRACE("ACTUAL0 POINT: {}", glm::to_string(data.contacts[0].contactPoint));
-        VILLAIN_TRACE("ACTUAL1 POINT: {}", glm::to_string(data.contacts[1].contactPoint));
-        VILLAIN_TRACE("ACTUAL2 POINT: {}", glm::to_string(data.contacts[2].contactPoint));
-        VILLAIN_TRACE("ACTUAL3 POINT: {}", glm::to_string(data.contacts[3].contactPoint));
+        // WARNING: Not sure if y coordinates for contactPints make sense here
         REQUIRE(data.contacts[0].penetration == Catch::Approx(0.5f));
-        //REQUIRE(data.contacts[0].contactNormal == glm::vec3(0.0, 1.0, 0.0));
-        //REQUIRE(data.contacts[0].contactPoint == glm::vec3(0.0f, -0.5f, 0.0f));
+        REQUIRE(data.contacts[0].contactNormal == glm::vec3(0.0, 1.0, 0.0));
+        REQUIRE(data.contacts[0].contactPoint == glm::vec3(0.5f, -1.0f, 0.5f));
         //// 2nd contact
-        //REQUIRE(data.contacts[1].penetration == Catch::Approx(0.5f));
-        //REQUIRE(data.contacts[1].contactNormal == glm::vec3(0.0, 1.0, 0.0));
-        //REQUIRE(data.contacts[1].contactPoint == glm::vec3(0.0f, -0.5f, 0.0f));
+        REQUIRE(data.contacts[1].penetration == Catch::Approx(0.5f));
+        REQUIRE(data.contacts[1].contactNormal == glm::vec3(0.0, 1.0, 0.0));
+        REQUIRE(data.contacts[1].contactPoint == glm::vec3(-0.5f, -1.0f, 0.5f));
         //// 3rd contact
-        //REQUIRE(data.contacts[2].penetration == Catch::Approx(0.5f));
-        //REQUIRE(data.contacts[2].contactNormal == glm::vec3(0.0, 1.0, 0.0));
-        //REQUIRE(data.contacts[2].contactPoint == glm::vec3(0.0f, -0.5f, 0.0f));
+        REQUIRE(data.contacts[2].penetration == Catch::Approx(0.5f));
+        REQUIRE(data.contacts[2].contactNormal == glm::vec3(0.0, 1.0, 0.0));
+        REQUIRE(data.contacts[2].contactPoint == glm::vec3(0.5f, -1.0f, -0.5f));
         //// 4th contact
-        //REQUIRE(data.contacts[3].penetration == Catch::Approx(0.5f));
-        //REQUIRE(data.contacts[3].contactNormal == glm::vec3(0.0, 1.0, 0.0));
-        //REQUIRE(data.contacts[3].contactPoint == glm::vec3(0.0f, -0.5f, 0.0f));
+        REQUIRE(data.contacts[3].penetration == Catch::Approx(0.5f));
+        REQUIRE(data.contacts[3].contactNormal == glm::vec3(0.0, 1.0, 0.0));
+        REQUIRE(data.contacts[3].contactPoint == glm::vec3(-0.5f, -1.0f, -0.5f));
     }
 
     // TODO:
@@ -129,9 +126,54 @@ TEST_CASE("CollisionDetector - Box and HalfSpace", "[CollisionDetector]") {
 }
 
 TEST_CASE("CollisionDetector - Box and Sphere", "[CollisionDetector]") {
-    // TODO: test
+    Villain::CollisionData data(new Villain::Contact[16], 4, 0, 0.0f, 0.0f);
+
+    Villain::RigidBody body1, body2;
+    // 1x1x1 box
+    Villain::CollisionBox box({0.5, 0.5, 0.5}, &body1);
+    // 0.5 radius sphere
+    Villain::CollisionSphere sphere(0.5f, &body2);
+
+    SECTION("Box and Sphere are not intersecting") {
+        body1.setPosition({2.0, 0.0, 0.0});
+        body1.calculateDerivedData();
+        box.calculateTransform();
+
+        REQUIRE(Villain::CollisionDetector::boxAndSphere(box, sphere, &data) == 0);
+    }
+
+    SECTION("Box and Sphere are intersecting") {
+        body1.setPosition({1.0, 0.0, 0.0});
+        body1.calculateDerivedData();
+        box.calculateTransform();
+
+        REQUIRE(Villain::CollisionDetector::boxAndSphere(box, sphere, &data) == 1);
+    }
+    // TODO: More test cases
 }
 
 TEST_CASE("CollisionDetector - Box and Box", "[CollisionDetector]") {
+    Villain::CollisionData data(new Villain::Contact[16], 4, 0, 0.0f, 0.0f);
+
+    Villain::RigidBody body1, body2;
+    // 2 1x1x1 boxes
+    Villain::CollisionBox box({0.5, 0.5, 0.5}, &body1);
+    Villain::CollisionBox box2({0.5, 0.5, 0.5}, &body2);
+
+    SECTION("Box and Sphere are not intersecting") {
+        body1.setPosition({2.0, 0.0, 0.0});
+        body1.calculateDerivedData();
+        box.calculateTransform();
+
+        REQUIRE(Villain::CollisionDetector::boxAndBox(box, box2, &data) == 0);
+    }
+
     // TODO: test
+    //SECTION("Box and Sphere are intersecting") {
+        //body1.setPosition({1.0, 0.0, 0.0});
+        //body1.calculateDerivedData();
+        //box.calculateTransform();
+
+        //REQUIRE(Villain::CollisionDetector::boxAndBox(box, box2, &data) == 1);
+    //}
 }
