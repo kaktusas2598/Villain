@@ -21,6 +21,7 @@
 #include "physics/generators/contact/ParticleRod.hpp"
 #include "physics/generators/force/ParticleGravity.hpp"
 #include "physics/generators/force/ParticleSpring.hpp"
+#include "physics/generators/force/Gravity.hpp"
 #include "physics/generators/force/Spring.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include <glm/gtx/string_cast.hpp>
@@ -195,6 +196,12 @@ void Game::init() {
     CollisionPlane* groundPlane = new CollisionPlane({0.0, 1.0, 0.0}, 0.0);
     getRootNode()->getEngine()->getRigidBodyWorld()->getColliders().push_back(groundPlane);
 
+    // Add gravity for all bodies
+    //Gravity* gravity = new Gravity({0.0, -1.0, 0.0});
+    //for (auto& body: getRootNode()->getEngine()->getRigidBodyWorld()->getBodies()) {
+        //getRootNode()->getEngine()->getRigidBodyWorld()->getForceRegistry().add(body, gravity);
+    //}
+
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
 
 }
@@ -230,7 +237,18 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 5.f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-    debugRenderer.drawQuad(glm::vec3(0.f, 5.f, 0.f), glm::vec2(2.0, 3.0), true, false, true, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    // Mock up grid, just a demonstration, we need
+    debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(-3.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
+
+    debugRenderer.drawQuad(glm::vec3(0.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(0.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(0.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
+
+    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, -3.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 0.f), glm::vec2(3.0, 3.0), true, false, true);
+    debugRenderer.drawQuad(glm::vec3(3.f, 0.f, 3.f), glm::vec2(3.0, 3.0), true, false, true);
 
     ////////////////////////////////////////
     /// Collision narrow phase tests
