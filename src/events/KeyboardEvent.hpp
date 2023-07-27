@@ -18,6 +18,8 @@ namespace Villain {
             KeyCode getKey() const { return keyCode; }
             bool isPressed() { return eventType == KeyEventType::PRESS; }
 
+            VILLAIN_EVENT_TYPE(KeyboardEvent);
+
         private:
             KeyEventType eventType;
             KeyCode keyCode;

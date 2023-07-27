@@ -12,6 +12,7 @@ namespace Villain {
             int getWidth() const { return width; }
             int getHeight() const { return height; }
 
+            VILLAIN_EVENT_TYPE(WindowResizeEvent);
         private:
             int width, height;
     };

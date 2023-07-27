@@ -17,6 +17,7 @@ class Game : public Villain::Application {
         void onAppPostUpdate(float dt);
         void onAppRender(float deltaTime);
 
+        void onEvent(Villain::Event& event);
     private:
         Villain::DebugRenderer debugRenderer;
         //Villain::Particle* playerBody = nullptr;

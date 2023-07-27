@@ -44,6 +44,7 @@ namespace Villain {
             bool isRightMouseButton() const { return button == MouseButton::RIGHT && eventType == MouseEventType::CLICK; }
             int getMouseWheelDelta() const { return wheelDelta; }
 
+            VILLAIN_EVENT_TYPE(MouseEvent);
         private:
             MouseEventType eventType;
             MouseButton button;

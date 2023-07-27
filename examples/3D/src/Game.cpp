@@ -40,9 +40,20 @@ class ExampleEventListener : public EventListener {
     }
 };
 
+void Game::onEvent(Event& event) {
+    if (KeyboardEvent* myEvent = dynamic_cast<KeyboardEvent*>(&event)) {
+    }
+
+    if (event.getType() == EventType::WindowResizeEvent) {
+        VILLAIN_TRACE("Window Resize event without dynamic_cast!!!");
+    }
+}
+
 void Game::init() {
     loadScene("scene.xml");
     debugRenderer.init();
+
+    getRootNode()->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
 
     ///////////////////////////////////////////////////////
     // Instancing test
