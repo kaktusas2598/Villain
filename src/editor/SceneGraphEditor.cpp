@@ -95,7 +95,11 @@ namespace Villain {
         ImGui::Begin("Active Node");
 
         if (selectedNode != nullptr) {
-            ImGui::Text("%s", selectedNode->getName().c_str());
+            char nodeNameBuffer[100];
+            std::strcpy(nodeNameBuffer, selectedNode->getName().c_str());
+            if (ImGui::InputText("Node Name", nodeNameBuffer, sizeof(nodeNameBuffer))) {
+                selectedNode->setName(nodeNameBuffer);
+            }
 
             drawNodeProperties(selectedNode);
 
@@ -163,7 +167,9 @@ namespace Villain {
                         }
                         break;
                     case 3:
-                        editor->getFileBrowser().openPopup();
+                        if (ImGui::Button("Add Model")) {
+                            editor->getFileBrowser().openPopup();
+                        }
                         break;
                     case 4:
                         if (ImGui::Button("Add MoveController")) {
