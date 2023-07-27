@@ -1,6 +1,7 @@
 #include "SceneGraphEditor.hpp"
 
 
+#include "glm/gtx/string_cast.hpp"
 #include "imgui/imgui.h"
 
 #include "Application.hpp"
@@ -216,9 +217,9 @@ namespace Villain {
                     light->AmbientColor = light->DiffuseColor * 0.2f;
                 }
 
-                auto meshN1UV = dynamic_cast<MeshRenderer<VertexP1N1UV>*>(compo);
-                if (meshN1UV != nullptr) {
-                    ImGui::Text("Basic Mesh");
+                if (compo->getID() == GetId<MeshRenderer<VertexP1N1UV>>()) {
+                    auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
+                    ImGui::Text("Basic Mesh P1N1UV");
                     static int loadedMesh = 0;
                     auto originalMesh = meshN1UV->getMesh();
                     std::vector<VertexP1N1UV> vertices;
@@ -244,8 +245,8 @@ namespace Villain {
                     }
                 }
 
-                auto model = dynamic_cast<ModelRenderer*>(compo);
-                if (model != nullptr) {
+                if (compo->getID() == GetId<ModelRenderer>()) {
+                    auto model = static_cast<ModelRenderer*>(compo);
                     ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
                     if (model->getCurrentAnimation()) {
                         if (ImGui::BeginCombo("Active animation", model->getCurrentAnimation()->getName().c_str())) {
@@ -275,6 +276,16 @@ namespace Villain {
                         }
 
                     }
+                }
+
+                if (compo->getID() == GetId<RigidBodyComponent>()) {
+                    auto rg = static_cast<RigidBodyComponent*>(compo);
+                    ImGui::Text("Rigid Body");
+                    ImGui::Text("Mass: %f", rg->getBody()->getMass());
+                    ImGui::Text("Position: %s", glm::to_string(rg->getBody()->getPosition()).c_str());
+                    ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());
+                    ImGui::Text("Linear Velocity: %s", glm::to_string(rg->getBody()->getLinearVelocity()).c_str());
+                    ImGui::Text("Angular Velocity: %s", glm::to_string(rg->getBody()->getAngularVelocity()).c_str());
                 }
 
                 ImGui::Separator();
