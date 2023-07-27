@@ -104,7 +104,7 @@ namespace Villain {
         // TODO: ability to set custom number of contacts
         particleWorld = std::make_unique<ParticleWorld>(200);
         // FIXME: Seems like works best with only 1 iteration
-        rigidBodyWorld = std::make_unique<RigidBodyWorld>(200, 1);
+        rigidBodyWorld = std::make_unique<RigidBodyWorld>(200, 2);
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
