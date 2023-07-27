@@ -10,13 +10,21 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-// Logging macros to simplify logging in the engine
+/// Logging macros to simplify logging in the engine
 #define VILLAIN_TRACE(...) Villain::Logger::Instance()->trace(__VA_ARGS__)
 #define VILLAIN_DEBUG(...) Villain::Logger::Instance()->debug(__VA_ARGS__)
 #define VILLAIN_INFO(...) Villain::Logger::Instance()->info(__VA_ARGS__)
 #define VILLAIN_WARN(...) Villain::Logger::Instance()->warn(__VA_ARGS__)
 #define VILLAIN_ERROR(...) Villain::Logger::Instance()->error(__VA_ARGS__)
 #define VILLAIN_CRIT(...) Villain::Logger::Instance()->critical(__VA_ARGS__)
+/// Main engine assertion macro
+#define VILLAIN_ASSERT(condition, ...) \
+    do { \
+        if (!(condition)) { \
+            VILLAIN_CRIT(__VA_ARGS__); \
+            std::abort(); \
+        } \
+    } while (false)
 
 namespace Villain {
 
