@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('ImGuiLayer_8hpp_source.html',''); init
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
 <div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classVillain_1_1ImGuiLayer.html">   17</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1ImGuiLayer.html">ImGuiLayer</a> {</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="classVillain_1_1ImGuiLayer.html">ImGuiLayer</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="classVillain_1_1ImGuiLayer.html">ImGuiLayer</a>(<a class="code" href="classVillain_1_1Engine.html">Engine</a>* e);</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="comment">// Sets up ImGui context and backends</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> init(<a class="code" href="classVillain_1_1Window.html">Window</a>&amp; window);</div>
@@ -123,35 +123,38 @@ $(document).ready(function(){initNavTree('ImGuiLayer_8hpp_source.html',''); init
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordtype">float</span> getSceneViewportHeight()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> sceneViewportHeight; }</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="classVillain_1_1SceneGraphEditor.html">SceneGraphEditor</a>&amp; getSceneEditor() { <span class="keywordflow">return</span> sceneEditor; }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="comment">// Draw different tools, can potentially be refactored to new classes</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> drawMenu();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">void</span> drawScene(<a class="code" href="classVillain_1_1Engine.html">Engine</a>&amp; engine);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">void</span> drawSettings(<a class="code" href="classVillain_1_1Engine.html">Engine</a>&amp; engine);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="comment">// Render font awesome 6 icon, code point example - &quot;\uf07c&quot; for folder open icon</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> renderIcon(<span class="keyword">const</span> std::string&amp; codePoint, <span class="keywordtype">float</span> scale = 1.0f);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> setupDockspace();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> showDemoWindow; <span class="comment">//&lt;&lt;&lt; Toggle IMGui Demo Window for Docs</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> ImVec4 clearColor;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">float</span> sceneViewportWidth = 0, sceneViewportHeight = 0;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        glm::vec2 sceneViewportPosition{0.0f};</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        glm::vec2 mousePosRelativeToSceneViewport{0.0f};</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classVillain_1_1SceneGraphEditor.html">SceneGraphEditor</a> sceneEditor;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classVillain_1_1AssetBrowser.html">AssetBrowser</a> assetBrowser;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classVillain_1_1FileBrowser.html">FileBrowser</a> fileBrowser;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        ImFont* fontAwesome6;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        ImFont* robotoFont;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    };</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="classVillain_1_1Engine.html">Engine</a>* getEngine() { <span class="keywordflow">return</span> engine; }</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">// Draw different tools, can potentially be refactored to new classes</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">void</span> drawMenu();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">void</span> drawScene(<a class="code" href="classVillain_1_1Engine.html">Engine</a>&amp; engine);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">void</span> drawSettings(<a class="code" href="classVillain_1_1Engine.html">Engine</a>&amp; engine);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment">// Render font awesome 6 icon, code point example - &quot;\uf07c&quot; for folder open icon</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">void</span> renderIcon(<span class="keyword">const</span> std::string&amp; codePoint, <span class="keywordtype">float</span> scale = 1.0f);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> setupDockspace();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> showDemoWindow; <span class="comment">//&lt;&lt;&lt; Toggle IMGui Demo Window for Docs</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">static</span> ImVec4 clearColor;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classVillain_1_1Engine.html">Engine</a>* engine = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">float</span> sceneViewportWidth = 0, sceneViewportHeight = 0;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        glm::vec2 sceneViewportPosition{0.0f};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        glm::vec2 mousePosRelativeToSceneViewport{0.0f};</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classVillain_1_1SceneGraphEditor.html">SceneGraphEditor</a> sceneEditor;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="classVillain_1_1AssetBrowser.html">AssetBrowser</a> assetBrowser;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classVillain_1_1FileBrowser.html">FileBrowser</a> fileBrowser;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        ImFont* fontAwesome6;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        ImFont* robotoFont;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    };</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
 <div class="ttc" id="aclassVillain_1_1AssetBrowser_html"><div class="ttname"><a href="classVillain_1_1AssetBrowser.html">Villain::AssetBrowser</a></div><div class="ttdef"><b>Definition:</b> AssetBrowser.hpp:6</div></div>
 <div class="ttc" id="aclassVillain_1_1Engine_html"><div class="ttname"><a href="classVillain_1_1Engine.html">Villain::Engine</a></div><div class="ttdoc">Main engine class containing game loop.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:33</div></div>
-<div class="ttc" id="aclassVillain_1_1FileBrowser_html"><div class="ttname"><a href="classVillain_1_1FileBrowser.html">Villain::FileBrowser</a></div><div class="ttdef"><b>Definition:</b> FileBrowser.hpp:13</div></div>
+<div class="ttc" id="aclassVillain_1_1FileBrowser_html"><div class="ttname"><a href="classVillain_1_1FileBrowser.html">Villain::FileBrowser</a></div><div class="ttdoc">File browser ImGui widget for engine editor, rendered as a window or as a popup.</div><div class="ttdef"><b>Definition:</b> FileBrowser.hpp:29</div></div>
 <div class="ttc" id="aclassVillain_1_1ImGuiLayer_html"><div class="ttname"><a href="classVillain_1_1ImGuiLayer.html">Villain::ImGuiLayer</a></div><div class="ttdef"><b>Definition:</b> ImGuiLayer.hpp:17</div></div>
 <div class="ttc" id="aclassVillain_1_1SceneGraphEditor_html"><div class="ttname"><a href="classVillain_1_1SceneGraphEditor.html">Villain::SceneGraphEditor</a></div><div class="ttdef"><b>Definition:</b> SceneGraphEditor.hpp:7</div></div>
 <div class="ttc" id="aclassVillain_1_1Window_html"><div class="ttname"><a href="classVillain_1_1Window.html">Villain::Window</a></div><div class="ttdoc">Window Main Window Class.</div><div class="ttdef"><b>Definition:</b> Window.hpp:35</div></div>

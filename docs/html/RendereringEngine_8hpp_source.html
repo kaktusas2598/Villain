@@ -134,7 +134,7 @@ $(document).ready(function(){initNavTree('RendereringEngine_8hpp_source.html',''
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordtype">bool</span>* exponentialFogEnabled() { <span class="keywordflow">return</span> &amp;useExponentialFog; }</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="comment">// Call on window/viewport resize event</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="keywordtype">void</span> resizeCameras(<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight) { mainCamera-&gt;rescale(newWidth, newHeight); }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="keywordtype">void</span> resizeCameras(<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight) { mainCamera-&gt;<a class="code" href="classVillain_1_1Camera.html#a5fe3605b1577480e4479107394a5d4be">rescale</a>(newWidth, newHeight); }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="comment">// Post-processing effects/filters</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keywordtype">bool</span>* getInvertColors() { <span class="keywordflow">return</span> &amp;invertColors; }</div>
@@ -206,7 +206,8 @@ $(document).ready(function(){initNavTree('RendereringEngine_8hpp_source.html',''
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    };</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
 <div class="ttc" id="aclassVillain_1_1BaseLight_html"><div class="ttname"><a href="classVillain_1_1BaseLight.html">Villain::BaseLight</a></div><div class="ttdef"><b>Definition:</b> Light.hpp:31</div></div>
-<div class="ttc" id="aclassVillain_1_1Camera_html"><div class="ttname"><a href="classVillain_1_1Camera.html">Villain::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.hpp:30</div></div>
+<div class="ttc" id="aclassVillain_1_1Camera_html"><div class="ttname"><a href="classVillain_1_1Camera.html">Villain::Camera</a></div><div class="ttdoc">Main engine Camera class.</div><div class="ttdef"><b>Definition:</b> Camera.hpp:35</div></div>
+<div class="ttc" id="aclassVillain_1_1Camera_html_a5fe3605b1577480e4479107394a5d4be"><div class="ttname"><a href="classVillain_1_1Camera.html#a5fe3605b1577480e4479107394a5d4be">Villain::Camera::rescale</a></div><div class="ttdeci">void rescale(int width, int height)</div><div class="ttdoc">Call after creation and on window size change to change projection.</div><div class="ttdef"><b>Definition:</b> Camera.cpp:58</div></div>
 <div class="ttc" id="aclassVillain_1_1Engine_html"><div class="ttname"><a href="classVillain_1_1Engine.html">Villain::Engine</a></div><div class="ttdoc">Main engine class containing game loop.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:33</div></div>
 <div class="ttc" id="aclassVillain_1_1FrameBuffer_html"><div class="ttname"><a href="classVillain_1_1FrameBuffer.html">Villain::FrameBuffer</a></div><div class="ttdef"><b>Definition:</b> FrameBuffer.hpp:8</div></div>
 <div class="ttc" id="aclassVillain_1_1Mesh_html"><div class="ttname"><a href="classVillain_1_1Mesh.html">Villain::Mesh</a></div><div class="ttdef"><b>Definition:</b> Mesh.hpp:15</div></div>

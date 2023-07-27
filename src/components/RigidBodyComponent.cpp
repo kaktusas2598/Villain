@@ -6,7 +6,9 @@
 namespace Villain {
 
     RigidBodyComponent::RigidBodyComponent(RigidBody* rigidBody, CollisionPrimitive* colShape)
-        : body(rigidBody), collider(colShape) {}
+        : body(rigidBody), collider(colShape) {
+            VILLAIN_SET_COMPONENT_ID(RigidBodyComponent);
+        }
 
     void RigidBodyComponent::update(float deltaTime) {
         // Set position of scene graph node based on RigidBody position

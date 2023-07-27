@@ -48,6 +48,7 @@ var NAVTREE =
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
     ] ],
@@ -69,13 +70,13 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"classVillain_1_1Camera.html#a4d9aed7d86502586d7f6008f097934f9",
-"classVillain_1_1ImGuiLayer.html#aa5f3f99b9811acbf73ac800c86620d18",
-"classVillain_1_1ParticleBuoyancy.html#aecbdc65e21ab31f222441dbe25963bd3",
-"classVillain_1_1RigidBodyWorld.html#a234bd9038236628b245613bae08141fe",
-"classVillain_1_1VertexBuffer.html#afb79f869b038bb318627a3479c7e22ce",
-"structVillain_1_1BoundingSphere.html#a9ac1a169ed7bb913c93e9df319c5c30f"
+"AeroControl_8hpp_source.html",
+"classVillain_1_1Camera.html#a5e6db95736e4bbe13181dc93ca8f3fde",
+"classVillain_1_1ImGuiLayer.html#a4b7e0a084fdfd6d42db5bc3feaa66b88",
+"classVillain_1_1ParticleBatch2D.html#a578d31cc7eca052b602fd33624f0f36c",
+"classVillain_1_1RigidBodyComponent.html#a39a4f3ae6ec71e60ef95a95643fc10cc",
+"classVillain_1_1VertexArray.html#a1e8b95b0f7aed8ff285d601e17969274",
+"structVillain_1_1BoundingAABB.html#a6fc1ab89ac05ee6cf7b8f76acc5b8073"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

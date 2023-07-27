@@ -34,6 +34,7 @@ var annotated_dup =
       [ "RigidBodyComponent", "classVillain_1_1RigidBodyComponent.html", "classVillain_1_1RigidBodyComponent" ],
       [ "AssetBrowser", "classVillain_1_1AssetBrowser.html", "classVillain_1_1AssetBrowser" ],
       [ "DebugConsole", "structVillain_1_1DebugConsole.html", "structVillain_1_1DebugConsole" ],
+      [ "FileSelectedEvent", "classVillain_1_1FileSelectedEvent.html", "classVillain_1_1FileSelectedEvent" ],
       [ "FileBrowser", "classVillain_1_1FileBrowser.html", "classVillain_1_1FileBrowser" ],
       [ "ImGuiLayer", "classVillain_1_1ImGuiLayer.html", "classVillain_1_1ImGuiLayer" ],
       [ "SceneGraphEditor", "classVillain_1_1SceneGraphEditor.html", "classVillain_1_1SceneGraphEditor" ],

@@ -4,6 +4,11 @@
 
 namespace Villain {
 
+    KinematicController::KinematicController(RigidBody* planeBody, CollisionPrimitive* colShape)
+        : RigidBodyComponent(planeBody, colShape) {
+            VILLAIN_SET_COMPONENT_ID(KinematicController);
+        }
+
     void KinematicController::addToEngine(Engine* engine) {
         RigidBodyComponent::addToEngine(engine);
     }

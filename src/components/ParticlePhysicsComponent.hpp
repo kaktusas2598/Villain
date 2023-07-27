@@ -10,10 +10,10 @@
 
 namespace Villain {
 
-    // Represents some kind of physical particle system or device
+    /// Represents some kind of physical particle system or device
     class ParticlePhysicsComponent : public NodeComponent {
         public:
-            ParticlePhysicsComponent(bool kinematic = false): isKinematic(kinematic) {}
+            ParticlePhysicsComponent(bool kinematic = false);
 
             virtual void render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera);
             virtual void handleInput(float deltaTime);

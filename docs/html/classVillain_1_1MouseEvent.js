@@ -10,5 +10,6 @@ var classVillain_1_1MouseEvent =
     [ "getMouseWheelDelta", "classVillain_1_1MouseEvent.html#a383f8e1d4945ac0d11bfa3123f0158b8", null ],
     [ "isLeftMouseButton", "classVillain_1_1MouseEvent.html#ac21ba1df87bec647cc758a75bd329df4", null ],
     [ "isMiddleMouseButton", "classVillain_1_1MouseEvent.html#a8a67d8cd83c4f919ec1b1320342978a7", null ],
-    [ "isRightMouseButton", "classVillain_1_1MouseEvent.html#a6973f0d53434244f4aa44650ed190f6b", null ]
+    [ "isRightMouseButton", "classVillain_1_1MouseEvent.html#a6973f0d53434244f4aa44650ed190f6b", null ],
+    [ "VILLAIN_EVENT_TYPE", "classVillain_1_1MouseEvent.html#a6417082d57ebfb43f84d42f4bb47d979", null ]
 ];

@@ -1,6 +1,6 @@
 <map id="Villain::CameraController" name="Villain::CameraController">
 <area shape="rect" id="node1" title=" " alt="" coords="5,260,192,287"/>
-<area shape="rect" id="node2" href="$classVillain_1_1Camera.html" title=" " alt="" coords="37,171,160,197"/>
-<area shape="rect" id="node3" href="$classVillain_1_1NodeComponent.html" title=" " alt="" coords="9,95,189,121"/>
+<area shape="rect" id="node2" href="$classVillain_1_1Camera.html" title="Main engine Camera class." alt="" coords="37,171,160,197"/>
+<area shape="rect" id="node3" href="$classVillain_1_1NodeComponent.html" title="Component for Scene Graph node." alt="" coords="9,95,189,121"/>
 <area shape="rect" id="node4" href="$classVillain_1_1SceneNode.html" title=" " alt="" coords="27,5,171,32"/>
 </map>

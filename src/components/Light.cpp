@@ -20,6 +20,7 @@ namespace Villain {
 
     DirectionalLight::DirectionalLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& dir) :
         BaseLight(ambient, diffuse, specular), Direction(dir) {
+        VILLAIN_SET_COMPONENT_ID(DirectionalLight);
 
         shader = Shader::createFromResource("forward-directional");
 
@@ -30,6 +31,7 @@ namespace Villain {
 
     PointLight::PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& attenuation) :
                 BaseLight(ambient, diffuse, specular), Position(pos), Attenuation(attenuation) {
+        VILLAIN_SET_COMPONENT_ID(PointLight);
 
         shader = Shader::createFromResource("forward-point");
         // TODO: Zfar plane should probably be same as camera range(use attenuation to calculate)
@@ -43,6 +45,7 @@ namespace Villain {
 
     SpotLight::SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, const glm::vec3& attenuation, Camera* cam) :
                 BaseLight(ambient, diffuse, specular), Position(pos), Direction(dir), CutOff(cutOff), OuterCutOff(outerCutOff), Attenuation(attenuation), camera(cam) {
+        VILLAIN_SET_COMPONENT_ID(SpotLight);
 
         shader = Shader::createFromResource("forward-spot");
         // Shadow mapping for spot lights is almost identical to directional lights, but it uses perspective projection

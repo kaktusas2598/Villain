@@ -160,9 +160,6 @@ void Game::init() {
     rigidBodyCompo1->addForceGenerator(new Spring({0, 0, 0}, rigidBody2, {0.2, 0, 0}, 1.0f, 2.0f));
     rigidBodyCompo2->addForceGenerator(new Spring({0.2, 0, 0}, rigidBody1, {0, 0, 0}, 1.0f, 2.0f));
 
-    //printf("Camera ID: %i\n", GetId<Camera>());
-    //printf("ModelRenderer ID: %i\n", GetId<ModelRenderer>());
-
     EventListener* testListener = new ExampleEventListener();
     getRootNode()->getEngine()->getEventDispatcher()->registerListener(testListener);
 

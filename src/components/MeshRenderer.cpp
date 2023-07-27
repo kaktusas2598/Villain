@@ -9,6 +9,7 @@ namespace Villain {
 
     template <class VertexType>
         MeshRenderer<VertexType>::MeshRenderer(Mesh<VertexType>* mesh, Material material) {
+            VILLAIN_SET_COMPONENT_ID(MeshRenderer);
             this->mesh = mesh;
             this->material = material;
         }

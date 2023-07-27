@@ -9,8 +9,7 @@
 namespace Villain {
 
     Camera::Camera(CameraType cameraType) : type(cameraType) {
-        // Generate unique type id for this component
-        id = GetId<Camera>();
+        VILLAIN_SET_COMPONENT_ID(Camera);
 
         switchCameraController(type);
         up = glm::vec3(0.0, 1.0f, 0.0f);

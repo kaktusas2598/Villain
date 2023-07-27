@@ -130,16 +130,17 @@ $(document).ready(function(){initNavTree('MouseEvent_8hpp_source.html',''); init
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordtype">bool</span> isRightMouseButton()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> button == MouseButton::RIGHT &amp;&amp; eventType == MouseEventType::CLICK; }</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordtype">int</span> getMouseWheelDelta()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> wheelDelta; }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            MouseEventType eventType;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            MouseButton button;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            glm::vec2 position;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            glm::vec2 offset;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordtype">int</span> wheelDelta;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    };</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
-<div class="ttc" id="aclassVillain_1_1Event_html"><div class="ttname"><a href="classVillain_1_1Event.html">Villain::Event</a></div><div class="ttdoc">Base Event interface.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:9</div></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            VILLAIN_EVENT_TYPE(<a class="code" href="classVillain_1_1MouseEvent.html">MouseEvent</a>);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            MouseEventType eventType;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            MouseButton button;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            glm::vec2 position;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            glm::vec2 offset;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keywordtype">int</span> wheelDelta;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    };</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
+<div class="ttc" id="aclassVillain_1_1Event_html"><div class="ttname"><a href="classVillain_1_1Event.html">Villain::Event</a></div><div class="ttdoc">Base Event interface.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:27</div></div>
 <div class="ttc" id="aclassVillain_1_1MouseEvent_html"><div class="ttname"><a href="classVillain_1_1MouseEvent.html">Villain::MouseEvent</a></div><div class="ttdoc">Dispatched on mouse move, button click/release or wheel scroll events.</div><div class="ttdef"><b>Definition:</b> MouseEvent.hpp:22</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->

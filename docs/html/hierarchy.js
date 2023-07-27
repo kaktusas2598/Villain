@@ -39,6 +39,7 @@ var hierarchy =
     [ "Villain::DebugRenderer::DebugVertex", "structVillain_1_1DebugRenderer_1_1DebugVertex.html", null ],
     [ "Villain::Engine", "classVillain_1_1Engine.html", null ],
     [ "Villain::Event", "classVillain_1_1Event.html", [
+      [ "Villain::FileSelectedEvent", "classVillain_1_1FileSelectedEvent.html", null ],
       [ "Villain::KeyboardEvent", "classVillain_1_1KeyboardEvent.html", null ],
       [ "Villain::MouseEvent", "classVillain_1_1MouseEvent.html", null ],
       [ "Villain::WindowResizeEvent", "classVillain_1_1WindowResizeEvent.html", null ]

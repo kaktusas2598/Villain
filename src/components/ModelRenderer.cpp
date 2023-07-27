@@ -7,6 +7,14 @@
 
 namespace Villain {
 
+    ModelRenderer::ModelRenderer(Model *m, float animationSpeed) : model(m) {
+        VILLAIN_SET_COMPONENT_ID(ModelRenderer);
+
+        if (m->getAnimator()) {
+            if (animationSpeed > 0) m->getAnimator()->getCurrentAnimation()->setSpeed(animationSpeed);
+        }
+    }
+
     void ModelRenderer::render(
             Shader& shader,
             RenderingEngine& renderingEngine,

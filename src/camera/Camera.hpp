@@ -27,6 +27,11 @@ namespace Villain {
     const float SPEED = 2.5f;
     const float SENSITIVITY = 0.1f;
 
+    /*! \brief Main engine Camera class
+     *
+     * Can be used by itself or as a node in Scene Graph. Supports first person, third person, 2D and
+     * orthographic perspectives/types, can be controlled with attacheable CameraController classes
+     */
     class Camera: public NodeComponent {
         public:
             Camera(CameraType cameraType = CameraType::FIRST_PERSON);
@@ -35,7 +40,7 @@ namespace Villain {
             virtual void update(float deltaTime);
             virtual void addToEngine(Engine* engine);
 
-            // Call after creation and on window size change to change projection
+            /// Call after creation and on window size change to change projection
             void rescale(int width, int height);
 
             glm::mat4 getViewMatrix();

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['desireddeltavelocity_595',['desiredDeltaVelocity',['../classVillain_1_1Contact.html#a99a48ff3b6bd6e95b94d888707ffd5c4',1,'Villain::Contact']]],
-  ['direction_596',['direction',['../classVillain_1_1CollisionPlane.html#a50a368faaae234f3fa35f46074640cde',1,'Villain::CollisionPlane']]]
+  ['desireddeltavelocity_616',['desiredDeltaVelocity',['../classVillain_1_1Contact.html#a99a48ff3b6bd6e95b94d888707ffd5c4',1,'Villain::Contact']]],
+  ['direction_617',['direction',['../classVillain_1_1CollisionPlane.html#a50a368faaae234f3fa35f46074640cde',1,'Villain::CollisionPlane']]]
 ];

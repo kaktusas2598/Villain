@@ -1,4 +1,4 @@
 <map id="Villain::MeshRenderer&lt; VertexType &gt;" name="Villain::MeshRenderer&lt; VertexType &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="13,80,178,121"/>
-<area shape="rect" id="node2" href="$classVillain_1_1NodeComponent.html" title=" " alt="" coords="5,5,185,32"/>
+<area shape="rect" id="node1" title="Simple Mesh renderer." alt="" coords="13,80,178,121"/>
+<area shape="rect" id="node2" href="$classVillain_1_1NodeComponent.html" title="Component for Scene Graph node." alt="" coords="5,5,185,32"/>
 </map>

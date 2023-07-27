@@ -1,5 +1,5 @@
 <map id="Villain::KinematicController" name="Villain::KinematicController">
-<area shape="rect" id="node1" title=" " alt="" coords="11,155,212,181"/>
+<area shape="rect" id="node1" title="Attach to node to create kinematic rigid body which can be controlled via input." alt="" coords="11,155,212,181"/>
 <area shape="rect" id="node2" href="$classVillain_1_1RigidBodyComponent.html" title=" " alt="" coords="5,80,217,107"/>
-<area shape="rect" id="node3" href="$classVillain_1_1NodeComponent.html" title=" " alt="" coords="21,5,201,32"/>
+<area shape="rect" id="node3" href="$classVillain_1_1NodeComponent.html" title="Component for Scene Graph node." alt="" coords="21,5,201,32"/>
 </map>

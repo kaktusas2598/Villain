@@ -102,8 +102,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a6a4caed0a68c9cfb66efbf081ee6a6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab084808aa0b3e3e2b810e825012dfd90"><td class="memItemLeft" align="right" valign="top"><a id="ab084808aa0b3e3e2b810e825012dfd90"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#ab084808aa0b3e3e2b810e825012dfd90">unregisterListener</a> (<a class="el" href="classVillain_1_1EventListener.html">EventListener</a> *listener)</td></tr>
-<tr class="memdesc:ab084808aa0b3e3e2b810e825012dfd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop listening for events. <br /></td></tr>
+<tr class="memdesc:ab084808aa0b3e3e2b810e825012dfd90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop sending events to this listener. <br /></td></tr>
 <tr class="separator:ab084808aa0b3e3e2b810e825012dfd90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d0e01094ffef4b33ec02c7cbb8b563"><td class="memItemLeft" align="right" valign="top"><a id="a02d0e01094ffef4b33ec02c7cbb8b563"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#a02d0e01094ffef4b33ec02c7cbb8b563">registerCallback</a> (const EventCallback &amp;callback)</td></tr>
+<tr class="memdesc:a02d0e01094ffef4b33ec02c7cbb8b563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call once for every new event callback function we want to subscribe. <br /></td></tr>
+<tr class="separator:a02d0e01094ffef4b33ec02c7cbb8b563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1554c483d5b2d9cfebed85aa6b85eec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#ac1554c483d5b2d9cfebed85aa6b85eec">unregisterCallback</a> (const EventCallback &amp;callback)</td></tr>
+<tr class="memdesc:ac1554c483d5b2d9cfebed85aa6b85eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop sending events to this function callback.  <a href="classVillain_1_1EventDispatcher.html#ac1554c483d5b2d9cfebed85aa6b85eec">More...</a><br /></td></tr>
+<tr class="separator:ac1554c483d5b2d9cfebed85aa6b85eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afca6971b593c371fa4b64323b72f0618"><td class="memItemLeft" align="right" valign="top"><a id="afca6971b593c371fa4b64323b72f0618"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1EventDispatcher.html#afca6971b593c371fa4b64323b72f0618">dispatchEvent</a> (<a class="el" href="classVillain_1_1Event.html">Event</a> &amp;event)</td></tr>
 <tr class="memdesc:afca6971b593c371fa4b64323b72f0618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called every time we want to dispatch an event. <br /></td></tr>
@@ -115,7 +122,37 @@ std::vector&lt; <a class="el" href="classVillain_1_1EventListener.html">EventLis
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Responsible for keeping track of different event listeners and dispatches events to those listeners. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac1554c483d5b2d9cfebed85aa6b85eec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1554c483d5b2d9cfebed85aa6b85eec">&#9670;&nbsp;</a></span>unregisterCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Villain::EventDispatcher::unregisterCallback </td>
+          <td>(</td>
+          <td class="paramtype">const EventCallback &amp;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stop sending events to this function callback. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000029">Todo:</a></b></dt><dd>implement, but might be tricky because we are using std::function </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/<a class="el" href="EventDispatcher_8hpp_source.html">EventDispatcher.hpp</a></li>
 </ul>
 </div><!-- contents -->

@@ -3,6 +3,11 @@
 #include "glm/gtx/string_cast.hpp"
 namespace Villain {
 
+    ParticlePhysicsComponent::ParticlePhysicsComponent(bool kinematic)
+        : isKinematic(kinematic) {
+            VILLAIN_SET_COMPONENT_ID(ParticlePhysicsComponent);
+        }
+
     void ParticlePhysicsComponent::render(Shader& shader, RenderingEngine& renderingEngine, Camera& camera) {
         instanceMatrices.resize(particles.size());
         for (int i = 0; i < particles.size(); ++i) {

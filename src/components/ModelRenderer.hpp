@@ -6,13 +6,13 @@
 
 namespace Villain {
 
+    /*! \brief 3D Model Renderer.
+     *
+     * Let's specify 3D model, which can be animated and renders it
+     */
     class ModelRenderer : public NodeComponent {
         public:
-            ModelRenderer(Model *m, float animationSpeed = 0.0f) : model(m) {
-                if (m->getAnimator()) {
-                    if (animationSpeed > 0) m->getAnimator()->getCurrentAnimation()->setSpeed(animationSpeed);
-                }
-            };
+            ModelRenderer(Model *m, float animationSpeed = 0.0f);
             ~ModelRenderer() {}
 
             virtual void render(

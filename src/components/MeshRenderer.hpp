@@ -6,6 +6,10 @@
 
 namespace Villain {
 
+    /*! \brief Simple Mesh renderer
+     *
+     * Used to render custom mesh with specified material
+     */
     template <class VertexType>
     class MeshRenderer : public NodeComponent {
         public:
