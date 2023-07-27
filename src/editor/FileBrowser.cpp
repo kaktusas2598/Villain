@@ -1,5 +1,6 @@
 #include "FileBrowser.hpp"
 
+#include "Engine.hpp"
 #include "ImGuiLayer.hpp"
 #include "Logger.hpp"
 
@@ -99,6 +100,8 @@ namespace Villain {
                     // Select file
                     selectedFile = path.string();
                     VILLAIN_TRACE("Selected file {}", selectedFile);
+                    FileSelectedEvent fileSelectedEvent = FileSelectedEvent(selectedFile, extension);
+                    editor->getEngine()->getEventDispatcher()->dispatchEvent(fileSelectedEvent);
                 }
 
                 // Position the icon at the rightmost side of the selectable item

@@ -16,7 +16,7 @@ namespace Villain {
     bool ImGuiLayer::showDemoWindow = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ImGuiLayer::ImGuiLayer(): fileBrowser(this) {}
+    ImGuiLayer::ImGuiLayer(Engine* e): engine(e), fileBrowser(this) {}
 
     void ImGuiLayer::exit() {
         ImGui_ImplOpenGL3_Shutdown();

@@ -16,7 +16,7 @@ namespace Villain {
 
     class ImGuiLayer {
     public:
-        ImGuiLayer();
+        ImGuiLayer(Engine* e);
 
         // Sets up ImGui context and backends
         void init(Window& window);
@@ -36,6 +36,7 @@ namespace Villain {
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
         SceneGraphEditor& getSceneEditor() { return sceneEditor; }
+        Engine* getEngine() { return engine; }
 
         // Draw different tools, can potentially be refactored to new classes
         void drawMenu();
@@ -49,6 +50,8 @@ namespace Villain {
 
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
         static ImVec4 clearColor;
+
+        Engine* engine = nullptr;
 
         float sceneViewportWidth = 0, sceneViewportHeight = 0;
         glm::vec2 sceneViewportPosition{0.0f};

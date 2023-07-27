@@ -42,7 +42,7 @@ namespace Villain {
     int Engine::getScreenWidth() { return screenWidth; }
     int Engine::getScreenHeight() { return screenHeight; }
 
-    Engine::Engine() {
+    Engine::Engine(): imGuiLayer(this) {
         Logger::Instance()->info("Initialising the engine.");
     }
 
