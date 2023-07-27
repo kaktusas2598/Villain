@@ -41,6 +41,7 @@ namespace Villain {
             RigidBodies& getBodies() { return bodies; }
             ForceRegistry& getForceRegistry() { return registry; }
             Colliders& getColliders() { return colliders; }
+            bool* debugModeActive() { return &debugDrawEnabled; }
 
         protected:
             RigidBodies bodies; ///< All bodies in this world
