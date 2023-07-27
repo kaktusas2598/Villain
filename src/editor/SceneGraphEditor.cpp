@@ -1,6 +1,7 @@
 #include "SceneGraphEditor.hpp"
 
 
+#include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
 #include "imgui/imgui.h"
 
@@ -15,6 +16,24 @@
 #include "rendering/MeshUtils.hpp"
 
 namespace Villain {
+
+    void SceneGraphEditor::init() {
+        editor->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
+    }
+
+    void SceneGraphEditor::onEvent(Event& event) {
+        if (event.getType() == EventType::FileSelectedEvent) {
+            FileSelectedEvent e = static_cast<FileSelectedEvent&>(event);
+            // Check if we're loading a model, when load it for selected node
+            if (selectedNode) {
+                for (const std::string& supportedFormat : supportedModelFormats) {
+                    if (e.getExtension() == supportedFormat) {
+                        selectedNode->addComponent(new ModelRenderer(new Model(e.getFileName().c_str())));
+                    }
+                }
+            }
+        }
+    }
 
     void SceneGraphEditor::render(Engine& engine) {
         // Render the whole hierarchy
@@ -86,7 +105,7 @@ namespace Villain {
 
 
             ImGui::Separator();
-            const char* componentList[] = {"Camera", "Light", "Basic Mesh", "Model", "Move Controller", "Look Controller", "Physics"};
+            const char* componentList[] = {"Camera", "Light", "Basic Mesh", "Model", "Move Controller", "Look Controller", "Rigid Body"};
             static int selectedComponent = 1;
             // NOTE: wrap ListBox() in if condition to check for click events on list items
             ImGui::ListBox("Add Component", &selectedComponent, componentList, IM_ARRAYSIZE(componentList), 4);
@@ -144,11 +163,54 @@ namespace Villain {
                         }
                         break;
                     case 3:
-                        // TODO: need a way to select model, possibly using C++'s filesystem header
-                        //selectedNode->addComponent(new ModelRenderer(""))
+                        editor->getFileBrowser().openPopup();
                         break;
+                    case 4:
+                        if (ImGui::Button("Add MoveController")) {
+                            selectedNode->addComponent(new MoveController());
+                        }
+                        break;
+                    case 5:
+                        if (ImGui::Button("Add LookController")) {
+                            selectedNode->addComponent(new LookController());
+                        }
+                        break;
+                    case 6:
+                        static int colliderType = 0;
+                        static float mass = 1.0f;
+                        static bool kinematic = false;
+
+                        ImGui::Text("Properties");
+                        ImGui::DragFloat("Mass", &mass, 0.1f, 0.0f, 1000.0f, "%.1f");
+                        ImGui::Checkbox("Kinematic", &kinematic);
+
+                        ImGui::Text("Collision primitive");
+                        ImGui::RadioButton("NONE", &colliderType, 0); ImGui::SameLine();
+                        ImGui::RadioButton("SPHERE", &colliderType, 1); ImGui::SameLine();
+                        ImGui::RadioButton("BOX", &colliderType, 2);
+
+                        static float radius = 1.0f;
+                        static glm::vec3 boxHalfSize{0.5, 0.5, 0.5};
+                        ImGui::DragFloat("Sphere radius", &radius, 0.1f, 0.0f, 100.0f, "%.1f");
+                        ImGui::DragFloat3("Box half-size", glm::value_ptr(boxHalfSize), 0.1f, 0.0f, 100.0f, "%.1f");
+
+                        if (ImGui::Button("Add Rigid Body")) {
+                            RigidBody* body = new RigidBody();
+                            body->setMass(mass);
+                            CollisionPrimitive* col = nullptr;
+                            if (colliderType == 1) {
+                                col = new CollisionSphere(radius, body);
+                            } else if (colliderType == 2) {
+                                col = new CollisionBox(boxHalfSize, body);
+                            }
+                            if (kinematic)
+                                selectedNode->addComponent(new KinematicController(body, col));
+                            else
+                                selectedNode->addComponent(new RigidBodyComponent(body, col));
+                        }
+
                     default:
-                        printf("Option %s not implemented\n", componentList[selectedComponent]);
+                        VILLAIN_WARN("Option {} not implemented", componentList[selectedComponent]);
                         break;
                 }
 

@@ -36,6 +36,7 @@ namespace Villain {
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
         SceneGraphEditor& getSceneEditor() { return sceneEditor; }
+        FileBrowser& getFileBrowser() { return fileBrowser; }
         Engine* getEngine() { return engine; }
 
         // Draw different tools, can potentially be refactored to new classes

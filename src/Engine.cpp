@@ -81,6 +81,8 @@ namespace Villain {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
+        eventDispatcher = std::make_unique<EventDispatcher>();
+
         window.create(title, screenHeight, screenWidth, windowFlags);
 
         imGuiLayer.init(window);
@@ -106,7 +108,6 @@ namespace Villain {
         // NOTE: must be initialized before application
         renderingEngine = std::make_unique<RenderingEngine>(this);
 
-        eventDispatcher = std::make_unique<EventDispatcher>();
 
         if (enableGammaCorrection)
             renderingEngine->setGammaCorrection(true);

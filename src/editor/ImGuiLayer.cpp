@@ -16,7 +16,7 @@ namespace Villain {
     bool ImGuiLayer::showDemoWindow = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ImGuiLayer::ImGuiLayer(Engine* e): engine(e), fileBrowser(this) {}
+    ImGuiLayer::ImGuiLayer(Engine* e): engine(e), fileBrowser(this), sceneEditor(this) {}
 
     void ImGuiLayer::exit() {
         ImGui_ImplOpenGL3_Shutdown();
@@ -139,6 +139,8 @@ namespace Villain {
         // Setup Platform/Renderer backends
         ImGui_ImplSDL2_InitForOpenGL(window.getSDLWindow(), SDL_GL_GetCurrentContext());
         ImGui_ImplOpenGL3_Init("#version 330");
+
+        sceneEditor.init();
     }
 
     void ImGuiLayer::setupDockspace() {
