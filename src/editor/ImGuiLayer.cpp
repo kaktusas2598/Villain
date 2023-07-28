@@ -227,10 +227,16 @@ namespace Villain {
     void ImGuiLayer::drawMenu() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("Open")) {
+                if (ImGui::MenuItem("Open Scene")) {
                     fileBrowser.openPopup(".xml");
                 }
                 ImGui::SameLine(); renderIcon("\uf07c");
+
+                if (ImGui::MenuItem("Save Scene")) {
+                    // TODO:: add saving functionality, simple serialization to xlm and maybe
+                    // also save file popup (file browser with input text element?)
+                }
+                ImGui::SameLine(); renderIcon("\uf0c7");
 
                 if (ImGui::MenuItem("Quit")) {
                     Engine::setRunning(false);
