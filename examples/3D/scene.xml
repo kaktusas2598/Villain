@@ -26,19 +26,17 @@
             </Component>
         </Components>
     </Node>
-    <!--<Node name="Test Body">-->
-        <!--<Components>-->
-            <!--<Component type="RigidBody">-->
-                <!--<RigidBody mass="1.0" restitution="0.5" linearDamping="0.1" angularDamping="0.1">-->
-                    <!--<Position x="200.0" y="5.0" z="0.0" />-->
-                    <!--[><Orientation x="0.0" y="0.0" z="0.0" w="1.0" /><]-->
-                <!--</RigidBody>-->
-                <!--[><CollisionBox><]-->
-                    <!--[><HalfSize x="10.0" y="10.0" z="10.0"/><]-->
-                <!--[></CollisionBox><]-->
-            <!--</Component>-->
-        <!--</Components>-->
-    <!--</Node>-->
+    <Node name="Rigid Sphere">
+        <Components>
+            <Component type="RigidBody">
+                <RigidBody mass="1.0" restitution="0.5" linearDamping="0.1" angularDamping="0.1">
+                    <Position x="100.0" y="5.0" z="0.0" />
+                    <!--<Orientation x="0.0" y="0.0" z="0.0" w="1.0" />-->
+                </RigidBody>
+                <CollisionSphere radius="5.0"/>
+            </Component>
+        </Components>
+    </Node>
 
     <Node name="Sponza Palace" scale='0.1'>
         <Components>
