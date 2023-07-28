@@ -45,6 +45,10 @@ namespace Villain {
                     }
                 }
             }
+            // Open scene graph xml file
+            if (e.getExtension() == ".xml") {
+                editor->getEngine()->getApplication()->loadScene(e.getFileName());
+            }
         }
     }
 

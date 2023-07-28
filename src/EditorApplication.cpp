@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
             true
         );
 
+    engine.setEditMode(true);
     engine.run();
 
     return 0;

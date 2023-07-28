@@ -48,6 +48,7 @@ namespace Villain {
 
             bool running(){ return isRunning; }
             static void setRunning(bool running) { isRunning = running; }
+            static void setEditMode(bool edit) { editMode = edit; }
 
             static float getFps() { return fps; }
             static uint32_t getUpdateTime() { return updateTime; }
