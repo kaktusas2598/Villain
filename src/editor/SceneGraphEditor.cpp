@@ -45,7 +45,6 @@ namespace Villain {
                             }
                     }
                 }
-
             }
         }
     }
@@ -312,6 +311,36 @@ namespace Villain {
                         }
 
                     }
+
+                    static std::string selectedTexture;
+                    if (ImGui::BeginCombo("Diffuse Map", selectedTexture.c_str())) {
+                        bool noMap = meshN1UV->getMaterial().getDiffuseMap() == nullptr;
+                        if (ImGui::Selectable("--- None---", noMap)) {
+                            meshN1UV->getMaterial().setDiffuseMap(nullptr);
+                            selectedTexture = std::string();
+                        }
+                        if (noMap) {
+                            ImGui::SetItemDefaultFocus();
+                        }
+
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            const std::string& textureName = texturePair.first;
+                            const Texture* texture = texturePair.second;
+
+                            // Pass nullptr as the second parameter to use the text in the map as the ID
+                            bool isSelected = (meshN1UV->getMaterial().getDiffuseMap() == texture);
+                            if (ImGui::Selectable(textureName.c_str(), isSelected)) {
+                                // Update the selected texture when an option is selected
+                                meshN1UV->getMaterial().setDiffuseMap(const_cast<Texture*>(texture));
+                            }
+                            if (isSelected) {
+                                // Set the initial focus on the currently selected texture
+                                ImGui::SetItemDefaultFocus();
+                            }
+                        }
+                        ImGui::EndCombo();
+                    }
+
                     static int loadedMesh = 0;
                     auto originalMesh = meshN1UV->getMesh();
                     std::vector<VertexP1N1UV> vertices;
