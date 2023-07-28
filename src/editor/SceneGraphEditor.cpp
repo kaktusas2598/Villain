@@ -277,6 +277,7 @@ namespace Villain {
                 // TODO: find optimal way of adding any components and possibly custom components without too
                 // many conditionals
                 if (compo->getID() == GetId<Camera>()) {
+                    editor->renderIcon("\uf030"); ImGui::SameLine();
                     ImGui::Text("Camera");
                     Camera* camera = static_cast<Camera*>(compo);
 
@@ -304,6 +305,7 @@ namespace Villain {
                 }
                 auto light = dynamic_cast<BaseLight*>(compo);
                 if (light != nullptr) {
+                    editor->renderIcon("\uf0eb"); ImGui::SameLine();
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
                     ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor);
@@ -313,6 +315,7 @@ namespace Villain {
                 }
 
                 if (compo->getID() == GetId<MeshRenderer<VertexP1N1UV>>()) {
+                    editor->renderIcon("\uf61f"); ImGui::SameLine();
                     ImGui::Text("Basic Mesh P1N1UV");
                     auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
                     auto material = meshN1UV->getMaterial();
@@ -379,6 +382,7 @@ namespace Villain {
                 }
 
                 if (compo->getID() == GetId<ModelRenderer>()) {
+                    editor->renderIcon("\uf6c8"); ImGui::SameLine();
                     auto model = static_cast<ModelRenderer*>(compo);
                     ImGui::Text("Model %s at %s", model->getModel()->getFilename().c_str(), model->getModel()->getDirectory().c_str());
                     if (model->getCurrentAnimation()) {
@@ -412,6 +416,7 @@ namespace Villain {
                 }
 
                 if (compo->getID() == GetId<RigidBodyComponent>()) {
+                    editor->renderIcon("\uf1b9"); ImGui::SameLine();
                     auto rg = static_cast<RigidBodyComponent*>(compo);
                     ImGui::Text("Rigid Body");
                     ImGui::Text("Mass: %f", rg->getBody()->getMass());
@@ -422,6 +427,7 @@ namespace Villain {
                 }
 
                 if (compo->getID() == GetId<KinematicController>()) {
+                    editor->renderIcon("\uf1b9"); ImGui::SameLine();
                     auto rg = static_cast<KinematicController*>(compo);
                     ImGui::Text("Kinematic Rigid Body");
                     ImGui::Text("Mass: %f", rg->getBody()->getMass());
