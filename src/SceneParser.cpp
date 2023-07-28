@@ -251,7 +251,6 @@ namespace Villain {
                                 colShape = new CollisionSphere(radius, rigidBody);
                             }
                             if (e->Value() == std::string("CollisionBox")) {
-                                VILLAIN_ERROR("CollisionBox found!");
                                 colShape = new CollisionBox(parseVec3Element(e, "HalfSize"), rigidBody);
                             }
                         }
