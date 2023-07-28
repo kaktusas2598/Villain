@@ -67,6 +67,7 @@ namespace Villain {
 
             // Resource search directories
             std::vector<std::string> searchDirectories = {
+                "", // For absolute paths
                 "./",
                 "../",
                 "assets",

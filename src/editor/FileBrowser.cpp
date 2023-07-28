@@ -99,7 +99,6 @@ namespace Villain {
                 if (ImGui::Selectable(filename.c_str())) {
                     // Select file
                     selectedFile = path.string();
-                    VILLAIN_TRACE("Selected file {}", selectedFile);
                     FileSelectedEvent fileSelectedEvent = FileSelectedEvent(selectedFile, extension);
                     editor->getEngine()->getEventDispatcher()->dispatchEvent(fileSelectedEvent);
                 }

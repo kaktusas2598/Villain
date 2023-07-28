@@ -1,6 +1,7 @@
 #include "SceneGraphEditor.hpp"
 
 
+#include "ResourceManager.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
 #include "imgui/imgui.h"
@@ -26,11 +27,25 @@ namespace Villain {
             FileSelectedEvent e = static_cast<FileSelectedEvent&>(event);
             // Check if we're loading a model, when load it for selected node
             if (selectedNode) {
+                // TODO: need probably an enum FileType or AssetType or sth to avoid this looping
                 for (const std::string& supportedFormat : supportedModelFormats) {
                     if (e.getExtension() == supportedFormat) {
                         selectedNode->addComponent(new ModelRenderer(new Model(e.getFileName().c_str())));
                     }
                 }
+                for (const std::string& supportedFormat : supportedTextureFormats) {
+                    if (e.getExtension() == supportedFormat) {
+                        // TODO: Consider using other data types to store components in node for faster access of specific component
+                        for (auto& c : selectedNode->getComponents())
+                            if (c->getID() == GetId<MeshRenderer<VertexP1N1UV>>()) {
+                                // TODO: how to know if we want to set diffuse vs specular etc.. ?
+                                auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(c);
+                                std::string diffuseMapName = c->getParent()->getName() + std::string(" diffuse map");
+                                meshN1UV->getMaterial().setDiffuseMap(ResourceManager::Instance()->loadTexture(e.getFileName(), diffuseMapName));
+                            }
+                    }
+                }
+
             }
         }
     }
@@ -287,8 +302,16 @@ namespace Villain {
                 }
 
                 if (compo->getID() == GetId<MeshRenderer<VertexP1N1UV>>()) {
-                    auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
                     ImGui::Text("Basic Mesh P1N1UV");
+                    auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
+                    auto material = meshN1UV->getMaterial();
+
+                    if (!material.getDiffuseMap()) {
+                        if (ImGui::Button("Load diffuse map")) {
+                            editor->getFileBrowser().openPopup();
+                        }
+
+                    }
                     static int loadedMesh = 0;
                     auto originalMesh = meshN1UV->getMesh();
                     std::vector<VertexP1N1UV> vertices;

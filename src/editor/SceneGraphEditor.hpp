@@ -28,5 +28,6 @@ namespace Villain {
             SceneNode* selectedNode = nullptr;
 
             std::vector<std::string> supportedModelFormats = {".obj", ".dae", ".fbx", ".gltf", ".glb"};
+            std::vector<std::string> supportedTextureFormats = {"bmp", ".jpg", ".jpeg", ".png", "tga"};
     };
 }
