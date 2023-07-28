@@ -46,6 +46,7 @@ namespace Villain {
 
         // If camera belongs to a node, also set node rotation and invert yaw, so camera is looking at parent's back
         camera->setRotation({pitch, yaw, 0.0f});
+        // FIXME: possible cause of glitches when attaching RigidBody to same node as Camera
         if (camera->getParent())
             camera->GetTransform()->setEulerRot(0.0, yaw, 0.0);
         // FIXME: to make model renderer rotat in same direction, need to set -yaw, but when model walks in opposide direction
