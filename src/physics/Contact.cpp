@@ -94,6 +94,8 @@ namespace Villain {
         // Calculate the amount of velocity that is due to forces without reactions
         glm::vec3 accVelocity = thisBody->getLastFrameAcceleration() * deltaTime;
 
+        //accVelocity = glm::transpose(contactToWorld) * accVelocity;
+
         // Ignore any component of acceleration in the contact normal direction, only interested in planar acceleration
         accVelocity.x = 0;
 
