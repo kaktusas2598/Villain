@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EventDispatcher.hpp"
+#include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 
 namespace Villain {
@@ -26,6 +27,19 @@ namespace Villain {
 
             ImGuiLayer* editor = nullptr;
             SceneNode* selectedNode = nullptr;
+
+            enum class ComponentType { Camera, Light, Mesh, Model, MoveController, LookController, RigidBody, None };
+            std::map<ComponentType, const char*> componentNames = {
+                { ComponentType::None, "None" },
+                { ComponentType::Camera, "Camera" },
+                { ComponentType::Light, "Light" },
+                { ComponentType::Mesh, "Mesh" },
+                { ComponentType::Model, "Model" },
+                { ComponentType::MoveController, "Move Controller" },
+                { ComponentType::LookController, "Look Controller" },
+                { ComponentType::RigidBody, "Rigid Body" }
+            };
+            ComponentType selectedComponent = ComponentType::None;
 
             std::vector<std::string> supportedModelFormats = {".obj", ".dae", ".fbx", ".gltf", ".glb"};
             std::vector<std::string> supportedTextureFormats = {"bmp", ".jpg", ".jpeg", ".png", "tga"};
