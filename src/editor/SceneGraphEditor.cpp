@@ -156,7 +156,6 @@ namespace Villain {
 
                         break;
                     case 2:
-                        // TODO:
                         if (ImGui::Button("Add sphere mesh")) {
                             MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 1.0f);
                             selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
@@ -202,6 +201,8 @@ namespace Villain {
 
                         if (ImGui::Button("Add Rigid Body")) {
                             RigidBody* body = new RigidBody();
+                            body->setPosition(selectedNode->getTransform()->getPos());
+                            body->setOrientation(selectedNode->getTransform()->getOriantation());
                             body->setMass(mass);
                             CollisionPrimitive* col = nullptr;
                             if (colliderType == 1) {
@@ -214,7 +215,7 @@ namespace Villain {
                             else
                                 selectedNode->addComponent(new RigidBodyComponent(body, col));
                         }
-
+                        break;
                     default:
                         VILLAIN_WARN("Option {} not implemented", componentList[selectedComponent]);
                         break;
@@ -349,6 +350,16 @@ namespace Villain {
                 if (compo->getID() == GetId<RigidBodyComponent>()) {
                     auto rg = static_cast<RigidBodyComponent*>(compo);
                     ImGui::Text("Rigid Body");
+                    ImGui::Text("Mass: %f", rg->getBody()->getMass());
+                    ImGui::Text("Position: %s", glm::to_string(rg->getBody()->getPosition()).c_str());
+                    ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());
+                    ImGui::Text("Linear Velocity: %s", glm::to_string(rg->getBody()->getLinearVelocity()).c_str());
+                    ImGui::Text("Angular Velocity: %s", glm::to_string(rg->getBody()->getAngularVelocity()).c_str());
+                }
+
+                if (compo->getID() == GetId<KinematicController>()) {
+                    auto rg = static_cast<KinematicController*>(compo);
+                    ImGui::Text("Kinematic Rigid Body");
                     ImGui::Text("Mass: %f", rg->getBody()->getMass());
                     ImGui::Text("Position: %s", glm::to_string(rg->getBody()->getPosition()).c_str());
                     ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());

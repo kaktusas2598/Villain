@@ -108,29 +108,6 @@ void Game::init() {
 
     //particlePhysics->addForceGenerator(new ParticleGravity({0.0, -1.0, 0.0}), {3, 2});
 
-    // //////////////////////////////
-    //glm::vec3* windSpeed = new glm::vec3(0, 0, 0);
-    if (getRootNode()->findByID(1)) {
-        //playerBody = new Particle();
-        SceneNode* player = getRootNode()->findByID(1);
-        //playerBody->setPosition(player->getTransform()->getPos());
-        //playerBody->setMass(10.0);
-        //ParticlePhysicsComponent* playerParticleCompo = new ParticlePhysicsComponent(true);
-        //player->addComponent(playerParticleCompo);
-        //playerParticleCompo->addParticle(playerBody);
-        //playerParticleCompo->addContactGenerator(new GroundContacts(playerParticleCompo->getParticles()));
-
-        //aircraft = new FlightController(new RigidBody(), windSpeed);
-        //player->addComponent(aircraft);
-
-        playerBody = new RigidBody();
-        playerBody->setPosition({-20, 10, 0});
-        CollisionBox* box = new CollisionBox({10.0, 2.0, 8.0}, playerBody);
-        KinematicController* playerControl = new KinematicController(playerBody, box);
-        player->addComponent(playerControl);
-        //player->addComponent(new ModelRenderer(new Model("assets/models/toyplane.obj")));
-    }
-
     // Setting up meshes for rigid bodies test
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;

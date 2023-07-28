@@ -213,6 +213,7 @@ namespace Villain {
                         if (parseBoolAttribute(component, "Camera", "main")) {
                             // NOTE: Engine must have camera set at this point for xml to work!
                             cam = parentNode->getEngine()->getRenderingEngine()->getMainCamera();
+                            VILLAIN_ASSERT(cam, "Cannot set flashlight as camera is not set yet");
                         }
                         SpotLight* light = new SpotLight(ambient, diffuse, specular,
                                 currentNode->getTransform()->getPos(), direction, cutOff, outerCutoff, attenuation, cam);
@@ -224,7 +225,6 @@ namespace Villain {
                         currentNode->addComponent(new MoveController());
                     }
 
-                    // TODO: finish
                     if (component->Attribute("type") == std::string("RigidBody")) {
                         RigidBody* rigidBody = new RigidBody();
                         CollisionPrimitive* colShape = nullptr;
@@ -237,10 +237,18 @@ namespace Villain {
                                 float mass = 1.0f;
                                 e->QueryFloatAttribute("mass", &mass);
                                 rigidBody->setMass(10.0f);
-                                rigidBody->setPosition(parseVec3Element(component, "Position"));
+                                rigidBody->setPosition(parseVec3Element(e, "Position"));
+
+                                float linearDamping, angularDamping;
+                                if (e->QueryFloatAttribute("linearDamping", &linearDamping) == tinyxml2::XML_SUCCESS)
+                                    rigidBody->setLinearDamping(linearDamping);
+                                if (e->QueryFloatAttribute("angularDamping", &angularDamping) == tinyxml2::XML_SUCCESS)
+                                    rigidBody->setAngularDamping(angularDamping);
                             }
                             if (e->Value() == std::string("CollisionSphere")) {
-                                //TODO
+                                float radius = 1.0f;
+                                e->QueryFloatAttribute("radius", &radius);
+                                colShape = new CollisionSphere(radius, rigidBody);
                             }
                             if (e->Value() == std::string("CollisionBox")) {
                                 VILLAIN_ERROR("CollisionBox found!");

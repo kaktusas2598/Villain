@@ -63,6 +63,7 @@
     * Friction
     * Stability improvements, optimizations
     * Constraints: rods, cables, hinges, joints
+    * Terrain contact generator
     * Collision events, triggers
     * Data driven approach for particle types and emitters
 * Lua Scripting
