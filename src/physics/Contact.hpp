@@ -15,9 +15,16 @@ namespace Villain {
         public:
             friend class ContactResolver;
 
+            /// By default give invalid contact
+            Contact() : bodies{ nullptr, nullptr }, friction(-1.0f), restitution(-1.0f),
+                contactPoint(glm::vec3(-9999.0f)), contactNormal(glm::vec3(0.0f)),
+                penetration(-9999.0f), contactToWorld(glm::mat3(0.0f)),
+                contactVelocity(glm::vec3(0.0f)), desiredDeltaVelocity(0.0f),
+                relativeContactPos{ glm::vec3(-9999.0f), glm::vec3(-9999.0f) } {}
+
             RigidBody* bodies[2]; ///< Bodies involved in the contact. 2nd body can be nullptr for contacts with scenery.
             float friction; ///< Lateral friction coefficient at the contact
-            float restituion; ///< Normal restitution coefficient at the contact to describe response bounciness
+            float restitution; ///< Normal restitution coefficient at the contact to describe response bounciness
 
             glm::vec3 contactPoint; ///< Position of the contact in world coordinates.
             glm::vec3 contactNormal; ///< Direction of the contact in world coordinates.
@@ -26,9 +33,26 @@ namespace Villain {
             /// Set properties that don't normally depend on collision point (bodies and material properties)
             void setBodyData(RigidBody* one, RigidBody* two, float frictionCoef, float restCoef);
 
-        protected:
+            // Getters for unit tests mainly
+            RigidBody* getBody(unsigned index) const { return bodies[index]; }
+            float getFriction() const { return friction; }
+            float getRestitution() const { return restitution; }
+            glm::vec3 getContactPoint() const { return contactPoint; }
+            glm::vec3 getContactNormal() const { return contactNormal; }
+            float getPenetration() const { return penetration; }
+            glm::mat3 getContactToWorld() const { return contactToWorld; }
+            glm::vec3 getContactVelocity() const { return contactVelocity; }
+            float getDesiredDeltaVelocity() const { return desiredDeltaVelocity; }
+            glm::vec3 getRelativeContactPos(unsigned index) const { return relativeContactPos[index]; }
+
+            // Setters for unit tests mainly
+            void setContactPoint(const glm::vec3& point) { contactPoint = point; }
+            void setContactNormal(const glm::vec3& normal) { contactNormal = normal; }
+            void setPenetration(float pen) { penetration = pen; }
+
             /// Should be called automatically before resolution algorithm is run
             void calculateInternals(float deltaTime);
+        protected:
             /// Reverses the contact, calculateInternals() must be called after doing this!
             void swapBodies();
             /// Update awake state of bodies that are in contact

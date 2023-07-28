@@ -9,7 +9,7 @@ namespace Villain {
         bodies[0] = one;
         bodies[1] = two;
         friction = frictionCoef;
-        restituion = restCoef;
+        restitution = restCoef;
     }
 
     void Contact::calculateInternals(float deltaTime) {
@@ -72,7 +72,7 @@ namespace Villain {
         }
 
         // If velocity is very slow, limit the restitution
-        float thisRestitution = restituion;
+        float thisRestitution = restitution;
         if (fabs(contactVelocity.x) < velocityLimit) {
             thisRestitution = 0.0f;
         }
