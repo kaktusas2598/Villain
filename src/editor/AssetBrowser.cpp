@@ -11,6 +11,16 @@ namespace Villain {
         ImGui::Begin("Asset Browser");
         {
             if (ImGui::TreeNode("Assets")) {
+                if (ImGui::TreeNode("Models")) {
+                    for (auto const& t: ResourceManager::Instance()->getModelMap()) {
+                        if (ImGui::TreeNode(t.first.c_str())) {
+                            ImGui::TreePop();
+                        }
+                    }
+
+                    ImGui::TreePop();
+                }
+
                 if (ImGui::TreeNode("Music")) {
                     for (auto const& t: SoundManager::Instance()->getMusicMap()) {
                         if (ImGui::TreeNode(t.first.c_str())) {

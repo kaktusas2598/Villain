@@ -1,10 +1,20 @@
 #include "ResourceManager.hpp"
 
 #include "FileUtils.hpp"
+#include "Logger.hpp"
 
 namespace Villain {
 
     ResourceManager* ResourceManager::sInstance = nullptr;
+
+    void ResourceManager::clearModelMap() {
+        modelMap.clear();
+    }
+
+    void ResourceManager::clearModel(std::string id) {
+        delete modelMap[id];
+        modelMap.erase(id);
+    }
 
     void ResourceManager::clearTextureMap() {
         textureMap.clear();
@@ -22,6 +32,29 @@ namespace Villain {
     void ResourceManager::clearShader(std::string id) {
         delete shaderMap[id];
         shaderMap.erase(id);
+    }
+
+    Model* ResourceManager::loadModel(const std::string& fileName, std::string id) {
+        if (modelMap.find(id) != modelMap.end())
+            return modelMap[id];
+
+        Model* model = nullptr;
+        for (const std::string& directory : searchDirectories) {
+            std::string fullPath = directory + fileName;
+            if (FileUtils::fileExists(fullPath)) {
+                model = new Model(fullPath.c_str());
+                break;
+            }
+        }
+
+        if (model) {
+            modelMap[id] = model;
+            return model;
+        } else {
+            // Resource not found
+            VILLAIN_ERROR("Model {} not found!", fileName);
+            return nullptr;
+        }
     }
 
     Texture* ResourceManager::loadTexture(std::string fileName, std::string id, GLint wrappingMode, bool gammaCorrected) {
@@ -45,6 +78,7 @@ namespace Villain {
             return texture;
         } else {
             // Resource not found
+            VILLAIN_ERROR("Texture {} not found!", fileName);
             return nullptr;
         }
     }
@@ -67,6 +101,7 @@ namespace Villain {
             return shader;
         } else {
             // Resource not found
+            VILLAIN_ERROR("Shader {} not found!", fileName);
             return nullptr;
         }
     }

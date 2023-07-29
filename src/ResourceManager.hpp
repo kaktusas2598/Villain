@@ -2,8 +2,10 @@
 
 #include <string>
 #include <map>
-#include "rendering/Texture.hpp"
+
+#include "rendering/Model.hpp"
 #include "rendering/Shader.hpp"
+#include "rendering/Texture.hpp"
 
 namespace Villain {
 
@@ -13,6 +15,7 @@ namespace Villain {
     class ResourceManager {
         public:
 
+            Model* loadModel(const std::string& fileName, std::string id);
             Texture* loadTexture(
                     std::string fileName,
                     std::string id,
@@ -22,7 +25,7 @@ namespace Villain {
             Shader* loadShader(const std::string& fileName, std::string id);
             Shader* loadShader(const std::string& vertPath, const std::string& fragPath, std::string id);
             //Shader* loadShader(const std::string& vertPath, const std::string& fragPath, const std::string& geoPath, std::string id) {}
-            //TODO: Models, audio, fonts
+            //TODO: Audio, fonts, materials
             //TODO: Hot reloading
             //TODO: Search for embedded resources as well
 
@@ -51,6 +54,10 @@ namespace Villain {
                 return sInstance;
             }
 
+            std::map<std::string, Model*>& getModelMap() { return modelMap; }
+            void clearModelMap();
+            void clearModel(std::string id);
+
             std::map<std::string, Texture*>& getTextureMap() { return textureMap; }
             void clearTextureMap();
             void clearTexture(std::string id);
@@ -62,6 +69,7 @@ namespace Villain {
         private:
             ResourceManager() {}
 
+            std::map<std::string, Model*> modelMap;
             std::map<std::string, Texture*> textureMap;
             std::map<std::string, Shader*> shaderMap;
 
@@ -71,6 +79,7 @@ namespace Villain {
                 "./",
                 "../",
                 "assets",
+                "assets/models/",
                 "assets/shaders/",
                 "assets/textures/",
                 "resources",
