@@ -111,6 +111,12 @@ namespace Villain {
     void SceneGraphEditor::drawSelectedNode() {
         ImGui::Begin("Active Node");
 
+        if (selectedNode)
+            if (ImGui::Button("Remove Node")) {
+                editor->getEngine()->getApplication()->deleteNode(selectedNode);
+                selectedNode = nullptr;
+            }
+
         if (selectedNode != nullptr) {
             char nodeNameBuffer[100];
             std::strcpy(nodeNameBuffer, selectedNode->getName().c_str());
@@ -277,6 +283,12 @@ namespace Villain {
         if (!node->getComponents().empty()) {
             int i = 0;
             for (auto& compo: node->getComponents()) {
+                std::string removeBtnName = "Remove Component" + std::to_string(compo->getID());
+                if (ImGui::Button(removeBtnName.c_str())) {
+                    selectedNode->removeComponent(compo);
+                    continue;
+                }
+
                 ImGui::PushID(i); // Solves issues with multiple elements sharing same names
                 if (compo->getID() == GetId<Camera>()) {
                     editor->renderIcon("\uf030"); ImGui::SameLine();

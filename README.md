@@ -9,7 +9,7 @@
 * Builds as a library to be used as framework or as engine editor executable
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
-* Debug/Editor mode UI
+* Debug/Editor mode UI for scene graph editing
 * Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes
 * Error logging to stdout, log file and editor console
 * Event Dispatcher system
@@ -55,7 +55,6 @@
 ## Planned Features
 
 * Editor planned features:
-    * Node, component removal from graph
     * Hot reloading resources
     * Saving current scene
     * Scene camera, gizmos?

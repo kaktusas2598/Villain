@@ -36,6 +36,7 @@ namespace Villain {
             SceneNode* addComponent(NodeComponent* component);
 
             void removeChild(SceneNode* child);
+            void removeComponent(NodeComponent* component);
 
             bool isSelected() const { return selected; }
             void setSelected(bool select) { selected = select; }

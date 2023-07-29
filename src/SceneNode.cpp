@@ -47,6 +47,10 @@ namespace Villain {
         children.erase(std::remove(children.begin(), children.end(), child), children.end());
     }
 
+    void SceneNode::removeComponent(NodeComponent* component) {
+        components.erase(std::remove(components.begin(), components.end(), component), components.end());
+    }
+
     void SceneNode::handleInput(float deltaTime) {
         for (auto& c: components) {
             c->handleInput(deltaTime);

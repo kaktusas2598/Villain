@@ -115,6 +115,25 @@ namespace Villain {
         }
     }
 
+    void Application::deleteNode(SceneNode* node) {
+        if (!node)
+            return;
+
+        // Remove the node from the root's children list
+        auto& rootChildren = rootNode.getChildren();
+        auto it = std::find(rootChildren.begin(), rootChildren.end(), node);
+        if (it != rootChildren.end()) {
+            rootChildren.erase(it);
+        }
+
+        // Delete the node and all its children (recursively)
+        for (auto& child : node->getChildren()) {
+            deleteNode(child);
+        }
+
+        delete node;
+    }
+
     void Application::loadScene(const std::string& fileName) {
         SceneParser sceneParser;
         sceneParser.loadSceneGraph(fileName, &rootNode);
