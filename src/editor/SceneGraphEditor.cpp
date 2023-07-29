@@ -425,6 +425,14 @@ namespace Villain {
                     ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());
                     ImGui::Text("Linear Velocity: %s", glm::to_string(rg->getBody()->getLinearVelocity()).c_str());
                     ImGui::Text("Angular Velocity: %s", glm::to_string(rg->getBody()->getAngularVelocity()).c_str());
+                    if (rg->getCollider()) {
+                        if (auto box = dynamic_cast<CollisionBox*>(rg->getCollider())) {
+                            ImGui::DragFloat3("Collider Box Half Size", glm::value_ptr(box->halfSize), 0.1f);
+                        }
+                        if (auto sphere = dynamic_cast<CollisionSphere*>(rg->getCollider())) {
+                            ImGui::DragFloat("Collider Sphere Radius", &sphere->radius, 0.1f);
+                        }
+                    }
                 }
 
                 if (compo->getID() == GetId<KinematicController>()) {
@@ -436,6 +444,14 @@ namespace Villain {
                     ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());
                     ImGui::Text("Linear Velocity: %s", glm::to_string(rg->getBody()->getLinearVelocity()).c_str());
                     ImGui::Text("Angular Velocity: %s", glm::to_string(rg->getBody()->getAngularVelocity()).c_str());
+                    if (rg->getCollider()) {
+                        if (auto box = dynamic_cast<CollisionBox*>(rg->getCollider())) {
+                            ImGui::DragFloat3("Collider Box Half Size", glm::value_ptr(box->halfSize), 0.1f);
+                        }
+                        if (auto sphere = dynamic_cast<CollisionSphere*>(rg->getCollider())) {
+                            ImGui::DragFloat("Collider Sphere Radius", &sphere->radius, 0.1f);
+                        }
+                    }
                 }
 
                 ImGui::Separator();
