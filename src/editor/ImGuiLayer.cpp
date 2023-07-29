@@ -16,7 +16,8 @@ namespace Villain {
     bool ImGuiLayer::showDemoWindow = false;
     ImVec4 ImGuiLayer::clearColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    ImGuiLayer::ImGuiLayer(Engine* e): engine(e), fileBrowser(this), sceneEditor(this) {}
+    ImGuiLayer::ImGuiLayer(Engine* e)
+        : engine(e), assetBrowser(this), fileBrowser(this), sceneEditor(this) {}
 
     void ImGuiLayer::exit() {
         ImGui_ImplOpenGL3_Shutdown();
@@ -235,6 +236,7 @@ namespace Villain {
                 if (ImGui::MenuItem("Save Scene")) {
                     // TODO:: add saving functionality, simple serialization to xlm and maybe
                     // also save file popup (file browser with input text element?)
+                    fileBrowser.savePopup(".xml");
                 }
                 ImGui::SameLine(); renderIcon("\uf0c7");
 

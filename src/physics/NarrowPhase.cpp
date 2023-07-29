@@ -272,7 +272,7 @@ namespace Villain {
                 contact->setBodyData(box.body, nullptr, data->friction, data->restitution);
 
                 //VILLAIN_DEBUG("BoxVsPlane vertex position {}", glm::to_string(vertexPos));
-                VILLAIN_DEBUG("BoxVsPlane contact normal {}", glm::to_string(contact->contactNormal));
+                //VILLAIN_DEBUG("BoxVsPlane contact normal {}", glm::to_string(contact->contactNormal));
                 // Move to the next contact
                 contact++;
                 contactsUsed++;

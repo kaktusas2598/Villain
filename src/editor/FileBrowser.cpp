@@ -1,5 +1,6 @@
 #include "FileBrowser.hpp"
 
+#include "Application.hpp"
 #include "Engine.hpp"
 #include "ImGuiLayer.hpp"
 #include "Logger.hpp"
@@ -7,6 +8,7 @@
 namespace Villain {
 
     bool FileBrowser::popup = false;
+    bool FileBrowser::saveMode = false;
 
     void FileBrowser::render() {
         // Get the current working directory
@@ -43,6 +45,16 @@ namespace Villain {
                 }
 
                 drawFileBrowserPath(currentPath);
+
+                if (saveMode) {
+                    char nodeNameBuffer[100] = "scene.xml";
+                    ImGui::InputText("Save filename", nodeNameBuffer, sizeof(nodeNameBuffer));
+                    if (ImGui::Button("Save")) {
+                        saveMode = false;
+                        editor->getEngine()->getApplication()->saveScene(currentPath.string() + nodeNameBuffer);
+                        ImGui::CloseCurrentPopup();
+                    }
+                }
 
                 ImGui::PopStyleColor();
                 ImGui::PopStyleVar();
@@ -97,9 +109,8 @@ namespace Villain {
                     continue;
 
                 if (ImGui::Selectable(filename.c_str())) {
-                    // Select file
-                    selectedFile = path.string();
-                    FileSelectedEvent fileSelectedEvent = FileSelectedEvent(selectedFile, extension);
+                    // Dispath select file event
+                    FileSelectedEvent fileSelectedEvent = FileSelectedEvent(path);
                     editor->getEngine()->getEventDispatcher()->dispatchEvent(fileSelectedEvent);
                 }
 

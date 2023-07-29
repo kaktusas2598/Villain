@@ -101,7 +101,8 @@ namespace Villain {
     }
 
     void SceneParser::saveSceneGraph(const std::string& fileName, SceneNode* rootNode) {
-        // TODO:
+        // TODO:implement
+        VILLAIN_ASSERT(false, "Scene saving not implemented! Trying to load {}", fileName);
     }
 
     void SceneParser::parseSceneNode(tinyxml2::XMLElement* nodeRoot, SceneNode* parentNode) {

@@ -32,6 +32,7 @@ namespace Villain {
             SceneNode* getRootNode() { return &rootNode; }
             void deleteNode(SceneNode* node);
             void loadScene(const std::string& fileName);
+            void saveScene(const std::string& fileName);
 
             struct nk_context * getNuklearContext() { return nuklearContext; }
             void setNulkearContext(struct nk_context* nctx) { nuklearContext = nctx; }
