@@ -9,7 +9,7 @@
 * Builds as a library to be used as framework or as engine editor executable
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
-* Debug/Edit mode UI
+* Debug/Editor mode UI
 * Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes
 * Error logging to stdout, log file and editor console
 * Event Dispatcher system
@@ -55,10 +55,10 @@
 ## Planned Features
 
 * Editor planned features:
-    * Scene management, node deletion, etc
+    * Node, component removal from graph
     * Hot reloading resources
-    * Loading models, textures, scene, etc.
-    * Scene camera?
+    * Saving current scene
+    * Scene camera, gizmos?
 * Physics Engine planned additions:
     * Friction
     * Stability improvements, optimizations
@@ -67,10 +67,9 @@
     * Collision events, triggers
     * Data driven approach for particle types and emitters
 * Lua Scripting
-* Data Oriented Models
-* Entity Component System
+* Entity Component System?
 * Environmental mapping(reflections and refractions)
-* Mesh batch rendering
+* 3D Mesh batch rendering
 * Tessalated terrain
 * Stencil buffer
 * HDR and Bloom
@@ -167,3 +166,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)
   * Aerodynamical force generators broken or something, struggling to create flight simulator demo
   * Rework namespace system: create Villain::Physics, Villain::Rendering, etc..
+  * Fix synchronisation issues between camera and models or rigid bodies
