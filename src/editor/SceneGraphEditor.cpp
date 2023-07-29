@@ -416,29 +416,16 @@ namespace Villain {
                     }
                 }
 
-                if (compo->getID() == GetId<RigidBodyComponent>()) {
+                if (compo->getID() == GetId<RigidBodyComponent>() || compo->getID() == GetId<KinematicController>()) {
                     editor->renderIcon("\uf1b9"); ImGui::SameLine();
-                    auto rg = static_cast<RigidBodyComponent*>(compo);
-                    ImGui::Text("Rigid Body");
-                    ImGui::Text("Mass: %f", rg->getBody()->getMass());
-                    ImGui::Text("Position: %s", glm::to_string(rg->getBody()->getPosition()).c_str());
-                    ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());
-                    ImGui::Text("Linear Velocity: %s", glm::to_string(rg->getBody()->getLinearVelocity()).c_str());
-                    ImGui::Text("Angular Velocity: %s", glm::to_string(rg->getBody()->getAngularVelocity()).c_str());
-                    if (rg->getCollider()) {
-                        if (auto box = dynamic_cast<CollisionBox*>(rg->getCollider())) {
-                            ImGui::DragFloat3("Collider Box Half Size", glm::value_ptr(box->halfSize), 0.1f);
-                        }
-                        if (auto sphere = dynamic_cast<CollisionSphere*>(rg->getCollider())) {
-                            ImGui::DragFloat("Collider Sphere Radius", &sphere->radius, 0.1f);
-                        }
+                    auto rg = dynamic_cast<RigidBodyComponent*>(compo);
+                    if (compo->getID() == GetId<KinematicController>()) {
+                        //rg = dynamic_cast<KinematicController*>(compo);
+                        ImGui::Text("Kinematic Rigid Body");
+                    } else {
+                        ImGui::Text("Rigid Body");
                     }
-                }
 
-                if (compo->getID() == GetId<KinematicController>()) {
-                    editor->renderIcon("\uf1b9"); ImGui::SameLine();
-                    auto rg = static_cast<KinematicController*>(compo);
-                    ImGui::Text("Kinematic Rigid Body");
                     ImGui::Text("Mass: %f", rg->getBody()->getMass());
                     ImGui::Text("Position: %s", glm::to_string(rg->getBody()->getPosition()).c_str());
                     ImGui::Text("Orientation: %s", glm::to_string(rg->getBody()->getOrientation()).c_str());
