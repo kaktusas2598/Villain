@@ -16,6 +16,7 @@ var classVillain_1_1Material =
     [ "getSpecularMap", "classVillain_1_1Material.html#af33ca1241ec1242cb20fb7b3d30240cf", null ],
     [ "setAmbientColor", "classVillain_1_1Material.html#a97b172875cb383e8cb66dba7bb6283f6", null ],
     [ "setDiffuseColor", "classVillain_1_1Material.html#ac3373f085cca8a47c1d435b5e44fcef6", null ],
+    [ "setDiffuseMap", "classVillain_1_1Material.html#a6f662a02c0984f3ec31f25421b8661d1", null ],
     [ "setSpecularColor", "classVillain_1_1Material.html#a1c113896b571e5bc9816772499bd8426", null ],
     [ "setSpecularFactor", "classVillain_1_1Material.html#adc283c4520aa4df2c5a94eca81c67813", null ]
 ];

@@ -4,6 +4,7 @@ var classVillain_1_1Application =
     [ "~Application", "classVillain_1_1Application.html#aa42186939ceec63992c1ef2d445d394d", null ],
     [ "addStates", "classVillain_1_1Application.html#a36f669be69e38aa6d77a1ac7f5bc5a29", null ],
     [ "addToScene", "classVillain_1_1Application.html#a8c57087f7408960ac57c3f7450cd192d", null ],
+    [ "deleteNode", "classVillain_1_1Application.html#a2500da9ee4eaf25bd2b51840570b931c", null ],
     [ "exit", "classVillain_1_1Application.html#aaaa307a5665c7832229524c703fbe80f", null ],
     [ "getNuklearContext", "classVillain_1_1Application.html#ae2ad569b78a78fd56cb2653113fd2ab6", null ],
     [ "getRootNode", "classVillain_1_1Application.html#ae6ca7ca1dc1625f509a05f9d0a7c8c96", null ],

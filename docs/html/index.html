@@ -95,7 +95,7 @@ Core Engine</h2>
 <li>Builds as a library to be used as framework or as engine editor executable</li>
 <li>2D Tiled map parsing/loading from TMX/XML files</li>
 <li>3D Scene loading from XML files</li>
-<li>Debug/Edit mode UI</li>
+<li>Debug/Editor mode UI for scene graph editing</li>
 <li>Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes</li>
 <li>Error logging to stdout, log file and editor console</li>
 <li>Event Dispatcher system</li>
@@ -152,25 +152,24 @@ Physics</h2>
 Planned Features</h1>
 <ul>
 <li>Editor planned features:<ul>
-<li>Scene management, node deletion, etc</li>
 <li>Hot reloading resources</li>
-<li>Loading models, textures, scene, etc.</li>
-<li>Scene camera?</li>
+<li>Saving current scene</li>
+<li>Scene camera, gizmos?</li>
 </ul>
 </li>
 <li>Physics Engine planned additions:<ul>
 <li>Friction</li>
 <li>Stability improvements, optimizations</li>
 <li>Constraints: rods, cables, hinges, joints</li>
+<li>Terrain contact generator</li>
 <li>Collision events, triggers</li>
 <li>Data driven approach for particle types and emitters</li>
 </ul>
 </li>
 <li>Lua Scripting</li>
-<li>Data Oriented Models</li>
-<li>Entity Component System</li>
+<li>Entity Component System?</li>
 <li>Environmental mapping(reflections and refractions)</li>
-<li>Mesh batch rendering</li>
+<li>3D Mesh batch rendering</li>
 <li>Tessalated terrain</li>
 <li>Stencil buffer</li>
 <li>HDR and Bloom</li>
@@ -249,7 +248,8 @@ FIXME/TODOS</h1>
 <li>Move all usages of &lt;random&gt; header to new RandomUtils static class</li>
 <li>Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)<ul>
 <li>Aerodynamical force generators broken or something, struggling to create flight simulator demo</li>
-<li>Rework namespace system: create Villain::Physics, Villain::Rendering, etc.. </li>
+<li>Rework namespace system: create Villain::Physics, Villain::Rendering, etc..</li>
+<li>Fix synchronisation issues between camera and models or rigid bodies </li>
 </ul>
 </li>
 </ul>

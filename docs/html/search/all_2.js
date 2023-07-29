@@ -23,7 +23,7 @@ var searchData=
   ['collisionprimitive_54',['CollisionPrimitive',['../classVillain_1_1CollisionPrimitive.html',1,'Villain']]],
   ['collisionsphere_55',['CollisionSphere',['../classVillain_1_1CollisionSphere.html',1,'Villain']]],
   ['componentcounter_56',['componentCounter',['../namespaceVillain.html#a5dd41dfc06bf9f1b2d7fe6d2d3cba7df',1,'Villain']]],
-  ['contact_57',['Contact',['../classVillain_1_1Contact.html',1,'Villain']]],
+  ['contact_57',['Contact',['../classVillain_1_1Contact.html#a5d4a562e433355d89d1e74bae88987f2',1,'Villain::Contact::Contact()'],['../classVillain_1_1Contact.html',1,'Villain::Contact']]],
   ['contactcount_58',['contactCount',['../structVillain_1_1CollisionData.html#ad6eb67cd1d9ec26ee24281b09afe5522',1,'Villain::CollisionData']]],
   ['contactnormal_59',['contactNormal',['../classVillain_1_1Contact.html#a683b142cf42183d0540c5bd89933adef',1,'Villain::Contact']]],
   ['contactpoint_60',['contactPoint',['../classVillain_1_1Contact.html#a7910e0f71ed62756dd394dfa086cdd8e',1,'Villain::Contact']]],

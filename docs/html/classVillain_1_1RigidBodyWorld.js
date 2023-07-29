@@ -5,6 +5,7 @@ var classVillain_1_1RigidBodyWorld =
     [ "RigidBodyWorld", "classVillain_1_1RigidBodyWorld.html#a126bf3d432d2f6db0bd2d5c043056fb3", null ],
     [ "~RigidBodyWorld", "classVillain_1_1RigidBodyWorld.html#a9ead73b6fdbe3581bca611ca9d3d0c3e", null ],
     [ "debugDraw", "classVillain_1_1RigidBodyWorld.html#a29d5873ea5321e615e7875e4e5c37630", null ],
+    [ "debugModeActive", "classVillain_1_1RigidBodyWorld.html#ac38a51eca639d4ece779105629f06b06", null ],
     [ "generateContacts", "classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215", null ],
     [ "getBodies", "classVillain_1_1RigidBodyWorld.html#a4f895c65f7e911a59a7844ff541c5cca", null ],
     [ "getColliders", "classVillain_1_1RigidBodyWorld.html#a432fa6b007d5d9c30e562170c6a20e28", null ],

@@ -1,5 +1,6 @@
 var classVillain_1_1Contact =
 [
+    [ "Contact", "classVillain_1_1Contact.html#a5d4a562e433355d89d1e74bae88987f2", null ],
     [ "applyPositionChange", "classVillain_1_1Contact.html#a5f3b735a361e05323da34fbe05e5e219", null ],
     [ "applyVelocityChange", "classVillain_1_1Contact.html#a605d8b09081b32d38deb7cd15136f356", null ],
     [ "calculateContactBasis", "classVillain_1_1Contact.html#a77875c4c4e2bcdaff02fa1779a05a726", null ],
@@ -7,8 +8,21 @@ var classVillain_1_1Contact =
     [ "calculateFrictionlessImpulse", "classVillain_1_1Contact.html#a66f8c91603e331e907ac150575e577ae", null ],
     [ "calculateInternals", "classVillain_1_1Contact.html#ac53c6071f0586c5c4b93b967d520d9df", null ],
     [ "calculateLocalVelocity", "classVillain_1_1Contact.html#aa6d4e4f0a1296312da1851ad3891359f", null ],
+    [ "getBody", "classVillain_1_1Contact.html#a51c29ab428ff792735084ce3edec7023", null ],
+    [ "getContactNormal", "classVillain_1_1Contact.html#ab195cefd4aed4ac8f854cac1c053fb7a", null ],
+    [ "getContactPoint", "classVillain_1_1Contact.html#a2328e12e7fa66b01a583d37ef3ef6c70", null ],
+    [ "getContactToWorld", "classVillain_1_1Contact.html#a1953fd071376090809508ebc38048936", null ],
+    [ "getContactVelocity", "classVillain_1_1Contact.html#afb40537ed551d657068717f18286b2b5", null ],
+    [ "getDesiredDeltaVelocity", "classVillain_1_1Contact.html#a468b9e40809f71212fa0ad6b022f8573", null ],
+    [ "getFriction", "classVillain_1_1Contact.html#abda7e91af782c8f8251c6cc9eb48eba6", null ],
+    [ "getPenetration", "classVillain_1_1Contact.html#a571b4eab31d85033ee49006726cc94c2", null ],
+    [ "getRelativeContactPos", "classVillain_1_1Contact.html#aa14ca748306d01b139cb1ff97d29265e", null ],
+    [ "getRestitution", "classVillain_1_1Contact.html#abd7d8731ae43a90b79e31401522c5a1a", null ],
     [ "matchAwakeState", "classVillain_1_1Contact.html#a48a61b43f17d91ede2f7c11aa37ea9e9", null ],
     [ "setBodyData", "classVillain_1_1Contact.html#a5298cbb75c27f1e8bfcb9654004f2563", null ],
+    [ "setContactNormal", "classVillain_1_1Contact.html#adc0c88c9b498955dd893c179f07e8def", null ],
+    [ "setContactPoint", "classVillain_1_1Contact.html#a61b6ad0be001823923e89497fbd4abd1", null ],
+    [ "setPenetration", "classVillain_1_1Contact.html#aa64311f8945051379e8624c41dc11ad8", null ],
     [ "swapBodies", "classVillain_1_1Contact.html#a336950bfc1bb996ba7f926092713495f", null ],
     [ "ContactResolver", "classVillain_1_1Contact.html#a274795e9632d5cb7d5d387fc31136fe5", null ],
     [ "bodies", "classVillain_1_1Contact.html#af034d8fdd72cb28eab280b2e4407048e", null ],
@@ -20,5 +34,5 @@ var classVillain_1_1Contact =
     [ "friction", "classVillain_1_1Contact.html#af63012eeeb7780202cb56ebee167c661", null ],
     [ "penetration", "classVillain_1_1Contact.html#ab691e5f7ba5750dbb57185ba9657045a", null ],
     [ "relativeContactPos", "classVillain_1_1Contact.html#adfcf1d48dadf1bc7b2020cd2dbd5d26e", null ],
-    [ "restituion", "classVillain_1_1Contact.html#ab93c3df1da8967fd1c63fd3aa2f0f2b8", null ]
+    [ "restitution", "classVillain_1_1Contact.html#ac10ce51affe6c1aa474a8aaccaeb270b", null ]
 ];

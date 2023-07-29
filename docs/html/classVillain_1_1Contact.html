@@ -109,10 +109,57 @@ Collaboration diagram for Villain::Contact:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a5d4a562e433355d89d1e74bae88987f2"><td class="memItemLeft" align="right" valign="top"><a id="a5d4a562e433355d89d1e74bae88987f2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#a5d4a562e433355d89d1e74bae88987f2">Contact</a> ()</td></tr>
+<tr class="memdesc:a5d4a562e433355d89d1e74bae88987f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default give invalid contact. <br /></td></tr>
+<tr class="separator:a5d4a562e433355d89d1e74bae88987f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5298cbb75c27f1e8bfcb9654004f2563"><td class="memItemLeft" align="right" valign="top"><a id="a5298cbb75c27f1e8bfcb9654004f2563"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#a5298cbb75c27f1e8bfcb9654004f2563">setBodyData</a> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *one, <a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *two, float frictionCoef, float restCoef)</td></tr>
 <tr class="memdesc:a5298cbb75c27f1e8bfcb9654004f2563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set properties that don't normally depend on collision point (bodies and material properties) <br /></td></tr>
 <tr class="separator:a5298cbb75c27f1e8bfcb9654004f2563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51c29ab428ff792735084ce3edec7023"><td class="memItemLeft" align="right" valign="top"><a id="a51c29ab428ff792735084ce3edec7023"></a>
+<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getBody</b> (unsigned index) const</td></tr>
+<tr class="separator:a51c29ab428ff792735084ce3edec7023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abda7e91af782c8f8251c6cc9eb48eba6"><td class="memItemLeft" align="right" valign="top"><a id="abda7e91af782c8f8251c6cc9eb48eba6"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getFriction</b> () const</td></tr>
+<tr class="separator:abda7e91af782c8f8251c6cc9eb48eba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd7d8731ae43a90b79e31401522c5a1a"><td class="memItemLeft" align="right" valign="top"><a id="abd7d8731ae43a90b79e31401522c5a1a"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getRestitution</b> () const</td></tr>
+<tr class="separator:abd7d8731ae43a90b79e31401522c5a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2328e12e7fa66b01a583d37ef3ef6c70"><td class="memItemLeft" align="right" valign="top"><a id="a2328e12e7fa66b01a583d37ef3ef6c70"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getContactPoint</b> () const</td></tr>
+<tr class="separator:a2328e12e7fa66b01a583d37ef3ef6c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab195cefd4aed4ac8f854cac1c053fb7a"><td class="memItemLeft" align="right" valign="top"><a id="ab195cefd4aed4ac8f854cac1c053fb7a"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getContactNormal</b> () const</td></tr>
+<tr class="separator:ab195cefd4aed4ac8f854cac1c053fb7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a571b4eab31d85033ee49006726cc94c2"><td class="memItemLeft" align="right" valign="top"><a id="a571b4eab31d85033ee49006726cc94c2"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getPenetration</b> () const</td></tr>
+<tr class="separator:a571b4eab31d85033ee49006726cc94c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1953fd071376090809508ebc38048936"><td class="memItemLeft" align="right" valign="top"><a id="a1953fd071376090809508ebc38048936"></a>
+glm::mat3&#160;</td><td class="memItemRight" valign="bottom"><b>getContactToWorld</b> () const</td></tr>
+<tr class="separator:a1953fd071376090809508ebc38048936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb40537ed551d657068717f18286b2b5"><td class="memItemLeft" align="right" valign="top"><a id="afb40537ed551d657068717f18286b2b5"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getContactVelocity</b> () const</td></tr>
+<tr class="separator:afb40537ed551d657068717f18286b2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a468b9e40809f71212fa0ad6b022f8573"><td class="memItemLeft" align="right" valign="top"><a id="a468b9e40809f71212fa0ad6b022f8573"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getDesiredDeltaVelocity</b> () const</td></tr>
+<tr class="separator:a468b9e40809f71212fa0ad6b022f8573"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa14ca748306d01b139cb1ff97d29265e"><td class="memItemLeft" align="right" valign="top"><a id="aa14ca748306d01b139cb1ff97d29265e"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getRelativeContactPos</b> (unsigned index) const</td></tr>
+<tr class="separator:aa14ca748306d01b139cb1ff97d29265e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b6ad0be001823923e89497fbd4abd1"><td class="memItemLeft" align="right" valign="top"><a id="a61b6ad0be001823923e89497fbd4abd1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setContactPoint</b> (const glm::vec3 &amp;point)</td></tr>
+<tr class="separator:a61b6ad0be001823923e89497fbd4abd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc0c88c9b498955dd893c179f07e8def"><td class="memItemLeft" align="right" valign="top"><a id="adc0c88c9b498955dd893c179f07e8def"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setContactNormal</b> (const glm::vec3 &amp;normal)</td></tr>
+<tr class="separator:adc0c88c9b498955dd893c179f07e8def"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa64311f8945051379e8624c41dc11ad8"><td class="memItemLeft" align="right" valign="top"><a id="aa64311f8945051379e8624c41dc11ad8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setPenetration</b> (float pen)</td></tr>
+<tr class="separator:aa64311f8945051379e8624c41dc11ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac53c6071f0586c5c4b93b967d520d9df"><td class="memItemLeft" align="right" valign="top"><a id="ac53c6071f0586c5c4b93b967d520d9df"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#ac53c6071f0586c5c4b93b967d520d9df">calculateInternals</a> (float deltaTime)</td></tr>
+<tr class="memdesc:ac53c6071f0586c5c4b93b967d520d9df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should be called automatically before resolution algorithm is run. <br /></td></tr>
+<tr class="separator:ac53c6071f0586c5c4b93b967d520d9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -124,10 +171,10 @@ Public Attributes</h2></td></tr>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#af63012eeeb7780202cb56ebee167c661">friction</a></td></tr>
 <tr class="memdesc:af63012eeeb7780202cb56ebee167c661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lateral friction coefficient at the contact. <br /></td></tr>
 <tr class="separator:af63012eeeb7780202cb56ebee167c661"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab93c3df1da8967fd1c63fd3aa2f0f2b8"><td class="memItemLeft" align="right" valign="top"><a id="ab93c3df1da8967fd1c63fd3aa2f0f2b8"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#ab93c3df1da8967fd1c63fd3aa2f0f2b8">restituion</a></td></tr>
-<tr class="memdesc:ab93c3df1da8967fd1c63fd3aa2f0f2b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal restitution coefficient at the contact to describe response bounciness. <br /></td></tr>
-<tr class="separator:ab93c3df1da8967fd1c63fd3aa2f0f2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac10ce51affe6c1aa474a8aaccaeb270b"><td class="memItemLeft" align="right" valign="top"><a id="ac10ce51affe6c1aa474a8aaccaeb270b"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#ac10ce51affe6c1aa474a8aaccaeb270b">restitution</a></td></tr>
+<tr class="memdesc:ac10ce51affe6c1aa474a8aaccaeb270b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal restitution coefficient at the contact to describe response bounciness. <br /></td></tr>
+<tr class="separator:ac10ce51affe6c1aa474a8aaccaeb270b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7910e0f71ed62756dd394dfa086cdd8e"><td class="memItemLeft" align="right" valign="top"><a id="a7910e0f71ed62756dd394dfa086cdd8e"></a>
 glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#a7910e0f71ed62756dd394dfa086cdd8e">contactPoint</a></td></tr>
 <tr class="memdesc:a7910e0f71ed62756dd394dfa086cdd8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position of the contact in world coordinates. <br /></td></tr>
@@ -143,10 +190,6 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ac53c6071f0586c5c4b93b967d520d9df"><td class="memItemLeft" align="right" valign="top"><a id="ac53c6071f0586c5c4b93b967d520d9df"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#ac53c6071f0586c5c4b93b967d520d9df">calculateInternals</a> (float deltaTime)</td></tr>
-<tr class="memdesc:ac53c6071f0586c5c4b93b967d520d9df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should be called automatically before resolution algorithm is run. <br /></td></tr>
-<tr class="separator:ac53c6071f0586c5c4b93b967d520d9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a336950bfc1bb996ba7f926092713495f"><td class="memItemLeft" align="right" valign="top"><a id="a336950bfc1bb996ba7f926092713495f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Contact.html#a336950bfc1bb996ba7f926092713495f">swapBodies</a> ()</td></tr>
 <tr class="memdesc:a336950bfc1bb996ba7f926092713495f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverses the contact, <a class="el" href="classVillain_1_1Contact.html#ac53c6071f0586c5c4b93b967d520d9df" title="Should be called automatically before resolution algorithm is run.">calculateInternals()</a> must be called after doing this! <br /></td></tr>
@@ -239,7 +282,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ContactResolver</b><
 </div><div class="memdoc">
 
 <p>Perform inertia-weighted impule based resolution of this contact alone. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000042">Todo:</a></b></dt><dd>implement friction impulse </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000044">Todo:</a></b></dt><dd>implement friction impulse </dd></dl>
 
 </div>
 </div>

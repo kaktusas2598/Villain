@@ -15,6 +15,7 @@ var classVillain_1_1SceneNode =
     [ "handleInput", "classVillain_1_1SceneNode.html#a41dd51da04119ab8fba6518449421abb", null ],
     [ "isSelected", "classVillain_1_1SceneNode.html#a2476bd5780ef8e19c3e600d66c72ccb0", null ],
     [ "removeChild", "classVillain_1_1SceneNode.html#af15238a8dd923fbb185f77755b9117cc", null ],
+    [ "removeComponent", "classVillain_1_1SceneNode.html#adc52ff23dac231bced863d06bd4f68d4", null ],
     [ "render", "classVillain_1_1SceneNode.html#a232a325282a03fcc80b77f4ef598187f", null ],
     [ "setEngine", "classVillain_1_1SceneNode.html#a94f0954750e73e38bdfb7a1d33f51ca4", null ],
     [ "setName", "classVillain_1_1SceneNode.html#a163a1e06d7692293b530184b498213c6", null ],

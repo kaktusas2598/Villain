@@ -87,28 +87,62 @@ $(document).ready(function(){initNavTree('SceneGraphEditor_8hpp_source.html','')
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;SceneNode.hpp&quot;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceVillain.html">Villain</a> {</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;EventDispatcher.hpp&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;ResourceManager.hpp&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;SceneNode.hpp&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classVillain_1_1SceneGraphEditor.html">    7</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1SceneGraphEditor.html">SceneGraphEditor</a> {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;            <span class="keywordtype">void</span> render(<a class="code" href="classVillain_1_1Engine.html">Engine</a>&amp; engine);</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceVillain.html">Villain</a> {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">class </span>ImGuiLayer;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;            <span class="keywordtype">void</span> setSelectedNode(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node) { selectedNode = node; }</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            <span class="keywordtype">void</span> drawNodeHierarchy(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node); <span class="comment">//&lt;&lt;&lt; Render Scene Graph nodes and components recursively</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="keywordtype">void</span> drawSelectedNode();</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keywordtype">void</span> drawNodeProperties(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keywordtype">void</span> drawNodeComponents(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* selectedNode = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classVillain_1_1SceneGraphEditor.html">   11</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classVillain_1_1SceneGraphEditor.html">SceneGraphEditor</a> {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <a class="code" href="classVillain_1_1SceneGraphEditor.html">SceneGraphEditor</a>(<a class="code" href="classVillain_1_1ImGuiLayer.html">ImGuiLayer</a>* editor) : editor(editor) {}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keywordtype">void</span> render(<a class="code" href="classVillain_1_1Engine.html">Engine</a>&amp; engine);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classVillain_1_1SceneGraphEditor.html#ad972471374e5c077abb758316b6dd548">onEvent</a>(<a class="code" href="classVillain_1_1Event.html">Event</a>&amp; event);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keywordtype">void</span> setSelectedNode(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node) { selectedNode = node; }</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordtype">void</span> drawNodeHierarchy(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node); <span class="comment">//&lt;&lt;&lt; Render Scene Graph nodes and components recursively</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordtype">void</span> drawSelectedNode();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            <span class="keywordtype">void</span> drawNodeProperties(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordtype">void</span> drawNodeComponents(<a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* node);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            <a class="code" href="classVillain_1_1ImGuiLayer.html">ImGuiLayer</a>* editor = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <a class="code" href="classVillain_1_1SceneNode.html">SceneNode</a>* selectedNode = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keyword">enum class</span> ComponentType { <a class="code" href="classVillain_1_1Camera.html">Camera</a>, Light, <a class="code" href="classVillain_1_1Mesh.html">Mesh</a>, <a class="code" href="classVillain_1_1Model.html">Model</a>, <a class="code" href="classVillain_1_1MoveController.html">MoveController</a>, <a class="code" href="classVillain_1_1LookController.html">LookController</a>, <a class="code" href="classVillain_1_1RigidBody.html">RigidBody</a>, None };</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            std::map&lt;ComponentType, const char*&gt; componentNames = {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                { ComponentType::None, <span class="stringliteral">&quot;None&quot;</span> },</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                { ComponentType::Camera, <span class="stringliteral">&quot;Camera&quot;</span> },</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                { ComponentType::Light, <span class="stringliteral">&quot;Light&quot;</span> },</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                { ComponentType::Mesh, <span class="stringliteral">&quot;Mesh&quot;</span> },</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                { ComponentType::Model, <span class="stringliteral">&quot;Model&quot;</span> },</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                { ComponentType::MoveController, <span class="stringliteral">&quot;Move Controller&quot;</span> },</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                { ComponentType::LookController, <span class="stringliteral">&quot;Look Controller&quot;</span> },</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                { ComponentType::RigidBody, <span class="stringliteral">&quot;Rigid Body&quot;</span> }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            };</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            ComponentType selectedComponent = ComponentType::None;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            std::vector&lt;std::string&gt; supportedModelFormats = {<span class="stringliteral">&quot;.obj&quot;</span>, <span class="stringliteral">&quot;.dae&quot;</span>, <span class="stringliteral">&quot;.fbx&quot;</span>, <span class="stringliteral">&quot;.gltf&quot;</span>, <span class="stringliteral">&quot;.glb&quot;</span>};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            std::vector&lt;std::string&gt; supportedTextureFormats = {<span class="stringliteral">&quot;bmp&quot;</span>, <span class="stringliteral">&quot;.jpg&quot;</span>, <span class="stringliteral">&quot;.jpeg&quot;</span>, <span class="stringliteral">&quot;.png&quot;</span>, <span class="stringliteral">&quot;tga&quot;</span>};</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
+<div class="ttc" id="aclassVillain_1_1Camera_html"><div class="ttname"><a href="classVillain_1_1Camera.html">Villain::Camera</a></div><div class="ttdoc">Main engine Camera class.</div><div class="ttdef"><b>Definition:</b> Camera.hpp:35</div></div>
 <div class="ttc" id="aclassVillain_1_1Engine_html"><div class="ttname"><a href="classVillain_1_1Engine.html">Villain::Engine</a></div><div class="ttdoc">Main engine class containing game loop.</div><div class="ttdef"><b>Definition:</b> Engine.hpp:33</div></div>
-<div class="ttc" id="aclassVillain_1_1SceneGraphEditor_html"><div class="ttname"><a href="classVillain_1_1SceneGraphEditor.html">Villain::SceneGraphEditor</a></div><div class="ttdef"><b>Definition:</b> SceneGraphEditor.hpp:7</div></div>
+<div class="ttc" id="aclassVillain_1_1Event_html"><div class="ttname"><a href="classVillain_1_1Event.html">Villain::Event</a></div><div class="ttdoc">Base Event interface.</div><div class="ttdef"><b>Definition:</b> EventDispatcher.hpp:27</div></div>
+<div class="ttc" id="aclassVillain_1_1ImGuiLayer_html"><div class="ttname"><a href="classVillain_1_1ImGuiLayer.html">Villain::ImGuiLayer</a></div><div class="ttdef"><b>Definition:</b> ImGuiLayer.hpp:17</div></div>
+<div class="ttc" id="aclassVillain_1_1LookController_html"><div class="ttname"><a href="classVillain_1_1LookController.html">Villain::LookController</a></div><div class="ttdef"><b>Definition:</b> LookController.hpp:8</div></div>
+<div class="ttc" id="aclassVillain_1_1Mesh_html"><div class="ttname"><a href="classVillain_1_1Mesh.html">Villain::Mesh</a></div><div class="ttdef"><b>Definition:</b> Mesh.hpp:15</div></div>
+<div class="ttc" id="aclassVillain_1_1Model_html"><div class="ttname"><a href="classVillain_1_1Model.html">Villain::Model</a></div><div class="ttdef"><b>Definition:</b> Model.hpp:21</div></div>
+<div class="ttc" id="aclassVillain_1_1MoveController_html"><div class="ttname"><a href="classVillain_1_1MoveController.html">Villain::MoveController</a></div><div class="ttdef"><b>Definition:</b> MoveController.hpp:9</div></div>
+<div class="ttc" id="aclassVillain_1_1RigidBody_html"><div class="ttname"><a href="classVillain_1_1RigidBody.html">Villain::RigidBody</a></div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:8</div></div>
+<div class="ttc" id="aclassVillain_1_1SceneGraphEditor_html"><div class="ttname"><a href="classVillain_1_1SceneGraphEditor.html">Villain::SceneGraphEditor</a></div><div class="ttdef"><b>Definition:</b> SceneGraphEditor.hpp:11</div></div>
+<div class="ttc" id="aclassVillain_1_1SceneGraphEditor_html_ad972471374e5c077abb758316b6dd548"><div class="ttname"><a href="classVillain_1_1SceneGraphEditor.html#ad972471374e5c077abb758316b6dd548">Villain::SceneGraphEditor::onEvent</a></div><div class="ttdeci">void onEvent(Event &amp;event)</div><div class="ttdef"><b>Definition:</b> SceneGraphEditor.cpp:24</div></div>
 <div class="ttc" id="aclassVillain_1_1SceneNode_html"><div class="ttname"><a href="classVillain_1_1SceneNode.html">Villain::SceneNode</a></div><div class="ttdef"><b>Definition:</b> SceneNode.hpp:25</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
