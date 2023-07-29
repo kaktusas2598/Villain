@@ -42,6 +42,7 @@ namespace Villain {
             static bool saveMode; ///< Toggle input box for save file dialog popup
             ImGuiLayer* editor = nullptr;
             std::string selectedFile{};
+            fs::path selectedDirectory;
             std::string filter{};
     };
 }

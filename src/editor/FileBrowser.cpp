@@ -4,6 +4,7 @@
 #include "Engine.hpp"
 #include "ImGuiLayer.hpp"
 #include "Logger.hpp"
+#include "SceneWriter.hpp"
 
 namespace Villain {
 
@@ -48,10 +49,13 @@ namespace Villain {
 
                 if (saveMode) {
                     char nodeNameBuffer[100] = "scene.xml";
-                    ImGui::InputText("Save filename", nodeNameBuffer, sizeof(nodeNameBuffer));
+                    ImGui::InputText("Save as", nodeNameBuffer, sizeof(nodeNameBuffer)); ImGui::SameLine();
                     if (ImGui::Button("Save")) {
                         saveMode = false;
-                        editor->getEngine()->getApplication()->saveScene(currentPath.string() + nodeNameBuffer);
+                        VILLAIN_CRIT("Selected dir {}", selectedDirectory.string());
+                        SceneWriter sceneWriter;
+                        sceneWriter.saveSceneGraph(currentPath.string() + nodeNameBuffer,
+                                editor->getEngine()->getApplication()->getRootNode());
                         ImGui::CloseCurrentPopup();
                     }
                 }
@@ -97,6 +101,7 @@ namespace Villain {
                 editor->renderIcon("\uf07c");
 
                 if (expanded) {
+                    if (popup) selectedDirectory = path;
                     drawFileBrowserPath(path);
                     ImGui::TreePop();
                 }

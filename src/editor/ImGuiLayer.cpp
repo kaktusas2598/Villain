@@ -234,8 +234,6 @@ namespace Villain {
                 ImGui::SameLine(); renderIcon("\uf07c");
 
                 if (ImGui::MenuItem("Save Scene")) {
-                    // TODO:: add saving functionality, simple serialization to xlm and maybe
-                    // also save file popup (file browser with input text element?)
                     fileBrowser.savePopup(".xml");
                 }
                 ImGui::SameLine(); renderIcon("\uf0c7");
