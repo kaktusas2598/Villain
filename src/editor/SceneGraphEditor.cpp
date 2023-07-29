@@ -118,6 +118,8 @@ namespace Villain {
             }
 
         if (selectedNode != nullptr) {
+            ImGui::SeparatorText("Properties");
+
             char nodeNameBuffer[100];
             std::strcpy(nodeNameBuffer, selectedNode->getName().c_str());
             if (ImGui::InputText("Node Name", nodeNameBuffer, sizeof(nodeNameBuffer))) {
@@ -125,6 +127,8 @@ namespace Villain {
             }
 
             drawNodeProperties(selectedNode);
+
+            ImGui::SeparatorText("Add New Components");
 
             // Add component combo menu
             if (ImGui::BeginCombo("Add Component", componentNames[selectedComponent])) {
@@ -140,8 +144,6 @@ namespace Villain {
                 }
                 ImGui::EndCombo();
             }
-
-            ImGui::Separator();
 
             std::vector<VertexP1N1UV> vertices;
             std::vector<unsigned int> indices;
@@ -163,7 +165,6 @@ namespace Villain {
                     ImGui::SliderFloat3("Direction (for spot and directional lights only)", (float*)&lightDirection, -1.f, 1.f);
                     ImGui::DragFloat("Spot light cutoff angle", &spotLightCutoff, 1.0f, 0.0f, 180.0f);
                     ImGui::DragFloat("Spot light outer cutoff angle", &spotLightOuterCutoff, 1.0f, 0.0f, 180.0f);
-                    ImGui::Separator();
 
                     if (ImGui::Button("Add Point Light")) {
                         selectedNode->addComponent(
@@ -252,7 +253,7 @@ namespace Villain {
                     break;
             }
 
-            ImGui::Separator();
+            ImGui::SeparatorText("Components");
             // Draw existing components
             if (!selectedNode->getComponents().empty()) {
                 drawNodeComponents(selectedNode);
@@ -283,7 +284,7 @@ namespace Villain {
         if (!node->getComponents().empty()) {
             int i = 0;
             for (auto& compo: node->getComponents()) {
-                std::string removeBtnName = "Remove Component" + std::to_string(compo->getID());
+                std::string removeBtnName = "Remove Component " + std::to_string(compo->getID());
                 if (ImGui::Button(removeBtnName.c_str())) {
                     selectedNode->removeComponent(compo);
                     continue;
@@ -449,6 +450,19 @@ namespace Villain {
                             ImGui::DragFloat("Collider Sphere Radius", &sphere->radius, 0.1f);
                         }
                     }
+                }
+
+                if (compo->getID() == GetId<LookController>()) {
+                    ImGui::Text("Look Controller");
+                    auto control = dynamic_cast<LookController*>(compo);
+                    ImGui::DragFloat("Mouse sensitivity", control->getSensitivity());
+                    ImGui::Checkbox("Constrain Pitch", control->getConstrainPitch());
+                }
+
+                if (compo->getID() == GetId<MoveController>()) {
+                    ImGui::Text("Move Controller");
+                    auto control = dynamic_cast<MoveController*>(compo);
+                    ImGui::DragFloat("Movement speed", control->getSpeed());
                 }
 
                 ImGui::Separator();

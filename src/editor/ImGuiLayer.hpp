@@ -1,9 +1,9 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_sdl.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include <glm/glm.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_sdl2.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 #include "AssetBrowser.hpp"
 #include "FileBrowser.hpp"
