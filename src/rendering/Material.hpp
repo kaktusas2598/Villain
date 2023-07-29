@@ -8,10 +8,17 @@
 
 namespace Villain {
 
+    /// Main material classes used to bundle material properties and texture maps together
+    // TODO: Possibly should also contain shader
     class Material {
         public:
             Material(const std::string& name = std::string()) { this->name = name; }
             virtual ~Material() {}
+
+            /// Material equality based on their name alone to force adding unique names
+            bool operator==(const Material& other) const {
+                return this->name == other.name;
+            }
 
             // NOTE: Should the engine have default textures to display when there is no texture provided?
             Material(

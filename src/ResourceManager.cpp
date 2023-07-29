@@ -7,6 +7,52 @@ namespace Villain {
 
     ResourceManager* ResourceManager::sInstance = nullptr;
 
+    Material* ResourceManager::getMaterial(const std::string& id) {
+        if (materialMap.find(id) != materialMap.end()) {
+            return materialMap[id];
+        } else {
+            VILLAIN_WARN("Material {} not found", id);
+            return nullptr;
+        }
+    }
+
+    Model* ResourceManager::getModel(const std::string& id) {
+        if (modelMap.find(id) != modelMap.end()) {
+            return modelMap[id];
+        } else {
+            VILLAIN_WARN("Model {} not found", id);
+            return nullptr;
+        }
+    }
+
+
+    Shader* ResourceManager::getShader(const std::string& id) {
+        if (shaderMap.find(id) != shaderMap.end()) {
+            return shaderMap[id];
+        } else {
+            VILLAIN_WARN("Shader {} not found", id);
+            return nullptr;
+        }
+    }
+
+    Texture* ResourceManager::getTexture(const std::string& id) {
+        if (textureMap.find(id) != textureMap.end()) {
+            return textureMap[id];
+        } else {
+            VILLAIN_WARN("Texture {} not found", id);
+            return nullptr;
+        }
+    }
+
+    void ResourceManager::clearMaterialMap() {
+        materialMap.clear();
+    }
+
+    void ResourceManager::clearMaterial(std::string id) {
+        delete materialMap[id];
+        materialMap.erase(id);
+    }
+
     void ResourceManager::clearModelMap() {
         modelMap.clear();
     }
@@ -32,6 +78,12 @@ namespace Villain {
     void ResourceManager::clearShader(std::string id) {
         delete shaderMap[id];
         shaderMap.erase(id);
+    }
+
+    void ResourceManager::addMaterial(Material* material) {
+        // Only add to map if material by same name doesn't exist
+        if (materialMap.find(material->getName()) == materialMap.end())
+            materialMap[material->getName()] = material;;
     }
 
     Model* ResourceManager::loadModel(const std::string& fileName, std::string id) {
