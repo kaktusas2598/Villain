@@ -2,6 +2,7 @@
 
 #include "Texture.hpp"
 #include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include <string>
 #include <map>
@@ -45,6 +46,10 @@ namespace Villain {
             const glm::vec4& getAmbientColor() { return ambientColor; }
             const glm::vec4& getDiffuseColor() { return diffuseColor; }
             const glm::vec4& getSpecularColor() { return specularColor; }
+            float* getAmbientColorPtr() { return glm::value_ptr(ambientColor); }
+            float* getDiffuseColorPtr() { return glm::value_ptr(diffuseColor); }
+            float* getSpecularColorPtr() { return glm::value_ptr(specularColor); }
+            float* getSpecularFactorPtr() { return &specularFactor; }
             Texture* getDiffuseMap() { return diffuseMap; }
             Texture* getSpecularMap() { return specularMap; }
             Texture* getNormalMap() { return normalMap; }

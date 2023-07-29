@@ -335,6 +335,11 @@ namespace Villain {
                     auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
                     auto material = meshN1UV->getMaterial();
 
+                    ImGui::ColorEdit4("Ambient color", meshN1UV->getMaterial().getAmbientColorPtr());
+                    ImGui::ColorEdit4("Diffuse color", meshN1UV->getMaterial().getDiffuseColorPtr());
+                    ImGui::ColorEdit4("Specular color", meshN1UV->getMaterial().getSpecularColorPtr());
+                    ImGui::DragFloat("Specular factor", meshN1UV->getMaterial().getSpecularFactorPtr());
+
                     if (!material.getDiffuseMap()) {
                         if (ImGui::Button("Load diffuse map")) {
                             editor->getFileBrowser().openPopup();
