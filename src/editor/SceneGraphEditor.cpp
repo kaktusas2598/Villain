@@ -361,7 +361,6 @@ namespace Villain {
                     }
 
                     static int loadedMesh = 0;
-                    auto originalMesh = meshN1UV->getMesh();
                     std::vector<VertexP1N1UV> vertices;
                     std::vector<unsigned int> indices;
 
@@ -374,9 +373,7 @@ namespace Villain {
                     ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
                     ImGui::DragFloat("AABB size", &aabbSize, 1.0f, 0.0f, 100.0f, "%.1f");
 
-                    if (loadedMesh == 0)
-                        meshN1UV->setMesh(originalMesh);
-                    else if (loadedMesh == 1) {
+                    if (loadedMesh == 1) {
                         MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, sphereRadius);
                         meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
                     } else if (loadedMesh == 2) {
