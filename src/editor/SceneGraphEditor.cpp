@@ -278,8 +278,6 @@ namespace Villain {
             int i = 0;
             for (auto& compo: node->getComponents()) {
                 ImGui::PushID(i); // Solves issues with multiple elements sharing same names
-                // TODO: find optimal way of adding any components and possibly custom components without too
-                // many conditionals
                 if (compo->getID() == GetId<Camera>()) {
                     editor->renderIcon("\uf030"); ImGui::SameLine();
                     ImGui::Text("Camera");
@@ -307,8 +305,8 @@ namespace Villain {
                         ImGui::EndCombo();
                     }
                 }
-                auto light = dynamic_cast<BaseLight*>(compo);
-                if (light != nullptr) {
+
+                if (auto light = dynamic_cast<BaseLight*>(compo)) {
                     editor->renderIcon("\uf0eb"); ImGui::SameLine();
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
