@@ -131,7 +131,7 @@ namespace Villain {
         style.WindowRounding                    = 7;
         style.ChildRounding                     = 4;
         style.FrameRounding                     = 3;
-        style.PopupRounding                     = 4;
+        style.PopupRounding                     = 2;
         style.ScrollbarRounding                 = 9;
         style.GrabRounding                      = 3;
         style.LogSliderDeadzone                 = 4;
