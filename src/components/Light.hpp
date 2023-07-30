@@ -39,6 +39,7 @@ namespace Villain {
             ~BaseLight();
             virtual void addToEngine(Engine* engine) override;
             virtual std::string type() = 0;
+            virtual void setUniforms(Shader& shaderProgram) = 0;
             inline ShadowInfo* getShadowInfo() const { return shadowInfo; }
             inline Shader* getShader() { return shader; }
         protected:
@@ -53,7 +54,8 @@ namespace Villain {
             glm::vec3 Direction;
 
             DirectionalLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& dir);
-            virtual std::string type() { return std::string("directional"); }
+            virtual std::string type() override { return std::string("directional"); }
+            virtual void setUniforms(Shader& shaderProgram) override;
     };
 
     class PointLight : public BaseLight {
@@ -63,8 +65,9 @@ namespace Villain {
             glm::vec3 Attenuation;
 
             PointLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f});
-            virtual std::string type() { return std::string("point"); }
-            virtual void update(float deltaTime);
+            virtual std::string type() override { return std::string("point"); }
+            virtual void setUniforms(Shader& shaderProgram) override;
+            virtual void update(float deltaTime) override;
     };
 
     class SpotLight : public BaseLight {
@@ -78,7 +81,8 @@ namespace Villain {
             Camera* camera = nullptr;
 
             SpotLight(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& pos, const glm::vec3& dir, float cutOff, float outerCutOff, const glm::vec3& attenuation = {1.0f, 0.022f, 0.0019f}, Camera* cam = nullptr);
-            virtual std::string type() { return std::string("spot"); }
-            virtual void update(float deltaTime);
+            virtual std::string type() override { return std::string("spot"); }
+            virtual void setUniforms(Shader& shaderProgram) override;
+            virtual void update(float deltaTime) override;
     };
 }

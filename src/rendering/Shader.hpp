@@ -42,9 +42,6 @@ namespace Villain {
             unsigned int getRendererID() const { return rendererID; }
 
             // Set specific uniforms
-            void setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight);
-            void setPointLightUniforms(const std::string& name, PointLight& pointLight);
-            void setSpotLightUniforms(const std::string& name, SpotLight& spotLight);
             void setMaterialUniforms(Material& material);
             void setFogUniforms(RenderingEngine& renderingEngine, Camera& camera);
             // Update multiple default uniforms at once

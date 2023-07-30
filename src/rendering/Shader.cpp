@@ -224,24 +224,17 @@ namespace Villain {
     void Shader::updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera) {
         this->bind();
         // Step projection uniforms
+        // TODO: possibly move this to Renderer class, Camera can be submitted in start() method and transform submitted to each draw
         this->setUniformMat4f("model", transform.getTransformMatrix());
         this->setUniformMat4f("view", camera.getViewMatrix());
         this->setUniformMat4f("projection", camera.getProjMatrix());
 
+        // Set material uniforms
         this->setMaterialUniforms(material);
 
         // Set light uniforms
         if (renderingEngine.getActiveLight() != nullptr) {
-            if (renderingEngine.getActiveLight()->type() == "directional") {
-                DirectionalLight* dirLight = (DirectionalLight*)(renderingEngine.getActiveLight());
-                this->setDirectionalLightUniforms("dirLight", *dirLight);
-            } else if (renderingEngine.getActiveLight()->type() == "spot") {
-                SpotLight* spotLight = (SpotLight*)(renderingEngine.getActiveLight());
-                this->setSpotLightUniforms("spotLight", *spotLight);
-            } else if (renderingEngine.getActiveLight()->type() == "point") {
-                PointLight* pointLight = (PointLight*)(renderingEngine.getActiveLight());
-                this->setPointLightUniforms("pointLight", *pointLight);
-            }
+            renderingEngine.getActiveLight()->setUniforms(*this);
         }
 
         // Camera/view/eye pos for lighting calculations
@@ -301,38 +294,4 @@ namespace Villain {
         setUniform1f("layeredFogEnd", *renderingEngine.getLayeredFogEnd());
         setUniformVec3("viewPosition", camera.getPosition());
     }
-
-    void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight) {
-        // HACK: for shadow mapping, cause technically dir lights have no position
-        setUniformVec3(name + ".position", dirLight.GetTransform()->getPos());
-
-        setUniformVec3(name + ".direction", dirLight.Direction);
-        setUniformVec3(name + ".base.ambient", dirLight.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", dirLight.DiffuseColor);
-        setUniformVec3(name + ".base.specular", dirLight.SpecularColor);
-    }
-
-    void Shader::setPointLightUniforms(const std::string& name, PointLight& pointLight) {
-        setUniformVec3(name + ".position", pointLight.Position);
-        setUniform1f(name + ".constant", pointLight.Attenuation.x);
-        setUniform1f(name + ".linear", pointLight.Attenuation.y);
-        setUniform1f(name + ".quadratic", pointLight.Attenuation.z);
-        setUniformVec3(name + ".base.ambient", pointLight.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", pointLight.DiffuseColor);
-        setUniformVec3(name + ".base.specular", pointLight.SpecularColor);
-    }
-
-    void Shader::setSpotLightUniforms(const std::string& name, SpotLight& spotLight) {
-        setUniformVec3(name + ".position", spotLight.Position);
-        setUniformVec3(name + ".direction", spotLight.Direction);
-        setUniform1f(name + ".cutOff", spotLight.CutOff);
-        setUniform1f(name + ".outerCutOff", spotLight.OuterCutOff);
-        setUniform1f(name + ".constant", spotLight.Attenuation.x);
-        setUniform1f(name + ".linear", spotLight.Attenuation.y);
-        setUniform1f(name + ".quadratic", spotLight.Attenuation.z);
-        setUniformVec3(name + ".base.ambient", spotLight.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", spotLight.DiffuseColor);
-        setUniformVec3(name + ".base.specular", spotLight.SpecularColor);
-    }
-
 }
