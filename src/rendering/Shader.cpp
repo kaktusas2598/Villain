@@ -221,16 +221,13 @@ namespace Villain {
 
     }
 
-    void Shader::updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera) {
+    void Shader::updateUniforms(Transform& transform, RenderingEngine& renderingEngine, Camera& camera) {
         this->bind();
         // Step projection uniforms
         // TODO: possibly move this to Renderer class, Camera can be submitted in start() method and transform submitted to each draw
         this->setUniformMat4f("model", transform.getTransformMatrix());
         this->setUniformMat4f("view", camera.getViewMatrix());
         this->setUniformMat4f("projection", camera.getProjMatrix());
-
-        // Set material uniforms
-        this->setMaterialUniforms(material);
 
         // Set light uniforms
         if (renderingEngine.getActiveLight() != nullptr) {
@@ -239,48 +236,6 @@ namespace Villain {
 
         // Camera/view/eye pos for lighting calculations
         this->setUniformVec3("viewPosition", camera.getPosition());
-    }
-
-    void Shader::setMaterialUniforms(Material& material) {
-        // Base color/diffuse map
-        if (material.getDiffuseMap() == nullptr) {
-            this->setUniform1i("material.useDiffuseMap", 0);
-        } else {
-            this->setUniform1i("material.useDiffuseMap", 1);
-            material.getDiffuseMap()->bind(RenderingEngine::getSamplerSlot("diffuse"));
-            this->setUniform1i("material.texture_diffuse", RenderingEngine::getSamplerSlot("diffuse"));
-        }
-        // Specular map
-        if (material.getSpecularMap() == nullptr) {
-            this->setUniform1i("material.useSpecularMap", 0);
-        } else {
-            this->setUniform1i("material.useSpecularMap", 1);
-            material.getSpecularMap()->bind(RenderingEngine::getSamplerSlot("specular"));
-            this->setUniform1i("material.texture_specular", RenderingEngine::getSamplerSlot("specular"));
-        }
-        // Normal/bump map
-        if (material.getNormalMap() == nullptr) {
-            this->setUniform1i("material.useNormalMap", 0);
-        } else {
-            this->setUniform1i("material.useNormalMap", 1);
-            material.getNormalMap()->bind(RenderingEngine::getSamplerSlot("normal"));
-            this->setUniform1i("material.texture_normal", RenderingEngine::getSamplerSlot("normal"));
-        }
-        // Parallax displacement map
-        if (material.getDislacementMap() == nullptr) {
-            this->setUniform1i("material.useDispMap", 0);
-        } else {
-            this->setUniform1i("material.useDispMap", 1);
-            material.getDislacementMap()->bind(RenderingEngine::getSamplerSlot("disp"));
-            this->setUniform1i("material.texture_disp", RenderingEngine::getSamplerSlot("disp"));
-            this->setUniform1f("material.dispMapScale", material.getDispMapScale());
-            this->setUniform1f("material.dispMapBias", material.getDispMapBias());
-        }
-
-        this->setUniform1f("material.shininess", material.getSpecularFactor());
-        this->setUniformVec4("material.ambientColor", material.getAmbientColor());
-        this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
-        this->setUniformVec4("material.specularColor", material.getSpecularColor());
     }
 
     void Shader::setFogUniforms(RenderingEngine& renderingEngine, Camera& camera) {

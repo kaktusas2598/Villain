@@ -23,10 +23,9 @@ namespace Villain {
 		//unsigned int display = 0, total = 0;
 
         shader.bind();
-        // TODO: need different method to update uniforms, stuff like matrixes can be updated the same for all meshes
-        // materials are different per mesh
-        Material material;
-        shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
+        //Material material;
+        //this->material.updateUniforms(shader);
+        shader.updateUniforms(*parent->getTransform(), renderingEngine, camera);
 
         // Mouse picking/selecting uniforms
         shader.setUniform1ui("objectIndex", parent->getID());

@@ -42,10 +42,9 @@ namespace Villain {
             unsigned int getRendererID() const { return rendererID; }
 
             // Set specific uniforms
-            void setMaterialUniforms(Material& material);
             void setFogUniforms(RenderingEngine& renderingEngine, Camera& camera);
             // Update multiple default uniforms at once
-            void updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera);
+            void updateUniforms(Transform& transform, RenderingEngine& renderingEngine, Camera& camera);
 
             // Set uniforms, TODO: use templates to have multiple types of uniforms
             void setUniform1i(const std::string& name, int value);
