@@ -72,6 +72,8 @@ namespace Villain {
 
             /// Calculate the impulse needed to resolve this contact given that the contact has no friction
             glm::vec3 calculateFrictionlessImpulse(glm::mat3* inverseInertiaTensor);
+            /// Calculate the impulse needed to resolve this contact given that the contact has friction
+            glm::vec3 calculateFrictionImpulse(glm::mat3* inverseInertiaTensor);
 
             /// Converts local contact space coordinates to world space. Columns of this matrix form
             /// an orthonormal set of vectors
@@ -121,5 +123,14 @@ namespace Villain {
 
             /// Resolves positional issues for a given array of constraints, using given number of iterations
             void adjustPositions(Contact* contactArray, unsigned numContacts, float deltaTime);
+    };
+
+    /// Interface for contact generators which apply to to rigid bodies
+    class ContactGenerator {
+        public:
+            /// Fills given contact structure with generated contact. Contact pointer should point to
+            /// the first available contact in contact array, where limit is the maximum number of contacts that
+            /// can be written to. Returns number of contacts written to
+            virtual unsigned addContact(Contact* contact, unsigned limit) const = 0;
     };
 }

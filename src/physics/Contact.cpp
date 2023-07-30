@@ -2,6 +2,7 @@
 #include "Logger.hpp"
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/matrix_cross_product.hpp>
 
 namespace Villain {
 
@@ -33,6 +34,7 @@ namespace Villain {
         }
 
         // Calculate the desired change in velocity for resolution
+        VILLAIN_DEBUG("Calculating desired delta velocity in calculateInternals()");
         calculateDesiredDeltaVelocity(deltaTime);
     }
 
@@ -79,6 +81,13 @@ namespace Villain {
 
         // Combine the bounce velocity with the removed acceleration velocity
         desiredDeltaVelocity = -contactVelocity.x - thisRestitution * (contactVelocity.x - velocityFromAcc);
+
+        if (desiredDeltaVelocity != 0) {
+            VILLAIN_DEBUG("contactVelocity.x {} thisRestitution {} velocityFromAcc {}", contactVelocity.x, thisRestitution, velocityFromAcc);
+            VILLAIN_DEBUG("Calculated desired delta velocity {} Delta time {}", desiredDeltaVelocity, deltaTime);
+        }
+
+        if (contactNormal != glm::vec3()) VILLAIN_DEBUG("Contact Normal {} Last frame acc 0 {}", glm::to_string(contactNormal), glm::to_string(bodies[0]->getLastFrameAcceleration()));
     }
 
     glm::vec3 Contact::calculateLocalVelocity(unsigned bodyIndex, float deltaTime) {
@@ -89,19 +98,22 @@ namespace Villain {
         velocity += thisBody->getLinearVelocity();
 
         // Turn the velocity into contact coordinates
-        glm::vec3 contactVelocity = glm::transpose(contactToWorld) * velocity;
+        glm::vec3 localContactVelocity = glm::transpose(contactToWorld) * velocity;
+        //VILLAIN_DEBUG("{} Contact velocity {}", bodyIndex, glm::to_string(contactVelocity));
+
 
         // Calculate the amount of velocity that is due to forces without reactions
         glm::vec3 accVelocity = thisBody->getLastFrameAcceleration() * deltaTime;
 
-        //accVelocity = glm::transpose(contactToWorld) * accVelocity;
+        accVelocity = glm::transpose(contactToWorld) * accVelocity;
 
         // Ignore any component of acceleration in the contact normal direction, only interested in planar acceleration
         accVelocity.x = 0;
 
-        contactVelocity += accVelocity;
+        localContactVelocity += accVelocity;
+        //VILLAIN_DEBUG("{} Contact velocity final {}", bodyIndex, glm::to_string(contactVelocity));
 
-        return contactVelocity;
+        return localContactVelocity;
     }
 
     void Contact::calculateContactBasis() {
@@ -153,8 +165,9 @@ namespace Villain {
             // Calculate short format for frictionless impulse
             impulseContact = calculateFrictionlessImpulse(inverseInertiaTensor);
         } else {
-            // TODO: implement friction impulse
-            assert(false);
+            // Otherwise there might be impulses which are not in direction of the contact
+            // so more complex calculations are needed
+            impulseContact = calculateFrictionImpulse(inverseInertiaTensor);
         }
 
         // Convert impulse to world coords:
@@ -165,8 +178,8 @@ namespace Villain {
         angularVelChange[0] = inverseInertiaTensor[0] * impulsiveTorque;
         linearVelChange[0] = impulse * bodies[0]->getInverseMass();
 
-        VILLAIN_DEBUG("Linear Vel 0 {}", glm::to_string(linearVelChange[0]));
-        VILLAIN_DEBUG("Angular Vel 0 {}", glm::to_string(angularVelChange[0]));
+        //VILLAIN_DEBUG("Linear Vel 0 {}", glm::to_string(linearVelChange[0]));
+        //VILLAIN_DEBUG("Angular Vel 0 {}", glm::to_string(angularVelChange[0]));
         // Apply the changes to rigid body
         bodies[0]->addLinearVelocity(linearVelChange[0]);
         bodies[0]->addAngularVelocity(angularVelChange[0]);
@@ -178,8 +191,8 @@ namespace Villain {
             // Important!! 2nd body's impulse will be slower
             linearVelChange[1] = impulse * -bodies[1]->getInverseMass();
 
-            VILLAIN_DEBUG("Linear Vel 1 {}", glm::to_string(linearVelChange[1]));
-            VILLAIN_DEBUG("Angular Vel 1 {}", glm::to_string(angularVelChange[1]));
+            //VILLAIN_DEBUG("Linear Vel 1 {}", glm::to_string(linearVelChange[1]));
+            //VILLAIN_DEBUG("Angular Vel 1 {}", glm::to_string(angularVelChange[1]));
             // Apply the changes to rigid body
             bodies[1]->addLinearVelocity(linearVelChange[1]);
             bodies[1]->addAngularVelocity(angularVelChange[1]);
@@ -197,25 +210,98 @@ namespace Villain {
 
         // Find change in velocity in contact coords
         float deltaVelocity = glm::dot(deltaVelWorld, contactNormal);
+        //VILLAIN_DEBUG("Delta velocity originally {}", deltaVelocity);
 
         // Add linear component to change
         deltaVelocity += bodies[0]->getInverseMass();
+        //VILLAIN_DEBUG("Inverse body 0 mass {}", bodies[0]->getInverseMass());
 
         if (bodies[1]) {
             // Same transform sequence again
-            deltaVelWorld = glm::cross(relativeContactPos[1], contactNormal);
+            glm::vec3 deltaVelWorld = glm::cross(relativeContactPos[1], contactNormal);
             deltaVelWorld = inverseInertiaTensor[1] * deltaVelWorld;
             deltaVelWorld = glm::cross(deltaVelWorld, relativeContactPos[1]);
 
             deltaVelocity += glm::dot(deltaVelWorld, contactNormal);
             deltaVelocity += bodies[1]->getInverseMass();
         }
+        VILLAIN_TRACE("Contact normal {} point {}", glm::to_string(contactNormal), glm::to_string(contactPoint));
+        VILLAIN_TRACE("Contact penetration {} restitution {} friction {}", penetration, restitution, friction);
 
         // Calculate the required size of the impulse
         impulseContact.x = desiredDeltaVelocity / deltaVelocity;
         impulseContact.y = 0;
         impulseContact.z = 0;
-        VILLAIN_DEBUG("Frictionless impulse {}", glm::to_string(impulseContact));
+        // NOTE: Desired delta velocity seems fine, however deltaVelicity is usually around ~0.5
+        // in the case of massive impulse it is around 0.001! so dividing by it impulseContact.x because massive
+        VILLAIN_DEBUG("Desired delta velocity {} Delta Velocity {}", desiredDeltaVelocity, deltaVelocity);
+        if (bodies[1]) VILLAIN_WARN("Second body used in calculations for impulse");
+        VILLAIN_WARN("Frictionless impulse {}", glm::to_string(impulseContact));
+        return impulseContact;
+    }
+
+    // FIXME: with this numbers quickly go "nan"!
+    glm::vec3 Contact::calculateFrictionImpulse(glm::mat3* inverseInertiaTensor) {
+        glm::vec3 impulseContact;
+        float inverseMass = bodies[0]->getInverseMass();
+
+        // Build matrix for converting between linear and angular quantities
+        glm::mat3 impulseToTorque = glm::matrixCross3(relativeContactPos[0]);
+
+        // Build matrix to convert contact impulse to change in velocity in world coordinates
+        glm::mat3 deltaVelWorld = impulseToTorque;
+        deltaVelWorld *= inverseInertiaTensor[0];
+        deltaVelWorld *= impulseToTorque;
+        deltaVelWorld *= -1;
+
+        // Check if need to add data for body 2
+        if (bodies[1]) {
+            impulseToTorque = glm::matrixCross3(relativeContactPos[2]);
+
+            // Build matrix to convert contact impulse to change in velocity in world coordinates
+            glm::mat3 deltaVelWorld2 = impulseToTorque;
+            deltaVelWorld2 *= inverseInertiaTensor[1];
+            deltaVelWorld2 *= impulseToTorque;
+            deltaVelWorld2 *= -1;
+
+            deltaVelWorld += deltaVelWorld2;
+            inverseMass += bodies[1]->getInverseMass();
+        }
+
+        // Perform a change of basis to convert into contact coordinates
+        glm::mat3 deltaVelocity = glm::transpose(contactToWorld);
+        deltaVelocity *= deltaVelWorld;
+        deltaVelocity *= contactToWorld;
+
+        // Add the linear velocity change
+        deltaVelocity[0][0] += inverseMass;
+        deltaVelocity[1][1] += inverseMass;
+        deltaVelocity[2][2] += inverseMass;
+
+        // Invert to get impusle needed per unit velocity
+        glm::mat3 impulseMatrix = glm::inverse(deltaVelocity);
+
+        // Find target velocities to kill
+        glm::vec3 velKill{desiredDeltaVelocity, -contactVelocity.y, -contactVelocity.z};
+
+        // Find the impulse to kill target velocities
+        impulseContact = impulseMatrix * velKill;
+
+        // Check for exceeding friction
+        float planarImpulse = sqrtf(impulseContact.y * impulseContact.y + impulseContact.z * impulseContact.z);
+        if (planarImpulse > impulseContact.x * friction) {
+            // Need to use dynamic friction
+            impulseContact.y /= planarImpulse;
+            impulseContact.z /= planarImpulse;
+
+            impulseContact.x = deltaVelocity[0][0] +
+                deltaVelocity[1][0]*friction*impulseContact.y +
+                deltaVelocity[2][0]*friction*impulseContact.z;
+            impulseContact.x = desiredDeltaVelocity / impulseContact.x;
+            impulseContact.y *= friction * impulseContact.x;
+            impulseContact.z *= friction * impulseContact.x;
+        }
+
         return impulseContact;
     }
 
@@ -321,8 +407,6 @@ namespace Villain {
         // Prepare the contacts for processing
         prepareContacts(contactArray, numContacts, deltaTime);
 
-        //FIXME: not sure if problem is here but resolution isn't working
-
         // Resolve the interpenetration problems with the contacts
         adjustPositions(contactArray, numContacts, deltaTime);
 
@@ -377,6 +461,7 @@ namespace Villain {
                                 // negative otherwise
                                 contactArray[i].contactVelocity +=
                                     glm::transpose(contactArray[i].contactToWorld) * deltaVel * (b ? -1.0f: 1.0f);
+                                VILLAIN_DEBUG("Calculating desired delta velocity in adjustVelocities()");
                                 contactArray[i].calculateDesiredDeltaVelocity(deltaTime);
                             }
                         }

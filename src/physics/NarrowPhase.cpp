@@ -1,6 +1,8 @@
 #include "NarrowPhase.hpp"
+#include "Logger.hpp"
 
 #include <glm/gtx/norm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 namespace Villain {
 
@@ -263,6 +265,8 @@ namespace Villain {
                 contact->contactNormal = plane.direction;
                 contact->penetration = plane.offset - vertexDistance;
                 contact->setBodyData(box.body, nullptr, data->friction, data->restitution);
+                VILLAIN_CRIT("Box vs Plane Contact generated!");
+                VILLAIN_DEBUG("Penetration {} Contact point {} Normal {}", contact->penetration, glm::to_string(contact->contactPoint), glm::to_string(contact->contactNormal));
 
                 // Move to the next contact
                 contact++;
@@ -322,6 +326,7 @@ namespace Villain {
         contact->penetration = sphere.radius - sqrtf(dist);
         contact->setBodyData(box.body, sphere.body, data->friction, data->restitution);
 
+        VILLAIN_CRIT("Box vs Sphere Contact generated!");
         data->addContacts(1);
         return 1;
     }
@@ -419,6 +424,7 @@ namespace Villain {
             contact->penetration = pen;
             contact->contactNormal = axis;
             contact->contactPoint = vertex;
+            VILLAIN_CRIT("Box vs Box Contact generated!");
             contact->setBodyData(one.body, two.body, data->friction, data->restitution);
             data->addContacts(1);
             return 1;
