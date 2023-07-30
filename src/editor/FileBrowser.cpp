@@ -17,7 +17,16 @@ namespace Villain {
 
         ImGui::Begin("File Browser");
         {
-            if (ImGui::BeginPopupModal("FileBrowserPopup", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (ImGui::BeginPopupModal("FileBrowserPopup", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar)) {
+                ImGui::Text("File Browser"); ImGui::SameLine();
+                // Add a small red "X" button in the right corner to close the popup
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - 20.0);
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9, 0.1, 0.2, 1.0));
+                if (ImGui::Button("X", ImVec2(20.0, 20.0))) {
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::PopStyleColor();
+
                 // Customize the style
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.0f);
                 ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
