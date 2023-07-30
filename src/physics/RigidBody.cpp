@@ -41,7 +41,6 @@ namespace Villain {
         // TODO: Investigate if this is really correct, check page 202 in Ian Millington book
         glm::quat deltaOrientation = 0.5f * ((deltaTime * glm::quat(0.0f, rotation.x, rotation.y, rotation.z)) * orientation);
         orientation = orientation + deltaOrientation;
-        orientation = glm::normalize(orientation);
 
         // Normalize orientation and update matrices with new position and orientation
         calculateDerivedData();
@@ -51,14 +50,16 @@ namespace Villain {
     }
 
     void RigidBody::calculateDerivedData() {
+        orientation = glm::normalize(orientation);
+
         calculateTransformMatrix();
 
         // calculate inertia tensor in world space
         // TODO: Investigate if these calculations are correct
         //inverseInertiaTensorWorld = glm::transpose(glm::inverse(glm::mat3(transformMatrix))) * inverseInertiaTensor * glm::inverse(glm::mat3(transformMatrix));
         // Or this???
-        //inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor * glm::transpose(glm::mat3(transformMatrix));
-        inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor;
+        inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor * glm::transpose(glm::mat3(transformMatrix));
+        //inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor;
     }
 
     void RigidBody::calculateTransformMatrix() {
