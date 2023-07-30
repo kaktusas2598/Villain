@@ -138,9 +138,4 @@ namespace Villain {
         SceneParser sceneParser;
         sceneParser.loadSceneGraph(fileName, &rootNode);
     }
-
-    void Application::saveScene(const std::string& fileName) {
-        SceneParser sceneParser;
-        sceneParser.saveSceneGraph(fileName, &rootNode);
-    }
 }

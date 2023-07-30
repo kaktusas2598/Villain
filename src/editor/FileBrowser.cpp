@@ -17,7 +17,7 @@ namespace Villain {
 
         ImGui::Begin("File Browser");
         {
-            if (ImGui::BeginPopup("FileBrowserPopup", ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (ImGui::BeginPopupModal("FileBrowserPopup", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
                 // Customize the style
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.0f);
                 ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));

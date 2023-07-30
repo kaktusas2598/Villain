@@ -6,11 +6,10 @@
 namespace Villain {
 
     /// Saves scene graph from application to xml file for later loading
-    // TODO: Implement this
     class SceneWriter {
         public:
-            void saveSceneGraph(const std::string& fileName, SceneNode* rootNode) {}
+            void saveSceneGraph(const std::string& fileName, SceneNode* rootNode);
         private:
-
+            void saveSceneNode(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement* parentElement, SceneNode* currentNode);
     };
 }
