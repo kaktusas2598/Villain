@@ -122,14 +122,14 @@ void Game::init() {
     ///////////////////////////////////////////////////////
     RigidBody* rigidBody1 = new RigidBody();
     RigidBody* rigidBody2 = new RigidBody();
-    rigidBody1->setPosition({2.0, 5.0, 2.0});
-    rigidBody2->setPosition({2.0, 0.0, 2.0});
+    rigidBody1->setPosition({2.0, 10.0, 2.0});
+    rigidBody2->setPosition({2.0, 5.0, 2.0});
 
     CollisionSphere* sphere = new CollisionSphere(1.0f, rigidBody1);
     box = new CollisionBox({0.5, 0.5, 0.5}, rigidBody2);
 
-    RigidBodyComponent* rigidBodyCompo1 = new RigidBodyComponent(rigidBody1/*, sphere*/);
-    RigidBodyComponent* rigidBodyCompo2 = new RigidBodyComponent(rigidBody2/*, box*/);
+    RigidBodyComponent* rigidBodyCompo1 = new RigidBodyComponent(rigidBody1, sphere);
+    RigidBodyComponent* rigidBodyCompo2 = new RigidBodyComponent(rigidBody2, box);
     addToScene((new SceneNode("Rigid Body 1"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, Material()))->addComponent(rigidBodyCompo1));
     addToScene((new SceneNode("Rigid Body 2"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(cubeMesh, Material()))->addComponent(rigidBodyCompo2));
 
@@ -165,10 +165,10 @@ void Game::init() {
     getRootNode()->getEngine()->getRigidBodyWorld()->getColliders().push_back(groundPlane);
 
     // Add gravity for all bodies
-    //Gravity* gravity = new Gravity({0.0, -1.0, 0.0});
-    //for (auto& body: getRootNode()->getEngine()->getRigidBodyWorld()->getBodies()) {
-        //getRootNode()->getEngine()->getRigidBodyWorld()->getForceRegistry().add(body, gravity);
-    //}
+    Gravity* gravity = new Gravity({0.0, -1.0, 0.0});
+    for (auto& body: getRootNode()->getEngine()->getRigidBodyWorld()->getBodies()) {
+        getRootNode()->getEngine()->getRigidBodyWorld()->getForceRegistry().add(body, gravity);
+    }
 
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
 
