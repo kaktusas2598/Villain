@@ -47,12 +47,12 @@ namespace Villain {
         ShaderType type = ShaderType::NONE;
         for (std::string line; std::getline(iss, line); ) {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
+                //VILLAIN_ASSERT(type == ShaderType::NONE, "#shader directive must be set before using #include directive: {}", source);
                 // Recursively include shader headers
                 includeHeader(ss, type, line);
             } else if (line.find("#shader") != std::string::npos) {
                 if (line.find("vertex") != std::string::npos) {
                     type = ShaderType::VERTEX;
-
                 } else if (line.find("fragment") != std::string::npos) {
                     type = ShaderType::FRAGMENT;
                 } else if (line.find("geometry") != std::string::npos) {
@@ -84,7 +84,6 @@ namespace Villain {
             if (incLine.find("#include") != std::string::npos) {
                 includeHeader(ss, shaderType, incLine);
             } else {
-                // NOTE: #shader directive must come before #include directive, to ensure type is set here
                 ss[(int)shaderType] << incLine << '\n';
             }
         }
