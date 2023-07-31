@@ -3,7 +3,6 @@
 #include "EventDispatcher.hpp"
 #include "Input.hpp"
 #include "Timer.hpp"
-#include "UILayer.hpp"
 #include "Window.hpp"
 
 #include "editor/DebugConsole.hpp"
@@ -12,6 +11,7 @@
 #include "physics/RigidBodyWorld.hpp"
 #include "rendering/FrameBuffer.hpp"
 #include "rendering/RendereringEngine.hpp"
+#include "ui/UILayer.hpp"
 
 #include <functional>
 #include <stdio.h>
@@ -67,6 +67,7 @@ namespace Villain {
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             ImGuiLayer& getImGuiLayer() { return imGuiLayer; }
             UILayer& getUILayer() { return nuklearLayer; }
+            UIManager& getUIManager() { return nuklearLayer.getManager(); }
             Window getWindow() { return window; }
 
             static int getScreenWidth();

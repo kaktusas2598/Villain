@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_events.h>
+#include "UIManager.hpp"
 
 struct nk_context;
 
@@ -30,11 +31,14 @@ namespace Villain {
             /// Nuklear ui shutdown
             void exit();
 
+            UIManager& getManager() { return manager; }
+
             struct nk_context * getNuklearContext() { return nuklearContext; }
             void setNulkearContext(struct nk_context* nctx) { nuklearContext = nctx; }
 
         private:
             Engine* engine = nullptr;
             struct nk_context* nuklearContext; ///< Nuklear UI context
+            UIManager manager;
     };
 }

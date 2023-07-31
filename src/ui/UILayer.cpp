@@ -15,6 +15,7 @@ namespace Villain {
 
     void UILayer::init(Window& window) {
         nuklearContext = nk_sdl_init(window.getSDLWindow());
+        manager.init(nuklearContext);
         /* Load Fonts: if none of these are loaded a default font will be used  */
         /* Load Cursor: if you uncomment cursor loading please hide the cursor */
         {
