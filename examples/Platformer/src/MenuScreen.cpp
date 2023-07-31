@@ -39,7 +39,6 @@ if (Villain::Input::Get()->isKeyPressed(SDLK_ESCAPE)) {
 
 void MenuScreen::draw() {
     // GUI
-    struct nk_colorf bg;
     struct nk_context * ctx = mainApplication->getEngine()->getUILayer().getNuklearContext();
 
     int w = 200, h = 90;
