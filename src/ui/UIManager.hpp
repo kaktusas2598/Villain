@@ -14,7 +14,9 @@ namespace Villain {
             bool beginWindow(const char* title, float x, float y, int width, int height);
             void endWindow();
 
-            bool Button(const char* label);
+            void layoutRowDynamic(float height, int cols);
+
+            bool button(const char* label);
 
         private:
             struct nk_context* nuklearContext;
