@@ -367,6 +367,9 @@ namespace Villain {
                     glm::vec2 offsets{0.0f};
                     // Set offsets if relative mouse mode is used for 3D camera
                     if (!mouseFirst) {
+                        // TODO: This still works on SDL 2.0.20, but in 2.26.3 had to use SDL_GetRelativeMouseState()
+                        // to get correct relative offsets instead of the ones set here,
+                        // so need to find which version of SDL2 exactly breaks this and why
                         offsets = {event.motion.xrel, event.motion.yrel};
                     } else {
                         mouseFirst = false;
