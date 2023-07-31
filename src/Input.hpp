@@ -63,7 +63,17 @@ namespace Villain {
             void addInputCharacters(const char* chars);
 
             glm::vec2 getMouseCoords() const { return mouseCoords; } ///<Mouse coords's geeter
-            glm::vec2 getMouseOffsets() const { return mouseOffsets; }
+            glm::vec2 getMouseOffsets() {
+                // FIXME: Everything was fine with SDL2 2.0.20, once switched to new laptop running Ubuntu 23.04, now
+                // SDL2 version was 2.26.3 and setting mouse offsets for relative moude using SDL_MOUSEMOTION event does
+                // not seem to work anymore, so using SDL_GetRelativeMouseState() fixed this behaviour, but we're only hiding
+                // the reals problem
+                int x, y;
+                SDL_GetRelativeMouseState(&x, &y);
+                mouseOffsets.x = x; mouseOffsets.y = y;
+
+                return mouseOffsets;
+            }
             bool getMouseButtonState(int buttonNumber) {return mouseButtonStates[buttonNumber]; }
 
             Uint32 getEventType() { return eventType; } //< SDL_Event type's getter

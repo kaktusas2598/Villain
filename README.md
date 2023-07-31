@@ -86,7 +86,7 @@
 ## Used Libraries
 
  * [OpenGL](https://www.opengl.org) - Renderer
- * [SDL2](https://www.libsdl.org/) - for window creation and input handling, sound
+ * [SDL2](https://www.libsdl.org/) - for window creation and input handling, sound, version 2.0.20 used at the moment
  * [GLEW](https://glew.sourceforge.net/) - extension library for loading OpenGL functions
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  * [ImGui](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies (for engine tooling)
