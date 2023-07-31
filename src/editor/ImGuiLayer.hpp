@@ -14,6 +14,7 @@ namespace Villain {
     class Engine;
     class Window;
 
+    /// Responsible for initialising imgui and rendering Villain editor elements
     class ImGuiLayer {
     public:
         ImGuiLayer(Engine* e);
@@ -23,11 +24,15 @@ namespace Villain {
         // Shutdown ImGui
         void exit();
 
-        // Call before render() to start a new frame
+        /// Forward SDL events to nuklear
+        void processInput(SDL_Event* event);
+
+        /// Call before render() to start a new frame
         void start();
-        // Call after render() to actually render and end frame
+        /// Call after render() to actually render and end frame
         void end();
 
+        /// Main imgui editor render routine
         void render(Engine& engine);
 
         glm::vec2 getSceneViewportPosition() const { return sceneViewportPosition; }

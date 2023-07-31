@@ -3,6 +3,7 @@
 #include "EventDispatcher.hpp"
 #include "Input.hpp"
 #include "Timer.hpp"
+#include "UILayer.hpp"
 #include "Window.hpp"
 
 #include "editor/DebugConsole.hpp"
@@ -16,8 +17,6 @@
 #include <stdio.h>
 #include <memory>
 #include <vector>
-
-struct nk_context;
 
 namespace Villain {
 
@@ -67,6 +66,7 @@ namespace Villain {
 
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             ImGuiLayer& getImGuiLayer() { return imGuiLayer; }
+            UILayer& getUILayer() { return nuklearLayer; }
             Window getWindow() { return window; }
 
             static int getScreenWidth();
@@ -78,6 +78,7 @@ namespace Villain {
             static bool editMode; ///< enables IMGui Overlay
             Window window; ///< main window instance
             ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
+            UILayer nuklearLayer; ///< Responsible for initialising and rendering nuklear ui
             bool wireFrameMode = false; ///< Optional wireframe rendering mode
 
             // Screen dimensions will be static so they can be accessed from anywhere in the Engine
@@ -91,8 +92,6 @@ namespace Villain {
             bool mouseMotion = false;
 
             std::unique_ptr<FrameBuffer> sceneBuffer = nullptr; ///< Render Application scene here for futher processing
-            struct nk_context* nuklearContext; ///< Nuklear UI context
-
             std::unique_ptr<ParticleWorld> particleWorld = nullptr;
             std::unique_ptr<RigidBodyWorld> rigidBodyWorld = nullptr;
             std::unique_ptr<RenderingEngine> renderingEngine = nullptr;

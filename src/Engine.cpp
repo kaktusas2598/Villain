@@ -9,12 +9,7 @@
 #include "events/MouseEvent.hpp"
 #include "events/WindowResizeEvent.hpp"
 
-#include <string>
-#include <cstdio> // For sprintf
 #include "Logger.hpp"
-
-#include "nuklear.h"
-#include "nuklear_sdl_gl3.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -24,10 +19,6 @@
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-
-// NOTE: temporary nuklear defines
-#define MAX_VERTEX_MEMORY 512 * 1024
-#define MAX_ELEMENT_MEMORY 128 * 1024
 
 namespace Villain {
 
@@ -42,7 +33,7 @@ namespace Villain {
     int Engine::getScreenWidth() { return screenWidth; }
     int Engine::getScreenHeight() { return screenHeight; }
 
-    Engine::Engine(): imGuiLayer(this) {
+    Engine::Engine(): imGuiLayer(this), nuklearLayer(this) {
         Logger::Instance()->info("Initialising the engine.");
     }
 
@@ -86,18 +77,7 @@ namespace Villain {
         window.create(title, screenHeight, screenWidth, windowFlags);
 
         imGuiLayer.init(window);
-
-        nuklearContext = nk_sdl_init(window.getSDLWindow());
-        /* Load Fonts: if none of these are loaded a default font will be used  */
-        /* Load Cursor: if you uncomment cursor loading please hide the cursor */
-        {
-            struct nk_font_atlas *atlas;
-            nk_sdl_font_stash_begin(&atlas);
-            //struct nk_font *roboto = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Roboto-Regular.ttf", 16, 0);
-            nk_sdl_font_stash_end();
-            //nk_style_load_all_cursors(nuklearContext, atlas->cursors);
-            //nk_style_set_font(nuklearContext, &roboto->handle);
-        }
+        nuklearLayer.init(window);
 
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
 
@@ -117,7 +97,6 @@ namespace Villain {
         //initialize the current game
         application = app;
         application->setEngine(this);
-        application->setNulkearContext(nuklearContext);
         application->init();
 
         //initialize game screens and add them to the screenList
@@ -125,7 +104,6 @@ namespace Villain {
 
         //set the MainGame's current game screen
         application->startStateMachine();
-
 
         isRunning = true;//start main loop
     }
@@ -219,7 +197,7 @@ namespace Villain {
             int updateCount = 0;
             float deltaTime = 0;
 
-            nk_input_begin(nuklearContext);
+            nuklearLayer.beginInput();
 
             profiler.start();
             // Semi-Fixed time step with number of steps to prevent "Spiral of Death" if update logic takes too long,
@@ -233,10 +211,11 @@ namespace Villain {
                 Input::Get()->update();
                 SDL_Event event;
                 while (SDL_PollEvent(&event)) {
-                    ImGui_ImplSDL2_ProcessEvent(&event);
+                    imGuiLayer.processInput(&event);
+                    nuklearLayer.processInput(&event);
                     handleEvents(event);
-                    nk_sdl_handle_event(&event);
                 }
+                nuklearLayer.endInput();
 
                 //limit deltatime to 1.0 so no speedup (1.0 being one frame and .2 being a fifth of a frame)
                 deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
@@ -266,7 +245,6 @@ namespace Villain {
 
             renderTime = profiler.read();
 
-            nk_input_end(nuklearContext);
 
             fps = frameLimiter.end();
             // TODO: window title is currently isolated in init() method, we can drop that and load
@@ -324,14 +302,9 @@ namespace Villain {
             sceneBuffer->unbind();
 
         // Then render Nuklear UI
-        /* IMPORTANT: `nk_sdl_render` modifies some global OpenGL state
-         * with blending, scissor, face culling, depth test and viewport and
-         * defaults everything back into a default state.
-         * Make sure to either a.) save and restore or b.) reset your own state after
-         * rendering the UI. */
-        nk_sdl_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_MEMORY, MAX_ELEMENT_MEMORY);
+        nuklearLayer.render();
 
-        // In the end Render ImGui
+        // Finally render ImGui
         if (editMode) {
             // Clear background
             glClear(GL_COLOR_BUFFER_BIT);
@@ -459,11 +432,11 @@ namespace Villain {
         isRunning = false;
 
         imGuiLayer.exit();
+        nuklearLayer.exit();
 
         TTF_Quit();
         //IMG_Quit();
 
-        nk_sdl_shutdown();
         SDL_GL_DeleteContext(SDL_GL_GetCurrentContext());
         SDL_DestroyWindow(window.getSDLWindow());
         SDL_Quit();

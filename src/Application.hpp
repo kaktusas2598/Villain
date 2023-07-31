@@ -30,11 +30,9 @@ namespace Villain {
 
             StateMachine* getStateMachine() { return stateMachine.get(); }
             SceneNode* getRootNode() { return &rootNode; }
+            Engine* getEngine() { return rootNode.getEngine(); }
             void deleteNode(SceneNode* node);
             void loadScene(const std::string& fileName);
-
-            struct nk_context * getNuklearContext() { return nuklearContext; }
-            void setNulkearContext(struct nk_context* nctx) { nuklearContext = nctx; }
 
             // Optional callbacks
             // NOTE: These are legacy from when Engine was abstract class, I need to refactor existing games
@@ -61,8 +59,5 @@ namespace Villain {
             void operator=(Application& app) {}
 
             SceneNode rootNode;
-
-            // NOTE: problably should be in different class, maybe need to create UI class to abstract nuklear stuff
-            struct nk_context* nuklearContext;
     };
 }
