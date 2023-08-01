@@ -1,5 +1,7 @@
 #include "SceneWriter.hpp"
 
+#include "camera/Camera.hpp"
+
 #include "Logger.hpp"
 
 namespace Villain {
@@ -13,12 +15,13 @@ namespace Villain {
         tinyxml2::XMLElement* rootElement = doc.NewElement("Root");
         doc.InsertFirstChild(rootElement);
 
+        // TODO: Save properties
+
         // Root element won't contain anything usually
         for (auto& n : rootNode->getChildren())
             saveSceneNode(doc, rootElement, n);
 
-        // TODO: test!!!
-        //doc.SaveFile(fileName.c_str());
+        doc.SaveFile(fileName.c_str());
     }
 
     void SceneWriter::saveSceneNode(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement* parentElement, SceneNode* currentNode) {
@@ -33,6 +36,9 @@ namespace Villain {
 
         for (auto& c: currentNode->getComponents()) {
             // TODO: write data for each component attached to this node
+            if (c->getID() == GetId<Camera>()) {
+                Camera* camera = static_cast<Camera*>(c);
+            }
         }
 
         if (currentNode->getComponents().size()) {
