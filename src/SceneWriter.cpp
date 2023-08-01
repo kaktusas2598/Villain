@@ -35,9 +35,41 @@ namespace Villain {
         nodeElement->SetAttribute("scale", currentNode->getTransform()->getScale());
 
         for (auto& c: currentNode->getComponents()) {
-            // TODO: write data for each component attached to this node
+            // TODO:: Write component data:
+            //        All Light types
+            //        Move, Look controller
+            //        RigidBody, Kinematic, Flight
+            //        Mesh, Model renderers
+            //        Script
+
+            tinyxml2::XMLElement* componentElement = doc.NewElement("Component");
+            nodeElement->InsertEndChild(componentElement);
+
             if (c->getID() == GetId<Camera>()) {
                 Camera* camera = static_cast<Camera*>(c);
+                componentElement->SetAttribute("type", "Camera");
+                componentElement->SetAttribute("zNear", camera->getZnear());
+                componentElement->SetAttribute("zFar", camera->getZfar());
+                componentElement->SetAttribute("zoom", camera->getZoom());
+
+                std::string cameraType = "NONE";
+                switch (camera->getType()) {
+                    case CameraType::FIRST_PERSON:
+                        cameraType = "FIRST_PERSON";
+                    case CameraType::THIRD_PERSON:
+                        cameraType = "THIRD_PERSON";
+                    case CameraType::ORTHOGRAPHIC:
+                        cameraType = "ORTHOGRAPHIC";
+                    case CameraType::ORTHOGRAPHIC_2D:
+                        cameraType = "ORTHOGRAPHIC_2D";
+                    default:
+                        break;
+                }
+                tinyxml2::XMLElement* posElement = doc.NewElement("Component");
+                componentElement->InsertEndChild(posElement);
+                posElement->SetAttribute("positionX", camera->getPosition().x);
+                posElement->SetAttribute("positionY", camera->getPosition().y);
+                posElement->SetAttribute("positionZ", camera->getPosition().z);
             }
         }
 
