@@ -177,6 +177,12 @@ namespace Villain {
 
     void ImGuiLayer::processInput(SDL_Event* event) {
         ImGui_ImplSDL2_ProcessEvent(event);
+
+        // Editor shortcuts
+        if (Input::Get()->isKeyDown(SDLK_LCTRL) && Input::Get()->isKeyDown(SDLK_o))
+            fileBrowser.openPopup(".xml");
+        if (Input::Get()->isKeyDown(SDLK_LCTRL) && Input::Get()->isKeyDown(SDLK_s))
+            fileBrowser.savePopup(".xml");
     }
 
     void ImGuiLayer::start() {
