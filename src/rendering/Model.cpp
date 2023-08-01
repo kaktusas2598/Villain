@@ -36,17 +36,17 @@ namespace Villain {
         // aiProcess_CalcTangentSpace - won't calculate if there are no normals
         // aiProcess_OptimizeGraph - simplify aiNode graph, useful for complicated rigged models, but might not be useful for editor environments
         // NOTE: 2023-04-05: While doing tests with sponza model, disabled aiProcess_FlipUVs and model is working fine now
-        Logger::Instance()->info("Loading model: {}", path.c_str());
+        VILLAIN_INFO("Loading model: {}", path);
         scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            Logger::Instance()->error("Assimp import error: %s", *importer.GetErrorString());
+            VILLAIN_ERROR("Assimp import error: {}", importer.GetErrorString());
             return;
         }
         directory = path.substr(0, path.find_last_of('/'));
         fileName = path.substr(path.find_last_of('/'), path.length());
 
-        printf("Number of animations: %d, meshes: %d\n", scene->mNumAnimations, scene->mNumMeshes);
+        VILLAIN_TRACE("Number of animations: {} meshes: {}", scene->mNumAnimations, scene->mNumMeshes);
 
         processNode(scene->mRootNode, scene);
         // NOTE: Must be called after processing mesh! Not good design
@@ -177,7 +177,7 @@ namespace Villain {
             return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);
         }
 
-        Logger::Instance()->warn("Mesh missing material information");
+        VILLAIN_WARN("Mesh missing material information");
         return Mesh<VertexP1N1T1B1UV>(vertices, indices, numInstances, instanceMatrix);
     }
 
