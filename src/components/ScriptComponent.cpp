@@ -2,6 +2,8 @@
 
 namespace Villain {
     ScriptComponent::ScriptComponent(const std::string& scriptFilename): script(scriptFilename) {
+        VILLAIN_SET_COMPONENT_ID(ScriptComponent);
+
         LuaBindings::registerBindings(script.getLuaState());
         script.open();
     }

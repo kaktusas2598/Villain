@@ -4,16 +4,12 @@
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 #include "components/KinematicController.hpp"
-#include "components/Light.hpp"
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
-#include "components/MoveController.hpp"
 #include "components/ParticleEmitter.hpp"
 #include "components/ParticlePhysicsComponent.hpp"
 #include "components/RigidBodyComponent.hpp"
 
-#include "components/ScriptComponent.hpp"
-#include "physics/NarrowPhase.hpp"
 #include "physics/generators/contact/GroundContacts.hpp"
 #include "physics/generators/contact/ParticleCable.hpp"
 #include "physics/generators/contact/ParticleRod.hpp"
@@ -172,8 +168,6 @@ void Game::init() {
     }
 
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
-
-    getRootNode()->addComponent(new ScriptComponent("assets/scripts/test.lua"));
 }
 
 void Game::handleEvents(float deltaTime) {

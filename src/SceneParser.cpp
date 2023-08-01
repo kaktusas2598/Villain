@@ -7,7 +7,9 @@
 #include "components/KinematicController.hpp"
 #include "components/Light.hpp"
 #include "components/ModelRenderer.hpp"
+#include "components/LookController.hpp"
 #include "components/MoveController.hpp"
+#include "components/ScriptComponent.hpp"
 #include <sstream>
 
 namespace Villain {
@@ -123,11 +125,6 @@ namespace Villain {
             if (e->Value() == std::string("Components")) {
                 for (tinyxml2::XMLElement *component = e->FirstChildElement(); component != NULL; component = component->NextSiblingElement()) {
 
-                    if (component->Attribute("type") == std::string("Model")) {
-                        std::string modelPath = component->Attribute("fileName");
-                        currentNode->addComponent(new ModelRenderer(new Model(modelPath.c_str())));
-                    }
-
                     if (component->Attribute("type") == std::string("Camera")) {
                         Camera* camera = new Camera();
                         // Optional camera values
@@ -216,10 +213,20 @@ namespace Villain {
                         currentNode->addComponent(light);
                     }
 
+                    if (component->Attribute("type") == std::string("LookController")) {
+                        currentNode->addComponent(new LookController());
+                    }
 
                     if (component->Attribute("type") == std::string("MoveController")) {
                         currentNode->addComponent(new MoveController());
                     }
+
+                    if (component->Attribute("type") == std::string("Model")) {
+                        std::string modelPath = component->Attribute("fileName");
+                        currentNode->addComponent(new ModelRenderer(new Model(modelPath.c_str())));
+                    }
+
+
 
                     if (component->Attribute("type") == std::string("RigidBody")) {
                         RigidBody* rigidBody = new RigidBody();
@@ -258,7 +265,12 @@ namespace Villain {
                         }
                     }
 
-                    // TODO: Rest of components
+                    if (component->Attribute("type") == std::string("Script")) {
+                        std::string modelPath = component->Attribute("fileName");
+                        currentNode->addComponent(new ScriptComponent(modelPath));
+                    }
+
+                    // TODO: particle system component
                 }
             }
             // Parse children
