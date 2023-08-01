@@ -22,6 +22,7 @@ namespace Villain {
             ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 
             if (ImGui::BeginPopupModal("FileBrowserPopup", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar)) {
+
                 ImGui::Text("File Browser"); ImGui::SameLine();
                 // Add a small red "X" button in the right corner to close the popup
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - 20.0);
@@ -30,7 +31,6 @@ namespace Villain {
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::PopStyleColor();
-
 
                 // Draw a background
                 ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -58,13 +58,13 @@ namespace Villain {
                 drawFileBrowserPath(currentPath);
 
                 if (saveMode) {
-                    char nodeNameBuffer[100] = "scene.xml";
+                    static char nodeNameBuffer[100] = "untitled.xml";
                     ImGui::InputText("Save as", nodeNameBuffer, sizeof(nodeNameBuffer)); ImGui::SameLine();
                     if (ImGui::Button("Save")) {
                         saveMode = false;
                         VILLAIN_CRIT("Selected dir {}", selectedDirectory.string());
                         SceneWriter sceneWriter;
-                        sceneWriter.saveSceneGraph(currentPath.string() + nodeNameBuffer,
+                        sceneWriter.saveSceneGraph(currentPath.string() + "/" + nodeNameBuffer,
                                 editor->getEngine()->getApplication()->getRootNode());
                         ImGui::CloseCurrentPopup();
                     }
@@ -110,7 +110,8 @@ namespace Villain {
                 editor->renderIcon("\uf07c");
 
                 if (expanded) {
-                    if (popup) selectedDirectory = path;
+                    // NOTE: this will only set selected dir once dir in clicked, but we will phase out using tree for file browsing
+                    selectedDirectory = path;
                     drawFileBrowserPath(path);
                     ImGui::TreePop();
                 }
