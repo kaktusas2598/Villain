@@ -385,15 +385,15 @@ namespace Villain {
                     ImGui::RadioButton("AABB", &loadedMesh, 2);
 
                     static float sphereRadius = 1.0f;
-                    static float aabbSize = 1.0f;;
+                    static glm::vec3 aabbSize = glm::vec3(1.0f);
                     ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
-                    ImGui::DragFloat("AABB size", &aabbSize, 1.0f, 0.0f, 100.0f, "%.1f");
+                    ImGui::DragFloat3("AABB size", glm::value_ptr(aabbSize), 1.0f, 0.0f, 100.0f, "%.1f");
 
                     if (loadedMesh == 1) {
                         MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, sphereRadius);
                         meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
                     } else if (loadedMesh == 2) {
-                        MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), glm::vec3(aabbSize/2));
+                        MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), aabbSize/2.0f);
                         meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
                     }
                 }

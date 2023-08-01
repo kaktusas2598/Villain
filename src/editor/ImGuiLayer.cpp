@@ -175,6 +175,10 @@ namespace Villain {
         ImGui::End();
     }
 
+    void ImGuiLayer::processInput(SDL_Event* event) {
+        ImGui_ImplSDL2_ProcessEvent(event);
+    }
+
     void ImGuiLayer::start() {
         // These commands probably should go just before update() method so that states can setup their own ui
         // Start the Dear ImGui frame?

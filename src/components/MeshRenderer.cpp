@@ -23,8 +23,7 @@ namespace Villain {
 
             shader.bind();
             // NOTE: should implenent mesh batch renderer
-            // TODO: Add new updateUniforms() method without a matierla, because meshes set their own materials for each mesh
-            shader.updateUniforms(*parent->getTransform(), this->material, renderingEngine, camera);
+            shader.updateUniforms(*parent->getTransform(), renderingEngine, camera);
             shader.setUniform1ui("objectIndex", parent->getID());
             shader.setUniform1ui("drawIndex", 0);
             if (renderingEngine.getSelectedNodeID() != 0 && renderingEngine.getSelectedNodeID() == parent->getID()) {

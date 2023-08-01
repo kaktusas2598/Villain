@@ -139,8 +139,6 @@ namespace Villain {
         // Cache sphere positions
         glm::vec3 posOne = one.getAxis(3);
         glm::vec3 posTwo = two.getAxis(3);
-        //VILLAIN_DEBUG("Sphere1 Pos {}", glm::to_string(posOne));
-        //VILLAIN_DEBUG("Sphere2 Pos {}", glm::to_string(posTwo));
 
         // Find vector between the primitives
         glm::vec3 midline = posOne - posTwo;
@@ -160,7 +158,6 @@ namespace Villain {
         contact->penetration = one.radius + two.radius - size;
         contact->setBodyData(one.body, two.body, data->friction, data->restitution);
 
-        VILLAIN_DEBUG("SphereVsSphere contact normal {}", glm::to_string(contact->contactNormal));
         data->addContacts(1);
         return 1;
     }
@@ -185,7 +182,6 @@ namespace Villain {
         contact->contactPoint = position - plane.direction * (ballDistance + sphere.radius);
         contact->penetration = -ballDistance;
         contact->setBodyData(sphere.body, nullptr, data->friction, data->restitution);
-        VILLAIN_DEBUG("SphereVsPlane contact normal {}", glm::to_string(contact->contactNormal));
 
         data->addContacts(1);
         return 1;
@@ -265,14 +261,13 @@ namespace Villain {
                 // by half the separating distance and add vertex location
                 contact->contactPoint = plane.direction;
                 contact->contactPoint *= (vertexDistance - plane.offset);
-                // FIXME: was in the book's source code, but seems to causing problem in col. response!?
                 contact->contactPoint += vertexPos;
                 contact->contactNormal = plane.direction;
                 contact->penetration = plane.offset - vertexDistance;
                 contact->setBodyData(box.body, nullptr, data->friction, data->restitution);
+                //VILLAIN_CRIT("Box vs Plane Contact generated!");
+                //VILLAIN_DEBUG("Penetration {} Contact point {} Normal {}", contact->penetration, glm::to_string(contact->contactPoint), glm::to_string(contact->contactNormal));
 
-                //VILLAIN_DEBUG("BoxVsPlane vertex position {}", glm::to_string(vertexPos));
-                //VILLAIN_DEBUG("BoxVsPlane contact normal {}", glm::to_string(contact->contactNormal));
                 // Move to the next contact
                 contact++;
                 contactsUsed++;
@@ -331,11 +326,7 @@ namespace Villain {
         contact->penetration = sphere.radius - sqrtf(dist);
         contact->setBodyData(box.body, sphere.body, data->friction, data->restitution);
 
-        VILLAIN_WARN("Contact generated for box vs sphere");
-        VILLAIN_DEBUG("Distance {}", dist);
-        VILLAIN_DEBUG("closestPtWorld {}", glm::to_string(closestPtWorld));
-        VILLAIN_DEBUG("centre {}", glm::to_string(centre));
-        VILLAIN_DEBUG("BoxVsSphere contact normal {}", glm::to_string(contact->contactNormal));
+        //VILLAIN_CRIT("Box vs Sphere Contact generated!");
         data->addContacts(1);
         return 1;
     }
@@ -433,9 +424,9 @@ namespace Villain {
             contact->penetration = pen;
             contact->contactNormal = axis;
             contact->contactPoint = vertex;
+            //VILLAIN_CRIT("Box vs Box Contact generated!");
             contact->setBodyData(one.body, two.body, data->friction, data->restitution);
             data->addContacts(1);
-            VILLAIN_DEBUG("BoxVsBox contact normal {}", glm::to_string(contact->contactNormal));
             return 1;
         }
 

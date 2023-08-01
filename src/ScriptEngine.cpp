@@ -157,14 +157,11 @@ namespace Villain {
         //lua_register(state, "addParticleEmitter", lua_addParticleEmitter);
         //lua_register(state, "getMapWidth", lua_getMapWidth);
         //lua_register(state, "getMapHeight", lua_getMapHeight);
-        lua_register(state, "getScreenWidth", lua_getScreenWidth);
-        lua_register(state, "getScreenHeight", lua_getScreenHeight);
         //lua_register(state, "getCameraX", lua_getCameraX);
         //lua_register(state, "getCameraY", lua_getCameraY);
         //lua_register(state, "changeState", lua_changeState);
         lua_register(state, "quit", lua_quit);
         lua_register(state, "addLog", lua_addLog);
-
     }
 
     void ScriptEngine::init(std::string fileName) {

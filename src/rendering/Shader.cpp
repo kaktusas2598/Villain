@@ -47,12 +47,12 @@ namespace Villain {
         ShaderType type = ShaderType::NONE;
         for (std::string line; std::getline(iss, line); ) {
             if (line.find(INCLUDE_DIRECTIVE) != std::string::npos) {
+                //VILLAIN_ASSERT(type == ShaderType::NONE, "#shader directive must be set before using #include directive: {}", source);
                 // Recursively include shader headers
                 includeHeader(ss, type, line);
             } else if (line.find("#shader") != std::string::npos) {
                 if (line.find("vertex") != std::string::npos) {
                     type = ShaderType::VERTEX;
-
                 } else if (line.find("fragment") != std::string::npos) {
                     type = ShaderType::FRAGMENT;
                 } else if (line.find("geometry") != std::string::npos) {
@@ -84,7 +84,6 @@ namespace Villain {
             if (incLine.find("#include") != std::string::npos) {
                 includeHeader(ss, shaderType, incLine);
             } else {
-                // NOTE: #shader directive must come before #include directive, to ensure type is set here
                 ss[(int)shaderType] << incLine << '\n';
             }
         }
@@ -222,73 +221,21 @@ namespace Villain {
 
     }
 
-    void Shader::updateUniforms(Transform& transform, Material& material, RenderingEngine& renderingEngine, Camera& camera) {
+    void Shader::updateUniforms(Transform& transform, RenderingEngine& renderingEngine, Camera& camera) {
         this->bind();
         // Step projection uniforms
+        // TODO: possibly move this to Renderer class, Camera can be submitted in start() method and transform submitted to each draw
         this->setUniformMat4f("model", transform.getTransformMatrix());
         this->setUniformMat4f("view", camera.getViewMatrix());
         this->setUniformMat4f("projection", camera.getProjMatrix());
 
-        this->setMaterialUniforms(material);
-
         // Set light uniforms
         if (renderingEngine.getActiveLight() != nullptr) {
-            if (renderingEngine.getActiveLight()->type() == "directional") {
-                DirectionalLight* dirLight = (DirectionalLight*)(renderingEngine.getActiveLight());
-                this->setDirectionalLightUniforms("dirLight", *dirLight);
-            } else if (renderingEngine.getActiveLight()->type() == "spot") {
-                SpotLight* spotLight = (SpotLight*)(renderingEngine.getActiveLight());
-                this->setSpotLightUniforms("spotLight", *spotLight);
-            } else if (renderingEngine.getActiveLight()->type() == "point") {
-                PointLight* pointLight = (PointLight*)(renderingEngine.getActiveLight());
-                this->setPointLightUniforms("pointLight", *pointLight);
-            }
+            renderingEngine.getActiveLight()->setUniforms(*this);
         }
 
         // Camera/view/eye pos for lighting calculations
         this->setUniformVec3("viewPosition", camera.getPosition());
-    }
-
-    void Shader::setMaterialUniforms(Material& material) {
-        // Base color/diffuse map
-        if (material.getDiffuseMap() == nullptr) {
-            this->setUniform1i("material.useDiffuseMap", 0);
-        } else {
-            this->setUniform1i("material.useDiffuseMap", 1);
-            material.getDiffuseMap()->bind(RenderingEngine::getSamplerSlot("diffuse"));
-            this->setUniform1i("material.texture_diffuse", RenderingEngine::getSamplerSlot("diffuse"));
-        }
-        // Specular map
-        if (material.getSpecularMap() == nullptr) {
-            this->setUniform1i("material.useSpecularMap", 0);
-        } else {
-            this->setUniform1i("material.useSpecularMap", 1);
-            material.getSpecularMap()->bind(RenderingEngine::getSamplerSlot("specular"));
-            this->setUniform1i("material.texture_specular", RenderingEngine::getSamplerSlot("specular"));
-        }
-        // Normal/bump map
-        if (material.getNormalMap() == nullptr) {
-            this->setUniform1i("material.useNormalMap", 0);
-        } else {
-            this->setUniform1i("material.useNormalMap", 1);
-            material.getNormalMap()->bind(RenderingEngine::getSamplerSlot("normal"));
-            this->setUniform1i("material.texture_normal", RenderingEngine::getSamplerSlot("normal"));
-        }
-        // Parallax displacement map
-        if (material.getDislacementMap() == nullptr) {
-            this->setUniform1i("material.useDispMap", 0);
-        } else {
-            this->setUniform1i("material.useDispMap", 1);
-            material.getDislacementMap()->bind(RenderingEngine::getSamplerSlot("disp"));
-            this->setUniform1i("material.texture_disp", RenderingEngine::getSamplerSlot("disp"));
-            this->setUniform1f("material.dispMapScale", material.getDispMapScale());
-            this->setUniform1f("material.dispMapBias", material.getDispMapBias());
-        }
-
-        this->setUniform1f("material.shininess", material.getSpecularFactor());
-        this->setUniformVec4("material.ambientColor", material.getAmbientColor());
-        this->setUniformVec4("material.diffuseColor", material.getDiffuseColor());
-        this->setUniformVec4("material.specularColor", material.getSpecularColor());
     }
 
     void Shader::setFogUniforms(RenderingEngine& renderingEngine, Camera& camera) {
@@ -302,38 +249,4 @@ namespace Villain {
         setUniform1f("layeredFogEnd", *renderingEngine.getLayeredFogEnd());
         setUniformVec3("viewPosition", camera.getPosition());
     }
-
-    void Shader::setDirectionalLightUniforms(const std::string& name, DirectionalLight& dirLight) {
-        // HACK: for shadow mapping, cause technically dir lights have no position
-        setUniformVec3(name + ".position", dirLight.GetTransform()->getPos());
-
-        setUniformVec3(name + ".direction", dirLight.Direction);
-        setUniformVec3(name + ".base.ambient", dirLight.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", dirLight.DiffuseColor);
-        setUniformVec3(name + ".base.specular", dirLight.SpecularColor);
-    }
-
-    void Shader::setPointLightUniforms(const std::string& name, PointLight& pointLight) {
-        setUniformVec3(name + ".position", pointLight.Position);
-        setUniform1f(name + ".constant", pointLight.Attenuation.x);
-        setUniform1f(name + ".linear", pointLight.Attenuation.y);
-        setUniform1f(name + ".quadratic", pointLight.Attenuation.z);
-        setUniformVec3(name + ".base.ambient", pointLight.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", pointLight.DiffuseColor);
-        setUniformVec3(name + ".base.specular", pointLight.SpecularColor);
-    }
-
-    void Shader::setSpotLightUniforms(const std::string& name, SpotLight& spotLight) {
-        setUniformVec3(name + ".position", spotLight.Position);
-        setUniformVec3(name + ".direction", spotLight.Direction);
-        setUniform1f(name + ".cutOff", spotLight.CutOff);
-        setUniform1f(name + ".outerCutOff", spotLight.OuterCutOff);
-        setUniform1f(name + ".constant", spotLight.Attenuation.x);
-        setUniform1f(name + ".linear", spotLight.Attenuation.y);
-        setUniform1f(name + ".quadratic", spotLight.Attenuation.z);
-        setUniformVec3(name + ".base.ambient", spotLight.AmbientColor);
-        setUniformVec3(name + ".base.diffuse", spotLight.DiffuseColor);
-        setUniformVec3(name + ".base.specular", spotLight.SpecularColor);
-    }
-
 }

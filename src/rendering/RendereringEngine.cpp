@@ -277,7 +277,8 @@ namespace Villain {
         planeTransform.setScale(1.0);
         planeTransform.setPos(glm::vec3(0.0, 0.0, -0.2f));
         planeTransform.setEulerRot(0.0, 180.0, 90.0);
-        postFXShader->updateUniforms(planeTransform, postFXMat, *this, *altCamera);
+        postFXMat.updateUniforms(*postFXShader);
+        postFXShader->updateUniforms(planeTransform, *this, *altCamera);
         screenQuad->draw(*postFXShader, postFXMat);
         defaultShader->bind();
 
@@ -286,7 +287,8 @@ namespace Villain {
             Material mirrorMat{"null", mirrorBuffer->getTexture(), 1};
             planeTransform.setScale(0.25);
             planeTransform.setPos(glm::vec3(0.75f, 0.75f, -0.2f));
-            defaultShader->updateUniforms(planeTransform, mirrorMat, *this, *altCamera);
+            mirrorMat.updateUniforms(*defaultShader);
+            defaultShader->updateUniforms(planeTransform, *this, *altCamera);
             defaultShader->setUniformVec3("color", ambientLight);
             screenQuad->draw(*defaultShader, mirrorMat);
         }

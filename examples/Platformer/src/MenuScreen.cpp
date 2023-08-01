@@ -38,29 +38,23 @@ if (Villain::Input::Get()->isKeyPressed(SDLK_ESCAPE)) {
 }
 
 void MenuScreen::draw() {
-    // GUI
-    struct nk_colorf bg;
-    struct nk_context * ctx = mainApplication->getNuklearContext();
-
+    auto uiManager = mainApplication->getEngine()->getUIManager();
     int w = 200, h = 90;
     float x = Villain::Engine::getScreenWidth()/2.0f - w/2.0f;
     float y = Villain::Engine::getScreenHeight()/2.0f - h/2.0f;
 
-    if (nk_begin(ctx, "Show", nk_rect(x, y, w, h), NK_WINDOW_BORDER)) {
-        //nk_layout_row_static(ctx, 30, 80, 1);
-        nk_layout_row_dynamic(ctx, 30, 1);
-        if (nk_button_label(ctx, "PLAY")) {
+    if (uiManager.beginWindow("Show", x, y, w, h)) {
+        uiManager.layoutRowDynamic(30, 1);
+        if (uiManager.button("PLAY")) {
             setScreenState(Villain::ScreenState::CHANGE_NEXT);
         }
 
-        nk_layout_row_dynamic(ctx, 30, 1);
-        //nk_layout_row_static(ctx, 30, 80, 1);
-        if (nk_button_label(ctx, "EXIT")) {
+        uiManager.layoutRowDynamic(30, 1);
+        if (uiManager.button("EXIT")) {
             setScreenState(Villain::ScreenState::EXIT_APPLICATION);
         }
-
     }
-    nk_end(ctx);
+    uiManager.endWindow();
 
     //glEnable(GL_BLEND);
     // Back to regular blending

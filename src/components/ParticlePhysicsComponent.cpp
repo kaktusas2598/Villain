@@ -20,7 +20,7 @@ namespace Villain {
         particleQuadMesh->updateInstances(instanceMatrices);
 
         Material material;
-        shader.updateUniforms(*parent->getTransform(), material, renderingEngine, camera);
+        shader.updateUniforms(*parent->getTransform(), renderingEngine, camera);
         particleQuadMesh->draw(shader, material);
     }
 

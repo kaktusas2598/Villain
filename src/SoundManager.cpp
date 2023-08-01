@@ -1,6 +1,5 @@
 #include "SoundManager.hpp"
 #include "ErrorHandler.hpp"
-#include "SDL_mixer.h"
 
 namespace Villain {
 

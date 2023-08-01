@@ -18,6 +18,7 @@ namespace Villain {
         SCRIPT_ENTITIES = 2
     };
 
+    // TODO: Rething is this class is even needed anymore?? Only runChunk() (not working) used in DebugConsole and init() called by StateParser
     class ScriptEngine {
         public:
             ScriptEngine();
@@ -65,18 +66,6 @@ namespace Villain {
             // Lua API is written in C so only static C++ class methods can be wrapped for lua
             // Alternative way would be to use global functions
             //------------------------------------------------------------------------------------
-            //static int lua_playSound(lua_State *L) {
-                //std::string soundID = (std::string)lua_tostring(L, 1);
-                //TheSoundManager::Instance()->playSound(soundID, 0);
-                //return 0;
-            //}
-
-            //static int lua_playMusic(lua_State *L) {
-                //std::string soundID = (std::string)lua_tostring(L, 1);
-                //TheSoundManager::Instance()->playMusic(soundID, 0);
-                //return 0;
-            //}
-
             //static int lua_addParticleEmitter(lua_State *L) {
                 //float originX = (float)lua_tonumber(L, 1);
                 //float originY = (float)lua_tonumber(L, 2);
@@ -98,17 +87,6 @@ namespace Villain {
                 //return 1;
             //}
 
-            static int lua_getScreenWidth(lua_State *L) {
-                int screenWidth = Engine::getScreenWidth();
-                lua_pushnumber(L, screenWidth);
-                return 1;
-            }
-
-            static int lua_getScreenHeight(lua_State *L) {
-                int screenHeight = Engine::getScreenHeight();
-                lua_pushnumber(L, screenHeight);
-                return 1;
-            }
 
             //static int lua_getCameraX(lua_State *L) {
                 //int x = TheEngine::Instance()->camera.x;

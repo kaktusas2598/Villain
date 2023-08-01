@@ -36,7 +36,7 @@ namespace Villain {
 
     template <class VertexType>
     void Mesh<VertexType>::draw(Shader &shader, Material& material) {
-        shader.setMaterialUniforms(material);
+        material.updateUniforms(shader);
         if (numInstances > 1)
             shader.setUniform1i("instancedRenderingEnabled", true);
         else

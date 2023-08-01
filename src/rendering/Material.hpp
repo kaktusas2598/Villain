@@ -9,12 +9,16 @@
 
 namespace Villain {
 
+    class Shader;
+
     /// Main material classes used to bundle material properties and texture maps together
     // TODO: Possibly should also contain shader
     class Material {
         public:
             Material(const std::string& name = std::string()) { this->name = name; }
             virtual ~Material() {}
+
+            void updateUniforms(Shader& shader);
 
             /// Material equality based on their name alone to force adding unique names
             bool operator==(const Material& other) const {
