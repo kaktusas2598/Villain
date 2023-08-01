@@ -36,6 +36,8 @@ namespace Villain {
             void savePopup(const std::string& ext={}) { saveMode = true; openPopup(ext); }
 
         private:
+            void drawSelectedDirectory();
+            // For drawing file tree
             void drawFileBrowserPath(const fs::path& currentPath);
 
             static bool popup; ///< Toggles file browser as a popup

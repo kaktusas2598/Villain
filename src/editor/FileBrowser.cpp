@@ -46,23 +46,13 @@ namespace Villain {
                 float borderThickness = 1.0f;
                 drawList->AddRect(minBound, maxBound, borderColor, 0.0f, ImDrawCornerFlags_All, borderThickness);
 
-
-                // Display the parent directory as a selectable button
-                if (ImGui::Button("..")) {
-                    // Navigate to the parent directory
-                    const fs::path parentPath = currentPath.parent_path();
-                    if (fs::exists(parentPath))
-                        fs::current_path(parentPath);
-                }
-
-                drawFileBrowserPath(currentPath);
+                drawSelectedDirectory();
 
                 if (saveMode) {
                     static char nodeNameBuffer[100] = "untitled.xml";
                     ImGui::InputText("Save as", nodeNameBuffer, sizeof(nodeNameBuffer)); ImGui::SameLine();
                     if (ImGui::Button("Save")) {
                         saveMode = false;
-                        VILLAIN_CRIT("Selected dir {}", selectedDirectory.string());
                         SceneWriter sceneWriter;
                         sceneWriter.saveSceneGraph(currentPath.string() + "/" + nodeNameBuffer,
                                 editor->getEngine()->getApplication()->getRootNode());
@@ -75,7 +65,6 @@ namespace Villain {
             ImGui::PopStyleColor();
             ImGui::PopStyleVar();
 
-            //if (popup || ImGui::Button("Open File Browser")) {
             if (popup) {
                 ImGui::OpenPopup("FileBrowserPopup");
                 popup = false;
@@ -94,6 +83,56 @@ namespace Villain {
         ImGui::End();
     }
 
+    void FileBrowser::drawSelectedDirectory() {
+        // Display editable current path above
+        std::string currentPath = selectedDirectory.string();
+        static char currentPathBuffer[256];
+        std::strncpy(currentPathBuffer, currentPath.c_str(), sizeof(currentPathBuffer));
+        ImGui::InputText("Current path", currentPathBuffer, sizeof(currentPathBuffer));
+
+        // Display the parent directory as a selectable button, and make sure not to close a parent popup
+        if (ImGui::Selectable("..", false, ImGuiSelectableFlags_DontClosePopups)) {
+            // Navigate to the parent directory
+            selectedDirectory = selectedDirectory.parent_path();
+        }
+
+        for (const auto& entry : fs::directory_iterator(selectedDirectory)) {
+            const auto& path = entry.path();
+
+            // Skip hidden files
+            if (entry.is_regular_file() && path.filename().string()[0] == '.')
+                continue;
+
+            std::string filename = path.filename().string();
+            if (entry.is_directory()) {
+                if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_DontClosePopups)) {
+                    selectedDirectory = entry.path();
+                }
+                // Position the icon at the rightmost side of the tree node
+                ImGui::SameLine(ImGui::GetContentRegionAvail().x - ImGui::GetTextLineHeightWithSpacing());
+                editor->renderIcon("\uf07c");
+
+
+            } else if (entry.is_regular_file()) {
+                // Outputs '.xml', '.txt' etc
+                std::string extension = path.extension().string();
+
+                if (!filter.empty() && extension != filter)
+                    continue;
+
+                // If we are clicking on regular file when can close the popup
+                if (ImGui::Selectable(filename.c_str())) {
+                    // Dispath select file event
+                    FileSelectedEvent fileSelectedEvent = FileSelectedEvent(path);
+                    editor->getEngine()->getEventDispatcher()->dispatchEvent(fileSelectedEvent);
+                }
+
+                // Position the icon at the rightmost side of the selectable item
+                ImGui::SameLine(ImGui::GetContentRegionAvail().x - ImGui::GetTextLineHeightWithSpacing());
+                editor->renderIcon("\uf15b");
+            }
+        }
+    }
 
     void FileBrowser::drawFileBrowserPath(const fs::path& currentPath) {
         for (const auto& entry : fs::directory_iterator(currentPath)) {
@@ -110,8 +149,6 @@ namespace Villain {
                 editor->renderIcon("\uf07c");
 
                 if (expanded) {
-                    // NOTE: this will only set selected dir once dir in clicked, but we will phase out using tree for file browsing
-                    selectedDirectory = path;
                     drawFileBrowserPath(path);
                     ImGui::TreePop();
                 }
@@ -135,5 +172,4 @@ namespace Villain {
             }
         }
     }
-
 }

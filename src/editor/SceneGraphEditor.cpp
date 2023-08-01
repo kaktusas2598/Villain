@@ -29,7 +29,7 @@ namespace Villain {
                 // TODO: need probably an enum FileType or AssetType or sth to avoid this looping
                 for (const std::string& supportedFormat : supportedModelFormats) {
                     if (e.getExtension() == supportedFormat) {
-                        selectedNode->addComponent(new ModelRenderer(new Model(e.getFileName().c_str())));
+                        selectedNode->addComponent(new ModelRenderer(ResourceManager::Instance()->loadModel(e.getFileName(), e.getFileName())));
                     }
                 }
                 for (const std::string& supportedFormat : supportedTextureFormats) {
