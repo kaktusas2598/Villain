@@ -231,7 +231,6 @@ namespace Villain {
         return impulseContact;
     }
 
-    // FIXME: with this numbers quickly go "nan"!
     glm::vec3 Contact::calculateFrictionImpulse(glm::mat3* inverseInertiaTensor) {
         glm::vec3 impulseContact;
         float inverseMass = bodies[0]->getInverseMass();
@@ -247,7 +246,7 @@ namespace Villain {
 
         // Check if need to add data for body 2
         if (bodies[1]) {
-            impulseToTorque = glm::matrixCross3(relativeContactPos[2]);
+            impulseToTorque = glm::matrixCross3(relativeContactPos[1]);
 
             // Build matrix to convert contact impulse to change in velocity in world coordinates
             glm::mat3 deltaVelWorld2 = impulseToTorque;
