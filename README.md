@@ -51,6 +51,7 @@
       * Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)
       * Narrow-Phase: planes, spheres, OBBs
   * Collision Resolution using iterative contact resolver
+  * Basic friction model
 
 ## Planned Features
 
@@ -59,7 +60,6 @@
     * Saving current scene
     * Scene camera, gizmos?
 * Physics Engine planned additions:
-    * Friction
     * Stability improvements, optimizations
     * Constraints: rods, cables, hinges, joints
     * Terrain contact generator
