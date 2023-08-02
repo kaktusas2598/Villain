@@ -16,6 +16,7 @@
                 <Position x="-20.0" y="5.0" z="0.0" />
             </Component>
             <Component type="Model" fileName="assets/models/toyplane.obj"/>
+            <Component type="Script" fileName="assets/scripts/test.lua"/>
             <Component type="RigidBody" kinematic="true">
                 <RigidBody mass="1000.0" restitution="0.5">
                     <Position x="-20.0" y="5.0" z="0.0" />
