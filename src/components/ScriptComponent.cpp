@@ -14,7 +14,7 @@ namespace Villain {
     }
 
     ScriptComponent::~ScriptComponent() {
-        getParent()->getEngine()->getEventDispatcher()->unregisterCallback(UNBIND_EVENT_FN(onEvent));
+        getParent()->getEngine()->getEventDispatcher()->unregisterCallback(BIND_EVENT_FN(onEvent));
     }
 
     void ScriptComponent::update(float deltaTime) {

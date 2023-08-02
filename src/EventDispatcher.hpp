@@ -6,7 +6,6 @@
 
 /// Macro to make binding event callback function to dispatcher easier
 #define BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
-#define UNBIND_EVENT_FN BIND_EVENT_FN
 
 /// Macro to generate getType() method for each event class
 #define VILLAIN_EVENT_TYPE(Type) \
