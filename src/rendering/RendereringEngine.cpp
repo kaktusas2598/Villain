@@ -54,9 +54,16 @@ namespace Villain {
 
     RenderingEngine::~RenderingEngine() {
         delete defaultShader;
+        delete postFXShader;
+        delete normalDebugShader;
+        delete dirShadowMapShader;
+        delete omnidirShadowMapShader;
+        delete skyboxShader;
+        delete pickingShader;
+
         //FIXME: segfault, camera created in application class which user created on stack
         //delete mainCamera;
-        //delete altCamera;
+        delete altCamera;
         delete screenQuad;
         delete shadowBuffer;
         delete mirrorBuffer;
