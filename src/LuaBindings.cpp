@@ -13,6 +13,32 @@ namespace Villain {
         lua_register(L, "getScreenWidth", lua_getScreenWidth);
         lua_register(L, "getScreenHeight", lua_getScreenHeight);
         lua_register(L, "quit", lua_quit);
+
+        createSceneNodeMetatable(L);
+    }
+
+    void LuaBindings::createSceneNodeMetatable(lua_State* L) {
+        // Set methods for the metatable
+        luaL_Reg sceneNodeMethods[] = {
+            { "getName", lua_SceneNode_getName },
+            // Add more methods as needed
+            { NULL, NULL } // The array must be null-terminated
+        };
+
+        if (luaL_newmetatable(L, "SceneNode")) {
+            luaL_setfuncs(L, sceneNodeMethods, 0);
+
+            // Set "__index" to point to the metatable itself so that we can access methods
+            // from the metatable directly on userdata
+            lua_pushvalue(L, -1);
+            lua_setfield(L, -2, "__index");
+        }
+    }
+
+    int LuaBindings::lua_SceneNode_getName(lua_State *L) {
+        SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
+        lua_pushstring(L, node->getName().c_str());
+        return 1;
     }
 
     int LuaBindings::lua_playSound(lua_State *L) {
