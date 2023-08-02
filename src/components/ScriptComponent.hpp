@@ -1,12 +1,16 @@
 #pragma once
 
-#include "LuaBindings.hpp"
+#include "EventDispatcher.hpp"
 #include "LuaScript.hpp"
 #include "NodeComponent.hpp"
 
 namespace Villain {
 
-    /// Allows attaching custom Lua logic to a node in scene graph
+    /*! \brief Allows attaching Lua script to a node in scene graph
+     *
+     * Script can be executed every frame in Lua 'update' function or also respond to events
+     * with optional Lua event callbacks
+     */
     class ScriptComponent : public NodeComponent {
         public:
             ScriptComponent(const std::string& scriptFilename);
@@ -15,6 +19,10 @@ namespace Villain {
             /// Calls Lua "update" function
             virtual void update(float deltaTime) override;
 
+            virtual void addToEngine(Engine* engine) override;
+
+            /// Forwards Engine events to optional lua event callbacks defined by user
+            void onEvent(Event& event);
         private:
             LuaScript script;
     };

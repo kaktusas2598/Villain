@@ -1,5 +1,10 @@
 #include "ScriptComponent.hpp"
 
+#include "Engine.hpp"
+#include "LuaBindings.hpp"
+
+#include "events/KeyboardEvent.hpp"
+
 namespace Villain {
     ScriptComponent::ScriptComponent(const std::string& scriptFilename): script(scriptFilename) {
         VILLAIN_SET_COMPONENT_ID(ScriptComponent);
@@ -22,7 +27,34 @@ namespace Villain {
         if (lua_pcall(script.getLuaState(), 2, 0, 0) != LUA_OK) {
             // Handle any errors here.
             std::string errorMessage = lua_tostring(script.getLuaState(), -1);
-            VILLAIN_CRIT("Lua error in update script for {}: {}", getParent()->getName(), errorMessage);
+            VILLAIN_CRIT("Lua error in update() for {}: {}", getParent()->getName(), errorMessage);
+        }
+    }
+
+    void ScriptComponent::addToEngine(Engine* engine) {
+        // WARNING: Currently there is no way to unregister callbacks (only listeners have this)
+        // so if node gets removed, this potentially will be problematic
+        getParent()->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
+    }
+
+    void ScriptComponent::onEvent(Event& event) {
+        if (event.getType() == EventType::KeyboardEvent) {
+            lua_getglobal(script.getLuaState(), "onKey");
+
+            // Event callbacks in lua are optional
+            if (lua_isfunction(script.getLuaState(), -1)) {
+                KeyboardEvent e = static_cast<KeyboardEvent&>(event);
+                lua_pushnumber(script.getLuaState(), (char)e.getKey());
+                lua_pushlightuserdata(script.getLuaState(), getParent());
+                luaL_setmetatable(script.getLuaState(), "SceneNode");
+
+                if (lua_pcall(script.getLuaState(), 2, 0, 0) != LUA_OK) {
+                    std::string errorMessage = lua_tostring(script.getLuaState(), -1);
+                    VILLAIN_CRIT("Lua error in onKey() for {}: {}", getParent()->getName(), errorMessage);
+                }
+            }
+
+            // TODO: other callbacks with appropriate params
         }
     }
 }

@@ -49,9 +49,10 @@ namespace Villain {
         for (unsigned int i = 0; i < colliders.size(); i++) {
             for (unsigned int j = i + 1; j < colliders.size(); j++) {
                 unsigned used = 0;
+                // TODO:
                 // NOTE: TEMP variables!
                 float restitution = 0.2f;
-                float friction = 0.0f;
+                float friction = 0.2f;
                 CollisionData data(nextContact, limit, 0, restitution, friction);
 
                 if (CollisionSphere* one = dynamic_cast<CollisionSphere*>(colliders[i])) {
