@@ -13,6 +13,10 @@ namespace Villain {
         script.open();
     }
 
+    ScriptComponent::~ScriptComponent() {
+        getParent()->getEngine()->getEventDispatcher()->unregisterCallback(UNBIND_EVENT_FN(onEvent));
+    }
+
     void ScriptComponent::update(float deltaTime) {
         lua_getglobal(script.getLuaState(), "update"); // Get the Lua function by name.
 
@@ -32,8 +36,6 @@ namespace Villain {
     }
 
     void ScriptComponent::addToEngine(Engine* engine) {
-        // WARNING: Currently there is no way to unregister callbacks (only listeners have this)
-        // so if node gets removed, this potentially will be problematic
         getParent()->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
     }
 

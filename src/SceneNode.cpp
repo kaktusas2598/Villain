@@ -45,10 +45,12 @@ namespace Villain {
 
     void SceneNode::removeChild(SceneNode* child) {
         children.erase(std::remove(children.begin(), children.end(), child), children.end());
+        delete child;
     }
 
     void SceneNode::removeComponent(NodeComponent* component) {
         components.erase(std::remove(components.begin(), components.end(), component), components.end());
+        delete component;
     }
 
     void SceneNode::handleInput(float deltaTime) {

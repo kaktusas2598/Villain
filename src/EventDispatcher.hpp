@@ -1,12 +1,13 @@
 #pragma once
 
 #include <algorithm>
-#include <cassert>
 #include <functional>
 #include <vector>
 
 /// Macro to make binding event callback function to dispatcher easier
 #define BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+#define UNBIND_EVENT_FN BIND_EVENT_FN
+
 /// Macro to generate getType() method for each event class
 #define VILLAIN_EVENT_TYPE(Type) \
     virtual EventType getType() const override { \
@@ -54,12 +55,14 @@ namespace Villain {
             }
             /// Call once for every new event callback function we want to subscribe
             void registerCallback(const EventCallback& callback) {
-                callbacks.push_back(new EventCallback(callback));
+                callbacks.push_back(callback);
             }
             /// Stop sending events to this function callback
             void unregisterCallback(const EventCallback& callback) {
-                // TODO: implement, but might be tricky because we are using std::function
-                assert(false);
+                callbacks.erase(std::remove_if(callbacks.begin(), callbacks.end(),
+                            [&](const EventCallback& cb) {
+                            return cb.target<EventCallback>() == callback.target<EventCallback>();
+                            }), callbacks.end());
             }
 
             /// Must be called every time we want to dispatch an event
@@ -69,7 +72,7 @@ namespace Villain {
                 }
 
                 for (auto callback : callbacks) {
-                    (*callback)(event);
+                    callback(event);
                 }
             }
 
@@ -78,6 +81,6 @@ namespace Villain {
 
         private:
             std::vector<EventListener*> listeners;
-            std::vector<EventCallback*> callbacks;
+            std::vector<EventCallback> callbacks;
     };
 }

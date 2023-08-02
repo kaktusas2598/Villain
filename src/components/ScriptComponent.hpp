@@ -14,7 +14,7 @@ namespace Villain {
     class ScriptComponent : public NodeComponent {
         public:
             ScriptComponent(const std::string& scriptFilename);
-            ~ScriptComponent() {}
+            ~ScriptComponent();
 
             /// Calls Lua "update" function
             virtual void update(float deltaTime) override;
