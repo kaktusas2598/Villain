@@ -31,6 +31,7 @@ namespace Villain {
 
     Shader::~Shader() {
         GLCall(glDeleteProgram(rendererID));
+        uniformLocationCache.clear();
     }
 
     void Shader::createFromSource(const std::string& vertexSource, const std::string& fragmentSource) {
