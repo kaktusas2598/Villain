@@ -92,7 +92,7 @@ namespace Villain {
         if (rboID) GLCall(glDeleteRenderbuffers(1, &rboID));
         if (textureIDs) delete[] textureIDs;
         // FIXME: segfault
-        //for (int i = 0; i < numTextures; ++i)
+        //for (int i = 0; i < numTextures; i++)
             //delete textures[i];
         delete[] textures;
     }
