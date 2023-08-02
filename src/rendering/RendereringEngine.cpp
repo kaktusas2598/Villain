@@ -41,11 +41,19 @@ namespace Villain {
 
         glEnable(GL_BLEND);
 
-        screenQuad = MeshUtils<VertexP1N1UV>::getXYPlane(glm::vec3(0.0f), glm::vec2(1.0f), new float[4]{0.0, 1.0, 0.0, 1.0});
+        float* screenQuadUVCoords = new float[4]{0.0, 1.0, 0.0, 1.0};
+        screenQuad = MeshUtils<VertexP1N1UV>::getXYPlane(glm::vec3(0.0f), glm::vec2(1.0f), screenQuadUVCoords);
+        delete[] screenQuadUVCoords;
+
+        // Setup framebuffers
+        GLenum* shadowBufferAttachments = new GLenum[1]{GL_DEPTH_ATTACHMENT};
+        GLenum* mirrorBufferAttachments = new GLenum[1]{GL_COLOR_ATTACHMENT0};
         // TODO: refactor hardcoded shadow map size
-        shadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT});
-        omniShadowBuffer = new FrameBuffer(1024, 1024, 1, new GLenum[1]{GL_DEPTH_ATTACHMENT}, true);
-        mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, new GLenum[1]{GL_COLOR_ATTACHMENT0});
+        shadowBuffer = new FrameBuffer(1024, 1024, 1, shadowBufferAttachments);
+        omniShadowBuffer = new FrameBuffer(1024, 1024, 1, shadowBufferAttachments, true);
+        mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+        delete[] shadowBufferAttachments;
+        delete[] mirrorBufferAttachments;
 
         pickingTexture = new PickingTexture();
         pickingTexture->init(engine->getScreenWidth(), engine->getScreenHeight());
@@ -61,11 +69,14 @@ namespace Villain {
         delete skyboxShader;
         delete pickingShader;
 
+        delete pickingTexture;
+
         //FIXME: segfault, camera created in application class which user created on stack
         //delete mainCamera;
         delete altCamera;
         delete screenQuad;
         delete shadowBuffer;
+        delete omniShadowBuffer;
         delete mirrorBuffer;
     }
 

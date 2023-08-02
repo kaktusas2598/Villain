@@ -91,6 +91,10 @@ namespace Villain {
         if (fboID) GLCall(glDeleteFramebuffers(1, &fboID));
         if (rboID) GLCall(glDeleteRenderbuffers(1, &rboID));
         if (textureIDs) delete[] textureIDs;
+        // FIXME: segfault
+        //for (int i = 0; i < numTextures; ++i)
+            //delete textures[i];
+        delete[] textures;
     }
 
     void FrameBuffer::rescale(int w, int h) {
