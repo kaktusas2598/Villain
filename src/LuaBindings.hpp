@@ -24,6 +24,7 @@ namespace Villain {
             static int lua_playMusic(lua_State *L);
             static int lua_getScreenWidth(lua_State *L);
             static int lua_getScreenHeight(lua_State *L);
+            static int lua_addLog(lua_State *L);
             static int lua_quit(lua_State *L);
     };
 }

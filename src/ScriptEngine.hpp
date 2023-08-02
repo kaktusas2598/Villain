@@ -1,28 +1,15 @@
 #pragma once
 
 #include "LuaScript.hpp"
-
 #include "Engine.hpp"
-
 #include <string>
 
 namespace Villain {
-
-    // TODO:
-    // Must support multiple scripts, global script for common functionality, config scripts
-    // Might work similar to TextureManager, maybe recall to ScriptManager?
-    // addScript(ScriptType)
-    enum ScriptType {
-        SCRIPT_CONFIG = 0,
-        SCRIPT_GLOBALS = 1,
-        SCRIPT_ENTITIES = 2
-    };
 
     // TODO: Rething is this class is even needed anymore?? Only runChunk() (not working) used in DebugConsole and init() called by StateParser
     class ScriptEngine {
         public:
             ScriptEngine();
-            ~ScriptEngine() {}
 
             static ScriptEngine* Instance() {
                 if(s_pInstance == 0) {
@@ -31,11 +18,6 @@ namespace Villain {
                 }
                 return s_pInstance;
             }
-
-            // Scripts will probably not run every frame so this will be empty method
-            // Maybe this could be used to limit insane amount of times onCollide() event is triggered?
-            //
-            void update(float deltaTime);
 
             // Setup metatables and bind c++ methods
             void build();
@@ -63,81 +45,7 @@ namespace Villain {
             // Issues next task for dynamic behaviours/coroutines
             void issueNextTask(int id);
 
-            // Lua API is written in C so only static C++ class methods can be wrapped for lua
-            // Alternative way would be to use global functions
-            //------------------------------------------------------------------------------------
-            //static int lua_addParticleEmitter(lua_State *L) {
-                //float originX = (float)lua_tonumber(L, 1);
-                //float originY = (float)lua_tonumber(L, 2);
-                //std::string type = (std::string)lua_tostring(L, 3);
-                //ParticleSystem::Instance()->addEmitter(Vector2D{originX, originY}, type);
-                //return 0;
-            //}
-
-
-            //static int lua_getMapWidth(lua_State *L) {
-                //int mapWidth = TheEngine::Instance()->getMapWidth();
-                //lua_pushnumber(L, mapWidth);
-                //return 1;
-            //}
-
-            //static int lua_getMapHeight(lua_State *L) {
-                //int mapHeight = TheEngine::Instance()->getMapHeight();
-                //lua_pushnumber(L, mapHeight);
-                //return 1;
-            //}
-
-
-            //static int lua_getCameraX(lua_State *L) {
-                //int x = TheEngine::Instance()->camera.x;
-                //lua_pushnumber(L, x);
-                //return 1;
-            //}
-
-            //static int lua_getCameraY(lua_State *L) {
-                //int y = TheEngine::Instance()->camera.y;
-                //lua_pushnumber(L, y);
-                //return 1;
-            //}
-
-
-            //static int lua_changeState(lua_State *L) {
-                //std::string id = (std::string)lua_tostring(L, 1);
-                //TheEngine::Instance()->getStateMachine()->getCurrentState()->setNextID(id);
-                //TheEngine::Instance()->getStateMachine()->getCurrentState()->setScreenState(ScreenState::CHANGE_NEXT);
-                //return 1;
-            //}
-
-            static int lua_quit(lua_State *L) {
-                //TheEngine::Instance()->setRunning(false);
-                return 0;
-            }
-
-            static int lua_addLog(lua_State *L) {
-                int nArgs = lua_gettop(L);
-                // TODO: support building variadic args
-                for (int i = 0; i < nArgs; i++) {
-                    if (lua_isstring(L, i)) {
-                        DebugConsole::Instance()->addLog(lua_tostring(L,i));
-                    }
-                }
-                return 0;
-            }
-
-
-            // Allocates new user data and sends reference to EntityManager
-            /*static int lua_createEntity(lua_State *L);
-            // Lua __gc and removes reference from EntityManager
-            static int lua_destroyEntity(lua_State *L);
-
-            // Manual remove from entity manager array
-            static int lua_removeEntity(lua_State *L) {
-                Entity* entity = (Entity*)lua_touserdata(L, -1);
-                EntityManager::Instance()->remove(entity->id->get());
-                return 0;
-            }
-
-            static int lua_registerListener(lua_State *L) {
+            /*static int lua_registerListener(lua_State *L) {
                 Entity* entity = (Entity*)lua_touserdata(L, 1);
                 std::string type = (std::string)lua_tostring(L, 2);
                 std::string listener = (std::string)lua_tostring(L, 3);

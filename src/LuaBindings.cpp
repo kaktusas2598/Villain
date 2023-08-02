@@ -12,6 +12,7 @@ namespace Villain {
         lua_register(L, "playMusic", lua_playMusic);
         lua_register(L, "getScreenWidth", lua_getScreenWidth);
         lua_register(L, "getScreenHeight", lua_getScreenHeight);
+        lua_register(L, "addLog", lua_addLog);
         lua_register(L, "quit", lua_quit);
 
         createSceneNodeMetatable(L);
@@ -63,6 +64,17 @@ namespace Villain {
         int screenHeight = Engine::getScreenHeight();
         lua_pushnumber(L, screenHeight);
         return 1;
+    }
+
+    int LuaBindings::lua_addLog(lua_State *L) {
+        int nArgs = lua_gettop(L);
+        // TODO: support building variadic args
+        for (int i = 0; i < nArgs; i++) {
+            if (lua_isstring(L, i)) {
+                DebugConsole::Instance()->addLog(lua_tostring(L,i));
+            }
+        }
+        return 0;
     }
 
     int LuaBindings::lua_quit(lua_State *L) {
