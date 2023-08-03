@@ -53,6 +53,19 @@ namespace Villain {
         delete component;
     }
 
+    // FIXME: this would work if in header, but GetId<>() is defined in NodeComponent.hpp
+    // and we can't include it in SceneNode's header because it would mess up includes,
+    // one solution could be to move GetID<T>() method to SceneNode files as well
+    //template <typename T>
+    //T* SceneNode::getComponent() const {
+        //for(NodeComponent* c : components) {
+            //if (c->getID() == GetId<T>())
+                //return static_cast<T*>(c);
+        //}
+
+        //return nullptr;
+    //}
+
     void SceneNode::handleInput(float deltaTime) {
         for (auto& c: components) {
             c->handleInput(deltaTime);

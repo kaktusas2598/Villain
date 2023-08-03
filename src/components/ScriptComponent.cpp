@@ -18,7 +18,7 @@ namespace Villain {
     }
 
     void ScriptComponent::update(float deltaTime) {
-        lua_getglobal(script.getLuaState(), "update"); // Get the Lua function by name.
+        lua_getglobal(script.getLuaState(), "Update"); // Get the Lua function by name.
 
         // Push the 1st argument: delta time number
         lua_pushnumber(script.getLuaState(), deltaTime);
@@ -41,7 +41,7 @@ namespace Villain {
 
     void ScriptComponent::onEvent(Event& event) {
         if (event.getType() == EventType::KeyboardEvent) {
-            lua_getglobal(script.getLuaState(), "onKey");
+            lua_getglobal(script.getLuaState(), "OnKey");
 
             // Event callbacks in lua are optional
             if (lua_isfunction(script.getLuaState(), -1)) {

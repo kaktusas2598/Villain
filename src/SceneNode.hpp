@@ -38,6 +38,16 @@ namespace Villain {
             void removeChild(SceneNode* child);
             void removeComponent(NodeComponent* component);
 
+            template <typename T>
+            T* getComponent() const {
+                for(NodeComponent* c : components) {
+                    if (dynamic_cast<T*>(c))
+                        return static_cast<T*>(c);
+                }
+
+                return nullptr;
+            }
+
             bool isSelected() const { return selected; }
             void setSelected(bool select) { selected = select; }
 

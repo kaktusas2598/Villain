@@ -18,6 +18,8 @@ namespace Villain {
 
             /// SceneNode metatable bindings
             static int lua_SceneNode_getName(lua_State *L);
+            static int lua_SceneNode_getComponent(lua_State *L);
+            static int lua_SceneNode_setPosition(lua_State *L);
 
             /// General Bindings
             static int lua_playSound(lua_State *L);
