@@ -6,7 +6,6 @@
 
 namespace Villain {
 
-    // TODO: Rething is this class is even needed anymore?? Only runChunk() (not working) used in DebugConsole and init() called by StateParser
     class ScriptEngine {
         public:
             ScriptEngine();
@@ -37,21 +36,8 @@ namespace Villain {
                 script->close();
             }
 
-            // Dispatch event from the engine to lua by calling listener in lua
-            // First param will always be entity Id, second param is optional
-            // Will need a better way to pass different params
-            void dispatch(const std::string listener, int firstParam, int secondParam = -1);
-
             // Issues next task for dynamic behaviours/coroutines
             void issueNextTask(int id);
-
-            /*static int lua_registerListener(lua_State *L) {
-                Entity* entity = (Entity*)lua_touserdata(L, 1);
-                std::string type = (std::string)lua_tostring(L, 2);
-                std::string listener = (std::string)lua_tostring(L, 3);
-                entity->registerListener(type, listener);
-                return 0;
-            }*/
 
             // Temporary place, this method should go to dedicated scripting classes
             bool luaOk(lua_State* L, int call) {
@@ -63,7 +49,6 @@ namespace Villain {
                 }
                 return true;
             }
-            //------------------------------------------------------------------------------------
 
         private:
             static ScriptEngine* s_pInstance;

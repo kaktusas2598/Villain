@@ -69,22 +69,6 @@ namespace Villain {
         return std::string();
     }
 
-    void ScriptEngine::dispatch(const std::string listener, int firstParam, int secondParam) {
-        // Find appropriate lua function and call
-        if (!listener.empty()){
-            lua_getglobal(state, listener.c_str());
-            lua_pushnumber(state, firstParam);
-            // Need a better way to handle params, this would break if we actually want to pass -1
-            if (secondParam != -1) {
-                lua_pushnumber(state, secondParam);
-            }
-
-            if (luaOk(state, lua_pcall(state, 2, 0, 0))) {
-                //std::cout << "Listener invoked successfully" << std::endl;
-            }
-        }
-    }
-
     void ScriptEngine::issueNextTask(int id) {
         lua_getglobal(state, "issueNextTask");
         if (lua_isfunction(state, -1)) {
