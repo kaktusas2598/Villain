@@ -57,7 +57,6 @@ namespace Villain {
             }
         }
 
-        VILLAIN_WARN("Lua error in getComponent(): component \"{}\" not found", componentName);
         lua_pushnil(L);
         return 1;
     }
