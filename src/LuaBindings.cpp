@@ -23,6 +23,7 @@ namespace Villain {
         luaL_Reg sceneNodeMethods[] = {
             { "getName", lua_SceneNode_getName },
             { "getComponent", lua_SceneNode_getComponent },
+            { "getPosition", lua_SceneNode_getPosition },
             { "setPosition", lua_SceneNode_setPosition },
             // Add more methods as needed
             { NULL, NULL } // The array must be null-terminated
@@ -61,21 +62,19 @@ namespace Villain {
         return 1;
     }
 
-    int LuaBindings::lua_SceneNode_setPosition(lua_State *L) {
-        // Check if the number of arguments is correct (expected 4: self + 3 for x, y, z)
-        int numArgs = lua_gettop(L);
-        if (numArgs != 4) {
-            luaL_error(L, "Invalid number of arguments. Expected 3 (x, y, z).");
-            return 0;
-        }
-
+    int LuaBindings::lua_SceneNode_getPosition(lua_State *L) {
         SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
-        float x = static_cast<float>(luaL_checknumber(L, 2));
-        float y = static_cast<float>(luaL_checknumber(L, 3));
-        float z = static_cast<float>(luaL_checknumber(L, 4));
+        glm::vec3 position = node->getTransform()->getPos();
 
-        node->getTransform()->setPos({x, y, z});
+        pushVec3ToLua(L, position);
+        return 1;
+    }
 
+    int LuaBindings::lua_SceneNode_setPosition(lua_State *L) {
+        SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
+        glm::vec3 position = readVec3FromLua(L, 2);
+
+        node->getTransform()->setPos(position);
         return 0;
     }
 
@@ -117,5 +116,36 @@ namespace Villain {
     int LuaBindings::lua_quit(lua_State *L) {
         Engine::setRunning(false);
         return 0;
+    }
+
+    void LuaBindings::pushVec3ToLua(lua_State* L, const glm::vec3& vec) {
+        lua_newtable(L);
+        lua_pushnumber(L, vec.x);
+        lua_setfield(L, -2, "x");
+        lua_pushnumber(L, vec.y);
+        lua_setfield(L, -2, "y");
+        lua_pushnumber(L, vec.z);
+        lua_setfield(L, -2, "z");
+    }
+
+    glm::vec3 LuaBindings::readVec3FromLua(lua_State* L, int index) {
+        glm::vec3 vec;
+
+        lua_pushstring(L, "x");
+        lua_gettable(L, index);
+        vec.x = static_cast<float>(lua_tonumber(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "y");
+        lua_gettable(L, index);
+        vec.y = static_cast<float>(lua_tonumber(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "z");
+        lua_gettable(L, index);
+        vec.z = static_cast<float>(lua_tonumber(L, -1));
+        lua_pop(L, 1);
+
+        return vec;
     }
 }
