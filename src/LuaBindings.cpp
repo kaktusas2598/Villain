@@ -3,6 +3,8 @@
 #include "Engine.hpp"
 #include "SoundManager.hpp"
 
+#include "components/RigidBodyComponent.hpp"
+
 namespace Villain {
 
     void LuaBindings::registerBindings(lua_State* L) {
@@ -74,7 +76,14 @@ namespace Villain {
         SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
         glm::vec3 position = readVec3FromLua(L, 2);
 
-        node->getTransform()->setPos(position);
+        // Rigid body will override node position so set it explicitely if node has it
+        if (node->getComponent<RigidBodyComponent>()) {
+            RigidBodyComponent* rg = node->getComponent<RigidBodyComponent>();
+            rg->getBody()->setPosition(position);
+        } else {
+            node->getTransform()->setPos(position);
+        }
+
         return 0;
     }
 
