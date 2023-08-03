@@ -35,8 +35,9 @@ cmrc_add_resource_library(VillainResourceLibrary ALIAS Villain::ResourceLibrary 
 
 find_package(Lua REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-find_package(SDL2_mixer REQUIRED)
+#find_package(SDL2_ttf REQUIRED)
+#find_package(SDL2_mixer REQUIRED)
+find_package(OpenAL REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(assimp REQUIRED)
