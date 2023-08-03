@@ -1,9 +1,9 @@
 #include "SceneGraphEditor.hpp"
 
 
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/string_cast.hpp"
-#include "imgui/imgui.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <imgui/imgui.h>
 
 #include "Application.hpp"
 #include "Engine.hpp"
@@ -13,6 +13,7 @@
 #include "components/MeshRenderer.hpp"
 #include "components/ModelRenderer.hpp"
 #include "components/MoveController.hpp"
+#include "components/ScriptComponent.hpp"
 #include "rendering/MeshUtils.hpp"
 
 namespace Villain {
@@ -44,7 +45,12 @@ namespace Villain {
                             }
                     }
                 }
+                // Load script for selected node
+                if (e.getExtension() == ".lua") {
+                    selectedNode->addComponent(new ScriptComponent(e.getRootPath() + e.getRelativePath()));
+                }
             }
+
             // Open scene graph xml file
             if (e.getExtension() == ".xml") {
                 editor->getEngine()->getApplication()->loadScene(e.getFileName());
@@ -244,6 +250,11 @@ namespace Villain {
                             selectedNode->addComponent(new KinematicController(body, col));
                         else
                             selectedNode->addComponent(new RigidBodyComponent(body, col));
+                    }
+                    break;
+                case ComponentType::Script:
+                    if (ImGui::Button("Add Script")) {
+                        editor->getFileBrowser().openPopup();
                     }
                     break;
                 case ComponentType::None:
@@ -458,16 +469,24 @@ namespace Villain {
                 }
 
                 if (compo->getID() == GetId<LookController>()) {
+                    editor->renderIcon("\uf06e"); ImGui::SameLine();
                     ImGui::Text("Look Controller");
-                    auto control = dynamic_cast<LookController*>(compo);
+                    auto control = static_cast<LookController*>(compo);
                     ImGui::DragFloat("Mouse sensitivity", control->getSensitivity());
                     ImGui::Checkbox("Constrain Pitch", control->getConstrainPitch());
                 }
 
                 if (compo->getID() == GetId<MoveController>()) {
+                    editor->renderIcon("\uf554"); ImGui::SameLine();
                     ImGui::Text("Move Controller");
-                    auto control = dynamic_cast<MoveController*>(compo);
+                    auto control = static_cast<MoveController*>(compo);
                     ImGui::DragFloat("Movement speed", control->getSpeed());
+                }
+
+                if (compo->getID() == GetId<ScriptComponent>()) {
+                    auto script = static_cast<ScriptComponent*>(compo);
+                    editor->renderIcon("\uf186"); ImGui::SameLine();
+                    ImGui::Text("Script: %s", script->getScript().getFilename().c_str());
                 }
 
                 ImGui::Separator();

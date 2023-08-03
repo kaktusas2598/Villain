@@ -132,6 +132,7 @@ namespace Villain {
             }
 
             lua_State* getLuaState() { return L; }
+            std::string getFilename() const { return fileName; }
         private:
             bool luaOk(lua_State* L, int call) {
                 if (call != LUA_OK) {

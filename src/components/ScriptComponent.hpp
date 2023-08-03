@@ -23,6 +23,8 @@ namespace Villain {
 
             /// Forwards Engine events to optional lua event callbacks defined by user
             void onEvent(Event& event);
+
+            LuaScript& getScript() { return script; }
         private:
             LuaScript script;
     };

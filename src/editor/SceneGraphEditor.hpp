@@ -28,7 +28,7 @@ namespace Villain {
             ImGuiLayer* editor = nullptr;
             SceneNode* selectedNode = nullptr;
 
-            enum class ComponentType { Camera, Light, Mesh, Model, MoveController, LookController, RigidBody, None };
+            enum class ComponentType { Camera, Light, Mesh, Model, MoveController, LookController, RigidBody, Script, None };
             std::map<ComponentType, const char*> componentNames = {
                 { ComponentType::None, "None" },
                 { ComponentType::Camera, "Camera" },
@@ -37,7 +37,8 @@ namespace Villain {
                 { ComponentType::Model, "Model" },
                 { ComponentType::MoveController, "Move Controller" },
                 { ComponentType::LookController, "Look Controller" },
-                { ComponentType::RigidBody, "Rigid Body" }
+                { ComponentType::RigidBody, "Rigid Body" },
+                { ComponentType::Script, "Script" }
             };
             ComponentType selectedComponent = ComponentType::None;
 
