@@ -1,10 +1,12 @@
 #include "AudioBuffer.hpp"
 
 #include "AudioLoader.hpp"
+#include "Logger.hpp"
 
 namespace Villain {
 
     AudioBuffer::AudioBuffer(const std::string& fileName) {
+        VILLAIN_INFO("Loading audio: {} ", fileName);
         bufferId = AudioLoader::loadWAV(fileName);
 
         alGenSources(1, &sourceId);
@@ -50,6 +52,11 @@ namespace Villain {
 
     void AudioBuffer::setLooping(bool loop) {
         alSourcei(sourceId, AL_LOOPING, loop ? AL_TRUE: AL_FALSE);
+    }
+
+    void AudioBuffer::setDistanceAttenuation(float referenceDistance, float maxDistance) {
+        alSourcef(sourceId, AL_REFERENCE_DISTANCE, referenceDistance);
+        alSourcef(sourceId, AL_MAX_DISTANCE, maxDistance);
     }
 
     void AudioBuffer::setPosition(const glm::vec3& position) {

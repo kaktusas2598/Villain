@@ -6,7 +6,8 @@
 
 namespace Villain {
 
-    // TODO: Audio callbacks, Doppler effect, better error handling, decrease volume over the distance
+    // TODO: 1. Separate AL sources to AudioSource class
+    // TODO: 2. Audio callbacks, Doppler effect, better error handling, decrease volume over the distance
     /// Represents both OpenAL buffer and a source
     class AudioBuffer {
         public:
@@ -26,6 +27,9 @@ namespace Villain {
             void setPitch(float pitch);
             /// Set if audio source should loop or not
             void setLooping(bool loop);
+            /// Setup distance attenation - reference distance is distance where sound will be heard at original volume
+            /// max distance at which sound will be heard
+            void setDistanceAttenuation(float referenceDistance, float maxDistance);
 
             /// 3D sound position and orientation setters
             void setPosition(const glm::vec3& position);

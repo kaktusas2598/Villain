@@ -24,6 +24,10 @@ namespace Villain {
             alcDestroyContext(context);
             alcCloseDevice(device);
         }
+
+        // Set distance model for 3D audio
+        alDistanceModel(AL_INVERSE_DISTANCE);
+        //alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
     }
 
     AudioEngine::~AudioEngine() {
@@ -39,6 +43,7 @@ namespace Villain {
 
     void AudioEngine::setListenerPosition(const glm::vec3& pos) {
         alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+        alListener3f(AL_VELOCITY, 0, 0, 0);
     }
 
     void AudioEngine::setListenerOrientation(const glm::vec3& forward, const glm::vec3& up) {
