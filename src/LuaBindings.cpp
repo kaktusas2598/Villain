@@ -1,7 +1,6 @@
 #include "LuaBindings.hpp"
 
 #include "Engine.hpp"
-#include "SoundManager.hpp"
 
 #include "components/RigidBodyComponent.hpp"
 
@@ -10,8 +9,6 @@ namespace Villain {
     void LuaBindings::registerBindings(lua_State* L) {
         // Register C++ -> Lua wrappers
         // NOTE: Must be done before running lua script
-        lua_register(L, "playSound", lua_playSound);
-        lua_register(L, "playMusic", lua_playMusic);
         lua_register(L, "getScreenWidth", lua_getScreenWidth);
         lua_register(L, "getScreenHeight", lua_getScreenHeight);
         lua_register(L, "addLog", lua_addLog);
@@ -84,18 +81,6 @@ namespace Villain {
             node->getTransform()->setPos(position);
         }
 
-        return 0;
-    }
-
-    int LuaBindings::lua_playSound(lua_State *L) {
-        std::string soundID = (std::string)lua_tostring(L, 1);
-        SoundManager::Instance()->playSound(soundID, 0);
-        return 0;
-    }
-
-    int LuaBindings::lua_playMusic(lua_State *L) {
-        std::string soundID = (std::string)lua_tostring(L, 1);
-        SoundManager::Instance()->playMusic(soundID, 0);
         return 0;
     }
 

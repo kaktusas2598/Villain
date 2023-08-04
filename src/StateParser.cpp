@@ -2,8 +2,6 @@
 
 #include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
-#include "SoundManager.hpp"
-//#include "EntityManager.hpp"
 #include "ScriptEngine.hpp"
 #include "IGameScreen.hpp"
 
@@ -125,23 +123,23 @@ namespace Villain {
 
     void StateParser::parseSounds(tinyxml2::XMLElement* pStateRoot, std::vector<std::string> *pSoundIDs) {
         Logger::Instance()->info("Loading sounds.");
-        for (tinyxml2::XMLElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
-            std::string filename = e->Attribute("filename");
-            std::string id = e->Attribute("ID");
-            int type  = e->IntAttribute("type");
-            //e->Attribute("type", &type);
-            SoundType soundType;
-            switch (type) {
-            case 0:
-                soundType = SOUND_MUSIC;
-                break;
-            default:
-                soundType = SOUND_SFX;
-                break;
-            }
-            pSoundIDs->push_back(id);
-            SoundManager::Instance()->load(filename, id, soundType);
-        }
+        //for (tinyxml2::XMLElement *e = pStateRoot->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+            //std::string filename = e->Attribute("filename");
+            //std::string id = e->Attribute("ID");
+            //int type  = e->IntAttribute("type");
+            ////e->Attribute("type", &type);
+            //SoundType soundType;
+            //switch (type) {
+            //case 0:
+                //soundType = SOUND_MUSIC;
+                //break;
+            //default:
+                //soundType = SOUND_SFX;
+                //break;
+            //}
+            //pSoundIDs->push_back(id);
+            //SoundManager::Instance()->load(filename, id, soundType);
+        //}
     }
 
     void StateParser::parseScripts(tinyxml2::XMLElement* pScriptRoot) {

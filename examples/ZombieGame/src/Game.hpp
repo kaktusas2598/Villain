@@ -3,7 +3,6 @@
 
 #include "Application.hpp"
 #include "ResourceManager.hpp"
-#include "rendering/SpriteFont.hpp"
 #include "rendering/SpriteBatch.hpp"
 #include "tiled/Level.hpp"
 #include "Timer.hpp"
@@ -51,8 +50,6 @@ class Game : public Villain::Application {
         int numZombiesKilled = 0;
 
         Villain::SpriteBatch textBatch;
-        Villain::SpriteFont* spriteFont;
-
         Villain::FreeType* freeType;
 
         Villain::ParticleEngine2D particleEngine;

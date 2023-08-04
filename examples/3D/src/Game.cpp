@@ -168,6 +168,8 @@ void Game::init() {
     }
 
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
+
+    ResourceManager::Instance()->loadAudio("zombie.wav", "zombie");
 }
 
 void Game::handleEvents(float deltaTime) {

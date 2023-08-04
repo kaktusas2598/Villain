@@ -4,8 +4,6 @@
 #include "StateParser.hpp"
 //#include "LevelParser.hpp"
 #include "ResourceManager.hpp"
-#include "SoundManager.hpp"
-//#include "EntityManager.hpp"
 #include "ScriptEngine.hpp"
 #include "Logger.hpp"
 
@@ -54,7 +52,7 @@ namespace Villain {
         //ResourceManager::Instance()->clearTexture(textureIDs[i]);
         //}
 
-        SoundManager::Instance()->cleanSoundMaps();
+        ResourceManager::Instance()->clearAudioMap();
 
         ScriptEngine::Instance()->close();
 
