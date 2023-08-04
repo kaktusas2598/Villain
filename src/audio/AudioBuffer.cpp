@@ -17,16 +17,14 @@ namespace Villain {
         alDeleteBuffers(1, &bufferId);
     }
 
-    void AudioBuffer::play() {
-        // Play the sound
-        alSourcePlay(sourceId);
+    bool AudioBuffer::isPlaying() {
+        ALint state;
+        alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+        return state == AL_PLAYING;
+    }
 
-        // Wait until the sound finishes playing
-        // TODO: will have to use this later on and implement callback support 100%
-        //ALint state;
-        //do {
-            //alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
-        //} while (state == AL_PLAYING);
+    void AudioBuffer::play() {
+        alSourcePlay(sourceId);
     }
 
     void AudioBuffer::pause() {
@@ -56,7 +54,6 @@ namespace Villain {
     void AudioBuffer::setPosition(const glm::vec3& position) {
         alSource3f(sourceId, AL_POSITION, position.x, position.y, position.z);
     }
-
 
     void AudioBuffer::setDirection(const glm::vec3& direction) {
         alSource3f(sourceId, AL_DIRECTION, direction.x, direction.y, direction.z);

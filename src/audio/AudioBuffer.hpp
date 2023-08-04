@@ -14,6 +14,7 @@ namespace Villain {
             ~AudioBuffer();
 
             /// Playback Controls
+            bool isPlaying();
             void play();
             void pause();
             void stop();
