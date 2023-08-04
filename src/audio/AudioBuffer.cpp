@@ -12,6 +12,7 @@ namespace Villain {
     }
 
     AudioBuffer::~AudioBuffer() {
+        stop();
         // Clean up OpenAL resources
         alDeleteSources(1, &sourceId);
         alDeleteBuffers(1, &bufferId);
@@ -61,7 +62,7 @@ namespace Villain {
 
     void AudioBuffer::setPositionDirection(const glm::vec3& position, const glm::vec3& listenerPosition) {
         setPosition(position);
-        setDirection(glm::normalize(listenerPosition - listenerPosition));
+        setDirection(glm::normalize(listenerPosition - position));
     }
 
     void AudioBuffer::setVelocity(const glm::vec3& velocity) {
