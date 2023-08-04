@@ -18,7 +18,6 @@
 #include "FileUtils.hpp"
 
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 namespace Villain {
 
@@ -56,16 +55,6 @@ namespace Villain {
         if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
         {
             exitWithError("Could Not Initialize SDL.");
-        }
-
-        //Initialize PNG loading
-        // int imgFlags = IMG_INIT_PNG;
-        //if ( !( IMG_Init( imgFlags ) & imgFlags ) ) {
-        //exitWithError(IMG_GetError());
-        //}
-
-        if( TTF_Init() == -1 ) {
-            exitWithError(TTF_GetError());
         }
 
         // set up a double buffered window (minimizes flickering)
@@ -433,9 +422,6 @@ namespace Villain {
 
         imGuiLayer.exit();
         nuklearLayer.exit();
-
-        TTF_Quit();
-        //IMG_Quit();
 
         SDL_GL_DeleteContext(SDL_GL_GetCurrentContext());
         SDL_DestroyWindow(window.getSDLWindow());
