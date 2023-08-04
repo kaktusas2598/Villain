@@ -40,26 +40,4 @@ namespace Villain {
         ALfloat listenerOrientation[] = { forwardX, forwardY, forwardZ, upX, upY, upZ };
         alListenerfv(AL_ORIENTATION, listenerOrientation);
     }
-
-    void AudioEngine::playWAV(ALuint audioBuffer) {
-        // Create an OpenAL source and attach the buffer to it
-        ALuint source;
-        alGenSources(1, &source);
-        alSourcei(source, AL_BUFFER, audioBuffer);
-
-        // Play the sound
-        alSourcePlay(source);
-
-        // Wait until the sound finishes playing
-        ALint state;
-        do {
-            alGetSourcei(source, AL_SOURCE_STATE, &state);
-        } while (state == AL_PLAYING);
-
-        // Clean up OpenAL resources
-        alDeleteSources(1, &source);
-
-        //TODO: when do we exactly clean the buffer?
-        //alDeleteBuffers(1, &audioBuffer);
-    }
 }
