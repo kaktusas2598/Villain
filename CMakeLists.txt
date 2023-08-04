@@ -35,8 +35,6 @@ cmrc_add_resource_library(VillainResourceLibrary ALIAS Villain::ResourceLibrary 
 
 find_package(Lua REQUIRED)
 find_package(SDL2 REQUIRED)
-#find_package(SDL2_ttf REQUIRED)
-#find_package(SDL2_mixer REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
@@ -64,6 +62,15 @@ add_library(${PROJECT_NAME} STATIC ${sources} )
 # Specify extra directories with their own CMakeLists.txt for this build
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/imgui)
+
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+set(BUILD_EXAMPLES OFF)
+set(BUILD_PROGRAMS OFF)
+set(ENABLE_HARDCODED_TABLES OFF)
+set(BUILD_REGTEST OFF)
+set(BUILD_TESTING OFF)
+add_subdirectory(vendor/libsndfile)
+
 add_subdirectory(vendor/spdlog)
 set(tinyxml2_BUILD_TESTING 0)
 add_subdirectory(vendor/tinyxml2)
@@ -102,7 +109,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/vendor)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm spdlog imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${BOX2D_LIBRARIES} Villain::ResourceLibrary)
+target_link_libraries(${PROJECT_NAME} ${assimp_LIBRARIES} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${OpenGL_LIBRARIES} ${GLEW_LIBRARIES} ${CMAKE_DL_LIBS} glm spdlog imgui stb_image nuklear tinyxml2 ${FREETYPE_LIBRARIES} ${OPENAL_LIBRARY} sndfile ${BOX2D_LIBRARIES} Villain::ResourceLibrary)
 
 if(VILLAIN_BUILD_TESTS)
     add_subdirectory(vendor/catch2 tests/out)
