@@ -16,3 +16,6 @@
 [submodule "vendor/doxygen-awesome-css"]
 	path = vendor/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "vendor/libsndfile"]
+	path = vendor/libsndfile
+	url = https://github.com/libsndfile/libsndfile.git
