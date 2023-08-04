@@ -44,6 +44,24 @@ namespace Villain {
         }
     }
 
+    AudioBuffer* ResourceManager::getAudio(const std::string& id) {
+        if (audioMap.find(id) != audioMap.end()) {
+            return audioMap[id];
+        } else {
+            VILLAIN_WARN("Audio {} not found", id);
+            return nullptr;
+        }
+    }
+
+    void ResourceManager::clearAudioMap() {
+        audioMap.clear();
+    }
+
+    void ResourceManager::clearAudio(std::string id) {
+        delete audioMap[id];
+        audioMap.erase(id);
+    }
+
     void ResourceManager::clearMaterialMap() {
         materialMap.clear();
     }
@@ -167,4 +185,26 @@ namespace Villain {
         return shaderMap[id];
     }
 
+    AudioBuffer* ResourceManager::loadAudio(const std::string& fileName, std::string id) {
+        if (audioMap.find(id) != audioMap.end())
+            return audioMap[id];
+
+        AudioBuffer* audio = nullptr;
+        for (const std::string& directory : searchDirectories) {
+            std::string fullPath = directory + fileName;
+            if (FileUtils::fileExists(fullPath)) {
+                audio = new AudioBuffer(fullPath.c_str());
+                break;
+            }
+        }
+
+        if (audio) {
+            audioMap[id] = audio;
+            return audio;
+        } else {
+            // Resource not found
+            VILLAIN_ERROR("Audio file {} not found!", fileName);
+            return nullptr;
+        }
+    }
 }
