@@ -17,8 +17,6 @@
 #include "rendering/Mesh.hpp"
 #include "FileUtils.hpp"
 
-#include <SDL2/SDL_image.h>
-
 namespace Villain {
 
     int Engine::screenWidth;
