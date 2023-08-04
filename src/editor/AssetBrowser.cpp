@@ -12,9 +12,9 @@ namespace Villain {
         editor->renderIcon("\uf001"); ImGui::SameLine();
         if (ImGui::TreeNode("Audio")) {
             for (auto const& t: ResourceManager::Instance()->getAudioMap()) {
-                if (ImGui::TreeNode(t.first.c_str())) {
+                // NOTE: Not sure why using tree node correct sound was playing only when closing the node
+                if (ImGui::Selectable(t.first.c_str())) {
                     t.second->play();
-                    ImGui::TreePop();
                 }
             }
 
