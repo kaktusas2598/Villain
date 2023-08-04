@@ -121,7 +121,6 @@ First install the dependencies and when use build instructions below.
     sudo apt-get install -y liblua5.4-dev
     sudo apt-get install -y libassimp-dev
     sudo apt-get install -y libopenal-dev
-    sudo apt-get install -y libbullet-dev (Optional at the moment)
 
 ### Building
 
