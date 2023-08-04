@@ -70,7 +70,6 @@ void Game::init() {
     spriteBatch.init();
     textBatch.init();
 
-    spriteFont = new SpriteFont("assets/fonts/chintzy.ttf", 32);
     freeType = new FreeType("assets/fonts/PixelEmulator.ttf", 16);
 
     // Main game player
