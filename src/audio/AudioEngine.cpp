@@ -32,6 +32,15 @@ namespace Villain {
         alcCloseDevice(device);
     }
 
+    void AudioEngine::setListenerPosition(ALfloat x, ALfloat y, ALfloat z) {
+        alListener3f(AL_POSITION, x, y, z);
+    }
+
+    void AudioEngine::setListenerOrientation(ALfloat forwardX, ALfloat forwardY, ALfloat forwardZ, ALfloat upX, ALfloat upY, ALfloat upZ) {
+        ALfloat listenerOrientation[] = { forwardX, forwardY, forwardZ, upX, upY, upZ };
+        alListenerfv(AL_ORIENTATION, listenerOrientation);
+    }
+
     void AudioEngine::playWAV(ALuint audioBuffer) {
         // Create an OpenAL source and attach the buffer to it
         ALuint source;
