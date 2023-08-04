@@ -170,6 +170,8 @@ void Game::init() {
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
 
     ResourceManager::Instance()->loadAudio("zombie.wav", "zombie");
+    ResourceManager::Instance()->loadAudio("horse.wav", "horse");
+    //ResourceManager::Instance()->getAudio("zombie")->setLooping(true);
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -183,6 +185,22 @@ void Game::onAppPreUpdate(float dt) {
 }
 
 void Game::onAppPostUpdate(float dt) {
+    Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
+    AudioBuffer* horse = ResourceManager::Instance()->getAudio("horse");
+    horse->setPositionDirection(glm::vec3(0.0f), mainCamera->getPosition());
+    if (!horse->isPlaying())
+        horse->play();
+
+    AudioBuffer* zombie = ResourceManager::Instance()->getAudio("zombie");
+    if (Input::Get()->isKeyPressed(SDLK_p)) {
+        zombie->setPositionDirection(glm::vec3(0.0f), mainCamera->getPosition());
+
+        if (zombie->isPlaying()) {
+            zombie->pause();
+        } else {
+            zombie->play();
+        }
+    }
 }
 
 void Game::onAppRender(float dt) {
