@@ -10,6 +10,7 @@
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
 * Debug/Editor mode UI for scene graph editing
+* Attach simple Lua scripts to scene nodes for basic scripting
 * Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes
 * Error logging to stdout, log file and editor console
 * Event Dispatcher system
@@ -57,15 +58,15 @@
 
 * Editor planned features:
     * Hot reloading resources
-    * Saving current scene
+    * Saving current scene (In progress)
     * Scene camera, gizmos?
 * Physics Engine planned additions:
-    * Stability improvements, optimizations
+    * Stability improvements, optimizations (In progress)
     * Constraints: rods, cables, hinges, joints
     * Terrain contact generator
     * Collision events, triggers
     * Data driven approach for particle types and emitters
-* Lua Scripting
+* Lua Scripting (In progress)
 * Entity Component System?
 * Environmental mapping(reflections and refractions)
 * 3D Mesh batch rendering
@@ -75,6 +76,7 @@
 * Blending skeletal animations
 * Embedded texture support
 * Integrate terrain rendering features from 'Terrain' example
+* 3D Audio/Sound effect engine with OpenAL (In Progress)
 
 ## Screenshots
 
@@ -86,7 +88,8 @@
 ## Used Libraries
 
  * [OpenGL](https://www.opengl.org) - Renderer
- * [SDL2](https://www.libsdl.org/) - for window creation and input handling, sound, version 2.0.20 used at the moment
+ * [OpenAL](https://www.openal.org/) - Cross-platform 3D sound API
+ * [SDL2](https://www.libsdl.org/) - for window creation and input handling, version 2.0.20 used at the moment
  * [GLEW](https://glew.sourceforge.net/) - extension library for loading OpenGL functions
  * [GLM](https://glm.g-truc.net/0.9.8/index.html) - C++ Mathematics library for graphics applications.
  * [ImGui](https://github.com/ocornut/imgui) - Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies (for engine tooling)
@@ -95,6 +98,7 @@
  * [FreeType](https://freetype.org/index.html) - freely available software library to render fonts
  * [tinyxml2](https://github.com/leethomason/tinyxml2) - Simple, small, efficient C++ XML parser
  * [assimp](https://github.com/assimp/assimp) - Open Asset Importer Library for loading 3D models
+ * [libsndfile](http://www.mega-nerd.com/libsndfile/) - For reading and writing audio files
  * [spdlog](https://github.com/gabime/spdlog)- Very fast, header-only C++ logging library
  * [lua](https://www.lua.org/) - For scripting, configuration
  * [Catch2](https://github.com/catchorg/Catch2) - Modern C++ Test Framework
@@ -114,11 +118,9 @@ First install the dependencies and when use build instructions below.
 ### Dependencies
     sudo apt-get install -y libglew-dev
     sudo apt-get install -y libsdl2-dev
-    sudo apt-get install -y libsdl2-mixer-dev
-    sudo apt-get install -y libsdl2-image-dev
-    sudo apt-get install -y libsdl2-ttf-dev
     sudo apt-get install -y liblua5.4-dev
     sudo apt-get install -y libassimp-dev
+    sudo apt-get install -y libopenal-dev
     sudo apt-get install -y libbullet-dev (Optional at the moment)
 
 ### Building
@@ -139,8 +141,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
 
 ## FIXME/TODOS
 
- * SpriteFont class - all glyphs are packed to single GL texture for performance and their sizes
-     seem correct, but glyphs themselves are rendering weirdly
  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
  * Finish refactoring/porting StateParser class from Vigilant engine!
