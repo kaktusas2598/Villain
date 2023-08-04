@@ -17,7 +17,6 @@
 #include "Gun.hpp"
 #include "Player.hpp"
 #include "Zombie.hpp"
-#include "SoundManager.hpp"
 
 using namespace Villain;
 
@@ -26,12 +25,11 @@ const float ZOMBIE_SPEED = 40.f;
 const float ZOMBIE_DAMAGE = 5.f;
 
 void Game::init() {
-    SoundManager::Instance()->load("assets/audio/drive.mp3", "drive", SoundType::SOUND_MUSIC);
-    SoundManager::Instance()->load("assets/audio/pistol.wav", "pistol", SoundType::SOUND_SFX, -50);
-    SoundManager::Instance()->load("assets/audio/cg1.wav", "rifle", SoundType::SOUND_SFX, -60);
-    SoundManager::Instance()->load("assets/audio/shotgun.wav", "shotgun", SoundType::SOUND_SFX, -50);
-    SoundManager::Instance()->load("assets/audio/zombie.wav", "zombie", SoundType::SOUND_SFX, -20);
-    //SoundManager::Instance()->playMusic("drive");
+    ResourceManager::Instance()->loadAudio("assets/audio/drive.mp3", "drive");
+    ResourceManager::Instance()->loadAudio("assets/audio/pistol.wav", "pistol");
+    ResourceManager::Instance()->loadAudio("assets/audio/cg1.wav", "rifle");
+    ResourceManager::Instance()->loadAudio("assets/audio/shotgun.wav", "shotgun");
+    ResourceManager::Instance()->loadAudio("assets/audio/zombie.wav", "zombie");
 
     camera = new Camera(CameraType::ORTHOGRAPHIC_2D);
     hudCamera = new Camera(CameraType::ORTHOGRAPHIC_2D);
@@ -128,7 +126,7 @@ Game::~Game() {
         delete humans[i];
     }
 
-    SoundManager::Instance()->cleanSoundMaps();
+    ResourceManager::Instance()->clearAudioMap();
     //ResourceManager::Instance()->clearTextureMap();
 }
 
@@ -264,7 +262,7 @@ void Game::onAppPreUpdate(float dt) {
                 delete humans[j];
                 humans[j] = humans.back();
                 humans.pop_back();
-                SoundManager::Instance()->playSound("zombie");
+                ResourceManager::Instance()->getAudio("zombie")->play();
             }
         }
 

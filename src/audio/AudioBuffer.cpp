@@ -22,9 +22,10 @@ namespace Villain {
         alSourcePlay(sourceId);
 
         // Wait until the sound finishes playing
-        ALint state;
-        do {
-            alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
-        } while (state == AL_PLAYING);
+        // TODO: will have to use this later on and implement callback support 100%
+        //ALint state;
+        //do {
+            //alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+        //} while (state == AL_PLAYING);
     }
 }

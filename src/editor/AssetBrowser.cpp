@@ -2,14 +2,24 @@
 
 #include "editor/ImGuiLayer.hpp"
 #include "imgui/imgui.h"
-
 #include "ResourceManager.hpp"
-#include "SoundManager.hpp"
 
 namespace Villain {
 
     void AssetBrowser::render() {
         ImGui::Begin("Asset Browser");
+
+        editor->renderIcon("\uf001"); ImGui::SameLine();
+        if (ImGui::TreeNode("Audio")) {
+            for (auto const& t: ResourceManager::Instance()->getAudioMap()) {
+                if (ImGui::TreeNode(t.first.c_str())) {
+                    t.second->play();
+                    ImGui::TreePop();
+                }
+            }
+
+            ImGui::TreePop();
+        }
 
         editor->renderIcon("\uf5aa"); ImGui::SameLine();
         if (ImGui::TreeNode("Materials")) {
@@ -21,6 +31,7 @@ namespace Villain {
 
             ImGui::TreePop();
         }
+
         editor->renderIcon("\uf1b3"); ImGui::SameLine();
         if (ImGui::TreeNode("Models")) {
             for (auto const& t: ResourceManager::Instance()->getModelMap()) {
@@ -31,34 +42,11 @@ namespace Villain {
 
             ImGui::TreePop();
         }
-        editor->renderIcon("\uf001"); ImGui::SameLine();
-        if (ImGui::TreeNode("Music")) {
-            for (auto const& t: SoundManager::Instance()->getMusicMap()) {
-                if (ImGui::TreeNode(t.first.c_str())) {
-                    SoundManager::Instance()->playMusic(t.first);
 
-                    ImGui::TreePop();
-                }
-            }
-
-            ImGui::TreePop();
-        }
         editor->renderIcon("\uf0ad"); ImGui::SameLine();
         if (ImGui::TreeNode("Shaders")) {
             for (auto const& t: ResourceManager::Instance()->getShaderMap()) {
                 if (ImGui::TreeNode(t.first.c_str())) {
-                    ImGui::TreePop();
-                }
-            }
-
-            ImGui::TreePop();
-        }
-        editor->renderIcon("\uf001"); ImGui::SameLine();
-        if (ImGui::TreeNode("Sound FX")) {
-            for (auto const& t: SoundManager::Instance()->getSoundFXMap()) {
-                if (ImGui::TreeNode(t.first.c_str())) {
-                    SoundManager::Instance()->playSound(t.first);
-
                     ImGui::TreePop();
                 }
             }

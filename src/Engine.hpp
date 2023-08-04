@@ -5,6 +5,7 @@
 #include "Timer.hpp"
 #include "Window.hpp"
 
+#include "audio/AudioEngine.hpp"
 #include "editor/DebugConsole.hpp"
 #include "editor/ImGuiLayer.hpp"
 #include "physics/ParticleWorld.hpp"
@@ -98,5 +99,6 @@ namespace Villain {
             std::unique_ptr<RenderingEngine> renderingEngine = nullptr;
             Application* application = nullptr; ///< User engine application
             std::unique_ptr<EventDispatcher> eventDispatcher;
+            AudioEngine audioEngine;
     };
 }

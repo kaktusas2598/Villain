@@ -30,8 +30,6 @@ namespace Villain {
             static glm::vec3 readVec3FromLua(lua_State* L, int index);
 
             /// General Bindings
-            static int lua_playSound(lua_State *L);
-            static int lua_playMusic(lua_State *L);
             static int lua_getScreenWidth(lua_State *L);
             static int lua_getScreenHeight(lua_State *L);
             static int lua_addLog(lua_State *L);
