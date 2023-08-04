@@ -32,12 +32,17 @@ namespace Villain {
         alcCloseDevice(device);
     }
 
-    void AudioEngine::setListenerPosition(ALfloat x, ALfloat y, ALfloat z) {
-        alListener3f(AL_POSITION, x, y, z);
+    void AudioEngine::update(const glm::vec3& listenerPos, const glm::vec3& listenerForward, const glm::vec3& listenerUp) {
+        setListenerPosition(listenerPos);
+        setListenerOrientation(listenerForward, listenerUp);
     }
 
-    void AudioEngine::setListenerOrientation(ALfloat forwardX, ALfloat forwardY, ALfloat forwardZ, ALfloat upX, ALfloat upY, ALfloat upZ) {
-        ALfloat listenerOrientation[] = { forwardX, forwardY, forwardZ, upX, upY, upZ };
+    void AudioEngine::setListenerPosition(const glm::vec3& pos) {
+        alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+    }
+
+    void AudioEngine::setListenerOrientation(const glm::vec3& forward, const glm::vec3& up) {
+        ALfloat listenerOrientation[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
         alListenerfv(AL_ORIENTATION, listenerOrientation);
     }
 }

@@ -65,11 +65,12 @@ namespace Villain {
             inline Application* getApplication() { return application; }
             inline EventDispatcher* getEventDispatcher() { return eventDispatcher.get(); }
 
+            AudioEngine& getAudioEngine() { return audioEngine; }
             FrameBuffer* getSceneBuffer() { return sceneBuffer.get(); }
             ImGuiLayer& getImGuiLayer() { return imGuiLayer; }
             UILayer& getUILayer() { return nuklearLayer; }
             UIManager& getUIManager() { return nuklearLayer.getManager(); }
-            Window getWindow() { return window; }
+            Window& getWindow() { return window; }
 
             static int getScreenWidth();
             static int getScreenHeight();

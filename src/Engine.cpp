@@ -219,6 +219,10 @@ namespace Villain {
                 application->update(deltaTime);
                 application->onAppPostUpdate(deltaTime);
 
+                if (renderingEngine->getMainCamera() && renderingEngine->getMainCamera()->getType() != CameraType::ORTHOGRAPHIC_2D) {
+                    Camera* mainCam = renderingEngine->getMainCamera();
+                    audioEngine.update(mainCam->getPosition(), mainCam->getFront(), mainCam->getUp());
+                }
                 rigidBodyWorld->runPhysics(deltaTime);
 
                 totalDeltaTime -= deltaTime;
