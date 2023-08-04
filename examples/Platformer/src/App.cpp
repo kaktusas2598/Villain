@@ -3,7 +3,6 @@
 #include "Engine.hpp"
 #include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
-#include "SoundManager.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 
@@ -23,10 +22,7 @@ void App::addStates() {
     stateMachine->setScreen(menuScreen->getID());
 }
 
-App::~App() {
-    SoundManager::Instance()->cleanSoundMaps();
-    //ResourceManager::Instance()->clearTextureMap();
-}
+App::~App() {}
 
 void App::onAppWindowResize(int newWidth, int newHeight) {
     if (stateMachine->getCurrentScreen()->getID() == gameScreen->getID())
