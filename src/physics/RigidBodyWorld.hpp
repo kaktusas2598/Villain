@@ -18,7 +18,7 @@ namespace Villain {
             typedef std::vector<CollisionPrimitive*> Colliders;
 
             /// If not iterations are provided, when it will be four times the number of contacts used
-            RigidBodyWorld(unsigned maxContacts, unsigned iterations = 0);
+            RigidBodyWorld(Engine* e, unsigned maxContacts, unsigned iterations = 0);
             ~RigidBodyWorld();
 
             /// Calls all contact generators to report any contacts and returns numbers of generated contacts
@@ -55,5 +55,7 @@ namespace Villain {
 
             bool debugDrawEnabled = false;
             DebugRenderer debugRenderer;
+        private:
+            Engine* engine = nullptr;
     };
 }

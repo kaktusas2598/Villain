@@ -1,13 +1,15 @@
 #include "RigidBodyWorld.hpp"
 
+#include "Engine.hpp"
 #include "camera/Camera.hpp"
+#include "events/CollisionEvent.hpp"
 
 #include <Logger.hpp>
 
 namespace Villain {
 
-    RigidBodyWorld::RigidBodyWorld(unsigned maxContacts, unsigned iterations)
-        : resolver(iterations), maxContacts(maxContacts) {
+    RigidBodyWorld::RigidBodyWorld(Engine* e, unsigned maxContacts, unsigned iterations)
+        : engine(e), resolver(iterations), maxContacts(maxContacts) {
         debugRenderer.init();
         contacts = new Contact[maxContacts];
         calculateIterations = (iterations == 0);
@@ -96,7 +98,17 @@ namespace Villain {
 
         // And process them
         if (calculateIterations) resolver.setIterations(usedContacts * 4);
-        resolver.resolveContacts(contacts, usedContacts, deltaTime);
+        if (usedContacts) {
+            // Dispatch collision events
+            Contact* nextContact = contacts;
+            for (int i = 0; i < usedContacts; i++) {
+                CollisionEvent collisionEvent = CollisionEvent(nextContact->getBody(0), nextContact->getBody(1));
+                engine->getEventDispatcher()->dispatchEvent(collisionEvent);
+                nextContact++;
+            }
+            // Resolve all contacts
+            resolver.resolveContacts(contacts, usedContacts, deltaTime);
+        }
     }
 
     void RigidBodyWorld::debugDraw(Camera* camera) {
