@@ -7,7 +7,7 @@ function Update(deltaTime, node)
 end
 
 music = GetAudio("assets/audio/TownTheme.mp3")
-pitch = 1.0
+Pitch = 1.0
 -- Optional callback
 function OnKey(key, node)
     --if (node:getComponent("Camera")) then
@@ -16,19 +16,19 @@ function OnKey(key, node)
 
     --music = GetAudio("themeMusic")
     music:setVolume(0.02)
-    music:setPitch(pitch)
+    music:setPitch(Pitch)
     if (key == KeyCode("r")) then
-        pitch = pitch - 0.01
+        Pitch = Pitch - 0.01
         local position = { x = 0.0, y = 20.0, z = 0.0 }
         node:setPosition(position)
         music:play()
     end
-    local position = node:getPosition()
+    --local position = node:getPosition()
     --print(position.x, position.y, position.z)
 end
 
 function OnCollide(node, thisBody, otherBody)
-    print("Node: " .. node:getName())
+    --print("Node: " .. node:getName())
     if not isNil(otherBody) then
         print("This mass: " .. thisBody:getMass() .. " Other mass: " .. otherBody:getMass())
     end
