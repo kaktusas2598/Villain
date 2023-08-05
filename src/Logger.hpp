@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ErrorHandler.hpp"
-#include "LuaScript.hpp"
+#include "script/LuaScript.hpp"
 #include "editor/DebugConsole.hpp"
 #include "spdlog/common.h"
 

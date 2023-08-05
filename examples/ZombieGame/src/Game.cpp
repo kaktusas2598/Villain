@@ -4,7 +4,6 @@
 #include "ErrorHandler.hpp"
 #include "audio/AudioSource.hpp"
 #include "tiled/LevelParser.hpp"
-#include "LuaScript.hpp"
 #include "ResourceManager.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"

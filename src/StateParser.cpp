@@ -2,7 +2,7 @@
 
 #include "ErrorHandler.hpp"
 #include "ResourceManager.hpp"
-#include "ScriptEngine.hpp"
+#include "script/ScriptEngine.hpp"
 #include "IGameScreen.hpp"
 
 #include "Logger.hpp"

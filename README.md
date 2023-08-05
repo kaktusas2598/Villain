@@ -52,6 +52,7 @@
   * Collision Detection system:
       * Broad-Phase: Bounding Volume Hiearchy (Separate from rigid engine ATM)
       * Narrow-Phase: planes, spheres, OBBs
+  * Collision events
   * Collision Resolution using iterative contact resolver
   * Basic friction model
 
@@ -65,9 +66,9 @@
     * Stability improvements, optimizations (In progress)
     * Constraints: rods, cables, hinges, joints
     * Terrain contact generator
-    * Collision events, triggers
+    * Triggers
     * Data driven approach for particle types and emitters
-* Lua Scripting (In progress)
+* Lua Scripting API (In progress)
 * Entity Component System?
 * Environmental mapping(reflections and refractions)
 * 3D Mesh batch rendering
@@ -116,11 +117,7 @@
 First install the dependencies and when use build instructions below.
 
 ### Dependencies
-    sudo apt-get install -y libglew-dev
-    sudo apt-get install -y libsdl2-dev
-    sudo apt-get install -y liblua5.4-dev
-    sudo apt-get install -y libassimp-dev
-    sudo apt-get install -y libopenal-dev
+    sudo apt-get install -y libglew-dev libsdl2-dev liblua5.4-dev libassimp-dev libopenal-dev
 
 ### Building
 

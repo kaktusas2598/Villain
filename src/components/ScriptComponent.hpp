@@ -1,7 +1,7 @@
 #pragma once
 
 #include "EventDispatcher.hpp"
-#include "LuaScript.hpp"
+#include "script/LuaScript.hpp"
 #include "NodeComponent.hpp"
 
 namespace Villain {

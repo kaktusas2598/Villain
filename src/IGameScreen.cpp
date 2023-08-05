@@ -4,7 +4,7 @@
 #include "StateParser.hpp"
 //#include "LevelParser.hpp"
 #include "ResourceManager.hpp"
-#include "ScriptEngine.hpp"
+#include "script/ScriptEngine.hpp"
 #include "Logger.hpp"
 
 namespace Villain {

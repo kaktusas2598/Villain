@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "Input.hpp"
-#include "ScriptEngine.hpp"
+#include "script/ScriptEngine.hpp"
 #include "imgui/imgui.h"
 
 namespace Villain {

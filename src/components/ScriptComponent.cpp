@@ -1,7 +1,7 @@
 #include "ScriptComponent.hpp"
 
 #include "Engine.hpp"
-#include "LuaBindings.hpp"
+#include "script/LuaBindings.hpp"
 
 #include "events/CollisionEvent.hpp"
 #include "events/KeyboardEvent.hpp"
