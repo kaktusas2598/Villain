@@ -1,6 +1,5 @@
 var structVillain_1_1CollisionData =
 [
-    [ "CollisionData", "structVillain_1_1CollisionData.html#a5237d51317959fec15a8e10ee171d544", null ],
     [ "addContacts", "structVillain_1_1CollisionData.html#abd5d40c53a3e9aa744e5453f0a0020ee", null ],
     [ "contactCount", "structVillain_1_1CollisionData.html#ad6eb67cd1d9ec26ee24281b09afe5522", null ],
     [ "contacts", "structVillain_1_1CollisionData.html#a83536f493c9a9360a70641be78842f35", null ],

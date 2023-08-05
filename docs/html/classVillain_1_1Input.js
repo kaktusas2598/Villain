@@ -2,11 +2,7 @@ var classVillain_1_1Input =
 [
     [ "addInputCharacter", "classVillain_1_1Input.html#acc1d0307ddb8602c0a39963e7fb72008", null ],
     [ "addInputCharacters", "classVillain_1_1Input.html#ae3dbafcf236dde168f11cb8256989fde", null ],
-    [ "getEventType", "classVillain_1_1Input.html#a4a345bb9e5c1783e4bfd38b389e69fad", null ],
-    [ "getInChars", "classVillain_1_1Input.html#a157a6c2323801e59e3f81247dcd25ea2", null ],
-    [ "getMouseButtonState", "classVillain_1_1Input.html#a7f768c4b0b987a9c3de05a94d9cbfa14", null ],
     [ "getMouseCoords", "classVillain_1_1Input.html#a86c4776b266bf6811ea246158ea580b0", null ],
-    [ "getMouseOffsets", "classVillain_1_1Input.html#a78a0692b93f4552e9f4f278933b95551", null ],
     [ "isKeyDown", "classVillain_1_1Input.html#a3b2bc1561eb192759887181de61df82e", null ],
     [ "isKeyPressed", "classVillain_1_1Input.html#a753ae55a4ecae0ae9f49681d5f1d44c3", null ],
     [ "pressKey", "classVillain_1_1Input.html#ad02753a4a71275822a0977571ccfd385", null ],

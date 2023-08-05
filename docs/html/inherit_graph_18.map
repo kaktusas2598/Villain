@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structVillain_1_1DebugConsole.html" title=" " alt="" coords="5,5,171,32"/>
+<area shape="rect" id="node1" href="$classVillain_1_1CollisionPrimitive.html" title="Represents primitive to detect collision against." alt="" coords="5,56,192,83"/>
+<area shape="rect" id="node2" href="$classVillain_1_1CollisionBox.html" title="Represents a rigid body that can be treated as an axis&#45;aligned box for collision detection." alt="" coords="250,5,402,32"/>
+<area shape="rect" id="node3" href="$classVillain_1_1CollisionPlane.html" title="Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with worl..." alt="" coords="245,56,407,83"/>
+<area shape="rect" id="node4" href="$classVillain_1_1CollisionSphere.html" title="Represents a rigid body that can be treated as a sphere for collision detection." alt="" coords="240,107,412,133"/>
 </map>

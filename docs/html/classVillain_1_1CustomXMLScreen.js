@@ -1,7 +1,5 @@
 var classVillain_1_1CustomXMLScreen =
 [
-    [ "CustomXMLScreen", "classVillain_1_1CustomXMLScreen.html#a5053ce20252a72b614637107a746455d", null ],
-    [ "~CustomXMLScreen", "classVillain_1_1CustomXMLScreen.html#af49d8881587807a85017819536558e35", null ],
     [ "build", "classVillain_1_1CustomXMLScreen.html#aa2e64b6cc214abb637eecb6f328ec294", null ],
     [ "destroy", "classVillain_1_1CustomXMLScreen.html#a65566630140d0f4a4bdde399c1663050", null ],
     [ "draw", "classVillain_1_1CustomXMLScreen.html#a69692edbdd6b54937a6ec8c4574d5588", null ],

@@ -1,11 +1,9 @@
 var classVillain_1_1ContactResolver =
 [
-    [ "ContactResolver", "classVillain_1_1ContactResolver.html#a7ad273693e9cc28042d88d4de214fec7", null ],
     [ "adjustPositions", "classVillain_1_1ContactResolver.html#ac084a38fb908e0f924585c473a62e557", null ],
     [ "adjustVelocities", "classVillain_1_1ContactResolver.html#a44b9fa91d26035c5d232015b8fe2af30", null ],
     [ "prepareContacts", "classVillain_1_1ContactResolver.html#ac536ae2bcc26e6ca60ca0871917c6034", null ],
     [ "resolveContacts", "classVillain_1_1ContactResolver.html#a55083a65f1d63dccc8172c96bfb09859", null ],
-    [ "setIterations", "classVillain_1_1ContactResolver.html#a7a14773c2a863b4bd7d02157a2816424", null ],
     [ "positionEpsilon", "classVillain_1_1ContactResolver.html#a915f293bb47d632e04a58393f34c0003", null ],
     [ "positionIterations", "classVillain_1_1ContactResolver.html#ae403ca57d50066295f6e3a5412d03013", null ],
     [ "positionIterationsUsed", "classVillain_1_1ContactResolver.html#afe819a05024dd3397ca4d763d910848f", null ],

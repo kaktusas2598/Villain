@@ -1,27 +1,5 @@
 var classVillain_1_1Shader =
 [
-    [ "Shader", "classVillain_1_1Shader.html#a3f4bd16a6e975a84748b818b60b8a01a", null ],
-    [ "Shader", "classVillain_1_1Shader.html#ab0cac72d6c058d776fd14a790ad9a4c8", null ],
-    [ "Shader", "classVillain_1_1Shader.html#aff26533c3001e4c904015cd85f2253a2", null ],
-    [ "~Shader", "classVillain_1_1Shader.html#a272c1593b8df7139bc90c332e65c730a", null ],
-    [ "bind", "classVillain_1_1Shader.html#ab04f77ca38279d85a06e3f15cddf0b1a", null ],
-    [ "createFromSource", "classVillain_1_1Shader.html#ae12152ec179f6e8e1e792d920f001eca", null ],
-    [ "createFromSource", "classVillain_1_1Shader.html#ae61d36567033ed8e11a8bdefe38b369d", null ],
-    [ "getRendererID", "classVillain_1_1Shader.html#a8b9df373f3f1df2c74d8683ffcdfcaa7", null ],
-    [ "includeHeader", "classVillain_1_1Shader.html#a605bbb6bd598169081cd63ef879e17db", null ],
-    [ "setDirectionalLightUniforms", "classVillain_1_1Shader.html#a0a08d13aa8b953b6c34d8c0f3ab1a900", null ],
-    [ "setFogUniforms", "classVillain_1_1Shader.html#a4e92e229c5da1f208f86f555f9acffa8", null ],
-    [ "setMaterialUniforms", "classVillain_1_1Shader.html#aad68820de8a21d2c5db7a617af3ee493", null ],
-    [ "setPointLightUniforms", "classVillain_1_1Shader.html#a7ba9466474c5429a1548cc6d86b53ab1", null ],
-    [ "setSpotLightUniforms", "classVillain_1_1Shader.html#ad5bdd6cae91565e068bab4344bedf9f3", null ],
-    [ "setUniform1f", "classVillain_1_1Shader.html#ae60bec30eb55ba230c8890d5e6b0fbd6", null ],
     [ "setUniform1i", "classVillain_1_1Shader.html#a128d45e8d674529eec5b5041a510e9d6", null ],
-    [ "setUniform1ui", "classVillain_1_1Shader.html#a46ef39d06c7c58c18708943c3e42546a", null ],
-    [ "setUniform3f", "classVillain_1_1Shader.html#a79db5184c53562484260f941a92eac6b", null ],
-    [ "setUniform4f", "classVillain_1_1Shader.html#a75479b9d501c9f59086a5d62b24d2e85", null ],
-    [ "setUniformMat4f", "classVillain_1_1Shader.html#a6e0ef8751c30fc13f0bbd27d660b4676", null ],
-    [ "setUniformVec3", "classVillain_1_1Shader.html#a0a73463b818e6512aae843e56e4d7acd", null ],
-    [ "setUniformVec4", "classVillain_1_1Shader.html#a7e1b7a0d9b2263cedfbe658345fd124f", null ],
-    [ "unbind", "classVillain_1_1Shader.html#a518b9252e29de1ddfc97cb494afc800a", null ],
-    [ "updateUniforms", "classVillain_1_1Shader.html#af5addc5ee92d9a2cb43003b53c08de94", null ]
+    [ "updateUniforms", "classVillain_1_1Shader.html#aab02430e5fda38e589caa4bd746cf0db", null ]
 ];

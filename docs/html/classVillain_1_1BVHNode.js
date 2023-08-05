@@ -1,6 +1,5 @@
 var classVillain_1_1BVHNode =
 [
-    [ "BVHNode", "classVillain_1_1BVHNode.html#ac29aa1567a79ac72e4f748ef61d2f516", null ],
     [ "~BVHNode", "classVillain_1_1BVHNode.html#a383692c05d52d96f3c46391917ad3936", null ],
     [ "getPotentialContacts", "classVillain_1_1BVHNode.html#a1ceb187af0793dad9ebc76020eab70a2", null ],
     [ "getPotentialContactsWith", "classVillain_1_1BVHNode.html#a0b781a9d6e48b78226facb31e1f660af", null ],

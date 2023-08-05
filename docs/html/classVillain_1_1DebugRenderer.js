@@ -1,8 +1,6 @@
 var classVillain_1_1DebugRenderer =
 [
-    [ "DebugVertex", "structVillain_1_1DebugRenderer_1_1DebugVertex.html", "structVillain_1_1DebugRenderer_1_1DebugVertex" ],
-    [ "DebugRenderer", "classVillain_1_1DebugRenderer.html#a2da9c669a665835a137dc5e6c8afa656", null ],
-    [ "~DebugRenderer", "classVillain_1_1DebugRenderer.html#a7c4e60bdc282681492d427f521904460", null ],
+    [ "DebugVertex", "structVillain_1_1DebugRenderer_1_1DebugVertex.html", null ],
     [ "drawBox", "classVillain_1_1DebugRenderer.html#a6e229ec97b4b5cacd780db33321385e9", null ],
     [ "drawBox3D", "classVillain_1_1DebugRenderer.html#a946303fa2551635cc791570530b19cb9", null ],
     [ "drawBox3DRotated", "classVillain_1_1DebugRenderer.html#ad7ecf9b6d981ce23da8f4cb99a039e65", null ],
@@ -13,7 +11,6 @@ var classVillain_1_1DebugRenderer =
     [ "drawQuad", "classVillain_1_1DebugRenderer.html#a084083f432ead4c4c27054888609c31f", null ],
     [ "drawQuadraticBezierCurve", "classVillain_1_1DebugRenderer.html#adf551f74c5e24163e876c2d8637b5217", null ],
     [ "drawSphere", "classVillain_1_1DebugRenderer.html#a64e496a15313c80fade8edaad7b4197c", null ],
-    [ "end", "classVillain_1_1DebugRenderer.html#a03361133db833b09ba6c59fc64fbd10f", null ],
     [ "init", "classVillain_1_1DebugRenderer.html#a68dcadd23af582265d3bab7c2237cc8f", null ],
     [ "render", "classVillain_1_1DebugRenderer.html#a34fce44e776952bae1fac85273ac0f2f", null ]
 ];

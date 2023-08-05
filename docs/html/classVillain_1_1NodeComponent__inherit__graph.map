@@ -1,5 +1,5 @@
 <map id="Villain::NodeComponent" name="Villain::NodeComponent">
-<area shape="rect" id="node1" title="Component for Scene Graph node." alt="" coords="5,275,185,301"/>
+<area shape="rect" id="node1" title="Component for Scene Graph node." alt="" coords="5,300,185,327"/>
 <area shape="rect" id="node2" href="$classVillain_1_1BaseLight.html" title=" " alt="" coords="272,56,407,83"/>
 <area shape="rect" id="node6" href="$classVillain_1_1Camera.html" title="Main engine Camera class." alt="" coords="278,107,401,133"/>
 <area shape="rect" id="node7" href="$classVillain_1_1LookController.html" title=" " alt="" coords="256,157,423,184"/>
@@ -9,6 +9,7 @@
 <area shape="rect" id="node11" href="$classVillain_1_1ParticleEmitter.html" title=" " alt="" coords="256,376,423,403"/>
 <area shape="rect" id="node12" href="$classVillain_1_1ParticlePhysicsComponent.html" title="Represents some kind of physical particle system or device." alt="" coords="255,427,423,469"/>
 <area shape="rect" id="node13" href="$classVillain_1_1RigidBodyComponent.html" title="Represents a rigid body in screne graph, can associate force generators and optionally specify collid..." alt="" coords="233,493,445,520"/>
+<area shape="rect" id="node16" href="$classVillain_1_1ScriptComponent.html" title="Allows attaching Lua script to a node in scene graph." alt="" coords="248,544,431,571"/>
 <area shape="rect" id="node3" href="$classVillain_1_1DirectionalLight.html" title=" " alt="" coords="507,5,681,32"/>
 <area shape="rect" id="node4" href="$classVillain_1_1PointLight.html" title=" " alt="" coords="526,56,662,83"/>
 <area shape="rect" id="node5" href="$classVillain_1_1SpotLight.html" title=" " alt="" coords="528,107,660,133"/>

@@ -16,7 +16,6 @@ var dir_1243271318b2b38807a3b1d2ca08dd72 =
     [ "SkyBox.hpp", "SkyBox_8hpp_source.html", null ],
     [ "Sprite.hpp", "Sprite_8hpp_source.html", null ],
     [ "SpriteBatch.hpp", "SpriteBatch_8hpp_source.html", null ],
-    [ "SpriteFont.hpp", "SpriteFont_8hpp_source.html", null ],
     [ "Texture.hpp", "Texture_8hpp_source.html", null ],
     [ "TileAtlas.hpp", "TileAtlas_8hpp_source.html", null ],
     [ "Vertex.hpp", "Vertex_8hpp_source.html", null ],
