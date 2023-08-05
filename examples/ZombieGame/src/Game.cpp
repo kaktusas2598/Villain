@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 #include "ErrorHandler.hpp"
+#include "audio/AudioSource.hpp"
 #include "tiled/LevelParser.hpp"
 #include "LuaScript.hpp"
 #include "ResourceManager.hpp"
@@ -262,7 +263,8 @@ void Game::onAppPreUpdate(float dt) {
                 delete humans[j];
                 humans[j] = humans.back();
                 humans.pop_back();
-                ResourceManager::Instance()->getAudio("zombie")->play();
+                AudioSource* zSound = new AudioSource(ResourceManager::Instance()->getAudio("zombie"));
+                zSound->play();
             }
         }
 

@@ -1,5 +1,6 @@
 #include "Gun.hpp"
 #include "ResourceManager.hpp"
+#include "audio/AudioSource.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 #include <random>
 #include <ctime>
@@ -33,7 +34,8 @@ void Gun::fire(const glm::vec2& position, const glm::vec2& direction, std::vecto
     static std::mt19937 rndEngine(time(nullptr));
     static std::uniform_real_distribution<float> dist(-spread, spread);
 
-    Villain::ResourceManager::Instance()->getAudio(sound)->play();
+    Villain::AudioSource* fireSound = new Villain::AudioSource(Villain::ResourceManager::Instance()->getAudio(sound));
+    fireSound->play();
 
     for (int i = 0; i < bulletsPerShot; i++) {
         bullets.emplace_back(position, glm::rotate(direction, glm::radians(dist(rndEngine))), bulletSpeed, bulletLifetime, bulletDamage);
