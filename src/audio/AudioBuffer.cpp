@@ -7,7 +7,7 @@ namespace Villain {
 
     AudioBuffer::AudioBuffer(const std::string& fileName) {
         VILLAIN_INFO("Loading audio: {} ", fileName);
-        bufferId = AudioLoader::loadWAV(fileName);
+        bufferId = AudioLoader::loadAudio(fileName);
 
         alGenSources(1, &sourceId);
         alSourcei(sourceId, AL_BUFFER, bufferId);

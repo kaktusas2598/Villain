@@ -5,26 +5,31 @@
 #include <AL/al.h>
 #include <AL/alext.h>
 
+#include <climits>
 #include <sndfile.h>
 
 namespace Villain {
 
-    unsigned AudioLoader::loadWAV(const std::string& fileName) {
+    unsigned AudioLoader::loadAudio(const std::string& fileName) {
+        ALenum format, err;
         ALuint buffer;
         ALint byteblockalign = 0;
         ALint splblockalign = 0;
+        short* membuf;
         SF_INFO fileInfo;
         enum SampleFormatType sampleFormat = Int16;
+        sf_count_t numFrames, numChannels;
+        ALsizei numBytes;
+
         // Load audio data using libsndfile
         SNDFILE* sndFile = sf_open(fileName.c_str(), SFM_READ, &fileInfo);
-
-        // Error handling
         if (!sndFile) {
             VILLAIN_CRIT("Could not open audio in {}: {}", fileName, sf_strerror(sndFile));
         }
+        numChannels = fileInfo.channels;
 
         // Check if audio is usable
-        if(fileInfo.frames < 1) {
+        if(fileInfo.frames < 1 || fileInfo.frames > (sf_count_t)(INT_MAX / sizeof(short)) / numChannels) {
             VILLAIN_CRIT("Bad sample count in {} ", fileName);
             sf_close(sndFile);
             return 0;
@@ -64,12 +69,20 @@ namespace Villain {
                 break;
         }
 
+        // Decode audio file into buffer
+        membuf = static_cast<short*>(malloc((size_t)(fileInfo.frames * numChannels) * sizeof(short)));
+        numFrames = sf_readf_short(sndFile, membuf, fileInfo.frames);
+        if (numFrames < 1) {
+            free(membuf);
+            sf_close(sndFile);
+            VILLAIN_CRIT("Failed to read samples in {} ", fileName);
+            return 0;
+        }
+        numBytes = (ALsizei)(numFrames * numChannels) * (ALsizei)sizeof(short);
+
         // Read audio data from libsndfile and populate the OpenAL buffer
-        const sf_count_t numFrames = fileInfo.frames;
-        const sf_count_t numChannels = fileInfo.channels;
-        const sf_count_t numSamples = numFrames * numChannels;
-        float* samples = new float[numSamples];
-        ALenum format, err;
+        //const sf_count_t numSamples = numFrames * numChannels;
+        //float* samples = new float[numSamples];
 
         if (numChannels == 1) {
             if(sampleFormat == Int16)
@@ -97,22 +110,12 @@ namespace Villain {
             return 0;
         }
 
-        // TODO: will have to read based on sample format so maybe sf_readf_short or sth
-        sf_readf_float(sndFile, samples, numFrames);
-
-        // Convert floating-point samples to 16-bit signed integer samples
-        ALshort* bufferData = new ALshort[numSamples];
-        for (int i = 0; i < numSamples; i++) {
-            // Scale the floating-point sample to the range of a 16-bit signed integer (-32768 to 32767)
-            bufferData[i] = static_cast<ALshort>(samples[i] * 32767.0f);
-        }
-
-        // Create OpenAL buffer to hold audio data
+        // Create OpenAL buffer to hold audio data and cleanup
+        buffer = 0;
         alGenBuffers(1, &buffer);
+        alBufferData(buffer, format, membuf, numBytes, fileInfo.samplerate);
 
-        // Upload buffer and cleanup
-        alBufferData(buffer, format, bufferData, numSamples * sizeof(ALshort), fileInfo.samplerate);
-        delete[] samples;
+        free(membuf);
         sf_close(sndFile);
 
         err = alGetError();
