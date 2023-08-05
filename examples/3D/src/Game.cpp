@@ -171,6 +171,7 @@ void Game::init() {
 
     zombie = new AudioSource(ResourceManager::Instance()->loadAudio("zombie.wav", "zombie"));
     zombieMono = new AudioSource(ResourceManager::Instance()->loadAudio("zombie_mono.wav", "zombieMono"));
+    themeMusic = new AudioSource(ResourceManager::Instance()->loadAudio("TownTheme.mp3", "themeMusic"));
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -197,6 +198,10 @@ void Game::onAppPostUpdate(float dt) {
         } else {
             zombie->play();
         }
+    }
+    if (Input::Get()->isKeyPressed(SDLK_m)) {
+        themeMusic->setVolume(0.05);
+        themeMusic->play();
     }
 }
 

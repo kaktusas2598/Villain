@@ -5,7 +5,6 @@
 
 namespace Villain {
 
-    // TODO: 1. Audio callbacks, Doppler effect, better error handling, decrease volume over the distance
     /// Represents an audio source (speaker)
     class AudioSource {
         public:

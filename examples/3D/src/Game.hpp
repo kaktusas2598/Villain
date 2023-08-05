@@ -36,4 +36,5 @@ class Game : public Villain::Application {
 
         Villain::AudioSource* zombie;
         Villain::AudioSource* zombieMono;
+        Villain::AudioSource* themeMusic;
 };

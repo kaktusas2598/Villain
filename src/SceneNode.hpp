@@ -62,6 +62,16 @@ namespace Villain {
                 }
                 return nullptr;
             }
+            SceneNode* findByName(const std::string& name) {
+                if (name == uid)
+                    return this;
+                for (unsigned int i = 0; i < children.size(); i++) {
+                    SceneNode* child = children[i]->findByName(name);
+                    if (child != nullptr) return child;
+                }
+                return nullptr;
+            }
+
             Transform* getTransform() { return &transform; }
             void setEngine(Engine* e);
             inline Engine* getEngine() { return engine; }

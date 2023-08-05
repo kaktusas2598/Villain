@@ -7,6 +7,11 @@
 
 namespace Villain {
 
+    // TODO: 1. Audio callbacks ( in sources)
+    // TODO: 2. Doppler effect (in sources)
+    // TODO: 3. better error handling
+    // TODO: 4. long buffer streaming for music
+    //
     /// Manages OpenAL context and updates listener
     class AudioEngine {
         public:
