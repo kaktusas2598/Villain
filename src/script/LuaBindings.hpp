@@ -17,6 +17,7 @@ namespace Villain {
 
         private:
             static void createAudioSourceMetatable(lua_State* L);
+            static void createRigidBodyMetatable(lua_State* L);
             static void createSceneNodeMetatable(lua_State* L);
 
             /// Core Bindings
@@ -26,8 +27,10 @@ namespace Villain {
             static int lua_addLog(lua_State *L);
             static int lua_keyCode(lua_State *L);
             static int lua_quit(lua_State *L);
+            /// Check if userdata is nil
+            static int lua_isNil(lua_State* L);
 
-            /// Audio Source Bindings
+            /// AudioSource metatable bindings
             static int lua_AudioSource_isPlaying(lua_State* L);
             static int lua_AudioSource_play(lua_State* L);
             static int lua_AudioSource_pause(lua_State* L);
@@ -38,6 +41,17 @@ namespace Villain {
             static int lua_AudioSource_setLooping(lua_State* L);
             static int lua_AudioSource_setPositions(lua_State* L);
             static int lua_AudioSource_setVelocity(lua_State* L);
+
+            /// RigidBody metatable bindings
+            static int lua_RigidBody_addForce(lua_State* L);
+            static int lua_RigidBody_addForceAtPoint(lua_State* L);
+            static int lua_RigidBody_getAwake(lua_State* L);
+            static int lua_RigidBody_getMass(lua_State* L);
+            static int lua_RigidBody_getInverseMass(lua_State* L);
+            static int lua_RigidBody_setPosition(lua_State* L);
+            static int lua_RigidBody_setOrientation(lua_State* L);
+            static int lua_RigidBody_addAngularVelocity(lua_State* L);
+            static int lua_RigidBody_addLinearVelocity(lua_State* L);
 
             /// SceneNode metatable bindings
             static int lua_SceneNode_getName(lua_State *L);

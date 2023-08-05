@@ -62,13 +62,18 @@ namespace Villain {
             CollisionEvent collisionEvent = static_cast<CollisionEvent&>(event);
             // Check if it was dispatched from the same node RigidBodyComponent
             if (collisionEvent.isVerified()) {
-                // TODO: test and need to send info about both bodies/colliders in this collision
                 lua_getglobal(script.getLuaState(), "OnCollide");
                 if (lua_isfunction(script.getLuaState(), -1)) {
                     lua_pushlightuserdata(script.getLuaState(), getParent());
                     luaL_setmetatable(script.getLuaState(), "SceneNode");
 
-                    if (lua_pcall(script.getLuaState(), 1, 0, 0) != LUA_OK) {
+                    lua_pushlightuserdata(script.getLuaState(), collisionEvent.getBody1());
+                    luaL_setmetatable(script.getLuaState(), "RigidBody");
+
+                    lua_pushlightuserdata(script.getLuaState(), collisionEvent.getBody2());
+                    luaL_setmetatable(script.getLuaState(), "RigidBody");
+
+                    if (lua_pcall(script.getLuaState(), 3, 0, 0) != LUA_OK) {
                         std::string errorMessage = lua_tostring(script.getLuaState(), -1);
                         VILLAIN_CRIT("Lua error in onCollide() for {}: {}", getParent()->getName(), errorMessage);
                     }

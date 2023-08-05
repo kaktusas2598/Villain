@@ -13,6 +13,9 @@ namespace Villain {
             RigidBody* getBody1() const { return body1; }
             RigidBody* getBody2() const { return body2; }
 
+            void setBody1(RigidBody* rb1) { body1 = rb1; }
+            void setBody2(RigidBody* rb2) { body2 = rb2; }
+
             void setVerified(bool verify) { verified = verify; }
             bool isVerified() const { return verified; }
 

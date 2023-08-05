@@ -54,6 +54,11 @@ namespace Villain {
                 ScriptComponent* scriptComponent = getParent()->getComponent<ScriptComponent>();
                 if (scriptComponent) {
                     collisionEvent.setVerified(true);
+                    // Make sure first body in event is same as one in node!
+                    if (collisionEvent.getBody2() == body) {
+                        collisionEvent.setBody2(collisionEvent.getBody1());
+                        collisionEvent.setBody1(body);
+                    }
                     scriptComponent->onEvent(collisionEvent);
                 }
             }

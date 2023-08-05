@@ -6,6 +6,7 @@
 #include "ResourceManager.hpp"
 #include "audio/AudioSource.hpp"
 #include "components/RigidBodyComponent.hpp"
+#include "physics/RigidBody.hpp"
 
 namespace Villain {
 
@@ -18,8 +19,10 @@ namespace Villain {
         lua_register(L, "AddLog", lua_addLog);
         lua_register(L, "KeyCode", lua_keyCode);
         lua_register(L, "Quit", lua_quit);
+        lua_register(L, "isNil", lua_isNil);
 
         createAudioSourceMetatable(L);
+        createRigidBodyMetatable(L);
         createSceneNodeMetatable(L);
     }
 
@@ -60,6 +63,28 @@ namespace Villain {
 
         if (luaL_newmetatable(L, "AudioSource")) {
             luaL_setfuncs(L, audioSourceMethods, 0);
+
+            lua_pushvalue(L, -1);
+            lua_setfield(L, -2, "__index");
+        }
+    }
+
+    void LuaBindings::createRigidBodyMetatable(lua_State* L) {
+        luaL_Reg rigidBodyMethods[] = {
+            { "addForce", lua_RigidBody_addForce },
+            { "addForceAtPoint", lua_RigidBody_addForceAtPoint },
+            { "getAwake", lua_RigidBody_getAwake },
+            { "getMass", lua_RigidBody_getMass },
+            { "getInverseMass", lua_RigidBody_getInverseMass },
+            { "setPosition", lua_RigidBody_setPosition },
+            { "setOrientation", lua_RigidBody_setOrientation },
+            { "addAngularVelocity", lua_RigidBody_addAngularVelocity },
+            { "addLinearVelocity", lua_RigidBody_addLinearVelocity },
+            { NULL, NULL } // The array must be null-terminated
+        };
+
+        if (luaL_newmetatable(L, "RigidBody")) {
+            luaL_setfuncs(L, rigidBodyMethods, 0);
 
             lua_pushvalue(L, -1);
             lua_setfield(L, -2, "__index");
@@ -132,6 +157,69 @@ AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
         return 0;
     }
 
+    int LuaBindings::lua_RigidBody_addForce(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        glm::vec3 force = readVec3FromLua(L, 2);
+        rb->addForce(force);
+        return 0;
+    }
+
+    int LuaBindings::lua_RigidBody_addForceAtPoint(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        glm::vec3 force = readVec3FromLua(L, 2);
+        glm::vec3 point = readVec3FromLua(L, 3);
+        rb->addForceAtPoint(force, point);
+        return 0;
+    }
+
+    int LuaBindings::lua_RigidBody_getAwake(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        lua_pushboolean(L, rb->getAwake());
+        return 1;
+    }
+
+    int LuaBindings::lua_RigidBody_getMass(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        lua_pushnumber(L, rb->getMass());
+        return 1;
+    }
+
+    int LuaBindings::lua_RigidBody_getInverseMass(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        lua_pushnumber(L, rb->getInverseMass());
+        return 1;
+    }
+
+    int LuaBindings::lua_RigidBody_setPosition(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        glm::vec3 pos = readVec3FromLua(L, 2);
+        rb->setPosition(pos);
+        return 0;
+    }
+
+    int LuaBindings::lua_RigidBody_setOrientation(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        glm::vec3 eulerAngles = readVec3FromLua(L, 2);
+        // Convert euler angles to a quaternion
+        glm::quat orientation = glm::quat(eulerAngles);
+        rb->setOrientation(orientation);
+        return 0;
+    }
+
+    int LuaBindings::lua_RigidBody_addAngularVelocity(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        glm::vec3 angularVel = readVec3FromLua(L, 2);
+        rb->addAngularVelocity(angularVel);
+        return 0;
+    }
+
+    int LuaBindings::lua_RigidBody_addLinearVelocity(lua_State* L) {
+        RigidBody* rb = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        glm::vec3 linearVel = readVec3FromLua(L, 2);
+        rb->addLinearVelocity(linearVel);
+        return 0;
+    }
+
     int LuaBindings::lua_SceneNode_getName(lua_State *L) {
         SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
         lua_pushstring(L, node->getName().c_str());
@@ -183,10 +271,8 @@ AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
         AudioBuffer* buffer = ResourceManager::Instance()->getAudio(fileName);
         if (!buffer)
             buffer = ResourceManager::Instance()->loadAudio(fileName, fileName);
-        //lua_pushlightuserdata(L, new AudioSource(buffer));
         // Create a new userdata to wrap the AudioSource
         AudioSource* userdata = new AudioSource(buffer);
-
         // Push the userdata to the Lua stack
         void* ptr = lua_newuserdata(L, sizeof(AudioSource));
         memcpy(ptr, userdata, sizeof(AudioSource));
@@ -237,6 +323,13 @@ AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
     int LuaBindings::lua_quit(lua_State *L) {
         Engine::setRunning(false);
         return 0;
+    }
+
+    int LuaBindings::lua_isNil(lua_State* L) {
+        //RigidBody* body = static_cast<RigidBody*>(lua_touserdata(L, 1));
+        void* userdata = static_cast<void*>(lua_touserdata(L, 1));
+        lua_pushboolean(L, userdata == nullptr);
+        return 1;
     }
 
     void LuaBindings::pushVec3ToLua(lua_State* L, const glm::vec3& vec) {
