@@ -2,6 +2,7 @@
 
 #include "Application.hpp"
 #include "camera/Camera.hpp"
+#include "audio/AudioSource.hpp"
 #include "components/FlightController.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/Model.hpp"
@@ -32,4 +33,7 @@ class Game : public Villain::Application {
         Villain::RigidBody* sphere2 = nullptr;
 
         Villain::RigidBody* boxBody = nullptr;
+
+        Villain::AudioSource* zombie;
+        Villain::AudioSource* zombieMono;
 };

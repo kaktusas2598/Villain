@@ -1,5 +1,6 @@
 #include "AssetBrowser.hpp"
 
+#include "audio/AudioSource.hpp"
 #include "editor/ImGuiLayer.hpp"
 #include "imgui/imgui.h"
 #include "ResourceManager.hpp"
@@ -14,7 +15,8 @@ namespace Villain {
             for (auto const& t: ResourceManager::Instance()->getAudioMap()) {
                 // NOTE: Not sure why using tree node correct sound was playing only when closing the node
                 if (ImGui::Selectable(t.first.c_str())) {
-                    t.second->play();
+                    AudioSource source(t.second);
+                    source.play();
                 }
             }
 

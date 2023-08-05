@@ -169,8 +169,8 @@ void Game::init() {
 
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
 
-    ResourceManager::Instance()->loadAudio("zombie.wav", "zombie");
-    ResourceManager::Instance()->loadAudio("zombie_mono.wav", "zombieMono");
+    zombie = new AudioSource(ResourceManager::Instance()->loadAudio("zombie.wav", "zombie"));
+    zombieMono = new AudioSource(ResourceManager::Instance()->loadAudio("zombie_mono.wav", "zombieMono"));
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -185,12 +185,10 @@ void Game::onAppPreUpdate(float dt) {
 
 void Game::onAppPostUpdate(float dt) {
     Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
-    AudioBuffer* zombieMono = ResourceManager::Instance()->getAudio("zombieMono");
     zombieMono->setPositionDirection(glm::vec3(0.0f), mainCamera->getPosition());
     if (!zombieMono->isPlaying())
         zombieMono->play();
 
-    AudioBuffer* zombie = ResourceManager::Instance()->getAudio("zombie");
     if (Input::Get()->isKeyPressed(SDLK_p)) {
         zombie->setPositionDirection(glm::vec3(0.0f), mainCamera->getPosition());
 

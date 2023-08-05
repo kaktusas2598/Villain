@@ -1,44 +1,18 @@
 #pragma once
 
 #include "AL/al.h"
-#include "glm/glm.hpp"
 #include <string>
 
 namespace Villain {
 
-    // TODO: 1. Separate AL sources to AudioSource class
-    // TODO: 2. Audio callbacks, Doppler effect, better error handling, decrease volume over the distance
-    /// Represents both OpenAL buffer and a source
+    /// Represents audio buffer which can be played and used by multiple sources
     class AudioBuffer {
         public:
             AudioBuffer(const std::string& fileName);
             ~AudioBuffer();
 
-            /// Playback Controls
-            bool isPlaying();
-            void play();
-            void pause();
-            void stop();
-            void rewind();
-
-            /// Volume control (0.0 to +inf) (default 1.0)
-            void setVolume(float volume);
-            /// Pitch(speed) control (0.0 to +inf) (default 1.0)
-            void setPitch(float pitch);
-            /// Set if audio source should loop or not
-            void setLooping(bool loop);
-            /// Setup distance attenation - reference distance is distance where sound will be heard at original volume
-            /// max distance at which sound will be heard
-            void setDistanceAttenuation(float referenceDistance, float maxDistance);
-
-            /// 3D sound position and orientation setters
-            void setPosition(const glm::vec3& position);
-            void setDirection(const glm::vec3& direction);
-            void setPositionDirection(const glm::vec3& position, const glm::vec3& listenerPosition);
-            void setVelocity(const glm::vec3& velocity);
-
+            ALuint getID() const { return bufferId; }
         private:
             ALuint bufferId;
-            ALuint sourceId;
     };
 }
