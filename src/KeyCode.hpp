@@ -51,6 +51,8 @@ namespace Villain {
         a = SDLK_a,
         s = SDLK_s,
         d = SDLK_d,
+
+        r = SDLK_r,
         LSHIFT = SDLK_LSHIFT
     };
 }

@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 
+#include "KeyCode.hpp"
 #include "components/RigidBodyComponent.hpp"
 
 namespace Villain {
@@ -9,10 +10,11 @@ namespace Villain {
     void LuaBindings::registerBindings(lua_State* L) {
         // Register C++ -> Lua wrappers
         // NOTE: Must be done before running lua script
-        lua_register(L, "getScreenWidth", lua_getScreenWidth);
-        lua_register(L, "getScreenHeight", lua_getScreenHeight);
-        lua_register(L, "addLog", lua_addLog);
-        lua_register(L, "quit", lua_quit);
+        lua_register(L, "GetScreenWidth", lua_getScreenWidth);
+        lua_register(L, "GetScreenHeight", lua_getScreenHeight);
+        lua_register(L, "AddLog", lua_addLog);
+        lua_register(L, "KeyCode", lua_keyCode);
+        lua_register(L, "Quit", lua_quit);
 
         createSceneNodeMetatable(L);
     }
@@ -105,6 +107,23 @@ namespace Villain {
             }
         }
         return 0;
+    }
+
+    int LuaBindings::lua_keyCode(lua_State *L) {
+        const char* keyName = luaL_checkstring(L, 1);
+
+        if (strcmp(keyName, "r") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::r));
+        } else if (strcmp(keyName, "space") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::SPACE));
+        } else if (strcmp(keyName, "enter") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::RETURN));
+        } else {
+            lua_pushinteger(L, static_cast<int>(KeyCode::UKNOWN));
+        }
+        // TODO: Add all the rest :/
+
+        return 1;
     }
 
     int LuaBindings::lua_quit(lua_State *L) {
