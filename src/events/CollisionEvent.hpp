@@ -13,6 +13,9 @@ namespace Villain {
             RigidBody* getBody1() const { return body1; }
             RigidBody* getBody2() const { return body2; }
 
+            void setVerified(bool verify) { verified = verify; }
+            bool isVerified() const { return verified; }
+
             VILLAIN_EVENT_TYPE(CollisionEvent);
 
         private:
@@ -20,6 +23,8 @@ namespace Villain {
             RigidBody* body2; // TODO: or do we want to use CollisionPrimitive or sth else here?
             // TODO: maybe contact data gets dispatched as well
             bool isTrigger; // TODO: trigger wil not generate response force
+
+            bool verified = false; ///< Event will be verified only if it's being forwarded to the same node in the scene graph
     };
 
 };

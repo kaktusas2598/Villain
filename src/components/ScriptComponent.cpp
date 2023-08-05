@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "LuaBindings.hpp"
 
+#include "events/CollisionEvent.hpp"
 #include "events/KeyboardEvent.hpp"
 
 namespace Villain {
@@ -55,8 +56,25 @@ namespace Villain {
                     VILLAIN_CRIT("Lua error in onKey() for {}: {}", getParent()->getName(), errorMessage);
                 }
             }
-
-            // TODO: other callbacks with appropriate params
         }
+
+        if (event.getType() == EventType::CollisionEvent) {
+            CollisionEvent collisionEvent = static_cast<CollisionEvent&>(event);
+            // Check if it was dispatched from the same node RigidBodyComponent
+            if (collisionEvent.isVerified()) {
+                // TODO: test and need to send info about both bodies/colliders in this collision
+                lua_getglobal(script.getLuaState(), "OnCollide");
+                if (lua_isfunction(script.getLuaState(), -1)) {
+                    lua_pushlightuserdata(script.getLuaState(), getParent());
+                    luaL_setmetatable(script.getLuaState(), "SceneNode");
+
+                    if (lua_pcall(script.getLuaState(), 1, 0, 0) != LUA_OK) {
+                        std::string errorMessage = lua_tostring(script.getLuaState(), -1);
+                        VILLAIN_CRIT("Lua error in onCollide() for {}: {}", getParent()->getName(), errorMessage);
+                    }
+                }
+            }
+        }
+        // TODO: other callbacks with appropriate params
     }
 }

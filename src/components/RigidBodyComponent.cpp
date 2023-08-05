@@ -1,6 +1,8 @@
 #include "RigidBodyComponent.hpp"
 
 #include "Engine.hpp"
+#include "components/ScriptComponent.hpp"
+#include "events/CollisionEvent.hpp"
 #include "physics/TensorUtils.hpp"
 
 namespace Villain {
@@ -9,6 +11,10 @@ namespace Villain {
         : body(rigidBody), collider(colShape) {
             VILLAIN_SET_COMPONENT_ID(RigidBodyComponent);
         }
+
+    RigidBodyComponent::~RigidBodyComponent() {
+        getParent()->getEngine()->getEventDispatcher()->unregisterCallback(BIND_EVENT_FN(onEvent));
+    }
 
     void RigidBodyComponent::update(float deltaTime) {
         // Set position of scene graph node based on RigidBody position
@@ -31,12 +37,26 @@ namespace Villain {
             } else {
                 VILLAIN_ERROR("Inertia tensor not supported for this collision primitive");
             }
+
+            getParent()->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
         }
     }
 
     void RigidBodyComponent::addForceGenerator(ForceGenerator* generator) {
-                parent->getEngine()
-                    ->getRigidBodyWorld()->getForceRegistry().add(body, generator);
-            }
+        parent->getEngine()
+            ->getRigidBodyWorld()->getForceRegistry().add(body, generator);
+    }
 
+    void RigidBodyComponent::onEvent(Event& event) {
+        if (collider && event.getType() == EventType::CollisionEvent) {
+            CollisionEvent& collisionEvent = static_cast<CollisionEvent&>(event);
+            if (collisionEvent.getBody1() == body || collisionEvent.getBody2() == body) {
+                ScriptComponent* scriptComponent = getParent()->getComponent<ScriptComponent>();
+                if (scriptComponent) {
+                    collisionEvent.setVerified(true);
+                    scriptComponent->onEvent(collisionEvent);
+                }
+            }
+        }
+    }
 }
