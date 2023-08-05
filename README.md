@@ -79,6 +79,7 @@
 * Blending skeletal animations
 * Embedded texture support
 * Integrate terrain rendering features from 'Terrain' example
+* Camera automation
 
 ## Screenshots
 
