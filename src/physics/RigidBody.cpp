@@ -20,6 +20,8 @@ namespace Villain {
     void RigidBody::integrate(float deltaTime) {
         if (!isAwake) return;
 
+        if (inverseMass <= 0.0f) return;  // Infinite mass objects don't move
+
         // Calculate linear acceleration from force inputs
         lastFrameAcceleration = acceleration;
         lastFrameAcceleration += forceAccum * inverseMass;
