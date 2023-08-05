@@ -9,6 +9,7 @@
 * Builds as a library to be used as framework or as engine editor executable
 * 2D Tiled map parsing/loading from TMX/XML files
 * 3D Scene loading from XML files
+* 3D Sound support
 * Debug/Editor mode UI for scene graph editing
 * Attach simple Lua scripts to scene nodes for basic scripting
 * Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes
@@ -76,7 +77,6 @@
 * Blending skeletal animations
 * Embedded texture support
 * Integrate terrain rendering features from 'Terrain' example
-* 3D Audio/Sound effect engine with OpenAL (In Progress)
 
 ## Screenshots
 
