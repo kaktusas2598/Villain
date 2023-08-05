@@ -1,8 +1,8 @@
 #include "Application.hpp"
 
-#include "IGameScreen.hpp"
+#include "fsm/IGameScreen.hpp"
+#include "fsm/StateParser.hpp"
 #include "SceneParser.hpp"
-#include "StateParser.hpp"
 
 namespace Villain {
 

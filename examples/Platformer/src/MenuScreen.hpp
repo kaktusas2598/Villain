@@ -1,7 +1,7 @@
 #ifndef __MENU_SCREEN__
 #define __MENU_SCREEN__
 
-#include "IGameScreen.hpp"
+#include "fsm/IGameScreen.hpp"
 #include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 

@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "SceneNode.hpp"
-#include "StateMachine.hpp"
+#include "fsm/StateMachine.hpp"
 
 #include <memory>
 

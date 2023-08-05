@@ -1,9 +1,9 @@
 #ifndef __GAME_PLAY_SCREEN__
 #define __GAME_PLAY_SCREEN__
 
-#include "IGameScreen.hpp"
 #include "box2d/box2d.h"
 #include "camera/Camera.hpp"
+#include "fsm/IGameScreen.hpp"
 #include "rendering/SpriteBatch.hpp"
 #include "ResourceManager.hpp"
 #include "rendering/DebugRenderer.hpp"
