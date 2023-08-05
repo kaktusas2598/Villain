@@ -67,6 +67,7 @@
     * Constraints: rods, cables, hinges, joints
     * Terrain contact generator
     * Triggers
+    * Raycast test: closest hit, all hits, nearest hit
     * Data driven approach for particle types and emitters
 * Lua Scripting API (In progress)
 * Entity Component System?
