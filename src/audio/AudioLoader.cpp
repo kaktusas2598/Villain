@@ -4,7 +4,6 @@
 
 #include <AL/al.h>
 #include <AL/alext.h>
-
 #include <climits>
 #include <sndfile.h>
 
@@ -80,10 +79,6 @@ namespace Villain {
         }
         numBytes = (ALsizei)(numFrames * numChannels) * (ALsizei)sizeof(short);
 
-        // Read audio data from libsndfile and populate the OpenAL buffer
-        //const sf_count_t numSamples = numFrames * numChannels;
-        //float* samples = new float[numSamples];
-
         if (numChannels == 1) {
             if(sampleFormat == Int16)
                 format = AL_FORMAT_MONO16;
@@ -93,8 +88,6 @@ namespace Villain {
                 format = AL_FORMAT_MONO_IMA4;
             else if(sampleFormat == MSADPCM)
                 format = AL_FORMAT_MONO_MSADPCM_SOFT;
-            if (sampleFormat == SampleFormatType::Float)
-                format = AL_FORMAT_MONO_FLOAT32;
         } else if (numChannels == 2) {
             if(sampleFormat == Int16)
                 format = AL_FORMAT_STEREO16;
@@ -118,6 +111,7 @@ namespace Villain {
         free(membuf);
         sf_close(sndFile);
 
+        // Handle errors
         err = alGetError();
         if(err != AL_NO_ERROR) {
             fprintf(stderr, "OpenAL Error: %s\n", alGetString(err));
