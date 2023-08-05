@@ -15,9 +15,11 @@ namespace Villain {
             /// Must be called before executing script using these bindings
             static void registerBindings(lua_State* L);
 
+            /// Convert glm::vec3 to lua table
+            static void pushVec3ToLua(lua_State* L, const glm::vec3& vec);
+            /// Convert lua table to glm::vec3
+            static glm::vec3 readVec3FromLua(lua_State* L, int index);
         private:
-            static void createAudioSourceMetatable(lua_State* L);
-            static void createRigidBodyMetatable(lua_State* L);
             static void createSceneNodeMetatable(lua_State* L);
 
             /// Core Bindings
@@ -30,38 +32,10 @@ namespace Villain {
             /// Check if userdata is nil
             static int lua_isNil(lua_State* L);
 
-            /// AudioSource metatable bindings
-            static int lua_AudioSource_isPlaying(lua_State* L);
-            static int lua_AudioSource_play(lua_State* L);
-            static int lua_AudioSource_pause(lua_State* L);
-            static int lua_AudioSource_stop(lua_State* L);
-            static int lua_AudioSource_rewind(lua_State* L);
-            static int lua_AudioSource_setVolume(lua_State* L);
-            static int lua_AudioSource_setPitch(lua_State* L);
-            static int lua_AudioSource_setLooping(lua_State* L);
-            static int lua_AudioSource_setPositions(lua_State* L);
-            static int lua_AudioSource_setVelocity(lua_State* L);
-
-            /// RigidBody metatable bindings
-            static int lua_RigidBody_addForce(lua_State* L);
-            static int lua_RigidBody_addForceAtPoint(lua_State* L);
-            static int lua_RigidBody_getAwake(lua_State* L);
-            static int lua_RigidBody_getMass(lua_State* L);
-            static int lua_RigidBody_getInverseMass(lua_State* L);
-            static int lua_RigidBody_setPosition(lua_State* L);
-            static int lua_RigidBody_setOrientation(lua_State* L);
-            static int lua_RigidBody_addAngularVelocity(lua_State* L);
-            static int lua_RigidBody_addLinearVelocity(lua_State* L);
-
             /// SceneNode metatable bindings
             static int lua_SceneNode_getName(lua_State *L);
             static int lua_SceneNode_getComponent(lua_State *L);
             static int lua_SceneNode_getPosition(lua_State *L);
             static int lua_SceneNode_setPosition(lua_State *L);
-
-            /// Convert glm::vec3 to lua table
-            static void pushVec3ToLua(lua_State* L, const glm::vec3& vec);
-            /// Convert lua table to glm::vec3
-            static glm::vec3 readVec3FromLua(lua_State* L, int index);
     };
 }
