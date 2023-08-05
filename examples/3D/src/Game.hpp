@@ -34,7 +34,5 @@ class Game : public Villain::Application {
 
         Villain::RigidBody* boxBody = nullptr;
 
-        Villain::AudioSource* zombie;
         Villain::AudioSource* zombieMono;
-        Villain::AudioSource* themeMusic;
 };

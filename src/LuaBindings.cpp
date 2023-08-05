@@ -3,6 +3,8 @@
 #include "Engine.hpp"
 
 #include "KeyCode.hpp"
+#include "ResourceManager.hpp"
+#include "audio/AudioSource.hpp"
 #include "components/RigidBodyComponent.hpp"
 
 namespace Villain {
@@ -10,12 +12,14 @@ namespace Villain {
     void LuaBindings::registerBindings(lua_State* L) {
         // Register C++ -> Lua wrappers
         // NOTE: Must be done before running lua script
+        lua_register(L, "GetAudio", lua_getAudio);
         lua_register(L, "GetScreenWidth", lua_getScreenWidth);
         lua_register(L, "GetScreenHeight", lua_getScreenHeight);
         lua_register(L, "AddLog", lua_addLog);
         lua_register(L, "KeyCode", lua_keyCode);
         lua_register(L, "Quit", lua_quit);
 
+        createAudioSourceMetatable(L);
         createSceneNodeMetatable(L);
     }
 
@@ -26,7 +30,6 @@ namespace Villain {
             { "getComponent", lua_SceneNode_getComponent },
             { "getPosition", lua_SceneNode_getPosition },
             { "setPosition", lua_SceneNode_setPosition },
-            // Add more methods as needed
             { NULL, NULL } // The array must be null-terminated
         };
 
@@ -38,6 +41,95 @@ namespace Villain {
             lua_pushvalue(L, -1);
             lua_setfield(L, -2, "__index");
         }
+    }
+
+    void LuaBindings::createAudioSourceMetatable(lua_State* L) {
+        luaL_Reg audioSourceMethods[] = {
+            { "isPlaying", lua_AudioSource_isPlaying },
+            { "play", lua_AudioSource_play },
+            { "pause", lua_AudioSource_pause },
+            { "stop", lua_AudioSource_stop },
+            { "rewind", lua_AudioSource_rewind },
+            { "setVolume", lua_AudioSource_setVolume },
+            { "setPitch", lua_AudioSource_setPitch },
+            { "setLooping", lua_AudioSource_setLooping },
+            { "setPositions", lua_AudioSource_setPositions },
+            { "setVelocity", lua_AudioSource_setVelocity },
+            { NULL, NULL } // The array must be null-terminated
+        };
+
+        if (luaL_newmetatable(L, "AudioSource")) {
+            luaL_setfuncs(L, audioSourceMethods, 0);
+
+            lua_pushvalue(L, -1);
+            lua_setfield(L, -2, "__index");
+        }
+    }
+
+    int LuaBindings::lua_AudioSource_isPlaying(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        lua_pushboolean(L, source->isPlaying());
+        return 1;
+    }
+
+    int LuaBindings::lua_AudioSource_play(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        source->play();
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_pause(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        source->pause();
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_stop(lua_State* L) {
+AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        source->stop();
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_rewind(lua_State* L) {
+AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        source->rewind();
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_setVolume(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        float volume = static_cast<float>(lua_tonumber(L, 2));
+        source->setVolume(volume);
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_setPitch(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        float pitch = static_cast<float>(lua_tonumber(L, 2));
+        source->setPitch(pitch);
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_setLooping(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        bool loop = lua_toboolean(L, 2);
+        source->setLooping(loop);
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_setPositions(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        glm::vec3 position = readVec3FromLua(L, 2);
+        glm::vec3 listenerPos = readVec3FromLua(L, 3);
+        source->setPositionDirection(position, listenerPos);
+        return 0;
+    }
+
+    int LuaBindings::lua_AudioSource_setVelocity(lua_State* L) {
+        AudioSource* source = static_cast<AudioSource*>(lua_touserdata(L, 1));
+        glm::vec3 velocity = readVec3FromLua(L, 2);
+        source->setVelocity(velocity);
+        return 0;
     }
 
     int LuaBindings::lua_SceneNode_getName(lua_State *L) {
@@ -84,6 +176,22 @@ namespace Villain {
         }
 
         return 0;
+    }
+
+    int LuaBindings::lua_getAudio(lua_State *L) {
+        const char* fileName = luaL_checkstring(L, 1);
+        AudioBuffer* buffer = ResourceManager::Instance()->getAudio(fileName);
+        if (!buffer)
+            buffer = ResourceManager::Instance()->loadAudio(fileName, fileName);
+        //lua_pushlightuserdata(L, new AudioSource(buffer));
+        // Create a new userdata to wrap the AudioSource
+        AudioSource* userdata = new AudioSource(buffer);
+
+        // Push the userdata to the Lua stack
+        void* ptr = lua_newuserdata(L, sizeof(AudioSource));
+        memcpy(ptr, userdata, sizeof(AudioSource));
+        luaL_setmetatable(L, "AudioSource");
+        return 1;
     }
 
     int LuaBindings::lua_getScreenWidth(lua_State *L) {
