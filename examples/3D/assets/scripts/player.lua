@@ -12,7 +12,7 @@ function OnKey(key, node)
         print("Camera compo found!")
     end
 
-    if (key == 114) then -- 114 is code for 'r' in SDL2/Villain::KeyCode
+    if (key == KeyCode("r")) then
         print("Setting node pos")
         local position = { x = 0.0, y = 20.0, z = 0.0 }
         node:setPosition(position)
