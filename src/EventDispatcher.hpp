@@ -20,7 +20,8 @@ namespace Villain {
         KeyboardEvent,
         MouseEvent,
         WindowResizeEvent,
-        FileSelectedEvent
+        FileSelectedEvent,
+        CollisionEvent
     };
 
     /// Base Event interface
