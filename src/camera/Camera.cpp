@@ -192,7 +192,7 @@ namespace Villain {
 
     Frustum Camera::getFrustum() {
         if (type != CameraType::FIRST_PERSON && type != CameraType::THIRD_PERSON) {
-            Logger::Instance()->error("getFrustum(): Method not supported for this camera type\n");
+            //Logger::Instance()->error("getFrustum(): Method not supported for this camera type\n");
             return Frustum();
         }
         Frustum     frustum;
