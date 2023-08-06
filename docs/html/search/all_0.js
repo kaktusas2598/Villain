@@ -22,8 +22,9 @@ var searchData=
   ['assetbrowser_19',['AssetBrowser',['../classVillain_1_1AssetBrowser.html',1,'Villain']]],
   ['assimpnodedata_20',['AssimpNodeData',['../structVillain_1_1AssimpNodeData.html',1,'Villain']]],
   ['assimputils_21',['AssimpUtils',['../classVillain_1_1AssimpUtils.html',1,'Villain']]],
-  ['audiobuffer_22',['AudioBuffer',['../classVillain_1_1AudioBuffer.html',1,'Villain']]],
-  ['audioengine_23',['AudioEngine',['../classVillain_1_1AudioEngine.html',1,'Villain']]],
-  ['audioloader_24',['AudioLoader',['../classVillain_1_1AudioLoader.html',1,'Villain']]],
-  ['audiosource_25',['AudioSource',['../classVillain_1_1AudioSource.html',1,'Villain']]]
+  ['audiobindings_22',['AudioBindings',['../classVillain_1_1AudioBindings.html',1,'Villain']]],
+  ['audiobuffer_23',['AudioBuffer',['../classVillain_1_1AudioBuffer.html',1,'Villain']]],
+  ['audioengine_24',['AudioEngine',['../classVillain_1_1AudioEngine.html',1,'Villain']]],
+  ['audioloader_25',['AudioLoader',['../classVillain_1_1AudioLoader.html',1,'Villain']]],
+  ['audiosource_26',['AudioSource',['../classVillain_1_1AudioSource.html',1,'Villain']]]
 ];

@@ -1,0 +1,4 @@
+<map id="Villain::CollisionEvent" name="Villain::CollisionEvent">
+<area shape="rect" id="node1" title="Dispatched upon 2 Rigid bodies colliding." alt="" coords="5,80,169,107"/>
+<area shape="rect" id="node2" href="$classVillain_1_1Event.html" title="Base Event interface." alt="" coords="33,5,141,32"/>
+</map>

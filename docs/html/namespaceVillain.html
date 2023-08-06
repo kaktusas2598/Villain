@@ -115,6 +115,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1AssimpUtils.html">AssimpUtils</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1AudioBindings.html">AudioBindings</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1AudioBuffer.html">AudioBuffer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents audio buffer which can be played and used by multiple sources.  <a href="classVillain_1_1AudioBuffer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,6 +127,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper audio loader utility using libsndfile.  <a href="classVillain_1_1AudioLoader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1AudioSource.html">AudioSource</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an audio source (speaker)  <a href="classVillain_1_1AudioSource.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1BaseLight.html">BaseLight</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +161,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1CollisionDetector.html">CollisionDetector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds fine grained, narrow phase collision detection routines.  <a href="classVillain_1_1CollisionDetector.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1CollisionEvent.html">CollisionEvent</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatched upon 2 Rigid bodies colliding.  <a href="classVillain_1_1CollisionEvent.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1CollisionLayer.html">CollisionLayer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,6 +352,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1ParticleWorld.html">ParticleWorld</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1PhysicsBindings.html">PhysicsBindings</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1PickingTexture.html">PickingTexture</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1Plane.html">Plane</a></td></tr>
@@ -508,10 +516,14 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a367bae30272cd2999d5c3bcd948315d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bda2b901e2a400d6dc64dbbda349fb5"><td class="memItemLeft" align="right" valign="top"><a id="a4bda2b901e2a400d6dc64dbbda349fb5" name="a4bda2b901e2a400d6dc64dbbda349fb5"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVillain.html#a4bda2b901e2a400d6dc64dbbda349fb5">EventType</a> { <b>KeyboardEvent</b>
+<tr class="memitem:a4bda2b901e2a400d6dc64dbbda349fb5"><td class="memItemLeft" align="right" valign="top"><a id="a4bda2b901e2a400d6dc64dbbda349fb5" name="a4bda2b901e2a400d6dc64dbbda349fb5"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVillain.html#a4bda2b901e2a400d6dc64dbbda349fb5">EventType</a> { <br />
+&#160;&#160;<b>KeyboardEvent</b>
 , <b>MouseEvent</b>
 , <b>WindowResizeEvent</b>
 , <b>FileSelectedEvent</b>
+, <br />
+&#160;&#160;<b>CollisionEvent</b>
+<br />
  }</td></tr>
 <tr class="memdesc:a4bda2b901e2a400d6dc64dbbda349fb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used in every Event class so that dynamic_cast could be avoided. <br /></td></tr>
 <tr class="separator:a4bda2b901e2a400d6dc64dbbda349fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -646,10 +658,6 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>ImTextCharFromUtf8</b>
 <tr class="memitem:a80386127b464a17b90e86b65261fde21"><td class="memItemLeft" align="right" valign="top"><a id="a80386127b464a17b90e86b65261fde21" name="a80386127b464a17b90e86b65261fde21"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>ImTextStrFromUtf8</b> (ImWchar *buf, int buf_size, const char *in_text, const char *in_text_end, const char **in_text_remaining)</td></tr>
 <tr class="separator:a80386127b464a17b90e86b65261fde21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7511e68f5cc45326788c71a5ba8948ab"><td class="memItemLeft" align="right" valign="top"><a id="a7511e68f5cc45326788c71a5ba8948ab" name="a7511e68f5cc45326788c71a5ba8948ab"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a7511e68f5cc45326788c71a5ba8948ab"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>LuaScript::lua_getdefault&lt; std::string &gt;</b> ()</td></tr>
-<tr class="separator:a7511e68f5cc45326788c71a5ba8948ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe2d9ddd270a36d18e9fb5b761472084"><td class="memTemplParams" colspan="2"><a id="abe2d9ddd270a36d18e9fb5b761472084" name="abe2d9ddd270a36d18e9fb5b761472084"></a>
 template&lt;class T &gt; </td></tr>
 <tr class="memitem:abe2d9ddd270a36d18e9fb5b761472084"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>GetId</b> ()</td></tr>
@@ -675,24 +683,10 @@ template&lt;class VertexType &gt; </td></tr>
 <tr class="memitem:ac00bd7f48d391ba84483d6f7cf92d813"><td class="memItemLeft" align="right" valign="top"><a id="ac00bd7f48d391ba84483d6f7cf92d813" name="ac00bd7f48d391ba84483d6f7cf92d813"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setClearColor</b> (const glm::vec4 &amp;color)</td></tr>
 <tr class="separator:ac00bd7f48d391ba84483d6f7cf92d813"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8d759703fb38983956d3f063818063d"><td class="memItemLeft" align="right" valign="top"><a id="ad8d759703fb38983956d3f063818063d" name="ad8d759703fb38983956d3f063818063d"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetUniqueId</b> ()</td></tr>
-<tr class="separator:ad8d759703fb38983956d3f063818063d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2c5b5b90097fcce636ee5e578cff5d7"><td class="memItemLeft" align="right" valign="top"><a id="af2c5b5b90097fcce636ee5e578cff5d7" name="af2c5b5b90097fcce636ee5e578cff5d7"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>hexToVec3</b> (const std::string &amp;hexColor)</td></tr>
-<tr class="separator:af2c5b5b90097fcce636ee5e578cff5d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad774eb9e4e8fd6de822eb689f4f969fa"><td class="memItemLeft" align="right" valign="top"><a id="ad774eb9e4e8fd6de822eb689f4f969fa" name="ad774eb9e4e8fd6de822eb689f4f969fa"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>parseColorAttribute</b> (tinyxml2::XMLElement *parentElement, const char *childElementName, const char *attributeName)</td></tr>
-<tr class="separator:ad774eb9e4e8fd6de822eb689f4f969fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c6fdf0c4ca914d25c6efb63e27c6ea9"><td class="memItemLeft" align="right" valign="top"><a id="a7c6fdf0c4ca914d25c6efb63e27c6ea9" name="a7c6fdf0c4ca914d25c6efb63e27c6ea9"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>parseVec3Element</b> (tinyxml2::XMLElement *element, const std::string &amp;elementName, const std::string &amp;x=&quot;x&quot;, const std::string &amp;y=&quot;y&quot;, const std::string &amp;z=&quot;z&quot;)</td></tr>
-<tr class="separator:a7c6fdf0c4ca914d25c6efb63e27c6ea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08a4a2275422e179f45e5bc5cb6b1a7f"><td class="memItemLeft" align="right" valign="top"><a id="a08a4a2275422e179f45e5bc5cb6b1a7f" name="a08a4a2275422e179f45e5bc5cb6b1a7f"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>parseFloatAttribute</b> (tinyxml2::XMLElement *parentElement, const char *childElementName, const char *attribName)</td></tr>
-<tr class="separator:a08a4a2275422e179f45e5bc5cb6b1a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a247b38a062a0400b7bcf6079939a2043"><td class="memItemLeft" align="right" valign="top"><a id="a247b38a062a0400b7bcf6079939a2043" name="a247b38a062a0400b7bcf6079939a2043"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseBoolAttribute</b> (tinyxml2::XMLElement *parentElement, const char *childElementName, const char *attribName)</td></tr>
-<tr class="separator:a247b38a062a0400b7bcf6079939a2043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7511e68f5cc45326788c71a5ba8948ab"><td class="memItemLeft" align="right" valign="top"><a id="a7511e68f5cc45326788c71a5ba8948ab" name="a7511e68f5cc45326788c71a5ba8948ab"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a7511e68f5cc45326788c71a5ba8948ab"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>LuaScript::lua_getdefault&lt; std::string &gt;</b> ()</td></tr>
+<tr class="separator:a7511e68f5cc45326788c71a5ba8948ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -747,7 +741,7 @@ const int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_COMPONENTS</
 </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68" name="ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68"></a>w&#160;</td><td class="fielddoc"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000039">Todo:</a></b></dt><dd>add rest of letters, modifiers, function keys and mouse keys </dd></dl>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68" name="ac45aa7d321f068f01742f1a92062e48faf1290186a5d0b1ceab27f4e77c0c5d68"></a>w&#160;</td><td class="fielddoc"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000046">Todo:</a></b></dt><dd>add rest of letters, modifiers, function keys and mouse keys </dd></dl>
 </td></tr>
 </table>
 

@@ -95,10 +95,18 @@ Static Public Member Functions</h2></td></tr>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>registerBindings</b> (lua_State *L)</td></tr>
 <tr class="memdesc:a3fcd1fe935ac5aad8188952ddc96d9eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be called before executing script using these bindings. <br /></td></tr>
 <tr class="separator:a3fcd1fe935ac5aad8188952ddc96d9eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada42d9e71d89a15a6261165693073f48"><td class="memItemLeft" align="right" valign="top"><a id="ada42d9e71d89a15a6261165693073f48" name="ada42d9e71d89a15a6261165693073f48"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>pushVec3ToLua</b> (lua_State *L, const glm::vec3 &amp;vec)</td></tr>
+<tr class="memdesc:ada42d9e71d89a15a6261165693073f48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert glm::vec3 to lua table. <br /></td></tr>
+<tr class="separator:ada42d9e71d89a15a6261165693073f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac095bfff3b2d7ebdc7d698b662fb196f"><td class="memItemLeft" align="right" valign="top"><a id="ac095bfff3b2d7ebdc7d698b662fb196f" name="ac095bfff3b2d7ebdc7d698b662fb196f"></a>
+static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>readVec3FromLua</b> (lua_State *L, int index)</td></tr>
+<tr class="memdesc:ac095bfff3b2d7ebdc7d698b662fb196f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert lua table to glm::vec3. <br /></td></tr>
+<tr class="separator:ac095bfff3b2d7ebdc7d698b662fb196f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/<a class="el" href="LuaBindings_8hpp_source.html">LuaBindings.hpp</a></li>
-<li>src/LuaBindings.cpp</li>
+<li>src/script/<a class="el" href="LuaBindings_8hpp_source.html">LuaBindings.hpp</a></li>
+<li>src/script/LuaBindings.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

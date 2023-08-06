@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classVillain_1_1EventDispatcher.html" title="Responsible for keeping track of different event listeners and dispatches events to those listeners." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node1" href="$classVillain_1_1Event.html" title="Base Event interface." alt="" coords="5,107,113,133"/>
+<area shape="rect" id="node2" href="$classVillain_1_1CollisionEvent.html" title="Dispatched upon 2 Rigid bodies colliding." alt="" coords="181,5,345,32"/>
+<area shape="rect" id="node3" href="$classVillain_1_1FileSelectedEvent.html" title="Dispatched upon pressed or released key." alt="" coords="169,56,356,83"/>
+<area shape="rect" id="node4" href="$classVillain_1_1KeyboardEvent.html" title="Dispatched upon pressed or released key." alt="" coords="178,107,347,133"/>
+<area shape="rect" id="node5" href="$classVillain_1_1MouseEvent.html" title="Dispatched on mouse move, button click/release or wheel scroll events." alt="" coords="187,157,338,184"/>
+<area shape="rect" id="node6" href="$classVillain_1_1WindowResizeEvent.html" title="Dispatched every time engine window is resized." alt="" coords="161,208,364,235"/>
 </map>

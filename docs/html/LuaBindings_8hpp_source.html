@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Villain Engine: src/LuaBindings.hpp Source File</title>
+<title>Villain Engine: src/script/LuaBindings.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -101,33 +101,36 @@ $(document).ready(function(){initNavTree('LuaBindings_8hpp_source.html',''); ini
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>            <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classVillain_1_1LuaBindings.html#a3fcd1fe935ac5aad8188952ddc96d9eb">registerBindings</a>(lua_State* L);</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            <span class="keyword">static</span> <span class="keywordtype">void</span> createSceneNodeMetatable(lua_State* L);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_getName(lua_State *L);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_getComponent(lua_State *L);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_getPosition(lua_State *L);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_setPosition(lua_State *L);</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keyword">static</span> <span class="keywordtype">void</span> pushVec3ToLua(lua_State* L, <span class="keyword">const</span> glm::vec3&amp; vec);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <span class="keyword">static</span> glm::vec3 readVec3FromLua(lua_State* L, <span class="keywordtype">int</span> index);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_getScreenWidth(lua_State *L);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_getScreenHeight(lua_State *L);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_addLog(lua_State *L);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_keyCode(lua_State *L);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_quit(lua_State *L);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    };</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>}</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classVillain_1_1LuaBindings.html#ada42d9e71d89a15a6261165693073f48">pushVec3ToLua</a>(lua_State* L, <span class="keyword">const</span> glm::vec3&amp; vec);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <span class="keyword">static</span> glm::vec3 <a class="code hl_function" href="classVillain_1_1LuaBindings.html#ac095bfff3b2d7ebdc7d698b662fb196f">readVec3FromLua</a>(lua_State* L, <span class="keywordtype">int</span> index);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            <span class="keyword">static</span> <span class="keywordtype">void</span> createSceneNodeMetatable(lua_State* L);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_getAudio(lua_State *L);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_getScreenWidth(lua_State *L);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_getScreenHeight(lua_State *L);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_addLog(lua_State *L);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_keyCode(lua_State *L);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_quit(lua_State *L);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_isNil(lua_State* L);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_getName(lua_State *L);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_getComponent(lua_State *L);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_getPosition(lua_State *L);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            <span class="keyword">static</span> <span class="keywordtype">int</span> lua_SceneNode_setPosition(lua_State *L);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    };</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>}</div>
 <div class="ttc" id="aclassVillain_1_1LuaBindings_html"><div class="ttname"><a href="classVillain_1_1LuaBindings.html">Villain::LuaBindings</a></div><div class="ttdef"><b>Definition:</b> LuaBindings.hpp:13</div></div>
-<div class="ttc" id="aclassVillain_1_1LuaBindings_html_a3fcd1fe935ac5aad8188952ddc96d9eb"><div class="ttname"><a href="classVillain_1_1LuaBindings.html#a3fcd1fe935ac5aad8188952ddc96d9eb">Villain::LuaBindings::registerBindings</a></div><div class="ttdeci">static void registerBindings(lua_State *L)</div><div class="ttdoc">Must be called before executing script using these bindings.</div><div class="ttdef"><b>Definition:</b> LuaBindings.cpp:10</div></div>
+<div class="ttc" id="aclassVillain_1_1LuaBindings_html_a3fcd1fe935ac5aad8188952ddc96d9eb"><div class="ttname"><a href="classVillain_1_1LuaBindings.html#a3fcd1fe935ac5aad8188952ddc96d9eb">Villain::LuaBindings::registerBindings</a></div><div class="ttdeci">static void registerBindings(lua_State *L)</div><div class="ttdoc">Must be called before executing script using these bindings.</div><div class="ttdef"><b>Definition:</b> LuaBindings.cpp:13</div></div>
+<div class="ttc" id="aclassVillain_1_1LuaBindings_html_ac095bfff3b2d7ebdc7d698b662fb196f"><div class="ttname"><a href="classVillain_1_1LuaBindings.html#ac095bfff3b2d7ebdc7d698b662fb196f">Villain::LuaBindings::readVec3FromLua</a></div><div class="ttdeci">static glm::vec3 readVec3FromLua(lua_State *L, int index)</div><div class="ttdoc">Convert lua table to glm::vec3.</div><div class="ttdef"><b>Definition:</b> LuaBindings.cpp:171</div></div>
+<div class="ttc" id="aclassVillain_1_1LuaBindings_html_ada42d9e71d89a15a6261165693073f48"><div class="ttname"><a href="classVillain_1_1LuaBindings.html#ada42d9e71d89a15a6261165693073f48">Villain::LuaBindings::pushVec3ToLua</a></div><div class="ttdeci">static void pushVec3ToLua(lua_State *L, const glm::vec3 &amp;vec)</div><div class="ttdoc">Convert glm::vec3 to lua table.</div><div class="ttdef"><b>Definition:</b> LuaBindings.cpp:161</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><b>LuaBindings.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_fe414d616bd0c4668e6515f48824338f.html">script</a></li><li class="navelem"><b>LuaBindings.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4 </li>
   </ul>
 </div>

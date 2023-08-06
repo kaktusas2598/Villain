@@ -8,6 +8,7 @@ var hierarchy =
     [ "Villain::AssetBrowser", "classVillain_1_1AssetBrowser.html", null ],
     [ "Villain::AssimpNodeData", "structVillain_1_1AssimpNodeData.html", null ],
     [ "Villain::AssimpUtils", "classVillain_1_1AssimpUtils.html", null ],
+    [ "Villain::AudioBindings", "classVillain_1_1AudioBindings.html", null ],
     [ "Villain::AudioBuffer", "classVillain_1_1AudioBuffer.html", null ],
     [ "Villain::AudioEngine", "classVillain_1_1AudioEngine.html", null ],
     [ "Villain::AudioLoader", "classVillain_1_1AudioLoader.html", null ],
@@ -43,6 +44,7 @@ var hierarchy =
     [ "Villain::DebugRenderer::DebugVertex", "structVillain_1_1DebugRenderer_1_1DebugVertex.html", null ],
     [ "Villain::Engine", "classVillain_1_1Engine.html", null ],
     [ "Villain::Event", "classVillain_1_1Event.html", [
+      [ "Villain::CollisionEvent", "classVillain_1_1CollisionEvent.html", null ],
       [ "Villain::FileSelectedEvent", "classVillain_1_1FileSelectedEvent.html", null ],
       [ "Villain::KeyboardEvent", "classVillain_1_1KeyboardEvent.html", null ],
       [ "Villain::MouseEvent", "classVillain_1_1MouseEvent.html", null ],
@@ -145,6 +147,7 @@ var hierarchy =
     [ "Villain::ParticleForceRegistry::ParticleForceRegistration", "structVillain_1_1ParticleForceRegistry_1_1ParticleForceRegistration.html", null ],
     [ "Villain::ParticleForceRegistry", "classVillain_1_1ParticleForceRegistry.html", null ],
     [ "Villain::ParticleWorld", "classVillain_1_1ParticleWorld.html", null ],
+    [ "Villain::PhysicsBindings", "classVillain_1_1PhysicsBindings.html", null ],
     [ "Villain::PickingTexture", "classVillain_1_1PickingTexture.html", null ],
     [ "Villain::PickingTexture::PixelInfo", "structVillain_1_1PickingTexture_1_1PixelInfo.html", null ],
     [ "Villain::Plane", "classVillain_1_1Plane.html", null ],

@@ -14,74 +14,6 @@
 
 namespace Villain {
 
-    std::string GetUniqueId() {
-       static int n = 1;
-       std::ostringstream os;
-       os << n++;
-       return os.str();
-    }
-
-    glm::vec3 hexToVec3(const std::string& hexColor) {
-        // Remove the '#' character from the hex color string
-        std::string colorString = hexColor.substr(1);
-
-        // Parse the individual color components from the hex string
-        int r, g, b;
-        std::istringstream(colorString.substr(0, 2)) >> std::hex >> r;
-        std::istringstream(colorString.substr(2, 2)) >> std::hex >> g;
-        std::istringstream(colorString.substr(4, 2)) >> std::hex >> b;
-
-        // Normalize the color values to the range [0, 1]
-        glm::vec3 color(r / 255.0f, g / 255.0f, b / 255.0f);
-
-        return color;
-    }
-
-    glm::vec3 parseColorAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attributeName) {
-        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
-        if (childElement) {
-            const char* color = nullptr;
-            if (childElement->QueryStringAttribute(attributeName, &color) == tinyxml2::XML_SUCCESS) {
-                return hexToVec3(color);
-            }
-        }
-        return glm::vec3(0.0f);
-    }
-
-    glm::vec3 parseVec3Element(tinyxml2::XMLElement* element, const std::string& elementName,
-            const std::string& x = "x", const std::string& y = "y", const std::string& z = "z") {
-        glm::vec3 vec3Value;
-
-        tinyxml2::XMLElement* vec3Element = element->FirstChildElement(elementName.c_str());
-        if (vec3Element) {
-            vec3Value.x = vec3Element->FloatAttribute(x.c_str());
-            vec3Value.y = vec3Element->FloatAttribute(y.c_str());
-            vec3Value.z = vec3Element->FloatAttribute(z.c_str());
-        }
-
-        return vec3Value;
-    }
-
-    float parseFloatAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attribName) {
-        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
-        float value = 0.0f;
-        if (childElement) {
-            childElement->QueryFloatAttribute(attribName, &value);
-        }
-
-        return value;
-    }
-
-    bool parseBoolAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attribName) {
-        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
-        bool value = false;
-        if (childElement) {
-            childElement->QueryBoolAttribute(attribName, &value);
-        }
-
-        return value;
-    }
-
     void SceneParser::loadSceneGraph(const std::string& fileName, SceneNode* rootNode) {
         tinyxml2::XMLDocument xmlDoc;
 
@@ -313,4 +245,71 @@ namespace Villain {
         }
     }
 
+    std::string SceneParser::GetUniqueId() {
+       static int n = 1;
+       std::ostringstream os;
+       os << n++;
+       return os.str();
+    }
+
+    glm::vec3 SceneParser::hexToVec3(const std::string& hexColor) {
+        // Remove the '#' character from the hex color string
+        std::string colorString = hexColor.substr(1);
+
+        // Parse the individual color components from the hex string
+        int r, g, b;
+        std::istringstream(colorString.substr(0, 2)) >> std::hex >> r;
+        std::istringstream(colorString.substr(2, 2)) >> std::hex >> g;
+        std::istringstream(colorString.substr(4, 2)) >> std::hex >> b;
+
+        // Normalize the color values to the range [0, 1]
+        glm::vec3 color(r / 255.0f, g / 255.0f, b / 255.0f);
+
+        return color;
+    }
+
+    glm::vec3 SceneParser::parseColorAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attributeName) {
+        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
+        if (childElement) {
+            const char* color = nullptr;
+            if (childElement->QueryStringAttribute(attributeName, &color) == tinyxml2::XML_SUCCESS) {
+                return hexToVec3(color);
+            }
+        }
+        return glm::vec3(0.0f);
+    }
+
+    glm::vec3 SceneParser::parseVec3Element(tinyxml2::XMLElement* element, const std::string& elementName,
+            const std::string& x, const std::string& y, const std::string& z) {
+        glm::vec3 vec3Value;
+
+        tinyxml2::XMLElement* vec3Element = element->FirstChildElement(elementName.c_str());
+        if (vec3Element) {
+            vec3Value.x = vec3Element->FloatAttribute(x.c_str());
+            vec3Value.y = vec3Element->FloatAttribute(y.c_str());
+            vec3Value.z = vec3Element->FloatAttribute(z.c_str());
+        }
+
+        return vec3Value;
+    }
+
+    float SceneParser::parseFloatAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attribName) {
+        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
+        float value = 0.0f;
+        if (childElement) {
+            childElement->QueryFloatAttribute(attribName, &value);
+        }
+
+        return value;
+    }
+
+    bool SceneParser::parseBoolAttribute(tinyxml2::XMLElement* parentElement, const char* childElementName, const char* attribName) {
+        tinyxml2::XMLElement* childElement = parentElement->FirstChildElement(childElementName);
+        bool value = false;
+        if (childElement) {
+            childElement->QueryBoolAttribute(attribName, &value);
+        }
+
+        return value;
+    }
 }

@@ -120,10 +120,10 @@ typedef std::vector&lt; <a class="el" href="classVillain_1_1CollisionPrimitive.h
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a126bf3d432d2f6db0bd2d5c043056fb3"><td class="memItemLeft" align="right" valign="top"><a id="a126bf3d432d2f6db0bd2d5c043056fb3" name="a126bf3d432d2f6db0bd2d5c043056fb3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>RigidBodyWorld</b> (unsigned <a class="el" href="classVillain_1_1RigidBodyWorld.html#adce3ee7252c256ffe364e3586fe501f6">maxContacts</a>, unsigned iterations=0)</td></tr>
-<tr class="memdesc:a126bf3d432d2f6db0bd2d5c043056fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">If not iterations are provided, when it will be four times the number of contacts used. <br /></td></tr>
-<tr class="separator:a126bf3d432d2f6db0bd2d5c043056fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a457cffaf6d1f0466dfaea1eaba7c1f69"><td class="memItemLeft" align="right" valign="top"><a id="a457cffaf6d1f0466dfaea1eaba7c1f69" name="a457cffaf6d1f0466dfaea1eaba7c1f69"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RigidBodyWorld</b> (<a class="el" href="classVillain_1_1Engine.html">Engine</a> *e, unsigned <a class="el" href="classVillain_1_1RigidBodyWorld.html#adce3ee7252c256ffe364e3586fe501f6">maxContacts</a>, unsigned iterations=0)</td></tr>
+<tr class="memdesc:a457cffaf6d1f0466dfaea1eaba7c1f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">If not iterations are provided, when it will be four times the number of contacts used. <br /></td></tr>
+<tr class="separator:a457cffaf6d1f0466dfaea1eaba7c1f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215">generateContacts</a> ()</td></tr>
 <tr class="memdesc:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls all contact generators to report any contacts and returns numbers of generated contacts.  <a href="classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215">More...</a><br /></td></tr>
 <tr class="separator:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,6 +142,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>integrate</b> (float 
 <tr class="memitem:a92adb1d6bb4e30190e481b4a3c455f2d"><td class="memItemLeft" align="right" valign="top"><a id="a92adb1d6bb4e30190e481b4a3c455f2d" name="a92adb1d6bb4e30190e481b4a3c455f2d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setDebugDraw</b> (bool debug)</td></tr>
 <tr class="separator:a92adb1d6bb4e30190e481b4a3c455f2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c110963f77b5262439f45527a36f34"><td class="memItemLeft" align="right" valign="top"><a id="a33c110963f77b5262439f45527a36f34" name="a33c110963f77b5262439f45527a36f34"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addBody</b> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *body)</td></tr>
+<tr class="separator:a33c110963f77b5262439f45527a36f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac28f21645e60d74c55d527926489d03e"><td class="memItemLeft" align="right" valign="top"><a id="ac28f21645e60d74c55d527926489d03e" name="ac28f21645e60d74c55d527926489d03e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeBody</b> (<a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *body)</td></tr>
+<tr class="separator:ac28f21645e60d74c55d527926489d03e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab13b3ffeb0f870bb515ecadf93b04af5"><td class="memItemLeft" align="right" valign="top"><a id="ab13b3ffeb0f870bb515ecadf93b04af5" name="ab13b3ffeb0f870bb515ecadf93b04af5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addCollider</b> (<a class="el" href="classVillain_1_1CollisionPrimitive.html">CollisionPrimitive</a> *collider)</td></tr>
+<tr class="separator:ab13b3ffeb0f870bb515ecadf93b04af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5461086752a8b895d58cee26cc1ae7d"><td class="memItemLeft" align="right" valign="top"><a id="af5461086752a8b895d58cee26cc1ae7d" name="af5461086752a8b895d58cee26cc1ae7d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeCollider</b> (<a class="el" href="classVillain_1_1CollisionPrimitive.html">CollisionPrimitive</a> *collider)</td></tr>
+<tr class="separator:af5461086752a8b895d58cee26cc1ae7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d3265a6950b3472dce94c0a6ef22dcf"><td class="memItemLeft" align="right" valign="top"><a id="a7d3265a6950b3472dce94c0a6ef22dcf" name="a7d3265a6950b3472dce94c0a6ef22dcf"></a>
 RigidBodies &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getBodies</b> ()</td></tr>
 <tr class="separator:a7d3265a6950b3472dce94c0a6ef22dcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,7 +223,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000057">Todo:</a></b></dt><dd>Render debug information for force and contact generators /for (ForceGenerator* forceGenerator : registry.generators()) { /forceGenerator-&gt;render(debugRenderer); /} </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000059">Todo:</a></b></dt><dd>Render debug information for force and contact generators /for (ForceGenerator* forceGenerator : registry.generators()) { /forceGenerator-&gt;render(debugRenderer); /} </dd></dl>
 
 </div>
 </div>
@@ -231,8 +243,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
 </div><div class="memdoc">
 
 <p>Calls all contact generators to report any contacts and returns numbers of generated contacts. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000055">Todo:</a></b></dt><dd>Integrate BVH broad phase here! </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000056">Todo:</a></b></dt><dd></dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000057">Todo:</a></b></dt><dd>Integrate BVH broad phase here! </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000058">Todo:</a></b></dt><dd></dd></dl>
 
 </div>
 </div>

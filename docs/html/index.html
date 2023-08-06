@@ -146,6 +146,7 @@ Physics</h2>
 <li>Narrow-Phase: planes, spheres, OBBs</li>
 </ul>
 </li>
+<li>Collision events</li>
 <li>Collision Resolution using iterative contact resolver</li>
 <li>Basic friction model</li>
 </ul>
@@ -164,11 +165,12 @@ Planned Features</h1>
 <li>Stability improvements, optimizations (In progress)</li>
 <li>Constraints: rods, cables, hinges, joints</li>
 <li>Terrain contact generator</li>
-<li>Collision events, triggers</li>
+<li>Triggers</li>
+<li>Raycast test: closest hit, all hits, nearest hit</li>
 <li>Data driven approach for particle types and emitters</li>
 </ul>
 </li>
-<li>Lua Scripting (In progress)</li>
+<li>Lua Scripting API (In progress)</li>
 <li>Entity Component System?</li>
 <li>Environmental mapping(reflections and refractions)</li>
 <li>3D Mesh batch rendering</li>
@@ -178,6 +180,7 @@ Planned Features</h1>
 <li>Blending skeletal animations</li>
 <li>Embedded texture support</li>
 <li>Integrate terrain rendering features from 'Terrain' example</li>
+<li>Camera automation</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Screenshots</h1>
@@ -214,7 +217,7 @@ Instructions</h1>
 <p >First install the dependencies and when use build instructions below.</p>
 <h2><a class="anchor" id="autotoc_md10"></a>
 Dependencies</h2>
-<p >sudo apt-get install -y libglew-dev sudo apt-get install -y libsdl2-dev sudo apt-get install -y liblua5.4-dev sudo apt-get install -y libassimp-dev sudo apt-get install -y libopenal-dev</p>
+<p >sudo apt-get install -y libglew-dev libsdl2-dev liblua5.4-dev libassimp-dev libopenal-dev</p>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Building</h2>
 <p >Engine is built as shared library using CMake, to use it in one of your projects, go to examples folder execute these scripts in order:</p><ul>
