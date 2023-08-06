@@ -21,6 +21,16 @@ namespace Villain {
         return ss.str();
     }
 
+    void FileUtils::saveFile(const std::string& filePath, const std::string& buffer) {
+        std::ofstream file(filePath, std::ios::binary);
+        if (file.is_open()) {
+            file << buffer;
+            file.close();
+        } else {
+            VILLAIN_ERROR("Error saving {}", filePath);
+        }
+    }
+
     // NOTE: could rewrite this in C++?
     char* FileUtils::loadBinaryFile(const std::string& filePath, int& size) {
         FILE* file = fopen(filePath.c_str(), "rb");

@@ -9,6 +9,7 @@ namespace Villain {
     class FileUtils {
         public:
             static std::string loadFile(const std::string& filePath);
+            static void saveFile(const std::string& filePath, const std::string& buffer);
             static char* loadBinaryFile(const std::string& filePath, int& size);
             static cmrc::file loadResource(const std::string& filePath);
 
