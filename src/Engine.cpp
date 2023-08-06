@@ -265,9 +265,8 @@ namespace Villain {
 
         imGuiLayer.start();
 
-        // In debug/edit mode render scene to texture and output it in imgui
-        if (editMode)
-            sceneBuffer->bind();
+        // In mode render scene to texture and output it in imgui editor
+        sceneBuffer->bind();
 
         if (wireFrameMode)
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
