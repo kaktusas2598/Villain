@@ -22,9 +22,9 @@ namespace Villain {
     }
 
     void FileUtils::saveFile(const std::string& filePath, const std::string& buffer) {
-        std::ofstream file(filePath, std::ios::binary);
+        std::ofstream file(filePath);
         if (file.is_open()) {
-            file << buffer;
+            file.write(buffer.data(), buffer.size());
             file.close();
         } else {
             VILLAIN_ERROR("Error saving {}", filePath);
