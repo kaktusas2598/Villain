@@ -287,6 +287,8 @@ namespace Villain {
             if (!selectedNode->getComponents().empty()) {
                 drawNodeComponents(selectedNode);
             }
+        } else {
+            ImGui::Text("Select a node or create a new node in the scene graph");
         }
 
         ImGui::End();
@@ -297,11 +299,11 @@ namespace Villain {
 
         ImGui::Text("Position"); ImGui::SameLine();
         ImGui::PushItemWidth(40);
-        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(1.0f, 0.0f, 0.0f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.8f, 0.1f, 0.1f));
         ImGui::DragFloat("X", &node->getTransform()->getPos().x); ImGui::SameLine();
-        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 1.0f, 0.0f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.2f, 0.7f, 0.3f));
         ImGui::DragFloat("Y", &node->getTransform()->getPos().y); ImGui::SameLine();
-        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.0f, 0.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor(0.1f, 0.0f, 0.9f));
         ImGui::DragFloat("Z", &node->getTransform()->getPos().z);
         ImGui::PopStyleColor(3);
         ImGui::PopItemWidth();
