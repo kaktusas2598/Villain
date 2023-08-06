@@ -164,3 +164,4 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
   * Aerodynamical force generators broken or something, struggling to create flight simulator demo
   * Rework namespace system: create Villain::Physics, Villain::Rendering, etc..
   * Fix synchronisation issues between camera and models or rigid bodies
+  * Implement logic for minimising on window resize: on minimise no rendering should be done
