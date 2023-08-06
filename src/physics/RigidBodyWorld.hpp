@@ -4,6 +4,7 @@
 #include "ForceGenerator.hpp"
 #include "NarrowPhase.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include <algorithm>
 #include <vector>
 
 namespace Villain {
@@ -36,6 +37,16 @@ namespace Villain {
 
             void debugDraw(Camera* camera);
             void setDebugDraw(bool debug) { debugDrawEnabled = debug; }
+
+            void addBody(RigidBody* body) { bodies.push_back(body); }
+            void removeBody(RigidBody* body) {
+                bodies.erase(std::remove(bodies.begin(), bodies.end(), body), bodies.end());
+            }
+
+            void addCollider(CollisionPrimitive* collider) { colliders.push_back(collider); }
+            void removeCollider(CollisionPrimitive* collider) {
+                colliders.erase(std::remove(colliders.begin(), colliders.end(), collider), colliders.end());
+            }
 
             // Getters
             RigidBodies& getBodies() { return bodies; }

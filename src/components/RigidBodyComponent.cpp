@@ -14,6 +14,9 @@ namespace Villain {
 
     RigidBodyComponent::~RigidBodyComponent() {
         getParent()->getEngine()->getEventDispatcher()->unregisterCallback(BIND_EVENT_FN(onEvent));
+        getParent()->getEngine()->getRigidBodyWorld()->removeBody(body);
+        if (collider)
+            getParent()->getEngine()->getRigidBodyWorld()->removeCollider(collider);
     }
 
     void RigidBodyComponent::update(float deltaTime) {
