@@ -327,7 +327,10 @@ namespace Villain {
                     ImGui::Text("Camera");
                     Camera* camera = static_cast<Camera*>(compo);
 
-                    ImGui::Text("Zoom: %.1f", camera->getZoom());
+                    ImGui::DragFloat("Z near plane", camera->getZnearPtr());
+                    ImGui::DragFloat("Z far plane", camera->getZfarPtr());
+                    ImGui::DragFloat("Zoom", camera->getZoomPtr());
+                    ImGui::DragFloat("Distance to target (third person only)", camera->getDistanceToTargetPtr());
 
                     std::map<CameraType, const char*> types;
                     types[CameraType::NONE] = "None";

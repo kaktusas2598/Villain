@@ -46,11 +46,26 @@ namespace Villain {
             glm::mat4 getViewMatrix();
             glm::mat4 getProjMatrix();
 
+            /// If using Orthographic camera with skybox, this must override proj matrix for skybox
+            glm::mat4 getSkyboxProjMatrix() {
+                // Use a very large FOV angle for the skybox projection
+                float skyboxFOV = 90.0f;
+                float aspectRatio = (float)screenWidth / (float)screenHeight;
+                float nearPlane = 0.1f;
+                float farPlane = 1000.0f;
+                return glm::perspective(glm::radians(skyboxFOV), aspectRatio, nearPlane, farPlane);
+            }
+
             glm::vec3& getPosition() { return position; }
-            float getZoom() { return zoom; }
+            float getZoom() const { return zoom; }
             float getAspectRatio() { return (float)screenWidth / (float)screenHeight; }
-            float getZnear() { return zNear; }
-            float getZfar() { return zFar; }
+            float getZnear() const { return zNear; }
+            float getZfar() const{ return zFar; }
+            /// ImGui for editor
+            float* getZoomPtr() { return &zoom; }
+            float* getZnearPtr() { return &zNear; }
+            float* getZfarPtr() { return &zFar; }
+            float* getDistanceToTargetPtr() { return &distanceToTarget; }
 
             float getYaw() const { return yaw; }
             float getPitch() const { return pitch; }

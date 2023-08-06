@@ -145,7 +145,6 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
  * Fix Engine on Windows:
    - Linking errors for assimp
-   - C++ filesystem module not compiling
    - Crashes on glBufferData?
  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
     that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!

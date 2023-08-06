@@ -5,6 +5,7 @@
 #include "Logger.hpp"
 #include "camera/FirstPersonCameraController.hpp"
 #include "camera/ThirdPersonCameraController.hpp"
+#include "camera/OrthographicCameraController.hpp"
 
 namespace Villain {
 
@@ -50,6 +51,9 @@ namespace Villain {
             case CameraType::THIRD_PERSON:
                 activeController = std::make_unique<ThirdPersonCameraController>(this);
                 break;
+            case CameraType::ORTHOGRAPHIC:
+                activeController = std::make_unique<OrthographicCameraController>(this);
+                break;
             default:
                 Logger::Instance()->warn("No CameraController found for this Camera type");
         }
@@ -88,12 +92,18 @@ namespace Villain {
     }
 
     glm::mat4 Camera::getProjMatrix() {
+        float halfWidth, halfDepth, halfHeight;
         switch (type) {
             case CameraType::NONE:
                 projection = glm::mat4(1.0f);
                 break;
             case CameraType::ORTHOGRAPHIC:
-                projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
+                // Calculate the half frustum dimensions based on the zoom factor
+                halfWidth = screenWidth * 0.5f * zoom;
+                halfHeight = screenHeight * 0.5f * zoom;
+                halfDepth = zFar * 0.5f;
+
+                projection = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfDepth, halfDepth);
                 break;
             case CameraType::ORTHOGRAPHIC_2D:
                 projection = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, 0.1f, 100.0f);
@@ -179,7 +189,6 @@ namespace Villain {
         if (zoom < 0.001f)
             zoom = 0.001f;
     }
-
 
     Frustum Camera::getFrustum() {
         if (type != CameraType::FIRST_PERSON && type != CameraType::THIRD_PERSON) {

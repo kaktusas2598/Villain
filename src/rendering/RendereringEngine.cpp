@@ -271,7 +271,8 @@ namespace Villain {
         // Always last - render the skybox, if any
         if (currentSkybox) {
             skyboxShader->bind();
-            currentSkybox->render(mainCamera->getProjMatrix(), mainCamera->getViewMatrix(), deltaTime);
+            glm::mat4 proj = (mainCamera->getType() == CameraType::ORTHOGRAPHIC) ? mainCamera->getSkyboxProjMatrix() : mainCamera->getProjMatrix();
+            currentSkybox->render(proj, mainCamera->getViewMatrix(), deltaTime);
         }
     }
 
