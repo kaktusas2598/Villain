@@ -13,13 +13,13 @@ namespace Villain {
     void LuaBindings::registerBindings(lua_State* L) {
         // Register C++ -> Lua wrappers
         // NOTE: Must be done before running lua script
-        lua_register(L, "GetAudio", lua_getAudio);
-        lua_register(L, "GetScreenWidth", lua_getScreenWidth);
-        lua_register(L, "GetScreenHeight", lua_getScreenHeight);
-        lua_register(L, "AddLog", lua_addLog);
-        lua_register(L, "KeyCode", lua_keyCode);
-        lua_register(L, "Quit", lua_quit);
-        lua_register(L, "isNil", lua_isNil);
+        lua_register(L, "GetAudio", lua_GetAudio);
+        lua_register(L, "GetScreenWidth", lua_GetScreenWidth);
+        lua_register(L, "GetScreenHeight", lua_GetScreenHeight);
+        lua_register(L, "AddLog", lua_AddLog);
+        lua_register(L, "KeyCode", lua_KeyCode);
+        lua_register(L, "Quit", lua_Quit);
+        lua_register(L, "isNil", lua_IsNil);
 
         AudioBindings::registerBindings(L);
         PhysicsBindings::registerBindings(L);
@@ -92,7 +92,7 @@ namespace Villain {
         return 0;
     }
 
-    int LuaBindings::lua_getAudio(lua_State *L) {
+    int LuaBindings::lua_GetAudio(lua_State *L) {
         const char* fileName = luaL_checkstring(L, 1);
         AudioBuffer* buffer = ResourceManager::Instance()->getAudio(fileName);
         if (!buffer)
@@ -106,19 +106,19 @@ namespace Villain {
         return 1;
     }
 
-    int LuaBindings::lua_getScreenWidth(lua_State *L) {
+    int LuaBindings::lua_GetScreenWidth(lua_State *L) {
         int screenWidth = Engine::getScreenWidth();
         lua_pushnumber(L, screenWidth);
         return 1;
     }
 
-    int LuaBindings::lua_getScreenHeight(lua_State *L) {
+    int LuaBindings::lua_GetScreenHeight(lua_State *L) {
         int screenHeight = Engine::getScreenHeight();
         lua_pushnumber(L, screenHeight);
         return 1;
     }
 
-    int LuaBindings::lua_addLog(lua_State *L) {
+    int LuaBindings::lua_AddLog(lua_State *L) {
         int nArgs = lua_gettop(L);
         // TODO: support building variadic args
         for (int i = 0; i < nArgs; i++) {
@@ -129,7 +129,7 @@ namespace Villain {
         return 0;
     }
 
-    int LuaBindings::lua_keyCode(lua_State *L) {
+    int LuaBindings::lua_KeyCode(lua_State *L) {
         const char* keyName = luaL_checkstring(L, 1);
 
         if (strcmp(keyName, "r") == 0) {
@@ -146,12 +146,12 @@ namespace Villain {
         return 1;
     }
 
-    int LuaBindings::lua_quit(lua_State *L) {
+    int LuaBindings::lua_Quit(lua_State *L) {
         Engine::setRunning(false);
         return 0;
     }
 
-    int LuaBindings::lua_isNil(lua_State* L) {
+    int LuaBindings::lua_IsNil(lua_State* L) {
         //RigidBody* body = static_cast<RigidBody*>(lua_touserdata(L, 1));
         void* userdata = static_cast<void*>(lua_touserdata(L, 1));
         lua_pushboolean(L, userdata == nullptr);
