@@ -16,8 +16,12 @@ namespace Villain {
         lua_register(L, "GetAudio", lua_GetAudio);
         lua_register(L, "GetScreenWidth", lua_GetScreenWidth);
         lua_register(L, "GetScreenHeight", lua_GetScreenHeight);
+        lua_register(L, "getMouseCoords", lua_GetMouseCoords);
+        lua_register(L, "getMouseOffsets", lua_GetMouseOffsets);
         lua_register(L, "AddLog", lua_AddLog);
         lua_register(L, "KeyCode", lua_KeyCode);
+        lua_register(L, "IsKeyDown", lua_IsKeyDown);
+        lua_register(L, "IsKeyPressed", lua_IsKeyPressed);
         lua_register(L, "Quit", lua_Quit);
         lua_register(L, "isNil", lua_IsNil);
 
@@ -106,6 +110,18 @@ namespace Villain {
         return 1;
     }
 
+    int LuaBindings::lua_GetMouseCoords(lua_State *L) {
+        glm::vec2 mouseCoords = Input::Get()->getMouseCoords();
+        pushVec3ToLua(L, {mouseCoords.x, mouseCoords.y, 0.0f});
+        return 1;
+    }
+
+    int LuaBindings::lua_GetMouseOffsets(lua_State *L) {
+        glm::vec2 mouseOffsets = Input::Get()->getMouseOffsets();
+        pushVec3ToLua(L, {mouseOffsets.x, mouseOffsets.y, 0.0f});
+        return 1;
+    }
+
     int LuaBindings::lua_GetScreenWidth(lua_State *L) {
         int screenWidth = Engine::getScreenWidth();
         lua_pushnumber(L, screenWidth);
@@ -143,6 +159,18 @@ namespace Villain {
         }
         // TODO: Add all the rest :/
 
+        return 1;
+    }
+
+    int LuaBindings::lua_IsKeyDown(lua_State *L) {
+        unsigned key = static_cast<int>(lua_tointeger(L, 1));
+        lua_pushboolean(L, Input::Get()->isKeyDown(key));
+        return 1;
+    }
+
+    int LuaBindings::lua_IsKeyPressed(lua_State *L) {
+        unsigned key = static_cast<int>(lua_tointeger(L, 1));
+        lua_pushboolean(L, Input::Get()->isKeyPressed(key));
         return 1;
     }
 

@@ -24,10 +24,14 @@ namespace Villain {
 
             /// Core Bindings
             static int lua_GetAudio(lua_State *L);
+            static int lua_GetMouseCoords(lua_State *L);
+            static int lua_GetMouseOffsets(lua_State *L);
             static int lua_GetScreenWidth(lua_State *L);
             static int lua_GetScreenHeight(lua_State *L);
             static int lua_AddLog(lua_State *L);
             static int lua_KeyCode(lua_State *L);
+            static int lua_IsKeyDown(lua_State *L);
+            static int lua_IsKeyPressed(lua_State *L);
             static int lua_Quit(lua_State *L);
             /// Check if userdata is nil
             static int lua_IsNil(lua_State* L);
