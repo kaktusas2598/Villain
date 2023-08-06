@@ -199,11 +199,12 @@ namespace Villain {
         // Draw all different parts of the toolkit
         drawMenu();
         DebugConsole::Instance()->render();
-        drawScene(engine);
-        sceneEditor.render(engine);
-        assetBrowser.render();
         fileBrowser.render();
+        assetBrowser.render();
+        sceneEditor.render(engine);
         drawSettings(engine);
+        scriptEditor.render();
+        drawScene(engine);
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     }
 

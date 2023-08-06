@@ -8,6 +8,7 @@
 #include "AssetBrowser.hpp"
 #include "FileBrowser.hpp"
 #include "SceneGraphEditor.hpp"
+#include "editor/ScriptEditor.hpp"
 
 namespace Villain {
 
@@ -41,6 +42,7 @@ namespace Villain {
         float getSceneViewportHeight() const { return sceneViewportHeight; }
 
         SceneGraphEditor& getSceneEditor() { return sceneEditor; }
+        ScriptEditor& getScriptEditor() { return scriptEditor; }
         FileBrowser& getFileBrowser() { return fileBrowser; }
         Engine* getEngine() { return engine; }
 
@@ -66,6 +68,7 @@ namespace Villain {
         SceneGraphEditor sceneEditor;
         AssetBrowser assetBrowser;
         FileBrowser fileBrowser;
+        ScriptEditor scriptEditor;
 
         ImFont* fontAwesome6;
         ImFont* robotoFont;

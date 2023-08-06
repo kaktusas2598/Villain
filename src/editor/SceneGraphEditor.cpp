@@ -97,6 +97,7 @@ namespace Villain {
             selectedNode = node;
             // Set id in rendering engine so that color mod is applied to shader when drawing selected node
             node->getEngine()->getRenderingEngine()->setSelectedNodeID(selectedNode->getID());
+            shouldSetFocus = true;
         }
         if (nodeOpen) {
             if (ImGui::BeginTabBar("NodeProps", ImGuiTabBarFlags_None)) {
@@ -122,8 +123,10 @@ namespace Villain {
     }
 
     void SceneGraphEditor::drawSelectedNode() {
-        // Fixes active node not being in focus on startup but main menu stops working
-        //ImGui::SetNextWindowFocus();
+        if (shouldSetFocus) {
+            ImGui::SetNextWindowFocus();
+            shouldSetFocus = false;
+        }
         ImGui::Begin("Active Node");
 
         if (selectedNode) {
@@ -510,6 +513,8 @@ namespace Villain {
                     auto script = static_cast<ScriptComponent*>(compo);
                     editor->renderIcon("\uf186"); ImGui::SameLine();
                     ImGui::Text("Script: %s", script->getScript().getFilename().c_str());
+                    if (ImGui::Button("Edit"))
+                        editor->getScriptEditor().setScript(script->getScript().getFilename());
                 }
 
                 ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));

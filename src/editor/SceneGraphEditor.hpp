@@ -28,6 +28,8 @@ namespace Villain {
             ImGuiLayer* editor = nullptr;
             SceneNode* selectedNode = nullptr;
 
+            bool shouldSetFocus = false;
+
             enum class ComponentType { Camera, Light, Mesh, Model, MoveController, LookController, RigidBody, Script, None };
             std::map<ComponentType, const char*> componentNames = {
                 { ComponentType::None, "None" },
