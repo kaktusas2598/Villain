@@ -125,7 +125,7 @@ namespace Villain {
         style.WindowBorderSize                  = 1;
         style.ChildBorderSize                   = 1;
         style.PopupBorderSize                   = 1;
-        style.FrameBorderSize                   = 1;
+        style.FrameBorderSize                   = 2;
         style.TabBorderSize                     = 1;
         style.WindowRounding                    = 7;
         style.ChildRounding                     = 4;
@@ -333,7 +333,9 @@ namespace Villain {
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", Input::Get()->getMouseCoords().x, Input::Get()->getMouseCoords().y);
 
+        ImGui::SetWindowFontScale(1.1);
         ImGui::SeparatorText("General settings");
+        ImGui::SetWindowFontScale(1.0);
         // TODO: Functionality to add static colliders
         ImGui::Checkbox("Rigid Body Debug Mode", engine.getRigidBodyWorld()->debugModeActive());
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
@@ -344,8 +346,11 @@ namespace Villain {
         ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());
         ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());
         ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
+        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
 
+        ImGui::SetWindowFontScale(1.1);
         ImGui::SeparatorText("Fog settings");
+        ImGui::SetWindowFontScale(1.0);
         ImGui::ColorEdit3("Fog color: ", (float*)engine.getRenderingEngine()->getFogColor());
         ImGui::Checkbox("Exponential fog enable d(defaults to layered fog)", engine.getRenderingEngine()->exponentialFogEnabled());
         ImGui::DragFloat("Fog Density", (float*)engine.getRenderingEngine()->getFogDensity(), 0.0005f, 0.0f, 1.0f, "%.5f");
@@ -353,13 +358,14 @@ namespace Villain {
         ImGui::DragFloat("Layered Fog Top", (float*)engine.getRenderingEngine()->getLayeredFogTop(), 1.0f, 0.0f, 1000.0f, "%.1f");
         ImGui::DragFloat("Fog end", (float*)engine.getRenderingEngine()->getLayeredFogEnd(), 1.0, 0.0f, 1000.0f, "%.1f");
 
+        ImGui::SetWindowFontScale(1.1);
         ImGui::SeparatorText("Post-Processing Effects");
+        ImGui::SetWindowFontScale(1.0);
         ImGui::Checkbox("Invert colors", engine.getRenderingEngine()->getInvertColors());
         ImGui::Checkbox("Grayscale", engine.getRenderingEngine()->getGrayScale());
         ImGui::Checkbox("Sharpen", engine.getRenderingEngine()->getSharpen());
         ImGui::Checkbox("Blur", engine.getRenderingEngine()->getBlur());
         ImGui::Checkbox("Edge outline", engine.getRenderingEngine()->getEdgeDetection());
-        ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
 
         // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (showDemoWindow)

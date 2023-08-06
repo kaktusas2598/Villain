@@ -7,6 +7,7 @@ namespace Villain {
 
     BaseLight::~BaseLight() {
         delete shader;
+        getParent()->getEngine()->getRenderingEngine()->removeLight(this);
     }
 
     void BaseLight::addToEngine(Engine* engine) {

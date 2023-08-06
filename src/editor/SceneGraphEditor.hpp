@@ -10,7 +10,7 @@ namespace Villain {
 
     class SceneGraphEditor {
         public:
-            SceneGraphEditor(ImGuiLayer* editor) : editor(editor) {}
+            SceneGraphEditor(ImGuiLayer* editor);
 
             void init();
             void render(Engine& engine);

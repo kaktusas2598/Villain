@@ -23,6 +23,9 @@ namespace Villain {
             void postRender();
 
             inline void addLight(BaseLight* light) { lights.push_back(light); }
+            void removeLight(BaseLight* light) {
+                lights.erase(std::remove(lights.begin(), lights.end(), light), lights.end());
+            }
             inline BaseLight* getActiveLight() { return activeLight; }
             static unsigned int getSamplerSlot(const std::string& samplerType) { return samplerMap.find(samplerType)->second; }
             glm::vec3* getAmbientLightColor() { return &ambientLight; }

@@ -18,6 +18,10 @@
 
 namespace Villain {
 
+    SceneGraphEditor::SceneGraphEditor(ImGuiLayer* editor) : editor(editor) {
+        //selectedNode = editor->getEngine()->getApplication()->getRootNode();
+    }
+
     void SceneGraphEditor::init() {
         editor->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
     }
@@ -67,10 +71,13 @@ namespace Villain {
             drawNodeHierarchy(engine.getApplication()->getRootNode());
             ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.3f, 1.0f));
             if (ImGui::Button("New Node")) {
-                SceneNode* newNode = new SceneNode("testing");
+                SceneNode* newNode = new SceneNode("New Node");
                 engine.getApplication()->getRootNode()->addChild(newNode);
+                selectedNode = newNode;
             }
+            ImGui::PopStyleColor();
         }
         ImGui::End();
 
@@ -115,16 +122,23 @@ namespace Villain {
     }
 
     void SceneGraphEditor::drawSelectedNode() {
+        // Fixes active node not being in focus on startup but main menu stops working
+        //ImGui::SetNextWindowFocus();
         ImGui::Begin("Active Node");
 
-        if (selectedNode)
+        if (selectedNode) {
+            //ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, )
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
             if (ImGui::Button("Remove Node")) {
                 editor->getEngine()->getApplication()->deleteNode(selectedNode);
                 selectedNode = nullptr;
+                return;
             }
+            ImGui::PopStyleColor();
 
-        if (selectedNode != nullptr) {
+            ImGui::SetWindowFontScale(1.1);
             ImGui::SeparatorText("Properties");
+            ImGui::SetWindowFontScale(1.0);
 
             char nodeNameBuffer[100];
             std::strcpy(nodeNameBuffer, selectedNode->getName().c_str());
@@ -134,7 +148,9 @@ namespace Villain {
 
             drawNodeProperties(selectedNode);
 
+            ImGui::SetWindowFontScale(1.1);
             ImGui::SeparatorText("Add New Components");
+            ImGui::SetWindowFontScale(1.0);
 
             // Add component combo menu
             if (ImGui::BeginCombo("Add Component", componentNames[selectedComponent])) {
@@ -264,7 +280,9 @@ namespace Villain {
                     break;
             }
 
+            ImGui::SetWindowFontScale(1.1);
             ImGui::SeparatorText("Components");
+            ImGui::SetWindowFontScale(1.0);
             // Draw existing components
             if (!selectedNode->getComponents().empty()) {
                 drawNodeComponents(selectedNode);
@@ -489,11 +507,14 @@ namespace Villain {
                     ImGui::Text("Script: %s", script->getScript().getFilename().c_str());
                 }
 
+                ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+                ImGui::PushStyleVar(ImGuiStyleVar_SeparatorTextBorderSize, 2.0f);
                 ImGui::Separator();
+                ImGui::PopStyleColor();
+                ImGui::PopStyleVar();
                 ImGui::PopID();
                 i++;
             }
         }
     }
-
 }
