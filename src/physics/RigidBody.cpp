@@ -22,6 +22,9 @@ namespace Villain {
 
         if (inverseMass <= 0.0f) return;  // Infinite mass objects don't move
 
+        // Below we use first order Newton-Euler integration which is sufficient in most cases, however if we had
+        // very high accelerations, we could use 2nd order Newton-Euler integration or even Runga-Kutta 4 (RK4) integration
+
         // Calculate linear acceleration from force inputs
         lastFrameAcceleration = acceleration;
         lastFrameAcceleration += forceAccum * inverseMass;
@@ -40,7 +43,6 @@ namespace Villain {
         // Integrate position
         position += velocity * deltaTime;
         // Integrate orientation by converting angular velocity scaled vector to quaternion
-        // TODO: Investigate if this is really correct, check page 202 in Ian Millington book
         glm::quat deltaOrientation = 0.5f * ((deltaTime * glm::quat(0.0f, rotation.x, rotation.y, rotation.z)) * orientation);
         orientation = orientation + deltaOrientation;
 
@@ -57,11 +59,7 @@ namespace Villain {
         calculateTransformMatrix();
 
         // calculate inertia tensor in world space
-        // TODO: Investigate if these calculations are correct
-        //inverseInertiaTensorWorld = glm::transpose(glm::inverse(glm::mat3(transformMatrix))) * inverseInertiaTensor * glm::inverse(glm::mat3(transformMatrix));
-        // Or this???
         inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor * glm::transpose(glm::mat3(transformMatrix));
-        //inverseInertiaTensorWorld = glm::mat3(transformMatrix) * inverseInertiaTensor;
     }
 
     void RigidBody::calculateTransformMatrix() {
