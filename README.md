@@ -69,6 +69,7 @@
     * Triggers
     * Raycast test: closest hit, all hits, nearest hit
     * Data driven approach for particle types and emitters
+* Audio Engine: Streaming and audio callbacks
 * Lua Scripting API (In progress)
 * Entity Component System?
 * Environmental mapping(reflections and refractions)
