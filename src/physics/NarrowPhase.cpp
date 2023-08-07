@@ -8,18 +8,128 @@ namespace Villain {
 
 
     bool CollisionPlane::intersectRay(Ray& ray, RayHitResult& result) const {
-        // TODO: implement
-        return false;
+        float denominator = glm::dot(direction, ray.getDirection());
+
+        // If the ray is parallel to the plane, there is no intersection
+        if (std::abs(denominator) < 1e-6f) {
+            result.hit = false;
+            return false;
+        }
+
+        float t = (offset - glm::dot(direction, ray.From)) / denominator;
+
+        // If t is negative, the intersection is behind the ray's origin
+        if (t < 0) {
+            result.hit = false;
+            return false;
+        }
+
+        // Calculate the intersection point and normal
+        result.hit = true;
+        result.point = ray.From + t * ray.getDirection();
+        result.normal = direction;
+        result.distance = t;
+        return true;
     }
 
     bool CollisionSphere::intersectRay(Ray& ray, RayHitResult& result) const {
-        // TODO: implement
+        glm::vec3 oc = ray.From - getAxis(3);
+        float a = glm::dot(ray.getDirection(), ray.getDirection());
+        float b = 2.0f * glm::dot(oc, ray.getDirection());
+        float c = glm::dot(oc, oc) - radius * radius;
+        float discriminant = b * b - 4 * a * c;
+
+        // If the discriminant is negative, there is no intersection
+        if (discriminant < 0) {
+            result.hit = false;
+            return false;
+        }
+
+        // Calculate the two intersection points along the ray
+        float t1 = (-b - std::sqrt(discriminant)) / (2 * a);
+        float t2 = (-b + std::sqrt(discriminant)) / (2 * a);
+
+        // Choose the closest intersection point in front of the ray's origin
+        if (t1 >= 0 && t2 >= 0) {
+            float t = std::min(t1, t2);
+            result.hit = true;
+            result.point = ray.From + t * ray.getDirection();
+            result.normal = glm::normalize(result.point - getAxis(3));
+            result.distance = t;
+            return true;
+        } else if (t1 >= 0) {
+            result.hit = true;
+            result.point = ray.From + t1 * ray.getDirection();
+            result.normal = glm::normalize(result.point - getAxis(3));
+            result.distance = t1;
+            return true;
+        } else if (t2 >= 0) {
+            result.hit = true;
+            result.point = ray.From + t2 * ray.getDirection();
+            result.normal = glm::normalize(result.point - getAxis(3));
+            result.distance = t2;
+            return true;
+        }
+
+        // If both t1 and t2 are negative, the sphere is behind the ray's origin
+        result.hit = false;
         return false;
     }
 
     bool CollisionBox::intersectRay(Ray& ray, RayHitResult& result) const {
-        // TODO: implement
-        return false;
+        // Transform the ray to the local space of the box
+        glm::vec3 rayOrigin = glm::vec3(glm::inverse(transform) * glm::vec4(ray.From, 1.0f));
+        glm::vec3 rayDirection = glm::normalize(glm::vec3(glm::inverse(transform) * glm::vec4(ray.getDirection(), 0.0f)));
+
+        // Calculate the inverse of the ray direction for faster intersection tests
+        glm::vec3 invRayDirection = glm::vec3(1.0f) / rayDirection;
+
+        // Calculate the half extent of the box in local space
+        glm::vec3 localHalfSize = halfSize;
+
+        // Perform the AABB intersection test in the local space of the box
+        float tMin = -std::numeric_limits<float>::infinity();
+        float tMax = std::numeric_limits<float>::infinity();
+
+        for (int i = 0; i < 3; i++) {
+            float t1 = (-localHalfSize[i] - rayOrigin[i]) * invRayDirection[i];
+            float t2 = (localHalfSize[i] - rayOrigin[i]) * invRayDirection[i];
+
+            tMin = std::max(tMin, std::min(t1, t2));
+            tMax = std::min(tMax, std::max(t1, t2));
+        }
+
+        // Check if the ray intersects the AABB
+        if (tMax < 0 || tMin > tMax) {
+            // No intersection or intersection is behind the ray origin
+            return false;
+        }
+
+        // Calculate the intersection point and normal in local space
+        glm::vec3 localIntersectionPoint = rayOrigin + tMin * rayDirection;
+        glm::vec3 localIntersectionNormal(0.0f);
+
+        // Determine which face of the box the intersection point is on
+        for (int i = 0; i < 3; i++) {
+            float distance = localIntersectionPoint[i] - localHalfSize[i];
+            if (distance > 0) {
+                localIntersectionNormal[i] = 1.0f;
+            } else if (distance < 0) {
+                localIntersectionNormal[i] = -1.0f;
+            }
+        }
+
+        // Transform the intersection point and normal back to world space
+        result.point = glm::vec3(transform * glm::vec4(localIntersectionPoint, 1.0f));
+        result.normal = glm::normalize(glm::vec3(transform * glm::vec4(localIntersectionNormal, 0.0f)));
+
+        // Calculate the distance from the ray origin to the intersection point
+        result.distance = glm::length(result.point - ray.From);
+
+        // Set the "hit" flag to true to indicate intersection
+        result.hit = true;
+
+        return true;
     }
 
     static inline float transformToAxis(const CollisionBox &box, const glm::vec3 &axis) {
