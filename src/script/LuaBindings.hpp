@@ -41,5 +41,8 @@ namespace Villain {
             static int lua_SceneNode_getComponent(lua_State *L);
             static int lua_SceneNode_getPosition(lua_State *L);
             static int lua_SceneNode_setPosition(lua_State *L);
+            static int lua_SceneNode_addMoveBehaviour(lua_State *L);
+            static int lua_SceneNode_addCurveMoveBehaviour(lua_State *L);
+            static int lua_SceneNode_addTeleportBehaviour(lua_State *L);
     };
 }

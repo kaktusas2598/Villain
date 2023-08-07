@@ -68,14 +68,4 @@ namespace Villain {
         }
         return std::string();
     }
-
-    void ScriptEngine::issueNextTask(int id) {
-        lua_getglobal(state, "issueNextTask");
-        if (lua_isfunction(state, -1)) {
-            lua_pushnumber(state, id);
-            if(!luaOk(state, lua_pcall(state, 1, 0, 0))) {
-                // behaviour function error or script error
-            }
-        }
-    }
 }

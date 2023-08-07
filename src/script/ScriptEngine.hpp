@@ -36,10 +36,7 @@ namespace Villain {
                 script->close();
             }
 
-            // Issues next task for dynamic behaviours/coroutines
-            void issueNextTask(int id);
-
-            // Temporary place, this method should go to dedicated scripting classes
+            /// Temporary place, this method should go to dedicated scripting classes
             bool luaOk(lua_State* L, int call) {
                 if (call != LUA_OK) {
                     std::string errorMessage = lua_tostring(L, -1);

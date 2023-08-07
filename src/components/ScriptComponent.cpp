@@ -32,12 +32,46 @@ namespace Villain {
         if (lua_pcall(script.getLuaState(), 2, 0, 0) != LUA_OK) {
             // Handle any errors here.
             std::string errorMessage = lua_tostring(script.getLuaState(), -1);
-            VILLAIN_CRIT("Lua error in update() for {}: {}", getParent()->getName(), errorMessage);
+            VILLAIN_CRIT("Lua error in Update() for {}: {}", getParent()->getName(), errorMessage);
         }
+
+        ///////////////////////////////
+        // Update manipulators
+        for (auto& m: newManipulators) {
+            manipulators.push_back(std::move(m));
+        }
+        newManipulators.clear();
+
+        for (auto& m: manipulators) {
+            if (m->update(deltaTime)) {
+                // Manipulation complete, resume coroutine
+                issueNextTask();
+            }
+        }
+
+        // Remove completed manipulations
+        manipulators.erase(
+                std::remove_if(manipulators.begin(), manipulators.end(),
+                    [](const std::shared_ptr<Manipulator>& m)
+                    { return m->complete; } ), manipulators.end()
+                );
+        ///////////////////////////////
     }
 
     void ScriptComponent::addToEngine(Engine* engine) {
         getParent()->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
+
+        lua_getglobal(script.getLuaState(), "Init");
+        if (lua_isfunction(script.getLuaState(), -1)) {
+            lua_pushlightuserdata(script.getLuaState(), getParent());
+            luaL_setmetatable(script.getLuaState(), "SceneNode");
+
+            if (lua_pcall(script.getLuaState(), 1, 0, 0) != LUA_OK) {
+                // Handle any errors here.
+                std::string errorMessage = lua_tostring(script.getLuaState(), -1);
+                VILLAIN_CRIT("Lua error in Init() for {}: {}", getParent()->getName(), errorMessage);
+            }
+        }
     }
 
     void ScriptComponent::onEvent(Event& event) {
@@ -53,7 +87,7 @@ namespace Villain {
 
                 if (lua_pcall(script.getLuaState(), 2, 0, 0) != LUA_OK) {
                     std::string errorMessage = lua_tostring(script.getLuaState(), -1);
-                    VILLAIN_CRIT("Lua error in onKey() for {}: {}", getParent()->getName(), errorMessage);
+                    VILLAIN_CRIT("Lua error in OnKey() for {}: {}", getParent()->getName(), errorMessage);
                 }
             }
         }
@@ -75,11 +109,22 @@ namespace Villain {
 
                     if (lua_pcall(script.getLuaState(), 3, 0, 0) != LUA_OK) {
                         std::string errorMessage = lua_tostring(script.getLuaState(), -1);
-                        VILLAIN_CRIT("Lua error in onCollide() for {}: {}", getParent()->getName(), errorMessage);
+                        VILLAIN_CRIT("Lua error in OnCollide() for {}: {}", getParent()->getName(), errorMessage);
                     }
                 }
             }
         }
         // TODO: other callbacks with appropriate params
+    }
+
+    void ScriptComponent::issueNextTask() {
+        lua_getglobal(script.getLuaState(), "IssueNextTask");
+        if (lua_isfunction(script.getLuaState(), -1)) {
+            lua_pushlightuserdata(script.getLuaState(), getParent());
+            if (lua_pcall(script.getLuaState(), 1, 0, 0) != LUA_OK) {
+                std::string errorMessage = lua_tostring(script.getLuaState(), -1);
+                VILLAIN_CRIT("Lua error in IssueNextTask() for {}: {}", getParent()->getName(), errorMessage);
+            }
+        }
     }
 }

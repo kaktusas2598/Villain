@@ -2,6 +2,7 @@
 
 #include "audio/AudioSource.hpp"
 #include "components/RigidBodyComponent.hpp"
+#include "components/ScriptComponent.hpp"
 #include "Engine.hpp"
 #include "KeyCode.hpp"
 
@@ -16,14 +17,14 @@ namespace Villain {
         lua_register(L, "GetAudio", lua_GetAudio);
         lua_register(L, "GetScreenWidth", lua_GetScreenWidth);
         lua_register(L, "GetScreenHeight", lua_GetScreenHeight);
-        lua_register(L, "getMouseCoords", lua_GetMouseCoords);
-        lua_register(L, "getMouseOffsets", lua_GetMouseOffsets);
+        lua_register(L, "GetMouseCoords", lua_GetMouseCoords);
+        lua_register(L, "GetMouseOffsets", lua_GetMouseOffsets);
         lua_register(L, "AddLog", lua_AddLog);
         lua_register(L, "KeyCode", lua_KeyCode);
         lua_register(L, "IsKeyDown", lua_IsKeyDown);
         lua_register(L, "IsKeyPressed", lua_IsKeyPressed);
         lua_register(L, "Quit", lua_Quit);
-        lua_register(L, "isNil", lua_IsNil);
+        lua_register(L, "IsNil", lua_IsNil);
 
         AudioBindings::registerBindings(L);
         PhysicsBindings::registerBindings(L);
@@ -37,6 +38,9 @@ namespace Villain {
             { "getComponent", lua_SceneNode_getComponent },
             { "getPosition", lua_SceneNode_getPosition },
             { "setPosition", lua_SceneNode_setPosition },
+            { "addMoveBehaviour", lua_SceneNode_addMoveBehaviour },
+            { "addCurveMoveBehaviour", lua_SceneNode_addCurveMoveBehaviour },
+            { "addTeleportBehaviour", lua_SceneNode_addTeleportBehaviour },
             { NULL, NULL } // The array must be null-terminated
         };
 
@@ -93,6 +97,33 @@ namespace Villain {
             node->getTransform()->setPos(position);
         }
 
+        return 0;
+    }
+
+    int LuaBindings::lua_SceneNode_addMoveBehaviour(lua_State *L) {
+        SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
+        ScriptComponent* c = node->getComponent<ScriptComponent>();
+        glm::vec3 target = readVec3FromLua(L, 2);
+        float time = static_cast<float>(lua_tonumber(L, 3));
+        c->move(target, time);
+        return 0;
+    }
+
+    int LuaBindings::lua_SceneNode_addCurveMoveBehaviour(lua_State *L) {
+        SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
+        ScriptComponent* c = node->getComponent<ScriptComponent>();
+        glm::vec3 target = readVec3FromLua(L, 2);
+        glm::vec3 waypoint = readVec3FromLua(L, 3);
+        float time = static_cast<float>(lua_tonumber(L, 4));
+        c->curveMove(target, waypoint, time);
+        return 0;
+    }
+
+    int LuaBindings::lua_SceneNode_addTeleportBehaviour(lua_State *L) {
+        SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
+        ScriptComponent* c = node->getComponent<ScriptComponent>();
+        glm::vec3 target = readVec3FromLua(L, 2);
+        c->teleport(target);
         return 0;
     }
 
