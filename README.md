@@ -11,7 +11,7 @@
 * 3D Scene loading from XML files
 * 3D Sound support
 * Debug/Editor mode UI for scene graph editing
-* Attach simple Lua scripts to scene nodes for basic scripting
+* Attach simple Lua scripts to scene nodes for basic scripting with callbacks and dynamic automation sequences
 * Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes
 * Error logging to stdout, log file and editor console
 * Event Dispatcher system
@@ -62,6 +62,7 @@
     * Hot reloading resources
     * Saving current scene (In progress)
     * Scene camera, gizmos?
+    * Prefabs
 * Physics Engine planned additions:
     * Stability improvements, optimizations (In progress)
     * Constraints: rods, cables, hinges, joints
