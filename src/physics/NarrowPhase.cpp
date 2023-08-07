@@ -6,6 +6,22 @@
 
 namespace Villain {
 
+
+    bool CollisionPlane::intersectRay(Ray& ray, RayHitResult& result) const {
+        // TODO: implement
+        return false;
+    }
+
+    bool CollisionSphere::intersectRay(Ray& ray, RayHitResult& result) const {
+        // TODO: implement
+        return false;
+    }
+
+    bool CollisionBox::intersectRay(Ray& ray, RayHitResult& result) const {
+        // TODO: implement
+        return false;
+    }
+
     static inline float transformToAxis(const CollisionBox &box, const glm::vec3 &axis) {
         return
             box.halfSize.x * fabs(glm::dot(axis, box.getAxis(0))) +

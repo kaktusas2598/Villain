@@ -25,6 +25,19 @@ namespace Villain {
         bodies.clear();
     }
 
+    // TODO: TEST! Consider dispatching event as well
+    void RigidBodyWorld::cast(const glm::vec3& from, const glm::vec3& to, std::function<void(RayHitResult&)> callback) {
+        Ray ray(from, to);
+        // Perform ray casting and call the callback for each collision found
+        for (CollisionPrimitive* collider : colliders) {
+            RigidBody* rigidBody = collider->body; // Get the associated rigid body
+            RayHitResult result;
+            if (collider->intersectRay(ray, result)) {
+                callback(result);
+            }
+        }
+    }
+
     void RigidBodyWorld::startFrame() {
         for (RigidBody* body : bodies) {
             body->clearAccumulators();
