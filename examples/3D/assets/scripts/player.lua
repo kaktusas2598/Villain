@@ -31,9 +31,8 @@ function OnCollide(node, thisBody, otherBody)
     --print("Node: " .. node:getName())
     if not IsNil(otherBody) then
         print("This mass: " .. thisBody:getMass() .. " Other mass: " .. otherBody:getMass())
+        -- On touching other rigid body, give it some up force to lift it up
         local force = { x = 0.0, y = 10, z = 0.0 }
-        --otherBody:addLinearVelocity(force)
-        -- FIXME: addForce is called correctly but not working, is the order of the calls wrong?
-        --otherBody:addForce(force)
+        otherBody:addLinearVelocity(force)
     end
 end

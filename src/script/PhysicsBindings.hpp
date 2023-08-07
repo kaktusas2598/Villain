@@ -17,6 +17,8 @@ namespace Villain {
 
         private:
             /// RigidBody metatable bindings
+            /// NOTE: addForce and addForceAtPoint can be called in lua Update(), but not in OnCollide(),
+            /// because after collision, all accumulated forces will be cleared at the start of the next frame
             static int lua_RigidBody_addForce(lua_State* L);
             static int lua_RigidBody_addForceAtPoint(lua_State* L);
             static int lua_RigidBody_getAwake(lua_State* L);
