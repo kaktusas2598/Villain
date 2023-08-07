@@ -29,7 +29,11 @@ end
 
 function OnCollide(node, thisBody, otherBody)
     --print("Node: " .. node:getName())
-    if not isNil(otherBody) then
+    if not IsNil(otherBody) then
         print("This mass: " .. thisBody:getMass() .. " Other mass: " .. otherBody:getMass())
+        local force = { x = 0.0, y = 10, z = 0.0 }
+        --otherBody:addLinearVelocity(force)
+        -- FIXME: addForce is called correctly but not working, is the order of the calls wrong?
+        --otherBody:addForce(force)
     end
 end
