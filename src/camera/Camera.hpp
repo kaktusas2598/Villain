@@ -56,7 +56,7 @@ namespace Villain {
                 return glm::perspective(glm::radians(skyboxFOV), aspectRatio, nearPlane, farPlane);
             }
 
-            glm::vec3& getPosition() { return position; }
+            const glm::vec3& getPosition() const { return position; }
             float getZoom() const { return zoom; }
             float getAspectRatio() { return (float)screenWidth / (float)screenHeight; }
             float getZnear() const { return zNear; }
