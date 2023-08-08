@@ -381,6 +381,9 @@ namespace Villain {
                 ImGui::InputFloat("Plane Offset", &planeCollider->offset);
                 ImGui::DragFloat3("Plane Direction", glm::value_ptr(planeCollider->direction));
             }
+            static glm::vec3 colliderTranslation = glm::vec3(0.0f);
+            ImGui::DragFloat3("Translation", glm::value_ptr(colliderTranslation));
+            selectedCollider->offset = glm::translate(glm::mat4(1.0f), colliderTranslation);
             // TODO: Add ability to attach/detach rigid bodies by selecting them from another combo or sth like that
             ImGui::PopID();
         }

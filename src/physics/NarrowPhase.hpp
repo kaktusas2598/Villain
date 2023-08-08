@@ -83,7 +83,7 @@ namespace Villain {
 
             virtual bool intersectRay(Ray& ray, RayHitResult& result) const override;
             virtual void debugDraw(DebugRenderer* renderer) const override {
-                renderer->drawSphere(body->getPosition(), radius);
+                renderer->drawSphere(getAxis(3), radius);
             };
             void generateName() {
                 static int instanceCount = 0;
@@ -125,7 +125,7 @@ namespace Villain {
 
             virtual bool intersectRay(Ray& ray, RayHitResult& result) const override;
             virtual void debugDraw(DebugRenderer* renderer) const override {
-                renderer->drawBox3DRotated(body->getPosition(), halfSize * 2.0f, glm::mat4_cast(body->getOrientation()));
+                renderer->drawBox3DRotated(getAxis(3), halfSize * 2.0f, glm::mat4(glm::mat3(transform)));
             };
             void generateName() {
                 static int instanceCount = 0;
