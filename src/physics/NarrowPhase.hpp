@@ -59,17 +59,25 @@ namespace Villain {
             virtual bool intersectRay(Ray& ray, RayHitResult& result) const = 0;
             virtual void debugDraw(DebugRenderer* renderer) const = 0;
 
+            const std::string& getName() const {
+                return name;
+            }
+
         protected:
             /// Resultant transform of the primitive, calculated by combining offset of the primitive
             /// by the transform of the rigid body
             glm::mat4 transform;
+
+            std::string name; // The auto-generated name of the collider
     };
 
     /// Represents a rigid body that can be treated as a sphere for collision detection
     class CollisionSphere : public CollisionPrimitive {
         public:
             CollisionSphere(float radius, RigidBody* body, glm::mat4 offset = glm::mat4(1.0f))
-                : radius(radius), CollisionPrimitive(body, offset) {}
+                : radius(radius), CollisionPrimitive(body, offset) {
+                    generateName();
+                }
 
             float radius; ///< Radius of the sphere
 
@@ -77,13 +85,19 @@ namespace Villain {
             virtual void debugDraw(DebugRenderer* renderer) const override {
                 renderer->drawSphere(body->getPosition(), radius);
             };
+            void generateName() {
+                static int instanceCount = 0;
+                name = "Sphere " + std::to_string(++instanceCount);
+            }
     };
 
     /// Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with world geometry
     class CollisionPlane : public CollisionPrimitive {
         public:
             CollisionPlane(glm::vec3 normal, float distance, glm::mat4 offset = glm::mat4(1.0f))
-                : direction(normal), offset(distance), CollisionPrimitive(nullptr, offset) {}
+                : direction(normal), offset(distance), CollisionPrimitive(nullptr, offset) {
+                    generateName();
+                }
 
             glm::vec3 direction; ///< Plane normal
             float offset; ///< Distance of the plane from the origin
@@ -93,14 +107,19 @@ namespace Villain {
                 // NOTE:What size to use here? Possibly need to draw 'infinite' grid here
                 renderer->drawPlane(direction, offset, {5.0f, 5.0f});
             };
-
+            void generateName() {
+                static int instanceCount = 0;
+                name = "Plane " + std::to_string(++instanceCount);
+            }
     };
 
     /// Represents a rigid body that can be treated as an axis-aligned box for collision detection
     class CollisionBox : public CollisionPrimitive {
         public:
             CollisionBox(glm::vec3 half, RigidBody* body, glm::mat4 offset = glm::mat4(1.0f))
-                : halfSize(half), CollisionPrimitive(body, offset) {}
+                : halfSize(half), CollisionPrimitive(body, offset) {
+                    generateName();
+                }
 
             glm::vec3 halfSize; ///< Half sizes of the box along its local axes
 
@@ -108,7 +127,10 @@ namespace Villain {
             virtual void debugDraw(DebugRenderer* renderer) const override {
                 renderer->drawBox3DRotated(body->getPosition(), halfSize * 2.0f, glm::mat4_cast(body->getOrientation()));
             };
-
+            void generateName() {
+                static int instanceCount = 0;
+                name = "Box " + std::to_string(++instanceCount);
+            }
     };
 
     /// Fast intersection tests to use as an early exit in narrow phase collision detection
