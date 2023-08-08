@@ -327,50 +327,111 @@ namespace Villain {
         static bool showDemoWindow = false;
         ImGui::Begin("Settings");
 
-        // Engine Info and settings
+        separatorHeader("Engine Info", 1.15);
         ImGui::Text("Engine FPS: %.1f ", engine.getFps());
         ImGui::Text("Update frame time: %.1u ms ", engine.getUpdateTime());
         ImGui::Text("Render frame time: %.1u ms", engine.getRenderTime());
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::Text("Mouse coords(Window): %.1f, %.1f", Input::Get()->getMouseCoords().x, Input::Get()->getMouseCoords().y);
 
-        ImGui::SetWindowFontScale(1.1);
-        ImGui::SeparatorText("General settings");
-        ImGui::SetWindowFontScale(1.0);
-        // TODO: Functionality to add static colliders
-        ImGui::Checkbox("Rigid Body Debug Mode", engine.getRigidBodyWorld()->debugModeActive());
+        auto renderingEngine = engine.getRenderingEngine();
+        separatorHeader("Rendering settings", 1.15);
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
-        ImGui::Checkbox("Wireframe mode", engine.wireFrameModeActive());
-        ImGui::Checkbox("Visualise normals", engine.getRenderingEngine()->getVisualiseNormals());
-        ImGui::Checkbox("Visualise bone weights", engine.getRenderingEngine()->getVisualiseBoneWeights());
-        ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", engine.getRenderingEngine()->getGammaCorrection());
-        ImGui::Checkbox("Toon shading enabled", engine.getRenderingEngine()->getToonShadingEnabled());
-        ImGui::Checkbox("Mirror enabled", engine.getRenderingEngine()->getMirrorFramebufferEnabled());
-        ImGui::ColorEdit3("Ambient lighting color: ", (float*)engine.getRenderingEngine()->getAmbientLightColor());
+        ImGui::Checkbox("Wireframe mode", renderingEngine->wireFrameModeActive());
+        ImGui::Checkbox("Visualise normals", renderingEngine->getVisualiseNormals());
+        ImGui::Checkbox("Visualise bone weights", renderingEngine->getVisualiseBoneWeights());
+        ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", renderingEngine->getGammaCorrection());
+        ImGui::Checkbox("Toon shading enabled", renderingEngine->getToonShadingEnabled());
+        ImGui::Checkbox("Mirror enabled", renderingEngine->getMirrorFramebufferEnabled());
+        ImGui::ColorEdit3("Ambient lighting color: ", (float*)renderingEngine->getAmbientLightColor());
         ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
 
-        ImGui::SetWindowFontScale(1.1);
-        ImGui::SeparatorText("Fog settings");
-        ImGui::SetWindowFontScale(1.0);
-        ImGui::ColorEdit3("Fog color: ", (float*)engine.getRenderingEngine()->getFogColor());
-        ImGui::Checkbox("Exponential fog enable d(defaults to layered fog)", engine.getRenderingEngine()->exponentialFogEnabled());
-        ImGui::DragFloat("Fog Density", (float*)engine.getRenderingEngine()->getFogDensity(), 0.0005f, 0.0f, 1.0f, "%.5f");
-        ImGui::DragFloat("Fog Gradient", (float*)engine.getRenderingEngine()->getFogGradient(), 0.1f, 0.0f, 100.0f);
-        ImGui::DragFloat("Layered Fog Top", (float*)engine.getRenderingEngine()->getLayeredFogTop(), 1.0f, 0.0f, 1000.0f, "%.1f");
-        ImGui::DragFloat("Fog end", (float*)engine.getRenderingEngine()->getLayeredFogEnd(), 1.0, 0.0f, 1000.0f, "%.1f");
+        // TODO: Possibly move this to anotehr class or maybe all of this method, not sure yet
+        ///////////////////////////////////////////////////
+        separatorHeader("Physics settings", 1.15);
+        ImGui::Checkbox("Rigid Body Debug Mode", engine.getRigidBodyWorld()->debugModeActive());
 
-        ImGui::SetWindowFontScale(1.1);
-        ImGui::SeparatorText("Post-Processing Effects");
-        ImGui::SetWindowFontScale(1.0);
-        ImGui::Checkbox("Invert colors", engine.getRenderingEngine()->getInvertColors());
-        ImGui::Checkbox("Grayscale", engine.getRenderingEngine()->getGrayScale());
-        ImGui::Checkbox("Sharpen", engine.getRenderingEngine()->getSharpen());
-        ImGui::Checkbox("Blur", engine.getRenderingEngine()->getBlur());
-        ImGui::Checkbox("Edge outline", engine.getRenderingEngine()->getEdgeDetection());
+        // Draw select list of all colliders currently in rigid body world
+        RigidBodyWorld::Colliders& colliders = engine.getRigidBodyWorld()->getColliders();
+        static CollisionPrimitive* selectedCollider = nullptr;
+        if (ImGui::BeginCombo("Select Collider", selectedCollider ? selectedCollider->getName().c_str() : nullptr)) {
+            for (CollisionPrimitive* collider : colliders) {
+                bool isSelected = (selectedCollider == collider);
+                if (ImGui::Selectable(collider->getName().c_str(), isSelected)) {
+                    selectedCollider = collider;
+                }
+                if (isSelected) {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+
+        // Edit selected collider
+        if (selectedCollider) {
+            ImGui::PushID(selectedCollider);
+            if (auto sphereCollider = dynamic_cast<CollisionSphere*>(selectedCollider)) {
+                // Display sphere collider properties
+                ImGui::InputFloat("Sphere Radius", &sphereCollider->radius);
+            } else if (auto boxCollider = dynamic_cast<CollisionBox*>(selectedCollider)) {
+                // Display box collider properties
+                ImGui::DragFloat3("OBB Half Size", glm::value_ptr(boxCollider->halfSize));
+            } else if (auto planeCollider = dynamic_cast<CollisionPlane*>(selectedCollider)) {
+                // Display plane collider properties
+                ImGui::InputFloat("Plane Offset", &planeCollider->offset);
+                ImGui::DragFloat3("Plane Direction", glm::value_ptr(planeCollider->direction));
+            }
+            // TODO: Add ability to attach/detach rigid bodies by selecting them from another combo or sth like that
+            ImGui::PopID();
+        }
+
+        if (ImGui::Button("Add new collider")) {
+            ImGui::OpenPopup("Add Collider Popup");
+        }
+
+        // Popup for adding a new collider
+        if (ImGui::BeginPopup("Add Collider Popup")) {
+            if (ImGui::Selectable("Sphere")) {
+                colliders.push_back(new CollisionSphere(1.0f, nullptr));
+                ImGui::CloseCurrentPopup();
+            }
+            if (ImGui::Selectable("Box")) {
+                colliders.push_back(new CollisionBox({0.5, 0.5, 0.5}, nullptr));
+                ImGui::CloseCurrentPopup();
+            }
+            if (ImGui::Selectable("Plane")) {
+                colliders.push_back(new CollisionPlane({0, 1, 0}, 0));
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+        ///////////////////////////////////////////////////
+
+        // Fog Settings
+        separatorHeader("Fog settings", 1.15);
+        ImGui::ColorEdit3("Fog color: ", (float*)renderingEngine->getFogColor());
+        ImGui::Checkbox("Exponential fog enable d(defaults to layered fog)", renderingEngine->exponentialFogEnabled());
+        ImGui::DragFloat("Fog Density", (float*)renderingEngine->getFogDensity(), 0.0005f, 0.0f, 1.0f, "%.5f");
+        ImGui::DragFloat("Fog Gradient", (float*)renderingEngine->getFogGradient(), 0.1f, 0.0f, 100.0f);
+        ImGui::DragFloat("Layered Fog Top", (float*)renderingEngine->getLayeredFogTop(), 1.0f, 0.0f, 1000.0f, "%.1f");
+        ImGui::DragFloat("Fog end", (float*)renderingEngine->getLayeredFogEnd(), 1.0, 0.0f, 1000.0f, "%.1f");
+
+        // Enable post processing filters
+        separatorHeader("Post-Processing effects", 1.15);
+        ImGui::Checkbox("Invert colors", renderingEngine->getInvertColors());
+        ImGui::Checkbox("Grayscale", renderingEngine->getGrayScale());
+        ImGui::Checkbox("Sharpen", renderingEngine->getSharpen());
+        ImGui::Checkbox("Blur", renderingEngine->getBlur());
+        ImGui::Checkbox("Edge outline", renderingEngine->getEdgeDetection());
 
         // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (showDemoWindow)
             ImGui::ShowDemoWindow(&showDemoWindow);
     }
-}
 
+    void ImGuiLayer::separatorHeader(const char* text, float fontScale) {
+        ImGui::SetWindowFontScale(fontScale);
+        ImGui::SeparatorText(text);
+        ImGui::SetWindowFontScale(1.0);
+    }
+}

@@ -56,6 +56,9 @@ namespace Villain {
     private:
         void setupDockspace();
 
+        /// UI Elements
+        void separatorHeader(const char* text, float fontScale);
+
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
         static ImVec4 clearColor;
 
