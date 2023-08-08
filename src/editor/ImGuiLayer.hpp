@@ -53,11 +53,10 @@ namespace Villain {
 
         // Render font awesome 6 icon, code point example - "\uf07c" for folder open icon
         void renderIcon(const std::string& codePoint, float scale = 1.0f);
+        // Render custom size separator text for headers
+        void separatorHeader(const char* text, float fontScale);
     private:
         void setupDockspace();
-
-        /// UI Elements
-        void separatorHeader(const char* text, float fontScale);
 
         static bool showDemoWindow; //<<< Toggle IMGui Demo Window for Docs
         static ImVec4 clearColor;
