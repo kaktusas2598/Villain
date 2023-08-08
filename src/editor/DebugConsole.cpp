@@ -9,6 +9,7 @@ namespace Villain {
 
     std::map<std::string,std::string> DebugConsole::customInfo;
 
+    bool DebugConsole::showLogs = true;
     DebugConsole* DebugConsole::s_pInstance = nullptr;
 
     DebugConsole::DebugConsole() {
@@ -108,6 +109,8 @@ namespace Villain {
         }
         ImGui::SameLine();
         bool copyToClipboard = ImGui::SmallButton("Copy");
+        ImGui::SameLine();
+        ImGui::Checkbox("Show Logs", &showLogs);
 
         // Reserve enough left-over height for 1 separator + 1 input text
         const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();

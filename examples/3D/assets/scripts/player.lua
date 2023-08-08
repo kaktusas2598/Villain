@@ -33,6 +33,6 @@ function OnCollide(node, thisBody, otherBody)
         print("This mass: " .. thisBody:getMass() .. " Other mass: " .. otherBody:getMass())
         -- On touching other rigid body, give it some up force to lift it up
         local force = { x = 0.0, y = 10, z = 0.0 }
-        otherBody:addLinearVelocity(force)
+        ----otherBody:addLinearVelocity(force)
     end
 end

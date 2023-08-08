@@ -8,6 +8,7 @@
 
 namespace Villain {
 
+    /// Console with ability to run custom commands, lua scripts and display logs
     struct DebugConsole {
         public:
             static DebugConsole* Instance() {
@@ -26,6 +27,8 @@ namespace Villain {
             ImGuiTextFilter filter;
             bool autoScroll;
             bool scrollToBottom;
+
+            static bool showLogs; ///< Whether to display logs from Logger
 
             void addLog(const char* fmt, ...);// IM_FMTARGS(2)
             void clearLog();

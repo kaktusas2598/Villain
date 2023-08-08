@@ -18,9 +18,7 @@
 
 namespace Villain {
 
-    SceneGraphEditor::SceneGraphEditor(ImGuiLayer* editor) : editor(editor) {
-        //selectedNode = editor->getEngine()->getApplication()->getRootNode();
-    }
+    SceneGraphEditor::SceneGraphEditor(ImGuiLayer* editor) : editor(editor) {}
 
     void SceneGraphEditor::init() {
         editor->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
@@ -76,6 +74,7 @@ namespace Villain {
                 SceneNode* newNode = new SceneNode("New Node");
                 engine.getApplication()->getRootNode()->addChild(newNode);
                 selectedNode = newNode;
+                shouldSetFocus = true;
             }
             ImGui::PopStyleColor();
         }

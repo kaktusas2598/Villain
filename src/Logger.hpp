@@ -43,42 +43,42 @@ namespace Villain {
             void trace(const char* fmt, const Args&... args) {
                 fileLogger->trace(fmt, args...);
                 consoleLogger->trace(fmt, args...);
-                DebugConsole::Instance()->addLog("[TRACE]: %s", fmt::format(fmt, args...).c_str());
+                if (DebugConsole::showLogs) DebugConsole::Instance()->addLog("[TRACE]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void debug(const char* fmt, const Args&... args) {
                 fileLogger->debug(fmt, args...);
                 consoleLogger->debug(fmt, args...);
-                DebugConsole::Instance()->addLog("[DEBUG]: %s", fmt::format(fmt, args...).c_str());
+                if (DebugConsole::showLogs) DebugConsole::Instance()->addLog("[DEBUG]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void info(const char* fmt, const Args&... args) {
                 fileLogger->info(fmt, args...);
                 consoleLogger->info(fmt, args...);
-                DebugConsole::Instance()->addLog("[INFO]: %s", fmt::format(fmt, args...).c_str());
+                if (DebugConsole::showLogs) DebugConsole::Instance()->addLog("[INFO]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void warn(const char* fmt, const Args&... args) {
                 fileLogger->warn(fmt, args...);
                 consoleLogger->warn(fmt, args...);
-                DebugConsole::Instance()->addLog("[WARN]: %s", fmt::format(fmt, args...).c_str());
+                if (DebugConsole::showLogs) DebugConsole::Instance()->addLog("[WARN]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void error(const char* fmt, const Args&... args) {
                 fileLogger->error(fmt, args...);
                 consoleLogger->error(fmt, args...);
-                DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...).c_str());
+                if (DebugConsole::showLogs) DebugConsole::Instance()->addLog("[ERROR]: %s", fmt::format(fmt, args...).c_str());
             }
 
             template<typename... Args>
             void critical(const char* fmt, const Args&... args) {
                 fileLogger->critical(fmt, args...);
                 consoleLogger->critical(fmt, args...);
-                DebugConsole::Instance()->addLog("[CRIT]: %s", fmt::format(fmt, args...).c_str());
+                if (DebugConsole::showLogs) DebugConsole::Instance()->addLog("[CRIT]: %s", fmt::format(fmt, args...).c_str());
             }
 
             void dumpStack (lua_State *L);
