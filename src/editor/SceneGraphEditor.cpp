@@ -139,9 +139,7 @@ namespace Villain {
             }
             ImGui::PopStyleColor();
 
-            ImGui::SetWindowFontScale(1.1);
-            ImGui::SeparatorText("Properties");
-            ImGui::SetWindowFontScale(1.0);
+            editor->separatorHeader("Properties", 1.15);
 
             char nodeNameBuffer[100];
             std::strcpy(nodeNameBuffer, selectedNode->getName().c_str());
@@ -151,10 +149,7 @@ namespace Villain {
 
             drawNodeProperties(selectedNode);
 
-            ImGui::SetWindowFontScale(1.1);
-            ImGui::SeparatorText("Add New Components");
-            ImGui::SetWindowFontScale(1.0);
-
+            editor->separatorHeader("Add new components", 1.15);
             // Add component combo menu
             if (ImGui::BeginCombo("Add Component", componentNames[selectedComponent])) {
                 for (const auto& entry : componentNames) {
@@ -283,9 +278,7 @@ namespace Villain {
                     break;
             }
 
-            ImGui::SetWindowFontScale(1.1);
-            ImGui::SeparatorText("Components");
-            ImGui::SetWindowFontScale(1.0);
+            editor->separatorHeader("Components", 1.15);
             // Draw existing components
             if (!selectedNode->getComponents().empty()) {
                 drawNodeComponents(selectedNode);
