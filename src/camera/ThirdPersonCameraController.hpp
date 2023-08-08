@@ -29,7 +29,7 @@ namespace Villain {
 
             CameraMode mode = CameraMode::FOLLOW_MODE;
             float sensitivity = 0.1f;
-            float defaultDistance = 10.0f;
+            float defaultDistance = 50.0f;
     };
 
 }
