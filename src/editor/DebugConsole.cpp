@@ -17,15 +17,15 @@ namespace Villain {
         memset(inputBuf, 0, sizeof(inputBuf));
         historyPos = -1;
 
-        // TODO: is there a way to register lua binders more cleanly
         commands.push_back("print");
-        commands.push_back("playSound");
-        commands.push_back("playMusic");
-        commands.push_back("changeState");
-        commands.push_back("quit()");
-        commands.push_back("Entity:create()");
-        commands.push_back(":addSprite");
-        commands.push_back("addParticleEmitter");
+        commands.push_back("GetAudio()");
+        commands.push_back("GetMouseCoords()");
+        commands.push_back("GetMouseOffsets()");
+        commands.push_back("AddLog()");
+        commands.push_back("KeyCode()");
+        commands.push_back("IsKeyPressed()");
+        commands.push_back("IsKeyDown()");
+        commands.push_back("Quit()");
         // "CLASSIFY" is here to provide the test case where "C"+[tab] completes to "CL" and display multiple matches.
         //Commands.push_back("HELP");
         //Commands.push_back("HISTORY");
