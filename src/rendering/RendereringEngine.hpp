@@ -61,6 +61,7 @@ namespace Villain {
             bool* getToonShadingEnabled() { return &toonShadingEnabled; }
             bool* getVisualiseNormals() { return &visualiseNormals; }
             bool* getVisualiseBoneWeights() { return &visualiseBoneWeights; }
+            bool* wireFrameModeActive() { return &wireFrameMode; }
             // Additional FBOs
             bool* getMirrorFramebufferEnabled() { return &mirrorBufferEnabled; }
 
@@ -115,6 +116,7 @@ namespace Villain {
             bool toonShadingEnabled = false;
             bool visualiseNormals = false;
             bool visualiseBoneWeights = false;
+            bool wireFrameMode = false; ///< Optional wireframe rendering mode
 
             static bool gammaCorrection;
 

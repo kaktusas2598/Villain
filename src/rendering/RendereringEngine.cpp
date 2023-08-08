@@ -81,6 +81,11 @@ namespace Villain {
     }
 
     void RenderingEngine::render(SceneNode* node, float deltaTime) {
+        if (wireFrameMode)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         // Generate picking texture only if mouse is clicked so we can start selecting objects
         if (Input::Get()->isKeyDown(SDL_BUTTON_LEFT)) {
             pickPass(node);
@@ -277,6 +282,9 @@ namespace Villain {
     }
 
     void RenderingEngine::postRender() {
+        // Make sure we disable wireframe mode before post processing pass
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         activeLight = nullptr;
 
         bindMainTarget();

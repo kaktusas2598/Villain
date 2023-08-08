@@ -54,7 +54,6 @@ namespace Villain {
             static uint32_t getUpdateTime() { return updateTime; }
             static uint32_t getRenderTime() { return renderTime; }
             static bool editModeActive() { return editMode; }
-            bool* wireFrameModeActive() { return &wireFrameMode; }
 
             /// Special one-time render pass used for displaying loading screen image while the user application is loading
             void renderLoadingScreen();
@@ -82,7 +81,6 @@ namespace Villain {
             Window window; ///< main window instance
             ImGuiLayer imGuiLayer; ///< Responsible for initialising and rendering ImGui ui
             UILayer nuklearLayer; ///< Responsible for initialising and rendering nuklear ui
-            bool wireFrameMode = false; ///< Optional wireframe rendering mode
 
             // Screen dimensions will be static so they can be accessed from anywhere in the Engine
             static int screenWidth;

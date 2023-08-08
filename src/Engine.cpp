@@ -268,11 +268,6 @@ namespace Villain {
         // In mode render scene to texture and output it in imgui editor
         sceneBuffer->bind();
 
-        if (wireFrameMode)
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        else
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
         // First render application
         // NOTE: we want to have only 1 render method here in the end preferably and just
         // let rendering engine take care of all things?
@@ -280,9 +275,6 @@ namespace Villain {
 
         application->onAppRender(deltaTime);
         rigidBodyWorld->debugDraw(renderingEngine->getMainCamera());
-
-        // Make sure we disable wireframe mode before post processing pass
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         // Render additional fbos, apply post-processing fx
         application->postRenderPass(renderingEngine.get());
