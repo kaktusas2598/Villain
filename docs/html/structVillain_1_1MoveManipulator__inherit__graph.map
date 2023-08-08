@@ -1,0 +1,4 @@
+<map id="Villain::MoveManipulator" name="Villain::MoveManipulator">
+<area shape="rect" id="node1" title="Linearly interpolates position of SceneNode." alt="" coords="5,80,191,107"/>
+<area shape="rect" id="node2" href="$structVillain_1_1Manipulator.html" title="Base Manipulator class for Dynamic Behaviours scriptable in Lua using coroutines." alt="" coords="23,5,173,32"/>
+</map>

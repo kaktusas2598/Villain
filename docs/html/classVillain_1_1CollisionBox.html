@@ -119,6 +119,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a09f1d26e6578d0b13943724d3cddf60f"><td class="memItemLeft" align="right" valign="top"><a id="a09f1d26e6578d0b13943724d3cddf60f" name="a09f1d26e6578d0b13943724d3cddf60f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CollisionBox</b> (glm::vec3 half, <a class="el" href="classVillain_1_1RigidBody.html">RigidBody</a> *<a class="el" href="classVillain_1_1CollisionPrimitive.html#aa90ad6138bb1c4566ade95dda759d8e9">body</a>, glm::mat4 <a class="el" href="classVillain_1_1CollisionPrimitive.html#a02baad4176b1e84392b4af19276ec2bd">offset</a>=glm::mat4(1.0f))</td></tr>
 <tr class="separator:a09f1d26e6578d0b13943724d3cddf60f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d54aa96c06de524ba745e16e026f42b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1CollisionBox.html#a1d54aa96c06de524ba745e16e026f42b">intersectRay</a> (<a class="el" href="structVillain_1_1Ray.html">Ray</a> &amp;ray, <a class="el" href="structVillain_1_1RayHitResult.html">RayHitResult</a> &amp;result) const override</td></tr>
+<tr class="separator:a1d54aa96c06de524ba745e16e026f42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03925ab4c89916e8cb051b6846d18654"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1CollisionBox.html#a03925ab4c89916e8cb051b6846d18654">debugDraw</a> (<a class="el" href="classVillain_1_1DebugRenderer.html">DebugRenderer</a> *renderer) const override</td></tr>
 <tr class="separator:a03925ab4c89916e8cb051b6846d18654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classVillain_1_1CollisionPrimitive"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVillain_1_1CollisionPrimitive')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVillain_1_1CollisionPrimitive.html">Villain::CollisionPrimitive</a></td></tr>
@@ -135,6 +137,9 @@ glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>getAxis</b> (uns
 <tr class="memitem:a453c79b8408e8ad6c2dbf326bc20af68 inherit pub_methods_classVillain_1_1CollisionPrimitive"><td class="memItemLeft" align="right" valign="top"><a id="a453c79b8408e8ad6c2dbf326bc20af68" name="a453c79b8408e8ad6c2dbf326bc20af68"></a>
 const glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getTransform</b> () const</td></tr>
 <tr class="separator:a453c79b8408e8ad6c2dbf326bc20af68 inherit pub_methods_classVillain_1_1CollisionPrimitive"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f76e19764fd067f6b3d4ae34b0e970 inherit pub_methods_classVillain_1_1CollisionPrimitive"><td class="memItemLeft" align="right" valign="top"><a id="a23f76e19764fd067f6b3d4ae34b0e970" name="a23f76e19764fd067f6b3d4ae34b0e970"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>intersectRay</b> (<a class="el" href="structVillain_1_1Ray.html">Ray</a> &amp;ray, <a class="el" href="structVillain_1_1RayHitResult.html">RayHitResult</a> &amp;result) const =0</td></tr>
+<tr class="separator:a23f76e19764fd067f6b3d4ae34b0e970 inherit pub_methods_classVillain_1_1CollisionPrimitive"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a199f00cb90dd1b591757765703647a61 inherit pub_methods_classVillain_1_1CollisionPrimitive"><td class="memItemLeft" align="right" valign="top"><a id="a199f00cb90dd1b591757765703647a61" name="a199f00cb90dd1b591757765703647a61"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>debugDraw</b> (<a class="el" href="classVillain_1_1DebugRenderer.html">DebugRenderer</a> *renderer) const =0</td></tr>
 <tr class="separator:a199f00cb90dd1b591757765703647a61 inherit pub_methods_classVillain_1_1CollisionPrimitive"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,8 +197,47 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a id="a1d54aa96c06de524ba745e16e026f42b" name="a1d54aa96c06de524ba745e16e026f42b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d54aa96c06de524ba745e16e026f42b">&#9670;&nbsp;</a></span>intersectRay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Villain::CollisionBox::intersectRay </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structVillain_1_1Ray.html">Ray</a> &amp;&#160;</td>
+          <td class="paramname"><em>ray</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structVillain_1_1RayHitResult.html">RayHitResult</a> &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classVillain_1_1CollisionPrimitive.html">Villain::CollisionPrimitive</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/physics/<a class="el" href="NarrowPhase_8hpp_source.html">NarrowPhase.hpp</a></li>
+<li>src/physics/NarrowPhase.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

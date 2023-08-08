@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['offset_0',['offset',['../classVillain_1_1CollisionPrimitive.html#a02baad4176b1e84392b4af19276ec2bd',1,'Villain::CollisionPrimitive::offset()'],['../classVillain_1_1CollisionPlane.html#a7f09319bcddbba34928160fac6852174',1,'Villain::CollisionPlane::offset()']]]
+  ['normal_0',['normal',['../structVillain_1_1RayHitResult.html#af1e0cac98c30a1673b9d74a8c28c0f8b',1,'Villain::RayHitResult']]]
 ];

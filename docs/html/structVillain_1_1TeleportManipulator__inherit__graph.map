@@ -1,0 +1,4 @@
+<map id="Villain::TeleportManipulator" name="Villain::TeleportManipulator">
+<area shape="rect" id="node1" title="Instant teleportation for SceneNode." alt="" coords="5,80,207,107"/>
+<area shape="rect" id="node2" href="$structVillain_1_1Manipulator.html" title="Base Manipulator class for Dynamic Behaviours scriptable in Lua using coroutines." alt="" coords="31,5,181,32"/>
+</map>

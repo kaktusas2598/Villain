@@ -20,8 +20,10 @@ var searchData=
   ['getscreenwidth_17',['getScreenWidth',['../classVillain_1_1Window.html#a7adaae48f2d80184751078f57d68f8dc',1,'Villain::Window']]],
   ['getsdlwindow_18',['getSDLWindow',['../classVillain_1_1Window.html#ab1178f80ca2c6a8352ea3c9a9ec3be14',1,'Villain::Window']]],
   ['getshader_19',['getShader',['../classVillain_1_1ResourceManager.html#a59a7fed6a6241bbd2423647d527af456',1,'Villain::ResourceManager']]],
-  ['gettexture_20',['getTexture',['../classVillain_1_1ResourceManager.html#a79bc0dd27f68a1e9c42971d8c083b1f1',1,'Villain::ResourceManager']]],
-  ['gettransform_21',['GetTransform',['../classVillain_1_1NodeComponent.html#a9c5b7da17f0e6b94d4e394a062294e2a',1,'Villain::NodeComponent']]],
-  ['gettype_22',['getType',['../classVillain_1_1Event.html#a44e3120c7173a95328c0612b88dcf96e',1,'Villain::Event']]],
-  ['getviewmatrix_23',['getViewMatrix',['../classVillain_1_1Camera.html#a0e77255fd862393ef420a25dc8649252',1,'Villain::Camera']]]
+  ['getskyboxprojmatrix_20',['getSkyboxProjMatrix',['../classVillain_1_1Camera.html#a4bc2ef32d9aee7e1634671da9a9816e4',1,'Villain::Camera']]],
+  ['gettexture_21',['getTexture',['../classVillain_1_1ResourceManager.html#a79bc0dd27f68a1e9c42971d8c083b1f1',1,'Villain::ResourceManager']]],
+  ['gettransform_22',['GetTransform',['../classVillain_1_1NodeComponent.html#a9c5b7da17f0e6b94d4e394a062294e2a',1,'Villain::NodeComponent']]],
+  ['gettype_23',['getType',['../classVillain_1_1Event.html#a44e3120c7173a95328c0612b88dcf96e',1,'Villain::Event']]],
+  ['getviewmatrix_24',['getViewMatrix',['../classVillain_1_1Camera.html#a0e77255fd862393ef420a25dc8649252',1,'Villain::Camera']]],
+  ['getzoomptr_25',['getZoomPtr',['../classVillain_1_1Camera.html#ac8af0d9c66a4f53d93cb7f31696a0dd5',1,'Villain::Camera']]]
 ];
