@@ -96,11 +96,11 @@ $(document).ready(function(){initNavTree('RigidBody_8hpp_source.html',''); initR
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>        <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>            <a class="code hl_class" href="classVillain_1_1RigidBody.html">RigidBody</a>();</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>            <span class="keywordtype">void</span> <a class="code hl_function" href="classVillain_1_1RigidBody.html#afb7eb9c54d41c68fbcd37dd51585851d">integrate</a>(<span class="keywordtype">float</span> deltaTime);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>            <span class="keywordtype">void</span> integrate(<span class="keywordtype">float</span> deltaTime);</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>            <span class="comment">// Calculate internal data from state(transformMatrix, etc.), automatically called in integration, and should</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>            <span class="comment">// always be called after body&#39;s state is altered directly!</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>            <span class="keywordtype">void</span> <a class="code hl_function" href="classVillain_1_1RigidBody.html#ac3a8abcd683c8943027487d04d1b5aa3">calculateDerivedData</a>();</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>            <span class="keywordtype">void</span> calculateDerivedData();</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>            <span class="comment">// Adds given force to the center of mass of the rigid body, bypassing torque</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            <span class="keywordtype">void</span> addForce(<span class="keyword">const</span> glm::vec3&amp; force) {</div>
@@ -205,8 +205,6 @@ $(document).ready(function(){initNavTree('RigidBody_8hpp_source.html',''); initR
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>}</div>
 <div class="ttc" id="aclassVillain_1_1RigidBody_html"><div class="ttname"><a href="classVillain_1_1RigidBody.html">Villain::RigidBody</a></div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:8</div></div>
 <div class="ttc" id="aclassVillain_1_1RigidBody_html_abc436b2c53b376db0b248cfc5d3601a0"><div class="ttname"><a href="classVillain_1_1RigidBody.html#abc436b2c53b376db0b248cfc5d3601a0">Villain::RigidBody::getPointInWorldSpace</a></div><div class="ttdeci">glm::vec3 getPointInWorldSpace(const glm::vec3 &amp;point)</div><div class="ttdef"><b>Definition:</b> RigidBody.hpp:75</div></div>
-<div class="ttc" id="aclassVillain_1_1RigidBody_html_ac3a8abcd683c8943027487d04d1b5aa3"><div class="ttname"><a href="classVillain_1_1RigidBody.html#ac3a8abcd683c8943027487d04d1b5aa3">Villain::RigidBody::calculateDerivedData</a></div><div class="ttdeci">void calculateDerivedData()</div><div class="ttdef"><b>Definition:</b> RigidBody.cpp:54</div></div>
-<div class="ttc" id="aclassVillain_1_1RigidBody_html_afb7eb9c54d41c68fbcd37dd51585851d"><div class="ttname"><a href="classVillain_1_1RigidBody.html#afb7eb9c54d41c68fbcd37dd51585851d">Villain::RigidBody::integrate</a></div><div class="ttdeci">void integrate(float deltaTime)</div><div class="ttdef"><b>Definition:</b> RigidBody.cpp:20</div></div>
 <div class="ttc" id="anamespaceVillain_html"><div class="ttname"><a href="namespaceVillain.html">Villain</a></div><div class="ttdoc">Main Namespace.</div><div class="ttdef"><b>Definition:</b> Application.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -54,6 +54,7 @@
       * Narrow-Phase: planes, spheres, OBBs
   * Collision events
   * Collision Resolution using iterative contact resolver
+  * Raycast tests: closest hit, all hits for planes, spheres, OBBs
   * Basic friction model
 
 ## Planned Features
@@ -66,9 +67,10 @@
 * Physics Engine planned additions:
     * Stability improvements, optimizations (In progress)
     * Constraints: rods, cables, hinges, joints
+    * Integrate BVH for broad-phase collision detection
     * Terrain contact generator
+    * Friction and resolution must be set by user
     * Triggers
-    * Raycast test: closest hit, all hits, nearest hit
     * Data driven approach for particle types and emitters
 * Audio Engine: Streaming and audio callbacks
 * Lua Scripting API (In progress)

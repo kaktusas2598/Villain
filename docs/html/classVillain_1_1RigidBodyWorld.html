@@ -124,6 +124,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>RigidBodyWorld</b> (<a class="el" href="classVillain_1_1Engine.html">Engine</a> *e, unsigned <a class="el" href="classVillain_1_1RigidBodyWorld.html#adce3ee7252c256ffe364e3586fe501f6">maxContacts</a>, unsigned iterations=0)</td></tr>
 <tr class="memdesc:a457cffaf6d1f0466dfaea1eaba7c1f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">If not iterations are provided, when it will be four times the number of contacts used. <br /></td></tr>
 <tr class="separator:a457cffaf6d1f0466dfaea1eaba7c1f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acebff03423cafb124a2dfcbf95f9c25a"><td class="memItemLeft" align="right" valign="top"><a id="acebff03423cafb124a2dfcbf95f9c25a" name="acebff03423cafb124a2dfcbf95f9c25a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>cast</b> (const glm::vec3 &amp;from, const glm::vec3 &amp;to, std::function&lt; void(<a class="el" href="structVillain_1_1RayHitResult.html">RayHitResult</a> &amp;)&gt; callback, bool closestHitOnly=true)</td></tr>
+<tr class="memdesc:acebff03423cafb124a2dfcbf95f9c25a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cast a ray in rigid body world and callback to each result, by defaults to only the closest hit. <br /></td></tr>
+<tr class="separator:acebff03423cafb124a2dfcbf95f9c25a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215">generateContacts</a> ()</td></tr>
 <tr class="memdesc:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls all contact generators to report any contacts and returns numbers of generated contacts.  <a href="classVillain_1_1RigidBodyWorld.html#ae1c5dcb5341fe15e26e87d743ce5c215">More...</a><br /></td></tr>
 <tr class="separator:ae1c5dcb5341fe15e26e87d743ce5c215"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,7 +227,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000059">Todo:</a></b></dt><dd>Render debug information for force and contact generators /for (ForceGenerator* forceGenerator : registry.generators()) { /forceGenerator-&gt;render(debugRenderer); /} </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000058">Todo:</a></b></dt><dd>Render debug information for force and contact generators /for (ForceGenerator* forceGenerator : registry.generators()) { /forceGenerator-&gt;render(debugRenderer); /} </dd></dl>
 
 </div>
 </div>
@@ -243,8 +247,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>debugDrawEnabled</b> 
 </div><div class="memdoc">
 
 <p>Calls all contact generators to report any contacts and returns numbers of generated contacts. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000057">Todo:</a></b></dt><dd>Integrate BVH broad phase here! </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000058">Todo:</a></b></dt><dd></dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000056">Todo:</a></b></dt><dd>Integrate BVH broad phase here! </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000057">Todo:</a></b></dt><dd></dd></dl>
 
 </div>
 </div>

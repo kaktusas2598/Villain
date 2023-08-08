@@ -5,6 +5,7 @@
 #include "NarrowPhase.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include <algorithm>
+#include <functional>
 #include <vector>
 
 namespace Villain {
@@ -21,6 +22,9 @@ namespace Villain {
             /// If not iterations are provided, when it will be four times the number of contacts used
             RigidBodyWorld(Engine* e, unsigned maxContacts, unsigned iterations = 0);
             ~RigidBodyWorld();
+
+            /// Cast a ray in rigid body world and callback to each result, by defaults to only the closest hit
+            void cast(const glm::vec3& from, const glm::vec3& to, std::function<void(RayHitResult&)> callback, bool closestHitOnly = true);
 
             /// Calls all contact generators to report any contacts and returns numbers of generated contacts
             unsigned generateContacts();

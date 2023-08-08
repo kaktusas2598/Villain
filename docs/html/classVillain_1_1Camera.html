@@ -132,21 +132,38 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>rescale</b> (int widt
 <tr class="memitem:ae7b8f97767aa80b2f05aec1f8df07365"><td class="memItemLeft" align="right" valign="top"><a id="ae7b8f97767aa80b2f05aec1f8df07365" name="ae7b8f97767aa80b2f05aec1f8df07365"></a>
 glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getProjMatrix</b> ()</td></tr>
 <tr class="separator:ae7b8f97767aa80b2f05aec1f8df07365"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40198b16e6013f045f5f069a75061e25"><td class="memItemLeft" align="right" valign="top"><a id="a40198b16e6013f045f5f069a75061e25" name="a40198b16e6013f045f5f069a75061e25"></a>
-glm::vec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> ()</td></tr>
-<tr class="separator:a40198b16e6013f045f5f069a75061e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af35cb9fa365936efb66b2a182e4fdee5"><td class="memItemLeft" align="right" valign="top"><a id="af35cb9fa365936efb66b2a182e4fdee5" name="af35cb9fa365936efb66b2a182e4fdee5"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getZoom</b> ()</td></tr>
-<tr class="separator:af35cb9fa365936efb66b2a182e4fdee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bc2ef32d9aee7e1634671da9a9816e4"><td class="memItemLeft" align="right" valign="top"><a id="a4bc2ef32d9aee7e1634671da9a9816e4" name="a4bc2ef32d9aee7e1634671da9a9816e4"></a>
+glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getSkyboxProjMatrix</b> ()</td></tr>
+<tr class="memdesc:a4bc2ef32d9aee7e1634671da9a9816e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">If using Orthographic camera with skybox, this must override proj matrix for skybox. <br /></td></tr>
+<tr class="separator:a4bc2ef32d9aee7e1634671da9a9816e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66bab539c74ce762dc0711d7fe244397"><td class="memItemLeft" align="right" valign="top"><a id="a66bab539c74ce762dc0711d7fe244397" name="a66bab539c74ce762dc0711d7fe244397"></a>
+const glm::vec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> () const</td></tr>
+<tr class="separator:a66bab539c74ce762dc0711d7fe244397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a266866cf7d26c2f1ae59f1d4298c0fe2"><td class="memItemLeft" align="right" valign="top"><a id="a266866cf7d26c2f1ae59f1d4298c0fe2" name="a266866cf7d26c2f1ae59f1d4298c0fe2"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getZoom</b> () const</td></tr>
+<tr class="separator:a266866cf7d26c2f1ae59f1d4298c0fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d9aed7d86502586d7f6008f097934f9"><td class="memItemLeft" align="right" valign="top"><a id="a4d9aed7d86502586d7f6008f097934f9" name="a4d9aed7d86502586d7f6008f097934f9"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getAspectRatio</b> ()</td></tr>
 <tr class="separator:a4d9aed7d86502586d7f6008f097934f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac95e1638340823332b75569d84ed94f0"><td class="memItemLeft" align="right" valign="top"><a id="ac95e1638340823332b75569d84ed94f0" name="ac95e1638340823332b75569d84ed94f0"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getZnear</b> ()</td></tr>
-<tr class="separator:ac95e1638340823332b75569d84ed94f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d47b780b6c7699e4d6f74f0ab7c6d3b"><td class="memItemLeft" align="right" valign="top"><a id="a0d47b780b6c7699e4d6f74f0ab7c6d3b" name="a0d47b780b6c7699e4d6f74f0ab7c6d3b"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getZfar</b> ()</td></tr>
-<tr class="separator:a0d47b780b6c7699e4d6f74f0ab7c6d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a766ea70356aad11d635bd5086846229a"><td class="memItemLeft" align="right" valign="top"><a id="a766ea70356aad11d635bd5086846229a" name="a766ea70356aad11d635bd5086846229a"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getZnear</b> () const</td></tr>
+<tr class="separator:a766ea70356aad11d635bd5086846229a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46af3a729389c72496f94ea04592425b"><td class="memItemLeft" align="right" valign="top"><a id="a46af3a729389c72496f94ea04592425b" name="a46af3a729389c72496f94ea04592425b"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getZfar</b> () const</td></tr>
+<tr class="separator:a46af3a729389c72496f94ea04592425b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8af0d9c66a4f53d93cb7f31696a0dd5"><td class="memItemLeft" align="right" valign="top"><a id="ac8af0d9c66a4f53d93cb7f31696a0dd5" name="ac8af0d9c66a4f53d93cb7f31696a0dd5"></a>
+float *&#160;</td><td class="memItemRight" valign="bottom"><b>getZoomPtr</b> ()</td></tr>
+<tr class="memdesc:ac8af0d9c66a4f53d93cb7f31696a0dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">ImGui for editor. <br /></td></tr>
+<tr class="separator:ac8af0d9c66a4f53d93cb7f31696a0dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a312af5f32ae2ee23fecea339f1fe6d0b"><td class="memItemLeft" align="right" valign="top"><a id="a312af5f32ae2ee23fecea339f1fe6d0b" name="a312af5f32ae2ee23fecea339f1fe6d0b"></a>
+float *&#160;</td><td class="memItemRight" valign="bottom"><b>getZnearPtr</b> ()</td></tr>
+<tr class="separator:a312af5f32ae2ee23fecea339f1fe6d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a895e376de88c6ace194e68f6f012da12"><td class="memItemLeft" align="right" valign="top"><a id="a895e376de88c6ace194e68f6f012da12" name="a895e376de88c6ace194e68f6f012da12"></a>
+float *&#160;</td><td class="memItemRight" valign="bottom"><b>getZfarPtr</b> ()</td></tr>
+<tr class="separator:a895e376de88c6ace194e68f6f012da12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a8d719e3ea380926cd2432c553abb3e"><td class="memItemLeft" align="right" valign="top"><a id="a2a8d719e3ea380926cd2432c553abb3e" name="a2a8d719e3ea380926cd2432c553abb3e"></a>
+float *&#160;</td><td class="memItemRight" valign="bottom"><b>getDistanceToTargetPtr</b> ()</td></tr>
+<tr class="separator:a2a8d719e3ea380926cd2432c553abb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a0c47b48e3427a2889bd1b8ba282726"><td class="memItemLeft" align="right" valign="top"><a id="a6a0c47b48e3427a2889bd1b8ba282726" name="a6a0c47b48e3427a2889bd1b8ba282726"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getYaw</b> () const</td></tr>
 <tr class="separator:a6a0c47b48e3427a2889bd1b8ba282726"><td class="memSeparator" colspan="2">&#160;</td></tr>

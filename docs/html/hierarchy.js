@@ -26,6 +26,7 @@ var hierarchy =
     [ "Villain::BVHNode< BoundingVolumeClass >", "classVillain_1_1BVHNode.html", null ],
     [ "Villain::CameraController", "classVillain_1_1CameraController.html", [
       [ "Villain::FirstPersonCameraController", "classVillain_1_1FirstPersonCameraController.html", null ],
+      [ "Villain::OrthographicCameraController", "classVillain_1_1OrthographicCameraController.html", null ],
       [ "Villain::ThirdPersonCameraController", "classVillain_1_1ThirdPersonCameraController.html", null ]
     ] ],
     [ "Villain::Character", "structVillain_1_1Character.html", null ],
@@ -91,6 +92,11 @@ var hierarchy =
     [ "Villain::Logger", "classVillain_1_1Logger.html", null ],
     [ "Villain::LuaBindings", "classVillain_1_1LuaBindings.html", null ],
     [ "Villain::LuaScript", "classVillain_1_1LuaScript.html", null ],
+    [ "Villain::Manipulator", "structVillain_1_1Manipulator.html", [
+      [ "Villain::CurveMoveManipulator", "structVillain_1_1CurveMoveManipulator.html", null ],
+      [ "Villain::MoveManipulator", "structVillain_1_1MoveManipulator.html", null ],
+      [ "Villain::TeleportManipulator", "structVillain_1_1TeleportManipulator.html", null ]
+    ] ],
     [ "Villain::Material", "classVillain_1_1Material.html", null ],
     [ "Villain::Mesh< VertexType >", "classVillain_1_1Mesh.html", null ],
     [ "Villain::Mesh< Villain::VertexP1N1T1B1UV >", "classVillain_1_1Mesh.html", null ],
@@ -155,6 +161,8 @@ var hierarchy =
     [ "Villain::PotentialContact", "structVillain_1_1PotentialContact.html", null ],
     [ "Villain::SpatialPartitioning::QuadTreeNode", "classVillain_1_1SpatialPartitioning_1_1QuadTreeNode.html", null ],
     [ "Villain::Random", "classVillain_1_1Random.html", null ],
+    [ "Villain::Ray", "structVillain_1_1Ray.html", null ],
+    [ "Villain::RayHitResult", "structVillain_1_1RayHitResult.html", null ],
     [ "Villain::RenderBatch", "classVillain_1_1RenderBatch.html", null ],
     [ "Villain::Renderer", "classVillain_1_1Renderer.html", null ],
     [ "Villain::RenderingEngine", "classVillain_1_1RenderingEngine.html", null ],
@@ -165,6 +173,7 @@ var hierarchy =
     [ "Villain::SceneNode", "classVillain_1_1SceneNode.html", null ],
     [ "Villain::SceneParser", "classVillain_1_1SceneParser.html", null ],
     [ "Villain::SceneWriter", "classVillain_1_1SceneWriter.html", null ],
+    [ "Villain::ScriptEditor", "classVillain_1_1ScriptEditor.html", null ],
     [ "Villain::ScriptEngine", "classVillain_1_1ScriptEngine.html", null ],
     [ "Villain::Shader", "classVillain_1_1Shader.html", null ],
     [ "Villain::ShadowInfo", "classVillain_1_1ShadowInfo.html", null ],

@@ -10,6 +10,23 @@ namespace Villain {
     class CollisionDetector;
     class IntersectionTests;
 
+    /// Used primarily for raycasting
+    struct Ray {
+        glm::vec3 From;    ///< Ray's starting position
+        glm::vec3 To;      ///< Ray's ending position
+
+        Ray(const glm::vec3& from, const glm::vec3& to): From(from), To(to) {}
+        glm::vec3 getDirection() const { return glm::normalize(To - From); }
+    };
+
+    /// Stores information about a ray hitting primitive
+    struct RayHitResult {
+        bool hit;          ///< True if the ray intersects with the primitive
+        glm::vec3 point;   ///< The point of intersection with the primitive
+        glm::vec3 normal;  ///< The normal at the point of intersection
+        float distance;    ///< The distance from the ray origin to the intersection point
+    };
+
     /// Represents primitive to detect collision against
     class CollisionPrimitive {
         public:
@@ -39,6 +56,7 @@ namespace Villain {
 
             const glm::mat4 getTransform() const { return transform; }
 
+            virtual bool intersectRay(Ray& ray, RayHitResult& result) const = 0;
             virtual void debugDraw(DebugRenderer* renderer) const = 0;
 
         protected:
@@ -55,6 +73,7 @@ namespace Villain {
 
             float radius; ///< Radius of the sphere
 
+            virtual bool intersectRay(Ray& ray, RayHitResult& result) const override;
             virtual void debugDraw(DebugRenderer* renderer) const override {
                 renderer->drawSphere(body->getPosition(), radius);
             };
@@ -69,6 +88,7 @@ namespace Villain {
             glm::vec3 direction; ///< Plane normal
             float offset; ///< Distance of the plane from the origin
 
+            virtual bool intersectRay(Ray& ray, RayHitResult& result) const override;
             virtual void debugDraw(DebugRenderer* renderer) const override {
                 // NOTE:What size to use here? Possibly need to draw 'infinite' grid here
                 renderer->drawPlane(direction, offset, {5.0f, 5.0f});
@@ -84,6 +104,7 @@ namespace Villain {
 
             glm::vec3 halfSize; ///< Half sizes of the box along its local axes
 
+            virtual bool intersectRay(Ray& ray, RayHitResult& result) const override;
             virtual void debugDraw(DebugRenderer* renderer) const override {
                 renderer->drawBox3DRotated(body->getPosition(), halfSize * 2.0f, glm::mat4_cast(body->getOrientation()));
             };

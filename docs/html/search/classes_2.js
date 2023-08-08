@@ -14,5 +14,6 @@ var searchData=
   ['contact_11',['Contact',['../classVillain_1_1Contact.html',1,'Villain']]],
   ['contactgenerator_12',['ContactGenerator',['../classVillain_1_1ContactGenerator.html',1,'Villain']]],
   ['contactresolver_13',['ContactResolver',['../classVillain_1_1ContactResolver.html',1,'Villain']]],
-  ['customxmlscreen_14',['CustomXMLScreen',['../classVillain_1_1CustomXMLScreen.html',1,'Villain']]]
+  ['curvemovemanipulator_14',['CurveMoveManipulator',['../structVillain_1_1CurveMoveManipulator.html',1,'Villain']]],
+  ['customxmlscreen_15',['CustomXMLScreen',['../classVillain_1_1CustomXMLScreen.html',1,'Villain']]]
 ];

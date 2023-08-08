@@ -1,0 +1,4 @@
+<map id="Villain::Manipulator" name="Villain::Manipulator">
+<area shape="rect" id="node1" title="Base Manipulator class for Dynamic Behaviours scriptable in Lua using coroutines." alt="" coords="5,95,155,121"/>
+<area shape="rect" id="node2" href="$classVillain_1_1SceneNode.html" title=" " alt="" coords="8,5,152,32"/>
+</map>

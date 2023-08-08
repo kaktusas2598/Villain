@@ -25,6 +25,46 @@ namespace Villain {
         bodies.clear();
     }
 
+    void RigidBodyWorld::cast(const glm::vec3& from, const glm::vec3& to, std::function<void(RayHitResult&)> callback, bool closestHitOnly) {
+        Ray ray(from, to);
+
+        float closestHitDistance = std::numeric_limits<float>::max();
+        RayHitResult closestHitResult;
+
+        // Perform ray casting, find the closest hit and call the callback for each collision found
+        for (CollisionPrimitive* collider : colliders) {
+            RigidBody* rigidBody = collider->body; // Get the associated rigid body
+            RayHitResult result;
+            if (collider->intersectRay(ray, result)) {
+                float hitDistance = glm::distance(from, result.point);
+                if (closestHitOnly) {
+                    if (hitDistance < closestHitDistance) {
+                        closestHitDistance = hitDistance;
+                        closestHitResult = result;
+                    }
+                } else {
+                    // Call the callback for each hit found
+                    if (debugDrawEnabled) {
+                        debugRenderer.drawLine(from, result.point, {0.9, 0.1, 0.2, 1.0});
+                        debugRenderer.drawSphere(result.point, 0.1f, {0.1, 0.1, 0.8, 1.0});
+                        debugRenderer.drawLine(result.point, result.point + result.normal , {0.1, 0.1, 0.8, 1.0});
+                    }
+                    callback(result);
+                }
+            }
+        }
+
+        // If a hit was found and closestHitOnly is true, call the callback with the closest hit result
+        if (closestHitOnly && closestHitDistance < std::numeric_limits<float>::max()) {
+            if (debugDrawEnabled) {
+                debugRenderer.drawLine(from, closestHitResult.point, {0.9, 0.1, 0.2, 1.0});
+                debugRenderer.drawSphere(closestHitResult.point, 0.1f, {0.1, 0.1, 0.8, 1.0});
+                debugRenderer.drawLine(closestHitResult.point, closestHitResult.point + closestHitResult.normal , {0.1, 0.1, 0.8, 1.0});
+            }
+            callback(closestHitResult);
+        }
+    }
+
     void RigidBodyWorld::startFrame() {
         for (RigidBody* body : bodies) {
             body->clearAccumulators();

@@ -97,7 +97,7 @@ Core Engine</h2>
 <li>3D Scene loading from XML files</li>
 <li>3D Sound support</li>
 <li>Debug/Editor mode UI for scene graph editing</li>
-<li>Attach simple Lua scripts to scene nodes for basic scripting</li>
+<li>Attach simple Lua scripts to scene nodes for basic scripting with callbacks and dynamic automation sequences</li>
 <li>Debug Rendering 2D rectangles, lines, circles, spheres, grids, bezier curves and oriented bounding boxes</li>
 <li>Error logging to stdout, log file and editor console</li>
 <li>Event Dispatcher system</li>
@@ -148,6 +148,7 @@ Physics</h2>
 </li>
 <li>Collision events</li>
 <li>Collision Resolution using iterative contact resolver</li>
+<li>Raycast tests: closest hit, all hits for planes, spheres, OBBs</li>
 <li>Basic friction model</li>
 </ul>
 </li>
@@ -159,17 +160,20 @@ Planned Features</h1>
 <li>Hot reloading resources</li>
 <li>Saving current scene (In progress)</li>
 <li>Scene camera, gizmos?</li>
+<li>Prefabs</li>
 </ul>
 </li>
 <li>Physics Engine planned additions:<ul>
 <li>Stability improvements, optimizations (In progress)</li>
 <li>Constraints: rods, cables, hinges, joints</li>
+<li>Integrate BVH for broad-phase collision detection</li>
 <li>Terrain contact generator</li>
+<li>Friction and resolution must be set by user</li>
 <li>Triggers</li>
-<li>Raycast test: closest hit, all hits, nearest hit</li>
 <li>Data driven approach for particle types and emitters</li>
 </ul>
 </li>
+<li>Audio Engine: Streaming and audio callbacks</li>
 <li>Lua Scripting API (In progress)</li>
 <li>Entity Component System?</li>
 <li>Environmental mapping(reflections and refractions)</li>
@@ -237,7 +241,6 @@ FIXME/TODOS</h1>
 <li>Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..</li>
 <li>Fix Engine on Windows:<ul>
 <li>Linking errors for assimp</li>
-<li>C++ filesystem module not compiling</li>
 <li>Crashes on glBufferData?</li>
 </ul>
 </li>
@@ -255,7 +258,8 @@ FIXME/TODOS</h1>
 <li>Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)<ul>
 <li>Aerodynamical force generators broken or something, struggling to create flight simulator demo</li>
 <li>Rework namespace system: create Villain::Physics, Villain::Rendering, etc..</li>
-<li>Fix synchronisation issues between camera and models or rigid bodies </li>
+<li>Fix synchronisation issues between camera and models or rigid bodies</li>
+<li>Implement logic for minimising on window resize: on minimise no rendering should be done </li>
 </ul>
 </li>
 </ul>

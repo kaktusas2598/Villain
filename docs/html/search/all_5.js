@@ -13,5 +13,6 @@ var searchData=
   ['framelimiter_10',['FrameLimiter',['../classVillain_1_1FrameLimiter.html',1,'Villain']]],
   ['freetype_11',['FreeType',['../classVillain_1_1FreeType.html',1,'Villain']]],
   ['friction_12',['friction',['../classVillain_1_1Contact.html#af63012eeeb7780202cb56ebee167c661',1,'Villain::Contact::friction()'],['../structVillain_1_1CollisionData.html#a0c2e0681ccbcfed086e576596d41c761',1,'Villain::CollisionData::friction()']]],
-  ['frustum_13',['Frustum',['../structVillain_1_1Frustum.html',1,'Villain']]]
+  ['from_13',['From',['../structVillain_1_1Ray.html#a8f6a4dfa9aeb754a37893ebdf574ad9d',1,'Villain::Ray']]],
+  ['frustum_14',['Frustum',['../structVillain_1_1Frustum.html',1,'Villain']]]
 ];
