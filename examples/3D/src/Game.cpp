@@ -10,6 +10,7 @@
 #include "components/ParticlePhysicsComponent.hpp"
 #include "components/RigidBodyComponent.hpp"
 
+#include "physics/NarrowPhase.hpp"
 #include "physics/generators/contact/GroundContacts.hpp"
 #include "physics/generators/contact/ParticleCable.hpp"
 #include "physics/generators/contact/ParticleRod.hpp"
@@ -189,7 +190,15 @@ void Game::onAppPostUpdate(float dt) {
         zombieMono->play();
 }
 
+void rayCallback(RayHitResult& result) {
+    VILLAIN_CRIT("Ray hit! Distance {}", result.distance);
+}
+
 void Game::onAppRender(float dt) {
+    Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
+    glm::mat4 view = mainCamera->getViewMatrix();
+    glm::mat4 projection = mainCamera->getProjMatrix();
+
     // Draw coordinate gizmo
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(5.f, 0.f, 0.f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     debugRenderer.drawLine(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 5.f, 0.f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
@@ -197,6 +206,18 @@ void Game::onAppRender(float dt) {
 
     // Render ground plane
     debugRenderer.drawGrid(glm::vec3(0.f, 1.f, 0.f), 0.0f, 500, 500, 10.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
+
+    glm::vec3 cameraPos = mainCamera->getPosition();
+    glm::vec3 cameraFront = mainCamera->getFront();
+
+    glm::vec2 mouseCoords = Input::Get()->getMouseCoords();
+    glm::vec3 mouseWorld = mainCamera->mouseRayToWorld(mouseCoords);
+    //debugRenderer.drawLine(cameraPos, cameraPos + mouseWorld * 1000.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
+    //debugRenderer.drawLine(cameraPos, cameraPos + cameraFront * 1000.0f, glm::vec4(1.0));
+
+    glm::vec3 cameraTo = cameraPos + cameraFront * 1000.0f;
+    getRootNode()->getEngine()->getRigidBodyWorld()->cast(cameraPos, cameraTo, rayCallback, false);
+
 
     ///////////////////////////////////////////////////////
     // Bezier curve demo
@@ -208,10 +229,7 @@ void Game::onAppRender(float dt) {
     debugRenderer.drawQuadraticBezierCurve(origin, control, end, numSegments, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
     debugRenderer.end();
-    Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
 
-    glm::mat4 view = mainCamera->getViewMatrix();
-    glm::mat4 projection = mainCamera->getProjMatrix();
 
     debugRenderer.render(projection * view, 1.0f);
 }
