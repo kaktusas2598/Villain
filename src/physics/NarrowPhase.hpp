@@ -7,6 +7,8 @@
 
 namespace Villain {
 
+    // Forward declarations
+    class CollisionPrimitive;
     class CollisionDetector;
     class IntersectionTests;
 
@@ -25,6 +27,7 @@ namespace Villain {
         glm::vec3 point;   ///< The point of intersection with the primitive
         glm::vec3 normal;  ///< The normal at the point of intersection
         float distance;    ///< The distance from the ray origin to the intersection point
+        CollisionPrimitive* collisionObject;
     };
 
     /// Represents primitive to detect collision against

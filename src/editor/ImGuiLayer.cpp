@@ -349,6 +349,7 @@ namespace Villain {
         // TODO: Possibly move this to anotehr class or maybe all of this method, not sure yet
         ///////////////////////////////////////////////////
         separatorHeader("Physics settings", 1.15);
+        ImGui::Checkbox("Pause Simulation", engine.getRigidBodyWorld()->isSimulationPaused());
         ImGui::Checkbox("Rigid Body Debug Mode", engine.getRigidBodyWorld()->debugModeActive());
 
         // Draw select list of all colliders currently in rigid body world
@@ -381,9 +382,7 @@ namespace Villain {
                 ImGui::InputFloat("Plane Offset", &planeCollider->offset);
                 ImGui::DragFloat3("Plane Direction", glm::value_ptr(planeCollider->direction));
             }
-            static glm::vec3 colliderTranslation = glm::vec3(0.0f);
-            ImGui::DragFloat3("Translation", glm::value_ptr(colliderTranslation));
-            selectedCollider->offset = glm::translate(glm::mat4(1.0f), colliderTranslation);
+            ImGui::DragFloat3("Translation", &selectedCollider->offset[3][0]);
             // TODO: Add ability to attach/detach rigid bodies by selecting them from another combo or sth like that
             ImGui::PopID();
         }

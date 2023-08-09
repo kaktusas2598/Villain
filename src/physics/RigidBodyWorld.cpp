@@ -66,6 +66,8 @@ namespace Villain {
     }
 
     void RigidBodyWorld::startFrame() {
+        if (simulationPaused) return;
+
         for (RigidBody* body : bodies) {
             body->clearAccumulators();
             body->calculateDerivedData();
@@ -127,6 +129,8 @@ namespace Villain {
     }
 
     void RigidBodyWorld::runPhysics(float deltaTime) {
+        if (simulationPaused) return;
+
         // First apply all the force generators
         registry.updateForces(deltaTime);
 

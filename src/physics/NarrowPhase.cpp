@@ -29,6 +29,7 @@ namespace Villain {
         result.point = ray.From + t * ray.getDirection();
         result.normal = direction;
         result.distance = t;
+        result.collisionObject = const_cast<CollisionPlane*>(this);
         return true;
     }
 
@@ -56,18 +57,21 @@ namespace Villain {
             result.point = ray.From + t * ray.getDirection();
             result.normal = glm::normalize(result.point - getAxis(3));
             result.distance = t;
+            result.collisionObject = const_cast<CollisionSphere*>(this);
             return true;
         } else if (t1 >= 0) {
             result.hit = true;
             result.point = ray.From + t1 * ray.getDirection();
             result.normal = glm::normalize(result.point - getAxis(3));
             result.distance = t1;
+            result.collisionObject = const_cast<CollisionSphere*>(this);
             return true;
         } else if (t2 >= 0) {
             result.hit = true;
             result.point = ray.From + t2 * ray.getDirection();
             result.normal = glm::normalize(result.point - getAxis(3));
             result.distance = t2;
+            result.collisionObject = const_cast<CollisionSphere*>(this);
             return true;
         }
 
@@ -128,6 +132,7 @@ namespace Villain {
 
         // Set the "hit" flag to true to indicate intersection
         result.hit = true;
+        result.collisionObject = const_cast<CollisionBox*>(this);
 
         return true;
     }

@@ -36,6 +36,13 @@ namespace Villain {
 
     Engine::~Engine() {}
 
+    void Engine::setEditMode(bool edit) {
+        editMode = edit;
+        // Upon changing mode in edit mode pause physics by default and debug draw but not in game mode
+        rigidBodyWorld->setSimulationPaused(editMode);
+        rigidBodyWorld->setDebugDraw(editMode);
+    }
+
     /**
      *
      * Init subsystems, client application, create window and setup GL context

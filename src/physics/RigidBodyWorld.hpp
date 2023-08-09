@@ -57,6 +57,9 @@ namespace Villain {
             ForceRegistry& getForceRegistry() { return registry; }
             Colliders& getColliders() { return colliders; }
             bool* debugModeActive() { return &debugDrawEnabled; }
+            bool* isSimulationPaused() { return &simulationPaused; }
+
+            void setSimulationPaused(bool pause) { simulationPaused = pause; }
 
         protected:
             RigidBodies bodies; ///< All bodies in this world
@@ -69,6 +72,7 @@ namespace Villain {
             bool calculateIterations; ///< True if should calculate number of iterations to give to contact resolver
 
             bool debugDrawEnabled = false;
+            bool simulationPaused = false;
             DebugRenderer debugRenderer;
         private:
             Engine* engine = nullptr;
