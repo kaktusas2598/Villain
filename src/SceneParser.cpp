@@ -171,7 +171,7 @@ namespace Villain {
                             if (e->Value() == std::string("RigidBody")) {
                                 float mass = 1.0f;
                                 e->QueryFloatAttribute("mass", &mass);
-                                rigidBody->setMass(10.0f);
+                                rigidBody->setMass(mass);
                                 rigidBody->setPosition(parseVec3Element(e, "Position"));
 
                                 float linearDamping, angularDamping;
