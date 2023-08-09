@@ -10,6 +10,7 @@
 #include "components/LookController.hpp"
 #include "components/MoveController.hpp"
 #include "components/ScriptComponent.hpp"
+#include "physics/generators/force/Gravity.hpp"
 #include <sstream>
 
 namespace Villain {
@@ -164,14 +165,18 @@ namespace Villain {
                         RigidBody* rigidBody = new RigidBody();
                         CollisionPrimitive* colShape = nullptr;
                         bool kinematic = false;
+                        bool staticB = false;
 
                         component->QueryBoolAttribute("kinematic", &kinematic);
+                        component->QueryBoolAttribute("static", &staticB);
 
                         for (tinyxml2::XMLElement* e = component->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
                             if (e->Value() == std::string("RigidBody")) {
                                 float mass = 1.0f;
                                 e->QueryFloatAttribute("mass", &mass);
                                 rigidBody->setMass(mass);
+                                if (staticB)
+                                    rigidBody->setInverseMass(0.0f);
                                 rigidBody->setPosition(parseVec3Element(e, "Position"));
 
                                 float linearDamping, angularDamping;
@@ -188,6 +193,19 @@ namespace Villain {
                             if (e->Value() == std::string("CollisionBox")) {
                                 colShape = new CollisionBox(parseVec3Element(e, "HalfSize"), rigidBody);
                             }
+                            if (e->Value() == std::string("ForceGenerators")) {
+                                for (tinyxml2::XMLElement* force = e->FirstChildElement(); force != NULL; force = force->NextSiblingElement()) {
+                                    if (force->Value() == std::string("Gravity")) {
+                                        float x = 0.0f, y = -9.81f, z = 0.0f;
+                                        force->QueryFloatAttribute("x", &x);
+                                        force->QueryFloatAttribute("y", &y);
+                                        force->QueryFloatAttribute("z", &z);
+                                        parentNode->getEngine()->getRigidBodyWorld()->getForceRegistry().add(rigidBody, new Gravity({x, y, z}));
+                                    }
+                                    // TODO: Add other force generator parsing
+                                }
+                            }
+
                         }
 
                         if (kinematic) {

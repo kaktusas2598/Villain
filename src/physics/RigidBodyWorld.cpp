@@ -95,8 +95,8 @@ namespace Villain {
                 unsigned used = 0;
                 // TODO:
                 // NOTE: TEMP variables!
-                float restitution = 0.2f;
-                float friction = 0.2f;
+                float restitution = 0.4f;
+                float friction = 0.1f;
                 CollisionData data(nextContact, limit, 0, restitution, friction);
 
                 if (CollisionSphere* one = dynamic_cast<CollisionSphere*>(colliders[i])) {
