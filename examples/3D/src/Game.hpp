@@ -19,6 +19,8 @@ class Game : public Villain::Application {
         void onAppRender(float deltaTime);
 
         void onEvent(Villain::Event& event);
+
+        void rayCallback(Villain::RayHitResult& result);
     private:
         Villain::DebugRenderer debugRenderer;
         //Villain::Particle* playerBody = nullptr;

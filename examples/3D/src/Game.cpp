@@ -179,8 +179,34 @@ void Game::handleEvents(float deltaTime) {
     }
 }
 
+void Game::rayCallback(RayHitResult& result) {
+    SceneNode* camera = getRootNode()->findByID(1);
+    RigidBody* player = camera->getComponent<RigidBodyComponent>()->getBody();
+    if (Input::Get()->isKeyDown(SDL_BUTTON_LEFT)) {
+        // Needed to find player body to make sure we don't apply force to ourselves
+        if (result.collisionObject->body && result.collisionObject->body != player) {
+            result.collisionObject->body->addForceAtBodyPoint(result.point + result.normal * 10.0f, result.point);
+        }
+    }
+}
+
 void Game::onAppPreUpdate(float dt) {
     handleEvents(dt);
+
+    // Raycast demo
+    Camera* mainCamera = getRootNode()->getEngine()->getRenderingEngine()->getMainCamera();
+    glm::vec3 cameraPos = mainCamera->getPosition();
+    glm::vec3 cameraFront = mainCamera->getFront();
+    glm::vec3 rayFrom = cameraPos;
+    glm::vec3 rayTo = cameraPos + cameraFront * 1000.0f;
+
+    if (mainCamera->getType() == CameraType::THIRD_PERSON) {
+        Transform* target = mainCamera->getParent()->getTransform();
+        rayFrom = target->getPos();
+        rayTo = target->getPos() + target->getForward() * 1000.0f;
+    }
+
+    getRootNode()->getEngine()->getRigidBodyWorld()->cast(rayFrom, rayTo, [this](RayHitResult& result) { rayCallback(result); }, false);
 }
 
 void Game::onAppPostUpdate(float dt) {
@@ -188,10 +214,6 @@ void Game::onAppPostUpdate(float dt) {
     zombieMono->setPositionDirection(glm::vec3(0.0f), mainCamera->getPosition());
     if (!zombieMono->isPlaying())
         zombieMono->play();
-}
-
-void rayCallback(RayHitResult& result) {
-    VILLAIN_CRIT("Ray hit! Distance {}", result.distance);
 }
 
 void Game::onAppRender(float dt) {
@@ -206,18 +228,6 @@ void Game::onAppRender(float dt) {
 
     // Render ground plane
     debugRenderer.drawGrid(glm::vec3(0.f, 1.f, 0.f), 0.0f, 500, 500, 10.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
-
-    glm::vec3 cameraPos = mainCamera->getPosition();
-    glm::vec3 cameraFront = mainCamera->getFront();
-
-    glm::vec2 mouseCoords = Input::Get()->getMouseCoords();
-    glm::vec3 mouseWorld = mainCamera->mouseRayToWorld(mouseCoords);
-    //debugRenderer.drawLine(cameraPos, cameraPos + mouseWorld * 1000.0f, glm::vec4(1.0, 0.0, 0.0, 1.0));
-    //debugRenderer.drawLine(cameraPos, cameraPos + cameraFront * 1000.0f, glm::vec4(1.0));
-
-    glm::vec3 cameraTo = cameraPos + cameraFront * 1000.0f;
-    getRootNode()->getEngine()->getRigidBodyWorld()->cast(cameraPos, cameraTo, rayCallback, false);
-
 
     ///////////////////////////////////////////////////////
     // Bezier curve demo
