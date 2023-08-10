@@ -33,12 +33,15 @@ namespace Villain {
         if (collider) {
             engine->getRigidBodyWorld()->getColliders().push_back(collider);
 
-            if (CollisionSphere* sphere = dynamic_cast<CollisionSphere*>(collider)) {
-                body->setInertiaTensor(TensorUtils::Sphere(sphere->radius, body->getMass()));
-            } else if (CollisionBox* box = dynamic_cast<CollisionBox*>(collider)) {
-                body->setInertiaTensor(TensorUtils::Cuboid(box->halfSize * 2.0f, body->getMass()));
-            } else {
-                VILLAIN_ERROR("Inertia tensor not supported for this collision primitive");
+            // Only calculate inertia tensors for dynamic bodies
+            if (body->getInverseMass() > 0.0f) {
+                if (CollisionSphere* sphere = dynamic_cast<CollisionSphere*>(collider)) {
+                    body->setInertiaTensor(TensorUtils::Sphere(sphere->radius, body->getMass()));
+                } else if (CollisionBox* box = dynamic_cast<CollisionBox*>(collider)) {
+                    body->setInertiaTensor(TensorUtils::Cuboid(box->halfSize * 2.0f, body->getMass()));
+                } else {
+                    VILLAIN_ERROR("Inertia tensor not supported for this collision primitive");
+                }
             }
 
             getParent()->getEngine()->getEventDispatcher()->registerCallback(BIND_EVENT_FN(onEvent));
