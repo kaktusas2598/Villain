@@ -242,4 +242,17 @@ void Game::onAppRender(float dt) {
 
 
     debugRenderer.render(projection * view, 1.0f);
+
+    auto uiManager = getRootNode()->getEngine()->getUIManager();
+    int w = 200, h = 50;
+    float x = Villain::Engine::getScreenWidth()/2.0f - w/2.0f;
+    float y = Villain::Engine::getScreenHeight()/2.0f - h/2.0f;
+
+    if (uiManager.beginWindow("Show", x, y, w, h)) {
+        uiManager.layoutRowDynamic(30, 1);
+        if (uiManager.button("TEST")) {
+            VILLAIN_CRIT("Yay!");
+        }
+    }
+    uiManager.endWindow();
 }
