@@ -37,19 +37,22 @@ namespace Villain {
             friend class IntersectionTests;
 
             CollisionPrimitive(RigidBody* body, glm::mat4 offset = glm::mat4(1.0f))
-                : body(body), offset(offset) {
-                    if (body) calculateTransform();
+                : body(body), offsetMatrix(offset) {
+                    calculateTransform();
                 }
             virtual ~CollisionPrimitive() {}
 
             RigidBody* body; ///< Rigid body represented by this primitive
-            glm::mat4 offset; ///< Offset matrix for this primitive from the give rigid body
+            glm::mat4 offsetMatrix; ///< Offset matrix for this primitive from the give rigid body
 
             void calculateTransform() {
-                if (body)
-                    transform = body->getTransform() * offset;
-                else
-                    transform = offset;
+                if (body) {
+                    if (body->getInverseMass() <= 0.0f)
+                        body->calculateDerivedData();
+                    transform = body->getTransform() * offsetMatrix;
+                } else {
+                    transform = offsetMatrix;
+                }
             }
 
             /// Allow access to the axis vectors in the transform of this primitive
@@ -97,8 +100,8 @@ namespace Villain {
     /// Plane here is not a primitive! It does not represent rigid bodies, but is used for contacts with world geometry
     class CollisionPlane : public CollisionPrimitive {
         public:
-            CollisionPlane(glm::vec3 normal, float distance, glm::mat4 offset = glm::mat4(1.0f))
-                : direction(normal), offset(distance), CollisionPrimitive(nullptr, offset) {
+            CollisionPlane(glm::vec3 normal, float distance, glm::mat4 offsetM = glm::mat4(1.0f))
+                : direction(normal), offset(distance), CollisionPrimitive(nullptr, offsetM) {
                     generateName();
                 }
 

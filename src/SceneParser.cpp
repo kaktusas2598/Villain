@@ -165,18 +165,13 @@ namespace Villain {
                         RigidBody* rigidBody = new RigidBody();
                         CollisionPrimitive* colShape = nullptr;
                         bool kinematic = false;
-                        bool staticB = false;
-
                         component->QueryBoolAttribute("kinematic", &kinematic);
-                        component->QueryBoolAttribute("static", &staticB);
 
                         for (tinyxml2::XMLElement* e = component->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
                             if (e->Value() == std::string("RigidBody")) {
                                 float mass = 1.0f;
                                 e->QueryFloatAttribute("mass", &mass);
                                 rigidBody->setMass(mass);
-                                if (staticB)
-                                    rigidBody->setInverseMass(0.0f);
                                 rigidBody->setPosition(parseVec3Element(e, "Position"));
 
                                 float linearDamping, angularDamping;
@@ -260,6 +255,33 @@ namespace Villain {
                 glm::vec3 ambientColor = parseColorAttribute(e, "Ambient", "color");
                 rootNode->getEngine()->getRenderingEngine()->setAmbientLightColor(ambientColor);
             }
+
+            // Static colliders used for level geometry mainly
+            if (property->Value() == std::string("StaticColliders")) {
+                RigidBodyWorld::Colliders& colliders = rootNode->getEngine()->getRigidBodyWorld()->getColliders();
+
+                for (tinyxml2::XMLElement *e = property->FirstChildElement(); e != NULL; e = e->NextSiblingElement()) {
+                    CollisionPrimitive* colShape = nullptr;
+                    // TODO: add rotation to collider offsets
+                    if (e->Value() == std::string("CollisionSphere")) {
+                        float radius = 1.0f;
+                        e->QueryFloatAttribute("radius", &radius);
+                        glm::vec3 translation = parseVec3Element(e, "Position");
+                        glm::mat4 offsetMatrix = glm::translate(glm::mat4(1.0f), translation);
+                        colliders.emplace_back(new CollisionSphere(radius, nullptr, offsetMatrix));
+                    }
+                    if (e->Value() == std::string("CollisionBox")) {
+                        glm::vec3 translation = parseVec3Element(e, "Position");
+                        glm::mat4 offsetMatrix = glm::translate(glm::mat4(1.0f), translation);
+                        colliders.emplace_back(new CollisionBox(parseVec3Element(e, "HalfSize"), nullptr, offsetMatrix));
+                    }
+                    if (e->Value() == std::string("CollisionPlane")) {
+                        float offset = 0.0f;
+                        e->QueryFloatAttribute("offset", &offset);
+                        colliders.emplace_back(new CollisionPlane(parseVec3Element(e, "Normal"), offset));
+                    }
+                }
+            }
         }
     }
 
@@ -299,7 +321,7 @@ namespace Villain {
 
     glm::vec3 SceneParser::parseVec3Element(tinyxml2::XMLElement* element, const std::string& elementName,
             const std::string& x, const std::string& y, const std::string& z) {
-        glm::vec3 vec3Value;
+        glm::vec3 vec3Value = glm::vec3(0.0f);
 
         tinyxml2::XMLElement* vec3Element = element->FirstChildElement(elementName.c_str());
         if (vec3Element) {

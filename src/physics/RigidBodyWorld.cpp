@@ -95,7 +95,8 @@ namespace Villain {
                 unsigned used = 0;
                 // TODO:
                 // NOTE: TEMP variables!
-                float restitution = 0.4f;
+                // Tuned for pool game
+                float restitution = 0.9f;
                 float friction = 0.1f;
                 CollisionData data(nextContact, limit, 0, restitution, friction);
 
