@@ -32,7 +32,9 @@ namespace Villain {
                 if (target == GL_TEXTURE_2D)
                     // NOTE: need to investigate if SRGB internal format is required for Framebuffer texture attachments when
                     // gamma correcting in post-processing quad
-                    textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
+                    // TODO: do we need to use floating point for all framebuffer or maybe need to specify this from framebuffer constructor
+                    textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA16F, GL_RGBA, false);
+                    //textures[i]->init(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA, false);
                 else
                     textures[i]->initCubeMap(width, height, textureIDs[i], GL_NEAREST, GL_RGBA, GL_RGBA);
             }
