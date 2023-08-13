@@ -84,7 +84,6 @@ namespace Villain {
         //glDrawBuffer(GL_NONE);
         //glReadBuffer(GL_NONE);
 
-        // Seems to work fine without this?
         GLCall(glDrawBuffers(numTextures, drawBuffers));
     }
 
@@ -108,7 +107,7 @@ namespace Villain {
         for (int i = 0; i < numTextures; i++) {
             textures[i]->init(w, h, textureIDs[i]);
             // TODO: this is bad design once we start attaching depth and stencil attachments
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureIDs[i], 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textureIDs[i], 0);
 
         }
         if (rboID != 0) {
