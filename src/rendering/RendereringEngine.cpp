@@ -298,7 +298,10 @@ namespace Villain {
         postFXShader->setUniform1i("sharpen", sharpen);
         postFXShader->setUniform1i("blur", blur);
         postFXShader->setUniform1i("edgeDetection", outline);
+
         postFXShader->setUniform1i("gammaCorrection", gammaCorrection);
+        postFXShader->setUniform1i("hdr", hdr);
+        postFXShader->setUniform1f("exposure", exposure);
         frustumCullingEnabled = false;
         Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};
         planeTransform.setScale(1.0);

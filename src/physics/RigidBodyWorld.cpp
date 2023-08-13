@@ -96,8 +96,8 @@ namespace Villain {
                 // TODO:
                 // NOTE: TEMP variables!
                 // Tuned for pool game
-                float restitution = 0.9f;
-                float friction = 0.1f;
+                float restitution = 0.6f;
+                float friction = 0.2f;
                 CollisionData data(nextContact, limit, 0, restitution, friction);
 
                 if (CollisionSphere* one = dynamic_cast<CollisionSphere*>(colliders[i])) {

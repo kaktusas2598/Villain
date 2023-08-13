@@ -35,6 +35,8 @@ namespace Villain {
             inline Camera* getMainCamera() { return mainCamera; }
             inline bool isFrustumCullingEnabled() { return frustumCullingEnabled; }
             bool* getGammaCorrection() { return &gammaCorrection; }
+            bool* getHDR() { return &hdr; }
+            float* getExposure() { return &exposure; }
             void setGammaCorrection(bool gamma) { gammaCorrection = gamma; }
             static bool gammaCorrectionEnabled() { return gammaCorrection; }
             int getSelectedNodeID() const { return selectedNodeID; }
@@ -119,6 +121,8 @@ namespace Villain {
             bool wireFrameMode = false; ///< Optional wireframe rendering mode
 
             static bool gammaCorrection;
+            bool hdr = false;
+            float exposure = 1.0; ///< Used to gether with HDR
 
             int selectedNodeID = 0;
     };

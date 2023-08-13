@@ -352,7 +352,7 @@ namespace Villain {
                     editor->renderIcon("\uf0eb"); ImGui::SameLine();
                     ImGui::Text("%s light", light->type().c_str());
                     ImGui::DragFloat("Shadow Bias", light->getShadowInfo()->getBiasPointer());
-                    ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor);
+                    ImGui::ColorEdit3("Diffuse light color", (float*)&light->DiffuseColor, ImGuiColorEditFlags_HDR | ImGuiColorEditFlags_Float);
                     // HACK: seems like I do this everywhere anyway, so maybe separate properties for specular and ambient colours of light sources
                     // are not needed? yet to be decided
                     light->AmbientColor = light->DiffuseColor * 0.2f;
