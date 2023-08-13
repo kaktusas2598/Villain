@@ -159,7 +159,7 @@ namespace Villain {
             char * message = (char*)alloca(length * sizeof(char));
             GLCall(glGetShaderInfoLog(id, length, &length, message));
 
-            Logger::Instance()->warn("Failed to compile shader: %s", message);
+            VILLAIN_ERROR("Failed to compile shader: {}", message);
 
             GLCall(glDeleteShader(id));
             return 0;
