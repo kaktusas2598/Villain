@@ -125,4 +125,16 @@ namespace Villain {
     void FrameBuffer::unbind() const {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     }
+
+    unsigned int FrameBuffer::getTextureID(unsigned textureIndex) const {
+        VILLAIN_ASSERT(textureIndex < numTextures, "Frambuffer only contains {} texture target(s)", numTextures);
+
+        return textureIDs[textureIndex];
+    }
+
+    Texture* FrameBuffer::getTexture(unsigned textureIndex) const {
+        VILLAIN_ASSERT(textureIndex < numTextures, "Frambuffer only contains {} texture target(s)", numTextures);
+
+        return textures[textureIndex];
+    }
 }
