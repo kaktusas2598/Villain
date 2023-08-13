@@ -6,7 +6,8 @@
 #shader fragment
 #version 330 core
 
-layout(location = 0) out vec4 o_color;
+layout(location = 0) out vec4 frag_color;
+layout(location = 1) out vec4 bright_color;
 
 in vec3 v_normal;
 in vec3 v_fragPos;
@@ -39,14 +40,15 @@ void main() {
         for(int i = 0; i < 4; i++){
             if (v_boneIds[i] == displayBoneIndex) {
                 if (v_weights[i] >= 0.7) {
-                    o_color = vec4(1.0, 0.0, 0.0, 1.0) * v_weights[i];
+                    frag_color = vec4(1.0, 0.0, 0.0, 1.0) * v_weights[i];
                 } else if (v_weights[i] >= 0.4 && v_weights[i] <= 0.7) {
-                    o_color = vec4(0.0, 1.0, 0.0, 1.0) * v_weights[i];
+                    frag_color = vec4(0.0, 1.0, 0.0, 1.0) * v_weights[i];
                 } else if (v_weights[i] >= 0.1) {
-                    o_color = vec4(1.0, 1.0, 0.0, 1.0) * v_weights[i];
+                    frag_color = vec4(1.0, 1.0, 0.0, 1.0) * v_weights[i];
                 }
 
                 found = true;
+                bright_color = vec4(0.0, 0.0, 0.0, 1.0);
                 break;
             }
         }
@@ -62,18 +64,24 @@ void main() {
 
         if (material.useDiffuseMap) {
             vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
-            o_color = textureColor * vec4(ambientLight, 1.0);
+            frag_color = textureColor * vec4(ambientLight, 1.0);
         } else {
-            o_color = vec4(ambientLight, 1.0) * material.diffuseColor;
+            frag_color = vec4(ambientLight, 1.0) * material.diffuseColor;
         }
 
         if (fogColor != vec3(0.0)) {
-            o_color = mix(vec4(fogColor, 1.0), o_color, visibility);
+            frag_color = mix(vec4(fogColor, 1.0), frag_color, visibility);
         }
 
         if (selected) {
-            o_color = o_color * vec4(0.0, 1.0, 0.0, 1.0);
+            frag_color = frag_color * vec4(0.0, 1.0, 0.0, 1.0);
         }
+
+        // Check whether fragment ouput is higher then specified threshold and output brightness colour used for bloom
+        float brightness = dot(frag_color.rgb, vec3(0.2126, 0.7152, 0.0722));
+        if (brightness > 1.0)
+            bright_color = vec4(frag_color.rgb, 1.0);
+        else
+            bright_color = vec4(0.0, 0.0, 0.0, 1.0);
     }
 }
-

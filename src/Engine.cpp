@@ -73,7 +73,8 @@ namespace Villain {
         imGuiLayer.init(window);
         nuklearLayer.init(window);
 
-        sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight);
+        GLenum* defaultSceneBufferAttachmenets = new GLenum[2]{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+        sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight, 2, defaultSceneBufferAttachmenets);
 
         // TODO: ability to set custom number of contacts
         particleWorld = std::make_unique<ParticleWorld>(200);
