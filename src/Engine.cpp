@@ -73,6 +73,7 @@ namespace Villain {
         imGuiLayer.init(window);
         nuklearLayer.init(window);
 
+        // 2nd attachment is for bright color output (overbright areas can get bloom effect)
         GLenum* defaultSceneBufferAttachmenets = new GLenum[2]{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
         sceneBuffer = std::make_unique<FrameBuffer>(screenWidth, screenHeight, 2, defaultSceneBufferAttachmenets);
 

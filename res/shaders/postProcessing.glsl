@@ -9,7 +9,10 @@
 layout(location = 0) out vec4 color;
 
 in vec2 v_texCoords;
-uniform sampler2D texture1;
+
+uniform sampler2D scene;
+uniform sampler2D bloomBlur;
+uniform bool bloom;
 
 // Post Processing Effects
 uniform bool invertColors;
@@ -29,9 +32,12 @@ uniform float exposure;
 const float offset = 1.0 / 300.0;
 
 void main() {
-    color = texture(texture1, v_texCoords);
+    color = texture(scene, v_texCoords);
 
-    vec3 hdrColor = texture(texture1, v_texCoords).rgb;
+    vec3 hdrColor = texture(scene, v_texCoords).rgb;
+    vec3 bloomColor = texture(bloomBlur, TexCoords).rgb;
+    if(bloom)
+        hdrColor += bloomColor; // additive blending
 
     if (invertColors) {
         hdrColor = 1.0 - hdrColor;
@@ -60,7 +66,7 @@ void main() {
 
     vec3 sampleTex[9];
     for (int i = 0; i < 9; i++) {
-        sampleTex[i] = vec3(texture(texture1, v_texCoords.st + offsets[i]));
+        sampleTex[i] = vec3(texture(scene, v_texCoords.st + offsets[i]));
     }
     vec3 col = vec3(0.0);
 
@@ -106,18 +112,17 @@ void main() {
         hdrColor = col;
     }
 
+    const float gamma = 2.2;
     if (hdr) {
         // exposure tone mapping
         vec3 mapped = vec3(1.0) - exp(-hdrColor * exposure);
         // gamma correction
-        const float gamma = 2.2;
         mapped = pow(mapped, vec3(1.0 / gamma));
         color = vec4(mapped, 1.0);
     }
 
     // apply gamma correction, must be done as the last step
-    if (gammaCorrection) {
-        float gamma = 2.2;
+    if (gammaCorrection && !hdr) {
         color.rgb = pow(hdrColor.rgb, vec3(1.0/gamma));
     }
 }

@@ -292,7 +292,7 @@ namespace Villain {
 
         engine->getSceneBuffer()->getTexture()->bind();
         postFXShader->bind();
-        postFXShader->setUniform1i("texture1", 0);
+        postFXShader->setUniform1i("scene", 0);
         postFXShader->setUniform1i("invertColors", invertColors);
         postFXShader->setUniform1i("grayScale", grayScale);
         postFXShader->setUniform1i("sharpen", sharpen);
