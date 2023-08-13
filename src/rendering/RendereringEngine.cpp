@@ -20,6 +20,7 @@ namespace Villain {
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
         skyboxShader = Shader::createFromResource("cubemap");
+        gaussianBlurShader = Shader::createFromResource("gaussianBlur");
 
         mainCamera = new Camera(CameraType::FIRST_PERSON);
         altCamera = new Camera(CameraType::NONE);
@@ -52,6 +53,9 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, shadowBufferAttachments);
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, shadowBufferAttachments, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+        pingpongFBOs[0] = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+        pingpongFBOs[1] = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+
         delete[] shadowBufferAttachments;
         delete[] mirrorBufferAttachments;
 
@@ -67,6 +71,7 @@ namespace Villain {
         delete dirShadowMapShader;
         delete omnidirShadowMapShader;
         delete skyboxShader;
+        delete gaussianBlurShader;
         delete pickingShader;
 
         delete pickingTexture;

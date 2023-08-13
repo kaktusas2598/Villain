@@ -79,6 +79,7 @@ namespace Villain {
             FrameBuffer* shadowBuffer = nullptr;
             FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
+            FrameBuffer* pingpongFBOs[2]; ///< For blurring scene used for bloom/glow effect
 
             // Mouse picking attributes
             PickingTexture* pickingTexture = nullptr;
@@ -93,6 +94,7 @@ namespace Villain {
             Shader* normalDebugShader = nullptr;
             Shader* dirShadowMapShader = nullptr;
             Shader* omnidirShadowMapShader = nullptr;
+            Shader* gaussianBlurShader = nullptr;
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
