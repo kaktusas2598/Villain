@@ -35,7 +35,7 @@ void main() {
     color = texture(scene, v_texCoords);
 
     vec3 hdrColor = texture(scene, v_texCoords).rgb;
-    vec3 bloomColor = texture(bloomBlur, TexCoords).rgb;
+    vec3 bloomColor = texture(bloomBlur, v_texCoords).rgb;
     if(bloom)
         hdrColor += bloomColor; // additive blending
 
