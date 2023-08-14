@@ -28,7 +28,8 @@
 * 2D and Cubemap texture support
 * Mipmapped textures with anisotropic filtering, 4x MultiSample Anti-Aliasing enabled
 * Gamma-corrected textures
-* HDR with tone mapping support and controllable exposure level
+* HDR support using basic tone mapping and controllable exposure level
+* Bloom
 * 2D texture batch rendering, multiple texture and colour support
 * Instanced rendering support for 3D models and meshes
 * 3D Model loading using assimp
@@ -80,7 +81,6 @@
 * 3D Mesh batch rendering
 * Tessalated terrain
 * Stencil buffer
-* Bloom
 * PBR rendering
 * Blending skeletal animations
 * Embedded texture support

@@ -50,10 +50,10 @@
         </Components>
     </Node>
 
-    <Node name="Sponza Palace" scale='0.1'>
+    <Node name="Sponza Palace" scale='0.2'>
         <Components>
             <Component type="Model" fileName="assets/models/sponza.obj" />
-            <Component type="Script" fileName="assets/scripts/test.lua"/>
+            <!--<Component type="Script" fileName="assets/scripts/test.lua"/>-->
         </Components>
     </Node>
     <Node name="Rock" scale='0.01' positionX='2.0' positionY='1.0' positionZ='0.0'>
@@ -73,26 +73,26 @@
             </Component>
         </Components>
     </Node>
-    <!--<Node name="Point Light" positionX='4.0' positionY='2.0' positionZ='3.0'>-->
-        <!--<Components>-->
-            <!--<Component type="PointLight">-->
-                <!--<Ambient color="#1F1F1F" intensity="0.2" />-->
-                <!--<Diffuse color="#FF0000" intensity="1.0" />-->
-                <!--<Specular color="#FFFFFF" intensity="1.0" />-->
-                <!--<Attenuation constant="1.0" linear="0.022" quadratic="0.0019" />-->
-            <!--</Component>-->
-        <!--</Components>-->
-    <!--</Node>-->
-    <!--<Node name="Point Light 2" positionX='-4.0' positionY='5.0' positionZ='3.0'>-->
-        <!--<Components>-->
-            <!--<Component type="PointLight">-->
-                <!--<Ambient color="#1F1F1F" intensity="0.2" />-->
-                <!--<Diffuse color="#FF0000" intensity="1.0" />-->
-                <!--<Specular color="#FFFFFF" intensity="1.0" />-->
-                <!--<Attenuation constant="1.0" linear="0.022" quadratic="0.0019" />-->
-            <!--</Component>-->
-        <!--</Components>-->
-    <!--</Node>-->
+    <Node name="Point Light" positionX='4.0' positionY='2.0' positionZ='3.0'>
+        <Components>
+            <Component type="PointLight">
+                <Ambient color="#1F1F1F" intensity="0.2" />
+                <Diffuse color="#FF0000" intensity="1.0" />
+                <Specular color="#FFFFFF" intensity="1.0" />
+                <Attenuation constant="1.0" linear="0.022" quadratic="0.0019" />
+            </Component>
+        </Components>
+    </Node>
+    <Node name="Point Light 2" positionX='-4.0' positionY='5.0' positionZ='3.0'>
+        <Components>
+            <Component type="PointLight">
+                <Ambient color="#1F1F1F" intensity="0.2" />
+                <Diffuse color="#FF0000" intensity="1.0" />
+                <Specular color="#FFFFFF" intensity="1.0" />
+                <Attenuation constant="1.0" linear="0.022" quadratic="0.0019" />
+            </Component>
+        </Components>
+    </Node>
     <!--<Node name="Spot Light" positionX='2.0' positionY='3.0' positionZ='1.0'>-->
         <!--<Components>-->
             <!--<Component type="SpotLight">-->

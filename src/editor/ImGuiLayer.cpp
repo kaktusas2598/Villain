@@ -342,6 +342,7 @@ namespace Villain {
         ImGui::Checkbox("Visualise bone weights", renderingEngine->getVisualiseBoneWeights());
         ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", renderingEngine->getGammaCorrection());
         ImGui::Checkbox("HDR Enabled (Also enables Gamma Correction)", renderingEngine->getHDR());
+        ImGui::Checkbox("Bloom enabled", renderingEngine->getBloom());
         ImGui::DragFloat("Exposure level", renderingEngine->getExposure());
         ImGui::Checkbox("Toon shading enabled", renderingEngine->getToonShadingEnabled());
         ImGui::Checkbox("Mirror enabled", renderingEngine->getMirrorFramebufferEnabled());

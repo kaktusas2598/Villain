@@ -20,6 +20,8 @@ namespace Villain {
         dirShadowMapShader = Shader::createFromResource("shadowMap");
         omnidirShadowMapShader = Shader::createFromResource("shadowCubeMap");
         skyboxShader = Shader::createFromResource("cubemap");
+        gaussianBlurShader = Shader::createFromResource("gaussianBlur");
+        lightColorShader = Shader::createFromResource("lightColor");
 
         mainCamera = new Camera(CameraType::FIRST_PERSON);
         altCamera = new Camera(CameraType::NONE);
@@ -52,6 +54,9 @@ namespace Villain {
         shadowBuffer = new FrameBuffer(1024, 1024, 1, shadowBufferAttachments);
         omniShadowBuffer = new FrameBuffer(1024, 1024, 1, shadowBufferAttachments, true);
         mirrorBuffer = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+        pingpongFBOs[0] = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+        pingpongFBOs[1] = new FrameBuffer(e->getScreenWidth(), e->getScreenHeight(), 1, mirrorBufferAttachments);
+
         delete[] shadowBufferAttachments;
         delete[] mirrorBufferAttachments;
 
@@ -67,6 +72,8 @@ namespace Villain {
         delete dirShadowMapShader;
         delete omnidirShadowMapShader;
         delete skyboxShader;
+        delete gaussianBlurShader;
+        delete lightColorShader;
         delete pickingShader;
 
         delete pickingTexture;
@@ -268,6 +275,23 @@ namespace Villain {
             glDepthFunc(GL_LESS);
         }
 
+        // after main rendering passes show all the light sources as bright meshes
+        std::vector<VertexP1N1UV> vertices;
+        std::vector<unsigned int> indices;
+        MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 1.0f);
+        Mesh<VertexP1N1UV>* lightSource = new Mesh<VertexP1N1UV>(vertices, indices);
+        lightColorShader->bind();
+        lightColorShader->setUniformMat4f("projection", mainCamera->getProjMatrix());
+        lightColorShader->setUniformMat4f("view", mainCamera->getViewMatrix());
+
+        for (auto& light: lights) {
+            lightColorShader->setUniformMat4f("model", light->GetTransform()->getTransformMatrix());
+            lightColorShader->setUniformVec3("lightColor", light->DiffuseColor);
+            // TODO: really shouldnt need to set material here
+            Material mat{"scene", engine->getSceneBuffer()->getTexture(), 1};
+            lightSource->draw(*lightColorShader, mat);
+        }
+
         if (visualiseNormals) {
             normalDebugShader->bind();
             node->render(normalDebugShader, this, mainCamera);
@@ -287,12 +311,41 @@ namespace Villain {
 
         activeLight = nullptr;
 
+        // Blur bright fragments with 2-pass Gaussian Blur filter
+        glDisable(GL_DEPTH_TEST);
+        bool horizontal = true, firstIteration = true;
+        unsigned int amount = 10;
+        gaussianBlurShader->bind();
+        for (unsigned int i = 0; i < amount; i++) {
+            pingpongFBOs[horizontal]->bind();
+            gaussianBlurShader->setUniform1i("horizontal", horizontal);
+            Material gaussianBlurMat{"blurredScene", engine->getSceneBuffer()->getTexture(1), 1};
+            if (firstIteration) {
+                engine->getSceneBuffer()->getTexture(1)->bind();
+            } else {
+                pingpongFBOs[!horizontal]->getTexture()->bind();
+                gaussianBlurMat.setDiffuseMap(pingpongFBOs[!horizontal]->getTexture());
+            }
+            // Render Quad
+            planeTransform.setScale(1.0);
+            planeTransform.setPos(glm::vec3(0.0, 0.0, -0.2f));
+            gaussianBlurMat.updateUniforms(*gaussianBlurShader);
+            gaussianBlurShader->updateUniforms(planeTransform, *this, *altCamera);
+            screenQuad->draw(*gaussianBlurShader, gaussianBlurMat);
+
+            horizontal = !horizontal;
+            if (firstIteration)
+                firstIteration = false;
+        }
+
         bindMainTarget();
         glDisable(GL_DEPTH_TEST);
 
         engine->getSceneBuffer()->getTexture()->bind();
+        pingpongFBOs[!horizontal]->getTexture()->bind(1);
         postFXShader->bind();
-        postFXShader->setUniform1i("texture1", 0);
+        postFXShader->setUniform1i("scene", 0);
+        postFXShader->setUniform1i("bloomBlur", 1);
         postFXShader->setUniform1i("invertColors", invertColors);
         postFXShader->setUniform1i("grayScale", grayScale);
         postFXShader->setUniform1i("sharpen", sharpen);
@@ -301,6 +354,7 @@ namespace Villain {
 
         postFXShader->setUniform1i("gammaCorrection", gammaCorrection);
         postFXShader->setUniform1i("hdr", hdr);
+        postFXShader->setUniform1i("bloom", bloom);
         postFXShader->setUniform1f("exposure", exposure);
         frustumCullingEnabled = false;
         Material postFXMat{"scene", engine->getSceneBuffer()->getTexture(), 1};
@@ -353,5 +407,11 @@ namespace Villain {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight());
         }
+    }
+
+    void RenderingEngine::resize(int newWidth, int newHeight) {
+        mainCamera->rescale(newWidth, newHeight);
+        pingpongFBOs[0]->rescale(newWidth, newHeight);
+        pingpongFBOs[1]->rescale(newWidth, newHeight);
     }
 }

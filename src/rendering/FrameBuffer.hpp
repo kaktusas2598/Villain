@@ -11,9 +11,8 @@ namespace Villain {
             FrameBuffer(int w, int h, int textureCount = 1, GLenum* attachments = new GLenum[1]{GL_COLOR_ATTACHMENT0}, bool cubeMap = false);
             ~FrameBuffer();
 
-            // NOTE: These are not great, in the future might need ability to get multiple textures
-            unsigned int getTextureID() const { return textureIDs[0]; }
-            Texture* getTexture() const { return textures[0]; }
+            unsigned int getTextureID(unsigned textureIndex = 0) const;
+            Texture* getTexture(unsigned textureIndex = 0) const;
             int getWidth() const { return width; }
             int getHeight() const { return height; }
 

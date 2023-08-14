@@ -36,6 +36,7 @@ namespace Villain {
             inline bool isFrustumCullingEnabled() { return frustumCullingEnabled; }
             bool* getGammaCorrection() { return &gammaCorrection; }
             bool* getHDR() { return &hdr; }
+            bool* getBloom() { return &bloom; }
             float* getExposure() { return &exposure; }
             void setGammaCorrection(bool gamma) { gammaCorrection = gamma; }
             static bool gammaCorrectionEnabled() { return gammaCorrection; }
@@ -52,7 +53,7 @@ namespace Villain {
             bool* exponentialFogEnabled() { return &useExponentialFog; }
 
             // Call on window/viewport resize event
-            void resizeCameras(int newWidth, int newHeight) { mainCamera->rescale(newWidth, newHeight); }
+            void resize(int newWidth, int newHeight);
 
             // Post-processing effects/filters
             bool* getInvertColors() { return &invertColors; }
@@ -79,6 +80,7 @@ namespace Villain {
             FrameBuffer* shadowBuffer = nullptr;
             FrameBuffer* omniShadowBuffer = nullptr;
             FrameBuffer* mirrorBuffer = nullptr;
+            FrameBuffer* pingpongFBOs[2]; ///< For blurring scene used for bloom/glow effect
 
             // Mouse picking attributes
             PickingTexture* pickingTexture = nullptr;
@@ -93,6 +95,9 @@ namespace Villain {
             Shader* normalDebugShader = nullptr;
             Shader* dirShadowMapShader = nullptr;
             Shader* omnidirShadowMapShader = nullptr;
+            Shader* gaussianBlurShader = nullptr;
+            // Maybe temporary shader to render light sources themselves as single color
+            Shader* lightColorShader = nullptr;
 
             BaseLight* activeLight = nullptr;
             std::vector<BaseLight*> lights;
@@ -122,6 +127,7 @@ namespace Villain {
 
             static bool gammaCorrection;
             bool hdr = false;
+            bool bloom = false;
             float exposure = 1.0; ///< Used to gether with HDR
 
             int selectedNodeID = 0;
