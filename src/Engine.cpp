@@ -412,7 +412,7 @@ namespace Villain {
                     eventDispatcher->dispatchEvent(resizeEvent);
                 }
                 application->onAppWindowResize(screenWidth, screenHeight);
-                renderingEngine->resizeCameras(screenWidth, screenHeight);
+                renderingEngine->resize(screenWidth, screenHeight);
                 break;
             default:
                 break;
