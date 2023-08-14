@@ -5,7 +5,8 @@
 
 #shader fragment
 #version 330 core
-out vec4 frag_color;
+
+layout(location = 0) out vec4 frag_color;
 
 in vec2 v_texCoords;
 
