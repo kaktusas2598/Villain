@@ -19,6 +19,15 @@ struct Material {
     sampler2D texture_disp;
 };
 
+struct PBRMaterial {
+    vec3 albedo;
+    float metallic;
+    float roughness;
+    float ao;
+
+    // TODO: samplers
+};
+
 struct BaseLight {
     vec3 ambient;
     vec3 diffuse;
