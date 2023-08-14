@@ -18,7 +18,7 @@ namespace Villain {
             Material(const std::string& name = std::string()) { this->name = name; }
             virtual ~Material() {}
 
-            void updateUniforms(Shader& shader);
+            virtual void updateUniforms(Shader& shader);
 
             /// Material equality based on their name alone to force adding unique names
             bool operator==(const Material& other) const {
@@ -65,15 +65,16 @@ namespace Villain {
             void setSpecularColor(const glm::vec4& specular) { specularColor = specular; }
             void setDiffuseMap(Texture* diffuse) { diffuseMap = diffuse; }
 
-        private:
+        protected:
             std::string name; //<<< Material name
+            Texture* normalMap = nullptr; //<<< Normal/bump map, shared with PBR materials so protected
+        private:
             float specularFactor ; //<<< shininess, higher value makes material more reflective and specular highlight becomes smaller
             glm::vec4 diffuseColor{1.0f};
             glm::vec4 ambientColor{1.0f};
             glm::vec4 specularColor{1.0f};
             Texture* diffuseMap = nullptr; //<<< Base colour, diffuse map
             Texture* specularMap = nullptr;//<<< Specularity map
-            Texture* normalMap = nullptr; //<<< Normal/bump map
             Texture* dispMap = nullptr; //<<< Parralax displacement map
             float dispMapScale = 0.1f; //<<< Displacement map scaling
             float dispMapBias = 0.0f; //<<< Displacement map offset/bias
