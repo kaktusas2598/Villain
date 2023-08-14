@@ -83,6 +83,7 @@
 * Stencil buffer
 * PBR rendering
 * Blending skeletal animations
+* Emission maps
 * Embedded texture support
 * Integrate terrain rendering features from 'Terrain' example
 * Camera automation
