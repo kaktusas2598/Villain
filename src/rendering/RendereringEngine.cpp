@@ -26,11 +26,15 @@ namespace Villain {
         mainCamera = new Camera(CameraType::FIRST_PERSON);
         altCamera = new Camera(CameraType::NONE);
 
+        samplerMap.emplace("albedo", 0);
         samplerMap.emplace("diffuse", 0);
         samplerMap.emplace("specular", 1);
         samplerMap.emplace("normal", 2);
         samplerMap.emplace("disp", 3);
         samplerMap.emplace("shadow", 4);
+        samplerMap.emplace("roughness", 5);
+        samplerMap.emplace("metallic", 6);
+        samplerMap.emplace("ao", 7);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
