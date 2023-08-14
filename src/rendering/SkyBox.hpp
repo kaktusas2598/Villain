@@ -21,6 +21,9 @@ namespace Villain {
 
             void setAnimated(bool anim = false) { animated = anim; }
             void setRotationSpeed(float speed) { rotationSpeed = speed; }
+
+            bool* getAnimated() { return &animated; }
+            float* getRotationSpeed() { return &rotationSpeed; }
         private:
             std::unique_ptr<VertexArray> skyboxVao;
             std::unique_ptr<VertexBuffer> skyboxVbo;

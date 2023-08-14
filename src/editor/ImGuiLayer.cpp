@@ -348,6 +348,10 @@ namespace Villain {
         ImGui::Checkbox("Mirror enabled", renderingEngine->getMirrorFramebufferEnabled());
         ImGui::ColorEdit3("Ambient lighting color: ", (float*)renderingEngine->getAmbientLightColor());
         ImGui::Checkbox("Show IMGui Demo Window", &showDemoWindow);
+        if (renderingEngine->getSkybox()) {
+            ImGui::Checkbox("Animate Skybox", renderingEngine->getSkybox()->getAnimated());
+            ImGui::DragFloat("Skybox rotation speed", renderingEngine->getSkybox()->getRotationSpeed());
+        }
 
         // TODO: Possibly move this to anotehr class or maybe all of this method, not sure yet
         ///////////////////////////////////////////////////
