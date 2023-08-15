@@ -20,7 +20,7 @@ namespace Villain {
                     Texture* roughnessMp = nullptr,
                     Texture* aoMp = nullptr
                     ) :
-                albedoMap(albedoMp), roughnessMap(roughnessMp), aoMap(aoMp)
+                albedoMap(albedoMp), metallicMap(metallicMp), roughnessMap(roughnessMp), aoMap(aoMp)
             {
                 this->name = name;
                 this->normalMap = normalMp;

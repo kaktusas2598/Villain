@@ -5,6 +5,8 @@
 namespace Villain {
 
     void Material::updateUniforms(Shader& shader) {
+        shader.setUniform1i("usePBR", false);
+
         // Base color/diffuse map
         if (diffuseMap == nullptr) {
             shader.setUniform1i("material.useDiffuseMap", 0);
