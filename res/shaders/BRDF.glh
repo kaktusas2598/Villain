@@ -2,6 +2,8 @@
  *  Shader containing methods for Cook-Torrance bidirectional reflective distribution function(BRDF)
  */
 
+const float PI = 3.14159265359;
+
 // Trowbridge-Reitz GGX normal distribution function (D) statistically approximates
 // the relative surface area of microfacets exactly aligned to the (halfway) vector h
 float DistributionGGX(vec3 N, vec3 H, float roughness)
