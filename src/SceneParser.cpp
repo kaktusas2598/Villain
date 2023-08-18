@@ -173,6 +173,7 @@ namespace Villain {
                                 e->QueryFloatAttribute("mass", &mass);
                                 rigidBody->setMass(mass);
                                 rigidBody->setPosition(parseVec3Element(e, "Position"));
+                                rigidBody->setOrientation(parseVec3Element(e, "Rotation"));
 
                                 float linearDamping, angularDamping;
                                 if (e->QueryFloatAttribute("linearDamping", &linearDamping) == tinyxml2::XML_SUCCESS)

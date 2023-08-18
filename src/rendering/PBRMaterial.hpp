@@ -35,6 +35,11 @@ namespace Villain {
             Texture* getRoughnessMap() { return roughnessMap; }
             Texture* getAOMap() { return aoMap; }
 
+            void setAlbedoMap(Texture* alb) { albedoMap = alb; }
+            void setMetallicMap(Texture* metal) { metallicMap = metal; }
+            void setRoughnessMap(Texture* rough) { roughnessMap = rough; }
+            void setAOMap(Texture* ambientOcl) { aoMap = ambientOcl; }
+
         private:
             glm::vec3 albedo{1.0f};
             float metallic = 0.0f;

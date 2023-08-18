@@ -64,6 +64,9 @@ namespace Villain {
             void setDiffuseColor(const glm::vec4& diffuse) { diffuseColor = diffuse; }
             void setSpecularColor(const glm::vec4& specular) { specularColor = specular; }
             void setDiffuseMap(Texture* diffuse) { diffuseMap = diffuse; }
+            void setSpecularMap(Texture* specular) { specularMap = specular; }
+            void setNormalMap(Texture* normal) { normalMap = normal; }
+            void setDisplacementMap(Texture* disp) { dispMap = disp; }
 
         protected:
             std::string name; //<<< Material name
