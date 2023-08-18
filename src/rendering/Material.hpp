@@ -69,17 +69,19 @@ namespace Villain {
             void setDisplacementMap(Texture* disp) { dispMap = disp; }
 
         protected:
+            /// Attributes used in both Phong and PBR rendering
             std::string name; //<<< Material name
             Texture* normalMap = nullptr; //<<< Normal/bump map, shared with PBR materials so protected
+            Texture* dispMap = nullptr; //<<< Parralax displacement map
+            float dispMapScale = 0.1f; //<<< Displacement map scaling
+            float dispMapBias = 0.0f; //<<< Displacement map offset/bias
         private:
+            /// Attributes only used for phong shaded materials
             float specularFactor ; //<<< shininess, higher value makes material more reflective and specular highlight becomes smaller
             glm::vec4 diffuseColor{1.0f};
             glm::vec4 ambientColor{1.0f};
             glm::vec4 specularColor{1.0f};
             Texture* diffuseMap = nullptr; //<<< Base colour, diffuse map
             Texture* specularMap = nullptr;//<<< Specularity map
-            Texture* dispMap = nullptr; //<<< Parralax displacement map
-            float dispMapScale = 0.1f; //<<< Displacement map scaling
-            float dispMapBias = 0.0f; //<<< Displacement map offset/bias
     };
 }
