@@ -114,11 +114,11 @@ namespace Villain {
         if (materialMap.find(id) == materialMap.end()) {
             Material* mat = nullptr;
             mat = new PBRMaterial(id,
-                    loadTexture(albedoMapFile, "albedo", GL_CLAMP_TO_EDGE, false),
-                    loadTexture(normalMapFile, "normal", GL_CLAMP_TO_EDGE, false),
-                    loadTexture(metallicMapFile, "metallic", GL_CLAMP_TO_EDGE, false),
-                    loadTexture(roughnessMapFile, "roughness", GL_CLAMP_TO_EDGE, false),
-                    loadTexture(aoMapFile, "ao", GL_CLAMP_TO_EDGE, false)
+                    loadTexture(albedoMapFile, id + "_albedo", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(normalMapFile, id + "_normal", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(metallicMapFile, id + "_metallic", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(roughnessMapFile, id + "_roughness", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(aoMapFile, id + "_ao", GL_CLAMP_TO_EDGE, false)
             );
             materialMap[id] = mat;
             return mat;
