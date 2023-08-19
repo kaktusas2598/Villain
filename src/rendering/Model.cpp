@@ -2,6 +2,7 @@
 
 #include "Logger.hpp"
 #include "ResourceManager.hpp"
+#include "rendering/PBRMaterial.hpp"
 #include "rendering/animation/Animation.hpp"
 #include "rendering/animation/Animator.hpp"
 #include "rendering/AssimpUtils.hpp"
@@ -129,52 +130,88 @@ namespace Villain {
         glm::vec4 specularColor{1.0f};
         if (mesh->mMaterialIndex >= 0) {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-            // Set up material colours
-            aiColor4D diffuse;
-            if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse)) {
-                diffuseColor = glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
-            }
-
-            aiColor4D ambient;
-            if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &ambient)) {
-                ambientColor = glm::vec4(ambient.r, ambient.g, ambient.b, ambient.a);
-            }
-
-            aiColor4D specular;
-            if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &specular)) {
-                specularColor = glm::vec4(specular.r, specular.g, specular.b, specular.a);
-            }
-
-            //float specularFactor = 32.0f;
-            //aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &specularFactor);
-
-            // Set up material textures
-            std::vector<Texture*>* diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureMapType::DIFFUSE);
-            textures.insert(textures.end(), diffuseMaps->begin(), diffuseMaps->end());
-            std::vector<Texture*>* specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureMapType::SPECULAR);
-            textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
-            std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureMapType::NORMAL);
-            textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
-
             matName = std::string(material->GetName().C_Str());
-            Texture* diffuseMap = nullptr;
-            Texture* specularMap = nullptr;
-            Texture* normalMap = nullptr;
-            if (!diffuseMaps->empty())
-                diffuseMap = (*diffuseMaps)[0];
-            if (!specularMaps->empty())
-                specularMap = (*specularMaps)[0];
-            if (!normalMaps->empty())
-                normalMap = (*normalMaps)[0];
-            // TODO: parallax displacement maps
-            // TODO: stop hardcoding specularity factor(32) here
-            Material mat(matName, diffuseMap, 32.0f, specularMap, normalMap);
-            mat.setAmbientColor(ambientColor);
-            mat.setDiffuseColor(diffuseColor);
-            mat.setSpecularColor(specularColor);
-            materials[matName] = mat;
-            return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);
+
+            // First check if we have PBR material
+            if (material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) > 0) {
+                // Set up material textures
+                std::vector<Texture*>* albedoMaps = loadMaterialTextures(material, aiTextureType_BASE_COLOR, TextureMapType::ALBEDO);
+                textures.insert(textures.end(), albedoMaps->begin(), albedoMaps->end());
+                std::vector<Texture*>* metallicMaps = loadMaterialTextures(material, aiTextureType_METALNESS, TextureMapType::METALLIC);
+                textures.insert(textures.end(), metallicMaps->begin(), metallicMaps->end());
+                std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureMapType::NORMAL);
+                textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
+                std::vector<Texture*>* roughnessMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, TextureMapType::ROUGHNESS);
+                textures.insert(textures.end(), roughnessMaps->begin(), roughnessMaps->end());
+                std::vector<Texture*>* aoMaps = loadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, TextureMapType::AO);
+                textures.insert(textures.end(), aoMaps->begin(), aoMaps->end());
+
+                Texture* albedoMap = nullptr;
+                Texture* metallicMap = nullptr;
+                Texture* normalMap = nullptr;
+                Texture* roughnessMap = nullptr;
+                Texture* aoMap = nullptr;
+
+                if (!albedoMaps->empty())
+                    albedoMap = (*albedoMaps)[0];
+                if (!metallicMaps->empty())
+                    metallicMap = (*metallicMaps)[0];
+                if (!normalMaps->empty())
+                    normalMap = (*normalMaps)[0];
+                if (!roughnessMaps->empty())
+                    roughnessMap = (*roughnessMaps)[0];
+                if (!aoMaps->empty())
+                    aoMap = (*aoMaps)[0];
+
+                PBRMaterial mat(matName, albedoMap, normalMap, metallicMap, roughnessMap, aoMap);
+                // TODO: add float ao, roughness, metallic and vec3 albedo if needed!
+                materials[matName] = mat;
+                ResourceManager::Instance()->addMaterial(&materials[matName]);
+                return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);
+
+            } else {
+                // Set up material colours
+                aiColor4D diffuse, ambient, specular;
+                if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse)) {
+                    diffuseColor = glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+                }
+                if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &ambient)) {
+                    ambientColor = glm::vec4(ambient.r, ambient.g, ambient.b, ambient.a);
+                }
+                if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &specular)) {
+                    specularColor = glm::vec4(specular.r, specular.g, specular.b, specular.a);
+                }
+
+                //float specularFactor = 32.0f;
+                //aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &specularFactor);
+
+                // Set up material textures
+                std::vector<Texture*>* diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureMapType::DIFFUSE);
+                textures.insert(textures.end(), diffuseMaps->begin(), diffuseMaps->end());
+                std::vector<Texture*>* specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureMapType::SPECULAR);
+                textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
+                std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureMapType::NORMAL);
+                textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
+
+                Texture* diffuseMap = nullptr;
+                Texture* specularMap = nullptr;
+                Texture* normalMap = nullptr;
+                if (!diffuseMaps->empty())
+                    diffuseMap = (*diffuseMaps)[0];
+                if (!specularMaps->empty())
+                    specularMap = (*specularMaps)[0];
+                if (!normalMaps->empty())
+                    normalMap = (*normalMaps)[0];
+                // TODO: parallax displacement maps
+                // TODO: stop hardcoding specularity factor(32) here
+                Material mat(matName, diffuseMap, 32.0f, specularMap, normalMap);
+                mat.setAmbientColor(ambientColor);
+                mat.setDiffuseColor(diffuseColor);
+                mat.setSpecularColor(specularColor);
+                materials[matName] = mat;
+                ResourceManager::Instance()->addMaterial(&materials[matName]);
+                return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);
+            }
         }
 
         VILLAIN_WARN("Mesh missing material information");
