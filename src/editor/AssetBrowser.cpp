@@ -58,15 +58,13 @@ namespace Villain {
 
         editor->renderIcon("\uf1fc"); ImGui::SameLine();
         if (ImGui::TreeNode("Textures")) {
+            ImVec2 desiredImgSize = ImGui::GetContentRegionAvail(); // will squish image to fit in
             for (auto const& t: ResourceManager::Instance()->getTextureMap()) {
                 if (ImGui::TreeNode(t.first.c_str())) {
-                    float width = ImGui::GetContentRegionAvail().x;
-                    float height = ImGui::GetContentRegionAvail().y;
-
                     ImGui::Image(
                             reinterpret_cast<ImTextureID>(t.second->getID()),
                             //ImGui::GetWindowSize(), // will respect aspect ratio of image
-                            ImGui::GetContentRegionAvail(), // will squish image to fit it in
+                            desiredImgSize,
                             ImVec2(0, 1),
                             ImVec2(1, 0)
                             );

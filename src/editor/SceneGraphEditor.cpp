@@ -15,6 +15,7 @@
 #include "components/MoveController.hpp"
 #include "components/ScriptComponent.hpp"
 #include "rendering/MeshUtils.hpp"
+#include "rendering/PBRMaterial.hpp"
 
 namespace Villain {
 
@@ -207,11 +208,13 @@ namespace Villain {
                 case ComponentType::Mesh:
                     if (ImGui::Button("Add sphere mesh")) {
                         MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 1.0f);
-                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        Material* mat = new Material();
+                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), mat));
                     }
                     if (ImGui::Button("Add Axis-Aligned Bounding Box mesh")) {
                         MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
-                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        Material* mat = new Material();
+                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), mat));
                     }
                     break;
                 case ComponentType::Model:
@@ -371,11 +374,8 @@ namespace Villain {
                     ImGui::ColorEdit4("Specular color", meshN1UV->getMaterial().getSpecularColorPtr());
                     ImGui::DragFloat("Specular factor", meshN1UV->getMaterial().getSpecularFactorPtr());
 
-                    if (!material.getDiffuseMap()) {
-                        if (ImGui::Button("Load diffuse map")) {
-                            editor->getFileBrowser().openPopup();
-                        }
-
+                    if (ImGui::Button("Load diffuse map")) {
+                        editor->getFileBrowser().openPopup();
                     }
 
                     static std::string selectedTexture;
@@ -428,6 +428,139 @@ namespace Villain {
                         meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
                     }
                 }
+
+                // TODO: 1. PBR Textures maps
+                // TODO: 2. Reduce duplication for different MeshRenderers
+                // TODO  3. Let user create and select materials to use
+                if (compo->getID() == GetId<MeshRenderer<VertexP1N1T1B1UV>>()) {
+                    editor->renderIcon("\uf61f"); ImGui::SameLine();
+                    ImGui::Text("Basic Mesh P1N1T1B1UV");
+                    auto meshN1T1B1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
+                    auto material = meshN1T1B1UV->getMaterial();
+
+                    if (auto pbr = dynamic_cast<PBRMaterial*>(meshN1T1B1UV->getMaterialPtr())) {
+                        ImGui::ColorEdit3("Albedo", pbr->getAlbedoColorPtr());
+                        ImGui::DragFloat("Roughness", pbr->getRoughnessPtr());
+                        ImGui::DragFloat("Metallic", pbr->getMetallicPtr());
+                        ImGui::DragFloat("AO", pbr->getAOPtr());
+
+                        static std::string selectedAlbedoMap;
+                        if (ImGui::BeginCombo("Albedo Map", selectedAlbedoMap.c_str())) {
+                            bool noMap = pbr->getAlbedoMap() == nullptr;
+                            if (ImGui::Selectable("--- None---", noMap)) {
+                                pbr->setAlbedoMap(nullptr);
+                                selectedAlbedoMap = std::string();
+                            }
+                            if (noMap) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+
+                            for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                                const std::string& textureName = texturePair.first;
+                                const Texture* texture = texturePair.second;
+
+                                // Pass nullptr as the second parameter to use the text in the map as the ID
+                                bool isSelected = (pbr->getAlbedoMap() == texture);
+                                if (ImGui::Selectable(textureName.c_str(), isSelected)) {
+                                    // Update the selected texture when an option is selected
+                                    pbr->setAlbedoMap(const_cast<Texture*>(texture));
+                                }
+                                if (isSelected) {
+                                    // Set the initial focus on the currently selected texture
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+                            ImGui::EndCombo();
+                        }
+                    } else {
+                        ImGui::ColorEdit4("Ambient color", material.getAmbientColorPtr());
+                        ImGui::ColorEdit4("Diffuse color", material.getDiffuseColorPtr());
+                        ImGui::ColorEdit4("Specular color", material.getSpecularColorPtr());
+                        ImGui::DragFloat("Specular factor", material.getSpecularFactorPtr());
+
+                        if (ImGui::Button("Load diffuse map")) {
+                            editor->getFileBrowser().openPopup();
+                        }
+
+                        static std::string selectedDiffuseMap;
+                        if (ImGui::BeginCombo("Diffuse Map", selectedDiffuseMap.c_str())) {
+                            bool noMap = meshN1T1B1UV->getMaterial().getDiffuseMap() == nullptr;
+                            if (ImGui::Selectable("--- None---", noMap)) {
+                                material.setDiffuseMap(nullptr);
+                                selectedDiffuseMap = std::string();
+                            }
+                            if (noMap) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+
+                            for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                                const std::string& textureName = texturePair.first;
+                                const Texture* texture = texturePair.second;
+
+                                // Pass nullptr as the second parameter to use the text in the map as the ID
+                                bool isSelected = (material.getDiffuseMap() == texture);
+                                if (ImGui::Selectable(textureName.c_str(), isSelected)) {
+                                    // Update the selected texture when an option is selected
+                                    material.setDiffuseMap(const_cast<Texture*>(texture));
+                                }
+                                if (isSelected) {
+                                    // Set the initial focus on the currently selected texture
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+                            ImGui::EndCombo();
+                        }
+                    }
+
+                    static std::string selectedNormalMap;
+                    if (ImGui::BeginCombo("Normal Map", selectedNormalMap.c_str())) {
+                        bool noMap = material.getNormalMap() == nullptr;
+                        VILLAIN_CRIT("Normal map not loaded for this material {}", material.getName());
+                        if (ImGui::Selectable("--- None---", noMap)) {
+                            material.setNormalMap(nullptr);
+                            selectedNormalMap = std::string();
+                        }
+                        if (noMap) {
+                            ImGui::SetItemDefaultFocus();
+                        }
+
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            const std::string& textureName = texturePair.first;
+                            const Texture* texture = texturePair.second;
+
+                            bool isSelected = (material.getNormalMap() == texture);
+                            if (ImGui::Selectable(textureName.c_str(), isSelected)) {
+                                material.setNormalMap(const_cast<Texture*>(texture));
+                            }
+                            if (isSelected) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+                        }
+                        ImGui::EndCombo();
+                    }
+
+                    //static int loadedMesh = 0;
+                    //std::vector<VertexP1N1UV> vertices;
+                    //std::vector<unsigned int> indices;
+
+                    //ImGui::RadioButton("DEFAULT", &loadedMesh, 0); ImGui::SameLine();
+                    //ImGui::RadioButton("SPHERE", &loadedMesh, 1); ImGui::SameLine();
+                    //ImGui::RadioButton("AABB", &loadedMesh, 2);
+
+                    //static float sphereRadius = 1.0f;
+                    //static glm::vec3 aabbSize = glm::vec3(1.0f);
+                    //ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
+                    //ImGui::DragFloat3("AABB size", glm::value_ptr(aabbSize), 1.0f, 0.0f, 100.0f, "%.1f");
+
+                    //if (loadedMesh == 1) {
+                        //MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, sphereRadius);
+                        //meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
+                    //} else if (loadedMesh == 2) {
+                        //MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), aabbSize/2.0f);
+                        //meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
+                    //}
+                }
+
 
                 if (compo->getID() == GetId<ModelRenderer>()) {
                     editor->renderIcon("\uf6c8"); ImGui::SameLine();

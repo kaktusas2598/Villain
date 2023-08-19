@@ -21,6 +21,12 @@ namespace Villain {
 
             /// Adds material to manager cache
             void addMaterial(Material* material);
+            Material* loadPBRMaterial(const std::string& id,
+                    const std::string& albedoMapFile,
+                    const std::string& normalMapFile,
+                    const std::string& roughnessMapFile,
+                    const std::string& metallicMapFile,
+                    const std::string& aoMapFile);
             /// Load 3D model to manager cache, report if it isn't found
             Model* loadModel(const std::string& fileName, std::string id);
             /// Load texture to manager cache, report if it isn't found
