@@ -429,9 +429,8 @@ namespace Villain {
                     }
                 }
 
-                // TODO: 1. PBR Textures maps
-                // TODO: 2. Reduce duplication for different MeshRenderers
-                // TODO  3. Let user create and select materials to use
+                // TODO: 1. Reduce duplication for different MeshRenderers
+                // TODO  2. Let user create and select materials to use
                 if (compo->getID() == GetId<MeshRenderer<VertexP1N1T1B1UV>>()) {
                     editor->renderIcon("\uf61f"); ImGui::SameLine();
                     ImGui::Text("Basic Mesh P1N1T1B1UV");
@@ -445,6 +444,10 @@ namespace Villain {
                         ImGui::DragFloat("AO", pbr->getAOPtr());
 
                         static std::string selectedAlbedoMap;
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            if (pbr->getAlbedoMap() == texturePair.second)
+                                selectedAlbedoMap = texturePair.first;
+                        }
                         if (ImGui::BeginCombo("Albedo Map", selectedAlbedoMap.c_str())) {
                             bool noMap = pbr->getAlbedoMap() == nullptr;
                             if (ImGui::Selectable("--- None---", noMap)) {
@@ -456,22 +459,98 @@ namespace Villain {
                             }
 
                             for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
-                                const std::string& textureName = texturePair.first;
-                                const Texture* texture = texturePair.second;
-
-                                // Pass nullptr as the second parameter to use the text in the map as the ID
-                                bool isSelected = (pbr->getAlbedoMap() == texture);
-                                if (ImGui::Selectable(textureName.c_str(), isSelected)) {
-                                    // Update the selected texture when an option is selected
-                                    pbr->setAlbedoMap(const_cast<Texture*>(texture));
+                                bool isSelected = (pbr->getAlbedoMap() == texturePair.second);
+                                if (ImGui::Selectable(texturePair.first.c_str(), isSelected)) {
+                                    pbr->setAlbedoMap(const_cast<Texture*>(texturePair.second));
                                 }
                                 if (isSelected) {
-                                    // Set the initial focus on the currently selected texture
                                     ImGui::SetItemDefaultFocus();
                                 }
                             }
                             ImGui::EndCombo();
                         }
+
+                        static std::string selectedRoughnessMap;
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            if (pbr->getRoughnessMap() == texturePair.second)
+                                selectedRoughnessMap = texturePair.first;
+                        }
+                        if (ImGui::BeginCombo("Roughness Map", selectedRoughnessMap.c_str())) {
+                            bool noMap = pbr->getRoughnessMap() == nullptr;
+                            if (ImGui::Selectable("--- None---", noMap)) {
+                                pbr->setRoughnessMap(nullptr);
+                                selectedRoughnessMap = std::string();
+                            }
+                            if (noMap) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+
+                            for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                                bool isSelected = (pbr->getRoughnessMap() == texturePair.second);
+                                if (ImGui::Selectable(texturePair.first.c_str(), isSelected)) {
+                                    pbr->setRoughnessMap(const_cast<Texture*>(texturePair.second));
+                                }
+                                if (isSelected) {
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+                            ImGui::EndCombo();
+                        }
+
+                        static std::string selectedMetallicMap;
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            if (pbr->getMetallicMap() == texturePair.second)
+                                selectedMetallicMap = texturePair.first;
+                        }
+                        if (ImGui::BeginCombo("Metallic Map", selectedMetallicMap.c_str())) {
+                            bool noMap = pbr->getMetallicMap() == nullptr;
+                            if (ImGui::Selectable("--- None---", noMap)) {
+                                pbr->setMetallicMap(nullptr);
+                                selectedMetallicMap = std::string();
+                            }
+                            if (noMap) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+
+                            for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                                bool isSelected = (pbr->getMetallicMap() == texturePair.second);
+                                if (ImGui::Selectable(texturePair.first.c_str(), isSelected)) {
+                                    pbr->setMetallicMap(const_cast<Texture*>(texturePair.second));
+                                }
+                                if (isSelected) {
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+                            ImGui::EndCombo();
+                        }
+
+                        static std::string selectedAOMap;
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            if (pbr->getAOMap() == texturePair.second)
+                                selectedAOMap = texturePair.first;
+                        }
+                        if (ImGui::BeginCombo("AO Map", selectedAOMap.c_str())) {
+                            bool noMap = pbr->getAOMap() == nullptr;
+                            if (ImGui::Selectable("--- None---", noMap)) {
+                                pbr->setAOMap(nullptr);
+                                selectedAOMap = std::string();
+                            }
+                            if (noMap) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+
+                            for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                                bool isSelected = (pbr->getAOMap() == texturePair.second);
+                                if (ImGui::Selectable(texturePair.first.c_str(), isSelected)) {
+                                    pbr->setAOMap(const_cast<Texture*>(texturePair.second));
+                                }
+                                if (isSelected) {
+                                    ImGui::SetItemDefaultFocus();
+                                }
+                            }
+                            ImGui::EndCombo();
+                        }
+
                     } else {
                         ImGui::ColorEdit4("Ambient color", material.getAmbientColorPtr());
                         ImGui::ColorEdit4("Diffuse color", material.getDiffuseColorPtr());
@@ -483,8 +562,12 @@ namespace Villain {
                         }
 
                         static std::string selectedDiffuseMap;
+                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                            if (material.getNormalMap() == texturePair.second)
+                                selectedDiffuseMap = texturePair.first;
+                        }
                         if (ImGui::BeginCombo("Diffuse Map", selectedDiffuseMap.c_str())) {
-                            bool noMap = meshN1T1B1UV->getMaterial().getDiffuseMap() == nullptr;
+                            bool noMap = material.getDiffuseMap() == nullptr;
                             if (ImGui::Selectable("--- None---", noMap)) {
                                 material.setDiffuseMap(nullptr);
                                 selectedDiffuseMap = std::string();
@@ -505,6 +588,7 @@ namespace Villain {
                                 }
                                 if (isSelected) {
                                     // Set the initial focus on the currently selected texture
+                                    selectedDiffuseMap = textureName;
                                     ImGui::SetItemDefaultFocus();
                                 }
                             }
@@ -513,6 +597,10 @@ namespace Villain {
                     }
 
                     static std::string selectedNormalMap;
+                    for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
+                        if (material.getNormalMap() == texturePair.second)
+                            selectedNormalMap = texturePair.first;
+                    }
                     if (ImGui::BeginCombo("Normal Map", selectedNormalMap.c_str())) {
                         bool noMap = material.getNormalMap() == nullptr;
                         VILLAIN_CRIT("Normal map not loaded for this material {}", material.getName());
@@ -533,6 +621,7 @@ namespace Villain {
                                 material.setNormalMap(const_cast<Texture*>(texture));
                             }
                             if (isSelected) {
+                                selectedNormalMap = textureName;
                                 ImGui::SetItemDefaultFocus();
                             }
                         }
