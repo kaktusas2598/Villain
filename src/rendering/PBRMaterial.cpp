@@ -8,6 +8,11 @@ namespace Villain {
         // Tell shader to switch light calculations from blinn-phong to PBR model
         shader.setUniform1i("usePBR", true);
 
+        shader.setUniformVec3("pbrMaterial.albedo", albedo);
+        shader.setUniform1f("pbrMaterial.roughness", roughness);
+        shader.setUniform1f("pbrMaterial.metallic", metallic);
+        shader.setUniform1f("pbrMaterial.ao", ao);
+
         // Base color map
         if (albedoMap == nullptr) {
             shader.setUniform1i("pbrMaterial.useAlbedoMap", 0);
