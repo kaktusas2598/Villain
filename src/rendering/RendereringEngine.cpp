@@ -164,6 +164,7 @@ namespace Villain {
 
         defaultShader->bind();
         defaultShader->setUniformVec3("ambientLight", ambientLight);
+        defaultShader->setUniform1i("normalMapDebugEnabled", visualiseNormals);
         defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *const_cast<Camera*>(mainCamera));
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);
@@ -296,7 +297,7 @@ namespace Villain {
             lightSource->draw(*lightColorShader, mat);
         }
 
-        if (visualiseNormals) {
+        if (visualiseVertexNormals) {
             normalDebugShader->bind();
             node->render(normalDebugShader, this, mainCamera);
         }

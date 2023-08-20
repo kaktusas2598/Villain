@@ -339,6 +339,7 @@ namespace Villain {
         ImGui::ColorEdit4("Screen clear color: ", (float*)&clearColor);
         ImGui::Checkbox("Wireframe mode", renderingEngine->wireFrameModeActive());
         ImGui::Checkbox("Visualise normals", renderingEngine->getVisualiseNormals());
+        ImGui::Checkbox("Visualise vertex normals", renderingEngine->getVisualiseVertexNormals());
         ImGui::Checkbox("Visualise bone weights", renderingEngine->getVisualiseBoneWeights());
         ImGui::Checkbox("Gamma correction enabled(Gamma = 2.2)", renderingEngine->getGammaCorrection());
         ImGui::Checkbox("HDR Enabled (Also enables Gamma Correction)", renderingEngine->getHDR());

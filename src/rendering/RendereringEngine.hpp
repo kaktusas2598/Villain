@@ -63,6 +63,7 @@ namespace Villain {
             bool* getBlur() { return &blur; }
             bool* getEdgeDetection() { return &outline; }
             bool* getToonShadingEnabled() { return &toonShadingEnabled; }
+            bool* getVisualiseVertexNormals() { return &visualiseVertexNormals; }
             bool* getVisualiseNormals() { return &visualiseNormals; }
             bool* getVisualiseBoneWeights() { return &visualiseBoneWeights; }
             bool* wireFrameModeActive() { return &wireFrameMode; }
@@ -123,6 +124,7 @@ namespace Villain {
             bool mirrorBufferEnabled = false;
             bool toonShadingEnabled = false;
             bool visualiseNormals = false;
+            bool visualiseVertexNormals = false;
             bool visualiseBoneWeights = false;
             bool wireFrameMode = false; ///< Optional wireframe rendering mode
 

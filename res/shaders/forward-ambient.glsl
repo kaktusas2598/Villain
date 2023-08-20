@@ -28,6 +28,7 @@ uniform vec3 viewPosition;
 
 uniform bool selected = false;
 uniform bool boneWeightDebugEnabled;
+uniform bool normalMapDebugEnabled;
 uniform int displayBoneIndex;
 
 void main() {
@@ -86,6 +87,22 @@ void main() {
         if (selected) {
             frag_color = frag_color * vec4(0.0, 1.0, 0.0, 1.0);
         }
+
+        if (normalMapDebugEnabled) {
+            vec3 normal = normalize(v_normal);
+            if (material.useNormalMap || pbrMaterial.useNormalMap) {
+                // transform normal vector to range [-1,1]
+                // Or instead of 2.0f -> 255.0/128.0?
+                if (usePBR)
+                    normal = 2.0 * texture(pbrMaterial.texture_normal, texCoords).rgb - 1.0f;
+                else
+                    normal = 2.0 * texture(material.texture_normal, texCoords).rgb - 1.0f;
+                // More correct way using TBN matrix to convert tangent space normal to local space
+                normal = normalize(v_TBN * normal);
+            }
+            frag_color = vec4(normal, 1.0);
+        }
+
 
         // Check whether fragment ouput is higher then specified threshold and output brightness colour used for bloom
         float brightness = dot(frag_color.rgb, vec3(0.2126, 0.7152, 0.0722));
