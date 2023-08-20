@@ -32,7 +32,7 @@ namespace Villain {
 
     void DirectionalLight::setUniforms(Shader& shaderProgram) {
         // HACK: for shadow mapping, cause technically dir lights have no position
-        shaderProgram.setUniformVec3("dirLight.position", GetTransform()->getPos());
+        shaderProgram.setUniformVec3("dirLight.base.position", GetTransform()->getPos());
 
         shaderProgram.setUniformVec3("dirLight.direction", Direction);
         shaderProgram.setUniformVec3("dirLight.base.ambient", AmbientColor);
@@ -51,7 +51,7 @@ namespace Villain {
     }
 
     void PointLight::setUniforms(Shader& shaderProgram) {
-        shaderProgram.setUniformVec3("pointLight.position", Position);
+        shaderProgram.setUniformVec3("pointLight.base.position", Position);
         shaderProgram.setUniform1f("pointLight.constant", Attenuation.x);
         shaderProgram.setUniform1f("pointLight.linear", Attenuation.y);
         shaderProgram.setUniform1f("pointLight.quadratic", Attenuation.z);
@@ -76,7 +76,7 @@ namespace Villain {
     }
 
     void SpotLight::setUniforms(Shader& shaderProgram) {
-        shaderProgram.setUniformVec3("spotLight.position", Position);
+        shaderProgram.setUniformVec3("spotLight.base.position", Position);
         shaderProgram.setUniformVec3("spotLight.direction", Direction);
         shaderProgram.setUniform1f("spotLight.cutOff", CutOff);
         shaderProgram.setUniform1f("spotLight.outerCutOff", OuterCutOff);

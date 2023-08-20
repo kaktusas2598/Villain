@@ -62,11 +62,21 @@ void main() {
             texCoords = parallaxMapping(texCoords, viewDirection, material.texture_disp, material.dispMapScale, material.dispMapBias, v_TBN);
         }
 
-        if (material.useDiffuseMap) {
-            vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
-            frag_color = textureColor * vec4(ambientLight, 1.0);
+        if (usePBR) {
+            if (pbrMaterial.useAlbedoMap) {
+                vec4 textureColor = texture2D(pbrMaterial.texture_albedo, texCoords);
+                frag_color = textureColor * vec4(ambientLight, 1.0);
+            } else {
+                frag_color = vec4(ambientLight * pbrMaterial.albedo, 1.0);
+            }
+
         } else {
-            frag_color = vec4(ambientLight, 1.0) * material.diffuseColor;
+            if (material.useDiffuseMap) {
+                vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
+                frag_color = textureColor * vec4(ambientLight, 1.0);
+            } else {
+                frag_color = vec4(ambientLight, 1.0) * material.diffuseColor;
+            }
         }
 
         if (fogColor != vec3(0.0)) {
