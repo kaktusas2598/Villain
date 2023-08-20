@@ -63,6 +63,12 @@
             <!--<Component type="Script" fileName="assets/scripts/test.lua"/>-->
         </Components>
     </Node>
+    <Node name="Football" scale='100.0'>
+        <Components>
+            <Component type="Model" fileName="assets/models/football_4k.gltf" />
+        </Components>
+    </Node>
+
     <Node name="Rock" scale='0.01' positionX='2.0' positionY='1.0' positionZ='0.0'>
         <Components>
             <Component type="Model" fileName="assets/models/rock.obj" />

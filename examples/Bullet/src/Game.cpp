@@ -104,7 +104,7 @@ void Game::init() {
     // Create mesh for wall
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
-    Material mat(
+    Material *mat = new Material(
             "redSandstonePavement",
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
             128, nullptr,
@@ -193,7 +193,7 @@ void Game::init() {
 
     indices.clear();
     vertices.clear();
-    Material earthMat("smallBlueDot", ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot"), 8);
+    Material *earthMat = new Material("smallBlueDot", ResourceManager::Instance()->loadTexture("assets/textures/earth2048.bmp", "smallBlueDot"), 8);
     MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 2.5f, glm::vec3(0.f, 0.f, 0.f));
     MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
     Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
@@ -245,7 +245,7 @@ void Game::createGround() {
     // Create mesh for ground
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
-    Material mat(
+    Material *mat = new Material(
             "redSandstonePavement",
             ResourceManager::Instance()->loadTexture("assets/textures/red_sandstone_pavement_diff_4k.jpg", "redSandstone", GL_REPEAT),
             128, nullptr,
@@ -278,7 +278,7 @@ void Game::addRigidBoxes() {
     Mesh<VertexP1N1T1B1UV>* mesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
     //std::vector<Texture*> textures = {ResourceManager::Instance()->loadTexture("assets/textures/crate.png", "crate")};
-    Material mat("cartoonWood",
+    Material *mat = new Material("cartoonWood",
             ResourceManager::Instance()->loadTexture("assets/textures/woodDiffuse.jpg", "crateBase"),
             128, nullptr,
             ResourceManager::Instance()->loadTexture("assets/textures/woodNormal.jpg", "crateNormal"));
@@ -351,7 +351,7 @@ void Game::shootSphere() {
 
     std::vector<VertexP1N1UV> vertices;
     std::vector<unsigned int> indices;
-    Material moonMat("lua", ResourceManager::Instance()->loadTexture("assets/textures/moon1024.bmp", "lua"), 8);
+    Material *moonMat = new Material("lua", ResourceManager::Instance()->loadTexture("assets/textures/moon1024.bmp", "lua"), 8);
     MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 0.5f, glm::vec3(0.f, 0.f, 0.f));
     Mesh<VertexP1N1UV>* sphereMesh = new Mesh<VertexP1N1UV>(vertices, indices);
     btRigidBody* sphereBody = PhysicsWorld->createRigidBody(new btSphereShape(0.5f), true, ballStartPos, btScalar(50.), btScalar(.5), 0.);

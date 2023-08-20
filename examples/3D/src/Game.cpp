@@ -19,6 +19,7 @@
 #include "physics/generators/force/Gravity.hpp"
 #include "physics/generators/force/Spring.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include "rendering/PBRMaterial.hpp"
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -126,10 +127,23 @@ void Game::init() {
     CollisionSphere* sphere = new CollisionSphere(1.0f, rigidBody1);
     box = new CollisionBox({0.5, 0.5, 0.5}, rigidBody2);
 
+    Material* pbrMaterial = ResourceManager::Instance()->loadPBRMaterial("PBR Mat",
+            "assets/materials/rustediron2_basecolor.png",
+            "assets/materials/rustediron2_normal.png",
+            "assets/materials/rustediron2_roughness.png",
+            "assets/materials/rustediron2_metallic.png",
+            "assets/materials/space-cruiser-panels2_ao.png");
+
+            //"assets/materials/space-cruiser-panels2_albedo.png",
+            //"assets/materials/space-cruiser-panels2_normal-ogl.png",
+            //"assets/materials/space-cruiser-panels2_roughness.png",
+            //"assets/materials/space-cruiser-panels2_metallic.png",
+            //"assets/materials/space-cruiser-panels2_ao.png");
+
     RigidBodyComponent* rigidBodyCompo1 = new RigidBodyComponent(rigidBody1, sphere);
     RigidBodyComponent* rigidBodyCompo2 = new RigidBodyComponent(rigidBody2, box);
-    addToScene((new SceneNode("Rigid Body 1"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, Material()))->addComponent(rigidBodyCompo1));
-    addToScene((new SceneNode("Rigid Body 2"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(cubeMesh, Material()))->addComponent(rigidBodyCompo2));
+    addToScene((new SceneNode("Rigid Body 1"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, pbrMaterial))->addComponent(rigidBodyCompo1));
+    addToScene((new SceneNode("Rigid Body 2"))->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(cubeMesh, pbrMaterial))->addComponent(rigidBodyCompo2));
 
     // Attach 2 bodies with a spring
     rigidBodyCompo1->addForceGenerator(new Spring({0, 0, 0}, rigidBody2, {0.2, 0, 0}, 1.0f, 2.0f));
@@ -243,16 +257,16 @@ void Game::onAppRender(float dt) {
 
     debugRenderer.render(projection * view, 1.0f);
 
-    auto uiManager = getRootNode()->getEngine()->getUIManager();
-    int w = 200, h = 50;
-    float x = Villain::Engine::getScreenWidth()/2.0f - w/2.0f;
-    float y = Villain::Engine::getScreenHeight()/2.0f - h/2.0f;
+    //auto uiManager = getRootNode()->getEngine()->getUIManager();
+    //int w = 200, h = 50;
+    //float x = Villain::Engine::getScreenWidth()/2.0f - w/2.0f;
+    //float y = Villain::Engine::getScreenHeight()/2.0f - h/2.0f;
 
-    if (uiManager.beginWindow("Show", x, y, w, h)) {
-        uiManager.layoutRowDynamic(30, 1);
-        if (uiManager.button("TEST")) {
-            VILLAIN_CRIT("Yay!");
-        }
-    }
-    uiManager.endWindow();
+    //if (uiManager.beginWindow("Show", x, y, w, h)) {
+        //uiManager.layoutRowDynamic(30, 1);
+        //if (uiManager.button("TEST")) {
+            //VILLAIN_CRIT("Yay!");
+        //}
+    //}
+    //uiManager.endWindow();
 }
