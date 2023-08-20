@@ -1,6 +1,7 @@
 #include "RendereringEngine.hpp"
 
 #include "Engine.hpp"
+#include "FileUtils.hpp"
 #include "Input.hpp"
 #include "Mesh.hpp"
 #include "MeshUtils.hpp"
@@ -46,6 +47,9 @@ namespace Villain {
         glEnable(GL_MULTISAMPLE);
 
         glEnable(GL_BLEND);
+
+        cmrc::file resourceFile = FileUtils::loadResource("res/textures/UVCheckerMap01-1024.png");
+        uvDebugTexture = new Texture(resourceFile.size(), const_cast<char*>(&(*resourceFile.begin())), true);
 
         float* screenQuadUVCoords = new float[4]{0.0, 1.0, 0.0, 1.0};
         screenQuad = MeshUtils<VertexP1N1UV>::getXYPlane(glm::vec3(0.0f), glm::vec2(1.0f), screenQuadUVCoords);
@@ -165,6 +169,12 @@ namespace Villain {
         defaultShader->bind();
         defaultShader->setUniformVec3("ambientLight", ambientLight);
         defaultShader->setUniform1i("normalMapDebugEnabled", visualiseNormals);
+        defaultShader->setUniform1i("uvDebugEnabled", visualiseUVs);
+        if (visualiseUVs) {
+            uvDebugTexture->bind(15);
+            defaultShader->setUniform1i("uvCheckerboard", 15);
+
+        }
         defaultShader->setFogUniforms(*const_cast<RenderingEngine*>(this), *const_cast<Camera*>(mainCamera));
         activeLight = nullptr;
         node->render(defaultShader, this, mainCamera);

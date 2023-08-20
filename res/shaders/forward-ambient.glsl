@@ -28,8 +28,12 @@ uniform vec3 viewPosition;
 
 uniform bool selected = false;
 uniform bool boneWeightDebugEnabled;
-uniform bool normalMapDebugEnabled;
 uniform int displayBoneIndex;
+
+uniform bool normalMapDebugEnabled;
+
+uniform bool uvDebugEnabled;
+uniform sampler2D uvCheckerboard;
 
 void main() {
     // NOTE: Need to find nicer way to here to avoid all these if statements
@@ -103,6 +107,9 @@ void main() {
             frag_color = vec4(normal, 1.0);
         }
 
+        if (uvDebugEnabled) {
+            frag_color = texture2D(uvCheckerboard, texCoords);
+        }
 
         // Check whether fragment ouput is higher then specified threshold and output brightness colour used for bloom
         float brightness = dot(frag_color.rgb, vec3(0.2126, 0.7152, 0.0722));
