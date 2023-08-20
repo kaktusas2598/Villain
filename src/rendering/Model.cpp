@@ -136,6 +136,7 @@ namespace Villain {
             if (material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) > 0) {
                 // Set up material textures
                 std::vector<Texture*>* albedoMaps = loadMaterialTextures(material, aiTextureType_BASE_COLOR, TextureMapType::ALBEDO);
+                VILLAIN_ASSERT(albedoMaps->size() > 0, "PBR material {} for model {} is lacking albedo map", material->GetName().C_Str(), fileName);
                 textures.insert(textures.end(), albedoMaps->begin(), albedoMaps->end());
                 std::vector<Texture*>* metallicMaps = loadMaterialTextures(material, aiTextureType_METALNESS, TextureMapType::METALLIC);
                 textures.insert(textures.end(), metallicMaps->begin(), metallicMaps->end());
