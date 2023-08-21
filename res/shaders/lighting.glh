@@ -12,11 +12,13 @@ struct Material {
     bool useSpecularMap;
     bool useNormalMap;
     bool useDispMap;
+    bool useEmissionMap;
 
     sampler2D texture_diffuse;
     sampler2D texture_specular;
     sampler2D texture_normal;
     sampler2D texture_disp;
+    sampler2D texture_emission;
 };
 
 struct PBRMaterial {
@@ -30,12 +32,14 @@ struct PBRMaterial {
     bool useNormalMap;
     bool useRoughnessMap;
     bool useAOMap;
+    bool useEmissionMap;
 
     sampler2D texture_albedo;
     sampler2D texture_metallic;
     sampler2D texture_normal;
     sampler2D texture_roughness;
     sampler2D texture_ao;
+    sampler2D texture_emission;
 };
 
 struct BaseLight {

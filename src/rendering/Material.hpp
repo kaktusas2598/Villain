@@ -58,6 +58,7 @@ namespace Villain {
             Texture* getSpecularMap() { return specularMap; }
             Texture* getNormalMap() { return normalMap; }
             Texture* getDislacementMap() { return dispMap; }
+            Texture* getEmissionMap() { return emissionMap; }
 
             void setSpecularFactor(float specular) { specularFactor = specular; }
             void setAmbientColor(const glm::vec4& ambient) { ambientColor = ambient; }
@@ -67,12 +68,14 @@ namespace Villain {
             void setSpecularMap(Texture* specular) { specularMap = specular; }
             void setNormalMap(Texture* normal) { normalMap = normal; }
             void setDisplacementMap(Texture* disp) { dispMap = disp; }
+            void setEmissionMap(Texture* emission) { emissionMap = emission; }
 
         protected:
             /// Attributes used in both Phong and PBR rendering
             std::string name; //<<< Material name
             Texture* normalMap = nullptr; //<<< Normal/bump map, shared with PBR materials so protected
             Texture* dispMap = nullptr; //<<< Parralax displacement map
+            Texture* emissionMap = nullptr; //<<< Emissive map
             float dispMapScale = 0.1f; //<<< Displacement map scaling
             float dispMapBias = 0.0f; //<<< Displacement map offset/bias
         private:

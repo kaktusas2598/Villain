@@ -36,6 +36,7 @@ namespace Villain {
         samplerMap.emplace("roughness", 5);
         samplerMap.emplace("metallic", 6);
         samplerMap.emplace("ao", 7);
+        samplerMap.emplace("emission", 8);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);

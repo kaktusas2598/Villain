@@ -75,12 +75,19 @@ void main() {
                 frag_color = vec4(ambientLight * pbrMaterial.albedo, 1.0);
             }
 
+            if (pbrMaterial.useEmissionMap) {
+                frag_color = frag_color + texture(pbrMaterial.texture_emission, texCoords);
+            }
         } else {
             if (material.useDiffuseMap) {
                 vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
                 frag_color = textureColor * vec4(ambientLight, 1.0);
             } else {
                 frag_color = vec4(ambientLight, 1.0) * material.diffuseColor;
+            }
+
+            if (material.useEmissionMap) {
+                frag_color = frag_color + texture(material.texture_emission, texCoords);
             }
         }
 

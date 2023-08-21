@@ -29,6 +29,14 @@ namespace Villain {
             normalMap->bind(RenderingEngine::getSamplerSlot("normal"));
             shader.setUniform1i("pbrMaterial.texture_normal", RenderingEngine::getSamplerSlot("normal"));
         }
+        // Emissive map
+        if (emissionMap == nullptr) {
+            shader.setUniform1i("pbrMaterial.useEmissionMap", 0);
+        } else {
+            shader.setUniform1i("pbrMaterial.useEmissionMap", 1);
+            emissionMap->bind(RenderingEngine::getSamplerSlot("emission"));
+            shader.setUniform1i("pbrMaterial.texture_emission", RenderingEngine::getSamplerSlot("emission"));
+        }
 
         // Metallic map
         if (metallicMap == nullptr) {

@@ -41,6 +41,14 @@ namespace Villain {
             shader.setUniform1f("material.dispMapScale", dispMapScale);
             shader.setUniform1f("material.dispMapBias", dispMapBias);
         }
+        // Emissive map
+        if (emissionMap == nullptr) {
+            shader.setUniform1i("material.useEmissionMap", 0);
+        } else {
+            shader.setUniform1i("material.useEmissionMap", 1);
+            emissionMap->bind(RenderingEngine::getSamplerSlot("emission"));
+            shader.setUniform1i("material.texture_emission", RenderingEngine::getSamplerSlot("emission"));
+        }
 
         shader.setUniform1f("material.shininess", specularFactor);
         shader.setUniformVec4("material.ambientColor", ambientColor);

@@ -146,6 +146,8 @@ namespace Villain {
                 textures.insert(textures.end(), roughnessMaps->begin(), roughnessMaps->end());
                 std::vector<Texture*>* aoMaps = loadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, TextureMapType::AO);
                 textures.insert(textures.end(), aoMaps->begin(), aoMaps->end());
+                std::vector<Texture*>* emissionMaps = loadMaterialTextures(material, aiTextureType_EMISSION_COLOR, TextureMapType::EMISSIVE);
+                textures.insert(textures.end(), emissionMaps->begin(), emissionMaps->end());
 
                 Texture* albedoMap = nullptr;
                 Texture* metallicMap = nullptr;
@@ -165,6 +167,9 @@ namespace Villain {
                     aoMap = (*aoMaps)[0];
 
                 PBRMaterial mat(matName, albedoMap, normalMap, metallicMap, roughnessMap, aoMap);
+                if (!emissionMaps->empty())
+                    mat.setEmissionMap((*emissionMaps)[0]);
+
                 // TODO: add float ao, roughness, metallic and vec3 albedo if needed!
                 materials[matName] = mat;
                 ResourceManager::Instance()->addMaterial(&materials[matName]);
@@ -193,6 +198,8 @@ namespace Villain {
                 textures.insert(textures.end(), specularMaps->begin(), specularMaps->end());
                 std::vector<Texture*>* normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, TextureMapType::NORMAL);
                 textures.insert(textures.end(), normalMaps->begin(), normalMaps->end());
+                std::vector<Texture*>* emissionMaps = loadMaterialTextures(material, aiTextureType_EMISSIVE, TextureMapType::EMISSIVE);
+                textures.insert(textures.end(), emissionMaps->begin(), emissionMaps->end());
 
                 Texture* diffuseMap = nullptr;
                 Texture* specularMap = nullptr;
@@ -209,6 +216,9 @@ namespace Villain {
                 mat.setAmbientColor(ambientColor);
                 mat.setDiffuseColor(diffuseColor);
                 mat.setSpecularColor(specularColor);
+                if (!emissionMaps->empty())
+                    mat.setEmissionMap((*emissionMaps)[0]);
+
                 materials[matName] = mat;
                 ResourceManager::Instance()->addMaterial(&materials[matName]);
                 return Mesh<VertexP1N1T1B1UV>(vertices, indices, matName, numInstances, instanceMatrix);

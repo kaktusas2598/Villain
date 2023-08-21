@@ -34,6 +34,7 @@
 * Instanced rendering support for 3D models and meshes
 * 3D Model loading using assimp
 * Normal and Parallax mapping support
+* Emission/emissive mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
 * Set optional skybox (with optional animation)
 * Exponential and Layered Fog
@@ -84,7 +85,6 @@
 * IBL rendering techniques
 * Lens flare, Depth of field effects
 * Blending skeletal animations
-* Emission maps
 * Embedded texture support
 * Integrate terrain rendering features from 'Terrain' example
 * Camera automation
