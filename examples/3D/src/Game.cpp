@@ -111,9 +111,11 @@ void Game::init() {
     std::vector<VertexP1N1T1B1UV> vertices;
     std::vector<unsigned int> indices;
     MeshUtils<VertexP1N1T1B1UV>::addAABB(&vertices, &indices); // 1x1x1 cube centered on 0,0,0
+    MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
     Mesh<VertexP1N1T1B1UV>* cubeMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
     vertices.clear(); indices.clear();
     MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, 1.0f); // Sphere with radius of 1
+    MeshUtils<VertexP1N1T1B1UV>::addTangents(&vertices, &indices);
     Mesh<VertexP1N1T1B1UV>* sphereMesh = new Mesh<VertexP1N1T1B1UV>(vertices, indices);
 
     ///////////////////////////////////////////////////////
