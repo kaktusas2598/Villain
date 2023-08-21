@@ -134,8 +134,7 @@ void Game::init() {
             "assets/materials/rustediron2_normal.png",
             "assets/materials/rustediron2_roughness.png",
             "assets/materials/rustediron2_metallic.png",
-            "assets/materials/space-cruiser-panels2_ao.png");
-
+            "404.txt");
             //"assets/materials/space-cruiser-panels2_albedo.png",
             //"assets/materials/space-cruiser-panels2_normal-ogl.png",
             //"assets/materials/space-cruiser-panels2_roughness.png",

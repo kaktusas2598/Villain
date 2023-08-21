@@ -434,7 +434,7 @@ namespace Villain {
                 if (compo->getID() == GetId<MeshRenderer<VertexP1N1T1B1UV>>()) {
                     editor->renderIcon("\uf61f"); ImGui::SameLine();
                     ImGui::Text("Basic Mesh P1N1T1B1UV");
-                    auto meshN1T1B1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
+                    auto meshN1T1B1UV = static_cast<MeshRenderer<VertexP1N1T1B1UV>*>(compo);
                     auto material = meshN1T1B1UV->getMaterial();
 
                     if (auto pbr = dynamic_cast<PBRMaterial*>(meshN1T1B1UV->getMaterialPtr())) {
@@ -628,26 +628,26 @@ namespace Villain {
                         ImGui::EndCombo();
                     }
 
-                    //static int loadedMesh = 0;
-                    //std::vector<VertexP1N1UV> vertices;
-                    //std::vector<unsigned int> indices;
+                    static int loadedMesh = 0;
+                    std::vector<VertexP1N1T1B1UV> vertices;
+                    std::vector<unsigned int> indices;
 
-                    //ImGui::RadioButton("DEFAULT", &loadedMesh, 0); ImGui::SameLine();
-                    //ImGui::RadioButton("SPHERE", &loadedMesh, 1); ImGui::SameLine();
-                    //ImGui::RadioButton("AABB", &loadedMesh, 2);
+                    ImGui::RadioButton("DEFAULT", &loadedMesh, 0); ImGui::SameLine();
+                    ImGui::RadioButton("SPHERE", &loadedMesh, 1); ImGui::SameLine();
+                    ImGui::RadioButton("AABB", &loadedMesh, 2);
 
-                    //static float sphereRadius = 1.0f;
-                    //static glm::vec3 aabbSize = glm::vec3(1.0f);
-                    //ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
-                    //ImGui::DragFloat3("AABB size", glm::value_ptr(aabbSize), 1.0f, 0.0f, 100.0f, "%.1f");
+                    static float sphereRadius = 1.0f;
+                    static glm::vec3 aabbSize = glm::vec3(1.0f);
+                    ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
+                    ImGui::DragFloat3("AABB size", glm::value_ptr(aabbSize), 1.0f, 0.0f, 100.0f, "%.1f");
 
-                    //if (loadedMesh == 1) {
-                        //MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, sphereRadius);
-                        //meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
-                    //} else if (loadedMesh == 2) {
-                        //MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), aabbSize/2.0f);
-                        //meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
-                    //}
+                    if (loadedMesh == 1) {
+                        MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, sphereRadius);
+                        meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
+                    } else if (loadedMesh == 2) {
+                        MeshUtils<VertexP1N1T1B1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), aabbSize/2.0f);
+                        meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
+                    }
                 }
 
 
