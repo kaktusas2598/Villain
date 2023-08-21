@@ -18,7 +18,7 @@ namespace Villain {
             Material(const std::string& name = std::string()) { this->name = name; }
             virtual ~Material() {}
 
-            void updateUniforms(Shader& shader);
+            virtual void updateUniforms(Shader& shader);
 
             /// Material equality based on their name alone to force adding unique names
             bool operator==(const Material& other) const {
@@ -64,18 +64,24 @@ namespace Villain {
             void setDiffuseColor(const glm::vec4& diffuse) { diffuseColor = diffuse; }
             void setSpecularColor(const glm::vec4& specular) { specularColor = specular; }
             void setDiffuseMap(Texture* diffuse) { diffuseMap = diffuse; }
+            void setSpecularMap(Texture* specular) { specularMap = specular; }
+            void setNormalMap(Texture* normal) { normalMap = normal; }
+            void setDisplacementMap(Texture* disp) { dispMap = disp; }
 
-        private:
+        protected:
+            /// Attributes used in both Phong and PBR rendering
             std::string name; //<<< Material name
+            Texture* normalMap = nullptr; //<<< Normal/bump map, shared with PBR materials so protected
+            Texture* dispMap = nullptr; //<<< Parralax displacement map
+            float dispMapScale = 0.1f; //<<< Displacement map scaling
+            float dispMapBias = 0.0f; //<<< Displacement map offset/bias
+        private:
+            /// Attributes only used for phong shaded materials
             float specularFactor ; //<<< shininess, higher value makes material more reflective and specular highlight becomes smaller
             glm::vec4 diffuseColor{1.0f};
             glm::vec4 ambientColor{1.0f};
             glm::vec4 specularColor{1.0f};
             Texture* diffuseMap = nullptr; //<<< Base colour, diffuse map
             Texture* specularMap = nullptr;//<<< Specularity map
-            Texture* normalMap = nullptr; //<<< Normal/bump map
-            Texture* dispMap = nullptr; //<<< Parralax displacement map
-            float dispMapScale = 0.1f; //<<< Displacement map scaling
-            float dispMapBias = 0.0f; //<<< Displacement map offset/bias
     };
 }

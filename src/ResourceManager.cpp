@@ -2,6 +2,7 @@
 
 #include "FileUtils.hpp"
 #include "Logger.hpp"
+#include "rendering/PBRMaterial.hpp"
 
 namespace Villain {
 
@@ -102,6 +103,27 @@ namespace Villain {
         // Only add to map if material by same name doesn't exist
         if (materialMap.find(material->getName()) == materialMap.end())
             materialMap[material->getName()] = material;;
+    }
+
+    Material* ResourceManager::loadPBRMaterial(const std::string& id,
+                    const std::string& albedoMapFile,
+                    const std::string& normalMapFile,
+                    const std::string& roughnessMapFile,
+                    const std::string& metallicMapFile,
+                    const std::string& aoMapFile) {
+        if (materialMap.find(id) == materialMap.end()) {
+            Material* mat = nullptr;
+            mat = new PBRMaterial(id,
+                    loadTexture(albedoMapFile, id + "_albedo", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(normalMapFile, id + "_normal", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(metallicMapFile, id + "_metallic", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(roughnessMapFile, id + "_roughness", GL_CLAMP_TO_EDGE, false),
+                    loadTexture(aoMapFile, id + "_ao", GL_CLAMP_TO_EDGE, false)
+            );
+            materialMap[id] = mat;
+            return mat;
+        }
+        return materialMap[id];
     }
 
     Model* ResourceManager::loadModel(const std::string& fileName, std::string id) {

@@ -7,7 +7,7 @@
 namespace Villain  {
 
     enum class TextureMapType {
-        NONE, DIFFUSE, SPECULAR, NORMAL, HEIGHT, DISPLACEMENT
+        NONE, DIFFUSE, SPECULAR, NORMAL, HEIGHT, DISPLACEMENT, ALBEDO, METALLIC, ROUGHNESS, AO
     };
 
     // OpenGL texture parameters info for easier texture construction

@@ -17,8 +17,7 @@ namespace Villain {
             // NOTE: Pass nullptr instead of &BPP and set desired channels to 4 to ensure consistency
             // Alternatively 3rd argument can be &BPP and 4th argument null, so that we actually set same BPP as in file
             Logger::Instance()->info("Loading texture: {} Gamma corrected: {}", filePath, texInfo.SRGB);
-            localBuffer = stbi_load(filePath.c_str(), &width, &height, nullptr, 4);
-            BPP = 4;
+            localBuffer = stbi_load(filePath.c_str(), &width, &height, &BPP, 0);
 
             if (!localBuffer) {
                 Logger::Instance()->error("Failed loading texture: {}", filePath);
@@ -28,12 +27,15 @@ namespace Villain {
         }
 
         // Recalibrate for gamma correction
-        if (texInfo.SRGB) {
-            if (BPP == 4)
-                texInfo.InternalFormat = GL_SRGB_ALPHA;
-            else
-                texInfo.InternalFormat = GL_SRGB;
-        }
+        if (BPP == 4)
+            texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB_ALPHA : GL_RGBA;
+        else if (BPP == 3) {
+            texInfo.InternalFormat = texInfo.SRGB ? GL_SRGB: GL_RGB;
+            texInfo.Format = GL_RGB;
+        } else if (BPP == 1)
+            texInfo.InternalFormat = texInfo.Format = GL_RED;
+        else
+            VILLAIN_ERROR("Unsupported number of channels: {}", BPP);
 
         GLCall(glBindTexture(target, rendererID));
         GLCall(glTexImage2D(target, 0, texInfo.InternalFormat, width, height, 0, texInfo.Format, texInfo.DataType, localBuffer));

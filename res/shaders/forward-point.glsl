@@ -27,7 +27,7 @@ uniform samplerCube shadowCubeMap;
 uniform float farPlane;
 
 float calcShadowAmount(PointLight light, samplerCube shadowMap, vec3 fragPos) {
-    vec3 fragToLight = fragPos - light.position;
+    vec3 fragToLight = fragPos - light.base.position;
     float closestDepth = texture(shadowMap, fragToLight).r;
     closestDepth *= farPlane;
     float currentDepth = length(fragToLight);
@@ -64,10 +64,13 @@ void main() {
         texCoords = parallaxMapping(texCoords, viewDirection, material.texture_disp, material.dispMapScale, material.dispMapBias, v_TBN);
     }
     // Normal Mapping
-    if (material.useNormalMap) {
+    if (material.useNormalMap || pbrMaterial.useNormalMap) {
         // transform normal vector to range [-1,1]
         // Or instead of 2.0f -> 255.0/128.0?
-        normal = 2.0 * texture(material.texture_normal, texCoords).rgb - 1.0f;
+        if (usePBR)
+            normal = 2.0 * texture(pbrMaterial.texture_normal, texCoords).rgb - 1.0f;
+        else
+            normal = 2.0 * texture(material.texture_normal, texCoords).rgb - 1.0f;
         //normal = normalize(normal * 2.0 - 1.0);
         // More correct way using TBN matrix to convert tangent space normal to local space
         normal = normalize(v_TBN * normal);

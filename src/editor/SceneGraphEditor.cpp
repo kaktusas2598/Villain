@@ -15,6 +15,7 @@
 #include "components/MoveController.hpp"
 #include "components/ScriptComponent.hpp"
 #include "rendering/MeshUtils.hpp"
+#include "rendering/PBRMaterial.hpp"
 
 namespace Villain {
 
@@ -207,11 +208,13 @@ namespace Villain {
                 case ComponentType::Mesh:
                     if (ImGui::Button("Add sphere mesh")) {
                         MeshUtils<VertexP1N1UV>::addSphere(&vertices, &indices, 1.0f);
-                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        Material* mat = new Material();
+                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), mat));
                     }
                     if (ImGui::Button("Add Axis-Aligned Bounding Box mesh")) {
                         MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices);
-                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), Material()));
+                        Material* mat = new Material();
+                        selectedNode->addComponent(new MeshRenderer<VertexP1N1UV>(new Mesh<VertexP1N1UV>(vertices, indices), mat));
                     }
                     break;
                 case ComponentType::Model:
@@ -366,46 +369,11 @@ namespace Villain {
                     auto meshN1UV = static_cast<MeshRenderer<VertexP1N1UV>*>(compo);
                     auto material = meshN1UV->getMaterial();
 
-                    ImGui::ColorEdit4("Ambient color", meshN1UV->getMaterial().getAmbientColorPtr());
-                    ImGui::ColorEdit4("Diffuse color", meshN1UV->getMaterial().getDiffuseColorPtr());
-                    ImGui::ColorEdit4("Specular color", meshN1UV->getMaterial().getSpecularColorPtr());
-                    ImGui::DragFloat("Specular factor", meshN1UV->getMaterial().getSpecularFactorPtr());
-
-                    if (!material.getDiffuseMap()) {
-                        if (ImGui::Button("Load diffuse map")) {
-                            editor->getFileBrowser().openPopup();
-                        }
-
+                    if (ImGui::Button("Load diffuse map")) {
+                        editor->getFileBrowser().openPopup();
                     }
 
-                    static std::string selectedTexture;
-                    if (ImGui::BeginCombo("Diffuse Map", selectedTexture.c_str())) {
-                        bool noMap = meshN1UV->getMaterial().getDiffuseMap() == nullptr;
-                        if (ImGui::Selectable("--- None---", noMap)) {
-                            meshN1UV->getMaterial().setDiffuseMap(nullptr);
-                            selectedTexture = std::string();
-                        }
-                        if (noMap) {
-                            ImGui::SetItemDefaultFocus();
-                        }
-
-                        for (const auto& texturePair : ResourceManager::Instance()->getTextureMap()) {
-                            const std::string& textureName = texturePair.first;
-                            const Texture* texture = texturePair.second;
-
-                            // Pass nullptr as the second parameter to use the text in the map as the ID
-                            bool isSelected = (meshN1UV->getMaterial().getDiffuseMap() == texture);
-                            if (ImGui::Selectable(textureName.c_str(), isSelected)) {
-                                // Update the selected texture when an option is selected
-                                meshN1UV->getMaterial().setDiffuseMap(const_cast<Texture*>(texture));
-                            }
-                            if (isSelected) {
-                                // Set the initial focus on the currently selected texture
-                                ImGui::SetItemDefaultFocus();
-                            }
-                        }
-                        ImGui::EndCombo();
-                    }
+                    editor->getAssetBrowser().renderMaterial(meshN1UV->getMaterialPtr());
 
                     static int loadedMesh = 0;
                     std::vector<VertexP1N1UV> vertices;
@@ -426,6 +394,42 @@ namespace Villain {
                     } else if (loadedMesh == 2) {
                         MeshUtils<VertexP1N1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), aabbSize/2.0f);
                         meshN1UV->setMesh(new Mesh<VertexP1N1UV>(vertices, indices));
+                    }
+                }
+
+                // TODO: 1. Reduce duplication for different MeshRenderers
+                // TODO  2. Let user create and select materials to use
+                if (compo->getID() == GetId<MeshRenderer<VertexP1N1T1B1UV>>()) {
+                    editor->renderIcon("\uf61f"); ImGui::SameLine();
+                    ImGui::Text("Basic Mesh P1N1T1B1UV");
+                    auto meshN1T1B1UV = static_cast<MeshRenderer<VertexP1N1T1B1UV>*>(compo);
+                    auto material = meshN1T1B1UV->getMaterial();
+
+                    if (ImGui::Button("Load diffuse map")) {
+                        editor->getFileBrowser().openPopup();
+                    }
+
+                    editor->getAssetBrowser().renderMaterial(meshN1T1B1UV->getMaterialPtr());
+
+                    static int loadedMesh = 0;
+                    std::vector<VertexP1N1T1B1UV> vertices;
+                    std::vector<unsigned int> indices;
+
+                    ImGui::RadioButton("DEFAULT", &loadedMesh, 0); ImGui::SameLine();
+                    ImGui::RadioButton("SPHERE", &loadedMesh, 1); ImGui::SameLine();
+                    ImGui::RadioButton("AABB", &loadedMesh, 2);
+
+                    static float sphereRadius = 1.0f;
+                    static glm::vec3 aabbSize = glm::vec3(1.0f);
+                    ImGui::DragFloat("Sphere radius", &sphereRadius, 1.0f, 0.0f, 100.0f, "%.1f");
+                    ImGui::DragFloat3("AABB size", glm::value_ptr(aabbSize), 1.0f, 0.0f, 100.0f, "%.1f");
+
+                    if (loadedMesh == 1) {
+                        MeshUtils<VertexP1N1T1B1UV>::addSphere(&vertices, &indices, sphereRadius);
+                        meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
+                    } else if (loadedMesh == 2) {
+                        MeshUtils<VertexP1N1T1B1UV>::addAABB(&vertices, &indices, glm::vec3(0.0f), aabbSize/2.0f);
+                        meshN1T1B1UV->setMesh(new Mesh<VertexP1N1T1B1UV>(vertices, indices));
                     }
                 }
 

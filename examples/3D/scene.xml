@@ -25,7 +25,7 @@
             <!--<Component type="Camera" main='true' zNear='0.1' zFar='1000' cameraType='FIRST_PERSON'>-->
                 <Position x="-20.0" y="5.0" z="0.0" />
             </Component>
-            <Component type="Model" fileName="assets/models/toyplane.obj"/>
+            <!--<Component type="Model" fileName="assets/models/toyplane.obj"/>-->
             <Component type="Script" fileName="assets/scripts/player.lua"/>
             <!--<Component type="MoveController"/>-->
             <Component type="RigidBody" kinematic="true">
@@ -33,10 +33,17 @@
                     <Position x="-20.0" y="5.0" z="0.0" />
                 </RigidBody>
                 <CollisionBox>
-                    <HalfSize x="10.0" y="2.0" z="8.0"/>
+                    <HalfSize x="10.0" y="3.0" z="6.5"/>
                 </CollisionBox>
             </Component>
         </Components>
+        <Children>
+            <Node name="Player Model" scale="3.0" rotX="-90.0" rotY="180.0">
+                <Components>
+                    <Component type="Model" fileName="assets/models/batmobile.dae" />
+                </Components>
+            </Node>
+        </Children>
     </Node>
     <Node name="Rigid Sphere">
         <Components>
@@ -56,6 +63,12 @@
             <!--<Component type="Script" fileName="assets/scripts/test.lua"/>-->
         </Components>
     </Node>
+    <Node name="Football" positionZ='-10.0' scale='20.0'>
+        <Components>
+            <Component type="Model" fileName="assets/models/football_4k.gltf" />
+        </Components>
+    </Node>
+
     <Node name="Rock" scale='0.01' positionX='2.0' positionY='1.0' positionZ='0.0'>
         <Components>
             <Component type="Model" fileName="assets/models/rock.obj" />

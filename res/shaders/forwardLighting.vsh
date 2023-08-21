@@ -81,7 +81,7 @@ void main() {
     // re-orthogonalize T with respect to N
     T = normalize(T - dot(T, N) * N);
     // then retrieve perpendicular vector B with the cross product of T and N
-    vec3 B = cross(T, N); // or N, T ??
+    vec3 B = cross(N, T);
     /*Or cheaper way : vec3 B = normalize(vec3(model * vec4(biTangent, 0.0)));*/
 
     v_TBN = mat3(T, B, N);

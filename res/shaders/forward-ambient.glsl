@@ -30,6 +30,11 @@ uniform bool selected = false;
 uniform bool boneWeightDebugEnabled;
 uniform int displayBoneIndex;
 
+uniform bool normalMapDebugEnabled;
+
+uniform bool uvDebugEnabled;
+uniform sampler2D uvCheckerboard;
+
 void main() {
     // NOTE: Need to find nicer way to here to avoid all these if statements
     // Skeletal animation debug
@@ -62,11 +67,21 @@ void main() {
             texCoords = parallaxMapping(texCoords, viewDirection, material.texture_disp, material.dispMapScale, material.dispMapBias, v_TBN);
         }
 
-        if (material.useDiffuseMap) {
-            vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
-            frag_color = textureColor * vec4(ambientLight, 1.0);
+        if (usePBR) {
+            if (pbrMaterial.useAlbedoMap) {
+                vec4 textureColor = texture2D(pbrMaterial.texture_albedo, texCoords);
+                frag_color = textureColor * vec4(ambientLight, 1.0);
+            } else {
+                frag_color = vec4(ambientLight * pbrMaterial.albedo, 1.0);
+            }
+
         } else {
-            frag_color = vec4(ambientLight, 1.0) * material.diffuseColor;
+            if (material.useDiffuseMap) {
+                vec4 textureColor = texture2D(material.texture_diffuse, texCoords);
+                frag_color = textureColor * vec4(ambientLight, 1.0);
+            } else {
+                frag_color = vec4(ambientLight, 1.0) * material.diffuseColor;
+            }
         }
 
         if (fogColor != vec3(0.0)) {
@@ -75,6 +90,25 @@ void main() {
 
         if (selected) {
             frag_color = frag_color * vec4(0.0, 1.0, 0.0, 1.0);
+        }
+
+        if (normalMapDebugEnabled) {
+            vec3 normal = normalize(v_normal);
+            if (material.useNormalMap || pbrMaterial.useNormalMap) {
+                // transform normal vector to range [-1,1]
+                // Or instead of 2.0f -> 255.0/128.0?
+                if (usePBR)
+                    normal = 2.0 * texture(pbrMaterial.texture_normal, texCoords).rgb - 1.0f;
+                else
+                    normal = 2.0 * texture(material.texture_normal, texCoords).rgb - 1.0f;
+                // More correct way using TBN matrix to convert tangent space normal to local space
+                normal = normalize(v_TBN * normal);
+            }
+            frag_color = vec4(normal, 1.0);
+        }
+
+        if (uvDebugEnabled) {
+            frag_color = texture2D(uvCheckerboard, texCoords);
         }
 
         // Check whether fragment ouput is higher then specified threshold and output brightness colour used for bloom

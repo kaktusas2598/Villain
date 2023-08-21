@@ -22,7 +22,7 @@
 
 ### Rendering
 * Multi-pass forward rendering system using scene graph for 3D applications
-* Phong-blinn based lighting system for Scene Graph
+* Phong-blinn based lighting system for Scene Graph or Basic Physically Based Rendering(PBR)
 * Directional and Omnidirectional shadow mapping with PCF Soft shadows
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
@@ -74,14 +74,15 @@
     * Friction and resolution must be set by user
     * Triggers
     * Data driven approach for particle types and emitters
-* Audio Engine: Streaming and audio callbacks
+* Audio Engine: Streaming and audio callbacks, doppler effect
 * Lua Scripting API (In progress)
 * Entity Component System?
 * Environmental mapping(reflections and refractions)
 * 3D Mesh batch rendering
 * Tessalated terrain
 * Stencil buffer
-* PBR rendering
+* IBL rendering techniques
+* Lens flare, Depth of field effects
 * Blending skeletal animations
 * Emission maps
 * Embedded texture support
@@ -156,13 +157,12 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
     that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!
  * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
-   sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)
+   sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)!!!!!
  * Read about Deferred shading and decide if it's feasible to introduce it
  * Investigate alternative Anti-Aliasing methods like FXAA
  * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
  * Investigate volumetric lighting and fog techniques
  * Investigate water rendering mechanics
- * Read about Physically Based Rendering (PBR)
  * Read about Screen Space Ambient Occlusion (SSAO)
  * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
  * Move all usages of <random> header to new RandomUtils static class
