@@ -43,6 +43,7 @@ namespace Villain {
 
         SceneGraphEditor& getSceneEditor() { return sceneEditor; }
         ScriptEditor& getScriptEditor() { return scriptEditor; }
+        AssetBrowser& getAssetBrowser() { return assetBrowser; }
         FileBrowser& getFileBrowser() { return fileBrowser; }
         Engine* getEngine() { return engine; }
 
