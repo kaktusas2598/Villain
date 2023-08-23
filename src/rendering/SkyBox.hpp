@@ -16,7 +16,7 @@ namespace Villain {
             SkyBox(const std::vector<std::string>& faces, Shader* shader);
             /// Default constructor for derived classes like HDRMap
             SkyBox() {}
-            ~SkyBox() {}
+            virtual ~SkyBox() {}
 
             // Must be rendered LAST every frame
             void render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, float deltaTime);
