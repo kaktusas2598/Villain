@@ -30,13 +30,14 @@ namespace Villain {
         samplerMap.emplace("albedo", 0);
         samplerMap.emplace("diffuse", 0);
         samplerMap.emplace("specular", 1);
+        samplerMap.emplace("roughness", 1);
         samplerMap.emplace("normal", 2);
         samplerMap.emplace("disp", 3);
-        samplerMap.emplace("shadow", 4);
-        samplerMap.emplace("roughness", 5);
-        samplerMap.emplace("metallic", 6);
-        samplerMap.emplace("ao", 7);
-        samplerMap.emplace("emission", 8);
+        samplerMap.emplace("metallic", 4);
+        samplerMap.emplace("ao", 5);
+        samplerMap.emplace("emission", 6);
+        samplerMap.emplace("shadow", 7);
+        samplerMap.emplace("irradiance", 8);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);

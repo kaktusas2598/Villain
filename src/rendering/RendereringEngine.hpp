@@ -5,6 +5,7 @@
 #include "../components/Light.hpp"
 #include "SceneNode.hpp"
 #include "Vertex.hpp"
+#include "rendering/HDRMap.hpp"
 #include "rendering/PickingTexture.hpp"
 #include "rendering/SkyBox.hpp"
 
@@ -135,6 +136,7 @@ namespace Villain {
             bool hdr = false;
             bool bloom = false;
             float exposure = 1.0; ///< Used to gether with HDR
+            HDRMap* currentEnvironmentMap = nullptr;
 
             int selectedNodeID = 0;
     };
