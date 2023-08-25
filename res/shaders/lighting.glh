@@ -162,13 +162,10 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
         vec3 ambient = vec3(0.03) * albedo * ao;
         if (useIBL) {
             // Use irradiance map (produced from HDR map) for ambient lighting
+            // FIXME: Segfault on gl draw elements, ONLY IF useIBL is false!!!!!??
+            // even setting irradianceMap if useIBL is false causes segfault
             vec3 irradiance = texture(irradianceMap, N).rgb;
             vec3 diffuse = irradiance * albedo;
-            // FIXME: Segfault on gl draw elements, huh?? wtf
-            // UPDATE: we only seem to get as far as rendering loading screen, so is this happening on the very first render pass?
-            // UPDATE2: ok, we don't get segfault if we remove "diffuse" term here!
-            // UPDATE3: removing irradiance from diffuse vec3 calculation "fixes" this, so maybe issue is related to irradianceMap uniform?
-            // UPDATE4: what the hell, only seem to be getting segfault if hrd map in rendering engine isn't set
             // TODO: try changing kD to use FresnelSchlick roughness variant here later on once bug is fixed
             ambient = (kD * diffuse) * ao;
         }
