@@ -284,6 +284,14 @@ namespace Villain {
                 }
                 light->getShader()->setUniform1f("shadowBias", shadowInfo->getBias()/1024.f);
             }
+            if (currentEnvironmentMap) {
+                glActiveTexture(GL_TEXTURE0 + getSamplerSlot("irradiance"));
+                glBindTexture(GL_TEXTURE_CUBE_MAP, currentEnvironmentMap->getIrradianceMapId());
+                light->getShader()->setUniform1i("irradianceMap", getSamplerSlot("irradiance"));
+                light->getShader()->setUniform1i("useIBL", true);
+            } else {
+                light->getShader()->setUniform1i("useIBL", false);
+            }
             node->render(light->getShader(), this, mainCamera);
 
             // Reset to default blending
@@ -315,10 +323,13 @@ namespace Villain {
         }
 
         // Always last - render the skybox, if any
+        // TODO: prefer rendering HDR map and then skybox!
         if (currentSkybox) {
             skyboxShader->bind();
             glm::mat4 proj = (mainCamera->getType() == CameraType::ORTHOGRAPHIC) ? mainCamera->getSkyboxProjMatrix() : mainCamera->getProjMatrix();
             currentSkybox->render(proj, mainCamera->getViewMatrix(), deltaTime);
+        } else if (currentEnvironmentMap) {
+            currentEnvironmentMap->render(mainCamera->getProjMatrix(), mainCamera->getViewMatrix());
         }
     }
 
@@ -414,6 +425,13 @@ namespace Villain {
     void RenderingEngine::setSkybox(const std::vector<std::string>& faces) {
         // TODO: handle changing skyboxes, manage memory
         currentSkybox = new SkyBox(faces, skyboxShader);
+    }
+
+    void RenderingEngine::setEnvironmentMap(const std::string& fileName) {
+        if (currentEnvironmentMap)
+            delete currentEnvironmentMap;
+
+        currentEnvironmentMap = new HDRMap(fileName);
     }
 
     void RenderingEngine::bindMainTarget() {

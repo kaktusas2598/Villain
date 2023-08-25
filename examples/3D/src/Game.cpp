@@ -186,6 +186,9 @@ void Game::init() {
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
 
     zombieMono = new AudioSource(ResourceManager::Instance()->loadAudio("zombie_mono.wav", "zombieMono"));
+
+    getRootNode()->getEngine()->getRenderingEngine()->setEnvironmentMap("assets/textures/theater_02_8k.hdr");
+    //environmentMap = new HDRMap("assets/textures/rural_asphalt_road_4k.hdr");
 }
 
 void Game::handleEvents(float deltaTime) {

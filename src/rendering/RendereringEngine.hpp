@@ -45,6 +45,7 @@ namespace Villain {
             void setSelectedNodeID(int id) { selectedNodeID = id; }
             void setSkybox(const std::vector<std::string>& faces);
             SkyBox* getSkybox() { return currentSkybox; }
+            void setEnvironmentMap(const std::string& fileName);
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }
