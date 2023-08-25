@@ -45,6 +45,15 @@ namespace Villain {
         }
     }
 
+    HDRMap* ResourceManager::getHDR(const std::string& id) {
+        if (hdrMap.find(id) != hdrMap.end()) {
+            return hdrMap[id];
+        } else {
+            VILLAIN_WARN("Environmental Map {} not found", id);
+            return nullptr;
+        }
+    }
+
     AudioBuffer* ResourceManager::getAudio(const std::string& id) {
         if (audioMap.find(id) != audioMap.end()) {
             return audioMap[id];
@@ -88,6 +97,15 @@ namespace Villain {
     void ResourceManager::clearTexture(std::string id) {
         delete textureMap[id];
         textureMap.erase(id);
+    }
+
+    void ResourceManager::clearHDRMap() {
+        hdrMap.clear();
+    }
+
+    void ResourceManager::clearHDR(std::string id) {
+        delete hdrMap[id];
+        hdrMap.erase(id);
     }
 
     void ResourceManager::clearShaderMap() {
@@ -171,6 +189,29 @@ namespace Villain {
         } else {
             // Resource not found
             VILLAIN_ERROR("Texture {} not found!", fileName);
+            return nullptr;
+        }
+    }
+
+    HDRMap* ResourceManager::loadHDREnvironmentalMap(const std::string& fileName, std::string id) {
+        if (hdrMap.find(id) != hdrMap.end())
+            return hdrMap[id];
+
+        HDRMap* map = nullptr;
+        for (const std::string& directory : searchDirectories) {
+            std::string fullPath = directory + fileName;
+            if (FileUtils::fileExists(fullPath)) {
+                map = new HDRMap(fullPath);
+                break;
+            }
+        }
+
+        if (map) {
+            hdrMap[id] = map;
+            return map;
+        } else {
+            // Resource not found
+            VILLAIN_ERROR("Environmental map {} not found!", fileName);
             return nullptr;
         }
     }
