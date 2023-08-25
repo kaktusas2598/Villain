@@ -46,13 +46,34 @@ namespace Villain {
         QUESTION = SDLK_QUESTION,
         AT = SDLK_AT,
 
-        // TODO: add rest of letters, modifiers, function keys and mouse keys
-        w = SDLK_w,
         a = SDLK_a,
-        s = SDLK_s,
+        b = SDLK_b,
+        c = SDLK_c,
         d = SDLK_d,
-
+        e = SDLK_e,
+        f = SDLK_f,
+        g = SDLK_g,
+        h = SDLK_h,
+        i = SDLK_i,
+        j = SDLK_j,
+        k = SDLK_k,
+        l = SDLK_l,
+        m = SDLK_m,
+        n = SDLK_n,
+        o = SDLK_o,
+        p = SDLK_p,
+        q = SDLK_q,
         r = SDLK_r,
+        s = SDLK_s,
+        t = SDLK_t,
+        u = SDLK_u,
+        v = SDLK_v,
+        w = SDLK_w,
+        x = SDLK_x,
+        y = SDLK_y,
+        z = SDLK_z,
+
+        // TODO: add rest of modifiers, function keys and mouse keys, and etc
         LSHIFT = SDLK_LSHIFT
     };
 }
