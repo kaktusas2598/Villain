@@ -162,7 +162,7 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
         vec3 ambient = vec3(0.03) * albedo * ao;
         if (useIBL) {
             // Use irradiance map (produced from HDR map) for ambient lighting
-            // FIXME: Segfault on gl draw elements, ONLY IF useIBL is false!!!!!??
+            // FIXME: Segfault on gl draw elements, ONLY IF useIBL is false/no map is set !!!!!??
             // even setting irradianceMap if useIBL is false causes segfault
             vec3 irradiance = texture(irradianceMap, N).rgb;
             vec3 diffuse = irradiance * albedo;
