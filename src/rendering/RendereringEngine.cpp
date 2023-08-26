@@ -336,7 +336,7 @@ namespace Villain {
             glm::mat4 proj = (mainCamera->getType() == CameraType::ORTHOGRAPHIC) ? mainCamera->getSkyboxProjMatrix() : mainCamera->getProjMatrix();
             // Prefer to render env map so we can have reflections/IBL etc.
             if (currentEnvironmentMap) {
-                currentEnvironmentMap->render(proj, mainCamera->getViewMatrix());
+                currentEnvironmentMap->render(proj, mainCamera->getViewMatrix(), exposure);
             } else {
                 skyboxShader->bind();
                 currentSkybox->render(proj, mainCamera->getViewMatrix(), deltaTime);

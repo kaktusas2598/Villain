@@ -10,7 +10,7 @@ namespace Villain {
             HDRMap(const std::string& hdrTexturePath);
 
             /// Must be rendered LAST every frame
-            void render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix);
+            void render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, float exposure = 1.0);
 
             unsigned getHDRTextureId() const { return hdrTexture->getID(); }
             unsigned getEnvironmentMapId() const { return envCubemap; }

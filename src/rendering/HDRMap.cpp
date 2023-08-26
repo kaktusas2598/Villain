@@ -114,13 +114,14 @@ namespace Villain {
         GLCall(glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight()));
     }
 
-    void HDRMap::render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix) {
+    void HDRMap::render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, float exposure) {
         Renderer renderer;
 
         GLCall(glDepthFunc(GL_EQUAL));
         cubemapShader->bind();
         cubemapShader->setUniformMat4f("projection", projectionMatrix);
         cubemapShader->setUniformMat4f("view", viewMatrix);
+        cubemapShader->setUniform1f("exposure", exposure);
 
         GLCall(glActiveTexture(GL_TEXTURE0));
         GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap));
