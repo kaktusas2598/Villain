@@ -300,6 +300,7 @@ namespace Villain {
                 light->getShader()->setUniform1i("brdfLUT", getSamplerSlot("brdfLUT"));
                 light->getShader()->setUniform1i("useIBL", true);
             } else {
+                // TODO:Fix this!
                 // FIXME:Weirdly if hdr map isn't set then we get segfault by ussing irradianceMap in lighting shader
                 // even though we shouldn't be on that code path
                 // HACK: the only other cubemap we currently use here is omnidirectional shadow buffer, but this is only if we add point lights!!
@@ -308,10 +309,10 @@ namespace Villain {
                 omniShadowBuffer->getTexture()->bind(getSamplerSlot("irradiance"));
                 omniShadowBuffer->getTexture()->bind(getSamplerSlot("prefiltered"));
                 shadowBuffer->getTexture()->bind(getSamplerSlot("brdfLUT"));
+
                 light->getShader()->setUniform1i("irradianceMap", getSamplerSlot("irradiance"));
                 light->getShader()->setUniform1i("prefilterMap", getSamplerSlot("prefiltered"));
                 light->getShader()->setUniform1i("brdfLUT", getSamplerSlot("brdfLUT"));
-
                 light->getShader()->setUniform1i("useIBL", false);
             }
 
