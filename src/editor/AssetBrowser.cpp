@@ -77,6 +77,26 @@ namespace Villain {
 
             ImGui::TreePop();
         }
+
+        editor->renderIcon("\uf279"); ImGui::SameLine();
+        if (ImGui::TreeNode("Environment(HDR) Maps")) {
+            ImVec2 desiredImgSize = ImGui::GetContentRegionAvail(); // will squish image to fit in
+            for (auto const& t: ResourceManager::Instance()->getHDRMap()) {
+                if (ImGui::TreeNode(t.first.c_str())) {
+                    ImGui::Image(
+                            reinterpret_cast<ImTextureID>(t.second->getHDRTextureId()),
+                            desiredImgSize,
+                            ImVec2(0, 1),
+                            ImVec2(1, 0)
+                            );
+
+                    ImGui::TreePop();
+                }
+            }
+
+            ImGui::TreePop();
+        }
+
         // TODO: fonts, levels
 
         ImGui::TreePop();
