@@ -22,7 +22,9 @@
 
 ### Rendering
 * Multi-pass forward rendering system using scene graph for 3D applications
-* Phong-blinn based lighting system for Scene Graph or Basic Physically Based Rendering(PBR)
+* Supported shading models:
+  * Phong-Blinn shading with optional Toon shading support
+  * Physically Based Rendering(PBR) with Image Based Lighting(IBL)/Environmental mapping support
 * Directional and Omnidirectional shadow mapping with PCF Soft shadows
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
@@ -36,7 +38,7 @@
 * Normal and Parallax mapping support
 * Emission/emissive mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
-* Set optional skybox (with optional animation)
+* Set optional skybox (with optional animation) or static HDR environmental map
 * Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation
@@ -78,11 +80,9 @@
 * Audio Engine: Streaming and audio callbacks, doppler effect
 * Lua Scripting API (In progress)
 * Entity Component System?
-* Environmental mapping(reflections and refractions)
 * 3D Mesh batch rendering
 * Tessalated terrain
-* Stencil buffer
-* IBL rendering techniques
+* Stencil buffer techniques
 * Lens flare, Depth of field effects
 * Blending skeletal animations
 * Embedded texture support
@@ -147,27 +147,28 @@ use [bear](https://github.com/rizsotto/Bear). I also use [CMake](https://cmake.o
 
 ## FIXME/TODOS
 
- * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
+  * FreeType class - font rendering works just fine, but it would be better if all glyphs were packed
      in a single texture before drawing
- * Finish refactoring/porting StateParser class from Vigilant engine!
- * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
- * Fix Engine on Windows:
+  * Finish refactoring/porting StateParser class from Vigilant engine!
+  * Look into implementing ObjectLayer class for Tiled Maps, this way we could maybe utilise Box2D..
+  * Fix Engine on Windows:
    - Linking errors for assimp
    - Crashes on glBufferData?
- * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
+  * Fix generating Mesh for Bullet Soft bodies: vertices.push_back makes no sense if we resize vector, also need to keep mesh updated somehow, which means
     that BulletBodyComponent needs to support btSoftBody OR create a new Node Component for soft bodies!
- * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
+  * Need to keep improving normal/parallax and shadow mapping techniques. Directional shadow mapping could be better, parallax needs more testing and
    sometimes normal mapping seems to introduce UV displacement(spotted on Sponza palace walls)!!!!!
- * Read about Deferred shading and decide if it's feasible to introduce it
- * Investigate alternative Anti-Aliasing methods like FXAA
- * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
- * Investigate volumetric lighting and fog techniques
- * Investigate water rendering mechanics
- * Read about Screen Space Ambient Occlusion (SSAO)
- * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
- * Move all usages of <random> header to new RandomUtils static class
- * Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)
+  * Read about Deferred shading and decide if it's feasible to introduce it
+  * Investigate alternative Anti-Aliasing methods like FXAA
+  * Investigate better shadow techniques: cascaded shadow mapping and shadow volumes
+  * Investigate volumetric lighting and fog techniques
+  * Investigate water rendering mechanics
+  * Read about Screen Space Ambient Occlusion (SSAO)
+  * More testing needed for camera frustum culling, add frustum for ortho cameras, add ability to set shadow map projection plane size
+  * Move all usages of <random> header to new RandomUtils static class
+  * Investigate layer stack approach for rendering and handling events: layers gets renderered on top of each other with events being propagated in reverse order (from last to first)
   * Aerodynamical force generators broken or something, struggling to create flight simulator demo
   * Rework namespace system: create Villain::Physics, Villain::Rendering, etc..
   * Fix synchronisation issues between camera and models or rigid bodies
   * Implement logic for minimising on window resize: on minimise no rendering should be done
+  * Investigate reflection probes for IBL

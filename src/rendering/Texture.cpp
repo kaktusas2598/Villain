@@ -20,7 +20,7 @@ namespace Villain {
             localBuffer = stbi_load(filePath.c_str(), &width, &height, &BPP, 0);
 
             if (!localBuffer) {
-                Logger::Instance()->error("Failed loading texture: {}", filePath);
+                VILLAIN_ERROR("Failed loading texture: {}", filePath);
                 stbi_image_free(localBuffer);
                 return;
             }
@@ -138,6 +138,24 @@ namespace Villain {
 
         setFiltering(filter, filter);
         setWrapping(GL_CLAMP_TO_EDGE);
+    }
+
+    void Texture::loadHDR(const std::string& fileName) {
+        stbi_set_flip_vertically_on_load(true);
+        float *data = stbi_loadf(fileName.c_str(), &width, &height, &BPP, 0);
+        if (data) {
+            glGenTextures(1, &rendererID);
+            glBindTexture(GL_TEXTURE_2D, rendererID);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+
+            setWrapping(GL_CLAMP_TO_EDGE);
+            setFiltering(GL_LINEAR, GL_LINEAR);
+
+            stbi_image_free(data);
+        }
+        else {
+            VILLAIN_ERROR("Failed loading texture: {}", filePath);
+        }
     }
 
     Texture::Texture(std::vector<std::string> faces)

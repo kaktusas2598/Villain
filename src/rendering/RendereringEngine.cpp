@@ -30,13 +30,16 @@ namespace Villain {
         samplerMap.emplace("albedo", 0);
         samplerMap.emplace("diffuse", 0);
         samplerMap.emplace("specular", 1);
+        samplerMap.emplace("roughness", 1);
         samplerMap.emplace("normal", 2);
         samplerMap.emplace("disp", 3);
-        samplerMap.emplace("shadow", 4);
-        samplerMap.emplace("roughness", 5);
-        samplerMap.emplace("metallic", 6);
-        samplerMap.emplace("ao", 7);
-        samplerMap.emplace("emission", 8);
+        samplerMap.emplace("metallic", 4);
+        samplerMap.emplace("ao", 5);
+        samplerMap.emplace("emission", 6);
+        samplerMap.emplace("shadow", 7);
+        samplerMap.emplace("irradiance", 8);
+        samplerMap.emplace("prefiltered", 9);
+        samplerMap.emplace("brdfLUT", 10);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
@@ -185,7 +188,7 @@ namespace Villain {
         for (auto& light: lights) {
             activeLight = light;
 
-            // Shadow map Render Pass
+            // Shadow Mapping Render Pass
             ShadowInfo* shadowInfo = activeLight->getShadowInfo();
             if (shadowInfo) {
                 Shader* shadowMapShader;
@@ -257,7 +260,7 @@ namespace Villain {
                 if (shadowInfo->getFlipFaces()) glCullFace(GL_BACK);
             }
 
-            // Main lighting pass
+            // Main Lighting Pass
             //bindMainTarget();
             engine->getSceneBuffer()->bind();
 
@@ -283,6 +286,36 @@ namespace Villain {
                 }
                 light->getShader()->setUniform1f("shadowBias", shadowInfo->getBias()/1024.f);
             }
+
+            if (currentEnvironmentMap) {
+                glActiveTexture(GL_TEXTURE0 + getSamplerSlot("irradiance"));
+                glBindTexture(GL_TEXTURE_CUBE_MAP, currentEnvironmentMap->getIrradianceMapId());
+                glActiveTexture(GL_TEXTURE0 + getSamplerSlot("prefiltered"));
+                glBindTexture(GL_TEXTURE_CUBE_MAP, currentEnvironmentMap->getPrefilteredMapId());
+                glActiveTexture(GL_TEXTURE0 + getSamplerSlot("brdfLUT"));
+                glBindTexture(GL_TEXTURE_2D, currentEnvironmentMap->getBRDFLUTId());
+
+                light->getShader()->setUniform1i("irradianceMap", getSamplerSlot("irradiance"));
+                light->getShader()->setUniform1i("prefilterMap", getSamplerSlot("prefiltered"));
+                light->getShader()->setUniform1i("brdfLUT", getSamplerSlot("brdfLUT"));
+                light->getShader()->setUniform1i("useIBL", true);
+            } else {
+                // TODO:Fix this!
+                // FIXME:Weirdly if hdr map isn't set then we get segfault by ussing irradianceMap in lighting shader
+                // even though we shouldn't be on that code path
+                // HACK: the only other cubemap we currently use here is omnidirectional shadow buffer, but this is only if we add point lights!!
+                // And of course this is not solution as in this case we should have no irradiance map, for shadowBuffer, dir or spot light must be added
+                // so this WILL BREAK if we have only 1 type of light, not good..
+                omniShadowBuffer->getTexture()->bind(getSamplerSlot("irradiance"));
+                omniShadowBuffer->getTexture()->bind(getSamplerSlot("prefiltered"));
+                shadowBuffer->getTexture()->bind(getSamplerSlot("brdfLUT"));
+
+                light->getShader()->setUniform1i("irradianceMap", getSamplerSlot("irradiance"));
+                light->getShader()->setUniform1i("prefilterMap", getSamplerSlot("prefiltered"));
+                light->getShader()->setUniform1i("brdfLUT", getSamplerSlot("brdfLUT"));
+                light->getShader()->setUniform1i("useIBL", false);
+            }
+
             node->render(light->getShader(), this, mainCamera);
 
             // Reset to default blending
@@ -313,11 +346,16 @@ namespace Villain {
             node->render(normalDebugShader, this, mainCamera);
         }
 
-        // Always last - render the skybox, if any
-        if (currentSkybox) {
-            skyboxShader->bind();
+        // Always last - render the skybox/environmental map, if any
+        if (currentSkybox || currentEnvironmentMap) {
             glm::mat4 proj = (mainCamera->getType() == CameraType::ORTHOGRAPHIC) ? mainCamera->getSkyboxProjMatrix() : mainCamera->getProjMatrix();
-            currentSkybox->render(proj, mainCamera->getViewMatrix(), deltaTime);
+            // Prefer to render env map so we can have reflections/IBL etc.
+            if (currentEnvironmentMap) {
+                currentEnvironmentMap->render(proj, mainCamera->getViewMatrix(), exposure);
+            } else {
+                skyboxShader->bind();
+                currentSkybox->render(proj, mainCamera->getViewMatrix(), deltaTime);
+            }
         }
     }
 
@@ -411,8 +449,15 @@ namespace Villain {
     }
 
     void RenderingEngine::setSkybox(const std::vector<std::string>& faces) {
-        // TODO: handle changing skyboxes, manage memory
+        if (currentSkybox)
+            delete currentSkybox;
+
         currentSkybox = new SkyBox(faces, skyboxShader);
+    }
+
+    void RenderingEngine::setEnvironmentMap(HDRMap* map) {
+        // NOTE: Not clearing previous map if set, because it should be handled by ResourceManager
+        currentEnvironmentMap = map;
     }
 
     void RenderingEngine::bindMainTarget() {

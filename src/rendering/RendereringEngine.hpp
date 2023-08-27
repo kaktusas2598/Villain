@@ -5,6 +5,7 @@
 #include "../components/Light.hpp"
 #include "SceneNode.hpp"
 #include "Vertex.hpp"
+#include "rendering/HDRMap.hpp"
 #include "rendering/PickingTexture.hpp"
 #include "rendering/SkyBox.hpp"
 
@@ -43,7 +44,9 @@ namespace Villain {
             int getSelectedNodeID() const { return selectedNodeID; }
             void setSelectedNodeID(int id) { selectedNodeID = id; }
             void setSkybox(const std::vector<std::string>& faces);
-            SkyBox* getSkybox() { return currentSkybox; }
+            SkyBox* getSkybox() const { return currentSkybox; }
+            void setEnvironmentMap(HDRMap* map);
+            HDRMap* getEnvironmentMap() const { return currentEnvironmentMap; }
 
             // Fog parameters
             glm::vec3* getFogColor() { return &fogColor; }
@@ -135,6 +138,7 @@ namespace Villain {
             bool hdr = false;
             bool bloom = false;
             float exposure = 1.0; ///< Used to gether with HDR
+            HDRMap* currentEnvironmentMap = nullptr;
 
             int selectedNodeID = 0;
     };

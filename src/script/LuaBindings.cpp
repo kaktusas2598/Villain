@@ -41,6 +41,7 @@ namespace Villain {
             { "addMoveBehaviour", lua_SceneNode_addMoveBehaviour },
             { "addCurveMoveBehaviour", lua_SceneNode_addCurveMoveBehaviour },
             { "addTeleportBehaviour", lua_SceneNode_addTeleportBehaviour },
+            { "setHDRMap", lua_SetHDRMap },
             { NULL, NULL } // The array must be null-terminated
         };
 
@@ -181,6 +182,26 @@ namespace Villain {
 
         if (strcmp(keyName, "r") == 0) {
             lua_pushinteger(L, static_cast<int>(KeyCode::r));
+        } else if (strcmp(keyName, "1") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM1));
+        } else if (strcmp(keyName, "2") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM2));
+        } else if (strcmp(keyName, "3") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM3));
+        } else if (strcmp(keyName, "4") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM4));
+        } else if (strcmp(keyName, "5") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM5));
+        } else if (strcmp(keyName, "6") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM6));
+        } else if (strcmp(keyName, "7") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM7));
+        } else if (strcmp(keyName, "8") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM8));
+        } else if (strcmp(keyName, "9") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM9));
+        } else if (strcmp(keyName, "0") == 0) {
+            lua_pushinteger(L, static_cast<int>(KeyCode::NUM0));
         } else if (strcmp(keyName, "space") == 0) {
             lua_pushinteger(L, static_cast<int>(KeyCode::SPACE));
         } else if (strcmp(keyName, "enter") == 0) {
@@ -207,6 +228,17 @@ namespace Villain {
 
     int LuaBindings::lua_Quit(lua_State *L) {
         Engine::setRunning(false);
+        return 0;
+    }
+
+    int LuaBindings::lua_SetHDRMap(lua_State *L) {
+        SceneNode* node = static_cast<SceneNode*>(lua_touserdata(L, 1));
+        const char* fileName = luaL_checkstring(L, 2);
+        HDRMap* map = ResourceManager::Instance()->getHDR(fileName);
+        if (!map)
+            map = ResourceManager::Instance()->loadHDREnvironmentalMap(fileName, fileName);
+
+        node->getEngine()->getRenderingEngine()->setEnvironmentMap(map);
         return 0;
     }
 

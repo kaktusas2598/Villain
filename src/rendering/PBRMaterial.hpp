@@ -26,6 +26,18 @@ namespace Villain {
                 this->normalMap = normalMp;
             }
 
+            PBRMaterial(
+                    const std::string& name,
+                    const glm::vec3& albedoValue = glm::vec3(1.0f),
+                    float metallicValue = 0.0f,
+                    float roughnessValue = 0.5f,
+                    float aoValue = 0.0f
+                    ) :
+                albedo(albedoValue), metallic(metallicValue), roughness(roughnessValue), ao(aoValue)
+            {
+                this->name = name;
+            }
+
             float* getAlbedoColorPtr() { return glm::value_ptr(albedo); }
             float* getMetallicPtr() { return &metallic; }
             float* getRoughnessPtr() { return &roughness; }

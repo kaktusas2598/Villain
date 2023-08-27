@@ -33,6 +33,7 @@ namespace Villain {
             static int lua_IsKeyDown(lua_State *L);
             static int lua_IsKeyPressed(lua_State *L);
             static int lua_Quit(lua_State *L);
+            static int lua_SetHDRMap(lua_State *L);
             /// Check if userdata is nil
             static int lua_IsNil(lua_State* L);
 

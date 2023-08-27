@@ -186,6 +186,36 @@ void Game::init() {
     getRootNode()->getEngine()->getRigidBodyWorld()->setDebugDraw(true);
 
     zombieMono = new AudioSource(ResourceManager::Instance()->loadAudio("zombie_mono.wav", "zombieMono"));
+
+    HDRMap* theater = ResourceManager::Instance()->loadHDREnvironmentalMap("assets/textures/theater_02_8k.hdr", "theater_8k");
+    ResourceManager::Instance()->loadHDREnvironmentalMap("assets/textures/rural_asphalt_road_4k.hdr", "asphalt_4k");
+
+    getRootNode()->getEngine()->getRenderingEngine()->setEnvironmentMap(theater);
+
+    // PBR Demo
+    int nrRows = 7;
+    int nrColumns = 7;
+    float spacing = 2.5;
+    glm::mat4 model = glm::mat4(1.0f);
+    for (int row = 0; row < nrRows; ++row) {
+        float metallic = (float)row / (float)nrRows;
+        for (int col = 0; col < nrColumns; ++col) {
+
+            // we clamp the roughness to 0.025 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
+            // on direct lighting.
+            float roughness = glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f);
+
+            PBRMaterial* mat = new PBRMaterial("PBR Demo Mat", glm::vec3(0.8f, 0.1f, 0.2f), metallic, roughness, 0.1f);
+            SceneNode* pbrDemoBall = new SceneNode("PBR Demo");
+            pbrDemoBall->getTransform()->setPos({
+                    (float)(col - (nrColumns / 2.0f)) * spacing,
+                    (float)(row - (nrRows / 2.0f)) * spacing,
+                    -2.0f
+                    });
+
+            addToScene(pbrDemoBall->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, mat)));
+        }
+    }
 }
 
 void Game::handleEvents(float deltaTime) {

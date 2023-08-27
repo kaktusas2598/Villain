@@ -66,6 +66,10 @@ namespace Villain {
         VILLAIN_INFO("GPU Vendor: {}", (char*)glGetString(GL_VENDOR));
         VILLAIN_INFO("GPU Renderer: {}", (char*)glGetString(GL_RENDERER));
 
+        int numTextureUnits;
+        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &numTextureUnits);
+        VILLAIN_INFO("Available texture units: {}", numTextureUnits);
+
         // set background color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

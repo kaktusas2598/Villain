@@ -25,6 +25,14 @@ function OnKey(key, node)
     end
     --local position = node:getPosition()
     --print(position.x, position.y, position.z)
+
+    if (key == KeyCode("1")) then
+        node:setHDRMap("theater_8k")
+    end
+    if (key == KeyCode("2")) then
+        node:setHDRMap("asphalt_4k")
+    end
+
 end
 
 function OnCollide(node, thisBody, otherBody)
