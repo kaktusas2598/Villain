@@ -22,7 +22,9 @@
 
 ### Rendering
 * Multi-pass forward rendering system using scene graph for 3D applications
-* Phong-blinn based lighting system for Scene Graph or Basic Physically Based Rendering(PBR)
+* Supported shading models:
+  * Phong-Blinn shading with optional Toon shading support
+  * Physically Based Rendering(PBR) with Image Based Lighting(IBL)/Environmental mapping support
 * Directional and Omnidirectional shadow mapping with PCF Soft shadows
 * Vertex, Fragment and Geometry shader support
 * 2D and Cubemap texture support
@@ -36,7 +38,7 @@
 * Normal and Parallax mapping support
 * Emission/emissive mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
-* Set optional skybox (with optional animation)
+* Set optional skybox (with optional animation) or static HDR environmental map
 * Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation
@@ -78,11 +80,9 @@
 * Audio Engine: Streaming and audio callbacks, doppler effect
 * Lua Scripting API (In progress)
 * Entity Component System?
-* Environmental mapping(reflections and refractions)
 * 3D Mesh batch rendering
 * Tessalated terrain
 * Stencil buffer
-* IBL rendering techniques
 * Lens flare, Depth of field effects
 * Blending skeletal animations
 * Embedded texture support
