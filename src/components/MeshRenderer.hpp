@@ -25,6 +25,7 @@ namespace Villain {
             Material* getMaterialPtr() { return material; }
 
             void setMesh(Mesh<VertexType>* m) { mesh = m; }
+            void setMaterial(Material* mat) { material = mat; }
         protected:
             Mesh<VertexType>* mesh;
             Material* material;

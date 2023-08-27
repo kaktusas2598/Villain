@@ -373,6 +373,20 @@ namespace Villain {
                         editor->getFileBrowser().openPopup();
                     }
 
+                    if (ImGui::BeginCombo("Active material", material.getName().c_str())) {
+                        for (auto const& m: ResourceManager::Instance()->getMaterialMap()) {
+                            bool isSelected = (m.first == material.getName());
+                            if (ImGui::Selectable(m.first.c_str(), isSelected)) {
+                                meshN1UV->setMaterial(m.second);
+                            }
+
+                            if (isSelected) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+                        }
+                        ImGui::EndCombo();
+                    }
+
                     editor->getAssetBrowser().renderMaterial(meshN1UV->getMaterialPtr());
 
                     static int loadedMesh = 0;
@@ -407,6 +421,20 @@ namespace Villain {
 
                     if (ImGui::Button("Load diffuse map")) {
                         editor->getFileBrowser().openPopup();
+                    }
+
+                    if (ImGui::BeginCombo("Active material", material.getName().c_str())) {
+                        for (auto const& m: ResourceManager::Instance()->getMaterialMap()) {
+                            bool isSelected = (m.first == material.getName());
+                            if (ImGui::Selectable(m.first.c_str(), isSelected)) {
+                                meshN1T1B1UV->setMaterial(m.second);
+                            }
+
+                            if (isSelected) {
+                                ImGui::SetItemDefaultFocus();
+                            }
+                        }
+                        ImGui::EndCombo();
                     }
 
                     editor->getAssetBrowser().renderMaterial(meshN1T1B1UV->getMaterialPtr());
