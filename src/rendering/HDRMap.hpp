@@ -20,9 +20,11 @@ namespace Villain {
             Shader* equirectangularToCubeMap; ///< Converts equirectangular texture to cubemap
             Shader* irradianceConvolutionShader; ///< Takes in cubemap texture and convolutes it producing irradiance map
             Shader* prefilterConvolutionShader; ///< Produces pre filtered convoluted map for specular IBL calculations
+            Shader* brdfIntegrationShader; ///< Produces convoluted BRDF part of the split sum integral approach for specular IBL
             Texture* hdrTexture; ///< Equirectangular HDR environmental map image texture
             unsigned int envCubemap; ///< HDR texture converted to cubemap
             unsigned int irradianceMap; ///< Convoluted hdr cubemap used as scene's irradiance map for diffuse IBL
             unsigned int prefilteredMap; ///< Pre-computed environment convolution map used for specular IBL
+            unsigned int brdfLUTTexture; ///< 2D lookup texture (LUT) - BRDF integration map used for specular IBL
     };
 }

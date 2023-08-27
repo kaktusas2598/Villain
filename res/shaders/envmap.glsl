@@ -29,6 +29,9 @@ uniform float exposure;
 void main()
 {
     vec3 envColor = texture(environmentMap, localPos).rgb;
+    // Test pre-filtered map
+    //vec3 envColor = textureLod(environmentMap, localPos, 0.2).rgb;
+    //vec3 envColor = textureLod(environmentMap, localPos, 1.2).rgb;
 
     // Exposure mapping
     envColor = vec3(1.0) - exp(-envColor * exposure);

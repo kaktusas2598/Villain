@@ -8,6 +8,31 @@ namespace Villain {
     HDRMap::HDRMap(const std::string& hdrTexturePath) {
         setupBuffers();
 
+        // Setup quad buffers
+        float quadVertices[] = {
+            // positions        // texture Coords
+            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        };
+
+        unsigned int quadIndices[] = {
+            0, 2, 3,
+            3, 1, 0,
+        };
+
+        std::unique_ptr<VertexArray> quadVao = std::make_unique<VertexArray>();
+        std::unique_ptr<VertexBuffer> quadVbo = std::make_unique<VertexBuffer>(quadVertices, 4 * 5 * sizeof(float));
+
+        VertexBufferLayout quadLayout;
+        quadLayout.push<float>(3);
+        quadLayout.push<float>(2);
+        quadVao->addBuffer(*quadVbo, quadLayout);
+
+        std::unique_ptr<IndexBuffer> quadIbo = std::make_unique<IndexBuffer>(quadIndices, 6);
+        ///////////////////////////////////////////////////
+
         // Make sure OpenGL filters between cubemap faces to avoid visible seams in prefiltered convolution maps
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
@@ -15,6 +40,7 @@ namespace Villain {
         cubemapShader = Shader::createFromResource("envmap");
         irradianceConvolutionShader = Shader::createFromResource("irradianceConvolution");
         prefilterConvolutionShader = Shader::createFromResource("preFilterConvolution");
+        brdfIntegrationShader = Shader::createFromResource("BRDFIntegration");
 
         // Load HDR environment map image file to texture
         hdrTexture = new Texture(GL_TEXTURE_2D);
@@ -168,7 +194,28 @@ namespace Villain {
         }
         ///////////////////////////////////////////////////
 
+        // Generate 2D lookup texture for storing BRDF convolution result for specular IBL
+        GLCall(glGenTextures(1, &brdfLUTTexture));
+        GLCall(glBindTexture(GL_TEXTURE_2D, brdfLUTTexture));
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, nullptr));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
+        GLCall(glBindFramebuffer(GL_FRAMEBUFFER, captureFBO));
+        GLCall(glBindRenderbuffer(GL_RENDERBUFFER, captureRBO));
+        GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512));
+        GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0));
+
+
+        GLCall(glViewport(0, 0, 512, 512));
+        brdfIntegrationShader->bind();
+        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+        renderer.draw(*quadVao, *quadIbo, *brdfIntegrationShader);
+        ///////////////////////////////////////////////////
+
+        // Reset culling back to default and reset to default framebuffer and viewport rendering size
         glEnable(GL_CULL_FACE);
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
         GLCall(glViewport(0, 0, Engine::getScreenWidth(), Engine::getScreenHeight()));
@@ -184,9 +231,9 @@ namespace Villain {
         cubemapShader->setUniform1f("exposure", exposure);
 
         GLCall(glActiveTexture(GL_TEXTURE0));
-        //GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap));
+        GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap));
         //GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap));
-        GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, prefilteredMap));
+        //GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, prefilteredMap));
         cubemapShader->setUniform1i("environmentMap", 0);
         renderer.draw(*skyboxVao, *skyboxIbo, *cubemapShader);
         GLCall(glDepthFunc(GL_LESS)); // Back to default
