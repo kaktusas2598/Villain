@@ -15,6 +15,8 @@ namespace Villain {
             unsigned getHDRTextureId() const { return hdrTexture->getID(); }
             unsigned getEnvironmentMapId() const { return envCubemap; }
             unsigned getIrradianceMapId() const { return irradianceMap; }
+            unsigned getPrefilteredMapId() const { return prefilteredMap; }
+            unsigned getBRDFLUTId() const { return brdfLUTTexture; }
 
         private:
             Shader* equirectangularToCubeMap; ///< Converts equirectangular texture to cubemap

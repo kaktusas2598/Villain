@@ -93,8 +93,10 @@ uniform Material material;
 uniform PBRMaterial pbrMaterial;
 uniform bool usePBR = false;
 // IBL-specific
-uniform samplerCube irradianceMap;
 uniform bool useIBL = false;
+uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfLUT;
 
 uniform sampler2D shadowMap;
 
@@ -125,6 +127,7 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
 
         vec3 N = normal;
         vec3 V = viewDir;
+        vec3 R = reflect(-V, N);
         // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0
         // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)
         vec3 F0 = vec3(0.04);
@@ -159,15 +162,28 @@ BaseLight calculateLight(BaseLight base, vec3 normal, vec3 lightDir, vec3 viewDi
         float NdotL = max(dot(N, L), 0.0);
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 
+        // Default ambient light value when using no IBL (no env map set)
         vec3 ambient = vec3(0.03) * albedo * ao;
+
+        // If environment map is set, this will be enabled and IBL will be used for ambient term
         if (useIBL) {
+            vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+
+            vec3 kS = F;
+            vec3 kD = vec3(1.0) - kS;
+            kD *= 1.0 - metallic;
+
             // Use irradiance map (produced from HDR map) for ambient lighting
             // FIXME: Segfault on gl draw elements, ONLY IF useIBL is false/no map is set !!!!!??
             // even setting irradianceMap if useIBL is false causes segfault
             vec3 irradiance = texture(irradianceMap, N).rgb;
             vec3 diffuse = irradiance * albedo;
-            // TODO: try changing kD to use FresnelSchlick roughness variant here later on once bug is fixed
-            ambient = (kD * diffuse) * ao;
+
+            const float MAX_REFLECTION_LOD = 4.0;
+            vec3 prefilteredColor = textureLod(prefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+            vec2 envBRDF = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+            vec3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
+            ambient = (kD * diffuse + specular) * ao;
         }
 
         vec3 newColor = ambient + Lo;

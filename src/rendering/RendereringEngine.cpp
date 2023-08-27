@@ -38,6 +38,8 @@ namespace Villain {
         samplerMap.emplace("emission", 6);
         samplerMap.emplace("shadow", 7);
         samplerMap.emplace("irradiance", 8);
+        samplerMap.emplace("prefiltered", 9);
+        samplerMap.emplace("brdfLUT", 10);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
@@ -288,15 +290,27 @@ namespace Villain {
             if (currentEnvironmentMap) {
                 glActiveTexture(GL_TEXTURE0 + getSamplerSlot("irradiance"));
                 glBindTexture(GL_TEXTURE_CUBE_MAP, currentEnvironmentMap->getIrradianceMapId());
+                glActiveTexture(GL_TEXTURE0 + getSamplerSlot("prefiltered"));
+                glBindTexture(GL_TEXTURE_CUBE_MAP, currentEnvironmentMap->getPrefilteredMapId());
+                glActiveTexture(GL_TEXTURE0 + getSamplerSlot("brdfLUT"));
+                glBindTexture(GL_TEXTURE_2D, currentEnvironmentMap->getBRDFLUTId());
+
                 light->getShader()->setUniform1i("irradianceMap", getSamplerSlot("irradiance"));
+                light->getShader()->setUniform1i("prefilterMap", getSamplerSlot("prefiltered"));
+                light->getShader()->setUniform1i("brdfLUT", getSamplerSlot("brdfLUT"));
                 light->getShader()->setUniform1i("useIBL", true);
             } else {
                 // FIXME:Weirdly if hdr map isn't set then we get segfault by ussing irradianceMap in lighting shader
                 // even though we shouldn't be on that code path
                 // HACK: the only other cubemap we currently use here is omnidirectional shadow buffer, but this is only if we add point lights!!
-                // And of course this is not solution as in this case we should have no irradiance map
+                // And of course this is not solution as in this case we should have no irradiance map, for shadowBuffer, dir or spot light must be added
+                // so this WILL BREAK if we have only 1 type of light, not good..
                 omniShadowBuffer->getTexture()->bind(getSamplerSlot("irradiance"));
+                omniShadowBuffer->getTexture()->bind(getSamplerSlot("prefiltered"));
+                shadowBuffer->getTexture()->bind(getSamplerSlot("brdfLUT"));
                 light->getShader()->setUniform1i("irradianceMap", getSamplerSlot("irradiance"));
+                light->getShader()->setUniform1i("prefilterMap", getSamplerSlot("prefiltered"));
+                light->getShader()->setUniform1i("brdfLUT", getSamplerSlot("brdfLUT"));
 
                 light->getShader()->setUniform1i("useIBL", false);
             }
