@@ -1,6 +1,7 @@
 #include "GeomipGrid.hpp"
 
 #include "Terrain.hpp"
+#include "rendering/MeshUtils.hpp"
 
 // TODO: move somewhere else maybe
 #define powi(base,exp) (int)powf((float)(base), (float)(exp))
@@ -261,10 +262,7 @@ namespace Villain {
                     unsigned int i1 = baseVertex + indices[i + 1];
                     unsigned int i2 = baseVertex + indices[i + 2];
 
-                    glm::vec3 v1 = vertices[i1].Position - vertices[i0].Position;
-                    glm::vec3 v2 = vertices[i2].Position - vertices[i0].Position;
-                    glm::vec3 normal = glm::cross(v1, v2);
-                    normal = glm::normalize(normal);
+                    glm::vec3 normal = MeshUtils<VertexP1N1UV>::getNormal(vertices[i0].Position, vertices[i1].Position, vertices[i2].Position);
 
                     // Vertex normal is average of all face(triangle) normals sharing vertex
                     vertices[i0].Normal += normal;

@@ -35,8 +35,13 @@ namespace Villain {
         // Generate tangents and bitangents for a mesh
         static void addTangents(std::vector<VertexP1N1T1B1UV>* vertices, std::vector<unsigned int>* indices);
 
-        // Calculate normal for a triangle
-        static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3);
+        // Calculate face normal for a triangle
+        static glm::vec3 getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3) {
+            glm::vec3 v1 = i2 - i1;
+            glm::vec3 v2 = i3 - i1;
+            glm::vec3 v3 = glm::cross(v1, v2);
+            return glm::normalize(v3);
+        }
 
         // NOTE: Need a good way to generate a face in any orientation, at the very least Axis-Aligned
         static void addXZPlane(

@@ -1,6 +1,7 @@
 #include "TriangleList.hpp"
 
 #include "Terrain.hpp"
+#include "rendering/MeshUtils.hpp"
 
 namespace Villain {
 
@@ -85,15 +86,11 @@ namespace Villain {
 
         // Calculate each triangle's normal and accumulate it
         for (unsigned int i = 0; i < indices.size(); i += 3) {
-            // NOTE: Pretty much identical to calculate normals method in MeshUtils class
             unsigned int i0 = indices[i];
             unsigned int i1 = indices[i + 1];
             unsigned int i2 = indices[i + 2];
 
-            glm::vec3 v1 = vertices[i1].Position - vertices[i0].Position;
-            glm::vec3 v2 = vertices[i2].Position - vertices[i0].Position;
-            glm::vec3 normal = glm::cross(v1, v2);
-            normal = glm::normalize(normal);
+            glm::vec3 normal = MeshUtils<VertexP1N1UV>::getNormal(vertices[i0].Position, vertices[i1].Position, vertices[i2].Position);
 
             // Vertex normal is average of all face(triangle) normals sharing vertex
             vertices[i0].Normal += normal;

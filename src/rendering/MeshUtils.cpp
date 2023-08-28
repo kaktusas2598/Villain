@@ -49,14 +49,6 @@ namespace Villain {
         }
     }
 
-    template <class VertexType>
-    glm::vec3 MeshUtils<VertexType>::getNormal(const::glm::vec3& i1, const::glm::vec3& i2, const::glm::vec3& i3) {
-        glm::vec3 v1 = i2 - i1;
-        glm::vec3 v2 = i3 - i1;
-        glm::vec3 v3 = glm::cross(v1, v2);
-        return glm::normalize(v3);
-    }
-
     // TODO: need ability to specify different orientations in easier way,
     // too much similar code in add XZ, XY and YZ plane methods
     template <class VertexType>
