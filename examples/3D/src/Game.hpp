@@ -6,6 +6,7 @@
 #include "components/FlightController.hpp"
 #include "rendering/DebugRenderer.hpp"
 #include "rendering/Model.hpp"
+#include "rendering/SkyDome.hpp"
 
 class Game : public Villain::Application {
     public:
@@ -37,4 +38,6 @@ class Game : public Villain::Application {
         Villain::RigidBody* boxBody = nullptr;
 
         Villain::AudioSource* zombieMono;
+
+        Villain::SkyDome* skydomeTest;
 };

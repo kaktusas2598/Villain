@@ -38,7 +38,7 @@
 * Normal and Parallax mapping support
 * Emission/emissive mapping support
 * Post-Processing filters/FX - blur, sharpen, grayscale, invert colors, edge outline (mutually exclusive ATM)
-* Set optional skybox (with optional animation) or static HDR environmental map
+* Set optional skybox (with optional animation) or static HDR environmental map or a basic skydome with optional texture
 * Exponential and Layered Fog
 * TrueType font rendering (Only ASCII encoding ATM)
 * Sprite animation

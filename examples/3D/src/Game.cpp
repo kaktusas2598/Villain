@@ -216,6 +216,9 @@ void Game::init() {
             addToScene(pbrDemoBall->addComponent(new MeshRenderer<VertexP1N1T1B1UV>(sphereMesh, mat)));
         }
     }
+
+    //skydomeTest = new SkyDome(8, 32, 1.0f, theater->getHDRTexture());
+    skydomeTest = new SkyDome(8, 32, 1.0f);
 }
 
 void Game::handleEvents(float deltaTime) {
@@ -300,4 +303,6 @@ void Game::onAppRender(float dt) {
         //}
     //}
     //uiManager.endWindow();
+
+    //skydomeTest->render(mainCamera);
 }
