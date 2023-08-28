@@ -1,9 +1,9 @@
 #include "Game.hpp"
 
 #include "ResourceManager.hpp"
-#include "terrain/TextureGenerator.hpp"
 #include "components/MoveController.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include "terrain/TextureGenerator.hpp"
 
 using namespace Villain;
 

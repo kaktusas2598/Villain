@@ -95,6 +95,8 @@
 ![3D features](screenshots/SponzaDemo.png?raw=true "Villain Engine Demo: 3D demo with models/lighting/shadow/normal mapping etc.")
 ![FPS](screenshots/FPS.png?raw=true "Villain Engine Demo: Wolfenstein/Doom clone")
 ![Bullet Physics](screenshots/Bullet.png?raw=true "Villain Engine Demo: Bullet Physics integration")
+![Terrain](screenshots/Terrain.png?raw=true "Villain Engine Demo: Terrain rendering with LOD and multitexturing")
+![PBR](screenshots/PBR.png?raw=true "Villain Engine Demo: Physically Based Rendering(PBR) with Image Based Lighting(IBL)")
 
 ## Used Libraries
 
