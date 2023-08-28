@@ -40,20 +40,20 @@ namespace Villain {
         size_t numFloats = 0;
 
         glEnableVertexAttribArray(POS_LOC);
-        glVertexAttribPointer(POS_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
+        glVertexAttribPointer(POS_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(VertexP1N1UV), (const void*)(numFloats * sizeof(float)));
         numFloats += 3;
 
         glEnableVertexAttribArray(TEX_LOC);
-        glVertexAttribPointer(TEX_LOC, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
+        glVertexAttribPointer(TEX_LOC, 2, GL_FLOAT, GL_FALSE, sizeof(VertexP1N1UV), (const void*)(numFloats * sizeof(float)));
         numFloats += 3;
 
         glEnableVertexAttribArray(NORMAL_LOC);
-        glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(numFloats * sizeof(float)));
+        glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(VertexP1N1UV), (const void*)(numFloats * sizeof(float)));
         numFloats += 3;
     }
 
     void TriangleList::populateBuffers(const Terrain* terrain) {
-        std::vector<Vertex> vertices;
+        std::vector<VertexP1N1UV> vertices;
         vertices.resize(width * depth);
         initVertices(terrain, vertices);
 
@@ -68,21 +68,23 @@ namespace Villain {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
     }
 
-    void TriangleList::Vertex::initVertex(const Terrain* terrain, int x, int z) {
+    VertexP1N1UV TriangleList::initVertex(const Terrain* terrain, int x, int z) {
+        VertexP1N1UV v;
         float y = terrain->getHeight(x, z);
-        Pos = glm::vec3(x * terrain->getWorldScale(), y, z * terrain->getWorldScale());
+        v.Position = glm::vec3(x * terrain->getWorldScale(), y, z * terrain->getWorldScale());
 
         float size = (float)terrain->getSize();
-        UV = glm::vec2(terrain->getTextureScale() * x / size, terrain->getTextureScale() * z / size);
+        v.UV = glm::vec2(terrain->getTextureScale() * x / size, terrain->getTextureScale() * z / size);
+        return v;
     }
 
-    void TriangleList::initVertices(const Terrain* terrain, std::vector<Vertex>& vertices) {
+    void TriangleList::initVertices(const Terrain* terrain, std::vector<VertexP1N1UV>& vertices) {
         int index = 0;
 
         for (int z = 0; z < depth; z++) {
             for (int x = 0; x < width; x++) {
                 assert(index < vertices.size());
-                vertices[index].initVertex(terrain, x, z);
+                vertices[index] = initVertex(terrain, x, z);
                 index++;
             }
         }
@@ -111,7 +113,7 @@ namespace Villain {
         }
     }
 
-    void TriangleList::calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
+    void TriangleList::calcNormals(std::vector<VertexP1N1UV>& vertices, std::vector<unsigned int>& indices) {
         unsigned index = 0;
 
         // Calculate each triangle's normal and accumulate it
@@ -121,8 +123,8 @@ namespace Villain {
             unsigned int i1 = indices[i + 1];
             unsigned int i2 = indices[i + 2];
 
-            glm::vec3 v1 = vertices[i1].Pos- vertices[i0].Pos;
-            glm::vec3 v2 = vertices[i2].Pos- vertices[i0].Pos;
+            glm::vec3 v1 = vertices[i1].Position - vertices[i0].Position;
+            glm::vec3 v2 = vertices[i2].Position - vertices[i0].Position;
             glm::vec3 normal = glm::cross(v1, v2);
             normal = glm::normalize(normal);
 

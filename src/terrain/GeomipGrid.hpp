@@ -3,6 +3,7 @@
 #include "LODManager.hpp"
 #include "TerrainFrustumCulling.hpp"
 #include "glm/glm.hpp"
+#include "rendering/Vertex.hpp"
 #include <GL/glew.h>
 #include <vector>
 
@@ -22,14 +23,7 @@ namespace Villain {
             void destroy();
 
         private:
-            // TODO: refactor to use struct from Vertex.hpp instead
-            struct Vertex {
-                glm::vec3 Pos;
-                glm::vec2 UV;
-                glm::vec3 Normal{0.0f};
-
-                void initVertex(const Terrain* terrain, int x, int z);
-            };
+            VertexP1N1UV initVertex(const Terrain* terrain, int x, int z);
 
             const Terrain* baseTerrain = nullptr;
             int width, depth; //<<< Heights will be read from the height map
@@ -59,13 +53,13 @@ namespace Villain {
 
             void createGLState();
             void populateBuffers(const Terrain* terrain);
-            void initVertices(const Terrain* terrain, std::vector<Vertex>& vertices);
+            void initVertices(const Terrain* terrain, std::vector<VertexP1N1UV>& vertices);
 
             int initIndices(std::vector<unsigned int>& indices);
             int initIndicesLOD(int index, std::vector<unsigned int>& indices, int lod);
             int initIndicesLODSingle(int index, std::vector<unsigned int>& indices, int lodCore, int lodLeft, int lodRight, int lodTop, int lodBottom);
 
-            void calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+            void calcNormals(std::vector<VertexP1N1UV>& vertices, std::vector<unsigned int>& indices);
 
             unsigned int addTriangle(unsigned int index, std::vector<unsigned int>& indices, unsigned v1, unsigned v2, unsigned v3);
             unsigned int createTriangleFan(int index, std::vector<unsigned int>& indices, int lodCore, int lodLeft, int lodRight, int lodTop, int lodBottom, int x, int z);

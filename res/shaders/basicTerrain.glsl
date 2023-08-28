@@ -2,8 +2,8 @@
 #version 330 core
 
 layout(location = 0) in vec3 position;
-layout(location = 1) in vec2 uv;
-layout(location = 2) in vec3 normal;
+layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 uv;
 
 // For now no need for world/model matrix as terrain will be constructed using world coordinates and won't be rotated/translated
 uniform mat4 projection;

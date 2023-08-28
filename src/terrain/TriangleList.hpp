@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "rendering/Vertex.hpp"
 #include <GL/glew.h>
 #include <vector>
 
@@ -18,14 +19,7 @@ namespace Villain {
             void render();
 
         private:
-            // TODO: refactor to use struct from Vertex.hpp instead
-            struct Vertex {
-                glm::vec3 Pos;
-                glm::vec2 UV;
-                glm::vec3 Normal{0.0f};
-
-                void initVertex(const Terrain* terrain, int x, int z);
-            };
+            VertexP1N1UV initVertex(const Terrain* terrain, int x, int z);
 
             int width, depth; //<<< Heights will be read from the height map
 
@@ -33,8 +27,8 @@ namespace Villain {
 
             void createGLState();
             void populateBuffers(const Terrain* terrain);
-            void initVertices(const Terrain* terrain, std::vector<Vertex>& vertices);
+            void initVertices(const Terrain* terrain, std::vector<VertexP1N1UV>& vertices);
             void initIndices(std::vector<unsigned int>& indices);
-            void calcNormals(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+            void calcNormals(std::vector<VertexP1N1UV>& vertices, std::vector<unsigned int>& indices);
     };
 }
