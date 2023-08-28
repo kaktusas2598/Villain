@@ -8,48 +8,12 @@ namespace Villain {
         width = w;
         depth = d;
 
-        createGLState();
-
         populateBuffers(terrain);
-
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void TriangleList::render() {
-        glBindVertexArray(vao);
+        vao->bind();
         glDrawElements(GL_TRIANGLES, (depth - 1) * (width - 1) * 6, GL_UNSIGNED_INT, NULL);
-        glBindVertexArray(0);
-    }
-
-    void TriangleList::createGLState() {
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-        glGenBuffers(1, &ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-        // TODO: Refactor to use VertexType structs to abstract these gl calls
-        int POS_LOC = 0;
-        int TEX_LOC = 1;
-        int NORMAL_LOC = 2;
-        size_t numFloats = 0;
-
-        glEnableVertexAttribArray(POS_LOC);
-        glVertexAttribPointer(POS_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(VertexP1N1UV), (const void*)(numFloats * sizeof(float)));
-        numFloats += 3;
-
-        glEnableVertexAttribArray(TEX_LOC);
-        glVertexAttribPointer(TEX_LOC, 2, GL_FLOAT, GL_FALSE, sizeof(VertexP1N1UV), (const void*)(numFloats * sizeof(float)));
-        numFloats += 3;
-
-        glEnableVertexAttribArray(NORMAL_LOC);
-        glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(VertexP1N1UV), (const void*)(numFloats * sizeof(float)));
-        numFloats += 3;
     }
 
     void TriangleList::populateBuffers(const Terrain* terrain) {
@@ -64,8 +28,11 @@ namespace Villain {
 
         calcNormals(vertices, indices);
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
+        vao = std::make_unique<VertexArray>();
+        vbo = std::make_unique<VertexBuffer>(vertices.data(), vertices.size() * sizeof(VertexP1N1UV));
+
+        vao->addBuffer(*vbo, VertexP1N1UV::getVertexLayout());
+        ibo = std::make_unique<IndexBuffer>(indices.data(), indices.size());
     }
 
     VertexP1N1UV TriangleList::initVertex(const Terrain* terrain, int x, int z) {

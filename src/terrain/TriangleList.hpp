@@ -1,16 +1,17 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "rendering/IndexBuffer.hpp"
+#include "rendering/VertexArray.hpp"
 #include "rendering/Vertex.hpp"
-#include <GL/glew.h>
-#include <vector>
+
+#include <memory>
 
 namespace Villain {
 
     class Terrain;
 
-    // GL Renderer for Terrain
-    // TODO: will need to refactor to fit in the engine
+    // Basic Terrain mesh builder without LOD
     class TriangleList {
         public:
             TriangleList() {}
@@ -23,9 +24,10 @@ namespace Villain {
 
             int width, depth; //<<< Heights will be read from the height map
 
-            GLuint vao, vbo, ibo;
+            std::unique_ptr<VertexArray> vao;
+            std::unique_ptr<VertexBuffer> vbo;
+            std::unique_ptr<IndexBuffer> ibo;
 
-            void createGLState();
             void populateBuffers(const Terrain* terrain);
             void initVertices(const Terrain* terrain, std::vector<VertexP1N1UV>& vertices);
             void initIndices(std::vector<unsigned int>& indices);
