@@ -1,12 +1,11 @@
-#ifndef __GAME__
-#define __GAME__
+#pragma once
 
 #include "Application.hpp"
-#include "FaultFormationTerrain.hpp"
-#include "MidpointDisplacementTerrain.hpp"
-#include "Terrain.hpp"
 #include "camera/Camera.hpp"
 #include "rendering/DebugRenderer.hpp"
+#include "terrain/FaultFormationTerrain.hpp"
+#include "terrain/MidpointDisplacementTerrain.hpp"
+#include "terrain/Terrain.hpp"
 
 class Game : public Villain::Application {
     public:
@@ -24,14 +23,12 @@ class Game : public Villain::Application {
         Villain::DebugRenderer debugRenderer;
         Villain::SceneNode* lightNode;
 
-        Terrain baseTerrain;
-        FaultFormationTerrain faultFormationTerrain;
-        MidpointDisplacementTerrain midpointDisplacementTerrain;
+        Villain::Terrain baseTerrain;
+        Villain::FaultFormationTerrain faultFormationTerrain;
+        Villain::MidpointDisplacementTerrain midpointDisplacementTerrain;
 
         Villain::Texture* terrainGeneratedTexture = nullptr;
         Villain::Texture* heightMapDebugTexture = nullptr;
 
         int terrainType = 2;
 };
-
-#endif // __GAME__

@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 #include "ResourceManager.hpp"
-#include "TextureGenerator.hpp"
+#include "terrain/TextureGenerator.hpp"
 #include "components/MoveController.hpp"
 #include "rendering/DebugRenderer.hpp"
 
