@@ -12,7 +12,7 @@ namespace Villain {
             /// Must be rendered LAST every frame
             void render(const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, float exposure = 1.0);
 
-            unsigned getHDRTextureId() const { return hdrTexture->getID(); }
+            Texture* getHDRTexture() const { return hdrTexture; }
             unsigned getEnvironmentMapId() const { return envCubemap; }
             unsigned getIrradianceMapId() const { return irradianceMap; }
             unsigned getPrefilteredMapId() const { return prefilteredMap; }

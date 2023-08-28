@@ -84,7 +84,7 @@ namespace Villain {
             for (auto const& t: ResourceManager::Instance()->getHDRMap()) {
                 if (ImGui::TreeNode(t.first.c_str())) {
                     ImGui::Image(
-                            reinterpret_cast<ImTextureID>(t.second->getHDRTextureId()),
+                            reinterpret_cast<ImTextureID>(t.second->getHDRTexture()->getID()),
                             desiredImgSize,
                             ImVec2(0, 1),
                             ImVec2(1, 0)
