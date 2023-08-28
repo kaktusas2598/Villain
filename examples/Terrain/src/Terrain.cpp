@@ -25,10 +25,8 @@ void Terrain::init(float scale, float texScale, std::vector<std::string> texture
     for (int i = 0; i < textureFilenames.size(); i++) {
         textures[i] = Villain::ResourceManager::Instance()->loadTexture(textureFilenames[i], textureFilenames[i], GL_REPEAT);
     }
-    // TODO: will need to move it somewhere else, terrain shader will probably be provided by the engine
-    //terrainShader = new Villain::Shader("assets/shaders/terrain.glsl");
     if (textureFilenames.size())
-        terrainShader = new Villain::Shader("assets/shaders/multiTexTerrain.glsl");
+        terrainShader = Villain::Shader::createFromResource("multiTexTerrain");
     else
         terrainShader = Villain::Shader::createFromResource("basicTerrain");
 }
