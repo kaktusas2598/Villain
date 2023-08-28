@@ -1,18 +1,19 @@
 #pragma once
 
+#include "glm/glm.hpp"
+#include "rendering/IndexBuffer.hpp"
+#include "rendering/Vertex.hpp"
+#include "rendering/VertexArray.hpp"
 #include "LODManager.hpp"
 #include "TerrainFrustumCulling.hpp"
-#include "glm/glm.hpp"
-#include "rendering/Vertex.hpp"
-#include <GL/glew.h>
-#include <vector>
+
+#include <memory>
 
 namespace Villain {
 
     class Terrain;
 
-    // GL Renderer for Terrain
-    // TODO: will need to refactor to fit in the engine
+    // Geomipmapped terrain mesh with Level of Detail(LOD) rendering
     class GeomipGrid {
         public:
             GeomipGrid() {}
@@ -30,7 +31,9 @@ namespace Villain {
             int patchSize = 0;
             int maxLOD = 0;
 
-            GLuint vao, vbo, ibo;
+            std::unique_ptr<VertexArray> vao;
+            std::unique_ptr<VertexBuffer> vbo;
+            std::unique_ptr<IndexBuffer> ibo;
 
             struct SingleLODInfo {
                 int Start = 0;
@@ -51,7 +54,6 @@ namespace Villain {
             int numPatchesZ = 0;
             LODManager lodManager;
 
-            void createGLState();
             void populateBuffers(const Terrain* terrain);
             void initVertices(const Terrain* terrain, std::vector<VertexP1N1UV>& vertices);
 
