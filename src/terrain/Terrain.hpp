@@ -24,8 +24,7 @@ namespace Villain {
 
             float* getHeightMap() { return heightMap; }
             float getHeight(int x, int z) const {
-                // TODO: this needs to be much better, need out of bounds check and also
-                // this assumes terrain will be square, will it always though?
+                VILLAIN_ASSERT((x * terrainSize + z) < terrainSize * terrainSize, "Incorrect terrain coordinates");
                 return heightMap[x * terrainSize + z];
             }
             float getHeightInterpolated(float x, float z) const;
