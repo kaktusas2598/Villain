@@ -40,10 +40,6 @@ namespace Villain {
         lodInfo.resize(maxLOD + 1);
 
         populateBuffers(terrain);
-
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void GeomipGrid::render(const glm::vec3& cameraPos, const glm::mat4& viewProj) {
