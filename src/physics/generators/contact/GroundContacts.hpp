@@ -6,7 +6,6 @@
 namespace Villain {
 
     // Generates contacts for a vector of particle to cause them to collide against the ground
-    // TODO: create similar contact generator for terrain
     class GroundContacts : public ParticleContactGenerator {
         public:
             GroundContacts(std::vector<Particle*>& particles, float groundHeight = 0.0f)
