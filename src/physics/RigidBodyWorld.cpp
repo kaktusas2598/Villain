@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "camera/Camera.hpp"
 #include "events/CollisionEvent.hpp"
+#include "physics/generators/contact/TerrainContacts.hpp"
 
 #include <Logger.hpp>
 
@@ -126,6 +127,16 @@ namespace Villain {
             }
         }
 
+        for (ContactGenerators::iterator g = contactGenerators.begin(); g != contactGenerators.end() ; g++) {
+            unsigned used = (*g)->addContact(nextContact, limit);
+            limit -= used;
+            nextContact += used;
+
+            // Ran out of contacts to fill, so we are missing contacts
+            if (limit <= 0) break;
+        }
+
+        // Return number of contacts used;
         return maxContacts - limit;
     }
 
@@ -153,6 +164,18 @@ namespace Villain {
             }
             // Resolve all contacts
             resolver.resolveContacts(contacts, usedContacts, deltaTime);
+        }
+    }
+
+
+    void RigidBodyWorld::addTerrainContactGenerators(Terrain* terrain) {
+        //for (ContactGenerator* generator : contactGenerators) {
+            //delete generator;
+        //}
+
+        for (RigidBody* body : bodies) {
+            TerrainContacts* terrainContacts = new TerrainContacts(body, terrain);
+            contactGenerators.push_back(terrainContacts);
         }
     }
 

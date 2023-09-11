@@ -14,6 +14,7 @@ namespace Villain {
     class Terrain {
         public:
             Terrain() {}
+            virtual ~Terrain() {}
 
             void init(float scale = 1.0f, float texScale = 1.0f, std::vector<std::string> textureFilenames={});
             void render(RenderingEngine& renderingEngine, Camera* camera);

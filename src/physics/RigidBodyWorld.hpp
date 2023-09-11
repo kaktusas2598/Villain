@@ -10,6 +10,8 @@
 
 namespace Villain {
 
+    class Terrain;
+
     /*! \brief Dynamic world of Rigid Bodies with collision
      *
      * Keeps track of rigid bodies and their collision shapes and provice means to simulate world
@@ -18,6 +20,7 @@ namespace Villain {
         public:
             typedef std::vector<RigidBody*> RigidBodies;
             typedef std::vector<CollisionPrimitive*> Colliders;
+            typedef std::vector<ContactGenerator*> ContactGenerators;
 
             /// If not iterations are provided, when it will be four times the number of contacts used
             RigidBodyWorld(Engine* e, unsigned maxContacts, unsigned iterations = 0);
@@ -52,8 +55,12 @@ namespace Villain {
                 colliders.erase(std::remove(colliders.begin(), colliders.end(), collider), colliders.end());
             }
 
+            /// Call everytime terrain is added or changed, at the moment ALL rigid bodies will have associated contact generators
+            void addTerrainContactGenerators(Terrain* terrain);
+
             // Getters
             RigidBodies& getBodies() { return bodies; }
+            ContactGenerators& getContactGenerators() { return contactGenerators; }
             ForceRegistry& getForceRegistry() { return registry; }
             Colliders& getColliders() { return colliders; }
             bool* debugModeActive() { return &debugDrawEnabled; }
@@ -67,6 +74,7 @@ namespace Villain {
 
             Colliders colliders; ///< Collision shapes attached to rigid bodies or immovable objects
             ContactResolver resolver; ///< Collision resolution routine for all contacts in this world
+            ContactGenerators contactGenerators; //< All contact generators in this world
             Contact* contacts; ///< Array of contacts, for filling by the contact generators
             unsigned maxContacts; ///< Max number of contacts allowed in this world
             bool calculateIterations; ///< True if should calculate number of iterations to give to contact resolver
