@@ -127,7 +127,7 @@
 First install the dependencies and when use build instructions below.
 
 ### Dependencies
-    sudo apt-get install -y libglew-dev libsdl2-dev liblua5.4-dev libassimp-dev libopenal-dev
+    sudo apt-get install -y libglew-dev libsdl2-dev liblua5.4-dev libassimp-dev libopenal-dev libfreetype6-dev
 
 ### Building
 
