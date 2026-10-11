@@ -27,6 +27,8 @@ namespace Villain {
     void VertexBuffer::fill(const void* data, unsigned int size, GLenum usage) {
         bind();
         GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
-        GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
+        // NOTE: should be safe not to have this as glBufferData allocates and coppies data to vertex buffer
+        // and sub data just copies verties to the same data
+        // GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
     }
 }
